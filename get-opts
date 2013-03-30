@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+#------------------------------------------------------------
+#
+# Ciro D. Santilli
+#
+#------------------------------------------------------------
+
+# if given outputs to a file instead of standard output
+# convenience for users basically
+# a program should always have the option of outputing to standard output
+# thus making it easy to pipe
+FILE_OUTPUT=false
+
+o)
+    OUTPUT_PATH=$OPTARG
+    FILE_OUTPUT=true

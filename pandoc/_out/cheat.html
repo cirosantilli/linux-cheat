@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="author" />
+  <title>title</title>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+</head>
+<body>
+<div id="header">
+<h1 class="title">title</h1>
+<h2 class="author">author</h2>
+<h3 class="date">date</h3>
+</div>
+<div id="TOC">
+<ul>
+<li><a href="#sources">sources</a></li>
+<li><a href="#header-1">header 1</a><ul>
+<li><a href="#header-2">header 2</a><ul>
+<li><a href="#header-3">header 3</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#paragraph">paragraph</a></li>
+<li><a href="#list">list</a><ul>
+<li><a href="#no-need-for-a-blank-line-after-last-header">no need for a blank line after last header</a></li>
+<li><a href="#ordered">ordered</a></li>
+<li><a href="#example-list">example list</a><ul>
+<li><a href="#no-tag">no tag</a></li>
+<li><a href="#tagged">tagged</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#code-block">code block</a></li>
+<li><a href="#math">math</a></li>
+</ul>
+</div>
+<h1 id="sources"><a href="#TOC">sources</a></h1>
+<p>great documentation page:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">    <span class="kw">man</span> pandoc_markdown</code></pre>
+<h1 id="header-1"><a href="#TOC">header 1</a></h1>
+<h2 id="header-2"><a href="#TOC">header 2</a></h2>
+<h3 id="header-3"><a href="#TOC">header 3</a></h3>
+<h1 id="paragraph"><a href="#TOC">paragraph</a></h1>
+<p>paragraph 1</p>
+<p>paragraph 2</p>
+<h1 id="list"><a href="#TOC">list</a></h1>
+<p>A list:</p>
+<ul>
+<li>ul 1</li>
+<li>ul 2</li>
+</ul>
+<p>Must have blank line after last paragraph: - this is not an item - neither is this</p>
+<h5 id="no-need-for-a-blank-line-after-last-header"><a href="#TOC">no need for a blank line after last header</a></h5>
+<ul>
+<li>ul 1</li>
+<li>ul 2</li>
+</ul>
+<p>but don't do this, it confusing and hard to read.</p>
+<h2 id="ordered"><a href="#TOC">ordered</a></h2>
+<ol>
+<li>a</li>
+<li>a</li>
+<li>a</li>
+</ol>
+<ol style="list-style-type: decimal">
+<li>a</li>
+<li>a</li>
+<li>a</li>
+</ol>
+<ol style="list-style-type: decimal">
+<li>a</li>
+<li>a</li>
+<li>a</li>
+</ol>
+<ol style="list-style-type: decimal">
+<li>a</li>
+<li>a</li>
+<li>a</li>
+</ol>
+<!-- -->
+<span id="VIMHERE"></span>
+<ol start="2" style="list-style-type: decimal">
+<li>a</li>
+<li>a</li>
+<li>a</li>
+</ol>
+<h2 id="example-list"><a href="#TOC">example list</a></h2>
+<h3 id="no-tag"><a href="#TOC">no tag</a></h3>
+<ol style="list-style-type: example">
+<li>no tag. a bit useless.</li>
+</ol>
+<p>a paragraph</p>
+<ol start="2" style="list-style-type: example">
+<li>no tag. a bit useless.</li>
+</ol>
+<p>must be at start of line to work: (@)</p>
+<h3 id="tagged"><a href="#TOC">tagged</a></h3>
+<ol start="3" style="list-style-type: example">
+<li>text of tag1</li>
+</ol>
+<p>ref to tag1: (5)</p>
+<ol start="4" style="list-style-type: example">
+<li>text of tag2</li>
+</ol>
+<p>ref to tag1: (5)</p>
+<ol start="5" style="list-style-type: example">
+<li>&lt;-- cannot start line directly with reference. It will be treated as a list item.</li>
+</ol>
+<h1 id="code-block"><a href="#TOC">code block</a></h1>
+<p>Inline: <code>this is inline code</code></p>
+<p>Indented:</p>
+<pre><code>this is a block
+it can contain many lines</code></pre>
+<p>Must have blank line after last paragraph: this is not a block because it does not have a blank line before last paragraph</p>
+<p>Can have a paragraph afterwards without blank line:</p>
+<pre><code>code block</code></pre>
+<p>paragraph after code block without blank line. Don't do this tough: it confusing and hard to read.</p>
+<p>Delimited code block with tildes:</p>
+<pre><code>import os
+
+def f(a):
+    print a
+
+f(&quot;abc&quot;)</code></pre>
+<p>with backticks:</p>
+<pre><code>import os
+
+def f(a):
+    print a
+
+f(&quot;abc&quot;)</code></pre>
+<p>I prefer backticks for analogy with inline blocks.</p>
+<p>Give attributes:</p>
+<table class="sourceCode python numberLines" id="id" startFrom="100"><tr class="sourceCode"><td class="lineNumbers"><pre>100
+101
+102
+103
+104
+105
+</pre></td><td class="sourceCode"><pre><code class="sourceCode python"><span class="ch">import</span> os
+
+<span class="kw">def</span> f(a):
+    <span class="kw">print</span> a
+
+f(<span class="st">&quot;abc&quot;</span>)</code></pre></td></tr></table>
+<h1 id="math"><a href="#TOC">math</a></h1>
+<p>Inline: <span class="math"><em>x</em><sup>2</sup></span></p>
+<p>Firs chars after first dollar and before lats one must not be space: $ x^2$ $x^2 $ $ x^2 $</p>
+</body>
+</html>
