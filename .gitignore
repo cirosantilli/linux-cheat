@@ -1,0 +1,29 @@
+_gitignore/
+#docs, examples, tests
+
+_out/
+#output files: bins/.so/.a
+
+_tmp/
+#intermediate compilation files: .o
+
+# Compiled Object files
+*.slo
+*.lo
+*.out
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+#assembly code
+*.s
+
+#temporary files
+*.tmp

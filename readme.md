@@ -10,6 +10,6 @@ take tools in a very wide sense that include:
 
 those tools are kept in this repo because:
 
-- they don' deserve a repo of their own
+- they don' deserve a repo of their own because I don't have enough info written on them.
 
 - it is difficult to say where the tool ends and linux begins.

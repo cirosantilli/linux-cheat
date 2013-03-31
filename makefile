@@ -1,13 +1,14 @@
-#sources
+##sources
 	#http://www.jfranken.de/homepages/johannes/vortraege/make_inhalt.en.html
 	#http://www-cip.physik.uni-bonn.de/pool/infos/make/advanced.html
 
-#motivation
+##motivation
 
 	#takes care of dependencies
+
 	#only builds if requirements were changed! (looks at timestamps)
 
-#basics
+##basics
 
 	target: dep1 dep2
 
@@ -23,9 +24,10 @@
 
 	#$make target #makes target
 
-#conventional targets
+##conventional targets
 
-#phony targets
+##phony targets
+
 	#if you don't give phony, make thinks you want to build a file
 	#if a file install exists, make does nothing!
 	#http://stackoverflow.com/questions/2145590/what-is-the-purpose-of-phony-in-a-makefile
@@ -75,7 +77,7 @@
 			install:
 				@mv out $(DIRINPATH)
 
-#variables
+##variables
 
 	CC=gcc 
 	CXX=$(CC)
@@ -142,14 +144,15 @@
 
 	#use hyphens '-' or '_' instead
 
-#include
+##include
+
 	#sources a file
 	include make.inc
 
 	#continue even if missing
 	-include make.inc
 
-#implicit rules
+##implicit rules
 
 	# An explicit rule assigns the commands for several targets
 	coat shoes mobile sweater socks trousers\
@@ -163,39 +166,22 @@
 	trousers:  pants shirt
 	shirt:     undershirt
 
-#duplicate rules ::
+##duplicate rules
+
 	#must use double colons
 	
 	#socks will build both
 	socks:: ; @echo get into left sock
 	socks:: ; @echo get into right sock
 
-#call other makefiles
+##call other makefiles
+
 	$(MAKE)
 
-#builtin function
-
-	#wildcard. makes an array with wildcard.
-	SRCS = $(wildcard *$(INEXT))
-
-	#pathsub. makes an array with wildcard.
-	OUTS = $(patsubst %$(INEXT),%$(OUTEXT),$(SRCS))
-
-		#compile all files of a type
-			INEXT=.c
-			OUTEXT=
-			SRCS = $(wildcard *$(INEXT))
-			OUTS = $(patsubst %$(INEXT),%$(OUTEXT),$(SRCS))
-			all: $(OUTS)
-			%: %$(INEXT)
-				$(CC) $(CFLAGS) -o $@$(OUTEXT) $<
-
-#@
-
-	#silent
+##silent
 
 	#normally build shows the commands it does
-	#with @, it omits the commands
+	#with `@`, it omits the commands
 	#BUT the stdout/err of the command still shows!
 	all:
 		@echo asdf
@@ -205,22 +191,19 @@
 		#"asdf"
 		@echo asdf
 
-#ignore errors -
+##ignore errors
+
 	#normally build stops if error
-	#not if -
+	#not if `-`
 	all:
 		-gcc a.c
 
-#ignore error and silent
+##ignore error and silent
+
 	all:
 		@-gcc a.c
 
-#compile all c files into one target
-SRC=$(wildcard *.c)
-all: $(SRC)
-	gcc $(CFLAGS) -o $@ $^ $(LIBS)
-
-#command line variables
+##command line variables
 
 	###
 	$make run A='"1"'
@@ -249,7 +232,7 @@ all: $(SRC)
 	echo $(A)
 	#as df
 
-#conditionals
+##conditional
 
 	A=defined
 	all: a.out
@@ -259,7 +242,22 @@ all: $(SRC)
 		echo undefined
 	endif
 
-#builtin funcs
+##builtin functions
+
+	#wildcard. makes an array with wildcard.
+	SRCS = $(wildcard *$(INEXT))
+
+	#pathsub. makes an array with wildcard.
+	OUTS = $(patsubst %$(INEXT),%$(OUTEXT),$(SRCS))
+
+		#compile all files of a type
+			INEXT=.c
+			OUTEXT=
+			SRCS = $(wildcard *$(INEXT))
+			OUTS = $(patsubst %$(INEXT),%$(OUTEXT),$(SRCS))
+			all: $(OUTS)
+			%: %$(INEXT)
+				$(CC) $(CFLAGS) -o $@$(OUTEXT) $<
 
 	$(subst from,to,text) 	Replace from with to in text.
 	$(patsubst pattern,replacement,text) 	Replace words matching pattern with replacement in text.
@@ -292,7 +290,7 @@ all: $(SRC)
 
 	$(eval X := $(AUX_DIR)$* ) define a variable inside a rule
 
-#submake
+##submake
 
 	#call other makefiles
 
@@ -308,9 +306,25 @@ all:
 
 	make
 
-#recipes
+##multiline commands
 
-	#make all files of an extension inside given path
+	#when `\` ends the line
+
+	#simply make continues reading next line
+
+	#`\` is passed to bash
+
+all:
+
+	( 			\
+		cd d	;\
+		pwd		;\
+	)
+
+##recipes
+
+	##make all files of an extension inside given path
+
 		CC=pdflatex
 		IN_EXT=.tex
 		IN_DIR=src/
@@ -336,4 +350,3 @@ all:
 			rm -rf $(OUT_DIR) $(AUX_DIR)
 			#rm *.$(OUT_EXT)
 		#compile command
-

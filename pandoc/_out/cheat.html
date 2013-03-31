@@ -25,6 +25,79 @@ code > span.al { color: #ff0000; font-weight: bold; }
 code > span.fu { color: #06287e; }
 code > span.er { color: #ff0000; font-weight: bold; }
   </style>
+  <script type="text/javascript">/*<![CDATA[*/
+  /* 
+  March 19, 2004 MathHTML (c) Peter Jipsen http://www.chapman.edu/~jipsen
+  Released under the GNU General Public License version 2 or later.
+  See the GNU General Public License (at http://www.gnu.org/copyleft/gpl.html)
+  for more details.
+  */
+  
+  function convertMath(node) {// for Gecko
+    if (node.nodeType==1) {
+      var newnode = 
+        document.createElementNS("http://www.w3.org/1998/Math/MathML",
+          node.nodeName.toLowerCase());
+      for(var i=0; i < node.attributes.length; i++)
+        newnode.setAttribute(node.attributes[i].nodeName,
+          node.attributes[i].nodeValue);
+      for (var i=0; i<node.childNodes.length; i++) {
+        var st = node.childNodes[i].nodeValue;
+        if (st==null || st.slice(0,1)!=" " && st.slice(0,1)!="\n") 
+          newnode.appendChild(convertMath(node.childNodes[i]));
+      }
+      return newnode;
+    }
+    else return node;
+  }
+  
+  function convert() {
+    var mmlnode = document.getElementsByTagName("math");
+    var st,str,node,newnode;
+    for (var i=0; i<mmlnode.length; i++)
+      if (document.createElementNS!=null)
+        mmlnode[i].parentNode.replaceChild(convertMath(mmlnode[i]),mmlnode[i]);
+      else { // convert for IE
+        str = "";
+        node = mmlnode[i];
+        while (node.nodeName!="/MATH") {
+          st = node.nodeName.toLowerCase();
+          if (st=="#text") str += node.nodeValue;
+          else {
+            str += (st.slice(0,1)=="/" ? "</m:"+st.slice(1) : "<m:"+st);
+            if (st.slice(0,1)!="/") 
+               for(var j=0; j < node.attributes.length; j++)
+                 if (node.attributes[j].nodeValue!="italic" &&
+                   node.attributes[j].nodeValue!="" &&
+                   node.attributes[j].nodeValue!="inherit" &&
+                   node.attributes[j].nodeValue!=undefined)
+                   str += " "+node.attributes[j].nodeName+"="+
+                       "\""+node.attributes[j].nodeValue+"\"";
+            str += ">";
+          }
+          node = node.nextSibling;
+          node.parentNode.removeChild(node.previousSibling);
+        }
+        str += "</m:math>";
+        newnode = document.createElement("span");
+        node.parentNode.replaceChild(newnode,node);
+        newnode.innerHTML = str;
+      }
+  }
+  
+  if (document.createElementNS==null) {
+    document.write("<object id=\"mathplayer\"\
+    classid=\"clsid:32F66A20-7614-11D4-BD11-00104BD3F987\"></object>");
+    document.write("<?import namespace=\"m\" implementation=\"#mathplayer\"?>");
+  }
+  if(typeof window.addEventListener != 'undefined'){
+    window.addEventListener('load', convert, false);
+  }
+  if(typeof window.attachEvent != 'undefined') {
+    window.attachEvent('onload', convert);
+  }
+  /*]]>*/
+  </script>
 </head>
 <body>
 <div id="header">
@@ -49,13 +122,21 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="#tagged">tagged</a></li>
 </ul></li>
 </ul></li>
+<li><a href="#links">links</a></li>
 <li><a href="#code-block">code block</a></li>
-<li><a href="#math">math</a></li>
+<li><a href="#math">math</a><ul>
+<li><a href="#latex">latex</a></li>
+</ul></li>
+<li><a href="#escaping-stuff">escaping stuff</a></li>
+<li><a href="#html">html</a><ul>
+<li><a href="#inner-content-is-md-parsed">inner content is md parsed:</a></li>
+</ul></li>
 </ul>
 </div>
 <h1 id="sources"><a href="#TOC">sources</a></h1>
 <p>great documentation page:</p>
 <pre class="sourceCode bash"><code class="sourceCode bash">    <span class="kw">man</span> pandoc_markdown</code></pre>
+<p>if its there, it might not be here!</p>
 <h1 id="header-1"><a href="#TOC">header 1</a></h1>
 <h2 id="header-2"><a href="#TOC">header 2</a></h2>
 <h3 id="header-3"><a href="#TOC">header 3</a></h3>
@@ -97,7 +178,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li>a</li>
 </ol>
 <!-- -->
-<span id="VIMHERE"></span>
+
 <ol start="2" style="list-style-type: decimal">
 <li>a</li>
 <li>a</li>
@@ -125,8 +206,15 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <ol start="5" style="list-style-type: example">
 <li>&lt;-- cannot start line directly with reference. It will be treated as a list item.</li>
 </ol>
+<h1 id="links"><a href="#TOC">links</a></h1>
+<p>header links generated with <code>--toc</code> work in latex and html: <a href="#links">links</a></p>
+<p>links to other internal ids works only in html: <a href="#id">id</a></p>
+<p>the only non html way I could find to do this was via code block attributes: <code>`code`{#id}</code>.</p>
 <h1 id="code-block"><a href="#TOC">code block</a></h1>
-<p>Inline: <code>this is inline code</code></p>
+<p>Inline: <code>*this is inline code*</code></p>
+<p>Inline backtick: <code>`</code></p>
+<p>Inline double backtick: <code>``</code></p>
+<p>Inline with attributes: <code class="sourceCode python" id="inline-with-attrs" a="b">a = <span class="dv">1</span> <span class="kw">if</span> <span class="ot">True</span> <span class="kw">else</span> <span class="dv">2</span></code></p>
 <p>Indented:</p>
 <pre><code>this is a block
 it can contain many lines</code></pre>
@@ -134,7 +222,7 @@ it can contain many lines</code></pre>
 <p>Can have a paragraph afterwards without blank line:</p>
 <pre><code>code block</code></pre>
 <p>paragraph after code block without blank line. Don't do this tough: it confusing and hard to read.</p>
-<p>Delimited code block with tildes:</p>
+<p>Delimited code block with tildes: <span id="VIMHERE"></span></p>
 <pre><code>import os
 
 def f(a):
@@ -148,7 +236,7 @@ def f(a):
     print a
 
 f(&quot;abc&quot;)</code></pre>
-<p>I prefer backticks for analogy with inline blocks.</p>
+<p>I prefer backticks for analogy with inline blocks. It is less readable tough.</p>
 <p>Give attributes:</p>
 <table class="sourceCode python numberLines" id="id" startFrom="100"><tr class="sourceCode"><td class="lineNumbers"><pre>100
 101
@@ -162,8 +250,47 @@ f(&quot;abc&quot;)</code></pre>
     <span class="kw">print</span> a
 
 f(<span class="st">&quot;abc&quot;</span>)</code></pre></td></tr></table>
+<p>Language shortcut:</p>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="ch">import</span> os
+
+<span class="kw">def</span> f(a):
+    <span class="kw">print</span> a
+
+f(<span class="st">&quot;abc&quot;</span>)</code></pre>
 <h1 id="math"><a href="#TOC">math</a></h1>
-<p>Inline: <span class="math"><em>x</em><sup>2</sup></span></p>
+<p>Inline: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><mrow><msup><mi>x</mi><mn>2</mn></msup></mrow></math></p>
 <p>Firs chars after first dollar and before lats one must not be space: $ x^2$ $x^2 $ $ x^2 $</p>
+<h2 id="latex"><a href="#TOC">latex</a></h2>
+<p>is ignored on html output, so don't use it.</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><mrow><msup><mi>x</mi><mn>2</mn></msup></mrow></math></p>
+
+<h1 id="escaping-stuff"><a href="#TOC">escaping stuff</a></h1>
+<p>#</p>
+<p>*a*</p>
+<p>[a](b)</p>
+<p>`a`</p>
+<p>```</p>
+<p>```</p>
+<h1 id="html"><a href="#TOC">html</a></h1>
+<p>only works for html output, not for pdf, so never use it unless you really need it and can break pdf.</p>
+<p>
+par
+</p>
+
+<p>
+par
+</p>
+
+<ul>
+    <li>
+item
+</li>
+</ul>
+
+<h2 id="inner-content-is-md-parsed"><a href="#TOC">inner content is md parsed:</a></h2>
+<p>
+<strong>par</strong>
+</p>
+
 </body>
 </html>

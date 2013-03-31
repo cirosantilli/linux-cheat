@@ -3,17 +3,18 @@
 #can mkdir and output that dir.
 
 override CCC ?= pandoc
-override FLAGS ?= -s --toc #flags that apply to all kinds of output (html, pdf, etc)
-override INEXT ?= .md
+override FLAGS ?= -s --toc --mathml 			#flags that apply to all kinds of output (html, pdf, etc)
+override ID ?=
+override IN_EXT ?= .md
 override OUT_DIR ?= _out/
-override RUN_NOEXT ?= a #basename without extension of file to view (with firefox, okular, etc.)
+override RUN_NOEXT ?= a 									#basename without extension of file to view (with firefox, okular, etc.)
 
-SRCS := $(wildcard *$(INEXT))
+SRCS := $(wildcard *$(IN_EXT))
 OUTEXT := .html
-OUT_HTML := $(patsubst %$(INEXT),$(OUT_DIR)%$(OUTEXT),$(SRCS))
+OUT_HTML := $(patsubst %$(IN_EXT),$(OUT_DIR)%$(OUTEXT),$(SRCS))
 
 OUTEXT := .pdf
-OUT_PDF = $(patsubst %$(INEXT),$(OUT_DIR)%$(OUTEXT),$(SRCS))
+OUT_PDF = $(patsubst %$(IN_EXT),$(OUT_DIR)%$(OUTEXT),$(SRCS))
 
 .PHONY: all mkdir html pdf firefox okular clean
 
@@ -26,16 +27,16 @@ html: mkdir $(OUT_HTML)
 
 pdf: mkdir $(OUT_PDF)
 
-firefox: html
-	firefox "$(OUT_DIR)$(RUN_NOEXT).html"
+firefox:
+	firefox "$(OUT_DIR)$(RUN_NOEXT).html$(ID)"
 
 okular: pdf
 	nohup okular --unique "$(OUT_DIR)$(RUN_NOEXT).pdf" >/dev/null &
 
-$(OUT_DIR)%.html: %.md
+$(OUT_DIR)%.html: %$(IN_EXT)
 	$(CCC) $(FLAGS) -o $@ $<
 
-$(OUT_DIR)%.pdf: %.md
+$(OUT_DIR)%.pdf: %$(IN_EXT)
 	$(CCC) $(FLAGS) -o $@ $<
 
 clean:
