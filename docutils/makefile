@@ -2,10 +2,10 @@
 
 #can mkdir and output that dir.
 
-override CCC ?= pandoc
-override FLAGS ?= -s --toc --mathml 			#flags that apply to all kinds of output (html, pdf, etc)
+override CC_LATEX  ?= rst2latex.py
+override CC_HTML ?= rst2html.py --math-output=MathML
 override ID ?=
-override IN_EXT ?= .md
+override IN_EXT ?= .rst
 override OUT_DIR ?= _out/
 override RUN_NOEXT ?= a 									#basename without extension of file to view (with firefox, okular, etc.)
 
@@ -34,10 +34,17 @@ okular:
 	nohup okular --unique "$(OUT_DIR)$(RUN_NOEXT).pdf" >/dev/null &
 
 $(OUT_DIR)%.html: %$(IN_EXT)
-	$(CCC) $(FLAGS) -o $@ $<
+	$(CC_HTML) $< $@
 
 $(OUT_DIR)%.pdf: %$(IN_EXT)
-	$(CCC) $(FLAGS) -o $@ $<
+	$(CC_LATEX) $< $(OUT_DIR)$*.tex
+	(																												\
+		cd $(OUT_DIR) 																				;\
+		pdflatex -interaction=nonstopmode "$*".tex						;\
+		-bibtex "$*" 																					;\
+		pdflatex -interaction=nonstopmode "$*".tex 						;\
+		pdflatex -interaction=nonstopmode -synctex=1 "$*".tex ;\
+	)
 
 clean:
 	rm -r "$(OUT_DIR)"

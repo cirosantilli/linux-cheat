@@ -1156,58 +1156,6 @@ int main(int argc, char** argv)
         sudo aspell --add-filter=$f
         sudo aspell --remove-filter=$f
 
-##text
-
-  ##latex
-
-    #full has enormous size (1Gb+) and lots of packages
-
-    #this is the best works out of the box bet
-    #while ubuntu latex has no package manager (windows has one...)
-
-
-      #sudo aptitude install -y texlive
-      sudo aptitude install -y texlive-full
-    
-    ##texmaker
-
-      #easy to user latex editor:
-      
-        sudo aptitude install -y texmaker
-
-  ##pandoc
-  
-    #input formats: extended markdown, subset of latex
-    #output formats: html, pdf
-
-      sudo aptitude install -y pandoc
-    
-    #description of markdown flavour:
-
-      man pandoc_markdown
-
-    ##output type is recognized by extension
-
-      #generate html from markdown:
-
-        pandoc a.md -o a.html
-
-      #generate pdf from markdown:
-
-        pandoc a.md -o a.pdf
-
-    ##options
-
-        pandoc -s --toc -c pandoc.css -A footer.html README -o example3.html
-
-      #-s : output is standalone. in output html for example,
-        #includes ``<html>`` and ``<body>`` tags
-      #--toc : creates a toc of links to headers,
-        #and headers are links to toc and have ids
-      #-A : include after
-      #-c : link to css
-      #-w rst : set input format to rst
-
 #codecs #ERROR: mpg123libjpeg-progs cannot locate
   #use TAB to navigate msfonts
   sudo aptitude install -y mencoder totem-mozilla icedax tagtool libmad0 mpg321 mpg123libjpeg-progs
