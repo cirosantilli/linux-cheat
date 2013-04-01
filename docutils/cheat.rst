@@ -1,8 +1,6 @@
 =============================================================================
-Document title must be completelly underlined and upperlined with =
+document title must be completely underlined and upperlined with =
 =============================================================================
-
-asdf
 
 .. contents:: toc title
     :depth: 5
@@ -265,3 +263,17 @@ is only used for respective output:
 .. raw:: latex
 
     {\it raw latex}
+
+roles
+=====
+
+can go before or after `````
+
+:math:`a^b_c` `a^b_c`:math:
+
+:code:`a^b_c`
+
+.. role:: latex(code)
+   :language: latex
+
+:latex:`\pi^e`

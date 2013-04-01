@@ -3016,9 +3016,25 @@ int main(void)
     exuberant-ctags a.c
     less tags
 
-#file management
+  ##pygments
 
-  #krusader
+    #python package for multi language syntax coloring.
+
+    #take python source, output colored html:
+    
+      pygmentize -O full -o test.html test.py
+      firefox test.html &
+
+    #-O: options.
+      #full is required here, otherwise there would be no header,
+      #and the style info would not be put in the html
+
+    #input and output formats here were inferred from extension,
+    #but can be explicitly set too.
+
+##file management
+
+  ##krusader
     
     #great file manager
 
@@ -3030,13 +3046,13 @@ int main(void)
     sudo aptitude install -y konqueror #needs to manage bookmarks. (otherwise, button does nothing)
     sudo aptitude install -y konsole   #needs to terminal emulator. (otherwise, button does nothing)
 
-  #filezilla
+  ##filezilla
 
     sudo aptitude install -y filezilla
 
-#terminal emulators
+##terminal emulators
 
-  #guake
+  ##guake
 
     sudo aptitude install -y guake
 
