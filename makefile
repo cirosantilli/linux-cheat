@@ -131,7 +131,7 @@
 	#special vars
 
 		#$@: cur target
-		#$*: basename without extension of cur target
+		#$*: part that matches % of cur target
 		#$<: first cur dep
 			$(OUTDIR)/target$(OUTEXT): dep.c
 				$(CC) $(FLAGS) -o $@ $<

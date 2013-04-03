@@ -15,7 +15,7 @@
 
   #for all installs: grep -E "aptitude install" %
 
-  #for a summary of up to level 2 header: ``grep -E '^[[:space:]]{0,4}##' %``
+  #for a summary of up to level 2 header: `grep -E '^[[:space:]]{0,4}##' %`
 
 #sources
 
@@ -57,13 +57,13 @@
 
 ##POSIX
 
-  #posix.1-2008, Single UNIX Specification, Version 4. formal name:``IEEE Std 1003.1-2008``
+  #posix.1-2008, Single UNIX Specification, Version 4. formal name:`IEEE Std 1003.1-2008`
   #<http://pubs.opengroup.org/onlinepubs/9699919799/>
   
   ##open group
 
-    #is an operating system standardization by IEEE and ``the open group``
-    #(merger of the ``Open software foundation`` with ``X/Open``)
+    #is an operating system standardization by IEEE and `the open group`
+    #(merger of the `Open software foundation` with `X/Open`)
 
     #major open group supporters: Fujitsu, Oracle, Hitachi, HP, Orbus Software, IBM, Kingdee, NEC, SAP, US Department of Defense, NASA 
 
@@ -71,8 +71,8 @@
   #windows is not
 
   #for example, many linux system calls have very close interfaces
-  #to the required posix ``system interfaces``
-  #example: ``pipe`` in posix, and ``pipe``, ``pipe2`` system calls
+  #to the required posix `system interfaces`
+  #example: `pipe` in posix, and `pipe`, `pipe2` system calls
 
   ##specifies
 
@@ -134,7 +134,7 @@
 
       ##predefined character classes
 
-        #which are enclosed in ``[::]`` inside a ``[]``
+        #which are enclosed in `[::]` inside a `[]`
         #full list:
         
             #alnum       digit       punct
@@ -234,8 +234,8 @@
 
         #A:
           
-          #same as 4 and 7, but replace ``suid`` by ``sticky bit``,
-          #``s`` by ``t`` and ``S`` by ``T``.
+          #same as 4 and 7, but replace `suid` by `sticky bit`,
+          #`s` by `t` and `S` by `T`.
 
     ##directories
   
@@ -272,9 +272,9 @@
         #add, remove and rename
 
         #only works if * x bit for is also on*!
-        #it makes no sense to have ``w`` without ``x`` on dirs!!
+        #it makes no sense to have `w` without `x` on dirs!!
 
-        #works even if ``r`` is off.
+        #works even if `r` is off.
       
           mkdir -m 444 r
           mkdir r/d
@@ -291,7 +291,7 @@
 
         #can modify item list (add rename remove) *if w bit is also on*
 
-        #all of that can be done *even if ``r`` is off*!
+        #all of that can be done *even if `r` is off*!
 
         #all only works if you have execute permissions to all of the parent dirs!
 
@@ -583,7 +583,7 @@ int main(int argc, char** argv)
     #<http://www.thegeekstuff.com/2010/11/linux-proc-file-system/>
     #numbered folders:
       #represent processes!
-    #you can ``sudo cat`` all files, even if they say size 0!
+    #you can `sudo cat` all files, even if they say size 0!
   #/root : root user home
   #/usr : user installed/distribuiton installed/managed by package manager
     #/usr/share
@@ -662,9 +662,9 @@ int main(int argc, char** argv)
     ##\.d$
 
       #many theories, a plausible one:
-      #differentiate ``a.conf file`` from ``a.conf.d`` dir
-      #normally, all files in the ``a.conf.d`` dir will be sourced
-      #as if they wre inside ``a.conf``
+      #differentiate `a.conf file` from `a.conf.d` dir
+      #normally, all files in the `a.conf.d` dir will be sourced
+      #as if they wre inside `a.conf`
 
 ##licences
 
@@ -826,7 +826,7 @@ int main(int argc, char** argv)
   
   #important implications:
   
-    #maby key programs are the same: ``dpkg`` for packages, ``upstart`` for init
+    #maby key programs are the same: `dpkg` for packages, `upstart` for init
 
   ##upgrade version
 
@@ -1152,7 +1152,7 @@ int main(int argc, char** argv)
       aspell --mode=html -c f
         #ignores language constructs!
       
-      #modes can be added/removed. They are called ``filters``
+      #modes can be added/removed. They are called `filters`
         sudo aspell --add-filter=$f
         sudo aspell --remove-filter=$f
 
@@ -1920,7 +1920,7 @@ int main(int argc, char** argv)
 
     #Gnu Compiler Collection: NOT c compiler
     #does: C, C++, Objective-C, Fortran, Java, Ada, and Go
-    #large frontend to severl subprograms such as ``as``, ``cpp`` and so on
+    #large frontend to severl subprograms such as `as`, `cpp` and so on
 
     #g++:
       #http://stackoverflow.com/questions/172587/what-is-the-difference-between-g-and-gcc
@@ -1959,9 +1959,9 @@ int main(int argc, char** argv)
 
       gcc a.c b.c -o ab.out
         #does all above steps in one
-        #if you use make, it is faster to genterate ``.o``
+        #if you use make, it is faster to genterate `.o`
         #and keep them, since if the source does not change,
-        #make will not recompile the corresponding ``.o``
+        #make will not recompile the corresponding `.o`
 
     ##compilation flags
 
@@ -1971,7 +1971,7 @@ int main(int argc, char** argv)
           #enables all warnings
           #ALWAYS USE IT
         gcc -Wall -Wno-unused-variable
-          #enables all warnings, except ``unused-variable
+          #enables all warnings, except `unused-variable
 
         #std
         #specifies version os the language to be used
@@ -1986,13 +1986,13 @@ int main(int argc, char** argv)
             #will be when implementation complete
 
           gcc -ansi
-            #changes with time, currently equals ``-std=c90``
+            #changes with time, currently equals `-std=c90`
             #don't use it
 
         gcc -std=c1x -pedantic 
           #give warnings for code that does not comply with c1x standard
           #this does not mean *FULL* complience, but greatly increases complience
-          #there is currently no full complience check in ``gcc``
+          #there is currently no full complience check in `gcc`
         gcc -std=c1x -pedantic-errors
           #give errors instead of warnings
 
@@ -2036,7 +2036,7 @@ int main(int argc, char** argv)
 
     ##c preprocessor
     
-      #the executable is ``cpp``
+      #the executable is `cpp`
       
       #gcc uses it implicitly
     
@@ -2119,9 +2119,9 @@ int main(int argc, char** argv)
           
             #standard: up to 3 numbers
             
-            #yes, they come after the ``.so``
+            #yes, they come after the `.so`
             #otherwise possible ambiguity:
-            #``liba.1.so`` is version 1 of ``liba`` or simply ``lib.a.1``?
+            #`liba.1.so` is version 1 of `liba` or simply `lib.a.1`?
             
             #to link to a given version:
             #use full basename linking with verison number.
@@ -2160,17 +2160,22 @@ int main(int argc, char** argv)
 
         ##compile with so
 
-          #-l : link to library libm.so.
+          ##-l
+          
+            #link to library libm.so:
 
-            gcc a.c -o a.out -lm
-            gcc a.c -o a.out -l:libm.so
-              #SAME
-              #relative paths to the load path get stored in the elf file
-              #``readelf -d`` shows that
-            gcc a.c /full/path/to/libm.so -o a.out 
-              #DIFFERENT
-              #the full path gets stored in the elf file
-              #``readelf -d`` shows that
+              gcc a.c -o a.out -lm
+              gcc a.c -o a.out -l:libm.so
+
+            #SAME
+            #relative paths to the load path get stored in the elf file
+            #`readelf -d` shows that
+
+              gcc a.c -o a.out -l:/full/path/to/libm.so 
+
+            #DIFFERENT
+            #the full path gets stored in the elf file
+            #`readelf -d` shows that
             
             #it must be in the load path. see: <#-L>
           
@@ -2178,18 +2183,19 @@ int main(int argc, char** argv)
 
             #the name given to -l must be EITHER:
 
-              #- stripped from ``lib`` and ``.so`` part
-                #in this example: ``m``, for ``libm.so``. *will not work for ``libm.so.1`` !!!!!
-              #- full basename: ``libm.so.1``
+              #- stripped from `lib` and `.so` part
+                #in this example: `m`, for `libm.so`. *will not work for `libm.so.1` !!!!!
+
+              #- colon + `:`full basename: `-l:libm.so.1`
               
               #you need to compile like this so gcc
               #can tell if all your functions are definied
 
-            #-L
+            ##-L
 
-              gcc a.c -o a.out -L/full/path/to/lib -lm
-              gcc a.c -o a.out -L./rel/path/to/lib -lm
-              env LIBRARY_PATH=$LIBRARY_PATH:/path/to/lib gcc a.c -o a.out -llib
+                gcc a.c -o a.out -L/full/path/to/ -lm
+                gcc a.c -o a.out -L./rel/path/to/ -lm
+                env LIBRARY_PATH=$LIBRARY_PATH:/path/to/ gcc a.c -o a.out -llib
 
               #append path to link search path
               #
@@ -2201,8 +2207,8 @@ int main(int argc, char** argv)
               #you still need to add it to the load path!!!
               #
               #either on /etc/ld.so.cache or on the variable
-              #``LD_LIBRARY_PATH`` (which is completelly different from
-              #``LIBRARY_PATH``, which can be used for compilation path,
+              #`LD_LIBRARY_PATH` (which is completelly different from
+              #`LIBRARY_PATH`, which can be used for compilation path,
               #but not for loading). see <#load path>.
               #
               #this is only good for compilation!!!
@@ -2216,7 +2222,7 @@ int main(int argc, char** argv)
               #optional but better, see <#search path>
             ./a.out
 
-            #this suposes that when you compiled you used: ``-lliba.so``
+            #this suposes that when you compiled you used: `-lliba.so`
           
           ##LD_LIBRARY_PATH
 
@@ -2252,7 +2258,7 @@ int main(int argc, char** argv)
             
             #binutils package
             
-            #is a convenient subset of ``readelf -d``
+            #is a convenient subset of `readelf -d`
             
             ldd a.out
               ##cases:
@@ -2266,11 +2272,11 @@ int main(int argc, char** argv)
               #search path
               
               #may also include other files as for example:
-                #``include /etc/ld.so.conf.d/*.conf``
+                #`include /etc/ld.so.conf.d/*.conf`
                 #in this case you want to:
                   cat /etc/ld.so.conf.d/*.conf
 
-              #the following are hard codded in ``ldconfig``:
+              #the following are hard codded in `ldconfig`:
                 #- /lib/
                 #- /usr/lib/
 
@@ -2284,12 +2290,12 @@ int main(int argc, char** argv)
               #it first looks for libs there,
               #and only then searches the path
               
-              #you can generate ``/etc/ld.so.cache`` automatically
-              #once you have your ``ld.so.conf`` with ``ldconfig``
+              #you can generate `/etc/ld.so.cache` automatically
+              #once you have your `ld.so.conf` with `ldconfig`
 
               #even if the linker finds the lib in the path,
               #it does not automatically add it to the cache
-              #so you still have to run ``ldconfig``
+              #so you still have to run `ldconfig`
 
               #running ldconfig is a part of every package install/uninstall
               #if it conatins a lib
@@ -2297,8 +2303,8 @@ int main(int argc, char** argv)
               ##ldconfig
               
                 sudo ldconfig
-                  ##search in dirs listed in ``/etc/ld.so.conf``
-                  #and write found libs to ``/etc/ld.so.cache```
+                  ##search in dirs listed in `/etc/ld.so.conf`
+                  #and write found libs to `/etc/ld.so.cache``
 
                 ldconfig -p
                   #print cache stored in /etc/ld.so.cache and .d
@@ -2316,7 +2322,7 @@ int main(int argc, char** argv)
                   
                     #/usr/lib/i386-linux-gnu/sse2: (hwcap: 0x0000000004000000)
                     
-                    #stands for ``hardware capacities``
+                    #stands for `hardware capacities`
                     
                     #if present, means that those libraries can only be used
                     #if you hardware has the given capacities
@@ -2361,170 +2367,128 @@ int main(int argc, char** argv)
             #ELF
       
       ##recommended libs
+
+        #this is just a quick list, installation and cheats will go better
+        #in other files/dirs
+
+        ##performance note
               
-        #to get the most out of applications, you have to
-        #compile it on your own computer so that the compiler will
-        #be able to make all the possible optimizations for your given
-        #architecture.
+          #to get the most out of applications, you have to
+          #compile it on your own computer so that the compiler will
+          #be able to make all the possible optimizations for your given
+          #architecture.
       
-        ##single language
-      
-          ##c
-            
-            sudo aptitude install -y linux-source linux-headers 
-
-            ##check
-            
-              #c unit testing
-              
-              sudo aptitude install -y check
-
-            ##ncurses
-            
-              #command line interactive interfaces
-              
-              sudo aptitude install -y ncurses
-
-            ##expat
-            
-              #xml parsing
-            
-            ##to evaluate
-
-              ##PCRE 
-
-                #perl regexes. c11 has regexes.
-              
-              ##popt 
-              
-                #parse command line options
-
-          ##c++
-
-            ##ode
-            
-              #solid body physics engine
-              
-              sudo aptitude install -y libode-dev
-
-            ##boost
-
-              #cross platform utilities
-              
-              #very popular, largely influences c++ future
-
-        ##multi language
-            
-          ##glx
+        ##c
           
-            #interface between opengl and x server
-            
-            #allows x windows to use opengl acceleration
-            
-            #must also support a given opengl version
-            
-            sudo aptitude install -y mesa-utils
+          sudo aptitude install -y linux-source linux-headers 
 
-            glxinfo | less
-              #lots of opengl info
-            glxgears
-              #demo
+          ##check
+          
+            #c unit testing
+            
+            sudo aptitude install -y check
 
-          ##scientific
+          ##ncurses
+          
+            #command line interactive interfaces
+            
+            sudo aptitude install -y ncurses
+
+          ##expat
+          
+            #xml parsing
+          
+          ##to evaluate
+
+            ##PCRE 
+
+              #perl regexes. c11 has regexes.
+            
+            ##popt 
+            
+              #parse command line options
+
+        ##c++
+
+          ##boost
+
+            #cross platform utilities
+            
+            #very popular, largely influences c++ future
+
+        ##glx
+        
+          #interface between opengl and x server
+          
+          #allows x windows to use opengl acceleration
+          
+          #must also support a given opengl version
+          
+          sudo aptitude install -y mesa-utils
+
+          glxinfo | less
+            #lots of opengl info
+          glxgears
+            #demo
+
+        ##scientific
+
+          ##netlib
+
+            #lots of good scientific libs from there
 
             ##blas lapack
-              #langs: fortran, c, c++
-              
-              #de-facto standard linalg lib
 
-              #matlab backend
+              #langs: fortran (native), c
 
-              #originally written in fortran, automatically converted to c with ``f2c``
-              
-              #install possibility:
-                #sudo aptitude install -y libblas-dev
-                #sudo aptitude install -y liblapack-dev
-                #sudo aptitude install -y libf2c2-dev
-              #but easier with atlas
-              
-              ##atlas
-              
-                #automatically tuned blas lapack
-                
-                #contains does full blas and a subset of lapack
+              #linear algebra. very widely standard..
 
-                #TODO understand what subset of lapack
-                #TODO understand how it automatically tunes
-                #TODO understand the relation with packages
+          ##acts collection
 
-                sudo aptitude install -y libatlas-dev libatlas-doc libatlas-test
-              
-            ##opengl glut
+            #<http://acts.nersc.gov/tools.html>
 
-              #opengl is just an interface to use the graphics card
-              #for graphics. Therefore it only contains basic primitives.
-              
-              #opengl is only the interface, but there can be several implentations:
+            #collection of good numerical libraries.
 
-              ##mesa
-              
-                #most common linux Opengl implementation
-                
-                #used by X server
-                
-                #requirement of <#freeglut>
-
-              ##glut
-                
-                #glut is based on gl, and adds things like:
-
-                ##mouse/keyboard input
-                ##geometric objects like spheres, cubes and teapots
-              
-                #the original glut implementation is proprietary
-
-              ##freeglut
-              
-                #is an open source implementation of glut
-                
-                #it is often associated with the <#mesa> implementation of gl
-
-              sudo aptitude install -y freeglut3-dev
-                #already installs mesa opengl on which it depends
-              
-            ##opencv
-              #langs: c++, python
+            #industry usage.
             
-              #computer vision
-              
-              sudo aptitude install -y libopencv-dev opencv-doc
-              sudo aptitude install -y libavformat-dev
-              sudo aptitude install -y ffmpeg
-              sudo aptitude install -y python-opencv opencv-doc libcv-dev libcvaux-dev libhighgui-dev
+          ##opengl glut
 
-            ##gsl
-              #langs: c, c++
-            
-              #gnu scientific library
-              
-              sudo aptitude install -y libgsl0-dev
+            #langs: c++(native), python
 
-              sudo aptitude install -y gsl-doc-info
-              info gsl
+            #3d rendering
 
-            ##freefem
+            #de facto open source standard.
+
+          ##opencv
+
+            #langs: c++(native), python
+          
+            #computer vision
+
+          ##gsl
+
+
+            #langs: c, c++
+          
+            #lots of domains
+
+          ##freefem
+          
+            #2d and 3d fem
             
-              #2d and 3d fem
-              
-              #TODO
+            #TODO
+          
+          ##r
+          
+            #statistics
             
-            ##r
-            
-              #statistics
-              
-            ##it++
-            
-              #signal processing
+          ##it++
+          
+            #signal processing
+
+          ##ode
+          
+            #rigid body physics engine
         
     ##gdb
     
@@ -2573,11 +2537,11 @@ int main(int argc, char** argv)
 
         #dis 1
           #disable breakpoint 1.
-          #1 is gotten from ``i b``
+          #1 is gotten from `i b`
 
         #en 1
           #enable breakpoint 1.
-          #1 is gotten from ``i b``
+          #1 is gotten from `i b`
 
         #d
           #delete all breakpoints
@@ -2699,7 +2663,7 @@ int main(int argc, char** argv)
       
       ##gprof
       
-        #part of ``binutils`` package
+        #part of `binutils` package
         
         #shows time spent into each call of individual functions
         #also shows average times per function
@@ -2710,18 +2674,18 @@ int main(int argc, char** argv)
 
         gcc -p -pg -c a.c -o a.o
         gcc -p -pg a.o -o a.out
-        #generates extra profiling code for ``prof`` and ``gprof`` programs
+        #generates extra profiling code for `prof` and `gprof` programs
         #must be used only both link and compile steps if separate
 
         ./a.out
-        #will generate ``gmon.out`` with gprof data in *cur dir*, not bin dir 
+        #will generate `gmon.out` with gprof data in *cur dir*, not bin dir 
 
         gprof a.out gmon.out
         #-b : remove large output explanation
         #-p : only flat profile
-        #-pfunc1 : only flat profile of ``func1``
+        #-pfunc1 : only flat profile of `func1`
         #-q : only call graph
-        #-qfunc1 : only call graph for ``func1``
+        #-qfunc1 : only call graph for `func1`
   
   ##mingw
   
@@ -2957,7 +2921,7 @@ int main(void)
     ##install
 
         sudo aptitude install -y ack-grep
-      #``ack`` package was already taken by a kanji converter!
+      #`ack` package was already taken by a kanji converter!
 
       #this begs for an alias:
         alias ack="ack-grep"
@@ -3242,7 +3206,7 @@ int main(void)
     cd
     mkdir dos
     dosbox game.exe
-      #there are also ``.bat`` and ``.com`` executables
+      #there are also `.bat` and `.com` executables
 
     ##inside the emulator
     
@@ -3432,7 +3396,7 @@ int main(void)
 
       ##-r
       
-        #recurse, print filenames. *VERY* tempting... no more ``find . -type f | xargs`` !!
+        #recurse, print filenames. *VERY* tempting... no more `find . -type f | xargs` !!
         
           grep -r 'a'
 
@@ -4086,14 +4050,14 @@ int main(void)
     
       #- pattern space: buffer that holds each line.
       
-        #``s//`` modifies pattern space
+        #`s//` modifies pattern space
     
       #- n: empty pattern space, put next line into it. default action at end.
       
-        #print first line after matching ``/a/``:
+        #print first line after matching `/a/`:
           assert [ "`echo $'a\nb' | sed -n '/a/ {n;p}'`" = $'b' ]
 
-        #print second line after matching ``/a/``:
+        #print second line after matching `/a/`:
           assert [ "`echo $'a\nb\nc' | sed -n '/a/ {n;n;p}'`" = $'c' ]
       
       #- N: append next line to pattern space. Next line is not read again.
@@ -4101,7 +4065,7 @@ int main(void)
           assert [ "`echo $'a\nb' | sed -n '/a/ {N;p};'`" = $'a\nb' ]
           assert [ "`echo $'a\nb' | sed -n '/b/ p; /a/ {N;p};'`" = $'a\nb' ]
 
-      #- p: print entire pattern space. default action at end if no ``-n``.
+      #- p: print entire pattern space. default action at end if no `-n`.
       
       #- P: print up to first newline.
 
@@ -4128,7 +4092,7 @@ int main(void)
         #print old/new newline pairs after substitution
           assert [ "`echo $'a\nb' | sed -n 'h; /a/ {s/a/c/; s/$/\n/; x;p;x;p}'`" = $'a\nc\n' ]
 
-        #print first line before matching ``/b/``:
+        #print first line before matching `/b/`:
           assert [ "`echo $'a\nb' | sed -n '/b/ {x;p;d}; h'`" = $'a' ]
 
       ##g
@@ -4149,7 +4113,7 @@ int main(void)
       
         #:label
         
-        #may be on same line as command, ex: ``:l s/a/b/`` is the same as ``:l; s/a/b``
+        #may be on same line as command, ex: `:l s/a/b/` is the same as `:l; s/a/b`
     
       ##b
         
@@ -4368,7 +4332,7 @@ int main(void)
     
     ##mysql command
 
-      #the ``mysql`` executable is a simple text based interface to mysql
+      #the `mysql` executable is a simple text based interface to mysql
 
       #it is bad to view tables that don't fit into the terminal width.
 
@@ -4417,7 +4381,7 @@ int main(void)
 
       #BAD: unsafe. Logs in without prompting password:
         mysql -u root -p"pass"
-      #there must be no space between ``-p`` and ``pass``
+      #there must be no space between `-p` and `pass`
 
       #change password for an existing user:
         mysqladmin -u root -p password
@@ -4655,7 +4619,7 @@ int main(void)
 
     cd "`mktemp -d`"
     echo "touch a" | at now + 1 minutes
-      #in one minute ``test -f a``
+      #in one minute `test -f a`
     echo "echo a" | at now + 1 minutes
       #nothing happens!
       #of course, job does not run in current shell
@@ -4678,7 +4642,7 @@ int main(void)
         #and current dir are saved and restored
 
       sudo cat /usr/lib/cron/at.allow
-        #if exists, only listed users can ``at``
+        #if exists, only listed users can `at`
       sudo cat /usr/lib/cron/at.deny
         #if allow exists, this is ignored!
         #if not, denies only to listed users
@@ -4687,7 +4651,7 @@ int main(void)
 
     #posix 7
 
-    #superset of ``at``
+    #superset of `at`
 
     #execute only when system load average goes below 1.5
     #starting from now!
@@ -4741,7 +4705,7 @@ int main(void)
       #show partitions, total and free space of each
 
       df -h
-        #h: like ``du -h``
+        #h: like `du -h`
       df -h | sort -hrk2
         #sort by total size
     
@@ -4856,7 +4820,7 @@ int main(void)
         #shows type, label and mountpoint
       sudo lsblk
         #lis all block devices.
-        #to me, also lists ``/dev/sr0``, my dvd.
+        #to me, also lists `/dev/sr0`, my dvd.
       sudo lsblk -no UUID /dev/sda1
         #get UUID only
 
@@ -4894,7 +4858,7 @@ int main(void)
       sudo fdisk /dev/sda
         #view/edit partitions for hd sda
 
-      #a primary parition that is split into logical paritions is called ``extended``
+      #a primary parition that is split into logical paritions is called `extended`
       
       #logical partitions are limited to 16 scsi and 53 ide total.
       
@@ -4974,7 +4938,7 @@ int main(void)
     sudo vim /etc/fstab
     sudo mount -a
       #apply changes
-      #only mounts ``auto`` option set.
+      #only mounts `auto` option set.
     
     #syntax:
     
@@ -5384,7 +5348,7 @@ int main(void)
     echo pwd > a/a
     chmod 777 a/a
     ./a/a
-      #``pwd``
+      #`pwd`
       #outside /a, the working directory of the caller (bash cwd)
 
   ##pwdx
@@ -5412,7 +5376,7 @@ int main(void)
       wait $!
       echo $?
 
-    #gets ``$?`` right even if process over already:
+    #gets `$?` right even if process over already:
       false &
       sleep 2
       true
@@ -5555,26 +5519,26 @@ int main(void)
       
       #*unless*, you use nohup
       
-      #consequences of ``nohup``:
+      #consequences of `nohup`:
         #- if stdin came from terminal (not pipe for example),
-          #sdtin comes from ``/dev/null`` (you have no stdin!) instead
+          #sdtin comes from `/dev/null` (you have no stdin!) instead
         #- if stdout would go to terminal (not pipe for example)
-          #it is *appended to* ``./nohup.out``, and if not possible from ``$HOME/nohup.out``
+          #it is *appended to* `./nohup.out`, and if not possible from `$HOME/nohup.out`
           #instead
           #
-          #if no stdout is generated, ``nohup.out`` is not created
+          #if no stdout is generated, `nohup.out` is not created
           #
-          #you can also redirect stdout to any file you want via ``nohup cmd > file``
-          #for example ``nohup cmd > /dev/null`` to ignore output
-        #- the program is still visible in ``jobs``, and may be killed with ``kill %+``
-        #- if you don't use ``&``, it runs on foreground, preventing you from using bash
+          #you can also redirect stdout to any file you want via `nohup cmd > file`
+          #for example `nohup cmd > /dev/null` to ignore output
+        #- the program is still visible in `jobs`, and may be killed with `kill %+`
+        #- if you don't use `&`, it runs on foreground, preventing you from using bash
 
       #how to test all this:
       nohup bash -c 'for i in {1..10}; do echo $i; sleep 1; done'
 
       #try:
-        #append ``> f`` to command
-        #append ``&``   to command
+        #append `> f` to command
+        #append `&`   to command
         jobs
         cat nohup.out
 
@@ -5618,7 +5582,7 @@ int main(void)
   
     #shows tree of which process invocates which
     
-    #note how ``init`` is the parent of all processes
+    #note how `init` is the parent of all processes
 
     #psmisc package
     
@@ -5672,7 +5636,7 @@ int main(void)
 
           /bin/bash --login
 
-      #``/bin/env`` and ``/bin/bash`` must exist relavive to ``/media/other_linux``
+      #`/bin/env` and `/bin/bash` must exist relavive to `/media/other_linux`
       
       #TODO check this and get asserts working =)
 
@@ -5863,7 +5827,7 @@ int main(void)
 
     ##dir
 
-      #must use recursive ``-r``, even if dir is empty
+      #must use recursive `-r`, even if dir is empty
 
         mkdir d
         if cp d d2; then assert false; fi
@@ -5878,7 +5842,7 @@ int main(void)
 
       #default recursivelly follows symlink
 
-      #with ``-d`` copies symlink
+      #with `-d` copies symlink
 
         echo a > a
         ln -s a b
@@ -5891,7 +5855,7 @@ int main(void)
         cp -d c e
         assert [ -L d ]
 
-      #does not work with ``-r``. Probable rationale:
+      #does not work with `-r`. Probable rationale:
 
         #the only thing this could do is to copy dirs
         #and symlink files
@@ -5905,7 +5869,7 @@ int main(void)
         ln -l a b
         assert [ "`stat -c '%i' a`" = "`stat -c '%i' b `" ]
 
-      #with ``r``, makes dirs, and hardlinks files:
+      #with `r`, makes dirs, and hardlinks files:
 
         mkdir d
         touch d/a
@@ -5968,20 +5932,20 @@ int main(void)
       touch d/f
       sudo chown newuser:newgroup d
         #must use sudo to chown
-      assert [ ``stat -c '%U' d`` = newuser ]
-      assert [ ``stat -c '%G' d`` = newgroup ]
-      assert [ ``stat -c '%U' d/f`` = a ]
+      assert [ `stat -c '%U' d` = newuser ]
+      assert [ `stat -c '%G' d` = newgroup ]
+      assert [ `stat -c '%U' d/f` = a ]
       
-    #``-R`` for recursive operation:
+    #`-R` for recursive operation:
 
       su a
       mkdir d
       touch d/f
       sudo chown b d
-      assert [ ``stat -c '%U' d`` = newuser ]
-      assert [ ``stat -c '%G' d`` = newgroup ]
-      assert [ ``stat -c '%U' d/f`` = newuser ]
-      assert [ ``stat -c '%G' d/f`` = newgroup ]
+      assert [ `stat -c '%U' d` = newuser ]
+      assert [ `stat -c '%G' d` = newgroup ]
+      assert [ `stat -c '%U' d/f` = newuser ]
+      assert [ `stat -c '%G' d/f` = newgroup ]
 
     #to change only user:
 
@@ -6073,8 +6037,8 @@ int main(void)
   ##umask
 
     #shows/sets permissions that will be *removed*
-    #this is system implemented, and interacts with certain system calls such as ``open``
-    #this also has direct effect on commands such as ``chmod`` and ``touch``
+    #this is system implemented, and interacts with certain system calls such as `open`
+    #this also has direct effect on commands such as `chmod` and `touch`
 
     touch a
     ls -l a
@@ -6133,7 +6097,7 @@ int main(void)
 
       #make hardlinks and symlinks
 
-      #this can also be done with ``cp``
+      #this can also be done with `cp`
 
       #hardlink:
         ln dest name
@@ -6183,7 +6147,7 @@ int main(void)
       ln -s a b
       cd ..
       realpath ./b/b
-        #= "``pwd``/a/a"
+        #= "`pwd`/a/a"
 
       #readlink -f
 
@@ -6262,7 +6226,7 @@ int main(void)
 
         ##applications
 
-          #give ``g+x`` to all files that have ``u+x``:
+          #give `g+x` to all files that have `u+x`:
 
            find . -type f -perm +100 | xargs chmod g+x
 
@@ -6361,7 +6325,7 @@ int main(void)
 
           echo -en 'a\0b' | xargs -0
 
-        #combo with ``find -print0``:
+        #combo with `find -print0`:
 
           find . -print0 | xargs -0
 
@@ -6406,7 +6370,7 @@ int main(void)
     
     #this uses a database, which must be updated with <#updatedb> before your new file is found
     
-    #commonly, ``updatedb`` is a <#cronjob>
+    #commonly, `updatedb` is a <#cronjob>
     
     locate a.h
 
@@ -6712,7 +6676,7 @@ int main(void)
       #ciro:x:1000:1000:ciro,,,:/home/ciro:/bin/bash
       #ciro: user name
       #x: password is encrypted and stored in /etc/shadow
-      #1000: user id. 0: root. 1-99: predefined. 100-999: reserved by system. 1000: first ``normal`` user
+      #1000: user id. 0: root. 1-99: predefined. 100-999: reserved by system. 1000: first `normal` user
       #1000: primary user group
       #ciro,,, : comment field. used by finger command.
       #/home/ciro: home dir
@@ -6723,7 +6687,7 @@ int main(void)
     #format:
       #groupname:x:5:user1,user2,user3
       #x: encrypted pass if any
-      #5: group id. ``regular`` groups start at 1000
+      #5: group id. `regular` groups start at 1000
 
     getent group "$g"
       #cat line of /etc/group for group g
@@ -6936,9 +6900,9 @@ int main(void)
             sudo chmod 700 /home/$u $u
             sudo chown /home/$u $u
 
-          #home dir files will me copied from a default template located at ``/etc/skel``
-          #to change this template use ``-k /path/to/skel/``.
-          #to create no files: ``-k /dev/null``
+          #home dir files will me copied from a default template located at `/etc/skel`
+          #to change this template use `-k /path/to/skel/`.
+          #to create no files: `-k /dev/null`
 
       #-p $p
         #bad because visible
@@ -6958,7 +6922,7 @@ int main(void)
         #if g missing, either create a group u and add user
         #of add to a default group specified in some config file
       #-c: comment field of /etc/passwd
-        #this format is used for ``finger`` command
+        #this format is used for `finger` command
 
         #chfn
           sudo chfn -f full_name -r room_no -w work_ph -h home_ph -o other $u
@@ -7108,8 +7072,8 @@ int main(void)
         echo $HOSTNAME
         hostname
           #print hostname
-          #if in command prompt: ``ciro@ciro-Thinkpad-T430``
-          #hostname is ``ciro-Thinkpad-T430``
+          #if in command prompt: `ciro@ciro-Thinkpad-T430`
+          #hostname is `ciro-Thinkpad-T430`
 
         h=
         sudo hostname "$h"
@@ -7316,7 +7280,7 @@ int main(void)
       
       #6 bytes: first 3 identify vendor, last 3 product
       
-      #colon separated notation. Ex: ``0C:21:B8:47:5F:96``
+      #colon separated notation. Ex: `0C:21:B8:47:5F:96`
     
       ##aka
       
@@ -7434,8 +7398,8 @@ int main(void)
       #get all files of a given types
 
     #-E --adjust-extension
-      #converts for example ``*.php?key=val`` pages to ``.php?key=val.html``
-      #while keeping ``*.css`` extension untouched
+      #converts for example `*.php?key=val` pages to `.php?key=val.html`
+      #while keeping `*.css` extension untouched
     #--cut-dirs=2 : similar to -nd, but only does nd up to given level
     #-k : convert links to local if local has been downloaded
     #-l 5 : -r depth
@@ -7444,10 +7408,10 @@ int main(void)
     #-nd : dont make sub directories, even if they existed on original site
     #-np : dont recurse into parent dirs
     #-nH : dont make a dir structure starting at host
-      #default: ``wget http://www.abc.com/a/b/c``
+      #default: `wget http://www.abc.com/a/b/c`
       #creates: www.abc.com/a/b/c file structure.
       #
-      #``wget -nH http://www.abc.com/a/b/c``
+      #`wget -nH http://www.abc.com/a/b/c`
       #creates only : a/b/c
     #-p : page requesites : css, images
     #-r : follow links on page and downloads them
@@ -7528,16 +7492,16 @@ int main(void)
       #good example if you are not one of the 100 people who live in Pitcairn island.
       #google redirects you to your country domain.
       
-      #with ``-v`` you can see the full transaction:
+      #with `-v` you can see the full transaction:
         curl -vL google.pn
 
     ##-u user:pass
 
       #does <#basic authentication>
 
-      #``--digest`` and ``--ntlm`` can be used together
+      #`--digest` and `--ntlm` can be used together
 
-      #if no ``:pass``, will ask for pass on command line.
+      #if no `:pass`, will ask for pass on command line.
 
       #examples:
         curl          -u user:pass site.with.basic.auth.com
@@ -7569,7 +7533,7 @@ int main(void)
     
       #make http HEAD request. see: <#http>
       
-      #implies ``-i`` of course
+      #implies `-i` of course
       
       #example:
         curl -I google.com
@@ -7657,7 +7621,7 @@ int main(void)
             gateway 192.168.1.1
 
         #- auto if1 if2
-          #automatically create interfaces if1 and if2 on ``ifup -a``
+          #automatically create interfaces if1 and if2 on `ifup -a`
 
         #- iface if1
           #from now on, define properties of if1
@@ -7694,6 +7658,16 @@ int main(void)
     
     #won;t work, why? 
       #echo $'GET / HTTP/1.0\n\n' | telnet www.google.com 80
+
+  ##nc
+
+    #open, listen, send and receive tcp/udp packages and sockets
+
+    ##example
+
+      #get apache working on port 80
+      
+      echo 'GET / HTTP/1.0' | nc google.com 80
 
   ##ssh
   
@@ -7910,11 +7884,11 @@ int main(void)
           sudo mv test /var/www/
 
         #the default root for serving files is specified in the <#conf file>
-        #by the ``DocumentRoot`` directive. In current ubuntu, it is ``/var/www/``
+        #by the `DocumentRoot` directive. In current ubuntu, it is `/var/www/`
 
         #the user under which the web server runs must have read access to this directory.
         
-        #usually this user is a different user from ``root`` for sercurity.
+        #usually this user is a different user from `root` for sercurity.
 
       ##cut the conf file to the bare minimum
 
@@ -7931,7 +7905,7 @@ int main(void)
 
         #"web subdirs" map directly to local dirs
         
-        #ubuntu default is currently ``/var/www/``
+        #ubuntu default is currently `/var/www/`
         
         #open file /var/www/test/index.html:
           firefox localhost/test/index.html
@@ -7958,8 +7932,8 @@ int main(void)
 
           #set apache serve root at given dir:
             DocumentRoot "/var/www/root"
-          #for this ot work, make sure ``DocumentRoot`` is not set anywhere else.
-          #(by default it was included in the include files, ``grep -r DocumenRoot`` shows where)
+          #for this ot work, make sure `DocumentRoot` is not set anywhere else.
+          #(by default it was included in the include files, `grep -r DocumenRoot` shows where)
 
           #for security concerns, only put things you want apache to serve directly inside DocumentRoot
           #such as html, css and images.
@@ -8004,9 +7978,9 @@ int main(void)
             DirectoryIndex index.php
             DirectoryIndex /cgi-bin/index.pl 
           #with this, for the entire site, first looks in order for:
-            #- ``index.html``
-            #- ``index.php``
-            #- ``/cgi-bin/index.pl``
+            #- `index.html`
+            #- `index.php`
+            #- `/cgi-bin/index.pl`
           #note how you can specify a script outside of that dir
 
           #in case none of those actions match, the default is for
@@ -8176,7 +8150,7 @@ int main(void)
             #common examples:
 
             #- text/html: browsers interprets body as html and renders it
-            #- text/plain: browser pastes to screen, no html rendering. So you will see tags like ``<h1>`` on screen.
+            #- text/plain: browser pastes to screen, no html rendering. So you will see tags like `<h1>` on screen.
             #- text/css
             #- application/pdf
             #- application/javascript
@@ -8213,7 +8187,7 @@ int main(void)
         
           ##401
 
-            #server should include a ``WWW-Authenticate`` field specifying what kind of authentication is required.
+            #server should include a `WWW-Authenticate` field specifying what kind of authentication is required.
             
             #try this with:
               curl -I localhost/location/that/requires/auth
@@ -8222,9 +8196,9 @@ int main(void)
               WWW-Authenticate: Basic realm="AuthName value"
             #so the type is Basic
             #
-            #``AuthName value`` is a any descriptive string
+            #`AuthName value` is a any descriptive string
             #set by the server operators.
-            #in Apache it is given by the ``AuthName`` directive
+            #in Apache it is given by the `AuthName` directive
         
             ##401 vs 403
             
@@ -8253,7 +8227,7 @@ int main(void)
                 curl -v u:p@google.com
 
               #this is however just a convention, since programs that accept it
-              #parse the string to extract the ``u:p`` part, and then send it
+              #parse the string to extract the `u:p` part, and then send it
               #on the header.
 
           ##digest authentication
@@ -8267,7 +8241,7 @@ int main(void)
             
             ##why it works
 
-              #data is appended to the authentication with ``:`` before hashing:
+              #data is appended to the authentication with `:` before hashing:
               #- domain (www.google.com)
               #- method (GET, POST, etc.)
               #- nonce
@@ -8312,7 +8286,7 @@ int main(void)
           #a cgi script is simply a script/executable that outputs the part of http response
           
           #this part includes some last header lines which the server delegates to it,
-          #notably ``content type``, followed by "\n\n" followed by the entire body.
+          #notably `content type`, followed by "\n\n" followed by the entire body.
           
           #the server passes information to the script through environment variables only.
           
@@ -8344,7 +8318,7 @@ print "</body></html>"
             
             ##status 
             
-              #optional, if not given suposes ``200 OK``.
+              #optional, if not given suposes `200 OK`.
 
               #if given as error, server will simply give the error and no data.
 
@@ -8372,7 +8346,7 @@ print "</body></html>"
 
                 firefox localhost/mycgi/test.pl
 
-              #note how ``ScriptAlias`` created a virtual directory
+              #note how `ScriptAlias` created a virtual directory
               #not present in the actual filesystem.
 
               #can also make individual script:
@@ -8395,7 +8369,7 @@ print "</body></html>"
               Action test /cgi-bin/test.pl
               AddHandler test .html 
 
-            #TODO: i get ``Action`` directive undefined... solve this.
+            #TODO: i get `Action` directive undefined... solve this.
             
             #try it:
               firefox localhost/index.html
@@ -8405,7 +8379,7 @@ print "</body></html>"
       
         #apache plugins are called modules
         
-        #modules are compiled ``.so`` files
+        #modules are compiled `.so` files
         
         #modules may define new directives
         
@@ -8450,7 +8424,7 @@ print "</body></html>"
           
           ##basic authentication
           
-            #provided by ``mod_auth_basic``
+            #provided by `mod_auth_basic`
         
             #apache conf:
               LoadModule auth_basic_module /usr/lib/apache2/modules/mod_auth_basic.so
@@ -8465,7 +8439,7 @@ print "</body></html>"
 
           ##digest
 
-            #provided by ``mod_auth_digest``
+            #provided by `mod_auth_digest`
           
             #mod_auth_digest is better than mod_auth_basic, so use digest!
 
@@ -8483,7 +8457,7 @@ print "</body></html>"
         
           #what type of storage is used for user password pairs
           
-          #is specified by the ``AuthBasicProvider`` directive.
+          #is specified by the `AuthBasicProvider` directive.
           
           ##file
           
@@ -8531,7 +8505,7 @@ print "</body></html>"
           #with pass:
             curl u:p@localhost/test/auth
             curl -u u:p localhost/test/auth
-          #of course, better using the ``-u`` option
+          #of course, better using the `-u` option
           #which could work also for different authentication methods.
         
     ##php
@@ -8583,7 +8557,7 @@ print "</body></html>"
 
   ##run levels
   
-    #ubuntu uses upstart, newer replacement to ``system v`` init
+    #ubuntu uses upstart, newer replacement to `system v` init
     
     #/etc/init: upstart configuration files
       #programs here are named services
@@ -8634,7 +8608,7 @@ print "</body></html>"
     #*must* be first char of first line
 
     #if this were a phython script for example,
-    #we'd use ``/bin/python``
+    #we'd use `/bin/python`
     
     #in older linux versions, interpreter must be a compiled binary.
     #in newer linux versions, it can an interpreted script also.
@@ -8650,36 +8624,36 @@ print "</body></html>"
       #the following happens:
       #- prog runs
       #- its command line arguments are:
-        #- 0: ``/progs/prog``
-        #- 1: ``a b``
-        #- 2: ``/scripts/cript``
+        #- 0: `/progs/prog`
+        #- 1: `a b`
+        #- 2: `/scripts/cript`
       
       #how this works for python:
-      #- ``#!/bin/python`` runs ``/bin/python /scripts/script``
-        #which for the python interpreter means: execute ``/scripts/script``
-      #- python comments start with ``#``. Therefore: *the shebang line is ignored by ``/bin/python``.
+      #- `#!/bin/python` runs `/bin/python /scripts/script`
+        #which for the python interpreter means: execute `/scripts/script`
+      #- python comments start with `#`. Therefore: *the shebang line is ignored by `/bin/python`.
     
-        #Therefore: All interpreted languages should have ``#`` as a comment character!
+        #Therefore: All interpreted languages should have `#` as a comment character!
 
     ##env
 
-      #you could use ``!#/bin/bash`` instead
+      #you could use `!#/bin/bash` instead
       #but if you go on a system where bash is located
-      #at ``/usr/bin/bash``, your script breaks
+      #at `/usr/bin/bash`, your script breaks
 
       #with env, path is used instead
-      #so if ``bash`` is in the users $PATH,
+      #so if `bash` is in the users $PATH,
       #and /usr/bin/env exists 
       #it works
 
       ##why it works
 
-        #``env cmd`` simply executes a program in current environment
+        #`env cmd` simply executes a program in current environment
 
         #in our case, the bash program
 
       #the advantage of this is that:
-        #- env is more often located in ``/usr/bin`` than bash in ``/usr`` acros *NIX TODO check
+        #- env is more often located in `/usr/bin` than bash in `/usr` acros *NIX TODO check
         #- all you interpreters
 
     ##why not from extension
@@ -8694,9 +8668,9 @@ print "</body></html>"
 
         #you need an extra EXT env var that says: you can execute a.py as py, a.sh as a
 
-        #it is important to execute a.sh as ``a`` because if someday you decide that
+        #it is important to execute a.sh as `a` because if someday you decide that
         #it sould be written in python istead, you don't break all dependant programs
-        #by using ``a.py``
+        #by using `a.py`
 
   ##bc
 
@@ -8757,15 +8731,15 @@ print "</body></html>"
 
       ##-n:
 
-        #use ``while (<>) { ... }`` loop aroud given program
+        #use `while (<>) { ... }` loop aroud given program
         #this makes perl act linewise
-        #each line gets the default value ``$_``
-        #therfore to print the current line, you instead of ``print($_)`` can simply write ``print``
-        #the endline ``"\n"`` is part of the string
+        #each line gets the default value `$_`
+        #therfore to print the current line, you instead of `print($_)` can simply write `print`
+        #the endline `"\n"` is part of the string
 
       ##-p
       
-        #same as ``-n``, with ``print`` at end
+        #same as `-n`, with `print` at end
 
       ##-i
 
@@ -8787,8 +8761,8 @@ print "</body></html>"
 
         #autosplit
 
-        #adds ``@F = split(/ /);`` to top of loop.
-        #requires ``-n`` or ``-p``. 
+        #adds `@F = split(/ /);` to top of loop.
+        #requires `-n` or `-p`. 
         
           assert[ "`echo $'a b c\nd e f' | perl -nae 'print $F[0]. ":" . $F[1] . ":" . $F[2]'`" = "a:b:c:d:e:f:" ] 
 
@@ -8800,7 +8774,7 @@ print "</body></html>"
 
       ##-F
 
-        #``-F: '/pattern/'``: set field separator for ``-a``
+        #`-F: '/pattern/'`: set field separator for `-a`
         
         #must be used with <#-a>
 
@@ -8809,7 +8783,7 @@ print "</body></html>"
 
       ##-0
       
-        #``-000`` sets ``$/`` (IRS) to a given octal value
+        #`-000` sets `$/` (IRS) to a given octal value
         
         #default: "\n"
         
@@ -8827,15 +8801,15 @@ print "</body></html>"
       
         #adds chomp to loops
         
-        #no arg: sets ``$\ = $/`` (ORS = IRS)
+        #no arg: sets `$\ = $/` (ORS = IRS)
         
-        #with arg: sets ``$\ = $/`` (ORS = IRS)
+        #with arg: sets `$\ = $/` (ORS = IRS)
         
-        #default ``$\``: ''
+        #default `$\`: ''
         
         ##application
         
-          #add newline to prints if ``-0`` is not set
+          #add newline to prints if `-0` is not set
           #(and thus equals newline)
 
       ##-M
@@ -8901,7 +8875,7 @@ print "</body></html>"
 
   #real name: X Window System
 
-  #x11 is a ``window system``
+  #x11 is a `window system`
   
   #upcoming alternative: wayland
   #not yet widely used,
@@ -8909,8 +8883,8 @@ print "</body></html>"
 
   #x11 is only an interface.
   #there can be different implementations:
-    #``X.org`` implentation currently dominates
-    #``XFree86`` was the dominant prior to 2004
+    #`X.org` implentation currently dominates
+    #`XFree86` was the dominant prior to 2004
       #it broke glp, and fell into disgrace
 
   ##it is an abstraction layer for things like:
@@ -8934,7 +8908,7 @@ print "</body></html>"
         #KDM, kde
         #GDM (gnome) fedora
 
-    ##``x window manager``:
+    ##`x window manager`:
       #functions:
         #window switching (alt tab / visible list of open windows)
         #program opening with button clicks
@@ -9260,7 +9234,7 @@ add Lock = Caps_Lock
     #I get:
       #NVIDIA Corporation GF108 [Quadro NVS 5400M] (rev a1)
       #                                 ^^^^^^^^^          
-      #so my card is: ``NVS 5400M``
+      #so my card is: `NVS 5400M`
   
   ##nvidia
     
@@ -9281,11 +9255,11 @@ add Lock = Caps_Lock
 
     sudo shutdown -P now
       #brings down the system and powers off afterwards
-      #``usual`` shutdown
+      #`usual` shutdown
       #sends TODO signal to running processes and waits for their termination TODO?
 
     sudo reboot now
-      #``usual`` restart computer
+      #usual restart computer
 
   ##setleds
   

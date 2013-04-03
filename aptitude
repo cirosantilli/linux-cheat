@@ -122,6 +122,11 @@
   ##apt-file
 
     #search for and list package files
+
+    #**very** useful:
+
+    #- who provides such a file?
+    #- where does htis file come from?
     
     sudo aptitude install apt-file
     apt-file update
