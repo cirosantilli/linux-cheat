@@ -6,7 +6,7 @@ document title must be completely underlined and upperlined with =
     :depth: 5
 
 .. sectnum::
-    :depth:
+    :depth: 5
 
 h1
 =======
@@ -251,14 +251,23 @@ unicode: |copy| |BogusMegaCorp (TM)| |---|
 
 datetime: |date| |time|
 
+include
+#######
+
+.. include:: included.rst
+
 raw
 ###
 
-is only used for respective output:
+is only used for respective output.
+
+html only shows in html output:
 
 .. raw:: html
 
    <p>raw html</p>
+
+latex only shows in latex output:
 
 .. raw:: latex
 

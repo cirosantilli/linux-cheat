@@ -1,4 +1,4 @@
-a python package for generating code documentation from comments.
+`docutils` is a python package for generating code documentation.
 
 it contains a mojor specification of the `reStructuredTest`
 and the reference implementations `rst2pdf` and `rst2html`.

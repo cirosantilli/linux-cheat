@@ -4,9 +4,11 @@
 
 ##motivation
 
-	#takes care of dependencies
+	#- takes care of dependencies
 
-	#only builds if requirements were changed! (looks at timestamps)
+	#- only builds if requirements were changed! (looks at timestamps)
+
+		#this may be important when compilation time starts getting significative
 
 ##basics
 
@@ -76,6 +78,31 @@
 
 			install:
 				@mv out $(DIRINPATH)
+
+##.SECONDARY
+
+	#an **intermediate** file is a file that is neither target nor prerequisite.
+
+	#example:
+
+		#a.m4 -> a.c -> a.o
+
+	#with a single rule:
+		
+		a.o: a.m4
+			m4 a.m4 > a.c
+			gcc -o a.o a.c
+
+	#here a.c is intermediate.
+
+	#make deletes intermediate files by default because:
+
+	#- they are not desired outputs (those must be targets)
+	#- if one of the base prerequisites is modified, this will be remade anyways
+
+	#if you want to keep them you can use the secondary target:
+
+	.SECONDARY: a.c b.c
 
 ##variables
 
@@ -244,13 +271,20 @@
 
 ##builtin functions
 
-	#wildcard. makes an array with wildcard.
-	SRCS = $(wildcard *$(INEXT))
+	##wildcard
 
-	#pathsub. makes an array with wildcard.
-	OUTS = $(patsubst %$(INEXT),%$(OUTEXT),$(SRCS))
+		#makes an array with wildcard.
+
+			SRCS = $(wildcard *$(INEXT))
+
+	##patsubst
+	
+		#makes an array with wildcard.
+
+			OUTS = $(patsubst %$(INEXT),%$(OUTEXT),$(SRCS))
 
 		#compile all files of a type
+
 			INEXT=.c
 			OUTEXT=
 			SRCS = $(wildcard *$(INEXT))
@@ -258,6 +292,16 @@
 			all: $(OUTS)
 			%: %$(INEXT)
 				$(CC) $(CFLAGS) -o $@$(OUTEXT) $<
+	
+	##foreach
+
+		#do a loop and concatenate results
+
+		#select all files with one of the given extensions in current directory
+
+			IN_DIR   := ./
+			IN_EXTS  := .lex .y .c .cpp
+			INS			 := $(foreach IN_EXT, $(IN_EXTS), $(wildcard $(IN_DIR)*$(IN_EXT)) )
 
 	$(subst from,to,text) 	Replace from with to in text.
 	$(patsubst pattern,replacement,text) 	Replace words matching pattern with replacement in text.
@@ -320,6 +364,31 @@ all:
 		cd d	;\
 		pwd		;\
 	)
+
+##implicit builtins
+
+#make has some built-in rules and variables
+
+#PAY ATTENTION OR THIS WILL F*** YOU UP LATER,
+#SINCE THEY MAY OVERRIDE YOUR OWN RULES AND VARIABLES WITHOUT WARNING!!!!!!!!!!!!!
+
+#in this way, for example, c.c -> c.o happens automatically
+
+#suffixes for which there are implicit rules (may override your own rules!):
+
+	#.out, .a, .ln, .o, .c, .cc, .C, .cpp, .p, .f, .F, .m, .r, .y, .l, .ym, .lm, .s, .S, .mod, .sym, .def, .h, .info, .dvi, .tex, .texinfo, .texi, .txinfo, .w, .ch .web, .sh, .elc, .el
+
+#predefined vars ( ?= won't work for them! ):
+
+	#AR AS CC CPP FC M2C PC CO GET LEX YACC LINT MAKEINFO TEX TEXI2DVI WEAVE CWEAVE TANGLE CTANGLE RM ARFLAGS ASFLAGS CFLAGS CXXFLAGS COFLAGS CPPFLAGS FFLAGS GFLAGS LDFLAGS LFLAGS YFLAGS PFLAGS RFLAGS LINTFLAGS 
+
+#those vars are mainly used to control the automatic rules.
+
+#to turn off the implicit rules: add a phony empty rule:
+
+.SUFFIXES:
+
+#as you may guess, this specifies for which suffixes automatic rules will work or not.
 
 ##recipes
 

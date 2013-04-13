@@ -1,18 +1,5 @@
 #!/usr/bin/env bash
 
-##sources
-
-  #<http://git-scm.com/book/en/Git-Branching-Basic-Branching-and-Merging>
-
-  #description of a production/dev/hotfix branch model:
-  #<http://nvie.com/posts/a-successful-git-branching-model/>
-
-  #update your cloned repo:
-  #<http://bassistance.de/2010/06/25/git-fu-updating-your-github-fork/>
-
-  #survey of git branching models:
-  #<http://stackoverflow.com/questions/2621610/what-git-branching-models-actually-work>
-
 ##config
 
   #first of all steps: tell git who you are
@@ -30,12 +17,15 @@
 
     git init
 
-    git remote add github "git@github.com:cirosantilli/python.git"
-    git remote add bitbucket "https://cirosantilli@bitbucket.org/cirosantilli/testrepo0.git"
+  ##bare
 
-  #allows to push and pull current repo git@github.com:cirosantilli/python.git repo.
+    #starts a bare repo here:
 
-  #this repo gets an alias github. see #1 push for details
+      git init --bare
+
+    #it this contains directly the contents of the .git file.
+
+    #a repo must be bare if you want to push to it/pull from it
 
 ##clone
 
@@ -50,13 +40,19 @@
 
   #see remote for what that means
 
+  ##bare
+
+    #what github does on `fork`!
+
+      git clone --bare $R
+
 ##remote
 
-  #add remote sources to your git repo
-  #note that when you clone something, it alreay has a origin remote,
-  #so you usually only need this when doing the first push
+  #create aliases to a remote repo
 
-  #create a remote branch at github called github:
+  #when you clone something, it alreay has a origin remote.
+
+  #create an alias to a remote repo:
 
     git remote add github https://github.com/cirosantilli/latex.git
 
@@ -116,11 +112,27 @@
   #  or leave it blank and cancel comit. action is taken after you save ans quit :wq
 
     git commit -am 'commit message'
+
   #same as above, but commits directly with message commit message
+
+  ##ammend
+
+    #correct last commibt *before it was pushed*:
+
+    #does not create new commitmessage
+
+    #correct message only:
+
+      git commit -m 'new commit message'
+
+    #correct message and updates files:
+
+      git commit -m 'new commit message'
 
 ##push
 
-  #pushing is updating hte chages you made
+  #pushing is updating the chages you made
+
   #it is better to add a remote
 
     R=git@github.com:cirosantilli/bash.git
@@ -142,7 +154,9 @@
 ##fetch
 
   #get changes from remote
+
   #*does not change* current repo
+
   #creates new remote/branch branches
 
     git remote add upstream git@github.com:cirosantilli/test.git
@@ -150,6 +164,7 @@
     git branch -r
 
   #origin/master
+
   #upstream/master
 
 ##pull
@@ -247,9 +262,9 @@
     #all differences between current state and last commit
       #no need to have added the files
 
-    git checkout $hash #go back to given Hash and KEEP changes. new commits will start branches
+    git checkout $hash  #go back to given Hash and KEEP changes. new commits will start branches
     git checkout master #go back to last commit and lose uncommited changes on all files
-    git checkout $hash #go back to hash (beginning of hash). lose uncommited
+    git checkout $hash  #go back to hash (beginning of hash). lose uncommited
     git checkout $hash -- $file1 $file2
 
   #revert only those files
@@ -267,7 +282,7 @@
 
     #if you are sure you are the only one, push --force will do
 
-##branch and merge
+##branch
 
   #branching is creating a separate path of developement
 
@@ -295,49 +310,13 @@
 
     git branch -d "$B"
 
-  #merge master with another branch :
-
-    git checkout master
-    git merge "$B"
-
-  #if auto merge is fine:
-
-  #master goes to new node created after merge
-
-  #else
-
-    git status
-
-  #shows what was unmerged
-
-  #needs merge
+##merge
 
   #files get modified to contain trash merge markers
 
   #open with a merging tool:
 
     git mergetool
-
-##remove file completelly from repo
-
-  #for example:
-    #sensitive data
-    UNAME=cirosantilli
-    REPONAME=python
-    REPOURL=https://github.com/$UNAME/$REPONAME.git
-    RMFILE=
-
-    git filter-branch --index-filter "git rm --cached --ignore-unmatch \"$RMFILE\"" --prune-empty -- --all
-    git push github master --force
-
-  #remove from local dir
-
-    rm -rf .git/refs/original/
-    git reflog expire --expire=now --all
-    git gc --prune=now
-    git gc --aggressive --prune=now
-
-  #MAIL ALL COLABORATORS AN TELL THEM TO git rebase
 
 ##submodule
 

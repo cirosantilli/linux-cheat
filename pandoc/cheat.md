@@ -212,3 +212,11 @@ only works for html output, not for pdf, so never use it unless you really need 
 ## inner content is md parsed:
 
 <p>**par**</p>
+
+##comments
+
+there is no real good way AFAIK
+
+a good possibility is:
+
+<!-- comment -->
