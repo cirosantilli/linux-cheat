@@ -66,38 +66,129 @@
   #TODO! =) someday ill get to the point of having something useful to package too myself...
   #and then I'll learn this!
 
-#sources
+#ppa
 
-  #add keys
-  sudo apt-key adv --keyserver pgp.mit.edu --recv-keys 5044912E
+  #ppas are sources of software
 
-  #add sources
-    #add a ppa. a ppa is a personal source, not directly supported by Ubuntu.
-    sudo add-apt-repository ppa:deluge-team/ppa
+  #they may or not be officially supported by ubuntu.
+
+  #to add a new source you must do two things:
+
+  #- add a the ppa key to the trusted ppa list
+  #- add the ppa to the ppa list
+
+  ##find sources
+
+    #launchpad is the main source for ppas and the site is maintained by ubuntu. look there first.
+
+    #next google it.
+
+  ##list sources 
+
+    #default sources:
+
+      cat /etc/apt/sources.list
+
+    #ppas:
+
+      ls -1 /etc/apt/sources.list.d/
+
+  ##keys
+
+    #in order to trus a ppa, you have to add its key.
+
+    #this is called a <#digital signature>.
+    
+    #It is meant to:
+
+    #- ensure that you received the data from who you think you did
+    #- ensure that the data was not modified in its way to you
+
+    #keys are managed by <#gpg>, and kept in:
+      
+      gpg /etc/apt/trustdb.gpg
+
+    #so if you want to really understand things, you must first understand gpg
+
+    #list keys easily:
+
+      apt-key list
+
+    ##add keys
+
+        sudo apt-key adv --keyserver pgp.mit.edu --recv-keys 5044912E
+
+      ##wget
+
+        wget -q -O - http://archive.getdeb.net/getdeb-archive.key | sudo apt-key add -
+
+  ##ppas in launchpad
+  
+    #launchapd is maintainedd by canonical, and it is easy to
+    #install/remove packages from them with `add-apt-repository`
+    #which add key and source easily
+
+    ##launchpad ppas
+
+        sudo add-apt-repository ppa:deluge-team/ppa
+        sudo aptitude update
+
+      #- `deluge-team` is an username
+      #- ppa is an specific ppa from that username
+
+      #-y: don't ask for confirmation:
+
+        sudo add-apt-repository -y ppa
+
+    #remove sources
+
+      #you could remove them manually, but there it is better to do that with ppa-purge:
+
+        sudo aptitude install ppa-purge
+        sudo ppa-purge ppa:matthaeus123/mrw-gimp-svn
+
+      #not sure what is the difference of:
+
+        sudo add-apt-repository --remote
+
+  ##ppas outside launchpad
+
+    #the best I could find for now to add was the getdeb way:
+
+      wget -q -O - http://archive.getdeb.net/getdeb-archive.key | sudo apt-key add -
+      sudo sh -c 'echo "deb http://archive.getdeb.net/ubuntu quantal-getdeb games" >> /etc/apt/sources.list.d/getdeb.list'
+
+    #and to remove:
+
+      sudo rm /etc/apt/sources.list.d/getdeb.list
+      apt-key list | less
+        #pub   4096R/46D7E7CF 2009-05-15
+        #            ^^^^^^^^           
+        #            KEY           
+      KEY=
+      sudo apt-key del "$KEY"
+
+    #keep a list of all ppas added like this somewhere.
+
+    #if you want to uninstall, you will remember the filename to remove
+
+    ##add-apt-repository
+
+      #bad
+
+      #you can also add just the source but not the key with:
+
+        sudo add-apt-repository -y "deb http://archive.ubuntugames.org ubuntugames main"
+
+      #and it will be appended to the `sources.list` directly,
+      #which is worse than using a file that is easier to remove!
+
+#update
+
+  #looks for possible updgrades on known sources,
+  #but does not install them
+
     sudo aptitude update
-
-    sudo add-apt-repository -y "$SRC"
-      #don't ask for confirmation
-
-  #list sources 
-
-    #sources list. does not include ppas
-    cat /etc/apt/sources.list
-    sudo vim /etc/apt/sources.list
-
-    #ppas you added are kept in separate files in this dir:
-    ls -1 /etc/apt/sources.list.d/
-
-  #remove sources
-
-    #you could remove them manually, but there it is better to do that with ppa-purge:
-    sudo aptitude install ppa-purge
-    sudo ppa-purge ppa:matthaeus123/mrw-gimp-svn
-
-  #update existing sources
-
-    sudo aptitude update
-      #looks for possible updgrades on known dirs, but does not install them
 
 #get info on installed packages
 
@@ -116,8 +207,9 @@
 
 #find new packages
 
-  sudo apt-cache search "Apache Server"
-  #searches package name and descriptions on the web
+  #searches package name and descriptions on the web:
+
+    apt-cache search apache
 
   ##apt-file
 
@@ -235,3 +327,4 @@
     sudo apt-get autoremove
     suto apt-get install $PKG
     #also, if the package comes from a ppa, remove the ppa and try again
+    #sources list. does not include ppas

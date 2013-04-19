@@ -149,13 +149,13 @@
 		#VARIABLE += value
 			#Appending the supplied value to the existing value
 
-	#define var inside rule
+	##define var inside rule
 		all:
 			$(eval X := $* )
 			#set a variable inside a rule
 			echo $(X)
 
-	#special vars
+	##special vars
 
 		#$@: cur target
 		#$*: part that matches % of cur target
@@ -167,9 +167,34 @@
 
 ##spaces
 
-	#you simply cannot have filenames with spaces in them.
+	#**PAY ATTENTION TO THIS BECAUSE MAKE IS FUSSY ABOUT SPACES**!
 
-	#use hyphens '-' or '_' instead
+	#- you simply cannot have filenames with spaces in them. use hyphens '-' or '_' instead
+
+	#- in variable definition, traillinw whitespaces that follow are included!!
+
+		#ex:
+
+			a = b  
+
+		#a = "b  "
+
+		#never use trailling spaces!!!
+
+	#- you cannot have a blank line for a rule:
+
+		all:
+			echo a
+
+			echo b
+
+		#only `echo a` will be executed!!!
+
+		all:
+			echo a
+			echo b
+
+		#`echo a` and `echo b` are executed
 
 ##include
 
@@ -350,6 +375,13 @@ all:
 
 	make
 
+##dolar sign
+
+	#if you want a dollar sign in the rules, use $$:
+
+	all:
+		a=b;echo $$a
+
 ##multiline commands
 
 	#when `\` ends the line
@@ -358,12 +390,11 @@ all:
 
 	#`\` is passed to bash
 
-all:
-
-	( 			\
-		cd d	;\
-		pwd		;\
-	)
+		all:
+			( 			\
+				cd d	;\
+				pwd		;\
+			)
 
 ##implicit builtins
 
@@ -390,6 +421,8 @@ all:
 
 #as you may guess, this specifies for which suffixes automatic rules will work or not.
 
+#**I SUGGEST YOU ALWAYS USE THIS**!
+
 ##recipes
 
 	##make all files of an extension inside given path
@@ -413,7 +446,7 @@ all:
 			mkdir -p "$(OUT_DIR)"
 
 		$(OUT_DIR)%$(OUT_EXT): $(IN_DIR)%$(IN_EXT)
-			$(CC) -o "$@" "$<"
+			$(CC) -o "$@" "$<"u al
 
 		clean:
 			rm -rf $(OUT_DIR) $(AUX_DIR)

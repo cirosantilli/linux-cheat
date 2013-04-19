@@ -12,11 +12,17 @@ this workflow is basically valid for any [vcm] with a web interface.
 
 ## souces
 
-- official book: <http://git-scm.com/book>. Good info and graphs.
+- official book: <http://git-scm.com/book>.
+
+    Good info and graphs.
+
+    Leaves out many practical things.
 
 - good tut: <http://cworth.org/hgbook-git/tour/>
 
 - good tut, straight to the point, ascii diagrams: <http://www.sbf5.com/~cduan/technical/git/git-1.shtml>
+
+- good tut by github: <http://learn.github.com/p/>
 
 - description of a production/dev/hotfix branch model:
     <http://nvie.com/posts/a-successful-git-branching-model/>
@@ -97,10 +103,19 @@ git + github allows you to do the following quickly:
 
 git is hard to learn at first because
 
-- it has inner state that is not obvious to visualise.
-- concepts depend on one another
+- it has inner state that is not obvious at first to visualise.
 
-to learn it, make a bunch of standard test repos, copy them out, test away.
+- concepts depend on one another egg and chicken style.
+
+to learn it:
+
+- make a bunch of standard test repos, copy them out, and *test away*.
+
+    use the standard repos generated in [test repos]
+
+- visualise the commit tree whenever you don't know what is going on.
+
+    once you see the tree, and how to modify it, everything falls into place!
 
 # setup
 
@@ -141,30 +156,6 @@ go into some dir you have code you want to add to git and then do:
 
 this creates a `.git` dir that contains all the git information.
 
-## branches
-
-read this after you understand [branch]
-
-example: remote
-
-                +---------------(E)
-                /                |
-    (A) -- (B) -- (C) -- (D)     |
-                          |      |
-                          master feature
-                          |
-                          HEAD
-
-you repo after clone:
-
-                    +-------------- (E)
-                   /                 |
-    (A) -- (B) -- (C) -- (D)         |
-                          |          |
-         origin/master, master    origin/feature
-                          |
-                         HEAD
-
 # create version
 
 most of git operations are based on versions, so you'd better know how to create them!
@@ -202,6 +193,16 @@ and if nothing changes, it says so.
 
 check out the [add], [rm] and [reset] commands to see how it behaves
 (it is only cool once you start changing the repo)
+
+# definition: index
+
+is where git stores what will be kept for next version
+
+it can modified with may commands such as [add], [rm], [mv], or [reset].
+
+# definition: working tree
+
+is all the "regular" files that lie outside the `.git` dir.
 
 # add
 
@@ -241,13 +242,152 @@ start with [0]
 
 # reset
 
-unadd a file that would be added to net version
+changes who is the parent of a commit.
 
-if you regret adding a file to next version, and want to undo that to:
+as any history rewritting, you should not do this after a push.
 
-    git reset HEAD a
+## hard vs soft
 
-the file stays the same on your disk, but it will not be considered for next commit anymore.
+hard also modifies the actual files and the index!
+
+soft does not.
+
+    ./copy.sh 2u
+    echo a3 >> a
+    echo b3 >> b
+    git add a b c
+    git status
+        #to be commited: a, b and c
+
+with soft:
+
+    git reset
+        #unstaged: a, b
+        #untracked: c
+    ls
+        #a b c
+
+    cat a
+        #a1
+        #a2
+        #a3
+
+    cat b
+        #b1
+        #b2
+        #b3
+
+    cat c
+        #c
+
+so all files stayed the same as they were, but they became unstaged.
+
+this is how you unstage a file.
+
+with hard:
+
+    git reset --hard
+    ls
+        #a b c
+
+    cat a
+        #a1
+        #a2
+
+    cat b
+        #b1
+        #b2
+
+    cat c
+        #c
+
+- tracked files went back to as they were at last commit.
+
+    Changes you made on the working tree were discarded!!
+
+- untracked files (`c`) are unchanged, but they are unstaged
+
+## change parent of a commit
+
+this changes history and as any history changing, if you do this after you [push] and someone else [fetche]d, there will be problems!
+
+with reset, you can change the commit a branch points to to any other commit,
+even if the other commit is not an ancestor of the parent!
+
+    ./copy.sh b2
+    git reset --hard b2
+    git status
+        #no changes
+
+the tree:
+
+    (1)-----(2)
+     |       
+     |       
+     |       
+     +------(b2)
+             |
+             master *
+             b
+
+`(2)` is called a *dangling commit* since it has no descentant branch.
+
+### delete last commit from history
+
+start with [2]:
+
+    ./copy.sh 2
+    echo a3 >> a
+    echo b3 >> b
+    echo c > c
+    git reset --hard HEAD~
+    ls
+        #a b c
+
+    cat a
+        #a1
+
+    cat b
+        #b1
+
+    cat c
+        #c
+
+    git show-refs -h HEAD
+        #hash2
+
+    git log --pretty=oneline
+        #only one commit!
+
+the tree:
+
+    (1)-----(2)
+     |
+     master *
+
+and `(2)` is called a dangling commit.
+
+## undo a reset hard
+
+you can undo a reset hard.
+
+first find out the hash of the deleted commits:
+
+    git fsck --lost-found
+
+they should show up as *dangling commits*. This is what they are: commits that have no descentand branch.
+
+now merge away with the have you just found.
+
+but *don't rely on this!*: 
+dangling commits are removed from time to time depending on your configs
+
+## remove all dangling commits forever
+
+    git reflog expire --expire=now --all
+    git gc --prune=now
+
+but be sure this is what you want! there is no turning back.
 
 # rm
 
@@ -306,6 +446,44 @@ or
 and a will be removed.
 
 ---
+
+# mv
+
+similar to [rm].
+
+if you do a normal `mv`, then it is as if the old file was removed and a new one was created:
+
+start with [1].
+
+    mv b c
+    git status
+        #removed: b
+        #untracked: b
+
+if you do `git mv`, git acknowleges it was moved:
+
+    mv b c
+    git status
+        #renamed: b -> c
+
+with `-f`, if the new path exists, it is overwritten:
+
+    git mv -f "$OLD_PATH" "$NEW_PATH"
+
+with `-k`, if moving would lead to an error (overwrite without -f or file not tracked), skip the move:
+
+    git mv -k "$OLD_PATH" "$NEW_PATH"
+
+# clean
+
+**danger**: remove all [untracked file]s in repo
+
+start with [1]
+
+    echo c > c
+    git clean -f
+    ls
+        #a b
 
 # commit
 
@@ -436,6 +614,22 @@ show all commits on all branches (by default only current branch is shown):
 
     git log --all
 
+view hash commit messages only:
+
+    git log --pretty=oneline
+
+# reflog
+
+see all that was done on repo linearly in time:
+    
+    git reflog
+
+shows stuff like:
+
+- commits
+- checkouts
+- resets
+
 # gitk
 
 gitk is a gui for git.
@@ -506,6 +700,10 @@ to understand branches, see [branch]
 
 see [remote head]
 
+## by tag
+
+see [tag]
+
 ## relative to another version
 
 one commit before:
@@ -524,9 +722,10 @@ three commits before:
 
 also work:
 
-- hash:          `1ba8f~3`
-- branch:       `master~3`
-- remote head:  `origin/master~3`
+- hash:        `1ba8f~3`
+- branch:      `master~3`
+- tag:         `1.0~3`
+- remote head: `origin/master~3`
 
 # diff
 
@@ -556,6 +755,80 @@ meaning:
     '+' indicates that a line was added.
 
     not surprisingly, if we remove something, a '-' will show instead
+
+# tag
+
+tags are aliases to commits
+
+the difference from branches is that tags don't move with commits.
+
+typical usage: give version numbers: `1.0`, `1.1`, `2.0`
+
+    ./copy 2
+
+give tag to `HEAD`:
+
+    git tag 2.0
+
+give tag to another commit:
+
+    git tag 1.0 HEAD~
+
+use:
+
+    git show-refs -h HEAD
+        #hash of first commit
+    git show-refs -h HEAD
+        #hash of second commit
+    git checkout 1.0
+    git show-refs -h HEAD
+        #hash of first commit
+    git checkout 2.0
+    git show-refs -h HEAD
+        #hash of second
+
+list:
+
+    git tag
+        #1.0
+        #1.0a
+        #1.1
+
+list with hashes side by side:
+
+    git show-ref --tags
+
+list with commit messages side by side:
+
+not possible without a for loop AFAIK <http://stackoverflow.com/questions/5358336/have-git-list-all-tags-along-with-the-full-message>
+
+delete:
+
+    git tag -d 1.0
+
+push to remote:
+
+    git push --tags
+
+is not done be default.
+
+## annotated tag
+
+    git tag -a ta -m 'annotated tag message!'
+
+and now:
+
+    git show ta
+
+will show who created the tag and the tag message before the rest of the infos.
+
+a tag that is not annotated is called a `lightweight` tag.
+
+## signed
+
+gpg signed tags!!
+
+too overkill/too lazy to show for here see: <http://learn.github.com/p/tagging.html>.
 
 # branch
 
@@ -755,6 +1028,13 @@ the command is called `checkout`, because we are goint to "check out" what anoth
 
 if you checkout the entire repo, `HEAD` moves!
 
+if you ommit the version, defaults to `HEAD` so:
+
+    git checkout
+    git checkout HEAD
+
+are the same.
+
 ### example: checkout entire repo
 
 start with [3]
@@ -914,6 +1194,27 @@ now restore it:
 
 ---
 
+the file must exist in the version you want to checkout to
+
+### counter-example: checkout after remove
+
+    start with [1]
+
+    git rm a
+    git commit -am 'noa`
+
+no try:
+
+    git checkout a
+
+which is the same as:
+
+    git checkout HEAD -- a
+
+and it fails, because in `HEAD` a was removed from the repo.
+
+---
+
 ### uncommited changes
 
 unlike when cheking out the entire repo,
@@ -940,6 +1241,9 @@ ex: start with [2b]
 
     merge 
 
+TODO: finish example
+TODO: mergetool
+
 # push
 
 makes changes on a [bare] remote repo.
@@ -961,7 +1265,49 @@ if the branch does not exist it is created.
 
 ## don't type the repo url
 
-### remote add
+### with remote add
+
+see [remote add]
+
+### -u
+
+another way is to use the -u flag:
+
+    git push -u git@github.com:userid/reponame.git master
+
+now next time you can just do:
+
+    git push
+
+and it will push to the last location.
+
+## force
+
+if you do something bad, force may allow you to correct it.
+
+TODO
+
+# remote
+
+create aliases to a remote repo
+
+when you clone something, it alreay has a origin remote.
+
+## view remote
+
+shows remote repo aliases without their real addresses:
+
+    git remote 
+
+shows remote repo aliases and their real addresses:
+
+    git remote -v
+
+view detail of branch:
+
+    git remote show $B
+
+## remote add
 
 one way to avoid typing the repo url is giving it an alias with `remote add`:
 
@@ -982,17 +1328,11 @@ which gives:
     origin  git@github.com:cirosantilli/reponame.git (fetch)
     origin  git@github.com:cirosantilli/reponame.git (push)
 
-### -u
+## remote rm
 
-another way is to use the -u flag:
+remove the branch github:
 
-    git push -u git@github.com:userid/reponame.git master
-
-now next time you can just do:
-
-    git push
-
-and it will push to the last location.
+    git remote rm github
 
 # remote head
 
@@ -1115,39 +1455,50 @@ the remote must have a name (either given automatically at `clone` as `origin` o
 
 ## example
 
-you after a clone:
+state of the remote:
+
+    (A)----(B)----(C)----(H)
+                   |      |     
+                   |      master *
+                   |                   
+                   +-----(E)
+                          | 
+                          feature
+
+local repo after a clone:
 
     git clone path/to/repo
 
-                   +--------------- (E)
-                   |                 |
-    (A)----(B)----(C)----(D)         |
-                          |          |
-         origin/master, master    origin/feature
-                          |
-                         HEAD
+    (A)----(B)----(C)----(D)    
+                   |      |     
+                   |      master *
+                   |      origin/master
+                   |                   
+                   +-----(E)
+                          | 
+                          origin/feature
 
 new state of the remote:
 
-                   +--------- (E)----(F)----(G)
-                   |                         |
-    (A)----(B)----(C)----(D)----(H)          |
-                                 |           |
-                               master     feature
-                                 |
-                                HEAD
+    (A)----(B)----(C)----(D)----(H)
+                   |             |     
+                   |             master *
+                   |                   
+                   +-----(E)----(F)--------(G)
+                                            | 
+                                            feature
 
-you after a fetch:
+local repo after a fetch:
 
     git fetch origin
 
-                    +-------------(E)--------------(F)------(G)
-                   /               |                         |
-    (A)----(B)----(C)----(D)-----------------(H)             |
-                          |        |          |              |
-                        master  feature origin/master  origin/feature
-                          |
-                         HEAD
+    (A)----(B)----(C)----(D)--------(H)
+                   |      |          |     
+                   |      master *   origin/master
+                   |                   
+                   +-----(E)--------(F)--------(G)
+                          |                     | 
+                          feature               origin/feature
 
 ---
 
@@ -1184,40 +1535,51 @@ does not update remote heads like [fetch] does.
 
 ## example: pull
 
-you after a clone:
+state of the remote:
+
+    (A)----(B)----(C)----(H)
+                   |      |     
+                   |      master *
+                   |                   
+                   +-----(E)
+                          | 
+                          feature
+
+your repo after a clone:
 
     git clone path/to/repo
 
-                    +-------------- (E)
-                   /                 |
-    (A) -- (B) -- (C) -- (D)         |
-                          |          |
-         origin/master, master    origin/feature
-                          |
-                         HEAD
+    (A)----(B)----(C)----(D)    
+                   |      |     
+                   |      master *
+                   |      origin/master
+                   |                   
+                   +-----(E)
+                          | 
+                          origin/feature
 
 new state of the remote:
 
-                    +-------- (E) -- (F) -- (G)
-                   /                         |
-    (A) -- (B) -- (C) -- (D) -- (H)          |
-                                 |           |
-                               master     feature
-                                 |
-                                HEAD
+    (A)----(B)----(C)----(D)----(H)
+                   |             |     
+                   |             master *
+                   |                   
+                   +-----(E)----(F)--------(G)
+                                            | 
+                                            feature
 
-you after a `pull`:
+local repo after a `merge`:
 
     git pull origin master
-    
-                    +-------- (E) ------------- (F) ----- (G)
-                   /           |                           |
-    (A) -- (B) -- (C) -- (D) ------------ (H)              |
-                               |           |               |
-                            feature  origin/master,  origin/feature
-                                        master
-                                           |
-                                          HEAD
+
+    (A)----(B)----(C)----(D)--------(H)
+                   |                 |     
+                   |                 master *
+                   |                 origin/master
+                   |                   
+                   +-----(E)--------(F)--------(G)
+                          |                     | 
+                          feature               origin/feature
 
 so you current branch `master` has been merged into the branch `master` from repo `origin`.
 
@@ -1247,37 +1609,132 @@ this may ask for you github username and pass.
 
 go back to github and browse your uploaded files to check that they are there.
 
+# file permissions
+
+git keeps file permissions (rwx) as metadata inside the ``.git`` dir
+
+# symlinks
+
+## on push
+
+git stores symlinks as files containing the link location
++ some metadata inside ``.git`` that indicates that it is a symlink.
+
+## on pull
+
+git recreates the symlinks on local system
+
+start with [multi]
+
+    cd a
+    ln -s a c
+    git add c
+    git commit -am 'c'
+    git push
+
+    cd ..
+    git clone ao c
+    cd c
+    [ -s c ] && echo ok
+
+# submodules
+
+## application
+
+you have 3 repos.
+
+you want to use files from a certain versions of repo 1 in repos 2 and 3,
+
+there is no reliable way to:
+
+- share a file between programs ( like `PATH` does for executable )
+- maintain different versions of a program ( like `virtualenv` does for python )
+
+so you have to keep a copy of the shared repo for each using repo anyways.
+
+## creation
+
+you have a latex `a.sty` file which you want to use
+
+- on version `1.1` for a latex project 2 in `project2` repo
+- on version `1.0` for a latex project 3 in `project3` repo
+
+make a repo and put `a.sty` in the repo. Call it `latex`.
+
+On project 2:
+
+    git submodule add git://github.com/USERNAME/latex.git shared 
+    ln -s shared/a.sty a.sty
+    git add .gitmodules
+
+Now a dir callled `shared` was created and contains your repo.
+
+Don't ever touch that dir directly. Changes in that dir are not seen by git.
+
+## cloning
+
+to get all the files of submodules you need:
+
+    git clone add git://github.com/USERNAME/project2.git
+    git submodule init
+    git submodule update
+
+---
+
+git commands inside the submodule work just like git commands on a regular git repo!
+
+## update the content of a submodule
+
+    cd share
+    git pull
+
+## go back to another version of a submodule
+
+    cd share
+    git log
+    git checkout VERSION-ID
+
+# rebase
+
+change local history making it appear linear thus clearer.
+
+as any history change, can only be done before push.
+
+see: <http://learn.github.com/p/rebasing.html>
+
+# hooks
+
+take an action whenever something happens (a commit for example)
+
+create a hook, just add an executable file with a known hook name under `.git/hooks/`
+
+this executable may receive command line arguments which git uses to pass useful info to the executable.
+
+example:
+
+    cd .git/hooks/
+    echo '#!/usr/bin/env bash
+
+    echo abc' > post-commit
+    chmod +x post-commit
+
+now whenever you commit, you will see: abc on the terminal!
+
+see: <http://git-scm.com/book/en/Customizing-Git-Git-Hooks> for other hook names.
+
+TODO
+
 # test repos
 
 use those to test stuff.
 
+they can be generated with the `generate-test-repos.sh` script
+
+they are described here.
+
 ## 0
 
-2 files uncommitted:
-
-    mkdir 0
-    cd 0
-    git init
-    echo 'a1' > a
-    echo 'b1' > b
-    cd ..
-
-    git status
-        #untracked: a b
-
-## 1
-
-2 files committed.
-
-create:
-
-    cp -r 0 1
-    cd 1
-    git add *
-    git commit -m 1
-    cd ..
-
-looks like:
+2 files uncommitted
 
     ls
         #a b
@@ -1285,31 +1742,29 @@ looks like:
         #a1
     cat b
         #b1
+    git status
+        #untracked: a b
 
+## 1
+
+same as [0], but commited
+
+    ls
+        #a b
+    cat a
+        #a1
+    cat b
+        #b1
     git status
         #no changes
 
-    1
-
-    ^
-    |
-
-    master
-
-    HEAD
+    (1)
+     |
+     master
 
 ## 1u
 
-2 files committed and one uncommited
-
-create:
-
-    cp -r 1 1u
-    cd 1u
-    echo 'c1' > c
-    cd ..
-
-looks like:
+same as [1], but one uncommited file added
 
     ls
         #a b c
@@ -1323,27 +1778,16 @@ looks like:
     git status
         #untracked: c
 
-    1
-
-    ^
-    |
-
-    master
-
-    HEAD
+    (1)
+     |
+     master
+     HEAD
 
 ## 1ub
 
-2 files committed and one uncommited + a branch called `b`
+same as 1ub + one branch
 
 current branch is `master`.
-
-    cp -r 1u 1ub
-    cd 1ub
-    git branch b
-    cd ..
-
-looks like:
 
     ls
         #a b c
@@ -1357,29 +1801,14 @@ looks like:
     git status
         #untracked: c
 
-    1
-
-    ^
-    |
-
-    master *
-
-    b
-
-    HEAD
+    (1)
+     |
+     master *
+     b
 
 ## 2
 
-2 commits 2 files commited
-
-    cp -r ic 2
-    cd 2
-    echo 'a2' >> a
-    echo 'b2' >> b
-    git commit -m 2
-    cd ..
-
-looks like:
+2 commits and 2 files commited
 
     ls
         #a b
@@ -1393,28 +1822,17 @@ looks like:
     git status
         #no changes
 
-    1  -->  2
-
-            ^
-            |
-
-            HEAD
-
-            master
+    (1)-----(2)
+             |
+             HEAD
+             master
 
 ## 2u
 
-2 commits 2 files commited, 1 file uncommited
-
-    cp -r 2 2u
-    cd 2u
-    echo -e 'c1\nc2' >> c
-    cd ..
-
-looks like:
+same as [2] + 1 file uncommited
 
     ls
-        #a b
+        #a b c
     cat a
         #a1
         #a2
@@ -1428,45 +1846,25 @@ looks like:
     git status
         #untracked: c
 
-    1  -->  2
-
-            ^
-            |
-
-            HEAD
-
-            master
+    (1)-----(2)
+             |
+             HEAD
+             master
 
 ## 2b
 
 two branches unmerged, no uncommited files.
 
-    cp -r 1u 2b
-    cd 2b
-    git add c
-    git commit -m 'master2'
-    git checkout b
-    echo a2 >> a
-    echo '' >> b
-    echo d1 > d
-    git add d
-    git commit -am 'b2'
-    git checkout master
-    cd ..
-
 tree:
 
-    1  -->  master2
-
-    |       ^
-    v       |
-
-    b2      master *
-
-    ^       HEAD
-    |          
-               
-    b
+     
+    (1)-----(2)
+     |       |
+     |       master *
+     |       
+     +------(b2)
+             |
+             b
 
 files:
 
@@ -1497,13 +1895,6 @@ files:
 
 3 commits 2 files
 
-    cp -r 2 3
-    cd 3
-    echo 'a3' >> a
-    echo 'b3' >> b
-    git commit -m 3
-    cd ..
-
 looks like:
 
     ls
@@ -1520,74 +1911,50 @@ looks like:
     git status
         #no changes
 
-    1  -->  2
+    (1)-----(2)-----(3)
+                     |
+                     master *
 
-    ^       ^
-    |       |
+## 0bare
 
-    master  HEAD
-
-## ib
-
-bare
-
-    mkdir ib
-    cd ib
-    git init --bare
-    cd ..
+bare repo
 
 ## multi
 
-contains multiple repos for interepo tests
+contains multiple repos for inter repo tests
 
 it looks just like the github fork model!
 
-    mkdir multi
-    cp -r 1 multi/a
-    cd multi
-    clone --bare a ao
-    clone --bare ao bo
-    clone bo b
-    cd a
-    git remote add origin ../ao
-    cd ../b
-    git remote add upstream ../ao
-    cd ../..
-
-    cd ao
-    git remote rm origin
-    git remote add origin ../a
-    cd ../bo
-    git remote rm origin
-    git remote add origin ../ao
-    cd ../b
-    git remote rm origin
-    git remote add origin ../bo
-
-the repo looks like this:
+the repos are:
 
     ls
         # a ao b bo
 
-where
+where:
 
 - ao is the origin of a
 - ao is the origin of bo
 - bo is the origin of b
 - ao is the upstream of b
 
-meaning that a is the original repo
+so that those represent:
 
-ao is where the owner put it on github
+- a is the original repo (same as [b2])
+- ao is where the owner put it on github
+- bo is the fork made by someone else on github
+- b  is the clone of the fork
 
-bo is the fork made by someone else
+also:
 
-b  is the clone of the fork
+- a has a branch `master` and a branch `b`
 
+## multiu
+
+like [multi], but both master branches have commited unmerged modifications
 
 # definitions
 
-some commonly git vocabulary
+some git vocabulary
 
 ## a commit
 
@@ -1612,6 +1979,15 @@ is to consider it for next commit
 is one that has already been staged once
 
 ---
+
+# TODO
+
+- b clones, a commits, b commits. how can a check b's work
+(without clone! withou merge into master, but as a branch at first commit)?
+
+- how to update submodules automatically after a clone (with hooks maybe?)
+
+- how to automatically upload cross platform output files such as pdf (generated from latex)
 
 [github]: https://github.com/
 [bitbucket]: https://www.bitbucket.org/ 

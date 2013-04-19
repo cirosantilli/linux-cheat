@@ -1093,38 +1093,199 @@ int main(int argc, char** argv)
   sudo aptitude install -y file-roller
     #gui app to view inside archives and extrac them
 
-#encryption
+##encryption
 
-  gpg -c "$F"
-  #will create a "$F".gpg encrypted file
-  #good combo with tar.gz
+  ##gpg
 
-  cat "$F" | gpg -o "$F".gpg -c
-  #create from stdin
+    ##sources
 
-  gpg "$F".gpg
-  #decrypts to F
+      #- good tut: <http://www.spywarewarrior.com/uiuc/gpg/gpg-com-4.htm>
+      #- good tut: <http://www.madboa.com/geek/gpg-quickstart/>
+      #- <https://help.ubuntu.com/community/GnuPrivacyGuardHowto>
 
-  gpg -d "$F".gpg
-  #decrypt to stdout
+    ##test preparation
 
-  gpg -o "$F" -d "$F".gpg
-  #decrypts to F
+      F=a
+      echo a > "$F"
 
-  cat "$F".gpg | gpg -o "$F" -d 
-  #decrypts from stdin
+    ##encryption without keys
 
-  #combos
+      #encryption and digital signing
 
-    E=tgz.gpg
-    tar cz "$F" | gpg -o "$F"."$E" -c && rm -rf "$F"
-    #targz encrypt "$F" to F.tgz.gpg, remove original
+      #create a "$F".gpg password only encrypted file:
 
-    gpg -d "$F" | tar xz && rm "$F"
-    #targz decrypt "$F"
+        gpg -c "$F"
 
+      #good combo with tar.gz.
 
-    #-o : output file. default: logkeys -s -m mylang.map -o ~/.secret/keys.log
+      #create from stdin:
+
+        cat "$F" | gpg -o "$F".gpg -c
+
+      #decrypt to F:
+
+        gpg "$F".gpg
+
+      #decrypt to stdout:
+
+        gpg -d "$F".gpg
+
+      #decrypts to F:
+
+        gpg -o "$F" -d "$F".gpg
+
+      #decrypt from stdin:
+
+        cat "$F".gpg | gpg -o "$F" -d 
+
+    ##tar combos
+
+      #targz encrypt "$F" to F.tgz.gpg, remove original:
+
+        E=tgz.gpg
+        tar cz "$F" | gpg -o "$F"."$E" -c && rm -rf "$F"
+
+      #targz decrypt "$F"
+
+        gpg -d "$F" | tar xz && rm "$F"
+
+    ##encryption with keys
+
+      #you have to understand the very basics of assymetric encryption
+      #such as RSA before reading this.
+
+      ##user id
+
+        #uid can either be any case insensitive substring of the key name or email
+        #that only one user has:
+
+          U="me@mail.com"
+          U="me"
+
+      ##key id
+        
+        #is an identifier of the key:
+
+          K=12345678
+
+        #to get it, use:
+
+          gpg --list-keys
+
+        #TODO: how is it calculated this id?
+
+      ##files
+
+        #private keys is kept under `~/.gnupg/secring.gpg`. **NEVER SHARE THIS FILE**
+
+        #public  keys that you trust are kept under `~/.gnupg/secring.gpg`.
+
+        #the keys here are called keyring
+
+        #`.asc` extension is used for ascii key files
+
+        #each key file (`.asc` or `.gpg` may contain many keys)
+
+      ##genarate pub/private pair
+
+          gpg --gen-key
+
+      ##manage keys
+
+        #list pub keys which you trust
+
+          gpg --list-keys
+
+        #sample output:
+
+          pub   1234R/12345678 2000-01-01
+          uid                  user <mail>
+          sub   1234R/87654321 2000-01-01
+
+        #pub: public key
+        #sub: corresponding private pair
+        #`12345678`: key id
+        #`1234R`: ???
+
+        #add pubkey ot the trust list:
+
+          gpg --import
+
+      ##publicate you pubkey
+
+        #- so that they can encrypt stuff so that you can read it.
+        #- so that they can verify you are the creator of files.
+
+        #as binary:
+
+          gpg -o a.gpg --export "$U"
+
+        #this could be sent on an email attachment.
+
+        #as ascii:
+
+          gpg -a -o a.gpg --export "$U"
+
+        #this could be sent on an email body or as an attachment.
+
+        #view keys in a key file (`.asc` or `.gpg`):
+
+          gpg a.gpg
+
+        ##keyserver
+
+          #this is the best method, people only have to know your keyserver,
+          #and they can look for your key themselves.
+
+          #of course, nothing prevents you from signing as `Bill Gates`,
+          #and then you need some way to prove that that is your real identigy..
+
+          #well known servers:
+
+            S="http://pgp.mit.edu/"
+            S="https://keyserver.pgp.com/"
+
+          #you don't even need to create an account there to add your key:
+
+            gpg --send-keys "$K" --keyserver "$S"
+
+          #note that you need to use the key id, not the user id!
+          #since one user can have many keys.
+
+          #search for someone's key on a server:
+
+            gpg --search-keys "$U" --keyserver "$S"
+
+          #TODO not working
+
+      ##encrypt decrypt
+
+        #finnally!
+
+        #create a "$F".gpg pubkey encrypted file:
+
+          gpg -r "$U" -e "$F"
+
+        #only the person who knows the corresponding private key
+        #will be able to decrypt it.
+
+        #decrypt file for which you own the private key:
+
+          gpg -o "$F".out -e "$F"
+
+      ##verify file
+
+        #prove that a file comes from who he claims to:
+
+        #create a "$F" verification file:
+
+          gpg -a -b "$F"
+
+        #verify file with its verification file:
+
+          gpg --verify "$F".asc "$F"
+
+        #only works of course if the key is in you keyring.
 
 ##dictionnary
 
@@ -1359,26 +1520,83 @@ int main(int argc, char** argv)
 
       #I CANT CHANGE THE WIDTH!!!
         #asciiview -width a.jpg
-      
 
   ##imagemagick
 
-    #tons of image conversion
+    #tons of image conversion tools
 
-    sudo aptitude install -y imagemagick
+    #cli + apis in lots of langs, includeing c (native), c++ and python
 
-    identify -list format
-      #supported formats
+    #reading the manual is a great image manipulation course!
 
-    convert a.pdf a.jpg
-      #open jpg per page, named a-1.jpg, a-2.jpg
-      #-monochrome : monochrome image. == -depth 1? but not in practice =)
-      #-depth : number of bits per pixel.
-      #-density : pdfs are fixed width for printers, not pixel data,
-      #  so you have to say how many dpi you want to take
-      #  300 for ocr
+    #install:
+
+      sudo aptitude install -y imagemagick
+      sudo aptitude install -y imagemagick-doc
+
+    #list supported formats:
+
+      identify -list format
+
+    ##convert
+
+      #- process images
+      #- converts between formats
+
+      #- input/output format can be deduced automatically (from extension/or magic?)
+
       #does not do:
-      #  djvu
+      #- djvu
+
+      ##options
+
+        #tons of options available
+
+          ##size
+
+            ##-crop
+
+              #10x10: rectangle to keep:
+
+                convert -crop 10x10 a.jpg b.jpg
+
+              #+10+10: top left corner of rect
+
+                convert -crop 10x10+10+10 a.jpg b.jpg
+
+              #top 50 percent:
+
+                convert -crop 100x50% a.jpg b.jpg
+
+              #cannot give top left corner in percentage
+
+              #bottom 50 percent:
+
+                convert -gravity south -crop 100x50% a.jpg b.jpg
+
+          ##color
+
+            #-monochrome: monochrome image. == -depth 1? but not in practice =)
+
+            #-depth: number of bits per pixel.
+
+            #-density: pdfs are fixed width for printers, not pixel data,
+              #so you have to say how many dpi you want to take
+              #300 makes output quite readable
+
+              #always set this for pdfs
+
+              #pdf to one jpg per page:
+
+                convert -density 300 a.pdf a.jpg
+
+            #-threshold: 
+
+                convert -threshold 50 a.jpg b.jpg
+
+            #-level: 
+
+                convert -level -100,100 a.jpg b.jpg
 
   ##exactimage
     
@@ -1400,7 +1618,18 @@ int main(int argc, char** argv)
 
     ##okular
 
-      sudo aptitude install -y okular okular-extra-backends
+        sudo aptitude install -y okular okular-extra-backends
+
+      #open at given page of document:
+
+        okular -p 2 a.pdf
+
+      #single instance:
+
+        okular --unique a.pdf
+        okular --unique b.pdf
+
+      #`a.pdf` is closed, `b.pdf` is opened on same window.
 
     ##fbreader
       
@@ -1418,6 +1647,44 @@ int main(int argc, char** argv)
   
   ##manipulation
 
+    ##a2ps
+
+      #txt to ps
+      
+        sudo aptitude install a2ps
+
+        a2ps -o a.ps a.txt
+
+      #-1: one page per sheet (default is 2)
+
+        a2ps -B -1 -o a.ps a.txt
+
+      #-B: remove default headers:
+
+        a2ps -B -o a.ps a.txt
+
+      #--borders=no: no default borders:
+
+        a2ps -B -1 --borders=no -o a.ps a.txt
+
+      #output to stdout
+
+        a2ps -o - a.txt
+
+    ##ps2pdf
+
+        ps2pdf a.ps
+
+        ps2pdf a.ps out.pdf
+
+      #read from stdin:
+
+        ps2pdf - a.pdf
+
+      #out to stdout:
+
+        ps2pdf a.ps -
+
     ##pdftotext
 
       #extracts text layer from pdf
@@ -1433,46 +1700,79 @@ int main(int argc, char** argv)
 
       #merge two or more pdfs into a new document:
           pdftk 1.pdf 2.pdf 3.pdf cat output 123.pdf
+
       #or using handles:
           pdftk A=1.pdf B=2.pdf cat A B output 12.pdf
+
       #or using wildcards:
           pdftk *.pdf cat output combined.pdf
+
       #slice pdf: get pagets 1 to 7 only:
           pdftk A="$f.pdf" cat A1-7 output "$f.pdf"
-      #split select pages from multiple pdfs into a new document:
+
+      #select pages from multiple pdfs into a new document:
           pdftk A=one.pdf B=two.pdf cat A1-7 B1-5 A8 output combined.pdf
+
+      #split pdf into single pages
+          pdftk mydoc.pdf burst
+
+      #get pdf metadata like number of pages:
+          pdftk mydoc.pdf dump_data | less
+
       #rotate the first page of a pdf to 90 degrees clockwise:
           pdftk in.pdf cat 1E 2-end output out.pdf
+
       #rotate an entire pdf document’s pages to 180 degrees:
           pdftk in.pdf cat 1-endS output out.pdf
+
       #encrypt a pdf using 128-bit strength (the default) and withhold all permissions (the default):
           pdftk mydoc.pdf output mydoc.128.pdf owner_pw foopass
+
       #Same as Above, Except a Password is Required to Open the PDF:
           pdftk mydoc.pdf output mydoc.128.pdf owner_pw foo user_pw baz
+
       #Same as Above, Except Printing is Allowed (after the PDF is Open):
           pdftk mydoc.pdf output mydoc.128.pdf owner_pw foo user_pw baz allow printing
+
       #Decrypt a PDF:
           pdftk secured.pdf input_pw foopass output unsecured.pdf
+
       #Join Two Files, One of Which is Encrypted (the Output is Not Encrypted):
           pdftk A=secured.pdf mydoc.pdf input_pw A=foopass cat output combined.pdf
+
       #Uncompress PDF Page Streams for Editing the PDF Code in a Text Editor:
           pdftk mydoc.pdf output mydoc.clear.pdf uncompress
+
       #Repair a PDF’s Corrupted XREF Table and Stream Lengths (If Possible):
           pdftk broken.pdf output fixed.pdf
-      #Burst a Single PDF Document into Single Pages and Report its Data to doc_data.txt:
-          pdftk mydoc.pdf burst
-      #Report on PDF Document Metadata, Bookmarks and Page Labels:
-          pdftk mydoc.pdf dump_data output report.txt
 
     ##djvulibre-bin
 
         sudo aptitude install -y djvulibre-bin
 
-        #ddjvu
-          #formats: pbm, pgm, ppm, pnm, rle, tiff, and pdf
+        ##ddjvu
 
-        ddjvu -format=pdf "$djvu" "$pdf"
-        #loses text layer
+          #convert djvu to other formats
+
+          #huge outputs! not practical sizes!
+
+          #very slow!
+          
+          #possible: pbm, pgm, ppm, pnm, rle, tiff, and pdf
+
+            ddjvu -format=pdf "$djvu" "$pdf"
+
+          #outputs pages 1 and 3, followed by all the document pages in reverse order up to page 4:
+
+            ddjvu -format=pdf -pages=1,3,99999-4 "$djvu" "$pdf"
+
+          #loses text layer
+
+        ##djvm
+
+          #get number of pages of djvu:
+
+            djvm -l speak\ chinese\ 2.djvu | sed -nre '$ s/.+#([0-9]+).+/\1/p'
 
     ##ps2pdf
 
@@ -2948,9 +3248,37 @@ int main(void)
       #rename cur tab
       #no good for -s: only renames on gui
 
-##games and fun
+##game
 
-  sudo add-apt-repository -y "deb http://archive.ubuntugames.org ubuntugames main"
+  ##getdeb
+
+    #non launchapd ppa with lots of good games.
+
+      wget -q -O - http://archive.getdeb.net/getdeb-archive.key | sudo apt-key add -
+      sudo sh -c 'echo "deb http://archive.getdeb.net/ubuntu quantal-getdeb games" > /etc/apt/sources.list.d/getdeb.list'
+      sudo aptitude update
+
+    ##urban terror
+
+      #inertia, cs like, my favorite linux free fps so far
+
+    ##world of padman
+
+      #fps, very large scenarios, cool weaponsmoves
+
+      #but too fast for my taste.
+
+      #sudo aptitude install worldofpadman
+
+    ##world of padman
+
+      #fps, too fast for my taste
+
+    ##wolfenstein
+
+      #fps, ww2
+
+      #too fast for my taste.
 
   ##console
 
@@ -3680,6 +4008,10 @@ int main(void)
       #aaa
       #a
       #bb
+
+    #-s: only break at spaces:
+
+      assert [ "`echo -e "12345 6" | fold -s -w 3`" = $'123\n45\n6' ]
 
   ##fmt
   
@@ -5476,9 +5808,10 @@ int main(void)
       assert [ `ls | wc -l` = 2 ]
 
   ##cp
+
     #POSIX
 
-    #copy
+    #copy files and dirs
 
     ##file
 
@@ -5556,9 +5889,9 @@ int main(void)
 
   ##install
   
-    ##move and set: mode, ownership and groups
+    #move and set: mode, ownership and groups
   
-    ##make all components of path
+    #make all components of path:
     
       install -d a/b/c
       assert [ -d a ]
@@ -7453,6 +7786,86 @@ int main(void)
     #install server:
       sudo aptitude install -y vsftpd
     #Very Secure FTP Deamon
+
+    #list of free hosts: <http://freehosting1.net/free_ftp_hosting.aspx>
+
+    #free hosts im inscribed in (so I don't forget):
+
+    #- <http://freehostingnoads.net/>
+
+      #2Gb      storage
+      #2Gb      max file size
+      #10Gb/mo  transfer
+    
+      #- <http://cirosantilli.t15.org/>
+
+    #see all available commands:
+
+      ?
+
+    #connect:
+
+      open ftp.domain.com
+
+    #disconnect and but keep program open:
+
+      bye
+
+    #disconnect and exit program:
+
+      bye
+
+    #ls remote:
+
+      ls
+
+    #cd remote:
+
+      cd
+
+    #cd local:
+
+      lcd
+
+    #pwd remote:
+
+      pwd
+
+    #upload with same basename:
+
+      put a
+
+    #file a exists in current local dir
+
+    #upload with different basename:
+
+      put a b
+
+    #download with same basename in current dir:
+
+      get a
+
+    #download with different basename in current dir:
+
+      get a b
+
+    #download on relative path:
+
+      get d/a
+
+    #subdir must exist locally
+
+    #delete remote file:
+
+      del a
+
+    #create a remote directory:
+
+      mkdir d
+
+    #remove a remote directory:
+
+      rm d
 
   ##cifs
   
