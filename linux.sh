@@ -1291,20 +1291,45 @@ int main(int argc, char** argv)
 
 ##dictionnary
 
-    sudo aptitude install -y goldendict
+    ##dictionnary formats
+
+        ##stardict
+        #<http://goldendict.org/dictionaries.php>
+
+        #for dicts, go: <www.stardict.org/download.php>
+
+        ##bgl
+        #babylon
+        #windows oriented: exes on site!
+        #can open .exe with 7zip to extract data content
+        #now most exes are downloader without blgs, probably vendor lockin
+        #I found some that actually contained the blg here:
+        #  http://www.babylon.com/dictionaries-glossaries
+
+    ##goldendict
+
+        #fork of stardict
+
+            sudo aptitude install -y goldendict
+
         #select text can make popup windows!
-        #
-        #accepted dictionnary formats:
-        # http://goldendict.org/dictionaries.php
-        # stardict
-        #   for dicts, go here:
-        #     www.stardict.org/download.php
-        # bgl : babylon
-        #  windows oriented: exes on site!
-        #  can open .exe with 7zip to extract data content
-        #  now most exes are downloader without blgs, probably vendor lockin
-        #  I found some that actually contained the blg here:
-        #    http://www.babylon.com/dictionaries-glossaries
+
+        #supported formats: stardict, blg,
+
+    ##sdcv
+
+        #command line stardict
+
+        #supported formats: stardict only
+
+        #to install dict place it under:
+
+            /usr/share/stardict/dic
+            $(HOME)/.stardict/dic
+
+        #list available dicts:
+
+            sdcv -l
 
     ##spell checking
 
@@ -3221,36 +3246,6 @@ int main(void)
 
         sudo aptitude install -y filezilla
 
-##terminal emulators
-
-    ##guake
-
-        sudo aptitude install -y guake
-
-        #- drop down: hit a key (<F12> default) and it shows
-        #- single instance, great ipc communication
-            # this means it is very fast to open new tabs on it
-            # since it is always running!
-
-        guake -t
-            #toogle guake
-        guake -p
-            #open preferences window
-        guake -n /usr
-            #new tab, cur dir /usr
-        guake -s 0
-            #go to tab 0
-            #it is always a number, not what is written on the tab
-        guake -g
-            #print cur tab
-        guake -e cd
-        guake -e 'cd / ; ls'
-            #exec string
-            #keep term open afterwards
-        guake -r 'new name'
-            #rename cur tab
-            #no good for -s: only renames on gui
-
 ##game
 
     ##getdeb
@@ -3542,6 +3537,25 @@ int main(void)
 
             assert [ "`echo -e 'a\nb'`" = $'a\nb' ]
 
+        #print the `-n` string:
+
+        #IMPOSSIBLE! not even gnu echo supports `--`. =) use `printf`.
+
+    ##printf
+
+        #posix 7
+
+        #removes echo quicks
+
+        #supports c format strings:
+
+            assert [ "`printf "%1.2d" 1`"       == "01" ]
+            assert [ "`printf "%1.2f" 1.23`"    == "1.23" ]
+
+        #print the `-n` string:
+
+            assert [ "`printf "%s" "-n"`" == "-n" ]
+
     ##grep
 
         #posix 7
@@ -3805,28 +3819,36 @@ int main(void)
         # -c : counts how many dupes
 
     ##read
+
+        #-p print message
+
+            read -p "enter string: " s
+            echo "you entered $s"
     
         #read from file descriptor linewise and assign to variable
 
             ##applications
 
-                while read l; do
-                    echo "$l";
-                done < "$f"
-                    #read file linewise
+                #read file linewise:
 
-                while read l; do
-                    echo "$l"
-                done < <( echo -e "a\nb\na b" )
-                    #read echo linewise
+                    while read l; do
+                        echo "$l";
+                    done < "$f"
 
-                IFS_OLD="$IFS"
-                while IFS=' : ' read f1 f2
-                do          
-                    echo "$f1 $f2"
-                done < <( echo -e "a : b\nc : d" )
-                IFS="$IFS_OLD"
-                    #delimiers
+                #read stdout linewise:
+
+                    while read l; do
+                        echo "$l"
+                    done < <( echo -e "a\nb\na b" )
+
+                #split into fields:
+
+                    IFS_OLD="$IFS"
+                    while IFS=' : ' read f1 f2
+                    do          
+                        echo "$f1 $f2"
+                    done < <( echo -e "a : b\nc : d" )
+                    IFS="$IFS_OLD"
 
     ##tee
 
@@ -3916,15 +3938,6 @@ int main(void)
             #-l newlines only
             #-L max line lenght only
             #-w words only
-
-    ##printf
-
-        #posix 7
-
-        printf "%1.2d" 1
-            #01
-        printf "%1.2f" 1.23
-            #1.23
 
     ##head
 
@@ -4036,12 +4049,13 @@ int main(void)
     
         #view bytes in hexa
 
-        echo abc | hexdump -C
-            #-C : see bytes in hexadecimal
-            #-n32 : only 32 bytes
-            #-s32 : start at byte 32
-            #-v: show duplicate lines
-            #-e '1/1 " %02X"': format string
+            echo abc | hexdump -C
+
+        #-C : see bytes in hexadecimal
+        #-n32 : only 32 bytes
+        #-s32 : start at byte 32
+        #-v: show duplicate lines
+        #-e '1/1 " %02X"': format string
 
     ##od
 
@@ -4644,29 +4658,6 @@ int main(void)
 
         echo "touch a" | at -q b now
             #same, but with at you can change to any time
-
-##bison and flex
-
-    #flex  = open source for lex
-    #bison = open source for yacc
-    
-    sudo aptitude install -y bison bison-doc
-    sudo aptitude install -y flex flex-doc
-
-    ##flex
-    
-        #formal regex to tokens
-        
-        #why it works well with bison:
-        
-            #this step is O(n)
-            
-            #the bison naive algorithm is O(n^3) ( assymptotic O(n^2.40) and falling )
-            
-    ##bison
-    
-        #parses deterministic context free languages (aka deterministic LR)
-        #subset of context-free, superset of regex
         
 ##hd
 
@@ -6550,173 +6541,51 @@ int main(void)
         fdupes -rd .
             #finds dupes, and prompt which to keep for each match
 
-##bash
+##prompt user
 
-    ##tput
+    ##while read case
 
-        #get/set terminal output params
+        #ask for user input, break into cases
+        #if none of the cases is met, print error message and ask again.
+        while true; do
+                read -p "Which case do you want? case a [a], case b [b], case c [c])" c 
+                case "$c" in
+                    "a" ) echo "Action for case a"; break;;
+                    "b" ) echo "Action for case b"; break;;
+                    "c" ) echo "Action for case c"; break;;
+                    * ) echo "Does not match any of the possible cases. Try again."
+                esac
+        done
 
-        #could be used for cu
-        
-        tput cols
-            #terminal width
-        tput lines
-            #terminal height
-            
-        tput clear
-            #clear terminal
+        #same as above, but for the ultra common case of yes [Y] no [n] case 
+        while true; do
+                read -p "Yes or no? [Y/n]" yn
+                case "$yn" in
+                        Y ) ; break;;
+                        n ) ; break;;
+                        * ) echo "Please enter either 'Y' or 'n'.";;
+                esac
+        done
 
-        tput cup 0 0
-            #go to top of screen
-            #start rewritting over what was written
+##yes
 
-        #multiple commands
+    #coreutils
 
-            echo $'clear\ncup 10 0' | tput -S
-
-        ##colors
-
-            CLEAR_TERMINAL=`tput clear`
-
-            SET_CURSOR_POSITION=`tput cup 2 3`
-            tput sc #saves current position
-            tput rc #restore previously saved cursor position
-
-            NCOLS=`tput cols`
-            NLINES=`tput lines`
-
-            CLEAR_FORMAT=`tput sgr0`
-
-            HIDE_CURSOR=`tput civis`
-            SHOW_CURSOR=`tput cnorm`
-
-            BOLD=`tput bold`
-
-            UNDERLINE_ON=`tput smul`
-            UNDERLINE_OFF=`tput rmul`
-
-            LINE_WRAP_OFF=`tput rmam`
-            LINE_WRAP_ON=`tput smam`
-
-            Black="$(tput setaf 0)"
-            BlackBG="$(tput setab 0)"
-
-            Red="$(tput setaf 1)"
-            RedBG="$(tput setab 1)"
-
-            Green="$(tput setaf 2)"
-            GreenBG="$(tput setab 2)"
-
-            Brown="$(tput setaf 3)"
-            BrownBG="$(tput setab 3)"
-
-            Blue="$(tput setaf 4)"
-            BlueBG="$(tput setab 4)"
-
-            Purple="$(tput setaf 5)"
-            PurpleBG="$(tput setab 5)"
-
-            Cyan="$(tput setaf 6)"
-            CyanBG="$(tput setab 6)"
-
-            White="$(tput setaf 7)"
-            WhiteBG="$(tput setab 7)"
-
-            echo "${GreyBG}${Red}gray on red${CLEAR_FORMAT}no format"
-            tput bold; tput setaf 7; tput setab 1; echo "gray on red"; tput sgr0; echo "no format"
-
-            #colors
-            #Set background color 	tput setab color
-            #Set foreground color 	tput setaf color
-            #Set bold mode 	tput bold
-            #Set half-bright mode 	tput dim
-            #Set underline mode 	tput smul
-            #Exit underline mode 	tput rmul
-            #Reverse mode 	tput rev
-            #Set standout mode 	tput smso
-            #Exit standout mode 	tput rmso
-            #Reset all attributes 	tput sgr0
-            #Color 	Code
-            #black 	0
-            #red 	1
-            #green 	2
-            #yellow 	3
-            #blue 	4
-            #purple 	5
-            #cyan 	6
-            #white 	7o
+    #repeat an output forever!
     
-    ##setterm
+    yes
+        #y
+        #y
+        #y
+        #...
+
+    yes a b c
+        #a b c
+        #a b c
+        #a b c
+        #...
     
-        #change terminal properties
-
-        #turns the cursor (blincking you are here thinghty) on/off
-            setterm -cursor off
-            setterm -cursor on
-        
-    ##libnotify
-    
-        #do those annoying popup notifications yourself!
-    
-        sudo aptitude install -y libnotify-bin
-
-        notify-send abc
-        notify-send -t 1000 abc
-            #-t: timeout
-        notify-send -u critical abc
-            #-u urgency. low, normal, or critical
-    
-    ##prompt user
-
-        ##while read case
-
-            #ask for user input, break into cases
-            #if none of the cases is met, print error message and ask again.
-            while true; do
-                    read -p "Which case do you want? case a [a], case b [b], case c [c])" c 
-                    case "$c" in
-                        "a" ) echo "Action for case a"; break;;
-                        "b" ) echo "Action for case b"; break;;
-                        "c" ) echo "Action for case c"; break;;
-                        * ) echo "Does not match any of the possible cases. Try again."
-                    esac
-            done
-
-            #same as above, but for the ultra common case of yes [Y] no [n] case 
-            while true; do
-                    read -p "Yes or no? [Y/n]" yn
-                    case "$yn" in
-                            Y ) ; break;;
-                            n ) ; break;;
-                            * ) echo "Please enter either 'Y' or 'n'.";;
-                    esac
-            done
-
-        ##dialog
-            
-            #ncurses wrapper
-        
-            sudo aptitude install -y dialog
-
-        ##yes
-        
-            #coreutils
-        
-            #repeat an output forever!
-            
-            yes
-                #y
-                #y
-                #y
-                #...
-
-            yes a b c
-                #a b c
-                #a b c
-                #a b c
-                #...
-            
-            yes | timeout 1 cat
+    yes | timeout 1 cat
 
 ##users and groups
 
@@ -6726,6 +6595,15 @@ int main(void)
     #while logged on a different shell, process on the other shells continue to run? TODO
         #totem stops
         #simple shell scripts continue
+
+##setterm
+
+    #outputs stdout that changes terminal properties
+
+    #turns the cursor on/off:
+
+        setterm -cursor off
+        setterm -cursor on
 
     cat /etc/passwd
         #shows users
@@ -7532,6 +7410,7 @@ int main(void)
                 #body ends with a single dot '.' on a line
 
             ##dict
+
                 curl dict://dict.org/show:db #dictionnaries
                 curl dict://dict.org/d:bash #general
                 curl dict://dict.org/d:bash:foldoc #computing
@@ -9491,9 +9370,6 @@ add Lock = Caps_Lock
 
         #collection of good numerical libraries.
 
-        #- asdf
-        #- qwer
-
         #industry usage.
         
     ##opengl glut
@@ -9560,19 +9436,9 @@ add Lock = Caps_Lock
     
         #set/get capslock, numlock and scrolllock led state
     
-        #only works from a terminal (ctrl+alt+F? thingy) 
+        #only works from tty (ctrl+alt+F[1-6] on ubuntu) 
         
-        setleds
-
-    ##expect
-    
-        sudo aptitude install -y expect
-
-    ##dejagnu
-
-        #provide single frontend for program tests
-
-        sudo aptitude install -y expect
+            setleds
 
     ##gtk themes
 
