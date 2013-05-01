@@ -2,8 +2,10 @@
 
 #TODO check facts and actually understand what is hapenning
 
+##control characters
+
 #some input bytes have immediate effect on a terminal,
-#even before you press <enter> to send commands.
+#even before you press <enter> to send characters.
 
 #they are useful for doing things like:
 
@@ -12,68 +14,68 @@
 #- erase a character
 #- go to the beginning of a line
 
-## useful list
+#the position of those control chars is inherited from
+#an influential terminal that existed, called the VT100
+#( ex, c-c finishing a program )
 
-    #to test the process control jobs, use the helper script:
+#to test the process control jobs, use the helper script:
 
-        #seqs 5
+    #seqs 5
 
-    #- c-v c-X:   input a literal control char c-x, bypassing any special meaning
+#- c-c:   send a kill signal to foreground process
 
-            #to input some literal control charas that have special no meaning
-            #you can just type them directly. Ex: c-a
+    #seqs 5
+    ##enter c-c
 
-            #to input any literal control chars including those do that have special meaning
-            #like `c-c` use `<c-v>` before them, so for example: `<c-v><c-c>`
+#- c-z:   send a stop signal to foreground process, and put it on background. `fg` to resume on foreground.
 
-            #control chars c-x are represented as `^X` on the terminal
+    #seqs 5
+    ##enter c-z
+    ##enter fg
 
-            #note however that while visually indistinguishable from a literal `^X`,
-            #it is only a single char, since backspacing remove the `^X` at once.
-            
-            #to view the ascii value of a sequence:
+#- c-s:   send stop   signal to foreground process. c-q to resume. TODO confirm
+#- c-q:        resume                                    
 
-            #echo -n <c-v>SEQ | hedump -C
+    #seqs 5
+    ##enter c-s
+    ##enter c-q
 
-    #- c-c:   send a kill signal to foreground process
+#- c-d:   eof
 
-        #seqs 5
-        ##enter c-c
+    #closes pipes
 
-    #- c-z:   send a stop signal to foreground process, and put it on background. `fg` to resume on foreground.
+    #often stdin input ends at the first newline
 
-        #seqs 5
-        ##enter c-z
-        ##enter fg
+    #but if you want to be able to give newlines,
+    #you have to enter a c-d to end the input.
 
-    #- c-s:   send stop   signal to foreground process. c-q to resume. TODO confirm
-    #- c-q:        resume                                    
+    #this closes the pipe from the bash side.
 
-        #seqs 5
-        ##enter c-s
-        ##enter c-q
+    #TODO add an example
 
-    #- c-d:   eof
+#- c-?: clear line
+#- c-h: destructive backspace
+#- c-m: same as enter. try <c-v><enter>
+#- c-[: same as esc. try <c-v><esc>
 
-        #closes pipes
+    #type asdf. type c-h. terminal removes the `f`.
 
-        #often stdin input ends at the first newline
+#- c-v c-X:   input a literal control char c-x, bypassing any special meaning
 
-        #but if you want to be able to give newlines,
-        #you have to enter a c-d to end the input.
+        #to input some literal control charas that have special no meaning
+        #you can just type them directly. Ex: c-a
 
-        #this closes the pipe from the bash side.
+        #to input any literal control chars including those do that have special meaning
+        #like `c-c` use `<c-v>` before them, so for example: `<c-v><c-c>`
 
-        #TODO add an example
+        #control chars c-x are represented as `^X` on the terminal
 
-    #- c-?: clear line
-    #- c-h: destructive backspace
-    #- c-m: same as enter. try <c-v><enter>
-    #- c-[: same as esc. try <c-v><esc>
+        #note however that while visually indistinguishable from a literal `^X`,
+        #it is only a single char, since backspacing remove the `^X` at once.
+        
+        #to view the ascii value of a sequence:
 
-        #type asdf. type c-h. terminal removes the `f`.
-
-##inner workings
+        #echo -n <c-v>SEQ | hedump -C
 
     #when you press a key, x tells the terminal about the key press,
     #and the terminal decides what to do with it.
@@ -122,204 +124,124 @@
     #some control keys sequences of non alphanumeric signs
     #have no value such as c-# while others do like c-[.
 
-##keys that have no ascii value
+##ansi codes
 
-    #the VT100 can also handle keys that have no ascii value like
+    #the VT100 can also stuff that have no ascii value like
 
-    #- fn keys
     #- arrow keys
+    #- fn keys
+    #- setting colors and other text attributes
+    #- setting cursor position
 
-    #to do that, the terminal uses control sequences
+    #using standard ansi escape codes <http://en.wikipedia.org/wiki/ANSI_escape_code>
+    #which are also based on ascii.
 
-    #TODO check facts and actually understand what is hapenning
+    ##exemple: text attributes
 
-    #some input bytes have immediate effect on a terminal,
-    #even before you press <enter> to send commands.
+            #echo -e '\033[31ma'
 
-    #they are useful for doing things like:
+        #- \033 : `\0` is for octal escapes intepreted with `-e`, `33` is esc in octal. You could also do:
 
-    #- stopping process
-    #- stop giving stdin
-    #- erase a character
-    #- go to the beginning of a line
+                #echo -e '^[[31ma'
 
-    ## useful list
+            #where ^[ is the literal esc entered via <c-v><c-[>
 
-        #to test the process control jobs, use the helper script:
+        #- `[` after esc means this is an escpe sequence! It is called a CSI (Control Sequence Introducer)
 
-            #seqs 5
+        #look at <http://en.wikipedia.org/wiki/ANSI_escape_code> to see what you can do on stdout.
+        #just colon separate attributes and end with m:
 
-        ##process control
+        #example: a, bold (1), underline (4) and red (31). Afterwards, sets formatting off.
 
-            #- c-v c-X:   input a literal control char c-x, bypassing any special meaning
+                echo -e '\033[1;4;31ma\033[0m'
 
-                    #to input some literal control charas that have special no meaning
-                    #you can just type them directly. Ex: c-a
+        #to use those seriously in a more portable and clear way from bash, use ``tput``.
 
-                    #to input any literal control chars including those do that have special meaning
-                    #like `c-c` use `<c-v>` before them, so for example: `<c-v><c-c>`
+    #most commands are of type `CSI n A`, or `CSI n B`.
 
-                    #control chars c-x are represented as `^X` on the terminal
+    ##exemple: cursor position
 
-                    #note however that while visually indistinguishable from a literal `^X`,
-                    #it is only a single char, since backspacing remove the `^X` at once.
-                    
-                    #to view the ascii value of a sequence:
+        #you can also set cursor position by outputting special control strings to stdout
 
-                    #echo -n <c-v>SEQ | hedump -C
+        #move cursor to position 2,3 on terminal:
 
-            #- c-c:   send a kill signal to foreground process
+            echo -e '\033[2;3H'
 
-                #seqs 5
-                ##enter c-c
+        #H is the command to position the cursor called `CUP`, 2;3 is the position.
 
-            #- c-z:   send a stop signal to foreground process, and put it on background. `fg` to resume on foreground.
+        #move the cursor back one position (same as left arrow):
 
-                #seqs 5
-                ##enter c-z
-                ##enter fg
+            echo -e 'a\033[1Db'
 
-            #- c-s:   send stop   signal to foreground process. c-q to resume. TODO confirm
-            #- c-q:        resume                                    
+        #which shows `b` on the terminal, since a was overwritten by b!
 
-                #seqs 5
-                ##enter c-s
-                ##enter c-q
+        #move cursor up four times:
 
-            #- c-d:   eof
+            echo -e '000\033[4A111'
 
-                #closes pipes
+            #things will get reall ugly as you start to rewrite previous PS1, PS2 and stdout =)
 
-                #often stdin input ends at the first newline
+    #note that this should rarelly be piped to other programs, only given to terminals
+    #otherwise all those ugly chars will go to the pipe! programs that color stuff should
+    #always test if output is going to a pipe or not.
 
-                #but if you want to be able to give newlines,
-                #you have to enter a c-d to end the input.
+##inner workings
 
-                #this closes the pipe from the bash side.
+    #when you press a key, x tells the terminal about the key press,
+    #and the terminal decides what to do with it.
 
-                #TODO add an example
+    #the typical thing that happens is that some program is reading
+    #from the terminal (bash shell, sh shell, python shell, etc)
 
-        ##input control
+    #what the terminal does on keypresses is not officially standardized
+    #but the VT100 behaviour became the de facto standard <http://en.wikipedia.org/wiki/VT100>
+    #so this is what computer terminal programs emulate.
+    
+    #VT100 uses ascii values only (0-127)
+    #with contro+keys to reach the non alphanumerical values.
+    #and ansi escape codes <http://en.wikipedia.org/wiki/ANSI_escape_code>
+    #for special things like keys that have no ascii representation (arrows, fn keys, etc)
+    #or setting the cursor position.
 
-            #- c-?: clear line
-            #- c-u: vim `normal! d0`
-            #- c-w: vim `normal! db`
-            #- c-h: backspace. try <c-v><backspace>
-            #- c-m: same as enter. try <c-v><enter>
-            #- c-[: same as esc. try <c-v><esc>
+    #some of the options may be configurable, so make sure your terminal emulator
+    #is configured to do what you expect it to do. For example, all the following
+    #are up to you terminal emulator to decide what to do:
 
-            #type asdf. type c-h. terminal removes the `f`.
+    #- what todo on certain key presses
 
-    ##inner workings
+        #the typical action for simple alhpanumeric chars is to print them on the screen
 
-        #when you press a key, x tells the terminal about the key press,
-        #and the terminal decides what to do with it.
+        #some control chars however do not get output to screen, and may affect
+        #processes running on the terminal or the terminal display
 
-        #the typical thing that happens is that some program is reading
-        #from the terminal (bash shell, sh shell, python shell, etc)
+    #- what to do when stuff gets output to stdout
 
-        #what the terminal does on keypresses is not officially standardized
-        #but the VT100 behaviour became the de facto standard <http://en.wikipedia.org/wiki/VT100>
-        #so this is what computer terminal programs emulate.
-        
-        #VT100 uses ascii values only (0-127)
-        #with contro+keys to reach the non alphanumerical values.
-        #and ansi escape codes <http://en.wikipedia.org/wiki/ANSI_escape_code>
-        #for keys that have no ascii representation (arrows, fn keys, etc)
+        #for simple chars lika alphanumeric ones, terminals simply print them out.
 
-        #- what todo on certain key presses
+        #^A is the beep char, and if configured to do so,
+        #terminals may emmit a beep when they see this at stdout.
+        #try (you must do <c-v><c-a>, not copy paste...):
+            
+            #echo ^A
 
-            #the typical action for simple alhpanumeric chars is to print them on the screen
+        #also see <color example>
 
-            #some control chars however do not get output to screen, and may affect
-            #processes running on the terminal or the terminal display
+        #other non-printable chars might simply print as nothing if they go to the stdout of you terminal
+        #try (you must do <c-v><c-a>, not copy paste...):
 
-        #- what to do when stuff gets output to stdout
+            #echo ^C
 
-            #for simple chars lika alphanumeric ones, terminals simply print them out.
+    #- how to let you input literal control chars
 
-            #^A is the beep char, and if configured to do so,
-            #terminals may emmit a beep when they see this at stdout.
-            #try (you must do <c-v><c-a>, not copy paste...):
-                
-                #echo ^A
+        #using `<c-v>`
 
-            #also see <color example>
+    #- how to display literal control chars you input
 
-            #other non-printable chars might simply print as nothing if they go to the stdout of you terminal
-            #try (you must do <c-v><c-a>, not copy paste...):
+        #as `^X`
 
-                #echo ^C
+    #some control chars are standardized by ascii: <http://en.wikipedia.org/wiki/ASCII> TODO confirm
+    #however what they do is not so well specified
 
-        #- how to let you input literal control chars
+    #some control keys sequences of non alphanumeric signs
+    #have no value such as c-# while others do like c-[.
 
-            #using `<c-v>`
-
-        #- how to display literal control chars you input
-
-            #as `^X`
-
-        #some control chars are standardized by ascii: <http://en.wikipedia.org/wiki/ASCII> TODO confirm
-        #however what they do is not so well specified
-
-        #some control keys sequences of non alphanumeric signs
-        #have no value such as c-# while others do like c-[.
-
-    ##beyond ascii values
-
-        #the VT100 can also stuff that have no ascii value like
-
-        #- fn keys
-        #- arrow keys
-        #- setting colors
-
-        #using ansi escape codes <http://en.wikipedia.org/wiki/ANSI_escape_code>
-
-        ##color example
-
-                #echo -e '\033[31ma'
-
-            #- \033 : `\0` is for octal escapes intepreted with `-e`, `33` is esc in octal. You could also do:
-
-                    #echo -e '^[[31ma'
-
-                #where ^[ is the literal esc entered via <c-v><c-[>
-
-            #- `[` after esc means this is an escpe sequence! It is called a CSI (Control Sequence Introducer)
-
-            #look at <http://en.wikipedia.org/wiki/ANSI_escape_code> to see what you can do on stdout.
-            #just colon separate attributes and end with m:
-
-            #example: a, bold (1), underline (4) and red (31). Afterwards, sets formatting off.
-
-                    echo -e '\033[1;4;31ma\033[0m'
-
-            #to use those seriously in a more portable and clear way from bash, use ``tput``.
-
-        #most commands are of type `CSI n A`, or `CSI n B`.
-
-        ##cursor position
-
-            #you can also set cursor position by outputting special control strings to stdout
-
-            #move cursor to position 2,3 on terminal:
-
-                echo -e '\033[2;3H'
-
-            #H is the command to position the cursor called `CUP`, 2;3 is the position.
-
-            #move the cursor back one position (same as left arrow):
-
-              echo -e 'a\033[1Db'
-
-            #which shows `b` on the terminal, since a was overwritten by b!
-
-            #move cursor up four times:
-
-              echo -e '000\033[4A111'
-
-              #things will get reall ugly as you start to rewrite previous PS1, PS2 and stdout =)
-
-        #note that this should rarelly be piped to other programs, only given to terminals
-        #otherwise all those ugly chars will go to the pipe! programs that color stuff should
-        #always test if output is going to a pipe or not.

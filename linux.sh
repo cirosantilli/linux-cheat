@@ -2,18 +2,15 @@
 
 #"#!" is the <#shebang>
 
-##meta
+##about
 
-    #collection of programs that can be used on linux and basic howtos on how to use them.
+    #linux info, including programs and programming languages that can be used on linux
 
-    #if a program does not come with ubuntu 12.04, the aptitude install will be included
-
-    #for installation, I focus on ubuntu which is what I am using.
+    #search for installation procedures on distribution specific packages outside,
+    #the focus here is usage
 
     #if a program gets large enough, or fits better somewhere else, it might be moved
     #a commit note will say when that happens.
-
-    #for all installs: grep -E "aptitude install" %
 
     #for a summary of up to level 2 header: `grep -E '^[[:space:]]{0,4}##' %`
 
@@ -512,6 +509,36 @@ int main(int argc, char** argv)
 
             stat -c '%h' f
 
+        #since the filesystem has to count this to be able to delete the file
+        #when the count reaches 0.
+
+        #you must have read *and* write premissions to the file in order to make a hardlink to it:
+
+            su a
+            touch a
+            chmod a 600
+            sudo chown b a
+            ln a aln
+                #operation not permitted
+
+        #this differs from copying where only read permission is emough.
+        
+        #this is because if you can access the hardlink to the file,
+        #then you can modify the file itself.
+
+    ##timestamps
+
+        #the following timestamps exist which store the last modification of file:
+
+        #- modification time: contents
+        #- access time:       read, execute
+        #- change time:       metadata (permissions, etc)
+        #- creation time:     not yet widely supported! don't rely on this.
+
+        #from bash those can be viewed with the stat command:
+
+            stat a
+
 ##lsb
         
         #maintained by the linux foundation
@@ -678,23 +705,6 @@ int main(int argc, char** argv)
         #like gpl
         #except you *can* use in commercial projects
 
-##packages
-
-    sudo apt-get update
-    sudo apt-get install -y aptitude
-        #like apt-get, but removing  a package will also uninstall all dependencies that
-        #were installed for that package
-    sudo aptitude install -y apt-file
-    apt-file update
-        #search package by file and list package files
-    sudo aptitude install -y ppa-purge
-        #remove added ppas
-    sudo aptitude install -y apt-file
-        #lets you search packages by files it contains
-        #see http://www.thegeekstuff.com/2009/10/debian-ubuntu-install-upgrade-remove-packages-using-apt-get-apt-cache-apt-file-dpkg/
-    sudo aptitude install -y apt-rdepends
-        #fins packages that depend on a given package
-
 ##man
 
     #the manuals
@@ -829,38 +839,13 @@ int main(int argc, char** argv)
     info
     info rm
 
-##ubuntu
-
-    #a debian based distribution
-    
-    #important implications:
-    
-        #maby key programs are the same: `dpkg` for packages, `upstart` for init
-
-    ##upgrade version
-
-        sudo aptitude install -y update-manager-core
-        sudo do-release-upgrade 
-        sudo aptitude update && sudo aptitude upgrade
-
-    #oppen app without global menu
-    
-        env UBUNTU_MENUPROXY=0 golly 
-
 ##configuration
 
     ##ubuntu
+    
+        #TODO: explain or remove
 
-        sudo aptitude install -y ubuntu-restricted-extras
-            #usefull stuff that does not come by default or Canonical would have to pay royalties
-
-        #ubuntu-tweak
-            #configure ubuntu
-            sudo add-apt-repository -y ppa:tualatrix/ppa
-            sudo aptitude update 
-            sudo aptitude install -y ubuntu-tweak
-
-        #sudo aptitude install -y myunity
+            #sudo aptitude install -y myunity
 
         #additional drivers : non free vendors
 
@@ -870,13 +855,13 @@ int main(int argc, char** argv)
             jockey-text --enable=$DRIVER
             #enable from list. ex: xorg:fglrx_updates
 
-    sudo aptitude install -y dconf-tools
+    #TODO explain or remove:
+
+        sudo aptitude install -y dconf-tools
 
     ##gnome tweak tool
 
         #gui to configure lots of desktop things.
-
-        sudo aptitude install -y gnome-tweak-tool
 
     sudo aptitude install -y gconf-editor
 
@@ -894,7 +879,9 @@ int main(int argc, char** argv)
             gsettings reset com.canonical.desktop.interface scrollbar-mode
                 #return to default value
 
-    sudo aptitude install -y compiz compizconfig-settings-manager compiz-plugins-extra
+    #TODO explain or remove:
+
+        sudo aptitude install -y compiz compizconfig-settings-manager compiz-plugins-extra
 
 ##desktop
 
@@ -904,28 +891,14 @@ int main(int argc, char** argv)
 
     #gnome shell
 
-        sudo add-apt-repository -y ppa:gnome3-team/gnome3
-        sudo aptitude update
-        sudo aptitude install -y gnome-shell
-
     #desktop/windows control
 
         gnome-open "$FILE"
             #opens with the deafult application. works in Ubuntu Unity 12.04
 
-            #maximize and minimize windows by grepping title or class
-
-            #GUI control
-
-                sudo aptitude install -y wmctrl
-                
-                wmctrl -a ' - GVIM'
-                #focus on a window with title containing '- GVIM' ( hopefully gVim! )
-
     #key logging
     
         #writes all keypresses to a file
-        sudo aptitude install -y logkeys
 
         sudo logkeys -s
             #start
@@ -933,22 +906,17 @@ int main(int argc, char** argv)
         sudo logkeys -k
             #end
 
-
     #ibus input methods
 
         #for chinese, japanes, etc input
 
-        sudo aptitude install -y ibus-qt4
-            #how have I looked for this, but no one told me: ibus for qt apps!!!!
+        #how have I looked for this, but no one told me: ibus for qt apps!!!!
 
-    ##alarm
-        sudo aptitude install -y alarm-clock-applet
+    ##alarm clock applet
+
+        #notifies you with sounds when a certain time passed
 
     ##weather indicator
-
-        sudo add-apt-repository -y ppa:atareao/atareao
-        sudo apt-get update
-        sudo apt-get install my-weather-indicator
 
 ##compresssion
 
@@ -966,7 +934,6 @@ int main(int argc, char** argv)
         #not so high compression
             #compresses dir one file by one it seems
         #easy to view and extract single files
-        sudo aptitude install -y zip unzip
 
         zip -r "$F".zip "$F"
         #zip file or directory
@@ -1069,31 +1036,9 @@ int main(int argc, char** argv)
         #but *use only for 7z*, which it was made for
         #with 7zip, you can open .exe files to extract their inner data
 
-        sudo aptitude install -y p7zip-full
+    ##file roller
 
-    sudo aptitude install -y sharutils
-        #shell archives
-
-    sudo aptitude install -y unace
-        #ace files
-
-    sudo aptitude install -y uudeview
-        #uuencode, xxencode, BASE64, quoted printable, BinHex
-
-    sudo aptitude install -y mpack
-        #mime messages
-
-    sudo aptitude install -y lha
-        #lzh, used on DOS, legacy
-
-    sudo aptitude install -y arj
-        #.arj files
-
-    sudo aptitude install -y cabextract
-        #microsoft cabinet format
-
-    sudo aptitude install -y file-roller
-        #gui app to view inside archives and extrac them
+        #very good gui app to view inside archives and extrac them
 
 ##encryption
 
@@ -1310,8 +1255,6 @@ int main(int argc, char** argv)
 
         #fork of stardict
 
-            sudo aptitude install -y goldendict
-
         #select text can make popup windows!
 
         #supported formats: stardict, blg,
@@ -1354,9 +1297,12 @@ int main(int argc, char** argv)
                 sudo aspell --remove-filter=$f
 
 #codecs #ERROR: mpg123libjpeg-progs cannot locate
+
     #use TAB to navigate msfonts
-    sudo aptitude install -y mencoder totem-mozilla icedax tagtool libmad0 mpg321 mpg123libjpeg-progs
-        #TODO understand/remove
+
+    #TODO explain or remove:
+
+            sudo aptitude install -y mencoder totem-mozilla icedax tagtool libmad0 mpg321 mpg123libjpeg-progs
 
 ##sound
 
@@ -1364,9 +1310,9 @@ int main(int argc, char** argv)
 
         ##cplay
 
-            #has a file browser
+            #cli
 
-                sudo aptitude install -y cplay
+            #has a file browser
 
                 cplay
 
@@ -1375,17 +1321,14 @@ int main(int argc, char** argv)
         ##lame
         
             #encode, decode and modify mp3
-            
-                sudo aptitude install -y lame
 
             #increases volume 5x:
+
                 lame --scale 5 a.mp3
 
         ##id3tool
         
             #get id3 tags info (for mp3 for example)
-
-            sudo aptitude install -y id3tool
 
             TITLE="`id3tool "$1" | grep '^Song Title:' | awk '{ for (i=3;i<=NF;i++) { printf $i; printf " " } }'`"
             ARTIST="`id3tool "$1" | grep '^Artist:' | awk '{ for (i=2;i<=NF;i++) { printf $i; printf " " } }'`"
@@ -1397,14 +1340,16 @@ int main(int argc, char** argv)
 
         ##cut up flac cue into multiple files
 
-            #via flacon GUI:
-                sudo add-apt-repository -y ppa:flacon
-                sudo aptitude update
-                sudo aptitude install -y flacon
+            ##flacon
 
-            #cuetools command line:
-                sudo aptitude install -y cuetools shntool
-                sudo aptitude install -y flac wavpack
+                #has gui
+
+            ##shntool
+
+                #TODO understand or remove:
+
+                    sudo aptitude install -y shntool cuetools 
+                    sudo aptitude install -y flac wavpack
 
                 shntool split -f *.cue -o flac *.ape -t '%n - %p - %t'
                     #single ape and cue in dir, flac output, formatted as number, author, track
@@ -1415,11 +1360,7 @@ int main(int argc, char** argv)
 
             #interactive front end for libSoX
 
-            sudo aptitude intall -y sox
-            sudo aptitude intall -y libsox-fmt-mp3
-                #installs mp3 support
-            apt-cache search libsox-fmt-
-                #to see all available formats
+                #must install available formats separatelly
 
             rec a.wav
                 #records from microphone into a.wav file
@@ -1443,10 +1384,13 @@ int main(int argc, char** argv)
 
             #cli for sound control
 
-            amixer scontrols 
-                #view available controls
-            amixer sset 'Master' 50%
-                #set master volume to 50%
+            #view available controls:
+
+                amixer scontrols 
+
+            #set master volume to 50%:
+
+                amixer sset 'Master' 50%
 
     ##rip
 
@@ -1454,10 +1398,10 @@ int main(int argc, char** argv)
 
             ##cli
 
-                sudo aptitude install -y abcde
-
             #rip:
+
                 abcde
+
             #automatically starts ripping correctly on most systems!!
             #creates dir in cur dir and saves rip out as .ogg in it
 
@@ -1494,16 +1438,16 @@ int main(int argc, char** argv)
     ##editors
 
         ##gimp
+
+            #image manipulation
         
             #huge amount of functions
 
-            sudo aptitude install -y gimp
-
         ##inkscape
         
-            #svg
-        
-            sudo aptitude install -y inkscape
+            #svg gui editor
+
+            #very good
 
     ##viewers
     
@@ -1514,24 +1458,6 @@ int main(int argc, char** argv)
             #lightweight
             
             eog a.jpg
-
-        ##caca-utils
-        
-            sudo aptitude install -y caca-utils
-
-            ##img2txt
-            
-                #stdout output
-
-                img2txt a.jpg
-                img2txt -W `tput cols` a.jpg
-                    #-W: width
-                    #fit to terminal
-            
-            ##caca view
-            
-                cacaview a.pjg
-                    #img2text on x window
 
         ##aview
         
@@ -1548,6 +1474,25 @@ int main(int argc, char** argv)
             #I CANT CHANGE THE WIDTH!!!
                 #asciiview -width a.jpg
 
+    ##caca-utils
+
+        ##img2txt
+        
+            #stdout output
+
+                img2txt a.jpg
+                img2txt -W `tput cols` a.jpg
+
+            #-W: width
+
+            #fit to terminal
+        
+        ##caca view
+
+            #img2text on x window
+        
+                cacaview a.pjg
+
     ##imagemagick
 
         #tons of image conversion tools
@@ -1555,11 +1500,6 @@ int main(int argc, char** argv)
         #cli + apis in lots of langs, includeing c (native), c++ and python
 
         #reading the manual is a great image manipulation course!
-
-        #install:
-
-            sudo aptitude install -y imagemagick
-            sudo aptitude install -y imagemagick-doc
 
         #list supported formats:
 
@@ -1629,15 +1569,11 @@ int main(int argc, char** argv)
         
         #concurrence to imagemagick, supposedly faster. c++ template api
 
-        sudo aptitude install -y exactimage
-
     ##dvipng
 
         #convert dvi to png
 
         #important application: latex -> dvi -> png -> website.
-
-        sudo aptitude install -y dvipng
 
 ##book
 
@@ -1677,6 +1613,8 @@ int main(int argc, char** argv)
         ##a2ps
 
             #txt to ps
+
+            #does not work for utf8. For that use <#paps>
             
                 sudo aptitude install a2ps
 
@@ -1698,6 +1636,12 @@ int main(int argc, char** argv)
 
                 a2ps -o - a.txt
 
+        ##paps
+
+            #txt to ps
+
+            #works for utf8
+
         ##ps2pdf
 
                 ps2pdf a.ps
@@ -1716,62 +1660,82 @@ int main(int argc, char** argv)
 
             #extracts text layer from pdf
 
-            pdftotext a.pdf
-            less a.txt
+                pdftotext a.pdf
+                less a.txt
 
         ##pdftk
 
             #pdf Tool Kit
 
-            sudo aptitude install -y pdftk
+                sudo aptitude install -y pdftk
 
             #merge two or more pdfs into a new document:
+
                     pdftk 1.pdf 2.pdf 3.pdf cat output 123.pdf
 
             #or using handles:
+
                     pdftk A=1.pdf B=2.pdf cat A B output 12.pdf
 
             #or using wildcards:
+
                     pdftk *.pdf cat output combined.pdf
 
             #slice pdf: get pagets 1 to 7 only:
+
                     pdftk A="$f.pdf" cat A1-7 output "$f.pdf"
 
             #select pages from multiple pdfs into a new document:
+
                     pdftk A=one.pdf B=two.pdf cat A1-7 B1-5 A8 output combined.pdf
 
             #split pdf into single pages
+
                     pdftk mydoc.pdf burst
 
             #get pdf metadata like number of pages:
+
                     pdftk mydoc.pdf dump_data | less
 
             #rotate the first page of a pdf to 90 degrees clockwise:
+
                     pdftk in.pdf cat 1E 2-end output out.pdf
 
             #rotate an entire pdf document’s pages to 180 degrees:
+
                     pdftk in.pdf cat 1-endS output out.pdf
 
             #encrypt a pdf using 128-bit strength (the default) and withhold all permissions (the default):
+
                     pdftk mydoc.pdf output mydoc.128.pdf owner_pw foopass
 
             #Same as Above, Except a Password is Required to Open the PDF:
+
                     pdftk mydoc.pdf output mydoc.128.pdf owner_pw foo user_pw baz
 
             #Same as Above, Except Printing is Allowed (after the PDF is Open):
+
                     pdftk mydoc.pdf output mydoc.128.pdf owner_pw foo user_pw baz allow printing
 
             #Decrypt a PDF:
+
                     pdftk secured.pdf input_pw foopass output unsecured.pdf
 
             #Join Two Files, One of Which is Encrypted (the Output is Not Encrypted):
+
                     pdftk A=secured.pdf mydoc.pdf input_pw A=foopass cat output combined.pdf
 
             #Uncompress PDF Page Streams for Editing the PDF Code in a Text Editor:
+
                     pdftk mydoc.pdf output mydoc.clear.pdf uncompress
 
             #Repair a PDF’s Corrupted XREF Table and Stream Lengths (If Possible):
+
                     pdftk broken.pdf output fixed.pdf
+
+        ##edit pdf content
+
+            #consider libreoffic draw + pdf importer.
 
         ##djvulibre-bin
 
@@ -1801,17 +1765,6 @@ int main(int argc, char** argv)
 
                         djvm -l speak\ chinese\ 2.djvu | sed -nre '$ s/.+#([0-9]+).+/\1/p'
 
-        ##ps2pdf
-
-            ps2pdf a.ps
-                #produces a.pdf
-            ps2pdf a.ps b.pdf
-                #produces b.pdf
-            ps2pdf -dUseFlateCompression=true a.ps
-                #compressed pdf
-            ps2pdf -dOptimize=true report.ps
-                #allows to see one page at a time (good for web)
-
 ##ocr
 
     #possibilities:
@@ -1837,9 +1790,11 @@ int main(int argc, char** argv)
         sudo aptitude install -y tesseract-ocr-eng #english
 
         ##chinese hack
+
             sudo aptitude install -y tesseract-ocr-chi-sim #simplified chinese
             cd /usr/share/tesseract-ocr/tessdata
             sudo ln -s chi_sim.traineddata zho.traineddata
+
             #tesseract looks for zho instead of chi_sim
             #there is probably a better way to do this in the tesseract configs, but apparently not directly from vobsub2srt
 
@@ -1848,12 +1803,14 @@ int main(int argc, char** argv)
         #-psm 1 : detects pages *and* script automatically. most magic mode.
 
     ##cuneiform
+
         #sudo aptitude install -y cuneiform
         cuneiform -l eng -f text -o "$f.txt" "$f.png"
         #-f: html, hocr
         #-l: lang, see man cuneirform
 
     ##hocr2pdf from the ExactImage package.
+
         hocr2pdf -i "$f.png" -s -o "$f.pdf" < "$f.hocr"
 
 ##video
@@ -1872,7 +1829,11 @@ int main(int argc, char** argv)
             #around 5
             #after this number of changes, YOU CANNOT CHANGE IT ANYMORE!!!!
 
-    sudo aptitude install -y vlc
+    ##vlc
+
+        #my current favourite video player:
+
+            sudo aptitude install -y vlc
         
     ##handbrake
 
@@ -1999,9 +1960,18 @@ int main(int argc, char** argv)
 
 ##chat messaging voice video
 
-    sudo add-apt-repository -y "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
-    sudo aptitude update
-    sudo aptitude install -y skype
+    ##skype
+
+        sudo add-apt-repository -y "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
+        sudo aptitude update
+        sudo aptitude install -y skype
+
+    ##google talk
+
+        wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
+        sudo sh -c 'echo "deb http://dl.google.com/linux/talkplugin/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+        sudo aptitude update
+        sudo aptitude install -y google-talkplugin
 
     sudo aptitude install -y pidgin
 
@@ -2175,14 +2145,15 @@ int main(int argc, char** argv)
         
 #file sharing
 
-    #torrent
+    ##torrent
 
-        #deluge
+        ##deluge
+
             sudo add-apt-repository -y ppa:deluge-team/ppa
             sudo aptitude update
             sudo aptitude install -y deluge
 
-    #dropbox
+    ##dropbox
 
         sudo aptitude install -y nautilus-dropbox 
 
@@ -2215,13 +2186,35 @@ int main(int argc, char** argv)
             sudo apt-get update
             sudo apt-get install indicator-ubuntuone
 
-    #soulseek client nicotine+ 
+    ##ubuntu one
 
-        sudo aptitude install -y nicotine+
+        #open source cross platform canonical dropbox like program
+
+        #web interface:
+
+            firefox https://one.ubuntu.com/dashboard/
+
+        #check deamon status:
+
+            u1sdtool -s
+
+        #publish a file:
+
+            u1sdtool --publish-file a
+
+        #get file public url to the clipboard:
+
+            u1sdtool --publish-file a | perl -ple 's/.+\s//' | xsel -b
+
+    ##nicotine+ 
+        #soulseek client
+
+            sudo aptitude install -y nicotine+
+
         #behind a proxy router
-        # go to the router admin panel, port forwarding part
+        #go to the router admin panel, port forwarding part
         #  (http://192.168.0.1/RgForwarding.asp on dlink for example, default login:admin pass:motorola)
-        # open ports 2234 to 2239 on local ip found at
+        #open ports 2234 to 2239 on local ip found at
         #  ifconfig eth0 | grep "inet addr:"
         #
         #now either put your files in another partition at the root, or symlink
@@ -3235,12 +3228,22 @@ int main(void)
         #great file manager
 
         #features:
-            #useractions
-            #give shortcuts to useractions
+
+        #- useractions:
+            #Execute shell scripts wich access to things like current directory or selected files
+
+        #- give shortcuts to useractions
+            #you can give shortcuts to anything, including user actions!
+
+        #- ftp. Just enter an ftp url on the address bar and it all works.
+
+            #filezilla is still better at this I think.
 
         sudo aptitude install -y krusader
-        sudo aptitude install -y konqueror #needs to manage bookmarks. (otherwise, button does nothing)
-        sudo aptitude install -y konsole   #needs to terminal emulator. (otherwise, button does nothing)
+        sudo aptitude install -y konqueror          #needs to manage bookmarks. (otherwise, button does nothing)
+        sudo aptitude install -y konsole            #needs to terminal emulator. (otherwise, button does nothing)
+        sudo aptitude install -y  khelpcenter4      #help
+        sudo aptitude install -y  kwalletmanager    #password manager
 
     ##filezilla
 
@@ -3508,7 +3511,13 @@ int main(void)
 
 ##libreoffice
 
-    sudo aptitude install -y libreoffice-base
+    #wysiwyg text editor, tables, image editor:
+
+        sudo aptitude install -y libreoffice
+
+    #database management:
+
+        sudo aptitude install -y libreoffice-base
 
 ##text
 
@@ -3592,10 +3601,8 @@ int main(void)
         
         ##exit status
         
-            echo a | grep b || echo 1
-                #1
-            echo -q a | grep a && echo 0
-                #0
+            echo a | grep -q b && assert false
+            echo a | grep -q a || assert false
                 #-q: suppress stdout
                     #useful if you only want the exit status
             
@@ -3780,8 +3787,7 @@ int main(void)
             #1
 
     ##factor
-    
-        #coreutils package
+        #coreutils
     
         #factor a number into prime constituents
         
@@ -3940,12 +3946,25 @@ int main(void)
             #-w words only
 
     ##head
+        #POSIX
 
-        head "$f"
-            #shows 10 first lines of f
+        #filter 10 first lines:
 
-        head -n3 "$f"
-            #shows 3 first lines of f
+            seq 20 | head
+
+        #filter 3 first lines:
+
+            seq 20 | head -n3
+
+        #2 first bytes:
+
+            assert [ "`echo -en 'abc' | head -c 2`" = "ab" ]
+
+        ##gnu coreutils
+
+            #remove last two bytes:
+
+                assert [ "`echo -en 'abc' | head -c -2`" = "a" ]
 
     ##tail
 
@@ -4543,6 +4562,90 @@ int main(void)
         sudo aptitude install -y m4
 
         #TODO
+
+##moreutils
+
+    #extra base linux utils
+
+        sudo aptitude install moreutils
+
+    ##sponge
+
+        #solves the input to output problem problem
+
+        #setup:
+
+            echo $'0\n1' > a
+
+        #fails:
+
+            grep 0 a | cat > a
+            assert [ "`cat a`" = '' ]
+
+        #works:
+
+            grep 0 a | sponge a
+            assert [ "`cat a`" = '0' ]
+
+    ##vipe
+
+        #use editor (aka vim =)) in the middle of a pipe
+
+            EDITOR=vim
+            seq 10 | vipe | less
+
+            a="`seq 10 | vipe`"
+            echo "$a"
+
+        #uses editor environment variable to determine editor
+
+        #in ubuntu, this is set by default to vim in bashrc.
+
+        #this is my preferred way to get user
+        #input that might be large (git commit messages...)
+
+            a="`echo -e "\n#lines starting with '#' will be ignored" | vipe | grep -Ev '^#' `"
+            echo "$a"
+
+##character encodings
+
+    ##chinese
+
+        #- Guobiao is mainly used in Mainland China and Singapore. Named as `GB\d+`
+        #- Big5, used in Taiwan, Hong Kong and Macau
+
+        #`file` does not work properly for chinese
+
+    ##dos2unix
+
+        #CR LF to CR
+
+        #in place:
+
+            echo -e 'a\r\nb\r\n' > a.txt
+            dos2unix a.txt
+            assert [ "`cat a.txt`" = $'a\nb\n' ]
+
+    ##enca
+
+        #detect and convert international encodings
+
+        #guess encoding:
+
+            enca a.txt
+
+        #this may not work if you don't give the expected language as input.
+
+        #view available languages:
+
+            enca --list languages
+
+        #tell enca that the file is in chinese:
+
+            enca -L zh a.txt
+
+        #you give languages as locales
+        #(i think as 2 letter iso 639-1 codes <http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes> since only `zh` worked for chinese)
     
     ##iconv
 
@@ -4562,6 +4665,12 @@ int main(void)
         iconv -f BIG-FIVE -t UTF-8 "$F"
             #convert contents of F from BIG-FIVE to UTF-8
             #no changes made: only outputs to stdout
+
+    ##convmv
+
+        #mv converting encodings
+
+            sudo aptitude install convmv
 
 ##cron
 
@@ -5426,6 +5535,36 @@ int main(void)
         kill -CONT $ID
             #continues stopped process
 
+    ##env
+
+        #shows all environment variables and their values:
+
+            env
+
+        #change environment for a single command:
+
+            a=b
+            env a=c echo $a
+            #c
+            echo $a
+            #b
+        
+        ##-i
+        
+            #exec in a clean environment:
+
+                assert [ "`env -i a=b env`" = "a=b" ]
+
+            ##start a subshell in the cleanest env possible
+            
+                #don't forget: subshells inherit all exported vars
+
+                    env -i bash --noprofile --norc
+                    env
+                    #some default vars might still be there!
+                    #I get: SHLVL, PWD
+                    exit
+
     ##killall
 
         #kill all process by name
@@ -5736,23 +5875,31 @@ int main(void)
     ##cd
         #POSIX
 
-        cd dir
-            #go to dir
+        #go to dir
 
-        cd
-        cd ~
-            #goto home dir
+            mkdir d
+            cd d
+            pwd
 
-        cd -
-            #go back to last dir
-            #only works once
+        #goto home dir:
 
-        cd -lh
-            #-a : (all) show hidden files
-            #-h : human readable filesizes
-            #-l : long. one per line, lots of data.
+            cd
+            cd ~
 
-        #path for cd!
+        #go back to last dir:
+
+            cd -
+
+        #only works once
+
+        #-a : (all) show hidden files
+        #-h : human readable filesizes
+        #-l : long. one per line, lots of data.
+
+            cd -alh
+
+        #PATH variable for cd!
+
             CDPATH=/usr/:~
             cd
             mkdir a
@@ -5772,60 +5919,97 @@ int main(void)
     ##mkdir
         #POSIX
 
-        #make a dir
+        #make dirs
 
-        mkdir "$d"
-            #make a dir
-        mkdir -p "$d"
-            #make a dir
-            #no error if existant
-        mkdir -m 1777 d
-        assert [ `stat -c "%A" d` = 'drwxrwxrwt' ]
-            #-m: mode (permissions)
+        #make a dir:
+
+            mkdir "$d"
+
+        #no error if existant:
+
+            mkdir -p "$d"
+
+        #-m: set mode of new dir (permissions)
+
+            mkdir -m 1777 d
+            assert [ `stat -c "%A" d` = 'drwxrwxrwt' ]
     
     ##mv
         #POSIX
     
-        #move or rename files
-        
-        touch a
-        mv a b
-        assert [ ! -f a ]
-        assert [ -f b ]
+        #move or rename files and dirs
 
-        touch a
-        mkdir d
-        mv a d
-        assert [ ! -f a ]
-        assert [ -f d/a ]
+        ##files
+
+            #if dest does not exist, move the file to it:
+        
+                mkdir d
+                touch d/a
+                mkdir d2
+                mv d/a d2/b
+                assert [ "`ls d`" = '' ]
+                assert [ "`ls d2`" = 'b' ]
+
+            #if dest exists and is a file, overwrite by default:
+
+                echo a > a
+                echo b > b
+                mv a b
+                assert [ "`ls`" = "b" ]
+                assert [ "`cat b`" = "a" ]
+
+            #if dest exists and is a dir, move into dir:
+
+                touch a
+                mkdir d
+                mv a d
+
+        ##dirs
+
+            #same as files except does not overwrite non empty dirs:
+
+                mkdir d
+                mkdir d2
+                mkdir d2/d
+                mv d d2
+                    #d2/d was overwritten:
+                assert [ "`ls`"     = "d2" ]
+                assert [ "`ls d2`"  = "d" ]
+                mkdir d
+                touch d2/d/a
+                mv d d2
+                    #cannot mv: dir not empty
 
         ##-b
 
             #make backup if dest exits
             
-            #if backupt exists, it is lost
+            #if backupt exists, it is lost:
             
-            touch a
-            touch b
+                touch a
+                touch b
 
             #backup ~a is made:
-            mv -b b a
-            assert [ -f a ]
-            assert [ -f a~ ]
-            assert [ `ls | wc -l` = 2 ]
+
+                mv -b b a
+                assert [ -f a ]
+                assert [ -f a~ ]
+                assert [ `ls | wc -l` = 2 ]
 
             #backup is only made if destination exists:
-            mv -b a b
-            assert [ -f a~ ]
-            assert [ -f b ]
-            assert [ `ls | wc -l` = 2 ]
 
-            #if backup exists, it gets overwritten
-            touch a
-            mv -b a b
-            assert [ -f a ]
-            assert [ -f a~ ]
-            assert [ `ls | wc -l` = 2 ]
+                mv -b a b
+                assert [ -f a~ ]
+                assert [ -f b ]
+                assert [ `ls | wc -l` = 2 ]
+
+            #if backup exists, it gets overwritten:
+
+                touch a
+                mv -b a b
+                assert [ -f a ]
+                assert [ -f a~ ]
+                assert [ `ls | wc -l` = 2 ]
 
     ##cp
 
@@ -5843,9 +6027,9 @@ int main(void)
 
             #if dest exists and is dir, copy into dir:
 
-                mkdir c
-                copy a c
-                assert [ "`cat c/a`" = $'c/a' ]
+                mkdir d
+                copy a d
+                assert [ "`cat d/a`" = $'d/a' ]
 
             #if dest exists and is file, overwrite without asking!
 
@@ -5856,22 +6040,62 @@ int main(void)
 
         ##dir
 
+                function setup_test
+                {
+                    mkdir d
+                    echo a > a
+                    echo a > d/a
+                    mkdir d2
+                    mkdir d2/d
+                    echo A > d2/d/a
+                    echo b > d2/d/b
+
+                    mkdir d3
+                    cd d3
+                    ln -s ../d2 d
+                    cd ..
+                }
+
+                function teardown_test
+                {
+                    rm -r a d d2 d3
+                }
+
             #must use recursive `-r`, even if dir is empty
 
-                mkdir d
-                if cp d d2; then assert false; fi
+                setup_test
+                if cp d e; then assert false; fi
+                teardown_test
+
+                setup_test
                 cp -r d d2
                 assert [ -d d2 ]
+                teardown_test
 
-                echo a > d/a
-                cp -r d d3
-                assert [ "`cat a`" = $'a' ]
+            #unlike move, can copy into dir recursively overwritting by default:
+
+                setup_test
+                cp -r d d2
+                assert [ "`ls d2/d`"    = 'a b' ]
+                assert [ "`cat d2/d/a`"  = 'A' ]
+                assert [ "`cat d2/d/b`"  = 'b' ]
+                teardown_test
+
+            #if fails however if you try to overwrite a file with a dir:
+
+                setup_test
+                if cp -r d a; then assert false; fi
+                teardown_test
+
+            #it also fails if you try to overwrite a link to a dir with a dir:
+
+                setup_test
+                if cp -r d d3; then assert false; fi
+                teardown_test
 
         ##symlink
 
-            #default recursivelly follows symlink
-
-            #with `-d` copies symlink
+            #by default, for files copies content of symlinks to new files/dirs:
 
                 echo a > a
                 ln -s a b
@@ -5881,8 +6105,24 @@ int main(void)
                 assert [ -f d ]
                 assert [ "`cat a`" = $'a' ]
 
+            #with `-d` copies symlink to files into new symlinks (mnemonic: no-Dereference):
+
                 cp -d c e
                 assert [ -L d ]
+
+            #for dirs by default copies symlink into a new symlink:
+
+                mkdir d
+                ln -s d dln
+                cp dln e
+                assert [ -L e ]
+
+            #to dereference symlinks to directories, use `-L`:
+
+                mkdir d
+                ln -s d dln
+                cp -L dln e
+                assert [ -d e ]
 
             #does not work with `-r`. Probable rationale:
 
@@ -5898,7 +6138,7 @@ int main(void)
                 ln -l a b
                 assert [ "`stat -c '%i' a`" = "`stat -c '%i' b `" ]
 
-            #with `r`, makes dirs, and hardlinks files:
+            #with `-r`, makes dirs, and hardlinks files:
 
                 mkdir d
                 touch d/a
@@ -5907,16 +6147,15 @@ int main(void)
                 assert [ "`stat -c '%i' d/a`" = "`stat -c '%i' e/a `" ]
                 assert [ "`stat -c '%i' d/b`" = "`stat -c '%i' e/b `" ]
 
-    ##install
-    
-        #move and set: mode, ownership and groups
-    
-        #make all components of path:
-        
-            install -d a/b/c
-            assert [ -d a ]
-            assert [ -d a/b ]
-            assert [ -d a/b/c ]
+            #if `-l` is used, does not overwrite file:
+
+                echo a > a
+                echo b > b
+                if cp -l a b; then assert false; fi
+
+            #but can overwrite if `-f` is given:
+
+                cp -fl a b
 
     ##rename
 
@@ -5932,6 +6171,21 @@ int main(void)
 
         find . ! -iname '* - *' -type f -print | cpio -pvdumB './no author'
         #cfind selected files to destination, building and keeping their relative directory structure
+
+    ##rsync
+
+        #TODO powered up `cp`?
+
+    ##install
+    
+        #move and set: mode, ownership and groups
+    
+        #make all components of path:
+        
+            install -d a/b/c
+            assert [ -d a ]
+            assert [ -d a/b ]
+            assert [ -d a/b/c ]
 
     ##mkfifo
 
@@ -5954,6 +6208,11 @@ int main(void)
         #POSIX
     
         #change owner and group of files
+
+        #you must use sudo to do this, because otherwise users would be able to:
+
+        #- steal ownership of files
+        #- git ownership to users who do not want to own the files
 
         #see <#file permissions>
         
@@ -6120,6 +6379,14 @@ int main(void)
                 touch a
                 ln a b
                 assert [ "`stat -c "%i" a`" = "`stat -c '%i' b`" ]
+
+        ##--print
+
+            #like `-c` but interprets escapes like `\n`
+
+                touch a
+                echo "`stat --print "%a\n%a\n" a`"
+                assert [ "`stat --print "\n" a`" = $'\n' ]
 
     ##links
 
@@ -6300,9 +6567,7 @@ int main(void)
 
             #this is the way to go:
 
-                while IFS= read -r -u3 -d '' FILE; do
-                    echo "$FILE"
-                done 3< <(find . -type f -print0)
+                while IFS= read -r -u3 -d '' f; do echo "$f"; done 3< <(find . -type f -print0)
 
             #the only thing tha breaks this is having programs that use 3<. godlike
 
@@ -6489,6 +6754,8 @@ int main(void)
                 if [ -z "`which zenity`" ]; then
                         sudo aptitude install zenity
                 fi
+
+            #could also be done bashonly with `type -P`.
 
     ##temp
 
@@ -6884,8 +7151,8 @@ int main(void)
       
         #create new groups
 
-        g=
-        sudo groupadd $g
+            g=
+            sudo groupadd $g
 
     ##usermod
 
@@ -7368,24 +7635,28 @@ int main(void)
         
         #only use <#wget> for recursive mirroring
 
-        sudo aptitude install -y curl
+            sudo aptitude install -y curl
 
         #make GET request, reponse body to stdout:
+
             curl amazon.com
 
         ##-d
 
             #makes POST request
+
                 curl -Ld "q=asdf" $URL
                 curl -L "google.com?q=asdf" $URL
 
             ##--data-urlencode
             #encodes spaces and other signs for you:
+
                 curl -d               "name=I%20am%20Ciro" $URL
                 curl --data-urlencode "name=I am Ciro"     $URL
 
-        curl -C - -O http://www.gnu.org/software/gettext/manual/gettext.html
         #resume download from where it stopped
+
+            curl -C - -O http://www.gnu.org/software/gettext/manual/gettext.html
 
         ##a-z range
         
@@ -8545,6 +8816,44 @@ print "</body></html>"
 
         #install mysql server. see: <#mysql server>
 
+    ##deployment
+
+        ##zymic
+
+            #free php
+
+            #did not work well with wordpress, probably some php restrictions.
+
+        ##000
+
+            #worked for wordpress
+
+        ##openshift
+
+            #open source
+
+            #operated as service by redhad
+
+            #ssh access
+
+            #languages: python, java, ruby
+
+            #lots of startups including wordpress
+
+            #number of apps quite limited: 3 per account
+
+            #console local client:
+
+                sudo gem install rhc
+
+            #start app (apps are stopped by default):
+
+                sudo gem install rhc
+
+            #error logs:
+
+
+
     ##vpn
 
         #control another computer with you computer
@@ -8755,6 +9064,7 @@ print "</body></html>"
             man perlcheat
 
         #waits a ctrl-d and then execute everything:
+
             perl
         
         ##sources
@@ -8850,6 +9160,8 @@ print "</body></html>"
                     #add newline to prints if `-0` is not set
                     #(and thus equals newline)
 
+                    #remove the annoying end newline which may match your `\s`!!
+
             ##-M
             
                 #import modules
@@ -8908,6 +9220,18 @@ print "</body></html>"
 
                 #regex refactoring:
                 ack -f | xargs perl 's/a/b/'
+
+    ##ruby
+
+        #perl python concurrent
+
+        ##gem
+
+            #ruby package manager
+
+            #install a package:
+
+                sudo gem install pkg
         
 ##x11
 
@@ -9160,7 +9484,7 @@ add Lock = Caps_Lock
             
             #can be pasted with a middle click
 
-            echo a > xsel
+            echo a | xsel
                 #set x selection
             assert [ `xsel` = a ]
                 #print contents of xselection
