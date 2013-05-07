@@ -233,20 +233,25 @@
 
 ##get new package info
 
-    apt-cache depends $PKG
-        #list package dependencies
+    #list package dependencies
 
-    sudo apt-get build-dep $PKG
-        #? what is the difference between this and depends
+        apt-cache depends $PKG
 
-    sudo apt-rdepends -r $PKG
-        #who depends on $PKG: reverse dependencies
+    #? what is the difference between this and depends
 
-    apt-cache show $PKG
-        #basic information about a package
+        sudo apt-get build-dep $PKG
 
-    apt-cache showpkg $PKG
-        #detailed information about a package
+    #find who depends on $PKG (reverse dependencies):
+
+        sudo apt-rdepends -r $PKG
+
+    #get basic information about a package:
+
+        apt-cache show $PKG
+
+    #get detailed information about a package:
+
+        apt-cache showpkg $PKG
 
     sudo aptitude install debtags
     debtags tag ls $PKG
@@ -258,15 +263,25 @@
 
 ##install
 
-    sudo aptitude install $PKG
     #install package
 
-    sudo aptitude install -o APT::Install-Recommends="true" $PKGg
+        sudo aptitude install $PKG
+
     #also installs recommended packages
+
+        sudo aptitude install -o APT::Install-Recommends="true" $PKGg
+
     #-o option changes things which could be in the config files.
 
-    sudo aptitude install -o APT::Install-Suggests="true" $PKGg
     #also installs suggested packages
+
+        sudo aptitude install -o APT::Install-Suggests="true" $PKGg
+
+    #install only the dependencies required for a package but not the package itself:
+
+        sudo aptitude build-dep $PKG
+    
+    #this is useful if you want to dev a package that has compiled dependencies
 
 ##upgrade installed packages
 

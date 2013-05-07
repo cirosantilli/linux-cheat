@@ -6771,27 +6771,13 @@ int main(void)
             assert test -d "$d"
             rm -r "$d"
                 #dir instead of file
-    
+
     ##pathchk
-    
+
         #check if path is portable across posix systems
-        
+
         pathchk -p 'a'
         pathchk -p '\'
-
-    ##dirs
-
-        #move between dirs in stack
-
-        dirs
-            #show dir stack
-            # -v : verbose. one per line, with line numbers
-
-        pushd .
-            #push to dir stack
-
-        popd
-            #pop fro dir stack and cd to it
 
     ##fdupes
 

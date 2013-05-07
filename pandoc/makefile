@@ -16,12 +16,18 @@ OUT_HTML := $(patsubst %$(IN_EXT),$(OUT_DIR)%$(OUTEXT),$(SRCS))
 OUTEXT := .pdf
 OUT_PDF = $(patsubst %$(IN_EXT),$(OUT_DIR)%$(OUTEXT),$(SRCS))
 
+ERASE_MSG := 'DONT PUT ANYTHING IMPORTANT IN THOSE DIRECTORIES SINCE `make clean` ERASES THEM!!!'
+
 .PHONY: all mkdir html pdf firefox okular clean
 
 all: html pdf
+	@echo 'OUTPUT    FILES WERE BE PUT INTO: $(OUT_DIR)'
+	@echo $(ERASE_MSG)
 
 mkdir:
 	mkdir -p $(OUT_DIR)
+	@echo "MADE DIRS: $(OUT_DIR)"
+	@echo $(ERASE_MSG)
 
 html: mkdir $(OUT_HTML)
 
@@ -41,3 +47,5 @@ $(OUT_DIR)%.pdf: %$(IN_EXT)
 
 clean:
 	rm -r "$(OUT_DIR)"
+	@echo "REMOVED DIRS: $(OUT_DIR)"
+	@echo $(ERASE_MSG)

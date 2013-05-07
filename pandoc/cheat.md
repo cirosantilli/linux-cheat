@@ -97,6 +97,19 @@ links to other internal ids works only in html: [id](#id)
 
 the only non html way I could find to do this was via code block attributes: `` `code`{#id} ``.
 
+## relative link
+
+possible:
+
+[readme.html](readme.html)
+
+[readme.pdf](readme.pdf)
+
+the problem is that you have to give the output extension here (html/pdf)
+and AFAIK there is no cross ouptut way to do do this. TODO new feature
+
+also note: relative links only work if all pdfs were downloaded on disk.
+
 # code block
 
 Inline: `*this is inline code*`

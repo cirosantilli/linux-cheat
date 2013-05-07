@@ -9,29 +9,38 @@ document title must be completely underlined and upperlined with =
     :depth: 5
 
 h1
-=======
+==
 
 must have at least as many underline symbols as length
 
 underline symbol can be anything.
 
+overline is optiona
+
 the first time it appears defines the level of a symbol.
 
 if you change that aftewards, you get an error.
 
-very confusing.
+convention used on python docs (aka **follow it**!!):
+
+- ``#`` with    overline: parts
+- ``*``                 : chapters
+- ``=`` without         : sections. This is what people usually put as ``h1`` level,
+    but will become a ``h3`` if you use parts and chapters.
+- ``-``                 : subsections
+- ``^``                 : subsubsections
+- ``"``                 : paragraphs
+
+a bit confusing, and hard to compute IMHO:
 
 h2
-##
+--
 
 h3
-++
-
-h4
 ^^
 
-h5
---
+h4
+""
 
 par
 ===
@@ -90,7 +99,7 @@ links to subdir unless if fits into some known protocol such as ``http`` or emai
 .. _maillink: a@b.c
 
 anonymous
-#########
+---------
 
 __ ano1
 
@@ -105,7 +114,7 @@ __ ano3
 `text of ano3`__
 
 internal
-########
+--------
 
 partarget_
 
@@ -125,7 +134,7 @@ _`inline internal target`. a link to it: `inline internal target`_. This makes a
 
 toid_
 
-.. _toid: #partarget
+.. _toid: -partarget
 
 uitarget_
 
@@ -252,12 +261,12 @@ unicode: |copy| |BogusMegaCorp (TM)| |---|
 datetime: |date| |time|
 
 include
-#######
+-------
 
 .. include:: included.rst
 
 raw
-###
+---
 
 is only used for respective output.
 
