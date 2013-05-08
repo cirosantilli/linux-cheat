@@ -1,30 +1,9 @@
-##sources
-	#http://www.jfranken.de/homepages/johannes/vortraege/make_inhalt.en.html
-	#http://www-cip.physik.uni-bonn.de/pool/infos/make/advanced.html
+#?deprecated
 
-##motivation
-
-	#- takes care of dependencies
-
-	#- only builds if requirements were changed! (looks at timestamps)
-
-		#this may be important when compilation time starts getting significative
-
-##basics
-
-	target: dep1 dep2
-
-	needs1:
-		gcc dep1
-
-	needs1:
-		gcc dep2
-
-	#% pattern
-		%.pdf:
-			%.ps; -ps2pdf $<
-
-	#$make target #makes target
+#THIS FILE IS DEPRECATED
+#it is being split up into smaller
+#more understantable and testable makefiles
+#and will be completelly removed afterwards
 
 ##conventional targets
 
@@ -229,31 +208,6 @@
 ##call other makefiles
 
 	$(MAKE)
-
-##silent
-
-	#normally build shows the commands it does
-	#with `@`, it omits the commands
-	#BUT the stdout/err of the command still shows!
-	all:
-		@echo asdf
-		#shows "asdf"
-		echo asdf
-		#"echo asdf"
-		#"asdf"
-		@echo asdf
-
-##ignore errors
-
-	#normally build stops if error
-	#not if `-`
-	all:
-		-gcc a.c
-
-##ignore error and silent
-
-	all:
-		@-gcc a.c
 
 ##command line variables
 
