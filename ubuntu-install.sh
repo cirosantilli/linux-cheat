@@ -7,20 +7,20 @@
 ##info
 
     #a debian based distribution
-    
+
     #important implications:
-    
+
         #maby key programs are the same: `dpkg` for packages, `upstart` for init
 
     ##upgrade version
 
         #sudo aptitude install -y update-manager-core
-        #sudo do-release-upgrade 
+        #sudo do-release-upgrade
         #sudo aptitude update && sudo aptitude upgrade
 
     #oppen app without global menu
-    
-        #env UBUNTU_MENUPROXY=0 golly 
+
+        #env UBUNTU_MENUPROXY=0 golly
 
     #ubuntu-tweak
 
@@ -48,6 +48,8 @@
 
             sudo aptitude install -y apt-file
             apt-file update
+
+            sudo aptitude install -y aview
 
         #.arj files:
 
@@ -131,7 +133,7 @@
 
     #you must first add ppas with `apt-add-repository`
 
-        sudo add-apt-repository -y ppa:tualatrix/ppa && sudo aptitude update 
+        sudo add-apt-repository -y ppa:tualatrix/ppa && sudo aptitude update
             sudo aptitude install -y ubuntu-tweak
 
         sudo add-apt-repository -y ppa:atareao/atareao && sudo apt-get update

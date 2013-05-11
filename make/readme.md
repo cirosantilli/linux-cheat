@@ -6,7 +6,7 @@ make allows you to do the following:
 
 it is the de facto standard tool for that today, but there is serious effort going on to replace it because it is too insane.
 
-#sources
+# sources
 
 - http://www.jfranken.de/homepages/johannes/vortraege/make_inhalt.en.html
 

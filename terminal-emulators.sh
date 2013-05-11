@@ -72,7 +72,7 @@
 
         #note however that while visually indistinguishable from a literal `^X`,
         #it is only a single char, since backspacing remove the `^X` at once.
-        
+
         #to view the ascii value of a sequence:
 
         #echo -n <c-v>SEQ | hedump -C
@@ -102,7 +102,7 @@
         #^A is the beep char, and if configured to do so,
         #terminals may emmit a beep when they see this at stdout.
         #try (you must do <c-v><c-a>, not copy paste...):
-            
+
             #echo ^A
 
         #other non-printable chars might simply print as nothing if they go to the stdout of you terminal
@@ -196,7 +196,7 @@
     #what the terminal does on keypresses is not officially standardized
     #but the VT100 behaviour became the de facto standard <http://en.wikipedia.org/wiki/VT100>
     #so this is what computer terminal programs emulate.
-    
+
     #VT100 uses ascii values only (0-127)
     #with contro+keys to reach the non alphanumerical values.
     #and ansi escape codes <http://en.wikipedia.org/wiki/ANSI_escape_code>
@@ -221,7 +221,7 @@
         #^A is the beep char, and if configured to do so,
         #terminals may emmit a beep when they see this at stdout.
         #try (you must do <c-v><c-a>, not copy paste...):
-            
+
             #echo ^A
 
         #also see <color example>

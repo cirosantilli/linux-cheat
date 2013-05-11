@@ -27,7 +27,7 @@
 	##conventional names
 
 		##help
-			
+
 				#print help on cur makefile options
 
 		##all
@@ -39,9 +39,9 @@
 		##check
 
 			#do test to check that application is woking properly
-	
+
 		##install
-			
+
 				#install after a build
 
 				#this basically putting built/config files in the right place with right permissions
@@ -67,7 +67,7 @@
 		#a.m4 -> a.c -> a.o
 
 	#with a single rule:
-		
+
 		a.o: a.m4
 			m4 a.m4 > a.c
 			gcc -o a.o a.c
@@ -85,7 +85,7 @@
 
 ##variables
 
-	CC=gcc 
+	CC=gcc
 	CXX=$(CC)
 	FLAGS=-Wall -Wno-unused-variable -Wno-unused-but-set-variable
 	OUTEXT=.out
@@ -154,7 +154,7 @@
 
 		#ex:
 
-			a = b  
+			a = b
 
 		#a = "b  "
 
@@ -200,7 +200,7 @@
 ##duplicate rules
 
 	#must use double colons
-	
+
 	#socks will build both
 	socks:: ; @echo get into left sock
 	socks:: ; @echo get into right sock
@@ -257,7 +257,7 @@
 			SRCS = $(wildcard *$(INEXT))
 
 	##patsubst
-	
+
 		#makes an array with wildcard.
 
 			OUTS = $(patsubst %$(INEXT),%$(OUTEXT),$(SRCS))
@@ -271,7 +271,7 @@
 			all: $(OUTS)
 			%: %$(INEXT)
 				$(CC) $(CFLAGS) -o $@$(OUTEXT) $<
-	
+
 	##foreach
 
 		#do a loop and concatenate results
@@ -306,7 +306,7 @@
 
 	$(shell command) 	Execute a shell command and return its output.
 		LIBS=$(shell pkg-config opencv --libs)
-		
+
 	$(origin variable) 	Return a string describing how the make variable variable was defined.
 	$(foreach var,words,text) 	Evaluate text with var bound to each word in words, and concatenate the results.
 	$(call var,param,...) 	Evaluate the variable var replacing any references to $(1),$(2) with the first, second, etc. param values.
@@ -365,7 +365,7 @@ all:
 
 #predefined vars ( ?= won't work for them! ):
 
-	#AR AS CC CPP FC M2C PC CO GET LEX YACC LINT MAKEINFO TEX TEXI2DVI WEAVE CWEAVE TANGLE CTANGLE RM ARFLAGS ASFLAGS CFLAGS CXXFLAGS COFLAGS CPPFLAGS FFLAGS GFLAGS LDFLAGS LFLAGS YFLAGS PFLAGS RFLAGS LINTFLAGS 
+	#AR AS CC CPP FC M2C PC CO GET LEX YACC LINT MAKEINFO TEX TEXI2DVI WEAVE CWEAVE TANGLE CTANGLE RM ARFLAGS ASFLAGS CFLAGS CXXFLAGS COFLAGS CPPFLAGS FFLAGS GFLAGS LDFLAGS LFLAGS YFLAGS PFLAGS RFLAGS LINTFLAGS
 
 #those vars are mainly used to control the automatic rules.
 
