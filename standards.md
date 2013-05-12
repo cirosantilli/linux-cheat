@@ -1,104 +1,75 @@
-linux is based on the following standards:
+linux an informal name for an operating systems which comply to the
+[linux standar base (lsb)](lsb) specification of the [linux foundation][]
 
-- posix
+the central component of the linux operating system is the linux kernel,
+released in 1991 by Linus Trovalds, however much of its core user space
+software comes from the gnu project
 
-- linux standard base (lsb)
+which was created by linux trovalds in 1991
 
-- file system hierarchy standard (fhs)
+the major specification produced by the linux foundation is the
+linux standard base (lsb): 
+which specifies the minimum intefaces every linux system must offer.
 
-## posix
+the linux foundation also offers certification and compliance verification
+tools for distribution developpers and application developpers.
 
-aka: Portable Operating System Interface for uniX.
+the list of certified distributions and products can be found here:
+https://www.linuxbase.org/lsb-cert/productdir.php?by_lsb.
 
-aka: Single Unix specification (SUS)
+# linux and gnu
 
-TODO understand difference between the two: http://unix.stackexchange.com/questions/14368/difference-between-posix-single-unix-specification-and-open-group-base-specifi
+[linux and gnu][]
 
-an operating system standardization by both IEEE and `the open group`
-(merger of the `Open software foundation` with `X/Open`)
+the user space programs of linux are mostly inherited from the *gnu project*
+which was created in 1983 by Richard Stallman.
 
-currently, linux and mac are largely posix compliant but not certified,
-windows is not largely compliant.
+for example, the following central components originate from gnu:
 
-free standard
+- gcc
+- glibc
+- bash
 
-has several versions. The last at the time of writting was made in 2008
+it seems that the gnu project is not officially called like that anymore,
+and has transformed into the *free software foundation* (fsf) also founded by Stallman
+TODO check
 
-POSIX issue 7: IEEE formal name: `IEEE Std 1003.1-2008`: http://pubs.opengroup.org/onlinepubs/9699919799/
-quite readable
+amongst the projects of the fsf is the *gnu operating system*.
+they are also active in legal causes and activism for free software
 
-Single UNIX Specification, Version 4: http://www.unix.org/version4/
+the gnu operating system is developping its own kernel called *HUD*,
+but the own project states that it is not yet ready for broad usage
 
-### the open group
+the fsf insists on caling what most people call linux as GNU/linux,
+which sounds quite reasonable considering they developed a great part of
+the userspace core
 
-major open group supporters whose major supporters include:
+the gnu software foundation is the creator and current maintainer
+of the GPL licence, and mostly uses that licence for its software and
+is the main enforcer of its infringements
 
-Fujitsu, Oracle, Hitachi, HP, IBM,
-US Department of Defense, NASA
+# examples of what lsb specifies
 
-therefore some of the top users/creators of software
-
-### examples of what posix specifies
-
-#### shell
-
-a shell language. bash is compliant, with extensions.
-
-utilities that should be available to the shell
-such as programs in path or shell builtins
-
-examples:
-
-- cd
-- ls
-- cat
-- mkdir
-
-#### system interface
-
-standard c interfaces to the system
-
-they allow for operations such as:
-
-- threads
-- ipc
-- filesystem operations
-- user/group info
-
-it does not however specify the *exact* system calls,
-and those are then implemented using a given os system calls.
-
-however many of the linux system calls rassemble those
-closely because of the complience
-
-## lsb
-
-linux standard base
-
-maintained by the linux foundation: http://www.linuxfoundation.org/collaborate/workgroups/lsb/download
-
-###examples of what lsb specifies
-
-#### core
+## core
 
 core c libraries
 
 elf filetype
 
-#### c++
+## c++
 
-#### interpreted languages
+## interpreted languages
 
 - python
 - perl
 
-#### desktop
+## desktop
 
 - x11, gtk+, and qt support
 - jpeg, png support
 - alsa (sound)
 
-## fhs
+# fhs
 
 filesystem hierarchy standard
 
@@ -181,31 +152,34 @@ used by who and last
 non official
 ubuntu: devices
 
-### basename conventions
+## basename conventions
 
 not in the fhs, but you should know about
 
-#### ^\.
+### ^\.
 
 hidden files
 
 it is up to programs to decide how to treat them
 
-#### \.~$
+### \.~$
 
 backup file
 
-#### \.bak$
+### \.bak$
 
 backup file
 
-#### \.orig$
+### \.orig$
 
 original installation file
 
-#### \.d$
+### \.d$
 
 many theories, a plausible one:
 differentiate `a.conf file` from `a.conf.d` dir
 normally, all files in the `a.conf.d` dir will be sourced
 as if they wre inside `a.conf`
+
+[lsb]: http://www.linuxfoundation.org/collaborate/workgroups/lsb/download
+[linux foundation]: http://www.linuxfoundation.org/

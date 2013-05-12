@@ -2,7 +2,7 @@ points to a target path
 
 # create
 
-use `ln -s`:
+use `ln -s` (posix 7):
 
     echo a > a
     ln -s a b

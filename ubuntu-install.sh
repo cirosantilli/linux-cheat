@@ -64,6 +64,11 @@
             sudo aptitude install -y dvipng
             #sudo aptitude install -y exactimage
             sudo aptitude install -y file-roller
+
+        #glasgow haskell compiler:
+
+            #sudo aptitude install -y ghc
+
             sudo aptitude install -y gimp
             sudo aptitude install -y gnome-tweak-tool
             sudo aptitude install -y goldendict
