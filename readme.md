@@ -2,7 +2,7 @@ info and cheatsheets on linux and *utils* that work on linux
 
 # definition: utils
 
-by *utils* I mean:
+by *utils* it is meant mean:
 
 - programs
 
@@ -21,5 +21,5 @@ I have not however tested anything in any os except linux.
 # this is the default utils repo
 
 those utils are kept in this repo because
-they don't deserve a repo of their own because I don't have enough info written on them.
+they don't deserve a repo of their own because there is not enough info written on them.
 this is the default place where those tools go to before deserving a repo

@@ -89,6 +89,10 @@
             sudo aptitude install -y lame
             sudo aptitude install -y logkeys
 
+        #nasm assembler:
+
+            sudo aptitude install -y nasm
+
         #.lzh files used on DOS, legacy:
 
             #sudo aptitude install -y lha
@@ -102,8 +106,8 @@
             sudo aptitude install -y p7zip-full
 
             sudo aptitude install -y ppa-purge
-            sudo aptitude install python-scipy
-            sudo aptitude install python-matplotlib
+            sudo aptitude install -y python-scipy
+            sudo aptitude install -y python-matplotlib
 
         #shell archives:
 
@@ -133,6 +137,11 @@
 
             sudo aptitude install -y zip unzip
             sudo aptitude install -y wmctrl
+
+        ##chm
+
+            #sudo aptitude install -y kchmreader
+            sudo aptitude install -y chmsee
 
 ##launchpad ppas
 

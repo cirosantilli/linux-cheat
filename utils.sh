@@ -963,6 +963,23 @@
 
                         djvm -l speak\ chinese\ 2.djvu | sed -nre '$ s/.+#([0-9]+).+/\1/p'
 
+    ##chm
+
+        #microsoft proprietary
+
+        #discontinued
+
+        #non plain text: compiled
+
+        #based on html?
+
+        #has been reverse ingeneered
+
+        #readers (best to worst):
+
+        #- kchmreader: kde, broken colors on ubuntu
+        #- chmsee: gtk+, few preferences, just works.
+
 ##ocr
 
     #possibilities:
@@ -1421,153 +1438,31 @@
 
 ##programming
 
-    sudo aptitude install -y build-essential
-        #building tools
+    #building tools
 
-    sudo aptitude install -y automake
-        #makefile macros
-        #generates makefiles
+        sudo aptitude install -y build-essential
 
-    sudo aptitude install -y libtool
-        #helps generatin libraries for c, c++, fortran and java
+    #makefile macros
+    #generates makefiles
 
-    sudo aptitude install -y cmake
-        #make advanced
+        sudo aptitude install -y automake
+
+    #helps generating libraries for c, c++, fortran and java
+
+        sudo aptitude install -y libtool
+
+    #make advanced
+
+        sudo aptitude install -y cmake
 
     #nasm assembler
 
-        sudo aptitude install -y nasm
-
         nasm -w+all -f elf -o a.o a.asm
+
             #-w+all : enable all warnings
             #-f ouptut format
 
         nasm -w+all -f elf -o a.o a.asm
-
-    ##make
-
-        make
-            #uses Makefile in cur dir
-        make -C /some/dir
-            #changes current dir
-
-    ##gcc ##g++
-
-        #Gnu Compiler Collection: NOT c compiler
-        #does: C, C++, Objective-C, Fortran, Java, Ada, and Go
-        #large frontend to severl subprograms such as `as`, `cpp` and so on
-
-        #g++:
-            #http://stackoverflow.com/questions/172587/what-is-the-difference-between-g-and-gcc
-            #most important:
-                #1) g++ treats both .c and .cpp files as c++
-                #2) g++ links to (but does not include) stdlib automatically, gcc does not!
-
-        #http://www3.ntu.edu.sg/home/ehchua/programming/cpp/gcc_make.html#
-        #http://www.adp-gmbh.ch/cpp/gcc/create_lib.html
-
-        #compilation steps
-
-            cpp a.c > a.i
-            cpp b.c > b.i
-            #expanded macros
-            #c pre processor
-
-            gcc -S a.i -o a.s
-            gcc -S b.i -o b.s
-                #generate human readable assembly code
-                #default format: att
-            gcc -masm=att -S a.c -o a.s
-            gcc -masm=intel -S a.c -o a.s
-                #specify format
-
-            as -o a.o a.s
-            as -o b.o b.s
-                #make machine code
-
-            gcc -c a.c -o a.o
-            gcc -c b.c -o b.o
-                #all above steps in one
-
-            ld -o ab.out a.o b.o
-                #link object files into single executable
-
-            gcc a.c b.c -o ab.out
-                #does all above steps in one
-                #if you use make, it is faster to genterate `.o`
-                #and keep them, since if the source does not change,
-                #make will not recompile the corresponding `.o`
-
-        ##compilation flags
-
-            ##always use
-
-                gcc -Wall
-                    #enables all warnings
-                    #ALWAYS USE IT
-                gcc -Wall -Wno-unused-variable
-                    #enables all warnings, except `unused-variable
-
-                #std
-                #specifies version os the language to be used
-                #
-                    #disable gcc extensions that conflict with c standrad
-                    gcc -std=c90
-                    gcc -std=c99
-                    gcc -std=1x
-                        #current most modern
-                    gcc -std=c11
-                        #not yet available
-                        #will be when implementation complete
-
-                    gcc -ansi
-                        #changes with time, currently equals `-std=c90`
-                        #don't use it
-
-                gcc -std=c1x -pedantic
-                    #give warnings for code that does not comply with c1x standard
-                    #this does not mean *FULL* complience, but greatly increases complience
-                    #there is currently no full complience check in `gcc`
-                gcc -std=c1x -pedantic-errors
-                    #give errors instead of warnings
-
-                ##-march cputype
-
-                    #optimizes code to given cpu (arch is for archtecture)
-                    #may use instructions only available to given cpu
-
-                    gcc -march=native
-                        #optimize for currrent compiling machine
-                    gcc -march=i386
-                        #80386 instruction set. old, compatible, used on almost all desktops and laptops
-                    gcc -march=armv7
-                        #Arm v.7, used on mobiles today
-
-                ##code optimization
-
-                    gcc -Q -O --help=optimizers
-                    #shows optimizations for -O
-
-                    #-O0 : no speed optimization. This is the default
-                    #-O : -O1 basic speed optimization
-                    #-O2 : more than O1
-                    #-O3 : more than O2
-                    #-Og : optimize for debugging
-                    #-Os : optimize for size
-                    #-Ofast : optimize for speed more than O3, *even if it breaks standards*
-
-                    gcc -O3 a.c -o a.out
-                    #compile with optimization
-
-                    ##summary
-
-                        gcc -std=c99 -pedantic-errors -Wall -03 -march=native a.c
-                            #always use this for production code
-
-            ##other
-
-                gcc -std=gnu90
-                    #c90 + gcc extensions
 
         ##c preprocessor
 
@@ -1607,7 +1502,7 @@
 
         ##libs
 
-            ##itro
+            ##intro
 
                 #**TO USE A LIBRARY YOU NEED 2 THINGS**:
 
@@ -1636,281 +1531,6 @@
                     gcc -c b.c
                     ar rcs a.a a.o b.o
                     gcc a.a c.c
-
-            ##dynamic
-
-                #aka ##shared library
-
-                ##loading vs linking
-
-                    ##linking
-
-                        #link to lib for entire program
-
-                        #simpler
-
-                    ##loading
-
-                        #explicitly load needed functions during program execution
-
-                ##create so
-
-                    gcc -c -fPIC a.c
-                    gcc -c -fPIC b.c
-                        #compile for .so
-                        #*MUST* compile like this
-                    gcc -shared a.o b.o -o libab.so
-
-                    ##version numbering
-
-                        #standard: up to 3 numbers
-
-                        #yes, they come after the `.so`
-                        #otherwise possible ambiguity:
-                        #`liba.1.so` is version 1 of `liba` or simply `lib.a.1`?
-
-                        #to link to a given version:
-                        #use full basename linking with verison number.
-
-                        #linking takes care of version defaults:
-
-                            #- liba.so.1.1.1
-                                #necessarily itself
-
-                            #- liba.so.1.1
-                                #itself
-                                #or a link to 1.1.1
-                                #or a link to 1.1.2
-                                #...
-
-                            #- liba.so.1
-                                #itself
-                                #or a link to 1.1
-                                #or a link to 1.2
-                                #or a link to 1.1.2
-                                #or a link to 1.2.1
-                                #...
-
-                            #- liba.so
-                                #itself
-                                #or a link to 1
-                                #or a link to 2
-                                #or a link to 1.1
-                                #or a link to 1.2
-                                #...
-
-                            #rationale: if you underspecify the library
-                            #you get by default the most recent
-
-                            #convention: change in first number means possible interface break
-
-                ##compile with so
-
-                    ##-l
-
-                        #link to library libm.so:
-
-                            gcc a.c -o a.out -lm
-                            gcc a.c -o a.out -l:libm.so
-
-                        #SAME
-                        #relative paths to the load path get stored in the elf file
-                        #`readelf -d` shows that
-
-                            gcc a.c -o a.out -l:/full/path/to/libm.so
-
-                        #DIFFERENT
-                        #the full path gets stored in the elf file
-                        #`readelf -d` shows that
-
-                        #it must be in the load path. see: <#-L>
-
-                        #PUT -l AFTER ALL COMMANDS!!!!!!!!!!
-
-                        #the name given to -l must be EITHER:
-
-                            #- stripped from `lib` and `.so` part
-                                #in this example: `m`, for `libm.so`. *will not work for `libm.so.1` !!!!!
-
-                            #- colon + `:`full basename: `-l:libm.so.1`
-
-                            #you need to compile like this so gcc
-                            #can tell if all your functions are definied
-
-                        ##-L
-
-                                gcc a.c -o a.out -L/full/path/to/ -lm
-                                gcc a.c -o a.out -L./rel/path/to/ -lm
-                                env LIBRARY_PATH=$LIBRARY_PATH:/path/to/ gcc a.c -o a.out -llib
-
-                            #append path to link search path
-                            #
-                            #to view current path: <#library path>
-                            #
-                            #can also be done via LIBRARY_PATH variable
-                            #
-                            #HOWEVER, when the program will run,
-                            #you still need to add it to the load path!!!
-                            #
-                            #either on /etc/ld.so.cache or on the variable
-                            #`LD_LIBRARY_PATH` (which is completelly different from
-                            #`LIBRARY_PATH`, which can be used for compilation path,
-                            #but not for loading). see <#load path>.
-                            #
-                            #this is only good for compilation!!!
-
-                ##execute
-
-                    ##best method
-
-                        sudo mv liba.so /some/where/in/link/path
-                        sudo ldconfig
-                            #optional but better, see <#search path>
-                        ./a.out
-
-                        #this suposes that when you compiled you used: `-lliba.so`
-
-                    ##LD_LIBRARY_PATH
-
-                        #this has nothing to do with LIBRARY_PATH path variable
-                        #which is used during compilation by gcc!
-
-                        #LD_LIBRARY_PATH is used during execution by the linker!
-
-                        env LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/absolute/path/to/lib ./a.out
-                        ./a.out
-
-                        #BAD
-
-                            env LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./rel/path/to/lib/from/cd ./a.out
-                            ./a.out
-
-                            #this only works if you are in the right dir
-                            #since relative path is take to current dir
-
-                    #required libs are stored in the ELF file at compilation
-                    #either as relative or absolute or absolute paths
-
-                    #next, the linker uses this information to find the library
-                    #during execution
-
-
-                        #you could build the exe, move the lib, and still link to it!
-
-                    ##ldd
-
-                        #list required shared libraries
-                        #and if they can be found
-
-                        #binutils package
-
-                        #is a convenient subset of `readelf -d`
-
-                        ldd a.out
-                            ##cases:
-                                ##Not a dynamic executable
-                                ##liba.1.so => /lib/liba.1.so
-                                ##liba.1.so => not found
-
-                    ##load path
-
-                        cat /etc/ld.so.conf
-                            #search path
-
-                            #may also include other files as for example:
-                                #`include /etc/ld.so.conf.d/*.conf`
-                                #in this case you want to:
-                                    cat /etc/ld.so.conf.d/*.conf
-
-                            #the following are hard codded in `ldconfig`:
-                                #- /lib/
-                                #- /usr/lib/
-
-                        ##cache
-
-                            #it would be very slow to search the path every time
-
-                            #therefore the linker keeps uses a cache at:
-                                cat /etc/ld.so.cache
-
-                            #it first looks for libs there,
-                            #and only then searches the path
-
-                            #you can generate `/etc/ld.so.cache` automatically
-                            #once you have your `ld.so.conf` with `ldconfig`
-
-                            #even if the linker finds the lib in the path,
-                            #it does not automatically add it to the cache
-                            #so you still have to run `ldconfig`
-
-                            #running ldconfig is a part of every package install/uninstall
-                            #if it conatins a lib
-
-                            ##ldconfig
-
-                                sudo ldconfig
-                                    ##search in dirs listed in `/etc/ld.so.conf`
-                                    #and write found libs to `/etc/ld.so.cache``
-
-                                ldconfig -p
-                                    #print cache stored in /etc/ld.so.cache and .d
-                                    #does not show in which directory libraries are stored in
-                                    #only where they link to
-
-                                ldconfig -v
-                                    #show directories that are scanned and libraries that are found
-                                    #in each dir
-
-                                ldconfig -v 2>/dev/null | grep -v $'^\t'
-                                    #print search path
-
-                                    ##hwcap
-
-                                        #/usr/lib/i386-linux-gnu/sse2: (hwcap: 0x0000000004000000)
-
-                                        #stands for `hardware capacities`
-
-                                        #if present, means that those libraries can only be used
-                                        #if you hardware has the given capacities
-
-                                        #here for example, as shown in the directory name,
-                                        #this path is for libraries which depend on the sse2
-                                        #extensions (a set of cpu instructions, not present
-                                        #in older cpus)
-
-                                        ##where ldconfig finds this info:
-
-                                        ##what the flags mean:
-
-                                            #<http://en.wikipedia.org/wiki/CPUID#EAX.3D1:_Processor_Info_and_Feature_Bits>
-
-                            ##environment
-
-                                #you can also add to path with environment variables
-
-                                #don't rely on this method for production
-
-                                export LD_LIBRARY_PATH="/path/to/link"
-
-                ##override symbols in libraries
-
-                    echo "/path/to/my/a.o" | sudo tee -a /etc/ld.so.preload
-                        #symbols in a.o will override symbols in liked libs
-
-                        #emergency/tests
-
-                    export LD_PRELOAD=
-                        #same effect
-
-                ##interpreter
-
-                    #program that loades shared libs for other programs
-
-                    #this program links to no shared libs!
-
-                    readelf a.elf | grep "Requesting program interpreter"
-                    file -L /lib/ld-linux.so.2
-                        #ELF
 
         ##gdb
 
@@ -2179,6 +1799,7 @@
     ##pkg-config
 
         #info is contained in "$PKG_NAME.pc" files located mainly under:
+
             #/usr/share/pkgconfig/
             #/usr/lib/i386-linux-gnu/pkgconfig/
 
@@ -4453,14 +4074,13 @@ int main(void)
                     sudo mknod /dev/coffee c 12 2
                         #makes a char file, major number 12, minor number 2
 
-    #distro name
+    ##lsb
 
-        lsb_release -sc
-        #precise
+        #get distro maintainer, name, version and version codename
 
-        #distro find
-            cat /etc/*-release
+            lsb_release -a
 
+        #this standas for `linux standard base`
 
     lsof | less
     #list all open files and pipes
@@ -8360,6 +7980,20 @@ print "</body></html>"
             #install a package:
 
                 sudo gem install pkg
+
+    ##haskell
+
+        #glasgow compiler is the main compiler implementation
+
+        #compile:
+
+            echo 'main = putStrLn "a"' > a.hs
+            ghc a.hs
+            [ `./a` = a ] || exit 1
+
+        #standard REPL interpreter that comes with the glasgow compiler:
+
+            ghci
 
 ##x11
 

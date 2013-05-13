@@ -1,0 +1,6 @@
+.PHONY: all
+
+all:
+	@echo other
+	@echo A = $(A)
+	@echo B = $(B)

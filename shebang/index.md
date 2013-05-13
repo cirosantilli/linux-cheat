@@ -73,6 +73,6 @@ what if you want to specify a different version of the interpreter?
 only a shebang can handle that
 
 it is important to execute `a.sh` as `a` because if someday you decide that
-it sould be written in python istead, you don't break all dependant programs
+it sould be written in python instead, you don't break all dependant programs
 by using `a.py`. Of course, you could work around that by symlinking `a` to `a.sh`,
 and changing the target to `a.py` when you move to python.

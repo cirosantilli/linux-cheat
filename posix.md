@@ -7,7 +7,7 @@ TODO understand difference between the two: http://unix.stackexchange.com/questi
 an operating system standardization by both IEEE and `the open group`
 (merger of the `Open software foundation` with `X/Open`)
 
-currently, linux and mac are largely posix compliant but not certified,
+currently, gnu/linux and mac systems are largely posix compliant but not certified,
 windows is not largely compliant.
 
 the specification if free to view
