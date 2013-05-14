@@ -2,6 +2,8 @@
 % author
 % date
 
+cheatsheet on pandoc's markdown
+
 # sources
 
 great documentation page:
@@ -109,6 +111,9 @@ ref to tag1: (@tag1)
 # links
 
 basic: [text](destination)
+
+automatic: <link>. You *must* use the angular brackets
+even if some versions of markdown allow you to ommit them such as github's.
 
 inner id: [text](#links). Also works in latex!
 

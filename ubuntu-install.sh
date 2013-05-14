@@ -4,6 +4,10 @@
 
 #running this file should do all automatable steps to install useful stuff we find useful.
 
+#non automatable steps shall be labelled as:
+
+    #MANUAL: edit that file and click some buttons
+
 ##info
 
     #a debian based distribution
@@ -38,6 +42,16 @@
 
             sudo apt-get install -y aptitude
 
+    ##manual
+
+        ##printer
+
+            #worked for: EPSON xp-202
+
+            #type printer in dash
+
+            #the guide shows you everything
+
     ##default ppas
 
         #those already come in default ppas
@@ -60,10 +74,16 @@
             #sudo aptitude install -y cabextract
 
             sudo aptitude install -y caca-utils
+
             sudo aptitude install -y cplay
             sudo aptitude install -y dvipng
             #sudo aptitude install -y exactimage
             sudo aptitude install -y file-roller
+
+        #very secure ftp deamon ftp server:
+
+           #sudo aptitude install -y vsftpd
+
 
         #glasgow haskell compiler:
 
@@ -72,6 +92,7 @@
             sudo aptitude install -y gimp
             sudo aptitude install -y gnome-tweak-tool
             sudo aptitude install -y goldendict
+            sudo aptitude install -y guvcview
 
         #ibus input methods for qt:
 
@@ -113,6 +134,8 @@
 
             #sudo aptitude install -y sharutils
 
+            sudo aptitude install -y samba
+
         ##sox
 
                 sudo aptitude intall -y sox
@@ -138,10 +161,61 @@
             sudo aptitude install -y zip unzip
             sudo aptitude install -y wmctrl
 
-        ##chm
+        ##book
 
+            sudo aptitude install -y okular okular-extra-backends
+            sudo aptitude install -y fbreader
+            sudo aptitude install -y calibre
             #sudo aptitude install -y kchmreader
             sudo aptitude install -y chmsee
+            sudo aptitude install -y pdftk
+            sudo aptitude install -y djvulibre-bin
+
+        ##sound
+
+            sudo aptitude install -y shntool
+            sudo aptitude install -y cuetools
+            sudo aptitude install -y flac
+            sudo aptitude install -y wavpack
+
+        ##video
+
+                sudo aptitude install -y vlc
+
+            ##tesseract
+
+                    sudo aptitude install -y tesseract-ocr
+
+                    #MANUAL: find available languages
+
+                        #apt-cache search tesseract-ocr-
+
+                    #english
+
+                        sudo aptitude install -y tesseract-ocr-eng
+
+                #chinese hack
+
+                    #sudo aptitude install -y tesseract-ocr-chi-sim #simplified chinese
+                    #cd /usr/share/tesseract-ocr/tessdata
+                    #sudo ln -s chi_sim.traineddata zho.traineddata
+
+                sudo aptitude install -y cuneiform
+
+
+            #handbreak:
+
+                sudo add-apt-repository -y ppa:stebbins/handbrake-releases
+                sudo aptitude install -y handbrake-cli
+                #sudo aptitude install -y handbrake-gtk
+
+            #vobsub2srt:
+
+                sudo add-apt-repository -y ppa:ruediger-c-plusplus/vobsub2srt
+                sudo aptitude update
+                sudo aptitude install -y vobsub2srt
+
+            sudo aptitude install -y mkvtools
 
 ##launchpad ppas
 

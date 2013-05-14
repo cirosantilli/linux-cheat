@@ -27,6 +27,14 @@ lsb does however specifies many more tools than POSIX
 and supports almost all base tools used by user friendly applications
 found in distributions
 
+## find your distro
+
+get distro maintainer, name, version and version codename:
+
+    lsb_release -a
+
+lsb this standas for `linux standard base`
+
 # certification
 
 the linux foundation offers certification and compliance verification

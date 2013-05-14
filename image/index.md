@@ -1,3 +1,5 @@
+# formats
+
 - btm: bit by bit, no compression
 
     specified by Microsoft
@@ -64,6 +66,29 @@
 image manipulation
 
 huge amount of functions
+
+learn the shortcuts and be happy
+
+avoid multi window madness:
+
+    Menu > Windows > Single-Window Mode
+
+resize image:
+
+    Menu > Image > Scale Image
+
+shortcuts:
+
+- `<C-PageDown>`: go to previous tab
+
+- `r`: rectangle select tool
+
+    - `<c-a> drag`: move the selection elsewhere
+    - `<c-s-v>`: open selection as new image
+
+- `R`: rotate selection tool
+
+- `<c-PageDown>`: rotate selection tool
 
 ##inkscape
 

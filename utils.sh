@@ -660,519 +660,6 @@
 
             sudo aptitude install -y mencoder totem-mozilla icedax tagtool libmad0 mpg321 mpg123libjpeg-progs
 
-##sound
-
-    ##players
-
-        ##cplay
-
-            #cli
-
-            #has a file browser
-
-                cplay
-
-    ##manipulation
-
-        ##lame
-
-            #encode, decode and modify mp3
-
-            #increases volume 5x:
-
-                lame --scale 5 a.mp3
-
-        ##id3tool
-
-            #get id3 tags info (for mp3 for example)
-
-            TITLE="`id3tool "$1" | grep '^Song Title:' | awk '{ for (i=3;i<=NF;i++) { printf $i; printf " " } }'`"
-            ARTIST="`id3tool "$1" | grep '^Artist:' | awk '{ for (i=2;i<=NF;i++) { printf $i; printf " " } }'`"
-            ALBUM="`id3tool "$1" | grep '^Album:' | awk '{ for (i=2;i<=NF;i++) { printf $i; printf " " } }'`"
-            YEAR="`id3tool "$1" | grep '^Year:' | awk '{ for (i=2;i<=NF;i++) { printf $i; printf " " } }'`"
-            TRACKNUM="`id3tool "$1" | grep '^Year:' | awk '{ print $2 }'`"
-
-            install -D "$1" /music/mp3/"$ARTIST-$ALBUM-$YEAR"/"$TRACKNUM-$ARTIST-$TITLE".mp3
-
-        ##cut up flac cue into multiple files
-
-            ##flacon
-
-                #has gui
-
-            ##shntool
-
-                #TODO understand or remove:
-
-                    sudo aptitude install -y shntool cuetools
-                    sudo aptitude install -y flac wavpack
-
-                shntool split -f *.cue -o flac *.ape -t '%n - %p - %t'
-                    #single ape and cue in dir, flac output, formatted as number, author, track
-
-        ##sox
-
-            #record, play and modify files cli
-
-            #interactive front end for libSoX
-
-                #must install available formats separatelly
-
-            rec a.wav
-                #records from microphone into a.wav file
-                #ctrl+c : stop recording
-
-            play a.wav
-                #plays a.wav file
-                #terminates when over
-
-    ##system parameters
-
-        ##alsamixer
-
-            #ncurses interface to view/control sound parameters
-
-            alsamixer
-                #left/right : change active parameter
-                #up/down    : change active parameter value
-
-        ##amixer
-
-            #cli for sound control
-
-            #view available controls:
-
-                amixer scontrols
-
-            #set master volume to 50%:
-
-                amixer sset 'Master' 50%
-
-    ##rip
-
-        ##abcde
-
-            ##cli
-
-            #rip:
-
-                abcde
-
-            #automatically starts ripping correctly on most systems!!
-            #creates dir in cur dir and saves rip out as .ogg in it
-
-##book
-
-    ###ps
-
-        a programming language! can have goto, branch, variables
-        levels refer to versions: 1, 2 and 3 exist up to today
-        cannot split page by page
-
-    ##eps:
-    ##djvu:
-    ##pdf: text layers, image layers, can be viewd page by page
-    ##mobi: mobipocket company, free format
-    ##rtf: proprietary microsoft
-
-    ##readers
-
-        ##okular
-
-                sudo aptitude install -y okular okular-extra-backends
-
-            #open at given page of document:
-
-                okular -p 2 a.pdf
-
-            #single instance:
-
-                okular --unique a.pdf
-                okular --unique b.pdf
-
-            #`a.pdf` is closed, `b.pdf` is opened on same window.
-
-        ##fbreader
-
-            #mobi reader
-
-            sudo aptitude install -y fbreader
-
-    ##calibre
-
-        #library management
-
-        sudo aptitude install -y calibre
-        mkdir ~/calibre
-        #set library there: Cntr p > ...
-
-    ##manipulation
-
-        ##a2ps
-
-            #txt to ps
-
-            #does not work for utf8. For that use <#paps>
-
-                sudo aptitude install a2ps
-
-                a2ps -o a.ps a.txt
-
-            #-1: one page per sheet (default is 2)
-
-                a2ps -B -1 -o a.ps a.txt
-
-            #-B: remove default headers:
-
-                a2ps -B -o a.ps a.txt
-
-            #--borders=no: no default borders:
-
-                a2ps -B -1 --borders=no -o a.ps a.txt
-
-            #output to stdout
-
-                a2ps -o - a.txt
-
-        ##paps
-
-            #txt to ps
-
-            #works for utf8
-
-        ##ps2pdf
-
-                ps2pdf a.ps
-
-                ps2pdf a.ps out.pdf
-
-            #read from stdin:
-
-                ps2pdf - a.pdf
-
-            #out to stdout:
-
-                ps2pdf a.ps -
-
-        ##pdftotext
-
-            #extracts text layer from pdf
-
-                pdftotext a.pdf
-                less a.txt
-
-        ##pdftk
-
-            #pdf Tool Kit
-
-                sudo aptitude install -y pdftk
-
-            #merge two or more pdfs into a new document:
-
-                    pdftk 1.pdf 2.pdf 3.pdf cat output 123.pdf
-
-            #or using handles:
-
-                    pdftk A=1.pdf B=2.pdf cat A B output 12.pdf
-
-            #or using wildcards:
-
-                    pdftk *.pdf cat output combined.pdf
-
-            #slice pdf: get pagets 1 to 7 only:
-
-                    pdftk A="$f.pdf" cat A1-7 output "$f.pdf"
-
-            #select pages from multiple pdfs into a new document:
-
-                    pdftk A=one.pdf B=two.pdf cat A1-7 B1-5 A8 output combined.pdf
-
-            #split pdf into single pages
-
-                    pdftk mydoc.pdf burst
-
-            #get pdf metadata like number of pages:
-
-                    pdftk mydoc.pdf dump_data | less
-
-            #rotate the first page of a pdf to 90 degrees clockwise:
-
-                    pdftk in.pdf cat 1E 2-end output out.pdf
-
-            #rotate an entire pdf document’s pages to 180 degrees:
-
-                    pdftk in.pdf cat 1-endS output out.pdf
-
-            #encrypt a pdf using 128-bit strength (the default) and withhold all permissions (the default):
-
-                    pdftk mydoc.pdf output mydoc.128.pdf owner_pw foopass
-
-            #Same as Above, Except a Password is Required to Open the PDF:
-
-                    pdftk mydoc.pdf output mydoc.128.pdf owner_pw foo user_pw baz
-
-            #Same as Above, Except Printing is Allowed (after the PDF is Open):
-
-                    pdftk mydoc.pdf output mydoc.128.pdf owner_pw foo user_pw baz allow printing
-
-            #Decrypt a PDF:
-
-                    pdftk secured.pdf input_pw foopass output unsecured.pdf
-
-            #Join Two Files, One of Which is Encrypted (the Output is Not Encrypted):
-
-                    pdftk A=secured.pdf mydoc.pdf input_pw A=foopass cat output combined.pdf
-
-            #Uncompress PDF Page Streams for Editing the PDF Code in a Text Editor:
-
-                    pdftk mydoc.pdf output mydoc.clear.pdf uncompress
-
-            #Repair a PDF’s Corrupted XREF Table and Stream Lengths (If Possible):
-
-                    pdftk broken.pdf output fixed.pdf
-
-        ##edit pdf content
-
-            #consider libreoffic draw + pdf importer.
-
-        ##djvulibre-bin
-
-                sudo aptitude install -y djvulibre-bin
-
-                ##ddjvu
-
-                    #convert djvu to other formats
-
-                    #huge outputs! not practical sizes!
-
-                    #very slow!
-
-                    #possible: pbm, pgm, ppm, pnm, rle, tiff, and pdf
-
-                        ddjvu -format=pdf "$djvu" "$pdf"
-
-                    #outputs pages 1 and 3, followed by all the document pages in reverse order up to page 4:
-
-                        ddjvu -format=pdf -pages=1,3,99999-4 "$djvu" "$pdf"
-
-                    #loses text layer
-
-                ##djvm
-
-                    #get number of pages of djvu:
-
-                        djvm -l speak\ chinese\ 2.djvu | sed -nre '$ s/.+#([0-9]+).+/\1/p'
-
-    ##chm
-
-        #microsoft proprietary
-
-        #discontinued
-
-        #non plain text: compiled
-
-        #based on html?
-
-        #has been reverse ingeneered
-
-        #readers (best to worst):
-
-        #- kchmreader: kde, broken colors on ubuntu
-        #- chmsee: gtk+, few preferences, just works.
-
-##ocr
-
-    #possibilities:
-    #  gocr, ocrad, tesseract or cuneiform.
-
-    #horc: format that contains orc + info about page position and certainty
-
-    #orc indexing: tranform pdf textonly to searchable pdf
-            #https://help.ubuntu.com/community/OCR#OCR_on_a_Multi_Page_PDF
-            #http://blog.konradvoelkel.de/2010/01/linux-ocr-and-pdf-problem-solved/
-
-    ##pdfs
-
-        #before you go about extracting pdfs, you must use the right command to convert!
-        #some good options are:
-        convert -density 300 -monochrome -normalize a.pdf a.png
-        convert -depth 1 -density 300 -normalize a.pdf a.png
-
-    ##tesseract
-
-        sudo aptitude install -y tesseract-ocr
-        apt-cache search tesseract-ocr- #to find available languages
-        sudo aptitude install -y tesseract-ocr-eng #english
-
-        ##chinese hack
-
-            sudo aptitude install -y tesseract-ocr-chi-sim #simplified chinese
-            cd /usr/share/tesseract-ocr/tessdata
-            sudo ln -s chi_sim.traineddata zho.traineddata
-
-            #tesseract looks for zho instead of chi_sim
-            #there is probably a better way to do this in the tesseract configs, but apparently not directly from vobsub2srt
-
-        tesseract -l eng -psm 3 a.png a
-        tesseract -l eng -psm 3 a.png a hocr
-        #-psm 1 : detects pages *and* script automatically. most magic mode.
-
-    ##cuneiform
-
-        #sudo aptitude install -y cuneiform
-        cuneiform -l eng -f text -o "$f.txt" "$f.png"
-        #-f: html, hocr
-        #-l: lang, see man cuneirform
-
-    ##hocr2pdf from the ExactImage package.
-
-        hocr2pdf -i "$f.png" -s -o "$f.pdf" < "$f.hocr"
-
-##video
-
-    #*ripping* is taking the dvd from the dvd to files in computer
-    #*trancoding*, is encoding the dvd on some smaller format.
-    #*containers* are filetypes that turn video, audio and subtitles in a single files
-        #mkv
-        #avi
-
-    #DVD
-        #DVDs have regions
-        #http://en.wikipedia.org/wiki/DVD_region_code
-        #this serves only to control copyright
-        #dvd readers have a limited number of region changes
-            #around 5
-            #after this number of changes, YOU CANNOT CHANGE IT ANYMORE!!!!
-
-    ##vlc
-
-        #my current favourite video player:
-
-            sudo aptitude install -y vlc
-
-    ##handbrake
-
-        #transcode
-        #containers: mkv, mpeg4
-        #first check this for some good info:
-            #firefox http://msdn.microsoft.com/en-us/library/windows/desktop/dd388582%28v=vs.85%29.aspx
-
-        sudo add-apt-repository -y ppa:stebbins/handbrake-releases
-        sudo aptitude install -y handbrake-cli
-        #sudo aptitude install -y handbrake-gtk
-        #get command line version of course
-
-        i=/media/
-        HandBrakeCLI -t 0 -i "$i"
-        #scans only for all titles and tracks
-
-        s=1,2
-        t=1
-        HandBrakeCLI -B 160 -e x264 -f mkv -i "$i" -m -o 1.mkv -q 22 -s "$s" -t "$t"
-        #1000 Kbps MPEG-4 Visual video and 160 Kbps AAC-LC audio in an MP4 container.
-        #-f container format (mkv|mp4)
-        #-m extract title markers
-        #-e x264 : video encode format x264/ffmpeg4/ffmpeg2/theora.
-        #-q 20 : CRF constant quality 0 .. 50. with x264: 22 for dvd, 22 for bluray.
-        #-B 160 : sound kbps
-        #-s 1,2,3 : subtitles to keep
-        #-t 1: title 1. A DVD can contain many titles, which are usually independent films or tracks
-        #In an MKV, you can store MPEG-4 video created by ffmpeg or x264, or Theora video.
-                #It stores audio in the AAC, MP3, or Vorbis formats. It can also pass through the Dolby Digital 5.1 (AC3) and Digital Theater Systems (DTS) surround sound formats used by DVDs.
-                #It supports chapters, as well as Variable Frame Rate video.
-                #It can include "soft" subtitles that can be turned on or off, instead of always being hard burned into the video frame. These can either be bitmap images of the subtitles included on a DVD (known as vobsub) or text.
-                #it seems though that it can't produce srt
-
-        #CRF ~2hrs film:
-            #CRF off = 1214 MB
-            #CRF 26 = 926 MB
-            #CRF 24 = 1205 MB
-            #CRF 22 = 1586 MB
-            #CRF 20 = 2141 MB
-            #CRF 16 = 4503 MB
-
-        #to get subtitles
-            #must do OCR
-            #OGMRip : srt
-            #MEncoder and Transcode : idx + sub
-            #mkvextract : can do srt from mkvs
-
-        #my results:
-            #HandBrakeCLI -B 160 -e x264 -f mkv -i /media/DVDVolume -m -o ~/out.mkv -q 20 -s 1,2,3
-            #initial length: 2:16
-            #conversion time: 4 hours
-            #final size: 2Gb
-            #quality: same as original
-
-            #HandBrakeCLI -B 160 -e x264 -f mkv -i /media/DVDVolume -m -o ~/out.mkv -q 22 -s 1,2,3
-            #initial length: 2:16
-            #conversion time: 2:23
-            #final size: 2Gb
-            #quality: same as original
-
-    ##acidrip
-        #containers: avi, mpg
-        #gtk interface
-
-    ##dvdrip
-
-        sudo aptitude install -y dvdrip
-
-    ##k9copy
-
-        sudo aptitude install -y k9copy
-
-    ##mkvtools
-
-        sudo aptitude install -y mkvtools
-
-        mkvinfo 1.mkv
-        #see info about a
-
-        t="3:ita 4:eng"
-        mkvextract tracks 1.mkv $t
-        #extracts tracks 3 and 4, save 3 to eng.$ext or str, 3 to chi.$ext
-            #where ext is the extension of the contained audio
-        #we know those are subtitles from mkinfo
-        #3:asdf means track 3, asdf is the output name
-        #the type is that contained in the tracks, not necessarily srt,
-            #maybe vobsub idx + sub if you want srt from vobsub, try obsub2srt
-
-    ##vobsub2srt
-
-        #uses tesseract for the ocr: this means you must install tesseract lanugages
-        #for chinese, must symlink
-        #see: #tesseract for installing the languages
-        sudo add-apt-repository -y ppa:ruediger-c-plusplus/vobsub2srt
-        sudo aptitude update
-        sudo aptitude install -y vobsub2srt
-
-        vobsub2srt --langlist 1 #view available languages inside a.sub a.idx pair
-        l=en
-        f=
-        vobsub2srt --lang "$l" "$f"
-        #takes eng.sub and eng.idx and makes eng.srt with optical recognition
-        #en or 0 were taken from --langlist
-        #don't know what to do if two subs for the same language such as
-        #  simplified and traditional chinese, both of which get zh
-        #output goes to a.str. don't forget to rename it as a.eng.srt before going to the next language
-
-    ##srtmerge
-
-        #https://github.com/wistful/srtmerge
-        sudo pip install srtmerge
-        srtmerge a b ab
-        #mergers two srte files into one
-        #if there are two timings that coincide, they are merged into one
-        #newline separated
-        #perfect for dual sub language learning
-
-    ##guvcview
-
-        sudo aptitude install -y guvcview
-        #record video/audio with webcam
-        #click on the bottom video icon to record, click again to stop
-
 ##chat messaging voice video
 
     ##skype
@@ -3886,8 +3373,11 @@ int main(void)
 
     ##uname
 
-        uname -a
-            #print all info uname has to give!
+        #print all info uname has to give:
+
+            uname -a
+
+        #this includes kernel version, user, ...
 
         #you can each isolated with other opts
 
@@ -3917,173 +3407,10 @@ int main(void)
             nproc
                 #4
 
-    ##kernel
+    ##lsof
 
-        ##get version
+        #list all open files and pipes
 
-            uname -r
-
-            cat /proc/version
-
-        ##sysctl
-
-            #view/config kernel parameters at runtime
-
-            sudo sysctl –a
-
-        ##modules
-
-            #.ko
-                #extension used instead of .o
-                #also contain module information
-
-            #device drivers (programs that enables the computer to talk to hardware)
-            #are one type of kernel modules
-
-            #modules are loaded as object files
-            #you can only use symbols defined by the kernel
-            #list of them:
-                cat /proc/kallsyms
-
-            #note that this causes great possibility of name pollution
-            #so choose names carefully!
-
-            #modules share memory space with the rest of the kernel
-            #this means that if a module segfaults, the kernel segfaults!
-
-            #two devices can map to the same hardware!
-
-            ##rings
-
-                #x86 concept
-
-                #programs can run in different rings
-
-                #4 rings exist
-
-                #linux uses 2:
-                    #0: kernel mode
-                    #3: user mode
-
-            ##config files
-
-                sudo ls /etc/modprobe.d
-                #sudo ls /etc/modprobe.conf
-                    #if file it gets read
-                    #if dir, all files in dir get read
-
-                sudo cat /etc/modules
-                    #modules loaded at boot
-
-
-            ##module-init-tools
-
-                ##package version
-
-                    #from any of the commands, --version
-
-                    modinfo --version
-
-                #package that provides utilities
-
-                ##lsmod
-
-                    #list loaded kernel modules
-
-                    #info taken from /proc/modules
-
-                    lsmod
-                        #cfg80211              175574  2 rtlwifi,mac80211
-                        #^^^^^^^^              ^^^^^^  ^ ^^^^^^^,^^^^^^^^
-                        #1                     2       3 4       5
-                        #1: name
-                        #2: size
-                        #3: numer of running instances
-                        #4: depends on
-                        #5: depends on
-
-                        cat /proc/modules
-                            #also contains two more columns:
-                                #status: Live, Loading or Unloading
-                                #memory offset: 0x129b0000
-
-                ##moinfo
-
-                    modinfo a.ko
-                    modinfo a
-                        #get info about a module
-
-                ##insmod
-
-                    #loads the module
-                    #does not check for dependencies
-
-                    sudo insmod
-
-                ##modprobe
-
-                    sudo modprobe -l
-                        #lists available modules
-                        #relative path to /lib/modules/VERSION/
-
-                    sudo modprobe $m
-                        #loads the module
-                        #checks for dependencies
-
-                    sudo modprobe vmhgfs -o vm_hgfs
-                        #load module under different name
-                        #to avoid conflicts
-
-                    sudo modprobe -r $m
-                        #remove module
-
-                sudo depmod -a
-                    #chekc dependencies are ok
-
-                m=a
-                sudo rmmod $m
-                    #get info about given .ko module file
-
-            ##device drivers
-
-                ls -l /dev
-
-                #there are two types of devices: block and char
-
-                    #crw-rw----  1 root tty       7,   1 Feb 25 09:29 vcs1
-                    #^
-                    #c: char
-
-                    #brw-rw----  1 root disk      8,   0 Feb 25 09:30 sda
-                    #^
-                    #b: block
-                    #this is my hd.
-                    #each partition also gets a b file
-
-                ##major minor numbers
-
-                    #crw-rw----  1 root tty       7,   1 Feb 25 09:29 vcs1
-                    #                             ^    ^
-                    #                             1    2
-                    #1: major number. tells kernel which driver controls this file
-                    #2: minor number. id of each hardware controlled by a
-                    #   given driveer
-
-                ##mknod
-
-                    sudo mknod /dev/coffee c 12 2
-                        #makes a char file, major number 12, minor number 2
-
-    ##lsb
-
-        #get distro maintainer, name, version and version codename
-
-            lsb_release -a
-
-        #this standas for `linux standard base`
-
-    lsof | less
-    #list all open files and pipes
         #COMMAND process name.
         #PID process ID
         #USER Username
@@ -4095,6 +3422,8 @@ int main(void)
         #NAME full path of the file name.
         #
         #-u user : by given user
+
+            lsof | less
 
     ##performance
 
@@ -4728,6 +4057,7 @@ int main(void)
                 #~/a
 
     ##touch
+
         #POSIX
 
         touch f
@@ -4735,6 +4065,7 @@ int main(void)
             #updates modify date to present if exists
 
     ##mkdir
+
         #POSIX
 
         #make dirs
@@ -4745,7 +4076,12 @@ int main(void)
 
         #no error if existant:
 
-            mkdir -p "$d"
+            mkdir d
+            mkdir -p d
+
+        #make parent dirs if not existent:
+
+            mkdir -p a/b/c/d
 
         #-m: set mode of new dir (permissions)
 
@@ -4753,6 +4089,7 @@ int main(void)
             assert [ `stat -c "%A" d` = 'drwxrwxrwt' ]
 
     ##mv
+
         #POSIX
 
         #move or rename files and dirs
@@ -6489,9 +5826,11 @@ int main(void)
             ##ftp
 
                 #download:
+
                     curl -u ftpuser:ftppass -O ftp://ftp_server/public_html/xss.php
 
                 #upload:
+
                     curl -u ftpuser:ftppass -T myfile.txt ftp://ftp.testserver.com
                     curl -u ftpuser:ftppass -T "{file1,file2}" ftp://ftp.testserver.com
 
@@ -6664,8 +6003,9 @@ int main(void)
 
     ##netstat
 
-        netstat -a
-            #TODO understand crazy output
+        #TODO understand output
+
+            netstat -a
 
     ##telnet
 
@@ -6680,12 +6020,17 @@ int main(void)
         #fun MUD games!
 
         #make http requests by hand for learning purposes:
+
             telnet google.com 80
+
         #type:
+
             GET / HTTP/1.0 <enter><enter>
+
         #you've made a get request by hand!
 
         #won;t work, why?
+
             #echo $'GET / HTTP/1.0\n\n' | telnet www.google.com 80
 
     ##nc
@@ -6785,102 +6130,6 @@ int main(void)
 
             #similar to ftp, ssh encryption
 
-    ##ftp
-
-        #tcp/ip file transfer protocol
-
-        #client: comes installed by default
-
-        #install server:
-            sudo aptitude install -y vsftpd
-        #Very Secure FTP Deamon
-
-        #list of free hosts: <http://freehosting1.net/free_ftp_hosting.aspx>
-
-        #free hosts im inscribed in (so I don't forget):
-
-        #- <http://freehostingnoads.net/>
-
-            #2Gb      storage
-            #2Gb      max file size
-            #10Gb/mo  transfer
-
-            #- <http://cirosantilli.t15.org/>
-
-        #see all available commands:
-
-            ?
-
-        #connect:
-
-            open ftp.domain.com
-
-        #disconnect and but keep program open:
-
-            bye
-
-        #disconnect and exit program:
-
-            bye
-
-        #ls remote:
-
-            ls
-
-        #cd remote:
-
-            cd
-
-        #cd local:
-
-            lcd
-
-        #pwd remote:
-
-            pwd
-
-        #upload with same basename:
-
-            put a
-
-        #file a exists in current local dir
-
-        #upload with different basename:
-
-            put a b
-
-        #download with same basename in current dir:
-
-            get a
-
-        #download with different basename in current dir:
-
-            get a b
-
-        #download on relative path:
-
-            get d/a
-
-        #subdir must exist locally
-
-        #delete remote file:
-
-            del a
-
-        #create a remote directory:
-
-            mkdir d
-
-        #remove a remote directory:
-
-            rm d
-
-    ##cifs
-
-        #TODO
-
-        sudo aptitude install -y cifs-utils
-
     ##samba
 
         #open source linux implementation of the SMB/CIFS networking protocol
@@ -6889,8 +6138,6 @@ int main(void)
         #it allows for file, printer and driver sharing on a network
 
         #best option for cross platform file transfers
-
-        sudo aptitude install -y samba
 
     ##browser
 
@@ -8349,6 +7596,20 @@ add Lock = Caps_Lock
 
             echo $GDMSESSION
                 #tells option chosen from login screen
+
+##scanner
+
+    ##simple-scan
+
+        #very simple to scan! after installing the printer drivers.
+
+            #simple-scan
+
+        #then click scan button. The image updates as the scan is made,
+        #and you can stop it when you are done before the scanner reached the bottom.
+
+        #make sure your scanner supports the definition preferences you set
+        #or you will get a connexion error
 
 ##graphics card
 
