@@ -41,7 +41,7 @@
         #Main - Officially supported software.
         #Restricted - Supported software that is not available under a completely free license.
         #Universe - Community maintained software, i.e. not officially supported software.
-        #Multiverse - Software that is not free. 
+        #Multiverse - Software that is not free.
 
 ##first time
 
@@ -76,7 +76,7 @@
 
         #next google it.
 
-    ##list sources 
+    ##list sources
 
         #default sources:
 
@@ -91,14 +91,14 @@
         #in order to trus a ppa, you have to add its key.
 
         #this is called a <#digital signature>.
-        
+
         #It is meant to:
 
         #- ensure that you received the data from who you think you did
         #- ensure that the data was not modified in its way to you
 
         #keys are managed by <#gpg>, and kept in:
-            
+
             gpg /etc/apt/trustdb.gpg
 
         #so if you want to really understand things, you must first understand gpg
@@ -116,7 +116,7 @@
                 wget -q -O - http://archive.getdeb.net/getdeb-archive.key | sudo apt-key add -
 
     ##ppas in launchpad
-    
+
         #launchapd is maintainedd by canonical, and it is easy to
         #install/remove packages from them with `add-apt-repository`
         #which add key and source easily
@@ -156,8 +156,8 @@
             sudo rm /etc/apt/sources.list.d/getdeb.list
             apt-key list | less
                 #pub   4096R/46D7E7CF 2009-05-15
-                #            ^^^^^^^^           
-                #            KEY           
+                #            ^^^^^^^^
+                #            KEY
             KEY=
             sudo apt-key del "$KEY"
 
@@ -188,7 +188,7 @@
     ##dpkg
 
         #info on installed packages
-        
+
         dpkg -l | grep $EXPRESSION
             #lists all installed packages.and greps for foo.
             #the first two letters mean:
@@ -202,7 +202,9 @@
 
     #searches package name and descriptions on the web:
 
-        apt-cache search apache
+        apt-cache search "$PATTERN"
+
+    #pattern is a Posix ERE
 
     ##apt-file
 
@@ -212,24 +214,33 @@
 
         #- who provides such a file?
         #- where does htis file come from?
-        
+
         sudo aptitude install apt-file
         apt-file update
         f=
 
         ##search
 
-            apt-file search "$f"
-                #search for file "$F" in packages.
-                #literal path substring match.
-            apt-file search -x "a.c"
-                #using a perl regex.
+            #search for file "$F" in packages.
+
+                apt-file search "$f"
+
+            #literal full path substring match
+
+            #use perl regex:
+
+                apt-file search -x "a.c"
+
+            #combo: search for an executable called a2x:
+
+                apt-file search bin/a2x
 
         ##show
 
-            p=
-            apt-file show "$p"
-                #shows files in package p
+            #shows files in package p
+
+                p=
+                apt-file show "$p"
 
 ##get new package info
 
@@ -280,7 +291,7 @@
     #install only the dependencies required for a package but not the package itself:
 
         sudo aptitude build-dep $PKG
-    
+
     #this is useful if you want to dev a package that has compiled dependencies
 
 ##upgrade installed packages
@@ -291,7 +302,7 @@
     #upgrades all packages for which upgrade does not involve installing more packages
     sudo apt-get -u upgrade
 
-    #upgrades all packages, even if upgrade requires installation of new packages 
+    #upgrades all packages, even if upgrade requires installation of new packages
     sudo apt-get dist-upgrade
 
 ##remove packages. someday they have to die =(

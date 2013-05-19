@@ -96,6 +96,10 @@ svg gui editor
 
 very good
 
+##dia
+
+gnome diagram editor
+
 #viewers
 
 ##eog

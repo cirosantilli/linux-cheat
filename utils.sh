@@ -1529,6 +1529,22 @@ int main(void)
         exuberant-ctags a.c
         less tags
 
+    ##source-highlight
+
+        #takes in source files and produces highlighted output in one of the formats:
+
+        #- html
+        #- ansi terminal escape sequences
+        #- pdf
+
+        #list all languages supported:
+
+            source-highlight --lang-list
+
+        #generate an `a.html` highlighted version of `a.py`:
+
+            source-highlight a.py
+
     ##pygments
 
         #python package for multi language syntax coloring.

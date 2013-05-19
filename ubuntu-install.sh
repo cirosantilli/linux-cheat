@@ -12,12 +12,15 @@
 
     #a debian based distribution
 
-    #but unlike debian maintained by the cannonical company
+    #unlike debian maintained by the cannonical company
     #which gets money by offering maintaincance (debian is managed by the community)
 
     #important implications:
 
-        #maby key programs are the same: `dpkg` for packages, `upstart` for init
+        #many key programs are the same:
+
+        #- `dpkg` for packages
+        #- `upstart` for init
 
     ##upgrade version
 
@@ -25,7 +28,7 @@
         #sudo do-release-upgrade
         #sudo aptitude update && sudo aptitude upgrade
 
-    #oppen app without global menu
+    #open app without global menu
 
         #env UBUNTU_MENUPROXY=0 golly
 
@@ -93,7 +96,6 @@
 
             #sudo aptitude install -y ghc
 
-            sudo aptitude install -y gimp
             sudo aptitude install -y gnome-tweak-tool
             sudo aptitude install -y goldendict
             sudo aptitude install -y guvcview
@@ -103,13 +105,6 @@
             sudo aptitude install -y ibus-qt4
 
             sudo aptitude install -y id3tool
-
-        #image magick:
-
-            sudo aptitude install -y imagemagick
-            sudo aptitude install -y imagemagick-doc
-
-            sudo aptitude install -y inkscape
 
             sudo aptitude install -y lame
             sudo aptitude install -y logkeys
@@ -189,6 +184,14 @@
                 #sudo aptitude install -y vsftpd
 
             sudo aptitude install -y filezilla
+
+        ##image
+
+            sudo aptitude install -y imagemagick
+            sudo aptitude install -y imagemagick-doc
+            sudo aptitude install -y dia
+            sudo aptitude install -y gimp
+            sudo aptitude install -y inkscape
 
         ##video
 
