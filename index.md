@@ -3,7 +3,7 @@ linux in informal terms can be either a computer system that:
 - a computer system which complies to the [linux standar base (lsb)](lsb)
     which is the main standard maintained by the [linux foundation][]
 
-- uses the linux kernel. TODO is this specified by the linux foundation? where?
+- uses the linux kernel. TODO is this specified by the lsb? where?
 
 the lsb specifies the minimum intefaces every linux system must offer.
 
@@ -88,10 +88,10 @@ is the main enforcer of its infringements
 
 # lsb and posix
 
-lsb is already highly posix copmliant, and it states that it is on of its
+lsb is already highly posix compliant, and it states that it is on of its
 long term goals meant to become fully posix compatible
 
-incompatibility are being listed for future resolution.
+incompatibility are being listed for future resolution
 
 # fhs
 

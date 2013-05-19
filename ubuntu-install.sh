@@ -12,6 +12,9 @@
 
     #a debian based distribution
 
+    #but unlike debian maintained by the cannonical company
+    #which gets money by offering maintaincance (debian is managed by the community)
+
     #important implications:
 
         #maby key programs are the same: `dpkg` for packages, `upstart` for init
@@ -65,6 +68,12 @@
 
             sudo aptitude install -y aview
 
+        #MANUAL: search aspell dictionnaries:
+
+            #sudo aptitude search aspell-
+            sudo aptitude search aspell-fr
+            sudo aptitude search aspell-pt-br
+
         #.arj files:
 
             #sudo aptitude install -y arj
@@ -79,11 +88,6 @@
             sudo aptitude install -y dvipng
             #sudo aptitude install -y exactimage
             sudo aptitude install -y file-roller
-
-        #very secure ftp deamon ftp server:
-
-           #sudo aptitude install -y vsftpd
-
 
         #glasgow haskell compiler:
 
@@ -178,6 +182,14 @@
             sudo aptitude install -y flac
             sudo aptitude install -y wavpack
 
+        ##ftp
+
+            #very secure ftp deamon ftp server:
+
+                #sudo aptitude install -y vsftpd
+
+            sudo aptitude install -y filezilla
+
         ##video
 
                 sudo aptitude install -y vlc
@@ -216,6 +228,48 @@
                 sudo aptitude install -y vobsub2srt
 
             sudo aptitude install -y mkvtools
+
+        ##game
+
+            ##getdeb
+
+                #non launchapd ppa with lots of good games.
+
+                    wget -q -O - http://archive.getdeb.net/getdeb-archive.key | sudo apt-key add -
+                    sudo sh -c 'echo "deb http://archive.getdeb.net/ubuntu quantal-getdeb games" > /etc/apt/sources.list.d/getdeb.list'
+                    sudo aptitude update
+                    sudo aptitude install urbanterror
+                    #sudo aptitude install worldofpadman
+
+            sudo aptitude install -y nethack-console
+            sudo aptitude install -y fortune
+            sudo aptitude install -y cowsay
+            sudo aptitude install -y robotfindskitten
+            sudo aptitude install -y bsdgames
+            sudo aptitude install -y greed
+            sudo aptitude install -y ninvaders
+            sudo aptitude install -y netrek-client-cow
+            sudo aptitude install -y urban-terror
+            sudo aptitude install -y golly
+            sudo aptitude install -y gnotski
+
+            ##dosbox
+
+                sudo aptitude install -y dosbox
+
+                ## MANUAL: get the sound working
+
+                    #TODO get working
+
+                        #pmidi -l
+                        #vim ~/.dosbox/dosbox-*.conf
+
+                    #put the port in:
+
+                        #[midi]
+                        #midiconfig=14:0
+
+                    #sudo aptitude install -y pmidi
 
 ##launchpad ppas
 

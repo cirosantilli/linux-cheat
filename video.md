@@ -159,4 +159,4 @@ great for language learning if you have multisubs
 
 # guvcview
 
-record video/audio with webcam
+view + record video/audio with webcam

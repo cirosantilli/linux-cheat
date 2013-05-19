@@ -173,10 +173,17 @@ recursive directory download:
 
     mirror d
 
-recursive directory upload:
+recursive directory upload (Reverse mirror)
 
     mirror -R d
 
 recursive directory remove:
 
     rm -r d
+
+#filezilla
+
+gui ftp manager
+
+stores connexion passwords/usernames
+and makes recursive copy/paste easy

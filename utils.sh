@@ -291,23 +291,31 @@
             #compresses dir one file by one it seems
         #easy to view and extract single files
 
-        zip -r "$F".zip "$F"
         #zip file or directory
-            #-r : add dir recursivelly. otherwise, adds only the top dir! useless
 
-        zip -er "$F".zip "$F"
-        #-e : encrypts
-            #you can still see filenames!! but not extract them
+            zip -r "$F".zip "$F"
 
-        unzip -l "$F".zip
-        #list all files (recursive)
+        #-r : add dir recursivelly. otherwise, adds only the top dir!
 
-        unzip "$F".zip
-        #extracts from zip
-            #if has password, asks for it
+        #-e : encrypt:
 
-        unzip "$F".zip -d out
+            zip -er "$F".zip "$F"
+
+        #you can still see filenames!! but not extract them
+
+        #list all files in zip file
+
+            unzip -l "$F".zip
+
+        #extract files from zip:
+
+            unzip "$F".zip
+
+        #if has password, asks for it
+
         #to a dir
+
+            unzip "$F".zip -d out
 
         for F in *; do echo "$F"; echo "$F".zip; zip "$F".zip "$F"; done
         #zip every file in cur dir to file.zip
@@ -634,21 +642,31 @@
 
         ##aspell
 
-            #interactively checks files for spelling errors
-
             ##features
 
                 #can add words to dict
 
                 #understands some predefined formats!
 
-            aspell -c f
+            #interactively checks files for spelling errors:
 
-            aspell --mode=tex -c f
-            aspell --mode=html -c f
-                #ignores language constructs!
+                aspell -c f
+
+            #if modified, change inline but create `.bak` file
+
+            #french:
+
+                aspell -l fr -c f
+
+            #must first install wordlist
+
+            #same but ignore language constructs (modes):
+
+                aspell --mode=tex -c f
+                aspell --mode=html -c f
 
             #modes can be added/removed. They are called `filters`
+
                 sudo aspell --add-filter=$f
                 sudo aspell --remove-filter=$f
 
@@ -1551,236 +1569,6 @@ int main(void)
         sudo aptitude install -y  khelpcenter4      #help
         sudo aptitude install -y  kwalletmanager    #password manager
 
-    ##filezilla
-
-        sudo aptitude install -y filezilla
-
-##game
-
-    ##getdeb
-
-        #non launchapd ppa with lots of good games.
-
-            wget -q -O - http://archive.getdeb.net/getdeb-archive.key | sudo apt-key add -
-            sudo sh -c 'echo "deb http://archive.getdeb.net/ubuntu quantal-getdeb games" > /etc/apt/sources.list.d/getdeb.list'
-            sudo aptitude update
-
-        ##urban terror
-
-            #my favorite linux free fps so far
-
-            #cs like, but mostly capture the flag.
-
-            #good inertia, not too fast.
-
-            #free but closed source
-
-                sudo aptitude install urbanterror
-
-        ##world of padman
-
-            #fps, very large scenarios, cool weaponsmoves
-
-            #but too fast for my taste.
-
-            #sudo aptitude install worldofpadman
-
-        ##world of padman
-
-            #fps, too fast for my taste
-
-        ##wolfenstein
-
-            #fps, ww2
-
-            #too fast for my taste.
-
-    ##console
-
-        ##fortune
-
-            #tells you fortune to stdout!
-
-            sudo aptitude install -y fortune
-
-            fortune
-            fortune
-
-        ##cowsay
-
-            #an ascii art cow echoes stdin
-
-            sudo aptitude install -y cowsay
-
-            fortune | cowsay
-            fortune | cowsay
-
-        ##moon-buggy
-
-            #simple, jump over obstacles
-
-            moon-buggy
-
-        ##robotfindskitten
-
-            #cute!
-
-            sudo aptitude install -y robotfindskitten
-
-            robotfindskitten
-
-        sudo aptitude install -y nethack-console
-            #nethack dungeon rpg
-
-        ##bsdgames
-
-            #lots of console games/cute apps
-
-            #highly recommened
-
-            sudo aptitude install -y bsdgames
-
-            afsh bsdgames | grep /usr/games/
-                #get a list
-
-            ##battlestar
-                #MUD
-
-            ##backgammon
-
-            ##number
-
-                #convert number in numerals to number in english
-
-                assert [ `echo 1 | number` = "one." ]
-
-            ##pom
-
-                #displays the phase of the moon
-
-            ##primes
-
-                primes 1 100
-                    #prints primes numbers between 1 to 100
-
-                primes 1 100 | wc -l
-                    #count primes
-
-            ##robots
-
-                #simple, fun, a bit too much luck
-
-                #play:
-                    robots
-
-                #play with better settings:
-                    alias robots="robots -ta`for i in {1..10000}; do echo -n n; done`"
-
-            ##atc
-
-                #nice timing memory
-
-                #E1 A0
-                    #plane E1, will land at airport 0
-                #e
-
-                    atc
-
-                #list scenarios and leave:
-                    atc -l
-
-                #play a scenario:
-                    atc -g crossover
-
-                #cannot pause...
-
-            ##hack
-
-                #nethack predecessor
-
-                hack
-
-            ##hunt
-
-                #multiplayer shooter
-
-                #looks *very* promissing, but multiplayer only...
-
-        ##greed
-
-            sudo aptitude install -y greed
-
-        ##ninvaders
-
-            sudo aptitude install -y ninvaders
-
-    ##netreck
-
-        #2d plane classic
-
-        sudo aptitude install -y netrek-client-cow
-
-    ##urban terror
-
-        sudo aptitude install -y urban-terror
-            #counter strike clone
-
-    ##golly
-
-        #conways game of life simulator
-
-        sudo aptitude install -y golly
-
-        env UBUNTU_MENUPROXY=0 golly
-            #because the global menu does not work
-
-    gnomine
-        #minesweeper clone
-
-    ##gnotski
-
-        #knotski clone
-
-        sudo aptitude install -y gnotski
-
-        gnotski
-
-    ##dosbox
-
-        #some good games there
-
-        sudo aptitude install -y dosbox
-        cd
-        mkdir dos
-        dosbox game.exe
-            #there are also `.bat` and `.com` executables
-
-        ##inside the emulator
-
-            mount c /home/$USER/dos
-            c:
-            dir
-                #ls
-            cd game
-            game.exe
-                #.exe and .bat are the extensions
-
-        ##avoid mouting every time
-
-            echo -e "mount c /home/$USER/dos\nc:" >> ~/.dosbox/dosbox-*.conf
-                #should be under the [autoexec] section
-
-        ##get the sound working
-
-            #TODO 0
-
-            sudo aptitude install -y pmidi
-            pmidi -l
-            vim ~/.dosbox/dosbox-*.conf
-            #put the port in:
-                #[midi]
-                #midiconfig=14:0
-
 ##time date
 
     ##cal
@@ -1790,30 +1578,48 @@ int main(void)
         cal
 
     ##date
-        sudo date
-            #get system date
 
-        sudo date -s "1 JUN 2012 09:30:00"
-        #set system date
+        #get system date:
 
-        TIMESTAMP=`date +%Y-%m-%d-%H-%M-%S`
+            sudo date
+
+                    TODO get working
+
+                        pmidi -l
+                        vim ~/.dosbox/dosbox-*.conf
+
+                    put the port in:
+
+                        [midi]
+                        midiconfig=14:0
+
+        #set system date:
+
+            sudo date -s "1 JUN 2012 09:30:00"
+
+        #format current time and output it:
+
+            TIMESTAMP=`date +%Y-%m-%d-%H-%M-%S`
 
     ##hwclock
 
-        sudo hwclock --show
-        #see hardware clock
+        #see hardware clock time:
 
-        sudo hwclock --systohc
+            sudo hwclock --show
+
         #sync hardware clock to system clock
+
+            sudo hwclock --systohc
 
     ##set you time zone
 
         #on dual boot with windows there are conflicts because Windows uses local time, and Linux UTC (more logical...). you must either tell Linux to use local, or better, Windows to use UTC
-        $TIMEZONE_LOCATION=/usr/share/zoneinfo
-        cd $TIMEZONE_LOCATION
-        ls
-        $TIMEZONE_NAME=
-        cp $TIMEZONE_LOCATION/$TIMEZONE_NAME /etc/localtime
+
+            $TIMEZONE_LOCATION=/usr/share/zoneinfo
+            cd $TIMEZONE_LOCATION
+            ls
+            $TIMEZONE_NAME=
+            cp $TIMEZONE_LOCATION/$TIMEZONE_NAME /etc/localtime
 
 ##libreoffice
 
@@ -4933,16 +4739,30 @@ int main(void)
 
         ##mktemp
 
-            f="$(mktemp)"
-            echo "$f"
-            assert test -f "$f"
-            rm "$f"
-                #creates a temporary file and returs its name
+            #create temporary directories and files in currend directory
 
-            d="$(mktemp -d)"
-            assert test -d "$d"
-            rm -r "$d"
-                #dir instead of file
+            #creates a temporary file in `/tmp/`:
+
+                f="$(mktemp)"
+                echo "$f"
+                assert test -f "$f"
+                rm "$f"
+
+            #directory:
+
+                d="$(mktemp -d)"
+                echo "$f"
+                assert test -d "$d"
+                rm -r "$d"
+
+            #custom name template:
+
+                f="$(mktemp --tmpdir abcXXXdef)"
+                assert echo "$f" | grep -E 'abc...def'
+                assert test -f "$f"
+                rm "$f"
+
+            #must use `--tmpdir` with template or else file is created in current dir
 
     ##pathchk
 
@@ -5401,6 +5221,15 @@ int main(void)
         #freeradius major implementation
 
 ##networking
+
+    ##netrc
+
+        #`$HOME/.netrc` is a config file that automates net logins
+        #(TODO: which type exactly of login?)
+
+        #ex:
+
+            machine code.google.com login <login> password <pass>
 
     ##sources
 
