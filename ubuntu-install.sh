@@ -189,7 +189,15 @@
 
             sudo aptitude install -y imagemagick
             sudo aptitude install -y imagemagick-doc
-            sudo aptitude install -y dia
+
+            #graph uml gui:
+
+                sudo aptitude install -y dia
+
+            #batch graph draw cli:
+
+                sudo aptitude install -y dot
+
             sudo aptitude install -y gimp
             sudo aptitude install -y inkscape
 
