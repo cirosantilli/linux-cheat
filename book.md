@@ -17,18 +17,6 @@ but not not formats that map directly to bits such as png or jpeg
 - mobi: mobipocket company, free format
 - rtf: proprietary microsoft
 
-- chm:
-
-    microsoft proprietary
-
-    discontinued
-
-    non plain text: compiled
-
-    based on html?
-
-    has been reverse ingeneered
-
 # readers
 
 ## okular
@@ -49,6 +37,26 @@ single instance:
 mobi reader
 
 # chm
+
+microsoft proprietary
+
+discontinued
+
+non plain text: compiled
+
+based on html?
+
+has been reverse ingeneered
+
+to html converters:
+
+- archmage:
+
+    produce non searchable html:
+
+        archmage a.chm
+
+readers:
 
 - chmsee: gtk+, few preferences, just works.
 - kchmreader: kde, broken colors on ubuntu

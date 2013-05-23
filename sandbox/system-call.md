@@ -1,38 +1,57 @@
-#system calls
+tell your os to do things which user space program can't do directly such as:
 
-    #what is
+- write to stdout, stderr, files
+- access devices
+- process/threading
+- exit a program
 
-        tell your os to do things which program can't such as:
+all of those operations are ultra os dependant,
+so when possible one should use portable wrappers
+libracies like ansi libc or the posix headers
 
-        - write to stdout, stderr, files
-        - access devices
-        - process/threading
-        - exit a program
+it is highly recommended that you also understand
+how to make system calls directly from assembler
+to really understand them since they have a primary
+assembly interface
 
-        ultra os dependant. to work around, you can inerface with c stdlib.
+it is also possible to call them from c code via certain macros
 
-    #<http://syscalls.kernelgrok.com/>
+# sources
 
-        full list
-        c manpage links
-        register args mnemonic
-        likss to online source cde 
+- <http://syscalls.kernelgrok.com/>
 
-    #<http://www.lxhp.in-berlin.de/lhpsysc0.html>
+    full linux syscal list
 
-        contains actual binary values of constants!
+    links to the c manpages
 
-    300+ total, many deprecated, some not implemented
+    register args mnemonic
 
-    ``int	$0x80`` calls
+    links to online source code
 
-    ``%eax`` holds what command. each call has a number
+- <http://www.lxhp.in-berlin.de/lhpsysc0.html>
 
-    ``%ebx``, ``%ecx``, ``%edx``, ``%esx``, ``%edi`` are the params
+    contains actual binary values of constants so you can make he calls from assembler
 
-    all can be accessed by POSIX c functions.
+# linux
 
-    #listof
+300+ total, many deprecated, some not implemented
+
+each system call gets a number in order of addition to the kernel:
+this is called *syscall number*
+
+this number can never be changed, but system calls may be declared deprecated.
+
+system calls may be only present on certain architectures,
+but most of them work on all architectures
+
+to make any of the system calls, one must use the instruction `int $0x80`
+
+`%eax` holds the syscall number
+
+`%ebx`, `%ecx`, `%edx`, `%esx`, `%edi` are the params
+
+## examples of linux calls
+
 
         #rebootreboots or enables/disables ctrl+alt+del reboot
 
@@ -73,7 +92,7 @@
             - getcwdprocesses have working info associated
             - chdir
             - fchdirusing a file descriptor instead of string
-            - chrootuse new root (default ``/`` ) for paths starting with ``/``
+            - chrootuse new root (default `/` ) for paths starting with `/`
             - creatcreate file or device. TODO: what is a device
             - mknodcreate a directory or special or ordinary file
             - linkcreate new name for file
@@ -176,7 +195,7 @@
         #data segment size
 
             #brkset
-            #sbrkincrement. called if heap is not large enough on ``malloc``
+            #sbrkincrement. called if heap is not large enough on `malloc`
 
         #mount
         #umount

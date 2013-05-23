@@ -100,6 +100,10 @@ very good
 
 gnome diagram editor
 
+##dot
+
+graph editor
+
 #viewers
 
 ##eog

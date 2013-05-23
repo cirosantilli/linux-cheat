@@ -70,7 +70,7 @@ enables all warnings:
 
 ALWAYS USE IT
 
-enables all warnings, except `unused-variable:
+enables all warnings, except `unused-variable`:
 
     gcc -Wall -Wno-unused-variable
 
@@ -130,11 +130,53 @@ compile with optimization
 
 ###summary
 
-                    gcc -std=c99 -pedantic-errors -Wall -03 -march=native a.c
-always use this for production code
+always use this for production code:
+
+    gcc -std=c99 -pedantic-errors -Wall -03 -march=native a.c
 
 ###other
 
     gcc -std=gnu90
 
 c90 + gcc extensions
+
+# c preprocessor
+
+does things like:
+
+- fetching `#include` files
+- evaluating and expanding `#define` and `#ifdef` macros
+
+before the compilation
+
+the executable is called `cpp`
+
+gcc uses it implicitly
+
+## define command line
+
+    gcc -DLINELENGTH=80 -DDEBUG c.c -o c
+
+same as adding
+
+    define LINELENGTH 80
+    define DEBUG
+
+to top of file
+
+## include search path
+
+    echo '' | cpp -v
+
+look for sections:
+
+- `include "..." search starts here`:
+- `include <...> search starts here`:
+
+## output preprocessed file
+
+learing purposes only:
+
+    gcc -E c.c -o c
+
+does whatever the preprocessor must do and output it to a file

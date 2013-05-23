@@ -93,6 +93,8 @@ long term goals meant to become fully posix compatible
 
 incompatibility are being listed for future resolution
 
+there some posix requirements that the linux kernel simply does not
+
 # fhs
 
 the filesystem hierarchy standard specifies base directories

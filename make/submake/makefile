@@ -15,15 +15,21 @@ unexport B
 
 # works even with variables that were explicitly exported previously
 
-.PHONY: all
+.PHONY: all a
 
 all:
+	# standard way to call on different directory:
+
+		$(MAKE) -C d
+
 	# -C: call make on a different directory
 
-		make -C d
+	# always use the MAKE variable since this does good magic for you
 
-	# useful for calling one make from another
+	#equivalent way:
+
+		cd d && $(MAKE)
 
 	# -f: use a given file as a makefile
 
-		make -f makefile-other
+		$(MAKE) -f makefile-other

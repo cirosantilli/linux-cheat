@@ -1,4 +1,20 @@
-# get version
+the kernel is the part of the system which does the most fundamental operations,
+in special low level hardware dependant ones. this allows for:
+
+- hardware independance: all programs make identical system calls to the kernel
+    without thinking about the hardware
+
+- process control: the kernel determines what programs can do or not,
+    enforcing for example file permissions
+
+user programs can only access the kernel services via system calls.
+
+the linux kernel is written on mainly on c c99 standard,
+with **gasp** gcc extensions. Therefore the linux kernel is married to gcc.
+
+# install a new kernel
+
+# get kernel version
 
     uname -r
 
@@ -109,23 +125,28 @@ list available modules relative path to /lib/modules/VERSION/:
 
     sudo modprobe -l
 
+load the module:
+
     sudo modprobe $m
-loads the module
+
 checks for dependencies
 
-    sudo modprobe vmhgfs -o vm_hgfs
-load module under different name
-to avoid conflicts
+load module under different name to avoid conflicts:
 
-    sudo modprobe -r $m
+    sudo modprobe vmhgfs -o vm_hgfs
+
 remove module
 
+    sudo modprobe -r $m
+
+check if dependencies are ok:
+
     sudo depmod -a
-chekc dependencies are ok
+
+get info about given `.ko` module file:
 
     m=a
     sudo rmmod $m
-get info about given .ko module file
 
 ## device drivers
 
@@ -133,23 +154,25 @@ get info about given .ko module file
 
 there are two types of devices: block and char
 
-crw-rw----  1 root tty       7,   1 Feb 25 09:29 vcs1
-^
-c: char
+    crw-rw----  1 root tty       7,   1 Feb 25 09:29 vcs1
+    ^
+    c: char
 
-brw-rw----  1 root disk      8,   0 Feb 25 09:30 sda
-^
-b: block
+    brw-rw----  1 root disk      8,   0 Feb 25 09:30 sda
+    ^
+    b: block
+
 this is my hd.
 each partition also gets a b file
 
 ### major minor numbers
 
-crw-rw----  1 root tty       7,   1 Feb 25 09:29 vcs1
-    ^    ^
-    1    2
-1: major number. tells kernel which driver controls this file
-2: minor number. id of each hardware controlled by a
+    crw-rw----  1 root tty       7,   1 Feb 25 09:29 vcs1
+        ^    ^
+        1    2
+
+- 1: major number. tells kernel which driver controls this file
+- 2: minor number. id of each hardware controlled by a
     given driveer
 
 ### mknod

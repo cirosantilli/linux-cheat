@@ -1,8 +1,14 @@
-make allows you to do the following:
+make allows you to:
 
-- make simple command line interfaces simply
+- make command line interfaces of the type:
 
-- only build outputs when inputs have changed, saving tons of time in build of large projects
+        make <something> a=b c=d
+
+    *very* easily
+
+- only build outputs when inputs have changed
+
+    this may save lots of time when building large projects
 
 it is the de facto standard tool for that today, but there is serious effort going on to replace it because it is too insane.
 
