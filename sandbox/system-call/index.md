@@ -50,6 +50,10 @@ to make any of the system calls, one must use the instruction `int $0x80`
 
 `%ebx`, `%ecx`, `%edx`, `%esx`, `%edi` are the params
 
+# get a list of system calls
+
+TODO how to find them?? where is the official list/api??
+
 ## examples of linux calls
 
 
