@@ -1,9 +1,19 @@
 /*
 how to make a system call from c
 
-# _syscall
+# syscall function
 
-TODO
+to get a list of system calls:
+
+    man 2 syscalls
+
+to get doc on each system call:
+
+    man 2 <syscall>
+
+for example:
+
+    man 2 write
 
 # unistd wrapper
 
@@ -17,49 +27,27 @@ and all that the unistd version does is to wrap them for c.
 
 newer system calls may not be directly available inside `unistd.h`
 and some processing may happen between the wrapper and the actual system call
+
+# _syscall macro
+
+deprecated method to do direct system calls
+
 */
 
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <unistd.h>
-
-#define __NR_write 3
-_syscall3(ssize_t, write, int, fd, const void *, buf, size_t, count)
-//      1 2        3      4    5   6             7    8       9
-
-/*
-
-#__NR_X
-
-defines the number of inputs of the system call X
-
-# _syscall
-
-macro that gives direct access to system calls,
-
-defined in unistd TODO isin't unistd general posix, and not unix specific?
-
-signature:
-
-#. number of inputs (0-6)
-#. return type
-#. name to be given on user space
-#. type of first    input
-#. name    first
-#.         second
-#.         second
-#.         third
-#.         third
-
-*/
+#define _GNU_SOURCE
+#include <sys/syscall.h>    /* for syscall.h. needs `_GNU_SOURCE`. */
+#include <sys/types.h>      /* for SYS_<name> */
+#include <asm/unistd.h>     /* for __NR_<number> */
 
 int main(int argc, char** argv)
 {
-    //#system calls
-
-        //
-
+    char s[] = "ab\ncd";
+    /* TODO: what is the usage difference between `asm/unistd.h __NR_X` and `sys/types SYS_NAME`? */
+    syscall( SYS_write, 1, s, 3 );
+    syscall( __NR_write, 1, s, 3 );
     return EXIT_SUCCESS;
 }

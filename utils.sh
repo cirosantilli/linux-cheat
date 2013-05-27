@@ -41,7 +41,7 @@
 
     #- man pages
 
-        #check <#man>
+        #check [man[]
 
         #not many examples, but full function list, and you often can guess what they mean!
 
@@ -65,7 +65,7 @@
 
     #the manuals
 
-    #posix 7
+    #posix 7 specifies the single option `-k` and nothing about pages
 
     ##search
 

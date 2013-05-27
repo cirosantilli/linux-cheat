@@ -280,7 +280,13 @@
 
 			IN_DIR   := ./
 			IN_EXTS  := .lex .y .c .cpp
-			INS			 := $(foreach IN_EXT, $(IN_EXTS), $(wildcard $(IN_DIR)*$(IN_EXT)) )
+			INS		 := $(foreach IN_EXT, $(IN_EXTS), $(wildcard $(IN_DIR)*$(IN_EXT)) )
+
+	##eval
+
+		define a variable inside a rule
+
+			$(eval X := $(AUX_DIR)$* )
 
 	$(subst from,to,text) 	Replace from with to in text.
 	$(patsubst pattern,replacement,text) 	Replace words matching pattern with replacement in text.
@@ -308,10 +314,7 @@
 		LIBS=$(shell pkg-config opencv --libs)
 
 	$(origin variable) 	Return a string describing how the make variable variable was defined.
-	$(foreach var,words,text) 	Evaluate text with var bound to each word in words, and concatenate the results.
 	$(call var,param,...) 	Evaluate the variable var replacing any references to $(1),$(2) with the first, second, etc. param values.
-
-	$(eval X := $(AUX_DIR)$* ) define a variable inside a rule
 
 ##submake
 

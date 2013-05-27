@@ -20,22 +20,20 @@
 
     //TODO is there a windows implementation for those headers?
 
-    //`POSIX_SOURCE` is another option which opens different functions.
+    //there are other headers which may expose posix functions such as `_POSIX_C_SOURCE` and `POSIX_SOURCE`
+    //for `gcc`, see `man feature_test_macros` for an explanaition.
 
     //the value refers to the actual posix version
+
     //for example:
 
     //- 500: issue 5, 1995
     //- 600: issue 6, 2004
     //- 700: issue 7, 2008
 
-    //TODO what is th difference between:
-
 #define _XOPEN_SOURCE 700
 //#define _POSIX_C_SOURCE 200112L
 //#define POSIX_SOURCE
-
-    //basename, dirname operations:
 
 //#ansi headers
 
@@ -55,7 +53,7 @@
 
 #include <libgen.h>
 
-    //whithout this, one gets the glib.c version:
+    //without this, one gets the glib.c version:
 
 #include <pthread.h>
 #include <regex.h>

@@ -13,6 +13,22 @@ most important:
 1) g++ treats both .c and .cpp files as c++, since .c is backwards compatible with c++, it works
 2) g++ links to (but does not include) stdlib automatically, gcc does not!
 
+# executable formats
+
+## elf
+
+linux
+
+superseeds ``.coff`` which superseeds ``a.out``
+
+## mach-o
+
+mac os
+
+## pe
+
+windows. current `.exe`s
+
 # compilation steps
 
 it is good to understand which steps are done towards compilation
@@ -64,6 +80,8 @@ make will not recompile the corresponding `.o`
 
 # flags
 
+## Wall
+
 enables all warnings:
 
     gcc -Wall
@@ -74,31 +92,46 @@ enables all warnings, except `unused-variable`:
 
     gcc -Wall -Wno-unused-variable
 
+## std
+
 std specifies version os the language to be used
 
-disable gcc extensions that conflict with c standrad
+disables gcc extensions that conflict with c standrad
 
     gcc -std=c90
     gcc -std=c99
     gcc -std=1x
 
-current most modern
-                gcc -std=c11
-not yet available
-will be when implementation complete
+`c11` will be the next version and is still being developed at the time of writting
 
-                gcc -ansi
-changes with time, currently equals `-std=c90`
-don't use it
+## ansi
+
+don't use this:
+
+    gcc -ansi
+
+implies the most recent `-std` which gnu considers is stable manner (not necessarily the latest)
+
+changes with time, currently equals:
+
+    gcc -std=c90
+
+it is a bit confusing not to have a fixed version of the standard to comply to,
+so don't use it
+
+## pedantic
 
             gcc -std=c1x -pedantic
+
 give warnings for code that does not comply with c1x standard
 this does not mean *FULL* complience, but greatly increases complience
 there is currently no full complience check in `gcc`
+
             gcc -std=c1x -pedantic-errors
+
 give errors instead of warnings
 
-###-march cputype
+## march
 
 optimizes code to given cpu (arch is for archtecture)
 may use instructions only available to given cpu
@@ -110,35 +143,39 @@ optimize for currrent compiling machine
                 gcc -march=armv7
 Arm v.7, used on mobiles today
 
-###code optimization
+## optimization
+
+list possible optimizations for `-O`:
 
     gcc -Q -O --help=optimizers
 
-shows optimizations for -O
+the options:
 
--O0 : no speed optimization. This is the default
--O : -O1 basic speed optimization
--O2 : more than O1
--O3 : more than O2
--Og : optimize for debugging
--Os : optimize for size
--Ofast : optimize for speed more than O3, *even if it breaks standards*
+- O0 : no speed optimization. This is the default
+- O : -O1 basic speed optimization
+- O2 : more than O1
+- O3 : more than O2
+- Og : optimize for debugging
+- Os : optimize for size
+- Ofast : optimize for speed more than O3, *even if it breaks standards*
+
+best general code optimization method:
 
     gcc -O3 a.c -o a.out
 
-compile with optimization
+always use this for production code.
 
-###summary
+## summary
 
 always use this for production code:
 
     gcc -std=c99 -pedantic-errors -Wall -03 -march=native a.c
 
-###other
+### other
+
+do c90 + gcc extensions:
 
     gcc -std=gnu90
-
-c90 + gcc extensions
 
 # c preprocessor
 

@@ -6,17 +6,19 @@ override RUN		?= c
 
 INS			:= $(foreach IN_EXT, $(IN_EXTS), $(wildcard $(IN_DIR)*$(IN_EXT)) )
 INS_NODIR 	:= $(notdir $(INS))
-OUTS_NODIR	:= $(patsubst %$(IN_EXT),%$(OUT_EXT),$(INS_NODIR))
-OUTS		:= $(addprefix $(OUT_DIR),$(OUTS_NODIR))
+OUTS_NODIR	:= $(basename $(INS_NODIR))
+OUTS_NODIR	:= $(addsuffix $(OUT_EXT), $(OUTS_NODIR))
+OUTS		:= $(addprefix $(OUT_DIR), $(OUTS_NODIR))
 
 .PHONY: all clean mkdir run
 
 all: mkdir $(OUTS)
 
-$(OUT_DIR)$(NAME)$(OUT_EXT): $(NAME).c
-	gcc -Wall -std=c99 -pedantic-errors -D_XOPEN_SOURCE=700 -o "$@" "$<"
+#cannot use `-std=99`, even if `_GNU_SOURCE` is defined in the file. TODO why?
+$(OUT_DIR)%$(OUT_EXT): %.c
+	gcc -Wall -pedantic-errors -o "$@" "$<"
 
-$(OUT_DIR)$(NAME)$(OUT_EXT): $(NAME).asm
+$(OUT_DIR)%$(OUT_EXT): %.asm
 	$(eval OBJ := "$(OUT_DIR)$*".o)
 	nasm -w+all -f elf -o "$(OBJ)" "$<"
 	ld -s -o "$@" "$(OBJ)"
@@ -25,7 +27,8 @@ clean:
 	rm -rf $(OUT_DIR)
 
 mkdir:
-	@echo $(OUTS)
+	#@echo 'for f in $(INS_NODIR); do echo -n "$${f%.*} "; done'
+	echo $(OUTS)
 	mkdir -p $(OUT_DIR)
 
 run: all
