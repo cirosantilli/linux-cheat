@@ -283,6 +283,34 @@
 
                     #sudo aptitude install -y pmidi
 
+        ##editors
+
+            sudo aptitude install -y vim
+            sudo aptitude install -y vim-gtk
+
+        ##program
+
+                sudo aptitude install -y build-essential
+                sudo aptitude install -y automake
+                sudo aptitude install -y cmake
+                sudo aptitude install -y libtool
+
+            ##fortran
+
+                #gnu fortran 77:
+
+                    sudo aptitude install -y g77
+
+                #gnu fortran 95:
+
+                    sudo aptitude install -y gfortran
+
+            ##source control
+
+                sudo aptutide install -y git
+                sudo aptutide install -y mercurial
+                sudo aptitude install -y subversion
+
 ##launchpad ppas
 
     #you must first add ppas with `apt-add-repository`

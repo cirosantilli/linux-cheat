@@ -217,3 +217,12 @@ learing purposes only:
     gcc -E c.c -o c
 
 does whatever the preprocessor must do and output it to a file
+
+# cross compile
+
+cross compiling means to compile a program for a different OS
+or architecture than the one the compiler is running
+
+gcc cannot cross compile for windows from linux (TODO check)
+
+this can be done with mingw (TODO how)

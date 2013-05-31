@@ -61,6 +61,8 @@ the entire section 2 of `man` is about system calls. You should check:
 
     TODO how to get a list of *ALL* system calls
 
+    TODO how to get a list of syscalls for each architecture?
+
 - `man 2 syscall`: a function that allows to make direct system calls in c
 
 to get info on specific system calls do:

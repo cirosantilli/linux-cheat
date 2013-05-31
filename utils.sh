@@ -927,6 +927,7 @@
             u1sdtool --publish-file a | perl -ple 's/.+\s//' | xsel -b
 
     ##nicotine+
+
         #soulseek client
 
             sudo aptitude install -y nicotine+
@@ -943,328 +944,6 @@
 
 ##programming
 
-    #building tools
-
-        sudo aptitude install -y build-essential
-
-    #makefile macros
-    #generates makefiles
-
-        sudo aptitude install -y automake
-
-    #helps generating libraries for c, c++, fortran and java
-
-        sudo aptitude install -y libtool
-
-    #make advanced
-
-        sudo aptitude install -y cmake
-
-    #nasm assembler
-
-        nasm -w+all -f elf -o a.o a.asm
-
-            #-w+all : enable all warnings
-            #-f ouptut format
-
-        nasm -w+all -f elf -o a.o a.asm
-
-    ##libs
-
-        ##intro
-
-            #**TO USE A LIBRARY YOU NEED 2 THINGS**:
-
-            #- the header .h file(s)
-            #- the compiled .so or .a file(s)
-
-            #either those must be in you compiler find path
-            #(different for headers and compiled files)
-            #or you must explicitly add them to the path.
-
-        ##search path
-
-            #where gcc search path for .a and .so
-
-            gcc -print-search-dirs | grep '^libraries' | tr ':' $'\n'
-
-        ##static
-
-                #gets included in program
-
-                #program gets larger
-
-                #you don't have to worry about dependancies
-
-                gcc -c a.c
-                gcc -c b.c
-                ar rcs a.a a.o b.o
-                gcc a.a c.c
-
-    ##gdb
-
-        #gnu symbolic debugger
-
-        gcc -ggdb3 a.c
-            #adds debug information to executable such as line numbers,
-            #and symbol names (normally exceutables contain only memory adresses)
-            #makes exec larger
-            #-g : generate debug info for gdb
-            #-ggdb : adds more info
-            #-ggdb3 : adds max info. default if 2 when ggdb is used.
-
-        gdb a.out
-        gdb a.out $pid
-            #attach to a running process
-            #pauses the process
-            #on quit, process continues
-
-            #r
-                #run prog
-                #if already runnin, kill and rerun.
-                #keeps breakpoints, etc
-            #r 1 2
-                #start running with arguments
-                #next r calls will use those args
-            #set args
-                #removes args
-
-            #k
-                #kill program
-                #keeps breakpoints, etc
-
-            #b
-                #b 10
-                #b func
-                #b c.c:10
-                #b c.c:func
-                #b +2
-                    #two lines down from cur
-                #b -2
-                    #two lines down from cur
-
-            #i b
-                #view breakpoints
-
-            #dis 1
-                #disable breakpoint 1.
-                #1 is gotten from `i b`
-
-            #en 1
-                #enable breakpoint 1.
-                #1 is gotten from `i b`
-
-            #d
-                #delete all breakpoints
-            #d 1
-                #delete breakpoint 1
-
-            #cl 10
-            #cl func
-            #cl file:func
-            #cl file:10
-                #delete breakpoint at line 10
-
-            #w
-                #set watchpoint
-                #stop prog when var or expr changes value
-
-            #c
-                #set catchpoint
-                #TODO ?
-
-            #s
-                #step exec next line
-                #if func call, step inside funv
-            #n
-                #setp next. if func call
-                #run entire func now
-            #whe
-                #where, print line number
-
-            #ba
-                #show backtrace of stack at current point
-
-            #f
-                #show cur frame number
-            #f 1
-                #go to frame 1
-
-            #l
-                #list next 10 lines of code.
-                #l again, lists next 10.
-            #l -
-                #previous
-            #l 20
-                #list 10 lines around line 20
-            #l 5,20
-            #l ,20
-            #l 5,
-            #l func
-            #l c.c
-            #l c.c:12
-            #l c.c:func
-            #set listsize 5
-
-            #p
-                #p x
-                    #print value of variable x in current frame
-                    #vars in other frames cannot be seen
-                #p x+1
-                #p x*2
-                #p func(1)
-                #p array
-                #p array[3]@5
-                    #print 3 vals or array, starting at elem 5
-                #p myStruct
-                #p myStruct.key
-                #set print pretty
-
-                #format
-                    #(gdb) p mychar    #default
-                    #$33 = 65 'A'
-                    #(gdb) p /o mychar #octal
-                    #$34 = 0101
-                    #(gdb) p /x mychar #hex
-                    #$35 = 0x41
-                    #(gdb) p /d mychar
-                    #$36 = 65
-                    #(gdb) p /u mychar #unsigned decimal
-                    #$37 = 65
-                    #(gdb) p /t mychar #binary
-                    #$38 = 1000001
-                    #(gdb) p /f mychar #float
-                    #$39 = 65
-                    #(gdb) p /a mychar
-                    #$40 = 0x41
-
-                #p &mychar
-                    #addres of mychar
-                    #p *(&mychar)
-
-                #pt x
-                    #print type of var x
-
-            #attach
-                #links to a running process
-
-            #q
-                #quit
-
-            #gdbinit
-                #~/.gdbinit
-                #somedir/.gdbinit
-
-    ##profiling
-
-        ##time
-
-            time ./a.out
-
-            #profiles a.out.
-            #bash builtin, different from /usr/bin/time
-            #
-            #real: wall clock time
-            #user: program cpu time usage
-            #sys: system call time used for program
-
-            /usr/bin/time -f "\t%U user,\t%S system,\t%x status" test.py
-                #time without path is the bash built-in
-                #does memorym iom etc profiles besides time profiles
-
-        ##gprof
-
-            #part of `binutils` package
-
-            #shows time spent into each call of individual functions
-            #also shows average times per function
-            #sorts from most to least time consuming
-
-            #you could get all those infos from <time.h> clock() func
-            #but this automates all for you in the case you want to measure functions
-
-            gcc -p -pg -c a.c -o a.o
-            gcc -p -pg a.o -o a.out
-            #generates extra profiling code for `prof` and `gprof` programs
-            #must be used only both link and compile steps if separate
-
-            ./a.out
-            #will generate `gmon.out` with gprof data in *cur dir*, not bin dir
-
-            gprof a.out gmon.out
-            #-b : remove large output explanation
-            #-p : only flat profile
-            #-pfunc1 : only flat profile of `func1`
-            #-q : only call graph
-            #-qfunc1 : only call graph for `func1`
-
-    ##mingw
-
-        #cross compile for windows
-
-        #it seems gcc can't do this
-
-        apt-cache search mingw
-
-    ##fortran
-
-        #gnu fortran 77:
-            sudo aptitude install -y g77
-
-        #gnu fortran 95:
-            sudo aptitude install -y gfortran
-
-    ##binutils package
-
-        #utilities to view and modify compiled code
-
-        ##ar
-
-            #create .a archives from .o files
-
-            ar rcs a.a a.o b.o
-
-        ##nm
-
-            #symbol table for object files
-
-            nm a.o
-
-        ##readelf
-
-            #gets stored inside executable files
-            #in a human readable way
-
-            readelf -s liba.so
-                #shows symtable (defined stuff) of elf .o or .so
-
-            readelf -d a.out
-                #shows dependencies of an executable (symbols and shared libs)
-
-            readelf --relocs a.o
-                #TODO ?
-
-        ##elfedit
-
-            #TODO
-
-        ##objdump
-
-            #see memory structure
-
-            objdump --disassemble a.o
-            objdump -h a.o
-
-        ##size
-
-            gcc -c a.c
-            gcc a.o
-            size a.out a.o
-            #shows size of each memory part of a program
-            #text : instructions
-            #data : init and uinit data
-            #dec and hex : size of executable in dec and hex
-
     ##pkg-config
 
         #info is contained in "$PKG_NAME.pc" files located mainly under:
@@ -1278,18 +957,6 @@
 
             CFLAGS=$(shell pkg-config --cflags pkgname)
             LIBS=$(shell pkg-config --libs pkgname)
-
-    ##strace
-
-        #list system calls made by executable
-
-        #includes calls that load program
-
-        echo '#include <stdio.h>
-int main(void)
-{ printf("hello"); return 0; }' > a.c
-        gcc a.c
-        strace ./a.out
 
     ##editors ides
 
@@ -1338,24 +1005,10 @@ int main(void)
 
         ##vim
 
-            sudo aptitude install -y vim
-            sudo aptitude install -y vim-gtk
-                #gvim, runs outside command line
-                #and thus gets around many command line limitations such as reserved shortcuts
+            #gvim, runs in gtk outside command line
+            #and thus gets around many command line limitations such as reserved shortcuts
 
-    ##version control
-
-        ##git
-
-            #see </git>
-
-        ##mercurial subversion
-
-            sudo aptutide install -y mercurial
-
-        ##svn subversion
-
-            sudo aptitude install -y subversion
+                gvim
 
     ##diff
 
@@ -1363,7 +1016,8 @@ int main(void)
 
             #compare files *and* directory contents
 
-            #files
+            #files:
+
                 echo -e "0\na\n1\n2\n3\n4\n5" > a
                 echo -e "0\n1\n2\nb\n3\n5" > b
                 nl a
@@ -1374,7 +1028,7 @@ int main(void)
                 diff -u a b
                 #gitlike diff (unified format)
 
-            #directories
+            #directories:
 
                 mkdir a
                 touch a/a

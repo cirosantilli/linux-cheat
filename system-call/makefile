@@ -14,7 +14,10 @@ OUTS		:= $(addprefix $(OUT_DIR), $(OUTS_NODIR))
 
 all: mkdir $(OUTS)
 
-#cannot use `-std=99`, even if `_GNU_SOURCE` is defined in the file. TODO why?
+#cannot use `-std=99`, even if `_GNU_SOURCE` is defined in the file
+#the reasion for this is related to `-std=99` automatically defining `__STRICT_ANSI__` cp variable
+#which overrides `_GNU_SOURCE` and causes other flags not to be defined.
+#see: `features.h`
 $(OUT_DIR)%$(OUT_EXT): %.c
 	gcc -Wall -pedantic-errors -o "$@" "$<"
 

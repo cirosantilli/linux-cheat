@@ -1,7 +1,7 @@
 /*
 how to make a system call from c
 
-# syscall function
+# get info on system calls
 
 to get a list of system calls:
 
@@ -15,18 +15,42 @@ for example:
 
     man 2 write
 
-# unistd wrapper
+# syscall
 
-this is cheating, but mainly does what we want
+function used to make direct system calls from c
 
-many system calls already have c wrappers inside `unistd.h`
+takes the syscall number followed by a variable number of arguments:
 
-altough this file defines posix functions, not specific linux system calls
-many of the posix functions are very close to the actual system calls,
-and all that the unistd version does is to wrap them for c.
+    syscall( number, arg1, arg2, ...)
 
-newer system calls may not be directly available inside `unistd.h`
-and some processing may happen between the wrapper and the actual system call
+where the arguments are the arguments of the system call
+
+don't use bare system call numbers since those vary between architectures:
+
+most system calls are defined on most architectures and have names which map
+to the actual number, depending on the architecture. This is done with the
+`__NR_<NAME>` constants in `asm/unistd.h` or SYS_<NAME> in `sys/types`
+
+## __NR_ macros
+
+are defined in the linux kernel directly
+
+## SYS_ macros
+
+are defined in terms of `__NR_` for compatibility
+
+TODO: what is the difference between `asm/unistd.h __NR_X` and `sys/types SYS_NAME`? which is better in which situtaions?
+
+# wrappers
+
+instead of using system calls, consider using wrappers:
+
+- ansi libc
+- posix as in unistd
+
+many of those wrappers are very thin and don't do much more than the system call itself
+
+this is why so many wrapper functions have very similar names and interfaces to the actual calls.
 
 # _syscall macro
 
@@ -39,15 +63,21 @@ deprecated method to do direct system calls
 #include <stdlib.h>
 
 #define _GNU_SOURCE
-#include <sys/syscall.h>    /* for syscall.h. needs `_GNU_SOURCE`. */
-#include <sys/types.h>      /* for SYS_<name> */
-#include <asm/unistd.h>     /* for __NR_<number> */
+#include <unistd.h>         /* for `syscall`. Needs `_GNU_SOURCE`, cannot have strict ansi ( implied by `-std=c99` or `-ansi`. See: `features.h` */
+#include <sys/syscall.h>    /* adds both __NR_ and SYS_ syscall number macros. TODO what is the `_LIBC` cp var? */
+/* #include <asm/unistd.h>  // for __NR_<number>. Already included by `sys/syscall.h` */
+/* #include <sys/types.h>   // for SYS_<name> */
 
-int main(int argc, char** argv)
+int main( int argc, char** argv )
 {
+
     char s[] = "ab\ncd";
-    /* TODO: what is the usage difference between `asm/unistd.h __NR_X` and `sys/types SYS_NAME`? */
-    syscall( SYS_write, 1, s, 3 );
+
+#ifndef _LIBC
+    puts("_LIBC");
+#endif
+
     syscall( __NR_write, 1, s, 3 );
+    syscall( SYS_write,  1, s, 3 );
     return EXIT_SUCCESS;
 }
