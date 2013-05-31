@@ -1,20 +1,20 @@
-`.ko` extension used instead of `.o`
-also contain module information
-
-device drivers (programs that enables the computer to talk to hardware)
-are one type of kernel modules
-
 modules are loaded as object files
 you can only use symbols defined by the kernel
 list of them:
 
+modules share memory space with the rest of the kernel
+this means that if a module segfaults, the kernel segfaults!
+
     cat /proc/kallsyms
+
+`.ko` extension used instead of `.o`
+also contain module information
+
+device drivers (programs that enables the computer to talk to hardware)
+are one specific type of kernel modules
 
 note that this causes great possibility of name pollution
 so choose names carefully!
-
-modules share memory space with the rest of the kernel
-this means that if a module segfaults, the kernel segfaults!
 
 two devices can map to the same hardware!
 
@@ -43,24 +43,30 @@ package that provides utilities
 
 list loaded kernel modules
 
-info taken from /proc/modules
+info is taken from `/proc/modules`
 
     lsmod
-        #cfg80211              175574  2 rtlwifi,mac80211
-        #^^^^^^^^              ^^^^^^  ^ ^^^^^^^,^^^^^^^^
-        #1                     2       3 4       5
 
-- 1: name
-- 2: size
-- 3: numer of running instances
-- 4: depends on
-- 5: depends on
+sample output:
+
+    cfg80211              175574  2 rtlwifi,mac80211
+    ^^^^^^^^              ^^^^^^  ^ ^^^^^^^,^^^^^^^^
+    1                     2       3 4       5
+
+1. name
+2. size
+3. numer of running instances
+4. depends on
+5. depends on
+
+to get more info:
 
     cat /proc/modules
 
 also contains two more columns:
-status: Live, Loading or Unloading
-memory offset: 0x129b0000
+
+- status: Live, Loading or Unloading
+- memory offset: 0x129b0000
 
 ## moinfo
 

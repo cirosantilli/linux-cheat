@@ -64,7 +64,7 @@ deprecated method to do direct system calls
 
 #define _GNU_SOURCE
 #include <unistd.h>         /* for `syscall`. Needs `_GNU_SOURCE`, cannot have strict ansi ( implied by `-std=c99` or `-ansi`. See: `features.h` */
-#include <sys/syscall.h>    /* adds both __NR_ and SYS_ syscall number macros. TODO what is the `_LIBC` cp var? */
+#include <sys/syscall.h>    /* adds both __NR_ and SYS_ syscall number macros. TODO what is the `_LIBC` cpp var? */
 /* #include <asm/unistd.h>  // for __NR_<number>. Already included by `sys/syscall.h` */
 /* #include <sys/types.h>   // for SYS_<name> */
 
@@ -72,11 +72,6 @@ int main( int argc, char** argv )
 {
 
     char s[] = "ab\ncd";
-
-#ifndef _LIBC
-    puts("_LIBC");
-#endif
-
     syscall( __NR_write, 1, s, 3 );
     syscall( SYS_write,  1, s, 3 );
     return EXIT_SUCCESS;
