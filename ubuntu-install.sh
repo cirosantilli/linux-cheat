@@ -165,11 +165,16 @@
             sudo aptitude install -y okular okular-extra-backends
             sudo aptitude install -y fbreader
             sudo aptitude install -y calibre
-            #sudo aptitude install -y kchmreader
-            sudo aptitude install -y chmsee
-            sudo aptitude install -y archmage
+
             sudo aptitude install -y pdftk
             sudo aptitude install -y djvulibre-bin
+
+            ##chm
+
+                sudo aptitude install -y chmsee
+                sudo aptitude install -y chm2pdf
+                sudo aptitude install -y archmage
+                #sudo aptitude install -y kchmreader
 
         ##sound
 

@@ -1,20 +1,25 @@
-modules are loaded as object files
-you can only use symbols defined by the kernel
-list of them:
+there are things which are hard to do from regular user programs such as
+directly talking to hardware
 
-modules share memory space with the rest of the kernel
-this means that if a module segfaults, the kernel segfaults!
+some operations can be done via system calls, but if you want flexibility and
+speed, using the kernel ring is fundamental
 
-    cat /proc/kallsyms
+however:
 
-`.ko` extension used instead of `.o`
-also contain module information
+- it would be very complicated to recompile the kernel and reboot every time you make some modification
+- the kernel would be huge if it were to support all possible hardware
+
+modules overcome those two problems exactly because they can be loaded into the kernel
+*while it is running* and use symbols that the kernel chooses to export TODO which
+
+it then runs in the same address space as the kernel and with the same permissions
+as the kernel (basically do anything) on a certain kernel context (TODO which exactly)
+
+compiled modules are special object files that have a `.ko` extension instead of `.o`
+they also contain module specific metadata
 
 device drivers (programs that enables the computer to talk to hardware)
 are one specific type of kernel modules
-
-note that this causes great possibility of name pollution
-so choose names carefully!
 
 two devices can map to the same hardware!
 

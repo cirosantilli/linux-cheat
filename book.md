@@ -48,7 +48,7 @@ based on html?
 
 has been reverse ingeneered
 
-to html converters:
+## chm to html
 
 - archmage:
 
@@ -56,7 +56,13 @@ to html converters:
 
         archmage a.chm
 
-readers:
+## chm to pdf
+
+- chm2pdf: <http://www.ubuntugeek.com/how-to-convert-chm-files-into-pdf-files-in-ubuntu.html>
+
+    index links were broken and did not show index pages
+
+## chm readers
 
 - chmsee: gtk+, few preferences, just works.
 - kchmreader: kde, broken colors on ubuntu
