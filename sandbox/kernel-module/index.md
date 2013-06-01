@@ -68,7 +68,7 @@ also contains two more columns:
 - status: Live, Loading or Unloading
 - memory offset: 0x129b0000
 
-## moinfo
+## modinfo
 
     modinfo a.ko
     modinfo a
