@@ -300,6 +300,12 @@
                 sudo aptitude install -y cmake
                 sudo aptitude install -y libtool
 
+            #gcc docs:
+
+                sudo aptitude install -y gcc-doc
+
+            #located at: `/usr/share/doc/gcc-doc`
+
             ##fortran
 
                 #gnu fortran 77:

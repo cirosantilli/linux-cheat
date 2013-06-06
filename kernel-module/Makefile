@@ -21,7 +21,7 @@ RUN_EXT		:= $(RUN)$(OUT_EXT)
 
 # `obj-m` is all that needs to be defined for the standard makefile to work
 
-#TODO why this does not work but the next line does? search for `:` version of `+=`
+#TODO why this does not work but the next line does? there is no `:` version of `+=`: it depends on how it is first defined. If if is first defined with `:`: then `+=` is `:`
 #obj-m 	+= $(OBJS)
 obj-m += hello_world.o cheat.o
 
@@ -29,8 +29,6 @@ obj-m += hello_world.o cheat.o
 
 # TODO put all outputs in a single output dir
 all:
-	echo $(OBJS)
-	echo $(obj-m)
 	make -C /lib/modules/$(shell uname -r)/build M="$(PWD)" modules
 	#make -C /lib/modules/$(shell uname -r)/build M="$(PWD)" O="$(PWD)/$(OUT_DIR)" modules
 

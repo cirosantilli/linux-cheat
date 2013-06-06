@@ -1,4 +1,8 @@
-gnu set of utilities to view and modify compiled code
+gnu set of utilities to compile and view and modify compiled code
+
+official site: <http://sourceware.org/binutils/>
+
+as stated there, the two main utilities are `ld`, the gnu liner, and `as` the gnu assembler.
 
 # ar
 
