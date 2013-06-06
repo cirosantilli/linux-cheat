@@ -18,3 +18,5 @@ all:
 	@echo "basename:   $(basename a/b a/b.c)"
 	@echo "dir:        $(dir a/b a/b/ a /)" #a a/a/ ./ /
 	@echo "notdir:     $(notdir a/b a/b/ b /)" #b b
+	@echo "filter:     $(filter %.a %.b, a.a a.ab a.b )"
+	@echo "filter:     $(filter-out %.a %.b, a.a a.ab a.b )"

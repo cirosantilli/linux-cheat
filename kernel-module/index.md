@@ -13,7 +13,7 @@ modules overcome those two problems exactly because they can be loaded into the 
 *while it is running* and use symbols that the kernel chooses to export TODO which
 
 it then runs in the same address space as the kernel and with the same permissions
-as the kernel (basically do anything) on a certain kernel context (TODO which exactly)
+as the kernel (basically do anything)
 
 compiled modules are special object files that have a `.ko` extension instead of `.o`
 they also contain module specific metadata
@@ -115,6 +115,13 @@ get info about given `.ko` module file:
 
     m=a
     sudo rmmod $m
+
+# includes
+
+the default Makefile which is called by the Makefile in this directory automatically
+adds `/usr/src/linux-headers-$(CUR_KERNEL_VERSION)/` TODO check
+
+those come directly from the kernel source tree.
 
 # device drivers
 

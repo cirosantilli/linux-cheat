@@ -192,16 +192,18 @@ gcc uses it implicitly
 
 ## define command line
 
-    gcc -DLINELENGTH=80 -DDEBUG c.c -o c
+defines can be made from command line arguments:
 
-same as adding
+    gcc -DDEBUG -DLINELENGTH=80 -o c c.c
 
-    define LINELENGTH 80
-    define DEBUG
+which is the same as adding
+
+    #define DEBUG
+    #define LINELENGTH 80
 
 to top of file
 
-## include search path
+## find include search path
 
     echo '' | cpp -v
 
@@ -210,13 +212,19 @@ look for sections:
 - `include "..." search starts here`:
 - `include <...> search starts here`:
 
-## output preprocessed file
+## view preprocessed file
 
-learing purposes only:
+this is mostly useful for learing purposes only
 
-    gcc -E c.c -o c
+using `cpp` directly:
 
-does whatever the preprocessor must do and output it to a file
+	cpp c.c
+
+this outputs the preprocessed file to stdout
+
+using gcc as a frontend:
+
+    gcc -E c.c
 
 # cross compile
 

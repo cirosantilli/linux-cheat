@@ -60,7 +60,9 @@ has been reverse ingeneered
 
 - chm2pdf: <http://www.ubuntugeek.com/how-to-convert-chm-files-into-pdf-files-in-ubuntu.html>
 
-    index links were broken and did not show index pages
+    `chm2pdf --website a.chm`: index links were broken and did not show index pages
+
+    `chm2pdf --book a.chm`: command did not work
 
 ## chm readers
 

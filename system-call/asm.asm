@@ -48,7 +48,7 @@ _start:
         ;#write
 
             mov eax, 4         ;sys_write
-            mov ebx, 1         ;file descriptor 1
+            mov ebx, 1         ;file descriptor 1 = stdout
             mov ecx, bs5       ;pointer to string
             mov edx, bs5l      ;string len
             int 80h
@@ -59,9 +59,9 @@ _start:
             mov edx, bs5l
             int 80h
 
-        ;file
+        ;#file
 
-            ;write
+            ;#write
 
                 ;open
 

@@ -1278,6 +1278,7 @@
         #appends newline
 
         #-n: no final newline:
+
             echo -n a
 
         #prints all given arguments, space separated:

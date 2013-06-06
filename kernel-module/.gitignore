@@ -1,6 +1,6 @@
 /*.cmd
 /*.mod.c
-/*.mod.o
+/*.o
 /*.ko
 /.tmp_versions
 /Module.symvers
