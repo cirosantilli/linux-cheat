@@ -3,6 +3,8 @@
 #include <linux/spinlock.h>
 #include <linux/interrupt.h>    /*request_irq, IRQF_SHARED*/
 
+#define MODNAME __FILE__ ": "
+
 //#static
 
 	//remember: the kernel is a huge program, and kernel modules are inserted into it,
@@ -45,7 +47,7 @@ int init_module(void)
 		printk takes printf format strings with containing things like `%d`
 	*/
 
-		printk(KERN_INFO "cheat init_module\n");
+		printk(KERN_INFO MODNAME "init_module\n");
 
 		printk(KERN_INFO "i_global = %d\n", i_global);
 
@@ -62,19 +64,19 @@ int init_module(void)
 	 	a typical use case is to test for errors conditions (which should, in theory, be rare...)
 	*/
 		if (likely(0)) {
-			printk(KERN_INFO "cheat ERROR\n");
+			printk(KERN_INFO MODNAME "ERROR\n");
 		}
 
 		if (likely(1)) {
-			printk(KERN_INFO "cheat unlikely(1)\n");
+			printk(KERN_INFO MODNAME "unlikely(1)\n");
 		}
 
 		if (unlikely(0)) {
-			printk(KERN_INFO "cheat ERROR\n");
+			printk(KERN_INFO MODNAME "ERROR\n");
 		}
 
 		if (unlikely(1)) {
-			printk(KERN_INFO "cheat unlikely(1)\n");
+			printk(KERN_INFO MODNAME "unlikely(1)\n");
 		}
 
 	/*
@@ -172,5 +174,5 @@ int init_module(void)
  * */
 void cleanup_module(void)
 {
-	printk(KERN_INFO "cheat cleanup_module\n");
+	printk(KERN_INFO MODNAME "cleanup_module\n");
 }

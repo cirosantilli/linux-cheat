@@ -43,6 +43,9 @@ a linux distribution, must also contain many more user level basic services such
 interpreter, the X server, etc. The extra user space services are specified by the lsb, and are not a part
 of the linux kernel.
 
+You cannot use user space libs such as libc to program the kernel,
+since the kernel itself itself if need to be working for user space to work. TODO confirm
+
 # user programs
 
 User programs such as a simple hello world run inside an abstraction called *process* defined by the kernel.
