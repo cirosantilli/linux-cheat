@@ -60,9 +60,12 @@ sample output:
 
 1. name
 2. size
-3. numer of running instances
-4. depends on
-5. depends on
+3. numer of running instances.
+
+	If negative, TODO
+
+4. depends on 1
+5. depends on 2
 
 to get more info:
 
@@ -75,21 +78,22 @@ also contains two more columns:
 
 ## modinfo
 
-    modinfo a.ko
-    modinfo a
+get info about a module by filename or by module name:
 
-get info about a module
+    modinfo ./a.ko
+    modinfo a
 
 ## insmod
 
 loads the module
+
 does not check for dependencies
 
     sudo insmod
 
 ## modprobe
 
-list available modules relative path to /lib/modules/VERSION/:
+list available modules relative path to `/lib/modules/VERSION/`:
 
     sudo modprobe -l
 
@@ -125,33 +129,70 @@ those come directly from the kernel source tree.
 
 # device drivers
 
+devices map to filesystem under `/dev/`. You can get info on them with:
+
     ls -l /dev
 
-there are two types of devices: block and char
+there are three main types of devices:
+
+- block and char
 
     crw-rw----  1 root tty       7,   1 Feb 25 09:29 vcs1
-    ^
-    c: char
-
     brw-rw----  1 root disk      8,   0 Feb 25 09:30 sda
     ^
-    b: block
+    type
 
-this is my hd.
+- b: block
+- c: char
+
+the `b` here is my hd.
+
 each partition also gets a b file
 
 ## major minor numbers
 
-    crw-rw----  1 root tty       7,   1 Feb 25 09:29 vcs1
-        ^    ^
-        1    2
+using `ls -l`:
 
-- 1: major number. tells kernel which driver controls this file
-- 2: minor number. id of each hardware controlled by a
-    given driveer
+    crw-rw----  1 root tty       7,   1 Feb 25 09:29 vcs1
+                                 ^    ^
+                                 1    2
+
+- 1: major number. tells kernel which driver controls the device represented by this file
+- 2: minor number. id of each hardware controlled by a given driver
+
+## mouse
+
+you can have some fun with mouses. Search for the mice or mouse device files and cat them:
+
+	sudo cat /dev/input/mice
+
+and then:
+
+	sudo cat /dev/input/mouse0
+
+now note that when you move the mouse, cat spits something out to the screen!
+
+`mice` is the combination of all mice, and each other `mouseX` is a single mouse device.
 
 ## mknod
 
     sudo mknod /dev/coffee c 12 2
 
 makes a char file, major number 12, minor number 2
+
+# hardware communication
+
+talking to hardware always comes down to writting bytes in specific registers
+at a given memory addres
+
+some processors implement a single address space for memory and other hardware devices,
+and others do not.
+
+however, since x86 is the most popular and it separates addres spaces,
+every architecture must at least mimic this separation.
+
+the memory space for non-memory locations is called I/O ports or I/O space.
+
+to use a port, you must first reserve it. To see who reserved what:
+
+	sudo cat /proc/ioports

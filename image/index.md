@@ -238,6 +238,10 @@ bottom 50 percent:
 
 ### color
 
+- `-colorspace Gray`: convert to grayscale
+
+    convert in.png -colorspace Gray out.png
+
 - `-monochrome`: monochrome image. == -depth 1? but not in practice =)
 
 - `-depth`: number of bits per pixel.

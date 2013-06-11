@@ -44,7 +44,7 @@ interpreter, the X server, etc. The extra user space services are specified by t
 of the linux kernel.
 
 You cannot use user space libs such as libc to program the kernel,
-since the kernel itself itself if need to be working for user space to work. TODO confirm
+since the kernel itself itself if need to be working for user space to work.
 
 # user programs
 
@@ -59,6 +59,15 @@ A simple example is the c `printf` function, which must at some point ask the ke
 probably via the `write` system call.
 
 Another simple example is file io.
+
+## floating point
+
+you cannto use floating point operations on kernel code because that would incur too much overhead
+of saving floating point registers on some architectures, so don't do it.
+
+## memory
+
+memory is much more restrictive than in user applictions, so be extra cautious to use little memory
 
 # rings
 
@@ -75,11 +84,68 @@ linux uses 2:
 
 this is used to separate who can do what
 
-# install a new kernel
+# test a new kernel
 
-TODO
+## compile and install
 
-also considering installing a module instead of hacking the kernel if a module would do
+this is a very slow test mechanism since you need to reboot everytime.
+
+<www.cyberciti.biz/tips/compiling-linux-kernel-26.html>
+
+get the source:
+
+	git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+
+clean everything:
+
+	make mrproper
+
+generate the `.config` file:
+
+	make menuconfig
+
+this opens up a ncurses interface which allows you to choose amongst tons of options
+which determine which features your kernel will include or not.
+
+then go on to `save` to save to the `.config` file and then exit
+
+build:
+
+	make -j5
+
+`-j` tells make to spawn several process, which is useful if you have a multicore processor.
+it is recommend to use
+
+	n = number of processors + 1
+
+this may take more than one hour.
+
+install:
+
+	sudo make modules_install -j5
+	sudo make install -j5
+
+this will place:
+
+- the compiled kernel under `/boot/vmlinuz-<version>`
+- config file `.config` as `/boot/config-<version>`
+- `System.map` under `/boot/System.map-<version>`.
+
+	This contains symbolic debug information.
+
+- `/lib/modules/<version>/` for the modules
+
+configure grub: TODO
+
+## kernel module
+
+can be inserted and removed while the kernel runs.
+
+However, if you make an error at startup (dereference null pointer for example),
+the kernel module may become impossible to reinsert without a reboot.
+<http://unix.stackexchange.com/questions/78858/cannot-remove-or-reinsert-kernel-module-after-error-while-inserting-it-without-r/>
+
+## kernel virtual machine
 
 # get kernel version
 

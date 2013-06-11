@@ -225,3 +225,11 @@ loses text layer
 get number of pages of djvu:
 
     djvm -l speak\ chinese\ 2.djvu | sed -nre '$ s/.+#([0-9]+).+/\1/p'
+
+# pdfcrop
+
+remove empty margins of pdf files
+
+greatly increases filesize (10x)
+
+	pdfcrop a.pdf

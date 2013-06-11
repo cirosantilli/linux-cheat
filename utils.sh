@@ -49,18 +49,6 @@
 
         #teaches how to build a minimal linux distro
 
-##licences
-
-    ##gpl
-
-        #you can use, study, share (copy), and modify the software
-        #you *cannot* use it in non gpl projects (copyleft)
-
-    ##mit liscence
-
-        #like gpl
-        #except you *can* use in commercial projects
-
 ##man
 
     #the manuals
