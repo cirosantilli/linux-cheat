@@ -84,13 +84,15 @@ linux uses 2:
 
 this is used to separate who can do what
 
+# version number
+
+- rc = Release Candidate
+
 # test a new kernel
 
-## compile and install
+## compile
 
 this is a very slow test mechanism since you need to reboot everytime.
-
-<www.cyberciti.biz/tips/compiling-linux-kernel-26.html>
 
 get the source:
 
@@ -114,13 +116,15 @@ build:
 	make -j5
 
 `-j` tells make to spawn several process, which is useful if you have a multicore processor.
-it is recommend to use
+it is recommend to use:
 
 	n = number of processors + 1
 
 this may take more than one hour.
 
-install:
+## install
+
+tested on Ubuntu `13.04` with kernel dev version `3.10.0-rc5+`
 
 	sudo make modules_install -j5
 	sudo make install -j5
@@ -135,7 +139,12 @@ this will place:
 
 - `/lib/modules/<version>/` for the modules
 
-configure grub: TODO
+now reboot, from the GRUB menu choose "Advanced Ubuntu options",
+and then choose the newly installed kernel.
+
+TODO how to go back to the old kernel image by default at startup?
+	going again into advance options and clicking on it works,
+	but the default is still the newer version which was installed.
 
 ## kernel module
 

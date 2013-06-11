@@ -322,6 +322,27 @@
                 sudo aptutide install -y mercurial
                 sudo aptitude install -y subversion
 
+        ##language
+
+        	#interpreters and related libs
+
+				sudo aptitude install -y perl-doc
+
+        	##java
+
+					sudo aptitude install openjdk-7-jre
+
+				#firefox plugin:
+
+					sudo aptitude install icedtea-7-plugin
+
+			##flash
+
+					sudo apt-add-repository -y "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
+					sudo aptitude update
+					sudo aptitude install -y flashplugin-installer
+
+
 ##launchpad ppas
 
     #you must first add ppas with `apt-add-repository`

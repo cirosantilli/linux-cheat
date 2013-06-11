@@ -102,7 +102,7 @@ use warnings;
 
     push @array, 4; #put at ent
     print @array;
-    
+
     pop @array; #remove
     print @array;
 
@@ -136,7 +136,7 @@ use warnings;
     ##if
 
         ##single line
-            
+
             #same as ``&&``
 
             #same as ``and``
@@ -165,7 +165,7 @@ use warnings;
                     #a
                 0 && print 'a'; print 'b';
                     #b
-  
+
         ##multiline
 
             if (1)
@@ -182,7 +182,7 @@ use warnings;
             }
 
     ##unless
-    
+
         #``unless``, ``&&`` and ``and`` are exact same as
         #``if``, ``||`` and ``or`` but negated.
 
@@ -254,7 +254,7 @@ use warnings;
 
             $count = 0;
             print $count, " " while ++$count <= 10;
-            print "\n"; 
+            print "\n";
 
 ##regex
 
@@ -287,7 +287,7 @@ use warnings;
     #\A - Matches only at the beginning of a string
     #\Z - Matches only at the end of a string or before a newline
     #\z - Matches only at the end of a string
-    #\G - Matches where previous m//g left off 
+    #\G - Matches where previous m//g left off
 
     #capture group
 
@@ -311,7 +311,7 @@ use warnings;
         #gets modified by functions:
 
     ##$.
-    
+
         #line numeber of last handle read
 
     ##input record reparator
@@ -339,7 +339,7 @@ use warnings;
             #1, 2, 3
 
     ##$#
-    
+
         #output format for numbers in print
 
     ##$$
@@ -353,7 +353,7 @@ use warnings;
         #name of file of script being executed
 
             print $0;
-    
+
     ##regex
 
         #$1..$9 #nth capturing group of last regex match
@@ -498,7 +498,7 @@ use warnings;
         my $a = `echo -n a b`;
 
     ##$?
-    
+
         #status of last process close
 
             `false`;
