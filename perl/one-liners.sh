@@ -1,21 +1,12 @@
 #!/usr/bin/env bash
 
-#cheat on perl for command line one liners
+##sources
 
-#perl is installed by default for posix compliance
-
-#the following contains lots of man pages and html docs:
-
-	man perldoc
-	man perlcheat
+	#famous perl one liners: <http://www.catonmat.net/blog/perl-one-liners-explained-part-six/>
 
 #wait a ctrl-d and then execute everything:
 
 	perl
-
-##sources
-
-	#famous perl one liners: <http://www.catonmat.net/blog/perl-one-liners-explained-part-six/>
 
 ##command line options
 

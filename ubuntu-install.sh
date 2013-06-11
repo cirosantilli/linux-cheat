@@ -342,6 +342,14 @@
 					sudo aptitude update
 					sudo aptitude install -y flashplugin-installer
 
+		##x11
+
+			sudo aptitude install -y xbacklight
+			sudo aptitude install -y xsel
+			sudo aptitude install -y libgtk-3-dev libgtk-3-doc gtk2.0-examples
+			sudo aptitude install -y xdotool
+			#sudo apt-add-repository ppa:cdekter/ppa
+			#sudo aptitude install -y autokey-gtk
 
 ##launchpad ppas
 

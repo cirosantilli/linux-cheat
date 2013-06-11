@@ -5,7 +5,7 @@ override IN_DIR 	?= ./
 override IN_EXTS 	?= .c
 override OUT_DIR 	?= _out/
 override OUT_EXT 	?=
-override RUN		?= main
+override RUN		?= hello_world
 
 INS		:= $(foreach IN_EXT, $(IN_EXTS), $(wildcard $(IN_DIR)*$(IN_EXT)) )
 INS_NODIR 	:= $(notdir $(INS))
@@ -19,7 +19,7 @@ all: mkdir $(OUTS)
 
 # rule to make the c files
 $(OUT_DIR)%$(OUT_EXT): %.c
-	gcc -Wall -std=c99 -pedantic-errors -D_XOPEN_SOURCE=700 -o "$@" "$<"
+	gcc -Wall -std=c99 -pedantic-errors -o "$@" "$<" -lX11
 
 clean:
 	rm -rf $(OUT_DIR)

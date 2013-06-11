@@ -1,11 +1,5 @@
 #!/usr/bin/env perl
 
-#perl cheat
-
-#use use perl on a golfing one liner focus
-
-#python for more involved applications
-
 use strict;
 use warnings;
 
