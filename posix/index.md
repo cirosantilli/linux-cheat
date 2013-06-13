@@ -79,11 +79,24 @@ very small, contains:
 
 ## envinronment variables
 
-- PATH
-- HOME
-- COLUMNS
-- EDITOR
-- PAGER
+posix defines some standard enviroment variables which every system should have
+
+in posix 7, those are defined in: Base Definitions > Enviroment Variables
+
+sample variables
+
+- `PATH`
+- `HOME`
+- `PWD`
+- `TMPDIR`
+- `COLUMNS` and `LINES`: current width of terminal
+
+default program variables:
+
+- `SHELL`: this is *not* the current shell! it conatains the path of the defualt shell
+- `TERM`: analogous to shell
+- `EDITOR`
+- `PAGER`
 
 ## regexp
 
@@ -98,8 +111,6 @@ basic is deprecated, so don't use it
 
 it is useful to learn since many posix compliant shell utilities may use
 them but not perl regexes, for example `grep` or `sed`.
-
- ERE
 
 ### examples
 

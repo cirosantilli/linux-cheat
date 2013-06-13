@@ -34,17 +34,28 @@ therefore it reaches general goals such as:
 - creating useful and simple abstractions which programs can rely on
 	(contiguous RAM memory, files, processes, user permissions, etc)
 
-the linux kernel is written on mainly on c c99 standard,
+The linux kernel is written on mainly on c c99 standard,
 with **gasp** gcc extensions. Therefore the linux kernel is married to gcc.
 Just guessing here, but an important reason for that is to use inline assembly TODO check
 
-also note that besides the linux kernel, what most people call a linux system, or more precisely
+Also note that besides the linux kernel, what most people call a linux system, or more precisely
 a linux distribution, must also contain many more user level basic services such as the python
 interpreter, the X server, etc. The extra user space services are specified by the lsb, and are not a part
 of the linux kernel.
 
 You cannot use user space libs such as libc to program the kernel,
 since the kernel itself itself if need to be working for user space to work.
+
+# communication with user space
+
+the kernel communicates parameters to user space using special files,
+located mainly under `/proc/` and `/sys/`
+
+you can see the contents of those files with a command line utility such as cat.
+
+for example:
+
+- `cat /proc/interrupts`: status of interrupt handlers
 
 # user programs
 
@@ -146,6 +157,8 @@ TODO how to go back to the old kernel image by default at startup?
 	going again into advance options and clicking on it works,
 	but the default is still the newer version which was installed.
 
+TODO how to install the /usr/src/linux-headers- headers?
+
 ## kernel module
 
 can be inserted and removed while the kernel runs.
@@ -205,3 +218,14 @@ view/config kernel parameters at runtime
 - `include`: headers which may be useful for using kernel parameters and functions on user programs or kernel modules TODO confirm
 
 	for kernel modules, those are automatically appended to the `cpp` include search path by the default makefile
+
+# usr/include/linux vs usr/src/linux-headers
+
+http://stackoverflow.com/questions/9094237/whats-the-difference-between-usr-include-linux-and-the-include-folder-in-linux
+
+- `/usr/include/linux` is owned by libc on linux, and used to call kernel services from userspace.
+	TODO understand with a sample usage
+
+- `/usr/src/linux-headers-$(uname -r)/include/linux/` is a selection of some headers of the kernel,
+	and can be used to offer access to the kernel's inner workings. It is useful for example for people
+	writting kernel modules, and is automatically included by the standard module `Makefile`.

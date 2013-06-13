@@ -149,7 +149,7 @@ the `b` here is my hd.
 
 each partition also gets a b file
 
-## major minor numbers
+## major and minor numbers
 
 using `ls -l`:
 
@@ -157,8 +157,42 @@ using `ls -l`:
                                  ^    ^
                                  1    2
 
-- 1: major number. tells kernel which driver controls the device represented by this file
-- 2: minor number. id of each hardware controlled by a given driver
+- 1: major number.
+
+	traditionally tells kernel which driver controls the device represented by this file
+
+	currentlly many drivers can share a single major number.
+
+- 2: minor number.
+
+	id of each hardware controlled by a given driver.
+
+Get a list of all major numbers attributed and the name of the related device:
+
+	cat /proc/devices
+
+Both are stored inside a `dev_t` type (a single int, with some bytes for each number).
+You can manipulate dev_t with the macros:
+
+- `MAJOR(dev_t dev)`: get major number of a `dev_t`
+- `MINOR(dev_t dev)`: get major number of a `dev_t`
+- `MKDEV(int major, int minor)`: make `dev_t` from major and minor
+
+---
+
+To register the char use:
+
+	int alloc_chrdev_region(dev_t *dev, unsigned int firstminor, unsigned int count, char *name);
+
+where:
+
+- `dev` is an output containing the device number dynamically allocated to your driver
+- `firstminor` is the first minor number associated with the char driver
+- `count` is the number of minor number which should be allocated.
+- `name` is what will appear under `/proc/devices` and on the sysfs under TODO
+
+You could fix the major device number yourself, but this is more and more deprecated.
+This was done with the `register_chrdev_region` function.
 
 ## mouse
 
@@ -180,6 +214,14 @@ now note that when you move the mouse, cat spits something out to the screen!
 
 makes a char file, major number 12, minor number 2
 
+## system calls that use the char file
+
+since the char file is not a real file but a representation of some hardware,
+you have furnish methods used by system calls that deal with files
+so those system calls can know what to do with that special file.
+
+all of those operations are defined under `fs.h`
+
 # hardware communication
 
 talking to hardware always comes down to writting bytes in specific registers
@@ -191,8 +233,30 @@ and others do not.
 however, since x86 is the most popular and it separates addres spaces,
 every architecture must at least mimic this separation.
 
+on x86, the following specialized instructions exist for port io:
+
+- IN    Read from a port
+- OUT   Write to a port
+- INS/INSB  Input string from port/Input byte string from port
+- INS/INSW  Input string from port/Input word string from port
+- INS/INSD  Input string from port/Input doubleword string from port
+- OUTS/OUTSB    Output string to port/Output byte string to port
+- OUTS/OUTSW    Output string to port/Output word string to port
+- OUTS/OUTSD    Output string to port/Output doubleword string to port
+
+however, you should avoid using those instructions directly in your device driver
+code since linux functions abstract over multiple architectures (when possible)
+making your code more portable.
+
+those instructions cannot be used from an user space program since the kernel
+prevents those from accessing hardware directly.
+
 the memory space for non-memory locations is called I/O ports or I/O space.
 
 to use a port, you must first reserve it. To see who reserved what:
 
 	sudo cat /proc/ioports
+
+# kobjects
+
+

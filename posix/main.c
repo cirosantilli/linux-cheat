@@ -349,7 +349,7 @@ int main(int argc, char** argv)
                 //memory was cloned, parent i unchanged
         }
 
-        /*puts("vfork");*/
+        /*#vfork*/
         /*{*/
             /*TODO*/
             /*implicit? with unistd.h?*/
@@ -399,10 +399,10 @@ int main(int argc, char** argv)
                     //don't forget that in a c program the first arg is the program name
         }
 
-        //waitpid()
+        //#waitpid()
             //wait for child with given PID to terminate
 
-        //IPC
+        //#IPC
         {
             //#pipes
             {
@@ -416,7 +416,7 @@ int main(int argc, char** argv)
 
                     //data very limited per buf! BUFSIZ ~= 1000-10000 today
 
-                    //i think it is not possible to know if a ilfe pointer
+                    //i think it is not possible to know if a life pointer
                     //is open for reading or writtin besides looking at how
                     //it was created
 
@@ -649,6 +649,14 @@ int main(int argc, char** argv)
             }
         }
     }
+
+    /*
+    #open
+
+        open file descriptors such as files
+
+        can do operations more specific than ansi c `fopen` such as non-blocking reads
+    */
 
     puts("\nALL ASSERTS PASSED\n");
     return EXIT_SUCCESS;

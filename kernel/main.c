@@ -5,7 +5,7 @@
 
 #include <linux/interrupt.h>    /* request_irq, IRQF_SHARED */
 #include <linux/kernel.h>	/* KERN_INFO */
-#include <linux/module.h>	/* needed by all modules */
+#include <linux/module.h>	/* module specific utilities: MODULE_* macros, module_param, module_init, module exit */
 #include <linux/sched.h>	/* current */
 #include <linux/spinlock.h>
 #include <linux/version.h>
@@ -175,7 +175,21 @@ static int __init init(void)
 	*/
 
 		/* printk( "UTS_RELEASE = %s", UTS_RELEASE ); */	/* TODO get working */
-		 printk(INFO_ID "LINUX_VERSION_CODE = %d", LINUX_VERSION_CODE );
+		 printk(INFO_ID "LINUX_VERSION_CODE = %d\n", LINUX_VERSION_CODE );
+
+	/*
+	#THIS_MODULE
+
+		pointer to the module struct of current module
+
+		the module struct and THIS_MODULE are both defined inside `module.h`
+
+		this struct determines all the information about a module
+	*/
+
+		//version is was set with the MODULE_VERSION macro:
+
+			printk(INFO_ID "THIS_MODULE->version = %s\n", THIS_MODULE->version );
 
 	i_global = 0;
 
@@ -242,6 +256,7 @@ static int __init init(void)
 		printk(INFO_ID "current->comm = %s\n", current->comm);
 		printk(INFO_ID "current->pid  = %i\n", current->pid);
 
+
 	/*
 	#device driver
 
@@ -255,6 +270,16 @@ static int __init init(void)
 
 	- network device: TODO
 	*/
+
+	/*
+	#character device
+
+		they are represented by the struct cdev found in TODO
+
+		dev_t dev;
+		int alloc_chrdev_region(&dev, 0, 1, "char_cheat");
+	*/
+
 
 	/*
 	#interrupt handler

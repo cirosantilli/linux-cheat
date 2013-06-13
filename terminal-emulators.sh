@@ -34,7 +34,7 @@
     ##enter fg
 
 #- c-s:   send stop   signal to foreground process. c-q to resume. TODO confirm
-#- c-q:        resume                                    
+#- c-q:        resume
 
     #seqs 5
     ##enter c-s
