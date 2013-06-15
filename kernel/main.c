@@ -9,6 +9,7 @@
 #include <linux/sched.h>	/* current */
 #include <linux/spinlock.h>
 #include <linux/version.h>
+#include <linux/slab.h>
 
 #define MODID __FILE__ ": "
 #define INFO_ID KERN_INFO MODID
@@ -215,6 +216,7 @@ static int __init init(void)
 
 	 	a typical use case is to test for errors conditions (which should, in theory, be rare...)
 	*/
+
 		if (likely(0)) {
 			printk(INFO_ID "ERROR\n");
 		}
@@ -230,6 +232,21 @@ static int __init init(void)
 		if (unlikely(1)) {
 			printk(INFO_ID "unlikely(1)\n");
 		}
+
+	/*
+	#kmalloc
+
+		like libc malloc, but for the kernel
+
+		#flags
+	*/
+
+		int *kmalloc_is = kmalloc(2 * sizeof(int), GFP_KERNEL);
+		kmalloc_is[0] = 0;
+		kmalloc_is[1] = 1;
+		printk(INFO_ID "kmalloc_is[0] = %d\n", kmalloc_is[0]);
+		printk(INFO_ID "kmalloc_is[1] = %d\n", kmalloc_is[1]);
+		kfree(kmalloc_is);
 
 	/*
 	#process
@@ -255,7 +272,6 @@ static int __init init(void)
 
 		printk(INFO_ID "current->comm = %s\n", current->comm);
 		printk(INFO_ID "current->pid  = %i\n", current->pid);
-
 
 	/*
 	#device driver

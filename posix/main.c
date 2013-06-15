@@ -588,7 +588,7 @@ int main(int argc, char** argv)
                             }
                         }
 
-                        //fork
+                        //#fork
                         {
                             //parent writes to child
 

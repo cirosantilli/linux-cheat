@@ -30,37 +30,47 @@ int nested()
 int main( int argc, char** argv )
 {
 
-	//# nested function
+	/*
+	#binary int literals
 
-        int nested()
-        {
-            return 1;
-        }
+		start with `0b`:
+	*/
 
-        {
+			assert( 16 == 0b10000 );
 
-            // is a function defined inside another function (the outter function here is `main`)
+	/*
+	#nested function
 
-            // this is not a redefinition because it is inside a parenthesis block
-            // much like a variable definition inside a parenthesis block
+		 is a function defined inside another function (the outter function here is `main`)
 
-            int nested()
-            {
-                return 2;
-            }
+		 this is not a redefinition because it is inside a parenthesis block
+		 much like a variable definition inside a parenthesis block
+	*/
 
-            //this would cause a redefinition error:
+		int nested()
+		{
+			return 1;
+		}
 
-                //int nested()
-                //{
-                //	return 2;
-                //}
+		{
 
-            // like variable redefinitions, the nested version overrides all external version
-            // which have become completelly innacessible
+			int nested()
+			{
+				return 2;
+			}
 
-            assert( nested() == 2 );
-        }
+			//this would cause a redefinition error:
+
+				//int nested()
+				//{
+				//	return 2;
+				//}
+
+			// like variable redefinitions, the nested version overrides all external version
+			// which have become completelly innacessible
+
+			assert( nested() == 2 );
+		}
 
 	/*
 	# preprocessor defines

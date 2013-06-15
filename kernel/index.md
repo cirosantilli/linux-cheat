@@ -219,13 +219,104 @@ view/config kernel parameters at runtime
 
 	for kernel modules, those are automatically appended to the `cpp` include search path by the default makefile
 
-# usr/include/linux vs usr/src/linux-headers
+- `include/linux`: TODO
+
+- `include/linux`: TODO
+
+	important headers there include:
+
+	- `fs.h`: filesystem structs
+
+## usr/include/linux vs usr/src/linux-headers
 
 http://stackoverflow.com/questions/9094237/whats-the-difference-between-usr-include-linux-and-the-include-folder-in-linux
 
 - `/usr/include/linux` is owned by libc on linux, and used to call kernel services from userspace.
 	TODO understand with a sample usage
 
-- `/usr/src/linux-headers-$(uname -r)/include/linux/` is a selection of some headers of the kernel,
-	and can be used to offer access to the kernel's inner workings. It is useful for example for people
-	writting kernel modules, and is automatically included by the standard module `Makefile`.
+- `/usr/src/linux-headers-$(uname -r)/include/linux/` is exactly part of the kernel tree under `include`
+	for a given kernel version.
+
+	can be used to offer access to the kernel's inner workings
+
+	it is useful for example for people writting kernel modules,
+	and is automatically included by the standard module `Makefile`.
+
+# filesystem
+
+linux abstracts over several hardwares and filesystem types to create a simple interface for programs
+
+that abstraction is called the virtual filesystem (VFS)
+
+## structures
+
+some major structures represent files
+
+- inode struct:
+
+	represents a file in the usual sense: a chunk of data on disk with medatada such as
+
+	- filesize
+	- timestamps. 
+
+	located in `fs.h`:
+
+- file struct:
+
+	represents a file open for reading.
+
+	serveral file structs can refer to a single inode
+
+	it contains information such as:
+
+	- current position in the file
+	- mode (read only, read-write)
+
+	located in `fs.h`:
+
+- dentry struct:
+
+	represents a path component
+
+	ex: the path `/usr/bin/env` will have the following path components:
+
+	- /
+	- usr
+	- bin
+	- env
+
+	and each one has an associated `dentry` object
+
+	located in `dcache.h`
+
+	it facilitates directory operations, and contains fields such as:
+
+	- pointer parent dentry
+
+# process
+
+the kernel manages user processes and kernel processes, scheduling them with some algorithm
+so that users see all process make some progress more or less at the same time.
+
+in the kernel, the following contexts exist:
+
+- regular process context.
+- interrupt handler context. Restrictive, cannot sleep.
+
+# memory
+
+the following kinds of memory exist for the kernel:
+
+- normal
+
+- high memory
+
+	Harder to work with, but useful if you need lots of memory.
+
+	TODO understand better.
+
+- DMA
+
+	Used for hardware access communication
+
+	TODO understand better

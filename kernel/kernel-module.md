@@ -256,7 +256,3 @@ the memory space for non-memory locations is called I/O ports or I/O space.
 to use a port, you must first reserve it. To see who reserved what:
 
 	sudo cat /proc/ioports
-
-# kobjects
-
-
