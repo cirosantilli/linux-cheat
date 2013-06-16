@@ -1,5 +1,5 @@
 if expand('%:e') =~ '\(c\|cpp\|f\)'
-    set noexpandtab
-    set tabstop=8
-    set shiftwidth=8
+    setl noexpandtab
+    setl tabstop=8
+    setl shiftwidth=8
 endif

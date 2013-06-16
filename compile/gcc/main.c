@@ -24,62 +24,62 @@ because of the large influence of gcc.
 
 int nested()
 {
-	return 0;
+    return 0;
 }
 
 int main( int argc, char** argv )
 {
 
-	/*
-	#binary int literals
+    /*
+    #binary int literals
 
-		start with `0b`:
-	*/
+        start with `0b`:
+    */
 
-			assert( 16 == 0b10000 );
+            assert( 16 == 0b10000 );
 
-	/*
-	#nested function
+    /*
+    #nested function
 
-		 is a function defined inside another function (the outter function here is `main`)
+         is a function defined inside another function (the outter function here is `main`)
 
-		 this is not a redefinition because it is inside a parenthesis block
-		 much like a variable definition inside a parenthesis block
-	*/
+         this is not a redefinition because it is inside a parenthesis block
+         much like a variable definition inside a parenthesis block
+    */
 
-		int nested()
-		{
-			return 1;
-		}
+        int nested()
+        {
+            return 1;
+        }
 
-		{
+        {
 
-			int nested()
-			{
-				return 2;
-			}
+            int nested()
+            {
+                return 2;
+            }
 
-			//this would cause a redefinition error:
+            //this would cause a redefinition error:
 
-				//int nested()
-				//{
-				//	return 2;
-				//}
+                //int nested()
+                //{
+                //    return 2;
+                //}
 
-			// like variable redefinitions, the nested version overrides all external version
-			// which have become completelly innacessible
+            // like variable redefinitions, the nested version overrides all external version
+            // which have become completelly innacessible
 
-			assert( nested() == 2 );
-		}
+            assert( nested() == 2 );
+        }
 
-	/*
-	# preprocessor defines
+    /*
+    # preprocessor defines
 
-	    only gnu extensions are considered here
+        only gnu extensions are considered here
 
-	    full list: <http://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html#Common-Predefined-Macros>
+        full list: <http://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html#Common-Predefined-Macros>
 
-	    view all macros that would be automatically defined:
+        view all macros that would be automatically defined:
 
             cpp -dM /dev/null
 
@@ -171,7 +171,7 @@ int main( int argc, char** argv )
     */
 
         /*
-            examples in i386
+            examples of inline assembly in i386
 
             this is the main place for contains more comments and explanations
             if other archs are also exemplified

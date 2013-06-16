@@ -40,35 +40,28 @@
     //only stuff that becomes available with posix defines is commented here
 
 #include <assert.h>
+#include <math.h>         //M_PI, M_PI_2, M_PI_4:
 #include <stdbool.h>
-
-    //M_PI, M_PI_2, M_PI_4:
-
-#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-//#posix headers
+//#posix only headers
 
 #include <libgen.h>
-
-    //without this, one gets the glib.c version:
-
-#include <pthread.h>
+#include <pthread.h>     //without this, one gets the glib.c version:
 #include <regex.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
-
-    //lots of posix realted typedef types:
-
-#include <sys/types.h>
-
-    //sleep:
-
-#include <sys/wait.h>
-
+#include <sys/types.h>  //lots of posix realted typedef types
+#include <sys/wait.h>     //sleep
 #include <unistd.h>
+
+//#usr/include/linux headers
+
+    //ok this is not the place for them, but I'll put the here anyways for the time being
+
+#include <linux/limits.h>     //PATH_MAX max path length on system
 
 extern char **environ;
 
@@ -88,20 +81,25 @@ int main(int argc, char** argv)
         fprintf( stderr, "%f\n", M_PI_4 );
     }
 
-    //#sleep
+    /*
+    #sleep
+
+        non busy sleep, that is, stop program execution for a given time,
+        and let other programs run in the meantime.
+
+        there is no portable standard way of doing this AFAIK
+    */
     {
-        //there is no portable standard way of doing this AFAIK
         for(int i=0; i<3; i++)
         {
             printf("%d",i);
             //sleep(1);
-                //sleep for 1 sec
         }
     }
 
-    //pathname operations
+    //#pathname operations
     {
-        //realpath
+        //#realpath
         //{
         //    //resolves symlinks recursivelly
         //    char rp[PATH_MAX+1];
@@ -145,7 +143,7 @@ int main(int argc, char** argv)
         }
     }
 
-    //directory operations
+    //#directory operations
     {
         //no standard portable way!
             //<http://www.devarticles.com/c/a/Cplusplus/Directories-in-Cplusplus/>
@@ -658,6 +656,5 @@ int main(int argc, char** argv)
         can do operations more specific than ansi c `fopen` such as non-blocking reads
     */
 
-    puts("\nALL ASSERTS PASSED\n");
     return EXIT_SUCCESS;
 }
