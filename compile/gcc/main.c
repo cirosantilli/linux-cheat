@@ -83,7 +83,7 @@ int main( int argc, char** argv )
 
             cpp -dM /dev/null
 
-        TODO there are some missing! where is `__i386__` for example?
+        TODO there are some missing! where is `__i386__` documented for example?
     */
 
     /*

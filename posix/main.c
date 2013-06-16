@@ -1,35 +1,37 @@
-//cheat on posix c headers
+/*
+main cheat on posix c headers
 
-//#defines
+#defines
 
-    //these are headers specified by posix
+    these are headers specified by posix
 
-    //on current ubuntu system this is implemented by the gnu c library:
-    //<http://www.gnu.org/software/libc/> says that POSIX compliance
-    //is a design goal of the gnu c library
+    on current ubuntu system this is implemented by the gnu c library:
+    <http://www.gnu.org/software/libc/> says that POSIX compliance
+    is a design goal of the gnu c library
 
-    //list of all headers: http://en.wikipedia.org/wiki/C_POSIX_library
+    list of all headers: http://en.wikipedia.org/wiki/C_POSIX_library
 
-    //posix defines certain things **INSIDE**
-    //headers with the same name as the ansi stdlib ones
-    //which are only activated if you add the defines **before
-    //including those files**!!
+    posix defines certain things **INSIDE**
+    headers with the same name as the ansi stdlib ones
+    which are only activated if you add the defines **before
+    including those files**!!
 
-    //gcc: if you want to access them with the `-ansi -c99` flags,
-    //you need to define `XXX_XOPEN_SOURCE`
+    gcc: if you want to access them with the `-ansi -c99` flags,
+    you need to define `XXX_XOPEN_SOURCE`
 
-    //TODO is there a windows implementation for those headers?
+    TODO is there a windows implementation for those headers?
 
-    //there are other headers which may expose posix functions such as `_POSIX_C_SOURCE` and `POSIX_SOURCE`
-    //for `gcc`, see `man feature_test_macros` for an explanaition.
+    there are other headers which may expose posix functions such as `_POSIX_C_SOURCE` and `POSIX_SOURCE`
+    for `gcc`, see `man feature_test_macros` for an explanaition.
 
-    //the value refers to the actual posix version
+    the value refers to the actual posix version
 
-    //for example:
+    for example:
 
-    //- 500: issue 5, 1995
-    //- 600: issue 6, 2004
-    //- 700: issue 7, 2008
+    - 500: issue 5, 1995
+    - 600: issue 6, 2004
+    - 700: issue 7, 2008
+*/
 
 #define _XOPEN_SOURCE 700
 //#define _POSIX_C_SOURCE 200112L
@@ -48,13 +50,14 @@
 
 //#posix only headers
 
+#include <fcntl.h>          //file control options. O_CREAT,
 #include <libgen.h>
-#include <pthread.h>     //without this, one gets the glib.c version:
+#include <pthread.h>        //without this, one gets the glib.c version:
 #include <regex.h>
 #include <sys/socket.h>
-#include <sys/stat.h>
-#include <sys/types.h>  //lots of posix realted typedef types
-#include <sys/wait.h>     //sleep
+#include <sys/stat.h>       //S_IRUSR and family,
+#include <sys/types.h>      //lots of posix realted typedef types
+#include <sys/wait.h>       //sleep
 #include <unistd.h>
 
 //#usr/include/linux headers
@@ -97,6 +100,102 @@ int main(int argc, char** argv)
         }
     }
 
+    /*
+    open, close, write, file operations can do operations more specific
+    than the corresponding ansi c `fopen`, `fclose`, etc functions
+
+    if you don't need that greater level of control,
+    just use the ansi functions for greater portability
+
+    #open
+
+        open file descriptors such as files
+
+        returns an `int` (file descriptor number) instead of a file
+
+        flags. Must specify one and only of the following:
+
+        - O_WRONLY: write only
+        - O_RDONLY: read only
+        - O_RW: read only
+
+        the following may all be specified:
+
+        - O_APPEND: Place written data at the end of the file.
+        - O_TRUNC: Set the length of the file to zero, discarding existing contents.
+        - O_CREAT: Creates the file, if necessary, with permissions given in mode.
+        - O_EXCL: Used with O_CREAT, ensures that the caller creates the file. The open is atomic; that is,
+            it’s performed with just one function call. This protects against two programs creating the file at
+            the same time. If the file already exists, open will fail.
+
+        return value: `-1` on error.
+
+        you can also use standard flags for permissions:
+
+        - S_IRUSR: Read permission, owner
+        - S_IWUSR: Write permission, owner
+        - S_IXUSR: Execute permission, owner
+
+        GRP for group versions
+        OTH for other versions
+
+    #write
+
+        write to file descriptor, such as one gotten with `open`
+
+        returns number of bytes written
+
+        it writes as many bytes as possible
+
+        if it receives a signal before writting, returns -1
+
+    #read
+
+        returns number of bytes read
+
+        0 if at end of file descriptor already
+
+        -1 if error
+    */
+    {
+        int fd;
+        char in[] = "open\n";
+        int nbytes = strlen( in );
+        char* out = malloc ( nbytes + 1 );
+
+        fd = open( "open.tmp", O_WRONLY | O_CREAT, 0777 );
+        if ( fd != -1 )
+        {
+            if ( write( fd, in, nbytes ) != nbytes )
+            {
+                assert( false );
+            }
+            close( fd );
+        }
+        else
+        {
+            assert( false );
+        }
+
+        fd = open( "open.tmp", O_RDONLY );
+        if ( fd != -1 )
+        {
+            if ( read( fd, out, nbytes ) == nbytes )
+            {
+                assert( strcmp( in, out ) == 0 );
+            }
+            else
+            {
+                assert( false );
+            }
+            close( fd );
+        }
+        else
+        {
+            assert( false );
+        }
+    }
+
     //#pathname operations
     {
         //#realpath
@@ -114,7 +213,7 @@ int main(int argc, char** argv)
         //    }
         //}
 
-        //dirname basename
+        //#dirname #basename
         {
             //p may be modified
 
@@ -122,13 +221,15 @@ int main(int argc, char** argv)
             //and may change on next dirname/basename call
 
             //behaviour:
-                //path         dirname    basename
-                //"/usr/lib"    "/usr"    "lib"
-                //"/usr/"       "/"       "usr"
-                //"usr"         "."       "usr"
-                //"/"           "/"       "/"
-                //"."           "."       "."
-                //".."          "."       ".."
+
+            //path         dirname   basename
+            //----------   --------  ---------
+            //"/usr/lib"   "/usr"    "lib"
+            //"/usr/"      "/"       "usr"
+            //"usr"        "."       "usr"
+            //"/"          "/"       "/"
+            //"."          "."       "."
+            //".."         "."       ".."
 
             char p[1024];
             char* res;
@@ -143,42 +244,116 @@ int main(int argc, char** argv)
         }
     }
 
-    //#directory operations
+    /*
+    #file and directory operations
+
+        there is no standard portable way of doing them: <http://www.devarticles.com/c/a/Cplusplus/Directories-in-Cplusplus/>
+
+        posix alternatives:
+
+        - portable semi heavyweight: booost: #include <boost/filesystem/operations.hpp>
+        - portable lightweight: dirent.h
+    */
     {
-        //no standard portable way!
-            //<http://www.devarticles.com/c/a/Cplusplus/Directories-in-Cplusplus/>
-        //posix alternatives:
-            //windows: direct.h
-            //portable heavyweight: booost: #include <boost/filesystem/operations.hpp>
-            //portable lightweight: dirent.h
 
-        if(0)
+        /*
+        #stat
+
+            get info on paths
+
+            return value: 0 on success, other constants on errors.
+
+            if you get a 0, you know the file exists!
+
+            this fills in the `struct stat` given by pointer
+
+        #struct stat
+
+            fields:
+
+            - dev_t st_dev            Device ID of device containing file.
+            - ino_t st_ino            File serial number.
+            - mode_t st_mode          Mode of file (see below).
+            - nlink_t st_nlink        Number of hard links to the file.
+            - uid_t st_uid            User ID of file.
+            - gid_t st_gid            Group ID of file.
+            - dev_t st_rdev           Device ID (if file is character or block special).
+            - off_t st_size           For regular files, the file size in bytes.
+
+                                      For symbolic links, the length in bytes of the
+                                      pathname contained in the symbolic link.
+
+                                      For a typed memory object, the length in bytes.
+
+                                      For other file types, the use of this field is
+                                      unspecified.
+
+            - struct timespec st_atim Last data access timestamp.
+            - struct timespec st_mtim Last data modification timestamp.
+            - struct timespec st_ctim Last file status change timestamp.
+
+            - blksize_t st_blksize    A file system-specific preferred I/O block size
+                                      for this object. In some file system types, this
+                                      may vary from file to file.
+            - blkcnt_t st_blocks      Number of blocks allocated for this object.
+
+        #find if a file exists
+
+            in *nix, you often cannot be sure if a file or directory exists,
+            because to do that you must have permission to list all of its parent dirs.
+
+            the only thing you can say is that a path is accessible or not.
+
+            using stat is a good way to do that.
+        */
         {
-            //mkdir
-            {
-                if( mkdir( "newdir", 0777 ) == -1 )
-                {
-                    puts("could not create newdir");
-                }
-                else
-                {
-                    puts("newdir created");
-                }
-            }
-            //rmdir
-            {
-                puts("press any key to remove newdir:");
-                getchar();
+            char in[] = "123\n";
+            char fname[] = "stat.tmp";
+            int perms = 0777;
+            struct stat s;
 
-                if( rmdir("newdir") == -1 )
-                {
-                    puts("could not remove newdir");
-                }
+            //create the file
+            int fd = open( fname, O_WRONLY | O_CREAT, perms );
+            int nbytes = strlen( in );
+            if ( fd != -1 )
+            {
+                if ( write( fd, in, nbytes ) != nbytes )
+                    assert( false );
                 else
                 {
-                    puts("newdir removed");
+                    //assert that file exists:
+                    assert( stat( fname, &s ) == 0 );
+
+                    //view/assert the fields of the stat struct:
+                    assert( s.st_size == nbytes );
                 }
+                close( fd );
             }
+            else
+            {
+                assert( false );
+            }
+        }
+
+        //#mkdir
+        {
+            struct stat s;
+            char fname[] = "mkdir";
+
+            //remove the file if it exists:
+            if( stat( fname, &s ) == 0 )
+                rmdir( fname );
+
+            //make the dir and check for error:
+            if( mkdir( fname, 0777 ) == -1 )
+                assert( false );
+        }
+
+        //#rmdir
+        {
+            mkdir( "rmdir", 0777 );
+            if( rmdir( "rmdir" ) == -1 )
+                assert( false );
         }
     }
 
@@ -207,57 +382,6 @@ int main(int argc, char** argv)
             //cur process only
         //RUSAGE_CHILDREN
             //children that terminated and have been waited for
-    }
-
-    //#threads
-    {
-        //posix threads
-
-        //c11 is making a standard threading model
-
-        //run single program in parallel
-
-        //quicker to start than a process
-
-        //each thread has its own stack,
-        //but global memory is shared
-
-        //clone
-        {
-            //bijection to the system call
-
-            //like ``fork``, but with shared memory and open file descriptors
-
-            /*puts("clone");*/
-            /*{*/
-                /*TODO*/
-                /*implicit? with unistd.h?*/
-                /*i = 0;*/
-                /*pid_t pid = clone();*/
-                /*if (pid == 0)*/
-                /*{*/
-                    /*i++;*/
-                /*}*/
-                /*else if (pid < 0)*/
-                /*{*/
-                    /*exit(1);*/
-                /*}*/
-                /*wait(&status);*/
-                /*if( pid == 0 )*/
-                /*{*/
-                    /*return EXIT_SUCCESS;*/
-                /*}*/
-
-                /*//no more child process*/
-                /*assert( status == EXIT_SUCCESS );*/
-                /*assert( i == 1 );*/
-            /*}*/
-        }
-
-        //#pthread.h
-        {
-            //library, probably based on clone
-        }
     }
 
     //#process
@@ -334,7 +458,7 @@ int main(int argc, char** argv)
             printf("pid = %d, i = % d\n", pid, i);
 
             wait(&status);
-            if( pid == 0 )
+            if ( pid == 0 )
             {
                 exit(EXIT_SUCCESS);
             }
@@ -648,13 +772,66 @@ int main(int argc, char** argv)
         }
     }
 
-    /*
-    #open
+    //#threads
+    {
+        //posix threads
 
-        open file descriptors such as files
+        //c11 is making a standard threading model
 
-        can do operations more specific than ansi c `fopen` such as non-blocking reads
-    */
+        //run single program in parallel
+
+        //quicker to start than a process
+
+        //each thread has its own stack,
+        //but global memory is shared
+
+        //clone
+        {
+            //bijection to the system call
+
+            //like ``fork``, but with shared memory and open file descriptors
+
+            /*puts("clone");*/
+            /*{*/
+                /*TODO*/
+                /*implicit? with unistd.h?*/
+                /*i = 0;*/
+                /*pid_t pid = clone();*/
+                /*if (pid == 0)*/
+                /*{*/
+                    /*i++;*/
+                /*}*/
+                /*else if (pid < 0)*/
+                /*{*/
+                    /*exit(1);*/
+                /*}*/
+                /*wait(&status);*/
+                /*if( pid == 0 )*/
+                /*{*/
+                    /*return EXIT_SUCCESS;*/
+                /*}*/
+
+                /*//no more child process*/
+                /*assert( status == EXIT_SUCCESS );*/
+                /*assert( i == 1 );*/
+            /*}*/
+        }
+
+        //#pthread.h
+        {
+            //library, probably based on clone
+        }
+    }
+
+    //#/usr/include/linux
+
+        //max file path length:
+
+            printf( "PATH_MAX = %d\n", PATH_MAX );
+
+        //but there seem to be problems: <http://stackoverflow.com/questions/833291/is-there-an-equivalent-to-winapis-max-path-under-linux-unix>
+
+        //one of them being filesystem dependance
 
     return EXIT_SUCCESS;
 }

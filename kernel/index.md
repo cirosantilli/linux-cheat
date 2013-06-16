@@ -257,7 +257,7 @@ some major structures represent files
 	represents a file in the usual sense: a chunk of data on disk with medatada such as
 
 	- filesize
-	- timestamps. 
+	- timestamps.
 
 	located in `fs.h`:
 
