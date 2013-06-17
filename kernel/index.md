@@ -53,9 +53,17 @@ located mainly under `/proc/` and `/sys/`
 
 you can see the contents of those files with a command line utility such as cat.
 
-for example:
+interesting files:
 
 - `cat /proc/interrupts`: status of interrupt handlers
+- `cat /proc/version`: linux kernel version and other system info. Similar to `uname -a` output.
+- `cat /proc/meminfo`: information on RAM memory
+- `cat /proc/cpuinfo`: information on cpu
+- numeric directories: 1, 2, 3, ...: contain standard directory structures with process info.
+
+    This is why that dir is called `/proc`
+
+TODO where are those documenteded?
 
 # user programs
 

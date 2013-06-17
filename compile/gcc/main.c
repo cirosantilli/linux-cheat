@@ -1,5 +1,5 @@
 /*
-cheat on gnu c extensions.
+cheat on gnu c extensions both on gcc and libc (called glibc in its gnu version)
 
 non gnu specific  features (ex: ansi c, posix) will not be put here.
 the latest stable version of those standards will be considered.
@@ -14,10 +14,34 @@ but you may encounter them in linux specific projects, such as the linux kernel 
 gnu extensions have a large chance of being implemented
 in future ansi c versions (but sometimes in a modified form)
 because of the large influence of gcc.
+*/
 
+/*
+#glibc
+
+    name for the gnu implementation of the c standard library
+
+    the standards only specifies the interface, not exact implementation of compiler and algorithms
+
+    glibc is one of important implementation
+
+    stdlib does not come with gcc: you could in theory choose between different implementations.
+
+    - ubuntu
+
+        - headers for glibc are on `/usr/include`. do `locate /stdio.h`
+
+        - lib for glibc are on `/usr/lib/i386-linux-gnu`. do `locate /libc.a`
+
+        - the ubuntu package is called `libc6-dev`. `dpkg -l | grep libc`
+
+    - docs
+
+        <http://www.gnu.org/software/libc/manual/html_mono/libc.html>
 */
 
 #include "assert.h"
+#include "complex.h"    //complex integer types
 #include "math.h"
 #include "stdio.h"
 #include "stdlib.h"
@@ -35,8 +59,20 @@ int main( int argc, char** argv )
 
         start with `0b`:
     */
+    {
+        assert( 0b10000 == 16 );
+    }
 
-            assert( 16 == 0b10000 );
+    /*
+    #complex integer
+
+        C99 has floating point complex numbers, but no integer complex numbers
+    */
+    {
+        int complex z = 1 + 1*I;
+        int complex z2 = 1 - 1*I;
+        assert( z + z2 == 2  );
+    }
 
     /*
     #nested function
