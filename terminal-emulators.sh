@@ -245,3 +245,23 @@
     #some control keys sequences of non alphanumeric signs
     #have no value such as c-# while others do like c-[.
 
+##cannonical vs non cannonical
+
+#cannonical waits for newline to make data available to program,
+#non cannonical does not
+
+#<http://stackoverflow.com/questions/358342/canonical-vs-non-canonical-terminal-input>
+
+##/dev/tty
+
+#special file, reading and writting to it is the same as reading and writting to current terminal
+
+#ex:
+
+    #echo a > /dev/tty
+
+#outputs:
+
+    #a
+
+#so `a` was written to the current terminal

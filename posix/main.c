@@ -71,39 +71,63 @@ extern char **environ;
 
 int main(int argc, char** argv)
 {
-    /*
-    #environment variables
-
-        each process has a list of them
-
-        #getenv
-
-            specified by ANSI C
-
-        #setenv
-
-            not specified by ANSI C TODO check
-
-        #putenv
-
-            don't use, just use `setenv` instead according to POSIX 7
-
-    */
+    //#environment variables
     {
-        assert( setenv( "HOME", "asdf", true ) != -1 );
-        assert( strcmp( getenv( "HOME" ), "asdf" ) == 0 );
+        /*
+            each process includes a list of its environment variables
 
-        //with overwrite false, if existing is not overwritten
-        //but error is not returned:
+            those can be modified for the process
 
-            assert( setenv( "HOME", "qwer", false ) != -1 );
+            child processes inherit those variables, so this is a way
+            for processes to communicate
+
+            #getenv
+
+                specified by ANSI C
+
+            #setenv
+
+                not specified by ANSI C TODO check
+
+            #putenv
+
+                don't use, just use `setenv` instead. POSIX 7 itself says this.
+        */
+        {
+            assert( setenv( "HOME", "asdf", true ) != -1 );
             assert( strcmp( getenv( "HOME" ), "asdf" ) == 0 );
+
+            //with overwrite false, if existing is not overwritten
+            //but error is not returned:
+
+                assert( setenv( "HOME", "qwer", false ) != -1 );
+                assert( strcmp( getenv( "HOME" ), "asdf" ) == 0 );
+        }
+
+        /*
+            #environ
+
+                automatically set by POSIX libraries linked to
+
+                is a list of strings of type `VAR=val`
+        */
+        if ( 0 ) //too much distracting output
+        {
+            //print entire environment
+            char **env = environ;
+            puts( "environ:" );
+            while ( *env )
+            {
+                printf( "  %s\n", *env );
+                env++;
+            }
+        }
     }
 
     /*
     #math.h
 
-        the M_PI constants are defined by POSIX inside of math.h
+        the `M_PI` constants are defined by POSIX inside of math.h
     */
     {
         //ansi c way of calculating pi:
@@ -521,85 +545,30 @@ int main(int argc, char** argv)
             //#include <linux/sched.h> >> task_struct
             //http://www.ibm.com/developerworks/library/l-linux-process-management/
 
-        //ids
+        /*
+        #get process info
+
+            every posix process has the folloing info associated to it:
+
+            - pid: number can uniquelly identifies process
+
+            - real and effective userid and groupid
+                real is always of who executes the program
+                effective may be different depending on the suid and sgid bits
+
+            process are free to change those ids with system calls
+        */
         {
-            //every posix process has the folloing info associated to it:
-                //real and effective userid and groupid
-                //real is always of who executes the program
-                //effective may be different depending on the suid and sgid bits
-            //process are free to change those ids with system calls
             uid_t uid  = getuid();
             uid_t euid = geteuid();
             gid_t gid  = getgid();
             gid_t egid = getegid();
+            pid_t pid = getpid();
+            printf( "pid: %llu\n",  (long long unsigned)pid );
             printf( "uid:  %llu\n", (long long unsigned)uid  );
             printf( "euid: %llu\n", (long long unsigned)euid );
             printf( "gid:  %llu\n", (long long unsigned)gid  );
             printf( "egid: %llu\n", (long long unsigned)egid );
-        }
-
-        //#fork
-        {
-            //makes a copy of this process
-            //``sys_fork`` call
-
-            int status;
-            int i = 0;
-
-            fflush(stdout);
-                //#buffering
-
-                    //<http://stackoverflow.com/questions/3513242/working-of-fork-in-linux-gcc>
-
-                    //there are three buffering methods:
-                        //unbuffered, fully buffered and line buffered
-
-                    //when you fork, the streams get forked too,
-                    //with unflushed data still inside
-
-                    //stdout and stderr flush at newlines
-                    //if you don't put newlines, if does not flush,
-                    //and fork copies the buffers
-
-                    //this will print everything twice
-            pid_t pid = fork();
-            if ( pid < 0 )
-            {
-                puts("failed to fork");
-                exit(EXIT_FAILURE);
-            }
-            else if ( pid == 0 )
-            {
-                puts("fork child");
-                    //NOTE
-                        //this is assynchonous with the process stdout
-
-                        //so it might not be in the line program order
-
-                        //but they both go to the same terminal
-                i++;
-                exit(EXIT_SUCCESS);
-            }
-            else
-            {
-                puts("parent");
-            }
-
-            puts("child and parent");
-            printf("pid = %d, i = % d\n", pid, i);
-
-            wait(&status);
-            if ( pid == 0 )
-            {
-                exit(EXIT_SUCCESS);
-            }
-
-            //no more child process
-            puts("parent after child");
-
-            assert( status == EXIT_SUCCESS );
-            assert( i == 0 );
-                //memory was cloned, parent i unchanged
         }
 
         /*#vfork*/
@@ -662,8 +631,17 @@ int main(int argc, char** argv)
 
             the basic ways are:
 
-            - signals
+            at startup:
+
+            - command line arguments
+            - environment variables
+
+            during execution:
+
             - pipes
+            - regular files
+            - signals
+            - shared memory
             - sockets
         */
         {

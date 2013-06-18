@@ -2,7 +2,15 @@ aka: Portable Operating System Interface for uniX.
 
 aka: Single Unix specification (SUS)
 
-TODO understand difference between the two: http://unix.stackexchange.com/questions/14368/difference-between-posix-single-unix-specification-and-open-group-base-specifi
+# sources
+
+- Matthew; Stones - Beginning Linux Programming <http://www.amazon.com/Beginning-Linux-Programming-Neil-Matthew/dp/0470147628>
+
+    very good intro do many of POSIX utilities
+
+    very interesting examples and topics
+
+# intro
 
 an operating system standardization by both IEEE and `the open group`
 (merger of the `Open software foundation` with `X/Open`)
@@ -164,3 +172,7 @@ a few of the most interesting suggests for argument and utility name syntax:
 - `--` marks the last of the options
 - `-` means stdin/stdout when the utility expects a filename as argument
 - `-W` is reserved for vendor options
+
+# TODO
+
+- understand difference between the two: http://unix.stackexchange.com/questions/14368/difference-between-posix-single-unix-specification-and-open-group-base-specifi
