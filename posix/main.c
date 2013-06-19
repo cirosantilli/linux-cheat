@@ -571,32 +571,6 @@ int main(int argc, char** argv)
             printf( "egid: %llu\n", (long long unsigned)egid );
         }
 
-        /*#vfork*/
-        /*{*/
-            /*TODO*/
-            /*implicit? with unistd.h?*/
-            /*//makes a copy of this process*/
-            /*i = 0;*/
-            /*pid_t pid = vfork();*/
-            /*if (pid == 0)*/
-            /*{*/
-                /*i++;*/
-            /*}*/
-            /*else if (pid < 0)*/
-            /*{*/
-                /*exit(1);*/
-            /*}*/
-            /*wait(&status);*/
-            /*if( pid == 0 )*/
-            /*{*/
-                /*return EXIT_SUCCESS;*/
-            /*}*/
-
-            /*//no more child process*/
-            /*assert( status == EXIT_SUCCESS );*/
-            /*assert( i == 1 );*/
-        /*}*/
-
         //#execl, execlp, execsle, execv, execvp, execvpe
         {
             //interfaces for ``execve`` system call

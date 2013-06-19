@@ -127,7 +127,7 @@ int main( int argc, char** argv )
     */
 
 #ifdef __GNUC__
-        puts("__GUNC__");
+        puts( "__GUNC__" );
 #endif
 
         /*
@@ -140,7 +140,7 @@ int main( int argc, char** argv )
         */
 
 #ifdef __STRICT_ANSI__
-        puts("__STRICT_ANSI__");
+        puts( "__STRICT_ANSI__" );
 #endif
 
         /*
@@ -150,7 +150,15 @@ int main( int argc, char** argv )
         */
 
 #ifdef __i386__
-        puts("__i386__");
+        puts( "__i386__" );
+#endif
+
+        /*
+        gcc defines OS macros TODO where?
+        */
+
+#ifdef __linux__
+        puts( "__linux__" );
 #endif
 
     /*

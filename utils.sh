@@ -3818,8 +3818,6 @@
         #- steal ownership of files
         #- git ownership to users who do not want to own the files
 
-        #see <#file permissions>
-
             su a
             mkdir d
             touch d/f
@@ -3853,8 +3851,6 @@
         #POSIX
 
         #change file permissions
-
-        #see: <#file permissions>
 
         #chomod [ugoa][+-=][rwxXst]+
             chmod a+x "$f"
