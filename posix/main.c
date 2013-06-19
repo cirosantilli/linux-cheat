@@ -58,7 +58,7 @@ main cheat on posix c headers
 #include <sys/socket.h>
 #include <sys/stat.h>       //S_IRUSR and family,
 #include <sys/types.h>      //lots of posix realted typedef types
-#include <sys/wait.h>       //sleep
+#include <sys/wait.h>       //wait, sleep
 #include <unistd.h>         //major posix header. Anything that is not elsewhere is here.
 
 //#usr/include/linux headers

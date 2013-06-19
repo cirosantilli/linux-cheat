@@ -10,7 +10,7 @@
 #include "stdlib.h"
 
 #include <sys/shm.h>        //getshm
-#include <sys/wait.h>       //sleep
+#include <sys/wait.h>       //wait, sleep
 #include "unistd.h"
 
 int main( int argc, char** argv )
@@ -19,9 +19,11 @@ int main( int argc, char** argv )
     #shared memory
 
         memory that can be accessed by multiple separate processes
+
+        in this example, both parent and child processes access the same shared memory
     */
     {
-
+        int shmid;
         /*
         #shmget
 
@@ -29,19 +31,24 @@ int main( int argc, char** argv )
 
                 int shmget(key_t key, size_t size, int shmflg);
 
-            - key: unique identifier used to refer to this memory.
+            - key: TODO
             - size: num of bytes
-            - shmflg: permission flags like for files
+            - shmflg: permission flags like for files + other specific flags
+                IPC_CREAT is required to allocate the memory
 
+            return:
+
+            - negative if error
+            - unique identifier of memory if positive
         */
 
-            key_t key = (key_t)getpid();
-            assert( shmget( key, sizeof( int ) * 2, 0755 ) == 0 );
+            shmid = shmget( (key_t)1234, sizeof( int ) * 2, IPC_CREAT | 0666 );
+            assert( shmid >= 0 );
 
         /*
         #shmat
 
-            attribute shared memory to program address space
+            attach shared memory to current process so it can be used afterwards
 
                 void *shmat(int shm_id, const void *shm_addr, int shmflg);
 
@@ -49,13 +56,14 @@ int main( int argc, char** argv )
             - shm_id: where to map to. Usual choice: `NULL` so the system choses on its own.
             - shm_flg:
         */
-            int* sh_mem = shmat( key, NULL, 0 );
-            if ( sh_mem == (void*)-1 )
+
+            int* shmem = shmat( shmid, NULL, 0 );
+            if ( shmem == (void*)-1 )
                 assert( false );
             else
             {
                 //parent only
-                sh_mem[0] = 1;
+                shmem[0] = 1;
                 fflush( stdout );
                 pid_t pid = fork();
                 if ( pid < 0 )
@@ -65,7 +73,9 @@ int main( int argc, char** argv )
                     //child only:
                     if ( pid == 0 )
                     {
-                        sh_mem[0]++;
+                        shmem[0]++;
+                        //detach from child:
+                        assert( shmdt( shmem ) == 0 );
                         exit( EXIT_SUCCESS );
                     }
 
@@ -73,16 +83,52 @@ int main( int argc, char** argv )
                     int status;
                     wait( &status );
                     assert( status == EXIT_SUCCESS );
-                    assert( sh_mem[0] == 2 );
+                    assert( shmem[0] == 2 );
 
                 /*
                 #shmdt
 
-                    delete shared memory
+                    detach shared memory from current process
 
-                        int shmdt( void* sh_mem );
+                        int shmdt( void* shmem );
+
+                    each process should detach it separatelly before deleting the memory
                 */
-                    assert( shmdt( sh_mem ) == 0 );
+
+                    //detach from parent:
+                    assert( shmdt( shmem ) == 0 );
+
+                /*
+                #shmctl
+
+                    controls the shared memory, doing amogst other things its deletion
+
+                        int shmctl(int shm_id, int command, struct shmid_ds *buf);
+
+                    - shm_id returned by shmget
+                    - command one of the following:
+
+
+                        - IPC_STAT: get parameters of memory into buf
+                        - IPC_SET:  set parameters of memory to match buf
+                        - IPC_RMID: delete memory.
+
+                            It must be detached from all processes, or you get unspecified behaviour.
+
+                    - buf the following struct:
+
+                            struct shmid_ds {
+                                uid_t shm_perm.uid;
+                                uid_t shm_perm.gid;
+                                mode_t shm_perm.mode;
+                            }
+
+                        it can be `NULL` for `PIC_RMID`
+
+                    - return: 0 on success, -1 on failure
+                */
+
+                    assert( shmctl( shmid, IPC_RMID, NULL ) == 0 );
                     return EXIT_SUCCESS;
                 }
             }
