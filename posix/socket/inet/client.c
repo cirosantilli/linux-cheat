@@ -1,9 +1,7 @@
 /*
 inet server example
 
-usage:
-
-    server listen_port
+TODO why connection refused?
 */
 
 #define _XOPEN_SOURCE 700
@@ -21,7 +19,7 @@ usage:
 int main( int argc, char** argv )
 {
     char server_ip[] = "127.0.0.1";
-    unsigned short server_port = 9734;
+    unsigned short server_port = 12345;
     int sockfd;
     int len;
     int result;
@@ -32,8 +30,41 @@ int main( int argc, char** argv )
 
     sockfd = socket( AF_INET, SOCK_STREAM, 0 );
     address.sin_family = AF_INET;
-    address.sin_addr.s_addr = inet_addr( server_ip );
-    address.sin_port = server_port;
+
+    /*
+    #inet_addr
+
+        converts the text representation to a representation that can be used on the network
+
+    #s_addr
+
+        server address
+    */
+        address.sin_addr.s_addr = inet_addr( server_ip );
+
+    /*
+    #htons
+
+        Host TO Network Short
+
+        takes a short (2 bytes), and converts it to the correct byte ordering expected by the network
+
+        you must do this, or else the network won't look at the right port
+
+        versions:
+
+        - htons
+        - htonl (long, 4 bytes)
+        - ntohs (inverse)
+        - ntohl
+
+    #sin_port
+
+        port at which to contact server
+    */
+
+        address.sin_port = htons( server_port );
+
     len = sizeof( address );
     result = connect( sockfd, ( struct sockaddr* )&address, len );
     if ( result == -1 )

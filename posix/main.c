@@ -50,9 +50,12 @@ main cheat on posix c headers
 
 //#posix only headers
 
+#include <arpa/inet.h>
 #include <errno.h>
 #include <fcntl.h>          //file control options. O_CREAT,
 #include <libgen.h>
+#include <netdb.h>          //gethostbyname
+#include <netinet/in.h>
 #include <pthread.h>        //without this, one gets the glib.c version:
 #include <regex.h>
 #include <sys/socket.h>
@@ -964,6 +967,98 @@ int main(int argc, char** argv)
         //#pthread.h
         {
             //library, probably based on clone
+        }
+    }
+
+    /*
+    #netdb.h
+
+        network information
+
+    */
+    {
+        /*
+        #gethostname
+
+            copies name of current host on given string
+
+                int gethostname( char* hostname, int namelength );
+
+            name is truncated to namelength if too large
+        */
+        {
+            const int namelength = 256;
+            char hostname[namelength];
+            gethostname( hostname, namelength );
+            printf( "gethostname = %s\n", hostname );
+        }
+
+        /*
+        #gethostbyname
+
+            give a hostname string ("localhost", "john") and get info on that host
+
+                struct hostent *gethostbyname(const char *name);
+
+            return value:
+
+                struct hostent {
+                    char *h_name;       // name of the host
+                    char **h_aliases;   // list of aliases (nicknames)
+                    int h_addrtype;     // address type
+                    int h_length;       // length in bytes of the address
+                    char **h_addr_list  // list of address (network order)
+                };
+
+            NULL on error
+
+        */
+        {
+            const int namelength = 256;
+            char hostname[namelength];
+            char** names;
+            char** addrs;
+            struct hostent* hostinfo;
+
+            gethostname( hostname, namelength );
+            hostinfo = gethostbyname( hostname );
+            if ( !hostinfo )
+            {
+                fprintf( stderr, "gethostbyname failed for hostname = %s\n", hostname );
+                exit( EXIT_FAILURE );
+            }
+            printf( "gethostbyname\n" );
+            printf( "name: %s\n", hostinfo -> h_name );
+            printf( "aliases:\n" );
+            names = hostinfo -> h_aliases;
+            while ( *names )
+            {
+                printf( "  %s\n", *names );
+                names++;
+            }
+            //assert that it is an inet address
+            if ( hostinfo -> h_addrtype != AF_INET )
+            {
+                fprintf( stderr, "host is not AF_INET\n" );
+                exit( EXIT_FAILURE );
+            }
+
+            //show addresses
+            printf( "IPs:\n" );
+            addrs = hostinfo -> h_addr_list;
+            while ( *addrs )
+            {
+                /*
+                #inet_ntoa
+
+                    converts integer representation of ip (4 bytes) to a string
+
+                    also corrects network byte ordering into correct representation
+                */
+                printf( "  %s", inet_ntoa( *(struct in_addr*)*addrs ) );
+                addrs++;
+            }
+            printf( "\n" );
         }
     }
 

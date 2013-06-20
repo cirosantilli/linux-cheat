@@ -418,9 +418,30 @@ you are gonna get at least 80 for their http server
 
 # netstat
 
-TODO understand output
+shows lots of POSIX sockets info
 
-    netstat -a
+get list pid and program name of programs using ports:
+
+    netstat -p
+
+output has 2 sections: Internet connections and UNIX domain sockets
+
+in short: Internet connections are done via sockets whose address is given by
+an ip and a port number, and can communicate across computers
+
+UNIX domain sockets are only for local communication. They are put into the filesystem
+and identified by a path on the filesystem
+
+when a program uses a socket, it binds to it, and other programs cannot use it.
+
+sample output for internet section:
+
+    Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+    tcp        0      0 localhost:32842         localhost:48553         ESTABLISHED 3497/GoogleTalkPlug
+
+TODO: understand every field
+
+- Proto: protocol. Basically tcp or udp
 
 # telnet
 
@@ -444,9 +465,9 @@ type:
 
 you've made a get request by hand!
 
-TODO won't work, why?
+TODO won't work, why? how to programatically write characters on a request?
 
-echo $'GET / HTTP/1.0\n\n' | telnet www.google.com 80
+    echo $'GET / HTTP/1.0\n\n' | telnet www.google.com 80
 
 # nc
 
@@ -644,3 +665,37 @@ several protocols exist.
 servers
 
     http://www.vpnbook.com/#pricing
+
+# xinetd
+
+aka inetd
+
+meaning: ineternet Deamon
+
+xinetd is the new version for inetd
+
+it seems that in older days many services used inetd as a frontend
+
+a service is something providede by a server on a certain identifier such as a IP/port/protocol or UNIX socket
+
+the concept of service has POSIX support via functions such as `getservbyname`,
+however POSIX does not specify which programs shall make the services available
+
+many major services such as http severs, ftp servers and others have been moved out,
+and xinetd may not even come installed by default on certain systems such as Ubuntu 13.04
+
+after installing the xinet deamon, edit the conf files `/etc/xinetd/` and `/etc/xinetd.d/`
+to enable/disable certain services. Services may come turned off by default so as to not interfere
+with existing network configurations.
+
+a simple example is the daytime protocol which has standard port 13.
+
+you can use telnet to try that service out:
+
+    telnet localhost 13
+
+that protocol takes no input, returns the date and time of the day, and closes the connection immediately.
+
+- TODO how to restart xinetd to make configure
+- TODO how new services are added?
+- TODO what are the advantages of using xinetd?

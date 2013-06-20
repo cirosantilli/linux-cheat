@@ -372,6 +372,8 @@
 
                 sudo aptitude install -y w3m w3m-img
 
+            #sudo aptitude install -y xinetd
+
 ##launchpad ppas
 
     #you must first add ppas with `apt-add-repository`

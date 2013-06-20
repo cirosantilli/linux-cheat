@@ -13,8 +13,7 @@
 
 int main( int argc, char** argv )
 {
-    char server_ip[] = "127.0.0.1";
-    unsigned short server_port = 9734;
+    unsigned short server_port = 12345;
     char ch;
     size_t client_len;
     int server_sockfd;
@@ -25,8 +24,17 @@ int main( int argc, char** argv )
     server_sockfd = socket( AF_INET, SOCK_STREAM, 0 );
     listen( server_sockfd, 5 );
     server_address.sin_family = AF_INET;
-    server_address.sin_addr.s_addr = inet_addr( server_ip );
-    server_address.sin_port = server_port;
+    /*
+    #s_addr server
+
+        on server, this is which addresses it will accept connections from
+
+    #INADDR_ANY
+
+        special value that tells server to accept connections from anyone
+    */
+    server_address.sin_addr.s_addr = htonl( INADDR_ANY );
+    server_address.sin_port = htons( server_port );
     bind( server_sockfd, (struct sockaddr*)&server_address, sizeof( server_address ) );
     while ( 1 )
     {

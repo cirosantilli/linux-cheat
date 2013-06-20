@@ -18,9 +18,15 @@ this are exactly the 3 parameters that the `socket` call receives
 
 ## domain
 
-- `AF_INET`: internet IP protocol, regular local networks or the internet
-- `AF_INET6`: IPv6
 - `AF_UNIX`: local sockets for single machine usage
+
+    UNIX domain sockets are uniquelly identified on the filesystem like pipes or other special files
+
+- `AF_INET`: internet IP protocol, regular local networks or the internet
+
+    this is one of the few stream like resources that are not put into the filesystem because TODO
+
+- `AF_INET6`: IPv6
 
 ## type
 
@@ -70,7 +76,6 @@ sometimes it is possible to choose different protocols for a given type
 3. kill the server
 
         fg
-
 
     and then hit <C-C>
 
