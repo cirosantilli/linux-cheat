@@ -1,4 +1,4 @@
-info and cheatsheets on linux and *utils* that work on linux
+info and cheatsheets on linux *and* utils that work on linux
 
 # definition: utils
 

@@ -351,6 +351,27 @@
 			#sudo apt-add-repository ppa:cdekter/ppa
 			#sudo aptitude install -y autokey-gtk
 
+		##networking
+
+            sudo aptitude install -y apache2
+
+            #php:
+
+                sudo aptitude install -y php5
+
+            #php apache module:
+
+                sudo aptitude install -y libapache2-mod-php5
+
+            sudo aptitude install -y openssh-client
+            sudo aptitude install -y openssh-server
+            sudo aptitude install -y nmap
+            sudo aptitude install -y whois
+
+            #terminal web browser:
+
+                sudo aptitude install -y w3m w3m-img
+
 ##launchpad ppas
 
     #you must first add ppas with `apt-add-repository`
