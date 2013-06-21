@@ -1241,13 +1241,94 @@
 
         #cat reversed linewise
 
-        assert [ "`echo $'a\nb' | tac`" = $'b\na' ]
+            assert [ "`echo $'a\nb' | tac`" = $'b\na' ]
 
     ##rev
 
         #reverse bytewise
 
-        assert [ "`echo $'ab' | rev`" = $'ba' ]
+            assert [ "`echo $'ab' | rev`" = $'ba' ]
+
+    ##dd
+
+        #POSIX
+
+        #menemonic: Duplicate Data TODO check
+
+        #funny mnemonic: Data Destroyer ( because of danger of common usage with sda devices to copy hard disks quickly )
+
+        #advantages:
+
+        #- gives more control than simpler utilities such as `cat`
+        #- supports the concept of `blocks`
+
+        #if = input file. If not given, stdin.
+
+        #of = output file. If not given, stdout.
+
+        #echo a | cat:
+
+            echo a | dd
+
+        #cat a:
+
+            echo a > a
+            dd if=a
+
+        #cp a b:
+
+            dd if=a of=b
+
+        #stop printing status lines:
+
+            echo a | dd status=none
+
+        ##bs
+
+            #how many input and output bytes to read/write at once.
+
+            #also defines the block size for count, skip and seek.
+
+            #obs and ibs for output and input seprately:
+
+        #count: copy up to count blocks (defined by bs):
+
+            assert [ `echo -n 1234 | dd status=none bs=2 count=1` = 12 ]
+            assert [ `echo -n 1234 | dd status=none bs=1 count=3` = 123 ]
+
+        #size suffixes:
+
+        #-c: 1 (char)
+        #-w: 2 (word)
+        #-kB: 1000
+        #-K: 1024
+        #-MB: 1000*1000
+        #-M: 1024*1024
+
+        #and so on for G, T, P, E, Z and Y!
+
+            assert [ `echo -n 123 | dd status=none bs=1c count=1` = 1 ]
+            assert [ `echo -n 123 | dd status=none bs=1w count=1` = 12 ]
+
+        #skip: skip first n input blocks (defined by bs or ibs):
+
+            assert [ `echo -n 123 | dd status=none bs=1 skip=1` = 23 ]
+
+        #seek: skip first n output blocks (defined by bs or obs):
+
+            #TODO minimal exmaple
+
+        ##conv
+
+            #do serveral data conversions on copy
+
+            #ucase: uppercase
+
+                assert [ `echo -n abc | dd status=none conv=ucase` = ABC ]
+
+        ##iflag oflag
+
+            #TODO
 
     ##pagers
 
@@ -1328,6 +1409,7 @@
             #1
 
     ##factor
+
         #coreutils
 
         #factor a number into prime constituents
@@ -1335,6 +1417,8 @@
         assert [ "`factor 30`" = "30: 2 3 5" ]
 
     ##uniq
+
+        #POSIX 7
 
         #ajacent dupe line operations
 
@@ -1399,6 +1483,8 @@
 
     ##tee
 
+        #POSIX 7
+
         ls | tee file
             #ls to stdou and file
         ls | tee file 1>&2
@@ -1416,29 +1502,33 @@
 
     ##tr
 
+        #POSIX 7
+
         #charwise text operations
 
-        tr abc ABC
-        #-s : replaces a by A and b by B and c by C
+        #replaces a by A and b by B and c by C:
 
-        tr -c abc d
+            assert [ `echo -n cab | tr abc ABC` =  CAB ]
+
+        #ranges are understood. Convert to uppercase:
+
+            assert [ `echo -n cab | tr a-z A-Z` =  CAB ]
+
+        #posix character classes are understood. Remove non alphtnum chras:
+
+            assert [ `echo -n 'ab_@' | tr -cd "[:alpha:]"` = ab ]
+
         #-c : complement and replace. replaces all non abc chars by d
 
-        tr -d abc
-        #deletes abc
+            assert [ `echo -n dcba | tr -c abc 0` =  0cba ]
 
-        tr -s a
-        #replaces multiple consecutive 'a's by isngle a
-        # aaaaa -> a
+        #-d: deletes abc chars:
 
-        tr a-z A-Z
-        #to upper
+            assert [ `echo -n dcba | tr -d abc` =  d ]
 
-        tr -cs "[:alpha:]" "\n"
-        #replaces non alphanum by a newline
+        #-s: replaces multiple consecutive 'a's and 'b's by isngle a
 
-        tr -cd "[:print:]"
-        #removes non printable chars
+            assert [ `echo -n aabbaac | tr -s ab` =  abac ]
 
     ##cut
 
@@ -1468,11 +1558,11 @@
 
     ##wc
 
+        #POSIX 7
+
         #count things
 
-        #mnemonic: Word Count
-
-        #posix 7
+        #mnemonic: Word Count.
 
         echo -n $'a\nb c' | wc
             #1 3 5
@@ -1487,7 +1577,8 @@
             #-w words only
 
     ##head
-        #POSIX
+
+        #POSIX 7
 
         #filter 10 first lines:
 
@@ -1509,11 +1600,15 @@
 
     ##tail
 
-        tail "$f"
-            #shows last 10 lines of f
+        #POSIX 7
 
-        tail -n3 "$f"
-            #shows last 3 lines of f
+        #show last 10 lines of f:
+
+            tail "$f"
+
+        #show last 3 lines of f:
+
+            tail -n3 "$f"
 
     ##truncate
 
@@ -1531,28 +1626,23 @@
         hexdump
         assert [ `cat f` = $'a\0' ]
 
-    ##dd
-
-        #corutils package
-
-        #TODO
-
     ##split
 
         #corutils package
 
         #split files into new smaller files of same size
 
-        echo -n abc > f
+            echo -n abc > f
 
-        split -db1 f p
-        split -dn3 f p
+            split -db1 f p
+            split -dn3 f p
 
-        assert [ `cat p00` = a ]
-        assert [ `cat p01` = b ]
-        assert [ `cat p02` = c ]
+            assert [ `cat p00` = a ]
+            assert [ `cat p01` = b ]
+            assert [ `cat p02` = c ]
 
-        #existing files are overwritten
+        #existing files are overwritten:
+
         #-d: uses number suffixes, otherwise, uses letters aa, ab, ac, ...
         #-b: bytes per file
         #-n: number of files
@@ -1609,7 +1699,7 @@
 
         #view bytes in hexa
 
-            echo abc | hexdump -C
+            echo -n abc | hexdump -C
 
         #-C : see bytes in hexadecimal
         #-n32 : only 32 bytes
@@ -1623,7 +1713,7 @@
 
         #view bytes in octal
 
-        od "$f"
+            od "$f"
 
     ##paste
 
@@ -3095,13 +3185,38 @@
 
     ##pstree
 
+        #psmisc package, not POSIX
+
         #shows tree of which process invocates which
 
-        #note how `init` is the parent of all processes
+            pstree
 
-        #psmisc package
+        #this works because in POSIX new processes are created exclusively
+        #by forking from other processes, and parent information is stored
+        #on each process, which dies if the parent dies
 
-        pstree
+        #this is a very insightfull program to understand what happened after
+        #the `init` process, first process on the system and common ancestor of all, started
+
+        #particularaly interesting if you are on a graphical interface,
+        #to understand where each process comes from
+
+        #quotint `man pstree`, multiple processes with same name and parent are wrttin in short notation:
+
+            #init-+-getty
+            #     |-getty
+            #     |-getty
+            #     `-getty
+
+        #becomes:
+
+            #init---4*[getty]
+
+        #threads (run parallel, but on same data, and cannot fork) are indicated by brackets:
+
+            #icecast2---13*[{icecast2}]
+
+        #means that `icecast2` has 13 threads.
 
     ##prtstat
 

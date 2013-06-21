@@ -85,6 +85,39 @@ on the internet, hotnames are resolved to ips by DNS servers
 
 you must pay for hostnames to use them
 
+# port
+
+once you have determined a host (computer),
+you still have to talk to one of the specific programs running on that computer
+
+each program listens on an specific port which is set by convention.
+
+ports from 1 - 1000 all have reserved or standardized functions:
+
+there are 2 ports number 10: 10/tcp and 10/udp, each for a different protocol.
+
+on POSIX systems ports are typically implemented via sockets.
+
+## read and write to a port from the command line
+
+you can write to a port in many ways using the command line.
+
+# tcp vs udp
+
+they are different protocols
+
+tcp guarantees that information packages arrive, udp does not
+
+for that, tcp has to maintain a connection,
+while udp simply sends the packages and hopes for the bes
+
+for this reason, udp has less overhead, but is only used when the transaction
+will limit itself to a single request/answer.
+
+some protocols include both a TCP and a UDP version, which may vary slightly
+while others only have either a TCP or an UDP version
+see <http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers> for a list
+
 # routers
 
 ## routing table
@@ -410,11 +443,26 @@ see hostname for how.
 
 # nmap
 
-show open ports at `google.com`:
+show open ports, state and service name associated to the port
+
+TCP services:
 
     nmap google.com
+    nmap localhost
 
-you are gonna get at least 80 for their http server
+you are gonna get at least 80 on google for their http server
+and on localhost too if you are running an http server such as apache.
+
+sample output excerpt:
+
+    PORT     STATE SERVICE
+    80/tcp   open  http
+
+TODO understand STATE and where SERVICE comes from
+
+view UDP ports:
+
+    sudo nmap -sU localhost
 
 # netstat
 
@@ -439,13 +487,15 @@ sample output for internet section:
     Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
     tcp        0      0 localhost:32842         localhost:48553         ESTABLISHED 3497/GoogleTalkPlug
 
-TODO: understand every field
+- TODO: understand every field
+
+- TODO: why is my apache server not shown here?
 
 - Proto: protocol. Basically tcp or udp
 
 # telnet
 
-protocol for comunicating between servers
+protocol for comunicating between servers and name of command line tool that uses it
 
 no encryption, therefore *DONT'T SEND PASSWORDS ON UNTRUSTED NETWORK WITH THIS*!!
 
@@ -469,15 +519,28 @@ TODO won't work, why? how to programatically write characters on a request?
 
     echo $'GET / HTTP/1.0\n\n' | telnet www.google.com 80
 
+also consider:
+
+- nc
+- socat
+
 # nc
+
+aka netcat
 
 open, listen, send and receive tcp/udp packages and sockets
 
-## example
-
-get apache working on port 80
+make an http get request manually to google.com:
 
     echo 'GET / HTTP/1.0' | nc google.com 80
+
+if you have apache working on your computer, you can also do it on localhost to test:
+
+    echo 'GET / HTTP/1.0' | nc localhost 80
+
+in both cases you should get the HTTP re
+
+`-u`: udp requests
 
 # ssh
 
@@ -665,37 +728,3 @@ several protocols exist.
 servers
 
     http://www.vpnbook.com/#pricing
-
-# xinetd
-
-aka inetd
-
-meaning: ineternet Deamon
-
-xinetd is the new version for inetd
-
-it seems that in older days many services used inetd as a frontend
-
-a service is something providede by a server on a certain identifier such as a IP/port/protocol or UNIX socket
-
-the concept of service has POSIX support via functions such as `getservbyname`,
-however POSIX does not specify which programs shall make the services available
-
-many major services such as http severs, ftp servers and others have been moved out,
-and xinetd may not even come installed by default on certain systems such as Ubuntu 13.04
-
-after installing the xinet deamon, edit the conf files `/etc/xinetd/` and `/etc/xinetd.d/`
-to enable/disable certain services. Services may come turned off by default so as to not interfere
-with existing network configurations.
-
-a simple example is the daytime protocol which has standard port 13.
-
-you can use telnet to try that service out:
-
-    telnet localhost 13
-
-that protocol takes no input, returns the date and time of the day, and closes the connection immediately.
-
-- TODO how to restart xinetd to make configure
-- TODO how new services are added?
-- TODO what are the advantages of using xinetd?

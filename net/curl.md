@@ -133,5 +133,5 @@ example:
 make custom request
 
 example:
-    curl -X $'GET / HTTP/1.1\n\n' google.com
 
+    curl -X $'GET / HTTP/1.1\n\n' google.com

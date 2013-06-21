@@ -26,27 +26,39 @@ last thing that is run at boot process
 
 determines runlevel
 
-    sudo init 6
+a great way to understand what happens after `init` is to use `pstree`
 
-set runlevel to 6 which implies a reboot
+this is distribution dependant
 
 # run levels
 
-ubuntu uses upstart, newer replacement to `system v` init
+TODO understand better
+
+set runlevel to 6 which implies a reboot
+
+get current runlevel (POSIX 7):
+
+    who -r
+
+therefore this is a POSIX 7 supported concept
+
+set runlevel:
+
+    #sudo init 6
+
+attention: this would cause the system to reboot
+
+# upstart
+
+some systems such as Ubunutu use upstart, newer replacement to the `system v` init system
 
 - `/etc/init`: upstart configuration files
 
 	programs here are named services
 
-- `/etc/init.d`: the old compatibility only system v initi dirs
+- `/etc/init.d`: compatibility only system v rc dirs
 
 	links to programs that get run on each runlevel at `/etc/rc\n.d/`
-
-determines previous and current run level
-
-	runlevel
-
-# upstart
 
 ## service
 

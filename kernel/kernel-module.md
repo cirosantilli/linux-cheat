@@ -133,6 +133,14 @@ devices map to filesystem under `/dev/`. You can get info on them with:
 
     ls -l /dev
 
+those files are not on disk files, but offer an interface similar to disk files
+via the same system calls.
+
+On this case however, it is entirely up to the device writer to specify what each call
+should do. Obviously, developers should use intuitive calls for the operations,
+so for exapmle `open` should make any required initializations, `write` send data to the device,
+`read` get data from the device, and `close` make cleanup operations.
+
 there are three main types of devices:
 
 - block and char
@@ -194,7 +202,57 @@ where:
 You could fix the major device number yourself, but this is more and more deprecated.
 This was done with the `register_chrdev_region` function.
 
-## mouse
+## mknod
+
+make a char file, major number 12, minor number 2:
+
+    sudo mknod /dev/coffee c 12 2
+
+## sample device files
+
+### /dev/null discards whatever input is given to it by a `write` sycall
+
+    very useful to discard undesired stdout/stderr:
+
+        echo a > /dev/null
+
+### /dev/zero
+
+returns as many zeros as asked for by a read syscall
+
+usage: initialize data sections to zero
+
+### /dev/full
+
+if you write to it, the write returns ENOSPC error
+
+example:
+
+    echo a > /dev/full
+
+if you read from it, returns as many null chars as were asked for by read.
+
+example:
+
+    TODO
+
+### pseudorandom number generators
+
+the kernel implements a random number generator which draws entropy from
+non predictable events, typically device events such as mice movements
+or disk reads for example.
+
+#### /dev/random
+
+`/dev/random` returns random numbers one by one whenever enough entropy
+is generated. It is slower than `urandom`, but has greater entropy.
+
+#### /dev/urandom
+
+`/dev/urandom` returns random numbers continuously. It is faster than `random`,
+but has less entropy. It should however be good enough for most applications.
+
+### mice
 
 you can have some fun with mouses. Search for the mice or mouse device files and cat them:
 
@@ -208,11 +266,7 @@ now note that when you move the mouse, cat spits something out to the screen!
 
 `mice` is the combination of all mice, and each other `mouseX` is a single mouse device.
 
-## mknod
-
-    sudo mknod /dev/coffee c 12 2
-
-makes a char file, major number 12, minor number 2
+## dev/random and dev/urandom
 
 ## system calls that use the char file
 
