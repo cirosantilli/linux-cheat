@@ -123,11 +123,13 @@ int main( int argc, char** argv )
     */
 
     /*
-        automatically defined on gcc even if `-std=cXX -pedantic-erors`:
+    automatically defined on gcc even if `-std=cXX -pedantic-erors`:
+
+    contains major version number
     */
 
 #ifdef __GNUC__
-        puts( "__GUNC__" );
+        printf( "__GUNC__ = %d\n", __GNUC__ );
 #endif
 
         /*

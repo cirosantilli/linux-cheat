@@ -266,12 +266,16 @@ static int __init init(void)
 		`task` is another way of saying process, and this is how it is usually referred to
 		inside the kernel. Also, when the term `task` is used, it usually refers to a process
 		inside the kernel.
-
-		TODO do kernel processes use the same struct as user space programs or not?
 	*/
+
+		//obviously running when this happens
+
+			printk(INFO_ID "current->state  = %ld\n", current->state);
+			printk(INFO_ID "TASK_RUNNING = %d\n", TASK_RUNNING);
 
 		printk(INFO_ID "current->comm = %s\n", current->comm);
 		printk(INFO_ID "current->pid  = %i\n", current->pid);
+		printk(INFO_ID "current->nr_cpus_allowed  = %d\n", current->nr_cpus_allowed);
 
 	/*
 	#device driver

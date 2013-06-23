@@ -1,5 +1,5 @@
 /*
-main cheat on posix c headers
+main cheat on the POSIX C API
 
 #defines
 
@@ -45,6 +45,7 @@ main cheat on posix c headers
 #include <math.h>           //M_PI, M_PI_2, M_PI_4:
 #include <stdbool.h>
 #include <stdio.h>          //popen(), perror()
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>         //strerror
 
@@ -57,11 +58,15 @@ main cheat on posix c headers
 #include <netdb.h>          //gethostbyname
 #include <netinet/in.h>
 #include <pthread.h>        //without this, one gets the glib.c version:
+#include <pwd.h>            //getpwuid, getpwnam, getpwent
 #include <regex.h>
+#include <sys/resource.h>   //rusage, getrusage, rlimit, getrlimit
 #include <sys/socket.h>
 #include <sys/stat.h>       //S_IRUSR and family,
 #include <sys/types.h>      //lots of posix realted typedef types
+#include <sys/utsname.h>    //uname, struct utsname
 #include <sys/wait.h>       //wait, sleep
+#include <syslog.h>         //syslog
 #include <unistd.h>         //major posix header. Anything that is not elsewhere is here.
 
 //#usr/include/linux headers
@@ -74,27 +79,159 @@ extern char **environ;
 
 int main(int argc, char** argv)
 {
-    //#environment variables
+    /*
+    #erros
+
+        typical error dealing conventions POSIX are:
+
+        - if the return value is not needed, functions return 0 on successs and either -1 on failure
+            or an integer which indicates failure cause
+        - if the return value is strictly positive, return a negative value on error
+        - if the return value is a pointer, return `NULL` on error
+
+        whenever there is an error, set `errno` accordingly to determine what was the cause of the erro
+
+    #errno.h
+
+        is defined by ANSI, but more predefined error constants are added extended in POSIX,
+        and each error has a standard associated error message TODO check
+
+        including functions that deal with the error messages
+
+        some of the POSIX only errors are: TODO check that those are not in ansi c
+
+        - EPERM: Operation not permitted
+        - ENOENT: No such file or directory
+        - EINTR: Interrupted system call
+        - EIO: I/O Error
+        - EBUSY: Device or resource busy
+        - EEXIST: File exists
+        - EINVAL: Invalid argument
+        - EMFILE: Too many open files
+        - ENODEV: No such device
+        - EISDIR: Is a directory
+        - ENOTDIR: Isn’t a directory
+
+        those error descriptions are also programatically accessible through functions
+        such as `perror` or `strerror`
+    */
     {
         /*
-            each process includes a list of its environment variables
+        #errno
 
-            those can be modified for the process
+            errno can be modified by functions to contain a description of certain
+            standard errors. TODO check: can user functions also modify errno?
 
-            child processes inherit those variables, so this is a way
-            for processes to communicate
+            0 indicates no error (ANSI C)
 
-            #getenv
+            since any function may change errno, you must use the functions that
+            depend on errno immediatelly after the function that generates the error
+        */
+        {
+            //assure tmpdir does not exist
+            struct stat s;
+            if( stat( "tmpdir", &s ) == 0 )
+                assert( rmdir( "tmpdir" ) != -1 );
 
-                specified by ANSI C
+            printf( "errno = %d\n", errno );
 
-            #setenv
+            rmdir( "tmpdir" );
+            printf( "errno = %d\n", errno );
 
-                not specified by ANSI C TODO check
+            //TODO why is errno unchanged even if the second rmdir worked?
 
-            #putenv
+            mkdir( "tmpdir", 0777 );
+            rmdir( "tmpdir" );
+            printf( "errno = %d\n", errno );
+        }
 
-                don't use, just use `setenv` instead. POSIX 7 itself says this.
+        /*
+        #perror
+
+            print description of errno to stderr with given prefix appended, NULL for no prefix.
+        */
+        {
+            perror( "perror" );
+
+            //assure tmpdir does not exist
+            struct stat s;
+            if( stat( "tmpdir", &s ) == 0 )
+                assert( rmdir( "tmpdir" ) != -1 );
+
+            assert( unlink( "idontexist" ) == -1 );
+            perror( "perror" );
+        }
+
+        /*
+        #strerror
+
+            returns a readonly pointer to the description of the error with the given number:
+
+                char *strerror( int errnum );
+        */
+        {
+            printf( "strerror(EISDIR) = \"%s\"\n", strerror(EISDIR) );
+        }
+    }
+
+    /*
+    #syslog
+
+        writes error messages to standard system files
+
+        interface:
+
+            void syslog(int priority, const char *message, arguments...);
+
+        error levels:
+
+        - LOG_EMERG       Description
+        - LOG_ALERT       An emergency situation
+        - LOG_CRIT        High-priority problem, such as database corruption
+        - LOG_ERR         Critical error, such as hardware failure
+        - LOG_WARNING     Errors
+        - LOG_NOTICE      Warning
+        - LOG_INFO        Special conditions requiring attention
+        - LOG_DEBUG       Informational messages
+
+        error source:
+
+        - LOG_USER: a user space application
+        - LOG_LOCAL[0-7]: left for admins to specify
+
+        message: accepts format strings similar to printf with extensions
+
+        - %m: errno message string
+    */
+    {
+        //TODO this breaks my poor program, why?
+
+            //syslog( LOG_ERR | LOG_USER, "syslog test: %m\n");
+    }
+
+    /*
+    #environment variables
+
+        each process includes a list of its environment variables
+
+        those can be modified for the process
+
+        child processes inherit those variables, so this is a way
+        for processes to communicate
+    */
+    {
+        /*
+        #getenv
+
+            specified by ANSI C
+
+        #setenv
+
+            not specified by ANSI C TODO check
+
+        #putenv
+
+            don't use, just use `setenv` instead. POSIX 7 itself says this.
         */
         {
             assert( setenv( "HOME", "asdf", true ) != -1 );
@@ -108,11 +245,11 @@ int main(int argc, char** argv)
         }
 
         /*
-            #environ
+        #environ
 
-                automatically set by POSIX libraries linked to
+            automatically set by POSIX libraries linked to
 
-                is a list of strings of type `VAR=val`
+            is a list of strings of type `VAR=val`
         */
         if ( 0 ) //too much distracting output
         {
@@ -428,138 +565,327 @@ int main(int argc, char** argv)
     }
 
     /*
-    #errno.h
+    rusage stands for Resource usage
 
-        is defined by ANSI, but more predefined error constants are added extended in POSIX. TODO check
+    the kernel allows processes to use a certain ammount of ressources such as
+    memory or processor time
 
-        including functions that deal with the error messages
+    exceeding those limits may lead the kernel to kill a processes
+    */
 
-        some of the POSIX only errors are: TODO check that those are not in ansi c
+    /*
+    #getrusage
 
-        - EPERM: Operation not permitted
-        - ENOENT: No such file or directory
-        - EINTR: Interrupted system call
-        - EIO: I/O Error
-        - EBUSY: Device or resource busy
-        - EEXIST: File exists
-        - EINVAL: Invalid argument
-        - EMFILE: Too many open files
-        - ENODEV: No such device
-        - EISDIR: Is a directory
-        - ENOTDIR: Isn’t a directory
+        returns the total time usage of current process (non sleeping/waiting)
 
-        those error descriptions are also programatically accessible through functions
-        such as `perror` or `strerror`
+            int getrusage(int who, struct rusage *r_usage);
+
+        - who:
+
+            - RUSAGE_SELF: only get information about current process
+            - RUSAGE_CHILDREN: information includes both current process and chidren who are dead
+                and are just waiting for the parent to call `wait()` on them.
+
+                This makes sense here because the only thing that keeps their memory
+                used up is the existance of the parent process.
+
+        - r_usage: is the main return valu, and is set to contain a struct:
+
+                struct rusage {
+                    struct timeval ru_utime; // user time used
+                    struct timeval ru_stime; // system time used
+                };
+
+            and `timeval` is of type:
+
+                struct timeval {
+                    time_t         tv_sec      Seconds. 
+                    suseconds_t    tv_usec     Microseconds.
+                };
+
+        - return: 0 on success, -1 on error + errno set to exact error
     */
     {
-        /*
-        #errno
-
-            errno can be modified by functions to contain a description of certain
-            standard errors. TODO check: can user functions also modify errno?
-
-            0 indicates no error (ANSI C)
-
-            since any function may change errno, you must use the functions that
-            depend on errno immediatelly after the function that generates the error
-        */
+        struct rusage usage;
+        if ( getrusage( RUSAGE_SELF, &usage ) == -1 )
         {
-            //assure tmpdir does not exist
-            struct stat s;
-            if( stat( "tmpdir", &s ) == 0 )
-                assert( rmdir( "tmpdir" ) != -1 );
-
-            printf( "errno = %d\n", errno );
-
-            rmdir( "tmpdir" );
-            printf( "errno = %d\n", errno );
-
-            //TODO why is errno unchanged even if the second rmdir worked?
-
-            mkdir( "tmpdir", 0777 );
-            rmdir( "tmpdir" );
-            printf( "errno = %d\n", errno );
+            perror( "getrusage failed" );
+            exit( EXIT_FAILURE );
         }
-
-        /*
-        #perror
-
-            print description of errno to stderr with given prefix appended, NULL for no prefix.
-        */
+        else
         {
-            perror( "perror" );
-
-            //assure tmpdir does not exist
-            struct stat s;
-            if( stat( "tmpdir", &s ) == 0 )
-                assert( rmdir( "tmpdir" ) != -1 );
-
-            assert( unlink( "idontexist" ) == -1 );
-            perror( "perror" );
-        }
-
-        /*
-        #strerror
-
-            returns a readonly pointer to the description of the error with the given number:
-
-                char *strerror( int errnum );
-        */
-        {
-            printf( "strerror(EISDIR) = \"%s\"\n", strerror(EISDIR) );
+            printf(
+                "user time      = %llu s %llu micro secs\n",
+                (uintmax_t)usage.ru_utime.tv_sec,
+                (uintmax_t)usage.ru_utime.tv_usec
+            );
+            printf(
+                "system time    = %llu s %llu micro secs\n",
+                (uintmax_t)usage.ru_stime.tv_sec,
+                (uintmax_t)usage.ru_stime.tv_usec
+            );
         }
     }
 
     /*
-    #memory usage #rusage
+    #getrlimit
 
-        rusage stands for RAM usage
+        returns the maximum value for a given resource
 
-        returns a struct:
+        there are two types of limits:
 
-            struct rusage {
-                struct timeval ru_utime; // user time used
-                struct timeval ru_stime; // system time used
-                long   ru_maxrss;        // maximum resident set size
-                long   ru_ixrss;         // integral shared memory size
-                long   ru_idrss;         // integral unshared data size
-                long   ru_isrss;         // integral unshared stack size
-                long   ru_minflt;        // page reclaims
-                long   ru_majflt;        // page faults
-                long   ru_nswap;         // swaps
-                long   ru_inblock;       // block input operations
-                long   ru_oublock;       // block output operations
-                long   ru_msgsnd;        // messages sent
-                long   ru_msgrcv;        // messages received
-                long   ru_nsignals;      // signals received
-                long   ru_nvcsw;         // voluntary context switches
-                long   ru_nivcsw;        // involuntary context switches
-            };
+        - soft: can be increased by any process to any value lower than the hard maximum
+        - hard: only processes with special privileges may increase the hard limit
+
+        if a resource goes over the soft limit, the kernel may choose to kill the process
+
+        interfaces:
+
+            int getrlimit(int resource, struct rlimit *rlp);
+            int setrlimit(int resource, const struct rlimit *rlp);
+
+        - resource: see the docs for a description of each possible value
+
+        - rlp: struct of type:
+
+                struct rlimit {
+                    rlim_t rlim_cur  // The current (soft) limit.
+                    rlim_t rlim_max  // The hard limit.
+                }
+
+            where `rlim_t` is an unsigned integer
     */
-
     {
-        //struct rusage usage;
-        //int i = getrusage( rusage_self, &usage );
+        struct rlimit limit;
+        if ( getrlimit( RLIMIT_DATA, &limit ) == -1 )
+        {
+            perror( "getrlimit( RLIMIT_DATA, ... ) failed" );
+            exit( EXIT_FAILURE );
+        }
+        else
+        {
+            //maximum process memory in bytes
+            if ( limit.rlim_max == RLIM_INFINITY )
+            {
+                //RLIM_INFINITY means that no limit is imposed on the resource
+                puts( "RLIMIT_DATA: no limit imposed" );
+            }
+            else
+            {
+                printf(
+                    "RLIMIT_DATA\n  soft = %llu\n  hard = %llu\n",
+                    (uintmax_t)limit.rlim_cur,
+                    (uintmax_t)limit.rlim_max
+                );
+            }
+        }
+
+        //ok, enough of error checking from now on
+
+        printf( "RLIM_INFINITY = %llu\n", (uintmax_t)RLIM_INFINITY );
+
+        //maximum total cpu usage in seconds
+        getrlimit( RLIMIT_CPU, &limit );
+        printf(
+            "RLIMIT_CPU\n  soft = %llu\n  hard = %llu\n",
+            (uintmax_t)limit.rlim_cur,
+            (uintmax_t)limit.rlim_max
+        );
+
+        //maximum file size in bytes
+        getrlimit( RLIMIT_FSIZE, &limit );
+        printf(
+            "RLIMIT_FSIZE\n  soft = %llu\n  hard = %llu\n",
+            (uintmax_t)limit.rlim_cur,
+            (uintmax_t)limit.rlim_max
+        );
+
+        //number of file descriptors:
+        getrlimit( RLIMIT_NOFILE, &limit );
+        printf(
+            "RLIMIT_NOFILE\n  soft = %llu\n  hard = %llu\n",
+            (uintmax_t)limit.rlim_cur,
+            (uintmax_t)limit.rlim_max
+        );
+    }
+
+    /*
+    #user information
+
+        once use have uids for processes, you can querry standard user information
+        which was traditionally stored in the `/etc/passwd` file.
+    */
+    {
+        /*
+        #getpwuid
+
+            you can get those information either by username or by uid:
+
+                #include <pwd.h>
+
+                struct passwd *getpwuid(uid_t uid);
+                struct passwd *getpwnam(const char *name);
+
+            the struct returned is:
+
+                struct passwd {
+                    passwd Member    // Description
+                    char *pw_name    // The user’s login name
+                    uid_t pw_uid     // The UID number
+                    gid_t pw_gid     // The GID number
+                    char *pw_dir     // The user’s home directory
+                    char *pw_gecos   // The user’s full name
+                    char *pw_shell   // The user’s default shell
+                }
+
+            which contains all the required user metadata specified by POSIX
+        */
+        uid_t uid = getuid();
+        struct passwd* info = getpwuid( uid );
+        if ( info == NULL )
+        {
+            perror( "getpwuid failed" );
+            exit( EXIT_FAILURE );
+        }
+        else
+        {
+            puts( "getpwuid" );
+            printf( "  pw_name        = %s\n", info->pw_name  );
+            printf( "  pw_uid         = %d\n", info->pw_uid   );
+            printf( "  pw_gid         = %d\n", info->pw_gid   );
+            printf( "  pw_dir         = %s\n", info->pw_dir   );
+            printf( "  pw_gecos       = %s\n", info->pw_gecos );
+            printf( "  pw_shell       = %s\n", info->pw_shell );
+        }
+
+        /*
+        #getpwuid
+
+            iterate a list of all passwd structures
+
+            first call gets the first, every call gets the next
+
+            to start from beginning again do:
+
+                void setpwent(void);
+
+            when you are done, free any associated resources with:
+
+                endpwent()
+        */
+        {
+            puts( "all users:" );
+            struct passwd* info;
+
+            info = getpwent();
+            while ( info != NULL )
+            {
+                printf( "  %s\n", info->pw_name  );
+                info = getpwent();
+            }
+            endpwent();
+        }
+    }
+
+    /*
+    #terminal
+
+        some POSIX functions deal with the controlling terminal which called the program if any
+
+    #getlogin
+
+        gets login name of controlling terminal
+
+        note that this is different from getuid, since it looks at the controlling terminal,
+        and not at processes specific information.
+    */
+    {
+        char* login = getlogin();
+        if ( login == NULL )
+        {
+            perror( "getlogin failed" );
+        }
+        else
+        {
+            printf( "getlogin() = %s\n", getlogin() );
+        }
+    }
+
+    /*
+    #uname
+
+        you can get information about the current computer using `uname`
+
+        unsurprisingly, it is the same information given by the POSIX utility `uname`
+    */
+    {
+        struct utsname info;
+        if ( uname( &info ) == -1 )
+        {
+            perror( "uname failed" );
+            exit( EXIT_FAILURE );
+        }
+        else
+        {
+            puts( "uname" );
+            printf( "  sysname   = %s\n", info.sysname   );
+            printf( "  nodename  = %s\n", info.nodename  );
+            printf( "  release   = %s\n", info.release   );
+            printf( "  version   = %s\n", info.version   );
+            printf( "  machine   = %s\n", info.machine   );
+        }
     }
 
     //#process
     {
-        //linux process model
-            //#include <linux/sched.h> >> task_struct
-            //http://www.ibm.com/developerworks/library/l-linux-process-management/
-
         /*
-        #get process info
+        #process info
 
-            every posix process has the folloing info associated to it:
+            #getpid
 
-            - pid: number can uniquelly identifies process
+                each process has an unique identifying integer called pid
 
-            - real and effective userid and groupid
-                real is always of who executes the program
-                effective may be different depending on the suid and sgid bits
+            #getuid and getguid
 
-            process are free to change those ids with system calls
+                each process has user and user group information associated to it
+                which determine what the process can or not
+
+                there are two types of uid and gid: real and effective:
+
+                - real is always of who executes the program
+
+                - effective may be different depending on the suid and sgid bits
+
+            #getpriority and nice
+
+                each process, user and group has a priority associated to it
+
+                those priorities are called *nice* values, since 
+                the higher the nice, the less time it takes ( it is nicer to other processes)
+
+                nice:
+
+                    int nice( int incr )
+
+                - incr: how much to increase the nice value
+                - return: the new nice value after the increase
+
+                getpriority:
+
+                    int getpriority(int which, id_t who);
+                    int setpriority(int which, id_t who, int priority);
+
+                - which:
+
+                    - PRIO_PROCESS: TODO what is the difference between this and nice?
+                    - PRIO_PGRP: TODO what is this?
+                    - PRIO_USER: TODO what is this?
+
+                - who: pid, uid or gid depending on which. `0` means current.
+
+                TODO what is the value range or priorities? POSIX says > 0, but I've read something
+                    on linux I've heard of -20 to 20? what about that NZERO value mentioned in the docs?
+                    where to get it?
         */
         {
             uid_t uid  = getuid();
@@ -567,39 +893,58 @@ int main(int argc, char** argv)
             gid_t gid  = getgid();
             gid_t egid = getegid();
             pid_t pid = getpid();
-            printf( "pid: %llu\n",  (long long unsigned)pid );
-            printf( "uid:  %llu\n", (long long unsigned)uid  );
-            printf( "euid: %llu\n", (long long unsigned)euid );
-            printf( "gid:  %llu\n", (long long unsigned)gid  );
-            printf( "egid: %llu\n", (long long unsigned)egid );
+            printf( "getpid()   = %llu\n",  (uintmax_t)pid     );
+            printf( "getuid()   = %llu\n",  (uintmax_t)uid     );
+            printf( "geteuid()  = %llu\n",  (uintmax_t)euid    );
+            printf( "getgid()   = %llu\n",  (uintmax_t)gid     );
+            printf( "getegid()  = %llu\n",  (uintmax_t)egid    );
+            printf( "getpriority( PRIO_PROCESS, 0 )     = %d\n",  getpriority( PRIO_PROCESS,    0 ) );
+            printf( "getpriority( PRIO_PGRP, 0 )        = %d\n",  getpriority( PRIO_PGRP,       0 ) );
+            printf( "getpriority( PRIO_USER, 0 )        = %d\n",  getpriority( PRIO_USER,       0 ) );
+            printf( "nice(0)    = %d\n",    nice( 0 ) );
+            printf( "nice(0)    = %d\n",    nice( 0 ) );
+            printf( "nice(1)    = %d\n",    nice( 1 ) );
+            printf( "nice(0)    = %d\n",    nice( 0 ) );
         }
 
         //#execl, execlp, execsle, execv, execvp, execvpe
         {
-            //interfaces for ``execve`` system call
+            /*
+            interfaces for ``execve`` system call
 
-            //execute and *leave*
-            //ends current process!!
+            execute and *leave*, ends current process!!
 
-            //common combo:
-                //fork + execl
+            common combo: fork + execl
 
-            //takes variable number or args
+            this is effective because of COW implemented on some systems:
+            memory will only be copied to new process if needed, and in this case it is no needed.
 
-            //must end null terminated
+            takes variable number or args
 
-            //char 'p': path, uses PATH var to find executable
-            //TODO: char 'v', char 'e'? what's the difference?
+            must end null terminated
 
-            //calls
-                //execl( "/bin/ls", "-l", "-h", NULL );
-                //execlp( "ls", "-l", "-h", NULL );
-                //execlp( "cprogram", "cprogram", "arg0", NULL );
-                    //don't forget that in a c program the first arg is the program name
+            versions:
+
+            - char 'p': path, uses PATH var to find executable
+            - TODO: char 'v', char 'e'? what's the difference?
+
+            sample calls:
+
+                execl( "/bin/ls", "-l", "-h", NULL );
+
+                execlp( "ls", "-l", "-h", NULL );
+
+                execlp( "cprogram", "cprogram", "arg0", NULL );
+
+            don't forget that in a c program the first arg is the program name
+            */
         }
 
-        //#waitpid()
-            //wait for child with given PID to terminate
+        /*
+        #waitpid()
+
+            wait for child with given PID to terminate
+        */
 
         /*
         #IPC
@@ -679,7 +1024,7 @@ int main(int argc, char** argv)
                     those 256 chunks will conatain its own header information)
                 */
                 {
-                    fprintf( stderr, "BUFSIZ = %llu", (long long unsigned) BUFSIZ );
+                    fprintf( stderr, "BUFSIZ = %llu", (intmax_t) BUFSIZ );
                     assert( BUFSIZ >= 256 );
                 }
 
@@ -739,11 +1084,12 @@ int main(int argc, char** argv)
                         assert( desired_last_char_read < BUFSIZ );
 
                         sprintf(
-                            cmd, "for i in `seq %llu`; do echo -n a; done",
-                            (long long unsigned) (desired_read_cycles-1)*BUFSIZ + desired_last_char_read
+                            cmd,
+                            "for i in `seq %llu`; do echo -n a; done",
+                            (uintmax_t)(desired_read_cycles-1) * BUFSIZ + desired_last_char_read
                         );
                         read_fp = popen( cmd, "r" );
-                        if( read_fp != NULL )
+                        if ( read_fp != NULL )
                         {
                             do
                             {
@@ -755,7 +1101,7 @@ int main(int argc, char** argv)
                                 printf( "======== n bytes read: %d\n", chars_read );
                                 //printf( "%s\n", buffer); //if you want to see a bunch of 'a's...
                                 read_cycles++;
-                            } while( chars_read == BUFSIZ );
+                            } while ( chars_read == BUFSIZ );
                             exit_status = pclose( read_fp );
                             assert( read_cycles == desired_read_cycles );
                             assert( chars_read == desired_last_char_read );
@@ -781,19 +1127,22 @@ int main(int argc, char** argv)
                         if( write_fp != NULL )
                         {
                             fwrite( buf, sizeof(char), BUFSIZ, write_fp );
+                            /*
+                            #pclose
+
+                                waits for child
+
+                                returns child exit status
+
+                                if child already waited for,
+                                returns -1: error
+                            */
                             exit_status = pclose( write_fp );
-                                //#pclose
-                                    //waits for child
-
-                                    //returns child exit status
-
-                                    //if child already waited for,
-                                    //returns -1: error
                             assert( exit_status == 0 );
                         }
                         else
                         {
-                            assert(false);
+                            assert( false );
                         }
                     }
                 }
@@ -1012,6 +1361,9 @@ int main(int argc, char** argv)
 
             NULL on error
 
+        #gethostbyaddr
+
+            same as gethostbyname but by address
         */
         {
             const int namelength = 256;
@@ -1060,6 +1412,34 @@ int main(int argc, char** argv)
             }
             printf( "\n" );
         }
+
+        /*
+        #getservbyport
+
+            posix requires that systems must keep a database containing strings
+            that describe which service (provided by a server) is available at each port
+
+                #include <netdb.h>
+
+                struct servent *getservbyport(int port, const char *proto);
+
+            this function uses that database to get info on such a service
+
+                struct servent {
+                    char *s_name;
+                    char **s_aliases;
+                    int s_port;
+                    char *s_proto;
+                };
+
+        #getservbyname
+
+            same as getservbyport but using the service name itself
+
+                #include <netdb.h>
+
+                struct servent *getservbyname(const char *name, const char *proto);
+        */
     }
 
     //#usr include linux

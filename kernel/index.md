@@ -46,10 +46,20 @@ of the linux kernel.
 You cannot use user space libs such as libc to program the kernel,
 since the kernel itself itself if need to be working for user space to work.
 
+# posix
+
+of of the goals of linux is to highly ( but to 100% ) POSIX compliant
+
+therefore, many of its system calls and concepts map directly to POSIX concepts
+
+we strongly incourage you to look at exactly what POSIX specifies
+and what it does not, so as to be able to decide if your code cannot be made
+more portable by using the posix c api instead of Linux specific code.
+
 # communication with user space
 
 the kernel communicates parameters to user space using special files,
-located mainly under `/proc/` and `/sys/`
+located mainly under `/proc/`, `/sys/` and `/dev/`
 
 you can see the contents of those files with a command line utility such as cat.
 
@@ -306,10 +316,29 @@ some major structures represent files
 the kernel manages user processes and kernel processes, scheduling them with some algorithm
 so that users see all process make some progress more or less at the same time.
 
-in the kernel, the following contexts exist:
+process representation is found under `sched.h` and is named `struct task_struct`
 
-- regular process context.
-- interrupt handler context. Restrictive, cannot sleep.
+for the kernel, processes can be in one of the following states:
+
+- running
+- waiting: wants to run, but scheduler let another one run for now
+- sleeping: is waiting for an event before it can run
+- stopped: killed but is waiting for its parent to call wait and get exit status
+- zombie: has been killed, but parent also without calling wait
+
+# interruptions
+
+- user space process can be interrupted by anyting, including other user space processes.
+- kernel space processes can be interrupted by other kernel processes or interrupts handlers,
+    but not by user space processes.
+
+    examples of things that generate kernel space processes:
+
+    - system calls
+    - module insertion/removal
+    - scheduled kernel processes such as softirqs
+
+- interrupt handlers cannot be interrupted by anyting else, not even other interrupt handlers.
 
 # memory
 

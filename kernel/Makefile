@@ -19,11 +19,18 @@ OBJS_NODIR	:= $(addsuffix $(OBJ_EXT), $(basename $(INS_NODIR)))
 OBJS		:= $(addprefix $(OUT_DIR), $(OBJS_NODIR))
 RUN_EXT		:= $(RUN)$(OUT_EXT)
 
-# `obj-m` is all that needs to be defined for the standard makefile to work
+# `obj-m` is all that needs to be defined for the standard makefile to work:
 
 #TODO why this does not work but the next line does? there is no `:` version of `+=`: it depends on how it is first defined. If if is first defined with `:`: then `+=` is `:`
 #obj-m 	+= $(OBJS)
 obj-m += hello_world.o main.o
+
+#gcc flags to use
+ccflags-y := -Wno-declaration-after-statement -std=gnu99
+#- must use -gnu because kernel relies on gnu extensions
+#- you may still get C90 forbids mixed declarations because the main Makefile
+#    explicitly uses `-make -Wno-declaration-after-statement`
+
 
 .PHONY: all clean ins rm run
 

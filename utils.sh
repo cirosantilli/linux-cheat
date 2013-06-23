@@ -2698,6 +2698,10 @@
 
     ##uname
 
+        #gets information on host computer
+
+        #POSIX 7
+
         #print all info uname has to give:
 
             uname -a
@@ -2890,6 +2894,13 @@
 
 ##process
 
+    ##bash
+
+        #get cur pid:
+
+            echo $$
+            echo $pid
+
     ##pwd
 
         #print working directory of process
@@ -2908,19 +2919,20 @@
 
     ##pwdx
 
-        pwdx $pid
+        #print current working directory of given process
 
-    #$$
-
-        #cur pid:
-            echo $$
+            pwdx $pid
 
     ##sleep
+
+        #POSIX 7
 
         sleep 2
             #do nothing for 2 seconds
 
     ##wait
+
+        #POSIX 7
 
         #wait for process with given pid to terminate
 
@@ -2945,6 +2957,8 @@
             assert [ "`echo $?`" = 0 ]
 
     ##ps
+
+        #POSIX 7
 
         #list current executing processes and their info
 
@@ -3103,14 +3117,16 @@
 
     ##nohup
 
+        #POSIX 7
+
         ##application
 
-            #make a process that continues to run if calling bash dies
-            #for example an X application!
+            #make a process that continues to run if calling bash dies:
 
-            nohup firefox >/dev/null &
-            exit
-                #firefox still lives!
+                nohup firefox >/dev/null &
+                exit
+
+            #firefox still lives! it would be killed if it were not for nohup
 
         ##explanation
 
@@ -3125,63 +3141,77 @@
             #*unless*, you use nohup
 
             #consequences of `nohup`:
-                #- if stdin came from terminal (not pipe for example),
-                    #sdtin comes from `/dev/null` (you have no stdin!) instead
-                #- if stdout would go to terminal (not pipe for example)
-                    #it is *appended to* `./nohup.out`, and if not possible from `$HOME/nohup.out`
-                    #instead
-                    #
-                    #if no stdout is generated, `nohup.out` is not created
-                    #
-                    #you can also redirect stdout to any file you want via `nohup cmd > file`
-                    #for example `nohup cmd > /dev/null` to ignore output
-                #- the program is still visible in `jobs`, and may be killed with `kill %+`
-                #- if you don't use `&`, it runs on foreground, preventing you from using bash
+
+            #- if stdin came from terminal (not pipe for example),
+                #sdtin comes from `/dev/null` (you have no stdin!) instead
+
+            #- if stdout would go to terminal (not pipe for example)
+                #it is *appended to* `./nohup.out`, and if not possible from `$HOME/nohup.out`
+                #instead
+                #
+                #if no stdout is generated, `nohup.out` is not created
+                #
+                #you can also redirect stdout to any file you want via `nohup cmd > file`
+                #for example `nohup cmd > /dev/null` to ignore output
+            #- the program is still visible in `jobs`, and may be killed with `kill %+`
+            #- if you don't use `&`, it runs on foreground, preventing you from using bash
 
             #how to test all this:
-            nohup bash -c 'for i in {1..10}; do echo $i; sleep 1; done'
+
+                nohup bash -c 'for i in {1..10}; do echo $i; sleep 1; done'
 
             #try:
-                #append `> f` to command
-                #append `&`   to command
+
+            #append `> f` to command
+            #append `&`   to command
+
                 jobs
                 cat nohup.out
 
     ##timeout
 
-        #run command for at most n seconds
+        #run command for at most n seconds, and kill it if it does not finish in time
 
         #coreutils
 
-        assert [ `timeout 3 bash -c 'for i in {1..2}; do echo $i; sleep 1; done'` = $'1\n2\n' ]
-        assert [ `timeout 1 bash -c 'for i in {1..2}; do echo $i; sleep 1; done'` = $'1\n' ]
+            assert [ `timeout 3 bash -c 'for i in {1..2}; do echo $i; sleep 1; done'` = $'1\n2\n' ]
+            assert [ `timeout 1 bash -c 'for i in {1..2}; do echo $i; sleep 1; done'` = $'1\n' ]
 
     ##nice
 
-        #-20: highest priority
-        # 20: lowest  priority
-        #the nicest you are, the more you let others run!
+        #- -20: highest priority
+        #- 20: lowest  priority
 
-        ps axl
-            #ps with NI(CE) column
+        #mnemonic: the nicest you are, the more you let others run!
 
-        nice -10 ./cmd
-            #set nice to 10
+        #POSIX 7
 
-        sudo nice --10 ./cmd
-            #set nice to -10
-            #only sudo can set negative nice
+        #therefore the concept of niceness is included in POSIX
 
-        renice 16 -p 13245
-            #change priority of process
+        #view nice of all processes:
+
+            ps axl
+
+        #run program with a nice of 10:
+
+            nice -10 ./cmd
+
+        #-10:
+
+            sudo nice --10 ./cmd
+
+        #you need sudo to decrease nice
+
+        #change priority of process by PID:
+
+            renice 16 -p 13245
 
     ##flock
 
         #puts an advisory file lock on given file while a command executes
 
-        touch a
-
-        flock a sleep 5
+            touch a
+            flock a sleep 5 &
 
     ##pstree
 
@@ -3229,11 +3259,14 @@
     ##ipcs
 
         #list info on inter process communication facilities:
-            #shared mem
-            #semaphores
-            #message queues
 
-        ipcs
+            ipcs
+
+        #shows:
+
+        #- shared mem
+        #- semaphores
+        #- message queues
 
         ##ipcrm
 

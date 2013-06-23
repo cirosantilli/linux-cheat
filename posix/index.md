@@ -75,7 +75,8 @@ it does not however specify the *exact* system calls,
 and those are then implemented using a given os system calls.
 
 however many of the linux system calls rassemble those
-closely because of the complience
+closely because of the complience, so when you learn the POSIX interface
+you are already learning the Linux interface too
 
 ## directory structure
 
