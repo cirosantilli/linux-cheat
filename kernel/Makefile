@@ -31,7 +31,6 @@ ccflags-y := -Wno-declaration-after-statement -std=gnu99
 #- you may still get C90 forbids mixed declarations because the main Makefile
 #    explicitly uses `-make -Wno-declaration-after-statement`
 
-
 .PHONY: all clean ins rm run
 
 # TODO put all outputs in a single output dir

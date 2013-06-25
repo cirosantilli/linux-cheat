@@ -2758,19 +2758,20 @@
 
         ##free
 
-            #ram and swap memory usage
+            #show RAM and swap memory in Megabytes
+
+            #-t totals at bottom
+            #-sN : repeat every N seconds
 
             free -m
-                #shows RAM and swap memory in Megabytes
-                # -t totals at bottom
-                # -sN : repeat every N seconds
 
         ##vmstat
 
             #memory, sway, io, cpu
 
-            vmstat 1 100
             #run every 1s, 100 times
+
+                vmstat 1 100
 
             #Vmstat procs Section
 

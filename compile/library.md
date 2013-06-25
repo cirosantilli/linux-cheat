@@ -74,6 +74,8 @@ you don't have to worry about dependancies
 
 ## loading vs linking
 
+there are two methods of using dynamic libraries in linux
+
 ### linking
 
 link to lib for entire program

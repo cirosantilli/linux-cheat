@@ -31,6 +31,14 @@ main cheat on the POSIX C API
     - 500: issue 5, 1995
     - 600: issue 6, 2004
     - 700: issue 7, 2008
+
+#TODO
+
+    #ptrace
+
+        one process (tracer) observes another process' (tracee) memory directly
+
+        <http://mikecvet.wordpress.com/2010/08/14/ptrace-tutorial/>
 */
 
 #define _XOPEN_SOURCE 700
@@ -55,6 +63,7 @@ main cheat on the POSIX C API
 #include <errno.h>
 #include <fcntl.h>          //file control options. O_CREAT,
 #include <libgen.h>
+//#include <limits.h>
 #include <netdb.h>          //gethostbyname
 #include <netinet/in.h>
 #include <pthread.h>        //without this, one gets the glib.c version:
@@ -68,12 +77,6 @@ main cheat on the POSIX C API
 #include <sys/wait.h>       //wait, sleep
 #include <syslog.h>         //syslog
 #include <unistd.h>         //major posix header. Anything that is not elsewhere is here.
-
-//#usr/include/linux headers
-
-    //ok this is not the place for them, but I'll put the here anyways for the time being
-
-#include <linux/limits.h>     //PATH_MAX max path length on system
 
 extern char **environ;
 
@@ -710,6 +713,24 @@ int main(int argc, char** argv)
     }
 
     /*
+    #sysconf
+
+        get lots of info on the system configuration
+
+        meanings for the constants can be found under
+        the `limits.h` and `unistd.h` corresponding variables
+    */
+    {
+        //number of processors:
+
+            printf( "_SC_NPROCESSORS_ONLN = %ld\n", sysconf( _SC_NPROCESSORS_ONLN ) );
+
+        //maximum lengh of command line arguments + environment variables:
+
+            printf( "_SC_ARG_MAX (MiB) = %ld\n", sysconf( _SC_ARG_MAX ) / ( 1 << 20 ) );
+    }
+
+    /*
     #user information
 
         once use have uids for processes, you can querry standard user information
@@ -1269,13 +1290,14 @@ int main(int argc, char** argv)
 
         posix threads
 
-        c11 will introduce a standard threading model, so this will be portable!
-
-        run single program in parallel
-
-        quicker to start than a process
+        c11 will introduce a standard threading model,
+        so in time this may become less important
 
         each thread has its own stack, but unlike process, global memory is shared
+
+        quicker to start than a process because less resource copy is needed
+
+        in Linux, based on the `clone` system call
     */
     {
         /*
@@ -1283,7 +1305,9 @@ int main(int argc, char** argv)
 
             very thin wrapper to the linux system clal
 
-            like ``fork``, but with shared memory and open file descriptors
+            like ``vfork``, but with shared memory and open file descriptors
+
+            TODO where is this on POSIX? can't find it
         */
         {
 
@@ -1440,22 +1464,6 @@ int main(int argc, char** argv)
 
                 struct servent *getservbyname(const char *name, const char *proto);
         */
-    }
-
-    //#usr include linux
-    {
-        /*
-        #PATH_MAX
-
-            max file path length:
-
-            but there seem to be problems with that:
-            <http://stackoverflow.com/questions/833291/is-there-an-equivalent-to-winapis-max-path-under-linux-unix>
-
-            one of them being filesystem dependance
-        */
-
-            printf( "PATH_MAX = %d\n", PATH_MAX );
     }
 
     return EXIT_SUCCESS;

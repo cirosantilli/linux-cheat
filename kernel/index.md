@@ -140,6 +140,19 @@ which determine which features your kernel will include or not.
 
 then go on to `save` to save to the `.config` file and then exit
 
+many of the options of the configuration file can be accessed via preprocessor macros
+which control system behaviour (TODO all of them are accessible?)
+
+for example:
+
+    CONFIG_SMP=y
+
+means that symmetrical multiprocessing is on (yes), and then in the code we can use:
+
+    #ifdef CONFIG_SMP
+        //smp specific
+    #endif
+
 build:
 
 	make -j5
@@ -311,20 +324,14 @@ some major structures represent files
 
 	- pointer parent dentry
 
-# process
+## proc filesystem representation
 
-the kernel manages user processes and kernel processes, scheduling them with some algorithm
-so that users see all process make some progress more or less at the same time.
+each process has a representation on the file system under `/proc/\d+` which allows useres with enough
+priviledge to gather information on them. Sample interesting fields:
 
-process representation is found under `sched.h` and is named `struct task_struct`
+- limits: limits to various resources which are imposed by the kernel
 
-for the kernel, processes can be in one of the following states:
-
-- running
-- waiting: wants to run, but scheduler let another one run for now
-- sleeping: is waiting for an event before it can run
-- stopped: killed but is waiting for its parent to call wait and get exit status
-- zombie: has been killed, but parent also without calling wait
+    going over those limits may cause the kernel to terminate processes with certain signals
 
 # interruptions
 
@@ -336,7 +343,9 @@ for the kernel, processes can be in one of the following states:
 
     - system calls
     - module insertion/removal
-    - scheduled kernel processes such as softirqs
+    - scheduled kernel processes such as softirqs.
+
+        those are run in kernel threads
 
 - interrupt handlers cannot be interrupted by anyting else, not even other interrupt handlers.
 
