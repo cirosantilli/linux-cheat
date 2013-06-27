@@ -50,13 +50,13 @@
 
 #define _XOPEN_SOURCE 700
 
-#include "assert.h"
-#include "stdbool.h"
-#include "stdio.h"
-#include "stdlib.h"
+#include <assert.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include <sys/wait.h>       //wait
-#include "unistd.h"
+#include <unistd.h>
 
 int main( int argc, char** argv )
 {

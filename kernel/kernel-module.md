@@ -289,11 +289,11 @@ every architecture must at least mimic this separation.
 
 on x86, the following specialized instructions exist for port io:
 
-- IN    Read from a port
-- OUT   Write to a port
-- INS/INSB  Input string from port/Input byte string from port
-- INS/INSW  Input string from port/Input word string from port
-- INS/INSD  Input string from port/Input doubleword string from port
+- IN            Read from a port
+- OUT           Write to a port
+- INS/INSB      Input string from port/Input byte string from port
+- INS/INSW      Input string from port/Input word string from port
+- INS/INSD      Input string from port/Input doubleword string from port
 - OUTS/OUTSB    Output string to port/Output byte string to port
 - OUTS/OUTSW    Output string to port/Output word string to port
 - OUTS/OUTSD    Output string to port/Output doubleword string to port

@@ -1,6 +1,6 @@
 /*
-main cheat on kernel modules and on kernel concepts
-that can be exemplified in modules (much easier than recompiling and reinstalling the kernel...)
+main cheat on the kernel kernel modules and on kernel concepts
+that can be exemplified in modules (much easier than recompiling and reinstalling the kernel)
 
 #typedefs
 
@@ -24,6 +24,7 @@ that can be exemplified in modules (much easier than recompiling and reinstallin
 #include <linux/kernel.h>	/* KERN_INFO */
 #include <linux/module.h>	/* module specific utilities: MODULE_* macros, module_param, module_init, module exit */
 #include <linux/sched.h>	/* current */
+#include <linux/sched/rt.h>	/* MAX_PRIO, MAX_USER_RT_PRIO, DEFAULT_PRIO */
 #include <linux/spinlock.h>
 #include <linux/version.h>
 #include <linux/slab.h>
@@ -160,6 +161,9 @@ DEFINE_PER_CPU(int, cpu_int);
  * */
 static int __init init(void)
 {
+	i_global = 0;
+	printk(INFO_ID "i_global = %d\n", i_global);
+
 	/*
 	#printk
 
@@ -178,12 +182,9 @@ static int __init init(void)
 
 		printk takes printf format strings with containing things like `%d`
 	*/
-
+	{
 		printk(INFO_ID "%s\n", __func__ );
-
-	i_global = 0;
-
-	printk(INFO_ID "i_global = %d\n", i_global);
+	}
 
 	/*
 	#data structures
@@ -309,13 +310,13 @@ static int __init init(void)
 				it allows to emulate inheritance independant of the type of structure
 				that is inheriting
 			*/
+
 			if ( container_of(&ca.list, struct char_list, list) != &ca )
 				return 1;
 		}
 	}
 
 	/*
-
 	#kernel version
 
 		device drivers depend on kernel version.
@@ -326,31 +327,10 @@ static int __init init(void)
 
 			example: on kernel `2.6.10` == 132618 (i.e., 0x02060a)
 	*/
-
+	{
 		/* printk( "UTS_RELEASE = %s", UTS_RELEASE ); */	/* TODO get working */
 		printk(INFO_ID "LINUX_VERSION_CODE = %d\n", LINUX_VERSION_CODE);
-
-	/*
-	#THIS_MODULE
-
-		pointer to the module struct of current module
-
-		the module struct and THIS_MODULE are both defined inside `module.h`
-
-		this struct determines all the information about a module
-	*/
-
-		//version is was set with the MODULE_VERSION macro:
-
-		printk(INFO_ID "THIS_MODULE->version = %s\n", THIS_MODULE->version );
-
-	/*
-	#parameters
-	*/
-
-		printk(INFO_ID "param_i = %d\n", param_i);
-		printk(INFO_ID "param_s = %s\n", param_s);
-		/*printk("param_is = %d, %d, %d\n", param_is[0], param_is[1], param_is[2]);*/
+	}
 
 	/*
 	#likely #unlikely
@@ -364,7 +344,7 @@ static int __init init(void)
 
 	 	a typical use case is to test for errors conditions (which should, in theory, be rare...)
 	*/
-
+	{
 		if (likely(0)) {
 			printk(INFO_ID "ERROR\n");
 		}
@@ -380,263 +360,7 @@ static int __init init(void)
 		if (unlikely(1)) {
 			printk(INFO_ID "unlikely(1)\n");
 		}
-
-
-	/*
-	#page
-
-		a page refers to the smallest virtual memory division that the kernel can get,
-		usually around 4Kib today. This size is equal to the size of the page frame.
-
-	#page frame
-
-		a page frame refers to the smalles physical memory that the processor can ask
-		from the RAM.
-
-	#linking pages to page frames
-
-		it would be too expensive to keep a link from every virtual memory:
-
-			4 GiB / 4 KiB = 1 M structures per processes
-
-		the solution is then to only keep
-
-	#TASK_SIZE
-
-		*virtual memory* is divided as follows:
-
-		- memory from address from 0 to TASK_SIZE - 1 can be used by *each* processes
-		- other memory adressses (from  TASK_SIZE to the maxinum adressable memory, 2^32 on 32 bits platforms
-				of 2^64 on 64 ) belongs to the kernel
-
-		TASK_SIZE is typically around 3/4 of the total memory
-
-		note that this is *virtual* memory, so it is independant of the acutual size of the memory
-		as the hardware and the kernel can give processes the illusion that they actually have
-		ammounts of memory larger than the hardware for instance
-
-	*/
-
-		printk(INFO_ID "TASK_SIZE (GiBs) = %lu\n", TASK_SIZE / (1 << 30));
-
-	/*
-	#kmalloc
-
-		like libc malloc, but for the kernel
-
-		#flags
-
-			TODO
-	*/
-
-		int *kmalloc_is = kmalloc(2 * sizeof(int), GFP_KERNEL);
-		kmalloc_is[0] = 0;
-		kmalloc_is[1] = 1;
-		printk(INFO_ID "kmalloc_is[0] = %d\n", kmalloc_is[0]);
-		printk(INFO_ID "kmalloc_is[1] = %d\n", kmalloc_is[1]);
-		kfree(kmalloc_is);
-
-	/*
-	# process
-
-		the kernel manages user processes and kernel processes, scheduling them with some algorithm
-		so that users see all process make some progress more or less at the same time.
-
-		process representation is found under `sched.h` and is named `struct task_struct`
-
-	#threads
-
-		threads are processes that share the same address space so they act on common variables
-
-	#kernel threads
-
-		kernel threads are like user space threads, but are created by the kernel
-		and execute on the kernel memory space with kernel priviledges.
-
-		They can also be listed with ps:
-
-	#current
-
-		macro that gives the `task_struct` representing the current process
-
-	#task_struct
-
-		represents processes (called taks on the kern), found in `sched.h`
-
-		#tgid
-
-			thread group id
-
-			same for all threads that TODO have the same data?
-
-		#parent vs real_parent
-
-			TODO
-
-		#priorities and scheduling
-
-			there are two main scheduler used today: completely_fair and real_time
-
-			real time attempts to be real time, but linux maker no guarantees that
-			a process will actually run before a given time, only this is very likely
-
-			#state
-
-				processes can be in one of the following states:
-
-				- running:
-				- waiting: wants to run, but scheduler let another one run for now
-				- sleeping: is waiting for an event before it can run
-				- stopped: killed but is waiting for its parent to call wait and get exit status
-				- zombie: has been killed, but parent also without calling wait
-
-				these are represented in the `state` field of `task_struct`
-
-				- TASK_RUNNING: running
-				- TASK_INTERRUPTIBLE: task is waiting for some event to continue running
-
-			#static_priority
-
-				priority when the process was started
-
-				can be changed with `nice` and `sched_setscheduler` system calls
-
-			#normal_priority
-
-				priority based on the static priority and on the scheduling policy
-
-			#prio
-
-				actual priority. Can be different from normal priority under certain conditions
-
-				that the kernel decides to increase priorities
-
-			#rt_priority
-
-				real time priority. Range: 0 to 99, largest mor urgent.
-
-				Does not replace the other priorities.
-
-			#sched_class
-
-				contains mainly function pointers that
-				determine the operation of the scheduler.
-
-			#policy
-
-				#SCHED_NORMAL
-
-					handled by the fair scheduler. Normal tasks.
-
-				#SCHED_BATCH
-
-					handled by the fair scheduler.
-
-					For non interactive jobs so latency is not a major concern,
-					and therefore batch jobs get disfavoured.
-
-				#SCHED_IDLE
-
-					handled by the fair scheduler.
-
-					those tasks have the minimum priority,
-					and only run when there is nothing else to do.
-
-				#SCHED_RR
-
-					Handled by the real time scheduler.
-
-					TODO
-
-				#SCHED_FIFO
-
-					Handled by the real time scheduler.
-
-					TODO
-
-			#run_list
-
-				used by the real time scheduler only
-
-				TODO
-
-			#time_slice
-
-				used by the real time only
-
-				TODO
-
-		#children
-
-			processes keep a linked list of its children
-
-		#sibling
-
-			processes keep a linked list of its siblings
-	*/
-
-		printk(INFO_ID "TASK_RUNNING = %d\n", TASK_RUNNING);
-		printk(INFO_ID "TASK_INTERRUPTIBLE = %d\n", TASK_INTERRUPTIBLE);
-
-		//self is obviously running when state gets printed, parent may be not:
-
-			printk(INFO_ID "current->state  = %ld\n", current->state);
-			printk(INFO_ID "current->parent->state  = %ld\n", current->parent->state);
-
-		printk(INFO_ID "current->comm = %s\n", current->comm);
-		printk(INFO_ID "current->pid  = %lld\n", (long long)current->pid);
-		printk(INFO_ID "current->tgid = %lld\n", (long long)current->tgid);
-
-		printk(INFO_ID "current->prio = %d\n", current->prio);
-		printk(INFO_ID "current->static_prio = %d\n", current->static_prio);
-		printk(INFO_ID "current->normal_prio = %d\n", current->normal_prio);
-		printk(INFO_ID "current->rt_priority = %d\n", current->rt_priority);
-		printk(INFO_ID "current->policy = %u\n", current->policy);
-		printk(INFO_ID "SCHED_NORMAL = %u\n", SCHED_NORMAL);
-
-		printk(INFO_ID "current->nr_cpus_allowed  = %d\n", current->nr_cpus_allowed);
-
-		printk(INFO_ID "current->exit_state = %d\n", current->exit_state);
-		printk(INFO_ID "current->exit_code = %d\n", current->exit_code);
-		printk(INFO_ID "current->exit_signal = %d\n", current->exit_signal);
-
-		/*  the signal sent when the parent dies  */
-
-			printk(INFO_ID "current->pdeath_signal = %d\n", current->pdeath_signal);
-
-		printk(INFO_ID "current->parent->pid  = %lld\n", (long long)current->parent->pid);
-		printk(INFO_ID "current->parent->parent->pid  = %lld\n", (long long)current->parent->parent->pid);
-		printk(INFO_ID "current->real_parent->pid  = %lld\n", (long long)current->real_parent->pid);
-
-		//children transversal:
-		{
-			struct task_struct *task_struct_ptr;
-			printk(INFO_ID "current->children pids:\n");
-			list_for_each_entry(task_struct_ptr, &current->children, children) {
-				printk(INFO_ID "  %lld\n", (long long)task_struct_ptr->pid);
-			}
-		}
-
-		//siblings transversal:
-		{
-			struct task_struct *task_struct_ptr;
-
-			printk(INFO_ID "current->sibling pids:\n");
-			list_for_each_entry(task_struct_ptr, &current->sibling, children) {
-				printk(INFO_ID "  %lld\n", (long long)task_struct_ptr->pid);
-			}
-
-			printk(INFO_ID "current->parent->sibling pids:\n");
-			list_for_each_entry(task_struct_ptr, &current->parent->sibling, children) {
-				printk(INFO_ID "  %lld\n", (long long)task_struct_ptr->pid);
-			}
-		}
-
-		//struct list_head sibling;	/* linkage in my parent's children list */
-
-		/* threadgroup leader */
-
-			printk(INFO_ID "current->group_leader->pid  = %lld\n", (long long)current->group_leader->pid);
+	}
 
 	/*
 	#smp
@@ -679,6 +403,467 @@ static int __init init(void)
 		printk(INFO_ID "cpu_int  = %d\n", get_cpu_var(cpu_int));
 
 		printk(INFO_ID "smp_processor_id()  = %d\n", smp_processor_id());
+	}
+
+
+	/*
+	#assembly instructions that only kernel code can do
+
+		some instructions require kernel priviledge to be used
+
+		those that can be demonstrated here shall be
+
+		the use of plain assembly should be avoided whenever possible,
+		since more portable alternatives have usually already been coded,
+		but understanding those instructions may give you insights
+		on how the system achieves certain effects.
+
+		#x86
+
+			- interrupt flag IF instruction
+
+				determines if interrupts are enabled or disabled
+
+			- IO instructions
+
+				- IN            Read from a port
+				- OUT           Write to a port
+				- INS/INSB      Input string from port/Input byte string from port
+				- INS/INSW      Input string from port/Input word string from port
+				- INS/INSD      Input string from port/Input doubleword string from port
+				- OUTS/OUTSB    Output string to port/Output byte string to port
+				- OUTS/OUTSW    Output string to port/Output word string to port
+				- OUTS/OUTSD    Output string to port/Output doubleword string to port
+	*/
+
+	/*
+	#page
+
+		a page refers to the smallest virtual memory division that the kernel can get,
+		usually around 4Kib today. This size is equal to the size of the page frame.
+
+	#page frame
+
+		a page frame refers to the smalles physical memory that the processor can ask
+		from the RAM.
+
+	#linking pages to page frames
+
+		it would be too expensive to keep a link from every virtual memory:
+
+			4 GiB / 4 KiB = 1 M structures per processes
+
+		the solution is then to only keep links between used pages and frames
+
+		this is done in a multilevel scheme
+	*/
+
+	/*
+	#kmalloc
+
+		like libc malloc, but for the kernel
+
+		#flags
+
+			TODO
+	*/
+	{
+		int *kmalloc_is = kmalloc(2 * sizeof(int), GFP_KERNEL);
+		kmalloc_is[0] = 0;
+		kmalloc_is[1] = 1;
+		printk(INFO_ID "kmalloc_is[0] = %d\n", kmalloc_is[0]);
+		printk(INFO_ID "kmalloc_is[1] = %d\n", kmalloc_is[1]);
+		kfree(kmalloc_is);
+	}
+
+	/*
+	#TASK_SIZE
+
+		*virtual memory* is divided as follows:
+
+		- memory from address from 0 to TASK_SIZE - 1 can be used by *each* processes
+		- other memory adressses (from  TASK_SIZE to the maxinum adressable memory, 2^32 on 32 bits platforms
+				of 2^64 on 64 ) belongs to the kernel
+
+		TASK_SIZE is typically around 3/4 of the total memory
+
+		note that this is *virtual* memory, so it is independant of the acutual size of the memory
+		as the hardware and the kernel can give processes the illusion that they actually have
+		ammounts of memory larger than the hardware for instance
+
+	*/
+	{
+		printk(INFO_ID "TASK_SIZE (GiBs) = %lu\n", TASK_SIZE / (1 << 30));
+	}
+
+	/*
+	#process
+
+		the kernel manages user processes and kernel processes, scheduling them with some algorithm
+		so that users see all process make some progress more or less at the same time.
+
+		process representation is found under `sched.h` and is named `struct task_struct`
+
+	#threads
+
+		threads are processes that share the same address space so they act on common variables
+
+	#kernel threads
+
+		kernel threads are like user space threads, but are created by the kernel
+		and execute on the kernel memory space with kernel priviledges.
+
+		They can also be listed with ps:
+
+	#current
+
+		macro that gives the `task_struct` representing the current process
+
+	#task_struct
+
+		represents processes (called taks on the kern), found in `sched.h`
+
+		#tgid
+
+			thread group id
+
+			same for all threads that TODO have the same data?
+
+		#parent vs real_parent
+
+			TODO
+
+		there are two main scheduler used today: completely_fair and real_time
+
+		real time attempts to be real time, but linux maker no guarantees that
+		a process will actually run before a given time, only this is very likely
+
+		#children
+
+			processes keep a linked list of its children
+
+		#sibling
+
+			processes keep a linked list of its siblings
+
+		#scheduling
+
+			the following fields relate to process scheduling
+
+			#state
+
+				- TASK_RUNNING: running
+				- TASK_INTERRUPTIBLE: task is waiting for some event to continue running
+
+			#static_priority
+
+				priority when the process was started
+
+				can be changed with `nice` and `sched_setscheduler` system calls
+
+			#normal_priority
+
+				priority based on the static priority and on the scheduling policy
+
+			#prio
+
+				actual priority. Can be different from normal priority under certain conditions
+
+				that the kernel decides to increase priorities
+
+			#rt_priority
+
+				real time priority. Range: 0 to 99, like nice, smallest is most urgent.
+
+			#sched_class
+
+				contains mainly function pointers that
+				determine the operation of the scheduler.
+
+			- policy
+
+				one of:
+
+				- SCHED_FIFO
+				- SCHED_RR
+				- SCHED_NORMAL
+				- SCHED_BATCH
+				- SCHED_IDLE
+
+				representing the scheduling policy
+
+			#run_list
+
+				used by the real time scheduler only
+
+				TODO
+
+			#time_slice
+
+				used by the real time only
+
+				TODO
+	*/
+	{
+		printk(INFO_ID "TASK_RUNNING = %d\n", TASK_RUNNING);
+		printk(INFO_ID "TASK_INTERRUPTIBLE = %d\n", TASK_INTERRUPTIBLE);
+
+		//self is obviously running when state gets printed, parent may be not:
+
+			printk(INFO_ID "current->state  = %ld\n", current->state);
+			printk(INFO_ID "current->parent->state  = %ld\n", current->parent->state);
+
+		printk(INFO_ID "current->comm = %s\n", current->comm);
+		printk(INFO_ID "current->pid  = %lld\n", (long long)current->pid);
+		printk(INFO_ID "current->tgid = %lld\n", (long long)current->tgid);
+
+		printk(INFO_ID "current->prio = %d\n", current->prio);
+		printk(INFO_ID "current->static_prio = %d\n", current->static_prio);
+		printk(INFO_ID "current->normal_prio = %d\n", current->normal_prio);
+		printk(INFO_ID "current->rt_priority = %d\n", current->rt_priority);
+		printk(INFO_ID "current->policy = %u\n", current->policy);
+		printk(INFO_ID "SCHED_NORMAL = %u\n", SCHED_NORMAL);
+
+		printk(INFO_ID "current->nr_cpus_allowed  = %d\n", current->nr_cpus_allowed);
+
+		printk(INFO_ID "current->exit_state = %d\n", current->exit_state);
+		printk(INFO_ID "current->exit_code = %d\n", current->exit_code);
+		printk(INFO_ID "current->exit_signal = %d\n", current->exit_signal);
+
+		/*  the signal sent when the parent dies  */
+
+			printk(INFO_ID "current->pdeath_signal = %d\n", current->pdeath_signal);
+
+		printk(INFO_ID "current->parent->pid  = %lld\n", (long long)current->parent->pid);
+		printk(INFO_ID "current->parent->parent->pid  = %lld\n", (long long)current->parent->parent->pid);
+		printk(INFO_ID "current->real_parent->pid  = %lld\n", (long long)current->real_parent->pid);
+
+		//children transversal:
+		{
+			struct task_struct *task_struct_ptr;
+			printk(INFO_ID "current->children pids:\n");
+			list_for_each_entry(task_struct_ptr, &current->children, children) {
+				printk(INFO_ID "  %lld\n", (long long)task_struct_ptr->pid);
+			}
+		}
+
+		///siblings transversal:
+		{
+			struct task_struct *task_struct_ptr;
+
+			printk(INFO_ID "current->sibling pids:\n");
+			list_for_each_entry(task_struct_ptr, &current->sibling, children) {
+				printk(INFO_ID "  %lld\n", (long long)task_struct_ptr->pid);
+			}
+
+			printk(INFO_ID "current->parent->sibling pids:\n");
+			list_for_each_entry(task_struct_ptr, &current->parent->sibling, children) {
+				printk(INFO_ID "  %lld\n", (long long)task_struct_ptr->pid);
+			}
+		}
+
+		//struct list_head sibling;	/* linkage in my parent's children list */
+
+		/* threadgroup leader */
+
+			printk(INFO_ID "current->group_leader->pid  = %lld\n", (long long)current->group_leader->pid);
+	}
+
+	/*
+	#scheduling
+
+		modern systems are preemptive: they can stop tasks to start another ones, and continue with the old task later
+
+		a major reason for this is to give users the illusion that
+		their text editor, compiler and music player can
+		run at the same time even if they have a single cpu
+
+		scheduling is chooshing which processes will run next
+
+		the processes which stopped running is said to have been *preempted*
+
+		the main difficulty is that switching between processes (called *context switch*)
+		has a cost because if requires copying old memory out and putting new memory in.
+
+		balancing this is a question throughput vs latency balace.
+
+		- throughput is the total average performance. Constant context switches reduce it because they have a cost
+		- latency is the time it takes to attend to new matters such as refreshing the screen for the user.
+			Reducing latency means more context switches which means smaller throughput
+
+		#state
+
+			processes can be in one of the following states:
+
+			- running: running
+			- waiting: wants to run, but scheduler let another one run for now
+			- sleeping: is waiting for an event before it can run
+			- stopped: killed but is waiting for its parent to call wait and get exit status
+			- zombie: has been killed, but parent also without calling wait
+
+		#policy
+
+			policy is the way of choosing which process will run next
+
+			POSIX specifies some policies, Linux implements them and defines new ones
+
+			policy in inherited by children processes
+
+			#normal vs real time policies
+
+				policies can be divided into two classes: normal and real time
+
+				real time processes always have higher priority:
+				whenever a real time process is runnable it runs instead of normal processes
+				therefore they must be used with much care not to bog the system down
+
+				the name real time policy is not very true: Linux does not absolutelly ensure
+				that process will finish before some deadline.
+
+				however, realtime processes are very priviledged,
+				and in absense of other real time processes without even higher priorities,
+				the processes will run as fast as the hardware can possibly run it.
+
+		#priorities
+
+			priorities are a measure of how important processes are,
+			which defines how much cpu time
+			they shall get relative to other processes
+
+			there are 2 types of priority:
+
+			- real time priority
+
+				ranges from 0 to 99
+
+				only applies to process with a real time scheduling policy
+
+			- normal priorities
+
+				ranges from -20 to 19
+
+				only applies to proces with a normal scheduling policy
+
+				also known as *nice value*. The name relates to the fact that higher nice values
+				mean less priority, so the process is being nice to others and letting them run first.
+
+				nice has an exponential meaning: each increase in nice value means that
+				the relative importance of a process increases in 1.25.
+
+			for both of them, lower numbers mean higher priority
+
+			internally, both real time and normal priorities are represented on a single
+			integer which ranges from 0 to 140:
+
+			- real time processes are in the 0 - 99 range
+			- normal processes are in the 100 - 140 range
+
+			once again, the lower values correspond to the greater priorities
+
+			priority is inherited by children processes
+
+			#nice
+
+				is the traditional name for normal priority,
+				ranging from -20 (greater priority) to 19.
+
+				an increase in 1 nice level means 10% more cpu power
+
+		#normal policies
+
+			#completelly fair scheduler
+
+				all normal processes are currently dealt with internally by the *completelly fair scheduler* (CFS)
+
+				the idea behind this scheduler is imagining a system where there are as many cpu's
+				as there are processeimagining a system where there are as many cpu's as there are processes
+
+				being fair means giving one processor for each processes
+
+				what the CFS tries to do is to get as close to that behaviour as possible,
+				even though the actual number of processors is much smaller.
+
+			#normal scheduling policy
+
+				represented by the `SCHED_NORMAL` define
+
+			#batch scheduling prolicy
+
+				represented by the `SCHED_BATCH` define
+
+				gets lower priority than normal processes TODO exactly how much lower
+
+			#idle scheduling prolicy
+
+				the lowest priority possible
+
+				processes with this policy only run when the system has absolutely
+
+				represented by the `SCHED_IDLE` define
+
+		#real time policies
+
+			#fifo
+
+				represented by the `SCHED_FIFO` define
+
+				highes priority possible
+
+				handled by the real time scheduler.
+
+				the process with highest real time priority runs however much it wants
+
+				it can only be interrupted by:
+
+				- another real time processes with even higher priority becomes RUNNABLE
+				- a SIGSTOP
+				- a sched_yield() call
+				- a blocking operation such as a pipe read which puts it to sleep
+
+				therefore, lots of care must be taken because an infinite loop here
+				can easily take down the system.
+
+			#round robin
+
+				represented by the `SCHED_RR` define
+
+				processes run fixed ammounts of time proportional to their real time priority
+
+				like turning around in a pie where each process has a slice proportional to
+				it real time priority
+
+				can only be preempted like fifo processes, except that it may also be preempted
+				by other round robin processes
+
+			TODO if there is a round robin and a fifo processes, who runs?
+
+		#swapper process
+
+			when there are no other processes to do,
+			the scheduler chooses a (TODO dummy?) processes called *swapper process*
+
+		#runqueues
+
+			a runqueue is a list of processes that will be given cpu time
+			in order which process will be activated.
+
+			it is managed by schedulers, and is a central part of how the scheduler
+			chooses which process to run next
+
+			there is one runqueu per processor.
+	*/
+	{
+		//max priority of an rt process:
+
+			printk(INFO_ID "MAX_USER_RT_PRIO  = %d\n", MAX_USER_RT_PRIO);
+
+		//max priority of any process:
+
+			printk(INFO_ID "MAX_PRIO  = %d\n", MAX_PRIO);
+
+		//default priority for new processes:
+
+			printk(INFO_ID "DEFAULT_PRIO  = %d\n", DEFAULT_PRIO);
 	}
 
 	/*
@@ -764,6 +949,35 @@ static int __init init(void)
 			/*return -EIO;*/
 		/*}*/
 
+	/*
+	#modules
+	*/
+	{
+		/*
+		#THIS_MODULE
+
+			pointer to the module struct of current module
+
+			the module struct and THIS_MODULE are both defined inside `module.h`
+
+			this struct determines all the information about a module
+		*/
+		{
+			//version is was set with the MODULE_VERSION macro:
+
+			printk(INFO_ID "THIS_MODULE->version = %s\n", THIS_MODULE->version );
+		}
+
+		/*
+		#parameters
+		*/
+		{
+			printk(INFO_ID "param_i = %d\n", param_i);
+			printk(INFO_ID "param_s = %s\n", param_s);
+			/*printk("param_is = %d, %d, %d\n", param_is[0], param_is[1], param_is[2]);*/
+		}
+	}
+
 	return 0;
 }
 
@@ -801,7 +1015,7 @@ module_init(init);
  *
  * naming this `module_cleanup` worked.
  *
- * # __exit
+ * #__exit
  *
  * 	if this is module is ever built into the kernel,
  * 	`__exit` functions are simply discarded to make up free space.

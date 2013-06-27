@@ -69,6 +69,7 @@ main cheat on the POSIX C API
 #include <pthread.h>        //without this, one gets the glib.c version:
 #include <pwd.h>            //getpwuid, getpwnam, getpwent
 #include <regex.h>
+#include <sched.h>
 #include <sys/resource.h>   //rusage, getrusage, rlimit, getrlimit
 #include <sys/socket.h>
 #include <sys/stat.h>       //S_IRUSR and family,
@@ -104,6 +105,10 @@ int main(int argc, char** argv)
         some of the POSIX only errors are: TODO check that those are not in ansi c
 
         - EPERM: Operation not permitted
+
+            when users try to do something which requires previledges that they don't have,
+            such as being the root user.
+
         - ENOENT: No such file or directory
         - EINTR: Interrupted system call
         - EIO: I/O Error
@@ -151,7 +156,9 @@ int main(int argc, char** argv)
         /*
         #perror
 
-            print description of errno to stderr with given prefix appended, NULL for no prefix.
+            print description of errno to stderr with given prefix appended, `NULL` for no prefix.
+
+            *base* basic way to print error messages after error on a posix function
         */
         {
             perror( "perror" );
@@ -857,431 +864,495 @@ int main(int argc, char** argv)
         }
     }
 
-    //#process
+    /*
+    #process info
+
+        #getpid
+
+            each process has an unique identifying integer called pid
+
+        #getuid
+
+            each process has user information associated to it
+            which determine what the process can or not
+
+            there are two types of uid and gid: real and effective:
+
+            - real is always of who executes the program
+
+            - effective may be different depending on the suid and sgid bits
+
+        #getguid
+
+            like getuid but for user group
+
+        #setuid
+
+            #sets the user id if you have the priviledges
+
+        #getpriority and nice
+
+            each process, user and group has a priority associated to it
+
+            those priorities are called *nice* values, since 
+            the higher the nice, the less time it takes ( it is nicer to other processes)
+
+            nice:
+
+                int nice( int incr )
+
+            - incr: how much to increase the nice value
+            - return: the new nice value after the increase
+
+            getpriority:
+
+                int getpriority(int which, id_t who);
+                int setpriority(int which, id_t who, int priority);
+
+            - which:
+
+                - PRIO_PROCESS: TODO what is the difference between this and nice?
+                - PRIO_PGRP: TODO what is this?
+                - PRIO_USER: TODO what is this?
+
+            - who: pid, uid or gid depending on which. `0` means current.
+
+            TODO what is the value range or priorities? POSIX says > 0, but I've read something
+                on linux I've heard of -20 to 20? what about that NZERO value mentioned in the docs?
+                where to get it?
+    */
+    {
+        uid_t uid  = getuid();
+        uid_t euid = geteuid();
+        gid_t gid  = getgid();
+        gid_t egid = getegid();
+        pid_t pid = getpid();
+        printf( "getpid()   = %llu\n",  (uintmax_t)pid     );
+        printf( "getuid()   = %llu\n",  (uintmax_t)uid     );
+        printf( "geteuid()  = %llu\n",  (uintmax_t)euid    );
+        printf( "getgid()   = %llu\n",  (uintmax_t)gid     );
+        printf( "getegid()  = %llu\n",  (uintmax_t)egid    );
+        printf( "getpriority( PRIO_PROCESS, 0 )     = %d\n",  getpriority( PRIO_PROCESS,    0 ) );
+        printf( "getpriority( PRIO_PGRP, 0 )        = %d\n",  getpriority( PRIO_PGRP,       0 ) );
+        printf( "getpriority( PRIO_USER, 0 )        = %d\n",  getpriority( PRIO_USER,       0 ) );
+        printf( "nice( 0 )    = %d\n",    nice( 0 ) );
+        printf( "nice( 0 )    = %d\n",    nice( 0 ) );
+        printf( "nice( 1 )    = %d\n",    nice( 1 ) );
+        printf( "nice( 0 )    = %d\n",    nice( 0 ) );
+    }
+
+    //#execl, execlp, execsle, execv, execvp, execvpe
     {
         /*
-        #process info
+        interfaces for ``execve`` system call
 
-            #getpid
+        execute and *leave*, ends current process!!
 
-                each process has an unique identifying integer called pid
+        common combo: fork + execl
 
-            #getuid and getguid
+        this is effective because of COW implemented on some systems:
+        memory will only be copied to new process if needed, and in this case it is no needed.
 
-                each process has user and user group information associated to it
-                which determine what the process can or not
+        takes variable number or args
 
-                there are two types of uid and gid: real and effective:
+        must end null terminated
 
-                - real is always of who executes the program
+        versions:
 
-                - effective may be different depending on the suid and sgid bits
+        - char 'p': path, uses PATH var to find executable
+        - TODO: char 'v', char 'e'? what's the difference?
 
-            #getpriority and nice
+        sample calls:
 
-                each process, user and group has a priority associated to it
+            execl( "/bin/ls", "-l", "-h", NULL );
 
-                those priorities are called *nice* values, since 
-                the higher the nice, the less time it takes ( it is nicer to other processes)
+            execlp( "ls", "-l", "-h", NULL );
 
-                nice:
+            execlp( "cprogram", "cprogram", "arg0", NULL );
 
-                    int nice( int incr )
-
-                - incr: how much to increase the nice value
-                - return: the new nice value after the increase
-
-                getpriority:
-
-                    int getpriority(int which, id_t who);
-                    int setpriority(int which, id_t who, int priority);
-
-                - which:
-
-                    - PRIO_PROCESS: TODO what is the difference between this and nice?
-                    - PRIO_PGRP: TODO what is this?
-                    - PRIO_USER: TODO what is this?
-
-                - who: pid, uid or gid depending on which. `0` means current.
-
-                TODO what is the value range or priorities? POSIX says > 0, but I've read something
-                    on linux I've heard of -20 to 20? what about that NZERO value mentioned in the docs?
-                    where to get it?
+        don't forget that in a c program the first arg is the program name
         */
-        {
-            uid_t uid  = getuid();
-            uid_t euid = geteuid();
-            gid_t gid  = getgid();
-            gid_t egid = getegid();
-            pid_t pid = getpid();
-            printf( "getpid()   = %llu\n",  (uintmax_t)pid     );
-            printf( "getuid()   = %llu\n",  (uintmax_t)uid     );
-            printf( "geteuid()  = %llu\n",  (uintmax_t)euid    );
-            printf( "getgid()   = %llu\n",  (uintmax_t)gid     );
-            printf( "getegid()  = %llu\n",  (uintmax_t)egid    );
-            printf( "getpriority( PRIO_PROCESS, 0 )     = %d\n",  getpriority( PRIO_PROCESS,    0 ) );
-            printf( "getpriority( PRIO_PGRP, 0 )        = %d\n",  getpriority( PRIO_PGRP,       0 ) );
-            printf( "getpriority( PRIO_USER, 0 )        = %d\n",  getpriority( PRIO_USER,       0 ) );
-            printf( "nice(0)    = %d\n",    nice( 0 ) );
-            printf( "nice(0)    = %d\n",    nice( 0 ) );
-            printf( "nice(1)    = %d\n",    nice( 1 ) );
-            printf( "nice(0)    = %d\n",    nice( 0 ) );
-        }
+    }
 
-        //#execl, execlp, execsle, execv, execvp, execvpe
-        {
-            /*
-            interfaces for ``execve`` system call
+    /*
+    #waitpid()
 
-            execute and *leave*, ends current process!!
+        wait for child with given PID to terminate
+    */
 
-            common combo: fork + execl
+    /*
+    #IPC
 
-            this is effective because of COW implemented on some systems:
-            memory will only be copied to new process if needed, and in this case it is no needed.
+        inter process communication
 
-            takes variable number or args
+        the basic ways are:
 
-            must end null terminated
+        at startup:
 
-            versions:
+        - command line arguments
+        - environment variables
 
-            - char 'p': path, uses PATH var to find executable
-            - TODO: char 'v', char 'e'? what's the difference?
+        during execution:
 
-            sample calls:
+        - pipes
+        - regular files
+        - signals
+        - shared memory
+        - sockets
+    */
 
-                execl( "/bin/ls", "-l", "-h", NULL );
+    /*
+    #pipe
 
-                execlp( "ls", "-l", "-h", NULL );
-
-                execlp( "cprogram", "cprogram", "arg0", NULL );
-
-            don't forget that in a c program the first arg is the program name
-            */
-        }
-
+        pipes can be either unnamed (more common) or nammed
+    */
+    {
         /*
-        #waitpid()
+        #unnamed pipe
 
-            wait for child with given PID to terminate
+            unidirectional child ----> parent transfer
+
+            can be created either via `popen` or `pipe`
+
+            single process must start two children process: data source and the data consumer
+            and connect them
+
+            advantages over files:
+
+            - simple: no need to agree on a filename to communicate over
+            - fast: no need to modify the filesystem or worse: do disk io!
+            - secure: other process cannot se the data as they could in a file
+
+            data very limited per buffer! BUFSIZ ~= 1000-10000 today,
+            and the only guarantee is being at least 256 bytes wide.
+
+            i think it is not possible to know if a file pointer
+            is open for reading or writtin besides looking at how
+            it was created
+
+            workflow:
+
+            - child fills the buffer, then parent takes control
+            - child fills ...
         */
 
         /*
-        #IPC
+        #BUFSIZ
 
-            inter process communication
+            a measure of the ideal maxinum ammount of that that
+            should should be written/read to a pipe at a time for good performance.
 
-            the basic ways are:
+            in practice you could read/write much more than that,
+            but BUFSIZ is a good value:
 
-            at startup:
+            - fast
+            - not larger than the maximum
 
-            - command line arguments
-            - environment variables
+            so in practice you will should just use this value as a maximum.
 
-            during execution:
+            if you try to read write more than the max,
+            it just flushes all when the buffer gets filled
 
-            - pipes
-            - regular files
-            - signals
-            - shared memory
-            - sockets
+            the larger the buffer the faster the transfer
+
+            the only guarantee is BUFSIZ >= 256
+
+            if you want to be very portable, you must design systems
+            whose messages need no more than 256 bytes at a time
+
+            with such a system, you could just pass many 256 chunks at once
+            if your large buffer allows (of course, it is likelly that each of
+            those 256 chunks will conatain its own header information)
         */
         {
-            //#pipes
+            fprintf( stderr, "BUFSIZ = %llu\n", (intmax_t) BUFSIZ );
+            assert( BUFSIZ >= 256 );
+        }
+
+        /*
+        #popen
+
+            creates unnamed pipes
+
+            consider using ansi c `system` instead of this.
+
+            opens a new process running the given command.
+
+            given string runs inside `sh` in a separated process and therefore it is:
+
+            - slow
+            - does magic stuff like pathname expansion (`*.txt`)
+            - harder to port to non posix systems if one day you decide to do that
+
+            it seems from the posix docs that the interpreter `sh` cannot be changed.
+
+            Unlike the ANSI C `system` function,
+            does not automatically wait for the command to return: see `pclose` for that.
+
+            For that reason, `popen` is slightly more general than `system`,
+            as you can do more work in the current program begore getting the shell output.
+
+            This is not however extremelly useful since you usually need the shell output
+            to continue working anyways.
+
+            The output of peopen is put on an unnamed pipe, which is accessible via
+            ANSI C FILE type returned by the function, instead of posix file descriptor (integers)
+
+            Therefore you must use ANSI C file io functions like `fopen` or `fclose` with it,
+            instead of the more low level POSIX `open` or `write` family.
+
+        #pclose
+
+            waits for child generated process.
+
+            returns child exit status.
+
+            if child was already waited for, returns -1 to indicate an error.
+        */
+        {
+            //read from command and get exit status
             {
-                /*
-                //#unnamed
+                //popen uses ANSI C fread which uses ANSI C FILE type:
+                FILE* read_fp;
+                char buffer[BUFSIZ + 1];
+                char cmd[1024];
+                int chars_read;
+                int exit_status;
+                int read_cycles = 0;
+                int desired_read_cycles = 3;
+                int desired_last_char_read = 1;
+                assert( desired_last_char_read < BUFSIZ );
 
-                    unidirectional child ----> parent transfer
-
-                    single process must start two children process: data source and the data consumer
-                    and connect them
-
-                    advantages over files:
-
-                    - simple: no need to agree on a filename to communicate over
-                    - fast: no need to modify the filesystem or worse: do disk io!
-                    - secure: other process cannot se the data as they could in a file
-
-                    data very limited per buffer! BUFSIZ ~= 1000-10000 today,
-                    and the only guarantee is being at least 256 bytes wide.
-
-                    i think it is not possible to know if a file pointer
-                    is open for reading or writtin besides looking at how
-                    it was created
-
-                    workflow:
-
-                    - child fills the buffer, then parent takes control
-                    - child fills ...
-                */
-
-                /*
-                #BUFSIZ
-
-                    implementation dependant
-
-                    in practice you could read/write much more than that,
-                    but BUFSIZ is a good value
-
-                    - fast
-                    - not larger than the maximum
-
-                    so in practice you will should just use this value as a maximum.
-
-                    if you try to read write more than the max,
-                    it just flushes all when the buffer gets filled
-
-                    the larger the buffer the faster the transfer
-
-                    the only guarantee is BUFSIZ >= 256
-
-                    if you want to be very portable, you must design systems
-                    whose messages need no more than 256 bytes at a time
-
-                    with such a system, you could just pass many 256 chunks at once
-                    if your large buffer allows (of course, it is likelly that each of
-                    those 256 chunks will conatain its own header information)
-                */
+                sprintf(
+                    cmd,
+                    "for i in `seq %llu`; do echo -n a; done",
+                    (uintmax_t)(desired_read_cycles-1) * BUFSIZ + desired_last_char_read
+                );
+                read_fp = popen( cmd, "r" );
+                if ( read_fp != NULL )
                 {
-                    fprintf( stderr, "BUFSIZ = %llu", (intmax_t) BUFSIZ );
-                    assert( BUFSIZ >= 256 );
+                    do
+                    {
+                            chars_read = fread( buffer, sizeof( char ), BUFSIZ, read_fp );
+
+                        buffer[chars_read] = '\0';
+                        printf( "======== n bytes read: %d\n", chars_read );
+                        //printf( "%s\n", buffer); //if you want to see a bunch of 'a's...
+                        read_cycles++;
+                    } while ( chars_read == BUFSIZ );
+                    exit_status = pclose( read_fp );
+                    assert( read_cycles == desired_read_cycles );
+                    assert( chars_read == desired_last_char_read );
+                    assert( exit_status == 0 );
                 }
-
-                /*
-                #popen
-
-                    consider using ansi c `system` instead of this.
-
-                    opens a new process running the given command.
-
-                    given string runs inside `sh` in a separated process and therefore it is:
-
-                    - slow
-                    - does magic stuff like pathname expansion (`*.txt`)
-                    - harder to port to non posix systems if one day you decide to do that
-
-                    it seems from the posix docs that the interpreter `sh` cannot be changed.
-
-                    Unlike the ANSI C `system` function,
-                    does not automatically wait for the command to return: see `pclose` for that.
-
-                    For that reason, `popen` is slightly more general than `system`,
-                    as you can do more work in the current program begore getting the shell output.
-
-                    This is not however extremelly useful since you usually need the shell output
-                    to continue working anyways.
-
-                    The output of peopen is put on an unnamed pipe, which is accessible via
-                    ANSI C FILE type returned by the function, instead of posix file descriptor (integers)
-
-                    Therefore you must use ANSI C file io functions like `fopen` or `fclose` with it,
-                    instead of the more low level POSIX `open` or `write` family.
-
-                #pclose
-
-                    waits for child generated process.
-
-                    returns child exit status.
-
-                    if child was already waited for, returns -1 to incate an error.
-                */
+                else
                 {
-
-                    {
-                        //read from command
-                        //get its exit staus
-
-                            FILE* read_fp;
-
-                        char buffer[BUFSIZ + 1];
-                        char cmd[1024];
-                        int chars_read;
-                        int exit_status;
-                        int read_cycles = 0;
-                        int desired_read_cycles = 3;
-                        int desired_last_char_read = 1;
-                        assert( desired_last_char_read < BUFSIZ );
-
-                        sprintf(
-                            cmd,
-                            "for i in `seq %llu`; do echo -n a; done",
-                            (uintmax_t)(desired_read_cycles-1) * BUFSIZ + desired_last_char_read
-                        );
-                        read_fp = popen( cmd, "r" );
-                        if ( read_fp != NULL )
-                        {
-                            do
-                            {
-                                //yes uses ANSI C fread which uses ANSI C FILE type:
-
-                                    chars_read = fread( buffer, sizeof( char ), BUFSIZ, read_fp );
-
-                                buffer[chars_read] = '\0';
-                                printf( "======== n bytes read: %d\n", chars_read );
-                                //printf( "%s\n", buffer); //if you want to see a bunch of 'a's...
-                                read_cycles++;
-                            } while ( chars_read == BUFSIZ );
-                            exit_status = pclose( read_fp );
-                            assert( read_cycles == desired_read_cycles );
-                            assert( chars_read == desired_last_char_read );
-                            assert( exit_status == 0 );
-                        }
-                        else
-                        {
-                            fprintf( stderr, "could not open pipe" );
-                            exit( EXIT_FAILURE );
-                        }
-                    }
-
-                    //write to stdin of command
-                    {
-                        FILE* write_fp;
-                        char buf[BUFSIZ];
-                        int exit_status;
-
-                        memset( buf, 'c', BUFSIZ );
-                        write_fp = popen( "cat; echo", "w" );
-                            //w for write
-                            //simply copies to stdout and adds newline
-                        if( write_fp != NULL )
-                        {
-                            fwrite( buf, sizeof(char), BUFSIZ, write_fp );
-                            /*
-                            #pclose
-
-                                waits for child
-
-                                returns child exit status
-
-                                if child already waited for,
-                                returns -1: error
-                            */
-                            exit_status = pclose( write_fp );
-                            assert( exit_status == 0 );
-                        }
-                        else
-                        {
-                            assert( false );
-                        }
-                    }
-                }
-
-                /*
-                #pipe()
-
-                    very close to the linux pipe system call
-
-                    differences from popen:
-
-                    - does not use a shell, avoiding many of its problems
-
-                    - uses integer file descriptors instead of ANSI C FILE type
-                        therefore you manipulate pipes with file descriptor functions
-                        like `open` and `write` instead of ANSI C `fopen` family.
-
-                        This potentially gives you more control over the operations.
-
-                    it may however be a bit harder to setup
-
-                    typically used with fork + exec
-                */
-                {
-                    {
-                        int nbytes;
-                        int pipes[2];
-                            //note the integers
-                            //for file descriptors
-                        char data[] = "123";
-                        char buf[BUFSIZ + 1];
-                        if ( pipe(pipes) == 0 )
-                        {
-                            nbytes = write( pipes[1], data, strlen(data) );
-                                //cannot use the c standard fwrite
-                                //dealing with posix specific file desciptors here
-                                //#write
-
-                                    //system calls
-
-                                    //returns the number of bytes written
-                                    //it may be less than the desired if there is not
-                                    //enough space on medium
-
-                                    //if does not write enough TODO
-                                    //guess you have to do another call
-                            assert( nbytes = strlen(data) );
-                            nbytes = read( pipes[0], buf, BUFSIZ);
-                            assert( nbytes = strlen(data) );
-                            buf[nbytes] = '\0';
-                            assert( strcmp( buf, data ) == 0 );
-                        }
-                        else
-                        {
-                            assert(false);
-                        }
-                    }
-
-                    //#fork
-                    {
-                        //parent writes to child
-
-                        //this works because if ever read happens before,
-                        //it blocks
-
-                        int nbytes;
-                        int file_pipes[2];
-                        const char data[] = "123";
-                        char buf[BUFSIZ + 1];
-                        pid_t pid;
-                        if ( pipe( file_pipes ) == 0 )
-                        {
-                            fflush(stdout);
-                            pid = fork();
-                            if ( pid == -1 )
-                            {
-                                assert(false);
-                            }
-                            else if ( pid == 0 )
-                            {
-                                nbytes = read( file_pipes[0], buf, BUFSIZ );
-                                printf( "pipe child. data: %s\n", buf );
-                                exit(EXIT_SUCCESS);
-                            }
-                            else
-                            {
-                                nbytes = write( file_pipes[1], data, strlen(data) );
-                                assert( nbytes == strlen(data) );
-                                strlen(data);
-                            }
-                        }
-                        else
-                        {
-                            assert(false);
-                        }
-                    }
-                }
-
-                //#FIFO
-                {
-                    //aka named pipes
-
-                    //appear on the filesystem
-
-                    //therfore can be accessed as by any process
-
-                    //are however faster than writting to files,
-                    //since everything happens on RAM
-
-                    //cannot open for rw
-
-                    //application: simple client/servers!
-
-                    //#mkfifo
-
-                        //TODO 0
+                    fprintf( stderr, "could not open pipe" );
+                    exit( EXIT_FAILURE );
                 }
             }
+
+            //write to stdin of command
+            {
+                FILE* write_fp;
+                char buf[BUFSIZ];
+                int exit_status;
+
+                memset( buf, 'c', BUFSIZ );
+                write_fp = popen( "cat; echo", "w" );
+                    //w for write
+                    //simply copies to stdout and adds newline
+                if( write_fp != NULL )
+                {
+                    fwrite( buf, sizeof(char), BUFSIZ, write_fp );
+                    exit_status = pclose( write_fp );
+                    assert( exit_status == 0 );
+                }
+                else
+                {
+                    assert( false );
+                }
+            }
+        }
+
+        /*
+        #pipe
+
+            create unnamed pipes
+
+            very close to the linux pipe system call
+
+            differences from popen:
+
+            - does not use a shell, avoiding many of its problems
+
+            - uses integer file descriptors instead of ANSI C FILE type
+                therefore you manipulate pipes with file descriptor functions
+                like `open` and `write` instead of ANSI C `fopen` family.
+
+                This potentially gives you more control over the operations.
+
+            it may however be a bit harder to setup
+
+            typically used with fork + exec
+        */
+        {
+            {
+                int nbytes;
+                int pipes[2];
+                    //note the integers
+                    //for file descriptors
+                char data[] = "123";
+                char buf[BUFSIZ + 1];
+                if ( pipe(pipes) == 0 )
+                {
+                    nbytes = write( pipes[1], data, strlen(data) );
+                        //cannot use the c standard fwrite
+                        //dealing with posix specific file desciptors here
+                        //#write
+
+                            //system calls
+
+                            //returns the number of bytes written
+                            //it may be less than the desired if there is not
+                            //enough space on medium
+
+                            //if does not write enough TODO
+                            //guess you have to do another call
+                    assert( nbytes = strlen(data) );
+                    nbytes = read( pipes[0], buf, BUFSIZ);
+                    assert( nbytes = strlen(data) );
+                    buf[nbytes] = '\0';
+                    assert( strcmp( buf, data ) == 0 );
+                }
+                else
+                {
+                    assert(false);
+                }
+            }
+
+            /*
+            parent writes to child
+
+            this works because if ever read happens before, it blocks
+            */
+            {
+
+                int nbytes;
+                int file_pipes[2];
+                const char data[] = "123";
+                char buf[BUFSIZ + 1];
+                pid_t pid;
+                if ( pipe( file_pipes ) == 0 )
+                {
+                    fflush(stdout);
+                    pid = fork();
+                    if ( pid == -1 )
+                    {
+                        assert(false);
+                    }
+                    else if ( pid == 0 )
+                    {
+                        nbytes = read( file_pipes[0], buf, BUFSIZ );
+                        printf( "pipe child. data: %s\n", buf );
+                        exit(EXIT_SUCCESS);
+                    }
+                    else
+                    {
+                        nbytes = write( file_pipes[1], data, strlen(data) );
+                        assert( nbytes == strlen(data) );
+                        strlen(data);
+                    }
+                }
+                else
+                {
+                    assert(false);
+                }
+            }
+        }
+
+        /*
+        #FIFO
+
+            aka named pipes
+
+            appear on the filesystem
+
+            therefore can be accessed as by any process who sees it
+            and has enough priviledge level
+
+            are however faster than writting to files,
+            since everything happens on RAM
+
+            cannot open for rw
+
+            application: simple client/servers!
+
+            created with mkfifo
+
+        #mkfifo
+
+            used to create a FIFO
+        */
+        {
+                //TODO example
+        }
+    }
+
+    /*
+    #sched.h
+
+        get or set scheduler information
+
+        posix 7 specifies four scheduling policies, more can be defined by the implementation
+
+        - fifo: first in first out. Process runs untill it finishes.
+        - rr: round robin. Assign time slices and turn around the pie.
+        - other:
+
+    #sched_getscheduler
+
+        pid_t for given pid, 0 for current process
+    */
+    {
+        printf( "SCHED_FIFO     = %d\n",  SCHED_FIFO      );
+        printf( "SCHED_RR       = %d\n",  SCHED_RR        );
+        //TODO why no sched sporadic
+            //printf( "SCHED_SPORADIC = %d\n",  SCHED_SPORADIC  );
+        printf( "SCHED_OTHER    = %d\n",  SCHED_OTHER     );
+
+        printf( "sched_getscheduler( 0 ) = %d\n",  sched_getscheduler( 0 ) );
+
+        /*
+        #sched_setscheduler()
+
+            you need root permissions to change to higher priority modes such SCHED_FIFO
+        */
+        {
+            int policy = SCHED_FIFO;
+            struct sched_param sched_param = {
+                .sched_priority = 99
+            };
+
+            if ( sched_setscheduler( 0, policy, &sched_param ) == -1 )
+            {
+                perror( "sched_setscheduler" );
+                //no error in case this is not run as root:
+                    //exit( EXIT_FAILURE );
+            }
+            else
+            {
+                assert( sched_getscheduler( 0 ) == policy );
+            }
+        }
+
+        /*
+        #sched_yield
+
+            excplicitly tell scheduler to schedule another process
+        */
+        {
+            sched_yield();
         }
     }
 
@@ -1300,42 +1371,6 @@ int main(int argc, char** argv)
         in Linux, based on the `clone` system call
     */
     {
-        /*
-        #clone
-
-            very thin wrapper to the linux system clal
-
-            like ``vfork``, but with shared memory and open file descriptors
-
-            TODO where is this on POSIX? can't find it
-        */
-        {
-
-            /*puts("clone");*/
-            /*{*/
-                /*TODO*/
-                /*implicit? with unistd.h?*/
-                /*i = 0;*/
-                /*pid_t pid = clone();*/
-                /*if (pid == 0)*/
-                /*{*/
-                    /*i++;*/
-                /*}*/
-                /*else if (pid < 0)*/
-                /*{*/
-                    /*exit(1);*/
-                /*}*/
-                /*wait(&status);*/
-                /*if( pid == 0 )*/
-                /*{*/
-                    /*return EXIT_SUCCESS;*/
-                /*}*/
-
-                /*//no more child process*/
-                /*assert( status == EXIT_SUCCESS );*/
-                /*assert( i == 1 );*/
-            /*}*/
-        }
 
         //#pthread.h
         {
@@ -1346,7 +1381,7 @@ int main(int argc, char** argv)
     /*
     #netdb.h
 
-        network information
+        network information (NETwork DataBase)
 
     */
     {

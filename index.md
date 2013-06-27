@@ -12,6 +12,17 @@ released in 1991 by Linus Trovalds, however much of its core user space
 software comes from the gnu project. For this reason linux systems
 may also be called gnu/linux.
 
+# sources
+
+- `git clone http://git.kernel.org/pub/scm/docs/man-pages/man-pages`
+
+    the linux man pages, documenting the kernel and C interfaces to it.
+
+    in special, look under
+
+    - `Documentation/` for docs
+    - `include/linux` for stuff you may use from modules
+
 # distributions
 
 a linux distribution is a linux system which in addition has end user

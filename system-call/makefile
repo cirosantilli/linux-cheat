@@ -7,7 +7,7 @@ override OUT_DIR 	:= _out/
 override OUT_EXT 	:= .elf
 override RUN		?= c
 
-INS		:= $(foreach IN_EXT, $(IN_EXTS), $(wildcard $(IN_DIR)*$(IN_EXT)) )
+INS			:= $(foreach IN_EXT, $(IN_EXTS), $(wildcard $(IN_DIR)*$(IN_EXT)) )
 INS_NODIR 	:= $(notdir $(INS))
 OUTS_NODIR	:= $(basename $(INS_NODIR))
 OUTS_NODIR	:= $(addsuffix $(OUT_EXT), $(OUTS_NODIR))
@@ -18,13 +18,8 @@ OUTS		:= $(addprefix $(OUT_DIR), $(OUTS_NODIR))
 all: mkdir $(OUTS)
 
 # rule to make c files
-#
-#cannot use `-std=99`, even if `_GNU_SOURCE` is defined in the file
-#the reasion for this is related to `-std=99` automatically defining `__STRICT_ANSI__` cpp variable
-#which overrides `_GNU_SOURCE` and causes other flags not to be defined.
-#see: `features.h`
 $(OUT_DIR)%$(OUT_EXT): %.c
-	gcc -Wall -pedantic-errors -std=gnu99 -o "$@" "$<"
+	gcc -Wall -std=c99 -pedantic-errors -o "$@" "$<"
 
 # rule to make asm files
 $(OUT_DIR)%$(OUT_EXT): %.asm

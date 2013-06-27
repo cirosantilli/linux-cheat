@@ -102,14 +102,14 @@ int main( int argc, char** argv )
                 //    return 2;
                 //}
 
-            // like variable redefinitions, the nested version overrides all external version
-            // which have become completelly innacessible
+            //like variable redefinitions, the nested version overrides all external version
+            //which have become completelly innacessible
 
             assert( nested() == 2 );
         }
 
     /*
-    # preprocessor defines
+    #preprocessor defines
 
         only gnu extensions are considered here
 
@@ -164,9 +164,9 @@ int main( int argc, char** argv )
 #endif
 
     /*
-    # inline assembly
+    #inline assembly
 
-        # sources
+        #sources
 
             - great intro: <http://www.ibm.com/developerworks/library/l-ia/index.html>
 

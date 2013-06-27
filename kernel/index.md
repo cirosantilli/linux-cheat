@@ -1,3 +1,23 @@
+The linux kernel is written on mainly on c c99 standard,
+with **gasp** gcc extensions. Therefore the linux kernel is married to gcc.
+Just guessing here, but an important reason for that is to use inline assembly TODO check
+
+Also note that besides the linux kernel, what most people call a linux system, or more precisely
+a linux distribution, must also contain many more user level basic services such as the python
+interpreter, the X server, etc. The extra user space services are specified by the lsb, and are not a part
+of the linux kernel.
+
+You cannot use user space libs such as libc to program the kernel,
+since the kernel itself itself if need to be working for user space to work.
+
+# sources
+
+- `git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git`
+
+    the source code, *the* only definitive source
+
+# what the kernel does
+
 the kernel does the most fundamental operations such as:
 
 - **user permission control**
@@ -33,18 +53,6 @@ therefore it reaches general goals such as:
 - increasing code portability across different hardware and architectures
 - creating useful and simple abstractions which programs can rely on
 	(contiguous RAM memory, files, processes, user permissions, etc)
-
-The linux kernel is written on mainly on c c99 standard,
-with **gasp** gcc extensions. Therefore the linux kernel is married to gcc.
-Just guessing here, but an important reason for that is to use inline assembly TODO check
-
-Also note that besides the linux kernel, what most people call a linux system, or more precisely
-a linux distribution, must also contain many more user level basic services such as the python
-interpreter, the X server, etc. The extra user space services are specified by the lsb, and are not a part
-of the linux kernel.
-
-You cannot use user space libs such as libc to program the kernel,
-since the kernel itself itself if need to be working for user space to work.
 
 # posix
 
@@ -94,10 +102,6 @@ Another simple example is file io.
 you cannto use floating point operations on kernel code because that would incur too much overhead
 of saving floating point registers on some architectures, so don't do it.
 
-## memory
-
-memory is much more restrictive than in user applictions, so be extra cautious to use little memory
-
 # rings
 
 x86 implemented concept
@@ -125,7 +129,7 @@ this is a very slow test mechanism since you need to reboot everytime.
 
 get the source:
 
-	git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+	git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
 
 clean everything:
 
