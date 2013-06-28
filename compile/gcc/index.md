@@ -1,4 +1,4 @@
-Gnu Compiler Collection: NOT c compiler
+Gnu Compiler Collection: *not* c compiler
 
 it is a large frontend to several subprograms such as `as`, `cpp`
 
@@ -13,13 +13,13 @@ most important:
 1) g++ treats both .c and .cpp files as c++, since .c is backwards compatible with c++, it works
 2) g++ links to (but does not include) stdlib automatically, gcc does not!
 
-# executable formats
+# supported executable formats
 
 ## elf
 
 linux
 
-superseeds ``.coff`` which superseeds ``a.out``
+superseeds `.coff` which superseeds `a.out`
 
 ## mach-o
 
@@ -27,7 +27,7 @@ mac os
 
 ## pe
 
-windows. current `.exe`s
+windows' current `.exe`s
 
 # compilation steps
 
@@ -80,6 +80,14 @@ make will not recompile the corresponding `.o`
 
 # flags
 
+## recommended compilation flags
+
+always use this for production code if possible:
+
+    gcc -std=c99 -pedantic-errors -Wall -03 -march=native a.c
+
+this will make for portable, efficient code.
+
 ## Wall
 
 enables all warnings:
@@ -104,9 +112,15 @@ disables gcc extensions that conflict with c standrad
 
 `c11` will be the next version and is still being developed at the time of writting
 
+to allow gnu extensions:
+
+    gcc -std=gnu90
+
+this is necessary on projects that rely on the extensions, such as the linux kernel
+
 ## ansi
 
-don't use this:
+don't use this, use `std` instead
 
     gcc -ansi
 
@@ -117,31 +131,39 @@ changes with time, currently equals:
     gcc -std=c90
 
 it is a bit confusing not to have a fixed version of the standard to comply to,
-so don't use it
+so just use std instead.
 
 ## pedantic
 
+give warnings for code that does not comply with c1x standard:
+
             gcc -std=c1x -pedantic
 
-give warnings for code that does not comply with c1x standard
 this does not mean *FULL* complience, but greatly increases complience
+
 there is currently no full complience check in `gcc`
 
-            gcc -std=c1x -pedantic-errors
+give errors instead of warnings:
 
-give errors instead of warnings
+            gcc -std=c1x -pedantic-errors
 
 ## march
 
 optimizes code to given cpu (arch is for archtecture)
+
 may use instructions only available to given cpu
 
+optimize for currrent compiling machine:
+
                 gcc -march=native
-optimize for currrent compiling machine
+
+strict 80386 instruction set. old, compatible, used on almost all desktops and laptops:
+
                 gcc -march=i386
-80386 instruction set. old, compatible, used on almost all desktops and laptops
+
+Arm v.7, used on mobiles today:
+
                 gcc -march=armv7
-Arm v.7, used on mobiles today
 
 ## optimization
 
@@ -152,7 +174,7 @@ list possible optimizations for `-O`:
 the options:
 
 - O0 : no speed optimization. This is the default
-- O : -O1 basic speed optimization
+- O  : -O1 basic speed optimization
 - O2 : more than O1
 - O3 : more than O2
 - Og : optimize for debugging
@@ -165,17 +187,40 @@ best general code optimization method:
 
 always use this for production code.
 
-## summary
+## M
 
-always use this for production code:
+don't compile, but generate a list of dependencies for the given source code
+in a format suitable for a makefile rule, and output it to stdout
 
-    gcc -std=c99 -pedantic-errors -Wall -03 -march=native a.c
+dependencies are basically the file itself and the required headers
 
-### other
+for example, in `a.c`:
 
-do c90 + gcc extensions:
+    #include <stdio.h>
+    #include "a.h"
 
-    gcc -std=gnu90
+then:
+
+    gcc -M a.c
+
+outputs to stdout:
+
+    a.c : /usr/include/stdio.h \
+        a.h
+
+to make this even more suitable for a makefile, you should suppress the
+standard system files with `-MM`:
+
+    gcc -MM a.c
+
+giving:
+
+    a.c : a.h
+
+you can then use those on a makefile as:
+
+    $(shell gcc -MM a.c)
+        gcc a.c
 
 # c preprocessor
 
