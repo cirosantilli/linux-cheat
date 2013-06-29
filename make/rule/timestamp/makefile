@@ -5,6 +5,10 @@ out: in
 	@echo "$@"
 	cp in out
 
+in:
+	@echo "$@"
+	echo a > in
+
 change_in:
 	@echo "$@"
 	echo a >> in

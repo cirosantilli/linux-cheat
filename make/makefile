@@ -18,10 +18,12 @@
 	#first target in file is default! all is often it by convention
 
 	#help. can be first if options required
+
 	help:
 		@echo "must use an option:"
 		@echo "  c"
 		@echo "  cpp"
+
 	#$make #makes first target found on file
 
 	##conventional names

@@ -2,3 +2,4 @@
 
 all:
 	@echo d
+	@pwd

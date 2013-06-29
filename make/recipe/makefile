@@ -1,3 +1,5 @@
+.POSIX:
+
 #each line is a separate invocation of the interpreter
 basic:
 	echo basic1

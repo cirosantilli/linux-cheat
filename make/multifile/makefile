@@ -9,13 +9,20 @@ export
 
 #export A B
 
-# preventin exporting specific variables:
+#preventin exporting specific variables:
 
 unexport B
 
-# works even with variables that were explicitly exported previously
+#works even with variables that were explicitly exported previously
+
+##include
+
+#sources another makefile here like shell `.` (dot)
+
+include makefile-include
 
 .PHONY: all a
+.POSIX:
 
 all:
 	# standard way to call on different directory:
@@ -33,3 +40,11 @@ all:
 	# -f: use a given file as a makefile
 
 		$(MAKE) -f makefile-other
+
+	# -f does not change the current directory to the directory of the given file:
+
+		$(MAKE) -f d/makefile
+
+	@#include:
+
+		@if [ ! "$(include_var)" = "include_var_val" ]; then exit 1; fi
