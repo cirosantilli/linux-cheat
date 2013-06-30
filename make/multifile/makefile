@@ -21,6 +21,17 @@ unexport B
 
 include makefile-include
 
+#if the file does not exist, generate a warning:
+
+include idontexist
+
+#to ignore warnings if the file does not exist, use a hyphen:
+
+-include idontexistbutyouignoreme
+
+#a major application of include is to separate make parameters from the main makefile:
+#just include the parameters file
+
 .PHONY: all a
 .POSIX:
 

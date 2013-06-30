@@ -59,7 +59,9 @@
 
 	rule := varrule: all
 
-##multiline
+##multiline variable
+
+	#create a multiline variable
 
 	#TODO why does it not work? I copied from the manual!
 
@@ -72,10 +74,8 @@ endef
 
 ##automatic variables
 
-	#some variables have default values
-
-	#variables like $@ are also automatic variables,
-	#but are discussed together with the rules
+	#variables that are automatically set, either at startup of MAKE or inside of rules
+	#depending on the rule such as $@ or $?
 
 	#some automatic variables can be defined in makefiles and have an effect
 
@@ -83,7 +83,7 @@ endef
 
 		#TODO
 
-	###AKECMDGOALS
+	###MAKECMDGOALS
 
 		#contains all targets given at commandline invocation
 
@@ -96,6 +96,8 @@ endef
 	##MAKELEVEL
 
 		#recursion level of make (how many makes called other makes)
+
+		#starts at 0
 
 	##SHELL
 

@@ -12,7 +12,7 @@ great documentation page:
     man pandoc_markdown
 ```
 
-if its there, it might not be here!
+if its clear there, it might not be here!
 
 # header 1
 

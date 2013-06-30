@@ -1,3 +1,12 @@
+##phony
+
+#if the rule is phony, then it is run even if the file exists
+
+#if a target depends on a phony rule, it is always run,
+#because phony rules are never considered already done (they have no timestamp)
+
+#to avoid this TODO
+
 .PHONY: clean change_in phony
 
 #this rule is only run if `in` is newer than `out`
@@ -22,8 +31,6 @@ change_nodep:
 	@echo "$@"
 	echo a >> nodep
 
-##phony
-#if the rule is phony, then it is run even if the file exists
 phony:
 	@echo "$@"
 
@@ -33,3 +40,5 @@ change_phony:
 
 clean:
 	rm -f in out nodep phony
+
+depends_on_phony: phony

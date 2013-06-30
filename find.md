@@ -9,56 +9,68 @@ posix 7, however breaks almost all of of posix and gnu command line interface st
 
 there are 3 parts to a find:
 
-    find <where> <what> <do-what-with-finds>
+    find <search-roots> <criteria> <action>
 
-find all files under current dir:
+for example, to find all files named `sh` under either current dir or `/bin` and print their names to stdout do:
 
-    find . -name '*' -print
+    find /bin . -type f -name 'sh' -print
 
-same as above:
+so in the example:
+
+- `/bin .` are the search roots
+
+- `-type f -name 'a.txt'` are the criteria
+
+    - `-type f` says that we want only Files, not directories
+    - `-name 'a.txt'` says that we want only files with basename `a.txt`
+
+- `-print` is the action, it tells find what to do with the files found,
+    in the case of print, it prints files found to stdout
+
+both the criteria and the actions have default values:
+
+- `criteria`: `-name '*'`, finding all files
+- `action`: `-print`, is the default action
+
+the search roots however have no default, and you must give at least one.
+
+therefore, the minimal find command is:
 
     find .
 
-therefore:
+which finds all files and directories under the current dir
 
-- default match criteria is to match anything (*)
-- default action is to print
+# criteria
 
-find in given dirs:
+say *what* find should find
 
-    mkdir d d2
-    touch d/a d/b d2/a d2/a
-    find d d2
+## name
 
-note how output also includes the dirs `d` and `d2`!
-
-# search criteria
-
-## name and iname
-
-match ENTIRE basenames posix expression:
+match **entire** basenames posix RE:
 
     find . -name 'README'
 
-finds files named **EXACTLY** `README`. does *not* match `README.txt`
+finds files named **exactly** `README`. does *not* match `README.txt`
 
-finds ENRTIRE basenames that match posix regex (not extended):
+it is a posix RE:
 
-    find . -name '*.txt'
+    find . -name '*.mp?'
+
+therefore the previous finds both `mp3` and `mp4` files (and `mp5` if that exists):
+
+## iname
 
 same as -name but case insensitive:
 
-    find . -iname '*.mp?'
-
 ## path
 
-looks at entire  file path posix regular expression:
+looks at *entire* file path posix RE
 
 find anything under current dir:
 
     find . - path './*'
 
-Note how relative paths all start with a dot slash './'
+relative paths *must* start with a dot slash './'
 
 finds only paths are either hidden or have a hidden parent.
 
@@ -70,17 +82,6 @@ also consider [prune][] for this.
 
 finds anything under ./.vim folder. same as find ./vim
 
-## regex
-
-find regexes
-
-can specify regex type with `-regextype`. Default is EMACS regex!!! ...
-but posix ere is also available
-
-    find . -regex '^/home/.*\.txt$'
-
-finds paths under /home, that end in .txt
-
 ## type
 
     find . -type f
@@ -90,24 +91,6 @@ files only
     find . -type d
 
 directories only
-
-## mindepth
-
-same as find but no `.`:
-
-    find . -mindepth 1
-
-## maxdepth
-
-find in current dir only:
-
-    find . -maxdepth 1
-
-find in current dir and direct children dirs
-
-    find . -maxdepth 2
-
-find in current and direct sons only
 
 ## prune
 
@@ -129,9 +112,42 @@ finds all files that are neither hidden themselves, nor are a child of a hidden 
 
     find . '*/.*' -prune -o ! -name '.*'
 
-prunes with multiple criteria 
+prunes with multiple criteria
 
-## -samefile
+### depth
+
+entries of the directory are acted upon before the directory
+
+the default is first the directory
+
+useful if you want to rename both the containing directory and the files inside it,
+in which case you must first rename the files and later the directory
+
+this nullifies `prune`
+
+## gnu extensions
+
+### mindepth
+
+same as find but no `.`:
+
+    find . -mindepth 1
+
+TODO how to do this in POSIX?
+
+### maxdepth
+
+find in current dir only:
+
+    find . -maxdepth 1
+
+find in current dir and direct children dirs
+
+    find . -maxdepth 2
+
+find in current and direct sons only
+
+### samefile
 
     find . -samefile file1
 
@@ -143,31 +159,67 @@ do not go into other devices ( for instance, inode operations! )
 
 you can concatenate multiple criteria logically.
 
-## not
+### regex
 
-    find . -iname '*.pdf'
+find regexes
+
+looks for *entire paths* instead of basenames
+
+the match must be for the *entire* path, and not just any substring
+
+relative paths *must* start with `./`
+
+can specify regex type with `-regextype`. Default is **EMACS** regex!!! ...
+(remember that this is a GNU extension and EMACS is the gnu pet editor)
+but posix ere is also available
+
+finds paths under `/home`, that end in .txt:
+
+    find . -regex '^/home/.*\.txt$'
+
+# multiple criteria
+
+you can combine criteria with boolean operations to make your search finer
+
+## and
+
+`-a` all conditions must be satisfied
+
+implicit when no criteria is specified
 
 find paths which are pdf and which are files. the and is implicit
-
-## and -a implicit when no criteria is specified
 
     find . -type f -iname '*.pdf'
 
-find paths which are pdf and which are files. the and is implicit
+same as above with explicit and:
 
     find . -type f -a -iname '*.pdf'
 
-same as above. the and is explicit here
+## not
 
-## or -o
+find all paths which are not files:
+
+    find . ! -type f
+
+## or
+
+paths with either pdf or djvu extension
 
     find . -iname '*.pdf' -o -iname '*.djvu'
 
-paths either terminated by pdf or djvu extension
+or has higher precedence over and, therefore:
 
     find . -type f -iname '*.pdf' -o -iname '*.djvu'
 
-files only, either pdf of djvu extension. Therfore or has higher precedence over and.
+which is the same as
+
+    find . -type f -a -iname '*.pdf' -o -iname '*.djvu'
+
+is also the same as:
+
+    find . -type f -a \( -iname '*.pdf' -o -iname '*.djvu' \)
+
+and finds pdf or djvu files only
 
 ## parenthesis
 
@@ -217,17 +269,12 @@ if you want to do stuff like that, a better solution is the
 
 THIS is THE more flexible stable way of doing lots of operations in bash I could find
 
-# useful calls that use the basic things above
+# combos
 
-## good bye Windows... 
+remove all `Thubs.db` files (aka good bye Windows Media Player):
 
     find . -name 'Thumbs.db' -delete 
 
-remove all Thumbs.db
+find all files with one of the given extensions:
 
-    find . -name 'AlbumArt*Large.jpg' -exec mv -n '{}' Front.jpg +
-    find . -name 'AlbumArt*' -delete
-
-remove AlbumArt from music.
-first make a copy of the cover with name 'Front' if you don't have one yet
-notice the irony, not only you kill Windows, but you first use their good (but somewhat ugly named and spreading two many files) service of downloading covers for you!
+    find . -type f -iname '*.pdf' -o -iname '*.djvu'
