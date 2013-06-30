@@ -7,13 +7,18 @@ posix 7, however breaks almost all of of posix and gnu command line interface st
 - multichar options starting with single hyphen: `-iname` and without short version
 - file list *before* options: `find . -iname .`
 
+# general syntax
+
 there are 3 parts to a find:
 
-    find <search-roots> <criteria> <action>
+    find <search-roots> <criteria> <actions>
+
+this is actually only a simplified version because of multiple actions that can be used with or `-o`,
+but is a good model to start with
 
 for example, to find all files named `sh` under either current dir or `/bin` and print their names to stdout do:
 
-    find /bin . -type f -name 'sh' -print
+    find /bin . -type f -name 'sh' -print -delete
 
 so in the example:
 
@@ -133,7 +138,9 @@ same as find but no `.`:
 
     find . -mindepth 1
 
-TODO how to do this in POSIX?
+[it seems that](http://stackoverflow.com/questions/13525004/how-to-exclude-this-current-dot-folder-from-find-type-d/17389439#17389439) the best way to do that in posix is currently:
+
+    find . ! -path .
 
 ### maxdepth
 
@@ -221,6 +228,27 @@ is also the same as:
 
 and finds pdf or djvu files only
 
+but there is a big gotcha: if the first part of an `or` fails, the second is not executed,
+including its action!
+
+for example, you could print all pdf files, and delete all djvu files with:
+
+    find . -type f -iname '*.pdf' -print -o -iname '*.djvu' -delete
+
+and if you do:
+
+    find . -type f -iname '*.pdf' -o -iname '*.djvu' -print
+
+**only the djvu files will get printed**, and pdf files will have no associated action!
+
+to explicitly print both, you must to:
+
+    find . -type f \( -iname '*.pdf' -o -iname '*.djvu' \) -print
+
+which is the same as the original:
+
+    find . -type f -iname '*.pdf' -o -iname '*.djvu'
+
 ## parenthesis
 
 you can change logical operation precedence with parenthesis.
@@ -237,17 +265,19 @@ you can do things with the files you find. There are two main ways to do that: -
 
 xargs tends to be more flexible
 
+'{}' gets expanded to the found path by -exec, and the commands ends when a trailling '+' is found
+
+ex: compile all tex under current dir:
+
     find . -iname '*.tex' -exec pdflatex '{}' +
 
-compile all tex under current dir.
-{} gets expanded to the found path by -exec, and the commands ends when a trailling '+' is found
+does the same as above.
 
     find . -iname '*.tex' -print0 | xargs -0 -I '{}' pdflatex '{}'
 
-does the same as above.
--print0 prints files null (\0) terminated. this avoids problems since filenames that can contain newlines, but not null chars.
--0 tells xargs that the input is null separated
--I '{}' tells xargs that {} should be substituted by each arg one at a time
+- `-print0` prints files null (\0) terminated. this avoids problems since filenames that can contain newlines, but not null chars.
+- `-0` tells xargs that the input is null separated
+- `-I '{}'` tells xargs that {} should be substituted by each arg one at a time
 
     find . -iname '*.tex' -print0 | xargs -0 -I '{}' sh -c "bibtex '{}'; pdflatex '{}'"
 
@@ -260,20 +290,20 @@ NOTE: i don't know why exaclty, but the following fails:
 
 this is probably because `basename {}` gets evaluated before {} is replaced by the find result
 basename {} returns {}, and AFTER THAT {} gets expanded to the find result ( not just the basename therefore )
-if you want to do stuff like that, a better solution is the 
+if you want to do stuff like that, a better solution is:
 
     find . -print0 | while read -d '' FILE;
         do echo "$FILE";
         echo asdf;
     done
 
-THIS is THE more flexible stable way of doing lots of operations in bash I could find
+this is a *much* more flexible way of doing lots of operations in bash I could find
 
 # combos
 
 remove all `Thubs.db` files (aka good bye Windows Media Player):
 
-    find . -name 'Thumbs.db' -delete 
+    find . -name 'Thumbs.db' -delete
 
 find all files with one of the given extensions:
 
