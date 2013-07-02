@@ -1,11 +1,11 @@
 # make all files with one of the given extensions by IN_EXTS
 # separatelly, possibly using a different rule per extension
 
-override IN_DIR 	?= ./
-override IN_EXTS 	?= .c .asm
-override OUT_DIR 	:= _out/
-override OUT_EXT 	:= .elf
-override RUN		?= c
+IN_DIR 	?= ./
+IN_EXTS 	?= .c .asm
+OUT_DIR 	:= _out/
+OUT_EXT 	:= .elf
+RUN		?= c
 
 INS			:= $(foreach IN_EXT, $(IN_EXTS), $(wildcard $(IN_DIR)*$(IN_EXT)) )
 INS_NODIR 	:= $(notdir $(INS))

@@ -2,12 +2,12 @@
 
 #can mkdir and output that dir.
 
-override CC_LATEX  	?= rst2latex.py
-override CC_HTML 		?= rst2html.py --math-output=MathML
-override ID 				?=
-override IN_EXT 		?= .rst
-override OUT_DIR 		?= _out/
-override RUN_NOEXT 	?= a 									#basename without extension of file to view (with firefox, okular, etc.)
+CC_LATEX  	?= rst2latex.py
+CC_HTML 		?= rst2html.py --math-output=MathML
+ID 				?=
+IN_EXT 		?= .rst
+OUT_DIR 		?= _out/
+RUN_NOEXT 	?= a 									#basename without extension of file to view (with firefox, okular, etc.)
 
 SRCS := $(wildcard *$(IN_EXT))
 OUTEXT := .html

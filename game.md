@@ -151,6 +151,40 @@ fps, very large scenarios, cool weaponsmoves
 
 but too fast for my taste.
 
+# snes
+
+## zsnes
+
+features:
+
+- fast forward
+- states
+- good rom support
+
+# nintendo 64
+
+## mupen64plus
+
+mupen64plus features:
+
+- fast forward
+- states
+
+keyboard: <http://code.google.com/p/mupen64plus/wiki/KeyboardSetup>
+
+usage:
+
+    mupen64plus rom.v64
+
+fullscreen:
+
+    alias mupen="mupen64plus --fullscreen"
+    mupen rom.v64
+
+# ps1
+
+## pcsxr
+
 # dosbox
 
 some good games there

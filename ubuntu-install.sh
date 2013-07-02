@@ -191,6 +191,10 @@
 
             sudo aptitude install -y filezilla
 
+            #higher level ftp operations such as recursive dir addition:
+
+                sudo aptitude install -y lftp
+
         ##image
 
             sudo aptitude install -y imagemagick
@@ -269,6 +273,10 @@
             sudo aptitude install -y urban-terror
             sudo aptitude install -y golly
             sudo aptitude install -y gnotski
+
+            sudo aptitude install -y zsnes
+            sudo aptitude install -y mupen64plus
+            sudo aptitude install -y pcsxr
 
             ##dosbox
 

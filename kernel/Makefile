@@ -3,17 +3,17 @@
 #
 # this file *must* be named exactly `Makefile`
 
-override IN_DIR 	?= ./
-override IN_EXTS 	?= .c
-override LOG_PATH 	?= /var/log/syslog
-override OUT_DIR 	?= ./
-#override OUT_DIR 	?= _out/
-override OUT_EXT 	?= .ko
-override OBJ_EXT 	?= .o
-override RUN		?= main
+IN_DIR 		?= ./
+IN_EXTS 	?= .c
+LOG_PATH 	?= /var/log/syslog
+OUT_DIR 	?= ./
+#OUT_DIR 	?= _out/
+OUT_EXT 	?= .ko
+OBJ_EXT 	?= .o
+RUN			?= main
 
-INS		:= $(filter-out %.mod.c, $(foreach IN_EXT, $(IN_EXTS), $(wildcard $(IN_DIR)*$(IN_EXT))))
-INS		:= $(foreach IN_EXT, $(IN_EXTS), $(wildcard $(IN_DIR)*$(IN_EXT)))
+INS			:= $(filter-out %.mod.c, $(foreach IN_EXT, $(IN_EXTS), $(wildcard $(IN_DIR)*$(IN_EXT))))
+INS			:= $(foreach IN_EXT, $(IN_EXTS), $(wildcard $(IN_DIR)*$(IN_EXT)))
 INS_NODIR 	:= $(notdir $(INS))
 OBJS_NODIR	:= $(addsuffix $(OBJ_EXT), $(basename $(INS_NODIR)))
 OBJS		:= $(addprefix $(OUT_DIR), $(OBJS_NODIR))

@@ -226,13 +226,13 @@
 
 	###
 	$make run A='"1"'
-	override A=2
+ A=2
 	echo $(A)
 	#2
 
 	###
 	$make run A='"1"'
-	override A?=2
+ A?=2
 	echo $(A)
 	#1
 

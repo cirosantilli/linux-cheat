@@ -2,12 +2,14 @@
 
 #can mkdir and output that dir.
 
-override CC := pandoc
-override FLAGS ?= -s --toc --mathml -N  	#flags that apply to all output formats: (html, pdf, etc)
-override ID ?=
-override IN_EXT ?= .md
-override OUT_DIR ?= _out/
-override RUN_NOEXT ?= a 									#basename without extension of file to view (with firefox, okular, etc.)
+CC := pandoc
+	#flags that apply to all output formats: (html, pdf, etc):
+FLAGS ?= -s --toc --mathml -N
+ID ?=
+IN_EXT ?= .md
+OUT_DIR ?= _out/
+	#basename without extension of file to view (with firefox, okular, etc.):
+RUN_NOEXT ?= a
 
 SRCS := $(wildcard *$(IN_EXT))
 OUTEXT := .html
@@ -40,10 +42,10 @@ okular:
 	nohup okular --unique "$(OUT_DIR)$(RUN_NOEXT).pdf" >/dev/null &
 
 $(OUT_DIR)%.html: %$(IN_EXT)
-	$(CC) $(FLAGS) -o $@ $<
+	$(CC) $(FLAGS) -o "$@" "$<"
 
 $(OUT_DIR)%.pdf: %$(IN_EXT)
-	$(CC) $(FLAGS) -o $@ $<
+	$(CC) $(FLAGS) -o "$@" "$<"
 
 clean:
 	rm -r "$(OUT_DIR)"

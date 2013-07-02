@@ -13,26 +13,26 @@ just find the one with the most space and uptime. htis is a list of good ones
 
 ## freehostingnoads
 
-    <http://freehostingnoads.net/>
+<http://freehostingnoads.net/>
 
-    Free Hosting No Ads
+Free Hosting No Ads
 
-        20 GB space
-        200 GB traffic
+    20 GB space
+    200 GB traffic
 
-    main quality parameters:
+main quality parameters:
 
-    - max data
-    - max data transfer
-    - max file size
+- max data
+- max data transfer
+- max file size
 
-    good free hosts:
+good free hosts:
 
-        - 2Gb      storage
-        - 2Gb      max file size
-        - 10Gb/mo  transfer
+    - 2Gb      storage
+    - 2Gb      max file size
+    - 10Gb/mo  transfer
 
-        urls of form: <http://cirosantilli.t15.org/>
+urls of form: <http://cirosantilli.t15.org/>
 
 # commands
 

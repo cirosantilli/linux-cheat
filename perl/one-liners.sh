@@ -108,9 +108,11 @@
 
 ##important one liners
 
-	echo $'a\nb' | perl -lape 's/a/A/'
-		#regex replace
-		#no newline match in the match
+    #regex replace in file
+
+        echo $'a\nb' | perl -lape 's/a/A/'
+
+    #prints entire new file to stdout
 
 	perl -pe 's/\n/ /g' F
 		#acts on newlines at end
