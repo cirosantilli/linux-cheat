@@ -184,6 +184,12 @@ finds paths under `/home`, that end in .txt:
 
     find . -regex '^/home/.*\.txt$'
 
+### empty
+
+Find empty files and directories:
+
+    find . -empty
+
 # multiple criteria
 
 you can combine criteria with boolean operations to make your search finer
@@ -308,3 +314,13 @@ remove all `Thubs.db` files (aka good bye Windows Media Player):
 find all files with one of the given extensions:
 
     find . -type f -iname '*.pdf' -o -iname '*.djvu'
+
+Remove all empty directories under given dir POSIX compliant:
+
+    find . -depth -type d -exec rmdir {} \; 2>/dev/null
+
+With GNU you get the better:
+
+    find . -depth -empty -type d -exec rmdir {} \; 2>/dev/null
+
+which avoids calling rmdir on non empty directories.

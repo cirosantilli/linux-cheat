@@ -50,6 +50,8 @@
 	varname := avarname
 	$(varname) := avarname_val
 
+	varname2 := varname
+
 	#TODO why does this not work:
 
 	#vardef := vardef_name := vardef_val
@@ -120,6 +122,8 @@ all:
 	@if [ ! "$(colon_plus)"			= "a b c" 			]; then exit 1; fi
 	@if [ ! "$(nocolon_plus)" 		= "a b d" 			]; then exit 1; fi
 	@if [ ! "$(avarname)" 			= "avarname_val"	]; then exit 1; fi
+	@#you can use variables inside variables: varname2 -> avarname -> avarname:
+	@if [ ! "$($(varname2))" 		= "avarname"		]; then exit 1; fi
 	@#@if [ ! "$(multiline)" 			= $$'1\n2'			]; then exit 1; fi
 	@#@if [ ! "$(vardef_name)"		= "vardef_val"		]; then exit 1; fi
 	$(multiline)

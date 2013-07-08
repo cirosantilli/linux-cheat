@@ -64,7 +64,7 @@ we strongly incourage you to look at exactly what POSIX specifies
 and what it does not, so as to be able to decide if your code cannot be made
 more portable by using the posix c api instead of Linux specific code.
 
-# communication with user space
+# special files for user space communication
 
 the kernel communicates parameters to user space using special files,
 located mainly under `/proc/`, `/sys/` and `/dev/`
@@ -370,3 +370,61 @@ the following kinds of memory exist for the kernel:
 	Used for hardware access communication
 
 	TODO understand better
+
+# x86
+
+This section discusses issues specific to the x86 linux implementation.
+
+## exceptions
+
+Intel reserves interrupt numbers from 0 to 31 for exceptions:
+anormal execution of instructions such as division by zero,
+or accessing forbidden memoyr areas.
+
+Certain interrupt numbers are processor interrupts called exceptions.
+
+Linux deals with those interrupts in interrupt handlers,
+and then if a user process generates one of those exceptions,
+the process is notified via a predefined signal.
+
+    0   Divide error                    SIGFPE
+    1   Debug                           SIGTRAP
+    2   NMI                             None
+    3   Breakpoint                      SIGTRAP
+    4   Overflow                        SIGSEGV
+    5   Bounds check                    SIGSEGV
+    6   Invalid opcode                  SIGILL
+    7   Device not available            None
+    8   Double fault                    None
+    9   Coprocessor segment overrun     SIGFPE
+    10  Invalid TSS                     SIGSEGV
+    11  Segment not present             SIGBUS
+    12  Stack segment fault             SIGBUS
+    13  General protection              SIGSEGV
+    14  Page Fault                      SIGSEGV
+    15  Intel-reserved                  None
+    16  Floating-point error            SIGFPE
+    17  Alignment check                 SIGBUS
+    18  Machine check                   None
+    19  SIMD floating point             SIGFPE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -36,7 +36,6 @@
 
         #configure ubuntu
 
-
 ##installation procedures
 
     ##before anything
@@ -58,297 +57,321 @@
 
             #the guide shows you everything
 
-    ##default ppas
+        sudo aptitude install -y abcde
+        sudo aptitude install -y alarm-clock-applet
+        sudo aptitude install -y apt-rdepends
 
-        #those already come in default ppas
+        sudo aptitude install -y apt-file
+        apt-file update
 
-            sudo aptitude install -y abcde
-            sudo aptitude install -y alarm-clock-applet
-            sudo aptitude install -y apt-rdepends
+        sudo aptitude install -y aview
 
-            sudo aptitude install -y apt-file
-            apt-file update
+    #MANUAL: search aspell dictionnaries:
 
-            sudo aptitude install -y aview
+        #sudo aptitude search aspell-
+        sudo aptitude search aspell-fr
+        sudo aptitude search aspell-pt-br
 
-        #MANUAL: search aspell dictionnaries:
+    #.arj files:
 
-            #sudo aptitude search aspell-
-            sudo aptitude search aspell-fr
-            sudo aptitude search aspell-pt-br
+        #sudo aptitude install -y arj
 
-        #.arj files:
+    #microsoft cabinet format:
 
-            #sudo aptitude install -y arj
+        #sudo aptitude install -y cabextract
 
-        #microsoft cabinet format:
+        sudo aptitude install -y caca-utils
 
-            #sudo aptitude install -y cabextract
+        sudo aptitude install -y cplay
+        sudo aptitude install -y dvipng
+        #sudo aptitude install -y exactimage
+        sudo aptitude install -y file-roller
 
-            sudo aptitude install -y caca-utils
+    #glasgow haskell compiler:
 
-            sudo aptitude install -y cplay
-            sudo aptitude install -y dvipng
-            #sudo aptitude install -y exactimage
-            sudo aptitude install -y file-roller
+        #sudo aptitude install -y ghc
 
-        #glasgow haskell compiler:
+        sudo aptitude install -y goldendict
+        sudo aptitude install -y guvcview
 
-            #sudo aptitude install -y ghc
+    #ibus input methods for qt:
 
-            sudo aptitude install -y gnome-tweak-tool
-            sudo aptitude install -y goldendict
-            sudo aptitude install -y guvcview
+        sudo aptitude install -y ibus-qt4
 
-        #ibus input methods for qt:
+        sudo aptitude install -y id3tool
 
-            sudo aptitude install -y ibus-qt4
+        sudo aptitude install -y lame
+        sudo aptitude install -y logkeys
 
-            sudo aptitude install -y id3tool
+    #nasm assembler:
 
-            sudo aptitude install -y lame
-            sudo aptitude install -y logkeys
+        sudo aptitude install -y nasm
 
-        #nasm assembler:
+    #.lzh files used on DOS, legacy:
 
-            sudo aptitude install -y nasm
+        #sudo aptitude install -y lha
 
-        #.lzh files used on DOS, legacy:
+    #mime messages
 
-            #sudo aptitude install -y lha
+        #sudo aptitude install -y mpack
 
-        #mime messages
+    #7 zip:
 
-            #sudo aptitude install -y mpack
+        sudo aptitude install -y p7zip-full
 
-        #7 zip:
+        sudo aptitude install -y ppa-purge
+        sudo aptitude install -y python-scipy
+        sudo aptitude install -y python-matplotlib
 
-            sudo aptitude install -y p7zip-full
+    #shell archives:
 
-            sudo aptitude install -y ppa-purge
-            sudo aptitude install -y python-scipy
-            sudo aptitude install -y python-matplotlib
+        #sudo aptitude install -y sharutils
 
-        #shell archives:
+        sudo aptitude install -y samba
 
-            #sudo aptitude install -y sharutils
+    ##sox
 
-            sudo aptitude install -y samba
+            sudo aptitude intall -y sox
+            sudo aptitude intall -y libsox-fmt-mp3
 
-        ##sox
+        #search for formats and install those you want:
 
-                sudo aptitude intall -y sox
-                sudo aptitude intall -y libsox-fmt-mp3
+            #apt-cache search libsox-fmt-
 
-            #search for formats and install those you want:
+    #usefull stuff that does not come by default or Canonical would have to pay royalties:
 
-                #apt-cache search libsox-fmt-
+        sudo aptitude install -y ubuntu-restricted-extras
 
-        #usefull stuff that does not come by default or Canonical would have to pay royalties:
 
-            sudo aptitude install -y ubuntu-restricted-extras
+    #.ace files
 
+        #sudo aptitude install -y unace
 
-        #.ace files
+    #uuencode, xxencode, BASE64, quoted printable, BinHex
 
-            #sudo aptitude install -y unace
+        sudo aptitude install -y uudeview
 
-        #uuencode, xxencode, BASE64, quoted printable, BinHex
+        sudo aptitude install -y zip unzip
+        sudo aptitude install -y wmctrl
 
-            sudo aptitude install -y uudeview
+    ##book
 
-            sudo aptitude install -y zip unzip
-            sudo aptitude install -y wmctrl
+        sudo aptitude install -y okular okular-extra-backends
+        sudo aptitude install -y fbreader
+        sudo aptitude install -y calibre
 
-        ##book
+        sudo aptitude install -y pdftk
+        sudo aptitude install -y djvulibre-bin
 
-            sudo aptitude install -y okular okular-extra-backends
-            sudo aptitude install -y fbreader
-            sudo aptitude install -y calibre
+        ##chm
 
-            sudo aptitude install -y pdftk
-            sudo aptitude install -y djvulibre-bin
+            sudo aptitude install -y chmsee
+            sudo aptitude install -y chm2pdf
+            sudo aptitude install -y archmage
+            #sudo aptitude install -y kchmreader
 
-            ##chm
+    ##sound
 
-                sudo aptitude install -y chmsee
-                sudo aptitude install -y chm2pdf
-                sudo aptitude install -y archmage
-                #sudo aptitude install -y kchmreader
+        sudo aptitude install -y shntool
+        sudo aptitude install -y cuetools
+        sudo aptitude install -y flac
+        sudo aptitude install -y wavpack
 
-        ##sound
+    ##ftp
 
-            sudo aptitude install -y shntool
-            sudo aptitude install -y cuetools
-            sudo aptitude install -y flac
-            sudo aptitude install -y wavpack
+        #very secure ftp deamon ftp server:
 
-        ##ftp
+            #sudo aptitude install -y vsftpd
 
-            #very secure ftp deamon ftp server:
+        sudo aptitude install -y filezilla
 
-                #sudo aptitude install -y vsftpd
+        #higher level ftp operations such as recursive dir addition:
 
-            sudo aptitude install -y filezilla
+            sudo aptitude install -y lftp
 
-            #higher level ftp operations such as recursive dir addition:
+    ##image
 
-                sudo aptitude install -y lftp
+        sudo aptitude install -y imagemagick
+        sudo aptitude install -y imagemagick-doc
 
-        ##image
+        #graph uml gui:
 
-            sudo aptitude install -y imagemagick
-            sudo aptitude install -y imagemagick-doc
+            sudo aptitude install -y dia
 
-            #graph uml gui:
+        #batch graph draw cli:
 
-                sudo aptitude install -y dia
+            sudo aptitude install -y dot
 
-            #batch graph draw cli:
+        sudo aptitude install -y gimp
+        sudo aptitude install -y inkscape
 
-                sudo aptitude install -y dot
+    ##video
 
-            sudo aptitude install -y gimp
-            sudo aptitude install -y inkscape
+            sudo aptitude install -y vlc
 
-        ##video
+        ##tesseract
 
-                sudo aptitude install -y vlc
+                sudo aptitude install -y tesseract-ocr
 
-            ##tesseract
+                #MANUAL: find available languages
 
-                    sudo aptitude install -y tesseract-ocr
+                    #apt-cache search tesseract-ocr-
 
-                    #MANUAL: find available languages
+                #english
 
-                        #apt-cache search tesseract-ocr-
+                    sudo aptitude install -y tesseract-ocr-eng
 
-                    #english
+            #chinese hack
 
-                        sudo aptitude install -y tesseract-ocr-eng
+                #sudo aptitude install -y tesseract-ocr-chi-sim #simplified chinese
+                #cd /usr/share/tesseract-ocr/tessdata
+                #sudo ln -s chi_sim.traineddata zho.traineddata
 
-                #chinese hack
+            sudo aptitude install -y cuneiform
 
-                    #sudo aptitude install -y tesseract-ocr-chi-sim #simplified chinese
-                    #cd /usr/share/tesseract-ocr/tessdata
-                    #sudo ln -s chi_sim.traineddata zho.traineddata
 
-                sudo aptitude install -y cuneiform
+        #handbreak:
 
+            sudo add-apt-repository -y ppa:stebbins/handbrake-releases
+            sudo aptitude install -y handbrake-cli
+            #sudo aptitude install -y handbrake-gtk
 
-            #handbreak:
+        #vobsub2srt:
 
-                sudo add-apt-repository -y ppa:stebbins/handbrake-releases
-                sudo aptitude install -y handbrake-cli
-                #sudo aptitude install -y handbrake-gtk
+            sudo add-apt-repository -y ppa:ruediger-c-plusplus/vobsub2srt
+            sudo aptitude update
+            sudo aptitude install -y vobsub2srt
 
-            #vobsub2srt:
+        sudo aptitude install -y mkvtools
 
-                sudo add-apt-repository -y ppa:ruediger-c-plusplus/vobsub2srt
+    ##game
+
+        ##getdeb
+
+            #non launchapd ppa with lots of good games.
+
+                wget -q -O - http://archive.getdeb.net/getdeb-archive.key | sudo apt-key add -
+                sudo sh -c 'echo "deb http://archive.getdeb.net/ubuntu quantal-getdeb games" > /etc/apt/sources.list.d/getdeb.list'
                 sudo aptitude update
-                sudo aptitude install -y vobsub2srt
+                sudo aptitude install urbanterror
+                #sudo aptitude install worldofpadman
 
-            sudo aptitude install -y mkvtools
+        sudo aptitude install -y nethack-console
+        sudo aptitude install -y fortune
+        sudo aptitude install -y cowsay
+        sudo aptitude install -y robotfindskitten
+        sudo aptitude install -y bsdgames
+        sudo aptitude install -y greed
+        sudo aptitude install -y ninvaders
+        sudo aptitude install -y netrek-client-cow
+        sudo aptitude install -y urban-terror
+        sudo aptitude install -y golly
+        sudo aptitude install -y gnotski
 
-        ##game
+        sudo aptitude install -y zsnes
+        sudo aptitude install -y mupen64plus
+        sudo aptitude install -y pcsxr
 
-            ##getdeb
+        ##dosbox
 
-                #non launchapd ppa with lots of good games.
+            sudo aptitude install -y dosbox
 
-                    wget -q -O - http://archive.getdeb.net/getdeb-archive.key | sudo apt-key add -
-                    sudo sh -c 'echo "deb http://archive.getdeb.net/ubuntu quantal-getdeb games" > /etc/apt/sources.list.d/getdeb.list'
-                    sudo aptitude update
-                    sudo aptitude install urbanterror
-                    #sudo aptitude install worldofpadman
+            ## MANUAL: get the sound working
 
-            sudo aptitude install -y nethack-console
-            sudo aptitude install -y fortune
-            sudo aptitude install -y cowsay
-            sudo aptitude install -y robotfindskitten
-            sudo aptitude install -y bsdgames
-            sudo aptitude install -y greed
-            sudo aptitude install -y ninvaders
-            sudo aptitude install -y netrek-client-cow
-            sudo aptitude install -y urban-terror
-            sudo aptitude install -y golly
-            sudo aptitude install -y gnotski
+                #TODO get working
 
-            sudo aptitude install -y zsnes
-            sudo aptitude install -y mupen64plus
-            sudo aptitude install -y pcsxr
+                    #pmidi -l
+                    #vim ~/.dosbox/dosbox-*.conf
 
-            ##dosbox
+                #put the port in:
 
-                sudo aptitude install -y dosbox
+                    #[midi]
+                    #midiconfig=14:0
 
-                ## MANUAL: get the sound working
+                #sudo aptitude install -y pmidi
 
-                    #TODO get working
+    ##editors
 
-                        #pmidi -l
-                        #vim ~/.dosbox/dosbox-*.conf
+        sudo aptitude install -y vim
+        sudo aptitude install -y vim-gtk
 
-                    #put the port in:
+    ##program
 
-                        #[midi]
-                        #midiconfig=14:0
+            sudo aptitude install -y build-essential
+            sudo aptitude install -y automake
+            sudo aptitude install -y cmake
+            sudo aptitude install -y libtool
 
-                    #sudo aptitude install -y pmidi
+        #gcc docs:
 
-        ##editors
+            sudo aptitude install -y gcc-doc
 
-            sudo aptitude install -y vim
-            sudo aptitude install -y vim-gtk
+        #located at: `/usr/share/doc/gcc-doc`
 
-        ##program
+        ##fortran
 
-                sudo aptitude install -y build-essential
-                sudo aptitude install -y automake
-                sudo aptitude install -y cmake
-                sudo aptitude install -y libtool
+            #gnu fortran 77:
 
-            #gcc docs:
+                sudo aptitude install -y g77
 
-                sudo aptitude install -y gcc-doc
+            #gnu fortran 95:
 
-            #located at: `/usr/share/doc/gcc-doc`
+                sudo aptitude install -y gfortran
 
-            ##fortran
+        ##source control
 
-                #gnu fortran 77:
+            sudo aptutide install -y git
+            sudo aptutide install -y mercurial
+            sudo aptitude install -y subversion
 
-                    sudo aptitude install -y g77
+    ##language
 
-                #gnu fortran 95:
+        #interpreters and related libs
 
-                    sudo aptitude install -y gfortran
+            sudo aptitude install -y perl-doc
 
-            ##source control
+        ##Java
 
-                sudo aptutide install -y git
-                sudo aptutide install -y mercurial
-                sudo aptitude install -y subversion
+            #Java is a pain to make work sometimes
 
-        ##language
+            #If things don't work, do the standard procedure:
+            #uninstall everything related to java, and try to install again.
 
-        	#interpreters and related libs
+            #Make sure you get the latest version, or things may not work.
 
-				sudo aptitude install -y perl-doc
+            #You should find all packages of type:
 
-        	##java
+                #dpkg -l | grep java | grep -iv javascript
+                #dpkg -l | grep openjdk
+                #dpkg -l | grep icedtea
 
-					sudo aptitude install openjdk-7-jre
+            #and then do:
 
-				#firefox plugin:
+                #sudo aptitude purge $PKG
 
-					sudo aptitude install icedtea-7-plugin
+            #Oracle version:
 
-			##flash
+                sudo add-apt-repository ppa:webupd8team/java
+                sudo aptitude update
+                sudo aptitude install oracle-java8-installer
 
-					sudo apt-add-repository -y "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
-					sudo aptitude update
-					sudo aptitude install -y flashplugin-installer
+            #This already comes with the browser plugin
+
+            #Openjdk version:
+
+                #sudo aptitude install openjdk-7-jre
+
+            #Firefox java plugin:
+
+                #sudo aptitude install icedtea-7-plugin
+
+            #Whichever don't forget to enable the plugin on firefox ( <c-s-a> to open plugins menu )
+
+        ##flash
+
+                sudo apt-add-repository -y "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
+                sudo aptitude update
+                sudo aptitude install -y flashplugin-installer
 
 		##x11
 
@@ -382,23 +405,59 @@
 
             #sudo aptitude install -y xinetd
 
+    ##desktop environments
+
+        #Install all of the following. If a bug relates to graphical stuff,
+        #change desktops to test.
+
+            sudo aptitude install -y gnome-tweak-tool
+
+        #gnome shell:
+
+            sudo add-apt-repository -y ppa:gnome3-team/gnome3 && sudo aptitude update
+            sudo aptitude install -y gnome-shell
+
+        #linux mint shell cinnamon:
+
+            sudo add-apt-repository -y ppa:gwendal-lebihan-dev/cinnamon-stable && sudo aptitude update
+            sudo aptitude install -y cinnamon
+
+        #kde shell plasma:
+
+            sudo aptitude install kde-plasma-desktop
+
+        #xubuntu shell xfce:
+
+            sudo aptitude install xfce4
+
+        #lubuntu lxde:
+
+            sudo aptitude install lxde
+
+        #for `qtconfig-qt4`:
+
+            sudo aptitude install qt4-qtconfig
+
+##xinit
+
+    #TODO
+
+##ck-list-sessions
+
+    #TODO
+
 ##launchpad ppas
 
     #you must first add ppas with `apt-add-repository`
 
         sudo add-apt-repository -y ppa:tualatrix/ppa && sudo aptitude update
-            sudo aptitude install -y ubuntu-tweak
+        sudo aptitude install -y ubuntu-tweak
 
-        sudo add-apt-repository -y ppa:atareao/atareao && sudo apt-get update
-            sudo apt-get install my-weather-indicator
+        sudo add-apt-repository -y ppa:atareao/atareao && sudo aptitude update
+        sudo apt-get install my-weather-indicator
 
         sudo add-apt-repository -y ppa:flacon && sudo aptitude update
-            sudo aptitude install -y flacon
-
-    #gnome shell:
-
-        sudo add-apt-repository -y ppa:gnome3-team/gnome3 && sudo aptitude update
-            sudo aptitude install -y gnome-shell
+        sudo aptitude install -y flacon
 
 ##non launchpad ppas
 

@@ -679,26 +679,31 @@
                 #a: up to date
                 #b: unwatched
 
-        dropbox status
-            #idle
+        #Get status:
 
-        dropbox ls
-            #ls on current dir
-            #green: synced
+            dropbox status
 
-        dropbox puburl "$F"
-        echo "wget `dropbox puburl "$F"`" > xsel
-            #get public url of F
-            #must be inside Public folder
+        #Possible status:
 
-        dropbox autostart y
-            #autostart dropbox
+        #- idle: program running but doing nothing
 
-        #ubuntu one
-            #shows sync status on task bar
-            sudo add-apt-repository -y ppa:noobslab/initialtesting
-            sudo apt-get update
-            sudo apt-get install indicator-ubuntuone
+
+        #get information on sync status of files on current dir:
+
+            dropbox ls
+
+        #- green: synced
+
+        #Get public url of F into the clipboard:
+
+            dropbox puburl "$F"
+            echo "wget `dropbox puburl "$F"`" > xsel
+
+        #The file must be inside Public folder.
+
+        #Autostart dropbox at startup:
+
+            dropbox autostart y
 
     ##ubuntu one
 
@@ -719,6 +724,12 @@
         #get file public url to the clipboard:
 
             u1sdtool --publish-file a | perl -ple 's/.+\s//' | xsel -b
+
+        #To shows icon with sync status on task bar:
+
+            sudo add-apt-repository -y ppa:noobslab/initialtesting
+            sudo apt-get update
+            sudo apt-get install indicator-ubuntuone
 
     ##nicotine+
 
@@ -1825,13 +1836,17 @@
 
         ##s command
 
-            #substitute
+            #substitute:
 
-            assert [ "`echo $'aba\ncd' | sed 's/a/b/'`" = $'bba\ncd' ]
+                assert [ "`echo $'aba\ncd' | sed 's/a/b/'`" = $'bba\ncd' ]
 
-            ##g modifier
+            #patter is a BRE
+
+            #g modifier:
 
                 assert [ "`echo 'aba' | sed 's/a/b/g'`" = $'bbb' ]
+
+            #replaces multiple non overalpping times on each line
 
             ##patterns are BREs
 
@@ -2613,12 +2628,13 @@
 
     ##mount
 
-        sudo mount /dev/sda1 /media/win/
-            #mount /dev/sda1 on /media/win/
+        #mount block device file on filesystem
 
-        ##bind
+            sudo mount /dev/sda1 /media/win/
 
-            #make one dir a copy of the other
+    ##bind
+
+        #make one dir a copy of the other
 
             mkdir a
             mkdir b
@@ -2633,26 +2649,35 @@
 
     ##umount
 
-        sudo umount /media/win/
-            #unmount what is on this dir
+        #unmount what is on this dir
+
+            sudo umount /media/win/
 
     ##/etc/fstab
 
+        #options for fsck
+
+        #basic usage: mount partitions at startup
+
         #source
-            firefox http://www.tuxfiles.org/linuxhelp/fstab.html
-            firefox https://wiki.archlinux.org/index.php/Fstab
-            man fstab
-            man mount
-                #options are here
+
+            #<http://www.tuxfiles.org/linuxhelp/fstab.html>
+            #<https://wiki.archlinux.org/index.php/Fstab>
+
+                man fstab
+                man mount
+
+            #options are here
 
         #list partitions that should mount up at startup
         #and where to mount them
 
-        sudo cp /etc/fstab /etc/fstab.bak
-        sudo vim /etc/fstab
-        sudo mount -a
-            #apply changes
-            #only mounts `auto` option set.
+            sudo cp /etc/fstab /etc/fstab.bak
+            sudo vim /etc/fstab
+            sudo mount -a
+
+        #apply changes
+        #only mounts `auto` option set.
 
         #syntax:
 
@@ -3004,7 +3029,7 @@
 
         #POSIX 7
 
-        #send signals to a process
+        #send signals to a process (signal is a ANSI C concept, with POSIX and Linux extensions)
 
         #not necessarily kill signal
 
@@ -3040,6 +3065,27 @@
 
             kill -CONT $ID
 
+    ##killall
+
+        #send signals to all process by name
+
+        #psmisc package
+
+        #application: firefox/skype hanged. `ps -A | grep -i firef',
+        #confirm that the name is firefox and that it is the only one with that name,
+        #and then:
+
+            killall firefox
+
+        #this sengs SIGTERM, which programs may be programmed to handle, 
+        #so the progrma may still hang ( and in theory be trying to finish nicelly, although in practice this never happens... )
+
+        #to kill it without mercy:
+
+            killall -s 2
+
+        #which sends SIGINT, which processes cannot handle, so they die
+
     ##env
 
         #POSIX 7
@@ -3071,12 +3117,6 @@
                     #some default vars might still be there!
                     #I get: SHLVL, PWD
                     exit
-
-    ##killall
-
-        #kill all process by name
-
-        #psmisc package
 
     ##top
 
@@ -4250,9 +4290,13 @@
 
         #commonly, `updatedb` is a <#cronjob>
 
-        locate a.h
+            locate a.h
 
-        ##updatedb
+        #to force update of file cache, use updatedb
+
+    ##updatedb
+
+        #updates file cache for locate
 
             sudo updatedb
 
@@ -4652,14 +4696,14 @@
     ##logout
 
         #logs out
-        #can only be used on login shell
 
-        logout
+        #can only be used on the login shell
+
+            logout
 
     ##faillog
 
         faillog -a
-            #TODO understand output
 
     ##useradd
 
@@ -4829,6 +4873,27 @@
         #posix 7
 
             assert [ `echo '1+1' | bc` = 2 ]
+
+    ##java
+
+        #java specifies the interface, but not the implementation.
+
+        #There are two implementations of of the java virtual machine:
+
+        #- Oracle: Closed source.
+
+            #Oracle created Java.
+
+            #You get only the binaries.
+
+        #- OpenJDK: Open source.
+
+        #As is the case with many products,
+        #some companies will recommend that you use this proprietary implementation,
+        #and might even rely on proprietary extensions, meaning that the other implementations
+        #won't work...
+
+        #Also, to run java apps on your browser you also need the Java plugin for your browser.
 
     ##ruby
 

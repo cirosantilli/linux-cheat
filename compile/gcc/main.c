@@ -170,6 +170,8 @@ int main( int argc, char** argv )
 
             - great intro: <http://www.ibm.com/developerworks/library/l-ia/index.html>
 
+            - docs: 
+
         can be used if you really, really want to optimize at the cost of:
 
         - architecture dependance
@@ -214,6 +216,8 @@ int main( int argc, char** argv )
             even if they are not explicitly written in the code.
 
         both inputs and outputs are constrats. `X` will indicate the constraint type
+
+        TODO: __asm__ vs asm
     */
 
         /*
@@ -227,8 +231,6 @@ int main( int argc, char** argv )
 
         /*
             #m constraint
-
-            m = Memory
 
             instructs gcc to store keep value of given expressions into RAM
 
@@ -244,6 +246,17 @@ int main( int argc, char** argv )
                 : "=m" (out)
                 : "m" (in)
                 : "%eax"      /* eax will be modified, so we have to list it in the clobber list */
+            );
+            assert( out == 1 );
+        }
+
+        //no input
+        {
+            int out = 0;
+            //out = 1
+            asm (
+                "movl $1, %0"
+                : "=m" (out)
             );
             assert( out == 1 );
         }

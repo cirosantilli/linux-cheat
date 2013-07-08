@@ -170,5 +170,15 @@ differentiate `a.conf file` from `a.conf.d` dir
 normally, all files in the `a.conf.d` dir will be sourced
 as if they wre inside `a.conf`
 
+# signals
+
+Signals are an ANSI C concept, with extensions by POSIX and Linux.
+
+Aspects which are defined to ANSI C or POSIX shall not be convered here.
+
+Get a list of all signals the system supports:
+
+    kill -l
+
 [lsb]: http://www.linuxfoundation.org/collaborate/workgroups/lsb/download
 [linux foundation]: http://www.linuxfoundation.org/

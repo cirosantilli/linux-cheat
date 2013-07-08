@@ -2,6 +2,11 @@
 
 #can be used both for variable definitions and in rules
 
+#NOTE: you **must** put a space after `ifeq`! The following fails gives a separator missing error:
+
+#ifeq(a,a)
+#endif
+
 ifeq (a,a)
 	ifeqaa := 1
 else

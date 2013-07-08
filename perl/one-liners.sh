@@ -106,24 +106,24 @@
 		#print sum of lines:
 			perl -MList::Util=sum -alne 'print sum @F'
 
-##important one liners
+##Important one liners
 
-    #regex replace in file
+    #Find files with matching names and print only new modified lines to stdout:
 
-        echo $'a\nb' | perl -lape 's/a/A/'
+        find . -iname `.tex` | perl -lane 'print if s/a/A/g'
 
-    #prints entire new file to stdout
+    #Useful before you do mass refactoring
 
-	perl -pe 's/\n/ /g' F
-		#acts on newlines at end
+    #Make the modifications on files with matching names, print nothing to stdout
 
-	echo $'a\nb\na' | perl -lane 'print if s/a/A/g'
-		#print only new modified lines to screen
+        find . -iname `.tex` | xargs perl -lapi -e 's/a/A/g'
 
-	echo $'a\nb\nc\nb' | perl -lane '$o = $_; if (s/b/B/g) { print $. . "  " . $o . "\n" . $. . "  " . $_ . "\n" }'
-		#print only modified lines
-		#print old and new
-		#with line numbers
+    #Useful to do mass regex refactoring.
+    #*Very dangerous*, so make a backup of the current direcotyr before proceeding!
+
+    #Print only modified lines, old and new, with line numbers:
+
+        echo $'a\nb\nc\nb' | perl -lane '$o = $_; if (s/b/B/g) { print $. . "  " . $o . "\n" . $. . "  " . $_ . "\n" }'
 
 	perl -0777 -lape 's/\n\n+/\n/\ng' F
 		#not linewise

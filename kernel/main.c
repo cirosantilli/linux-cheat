@@ -186,6 +186,25 @@ static int __init init(void)
 		printk(INFO_ID "%s\n", __func__ );
 	}
 
+
+#ifdef __i386__
+
+	/*
+	cheat on instructions that can only be done from kernel space
+
+	in the kernel, those are be separated from non architecture specific files
+	*/
+
+	//TODO how to get cr0?
+
+		//int out = 0;
+		//asm (
+		//	"mov %%cr0, %0"
+		//	: "=m" (out)
+		//);
+		//printk( "%d", out );
+#endif
+
 	/*
 	#data structures
 
