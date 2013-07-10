@@ -8,21 +8,19 @@
 
     #MANUAL: edit that file and click some buttons
 
-##info
+##ubuntu genearl info
 
     #a debian based distribution
 
     #unlike debian maintained by the cannonical company
     #which gets money by offering maintaincance (debian is managed by the community)
 
-    #important implications:
+    #important implications: many key programs are the same:
 
-        #many key programs are the same:
+    #- `dpkg` for packages
+    #- `upstart` for init
 
-        #- `dpkg` for packages
-        #- `upstart` for init
-
-    ##upgrade version
+    ##upgrade ubuntu version
 
         #sudo aptitude install -y update-manager-core
         #sudo do-release-upgrade
@@ -404,6 +402,10 @@
                 sudo aptitude install -y w3m w3m-img
 
             #sudo aptitude install -y xinetd
+
+    ##disk
+
+            sudo aptitude install -y gparted
 
     ##desktop environments
 

@@ -2,13 +2,6 @@
 main cheat on the kernel kernel modules and on kernel concepts
 that can be exemplified in modules (much easier than recompiling and reinstalling the kernel)
 
-#typedefs
-
-	the kernel uses many typedefed datatypes to ensure:
-
-	- fixed sized integers (the kernel cannot use c99's stdlib `int32_t` family)
-	- byte ordering: in some cases it is necessary to use typedefs to ensure big/small endieness
-
 #TODO
 
 	#__user
@@ -186,6 +179,51 @@ static int __init init(void)
 		printk(INFO_ID "%s\n", __func__ );
 	}
 
+	/*
+	#kernel version
+
+		device drivers depend on kernel version.
+
+		you can get some version flexibility with the preprocessor.
+
+		#LINUX_VERSION_CODE
+
+			example: on kernel `2.6.10` == 132618 (i.e., 0x02060a)
+	*/
+	{
+		/* printk( "UTS_RELEASE = %s", UTS_RELEASE ); */	/* TODO get working */
+		printk(INFO_ID "LINUX_VERSION_CODE = %d\n", LINUX_VERSION_CODE);
+	}
+
+	/*
+	#assembly instructions that only kernel code can do
+
+		some instructions require kernel priviledge to be used
+
+		those that can be demonstrated here shall be
+
+		the use of plain assembly should be avoided whenever possible,
+		since more portable alternatives have usually already been coded,
+		but understanding those instructions may give you insights
+		on how the system achieves certain effects.
+
+		#x86
+
+			- interrupt flag IF instruction
+
+				determines if interrupts are enabled or disabled
+
+			- IO instructions
+
+				- IN            Read from a port
+				- OUT           Write to a port
+				- INS/INSB      Input string from port/Input byte string from port
+				- INS/INSW      Input string from port/Input word string from port
+				- INS/INSD      Input string from port/Input doubleword string from port
+				- OUTS/OUTSB    Output string to port/Output byte string to port
+				- OUTS/OUTSW    Output string to port/Output word string to port
+				- OUTS/OUTSD    Output string to port/Output doubleword string to port
+	*/
 
 #ifdef __i386__
 
@@ -204,6 +242,107 @@ static int __init init(void)
 		//);
 		//printk( "%d", out );
 #endif
+
+	/*
+	#fixed size integers
+
+		Like c99 `int32_t` family
+
+		u for unsigned, s for signed.
+
+		Defined in `include/linux/types.h`.
+
+	#fixed size endieness
+
+		For cases were big or little endieness must be explicit
+
+		Defined in `include/linux/types.h`.
+
+	TODO what is the difference between using le and be?
+	*/
+	{
+		__u8 u8 = 127;
+		__s8 s8 = 255;
+
+		if ( le16 != be16 ) return 0;
+
+		__le16 le16 = 1;
+		__be16 be16 = 1;
+		if ( le16 != be16 ) return 0;
+	}
+
+	/*
+	#smp
+
+		stands for Symettrical MultiProcessing.
+
+		means using multiple cpus at once (multicore systems)
+
+	#per cpu variables
+
+		<http://www.makelinux.net/ldd3/chp-8-sect-5>
+
+		#DEFINE_PER_CPU
+
+			define a copy of given variable for each cpu
+
+		#get_cpu_var(name);
+
+			get variable for current cpu
+
+			this is a macro, so you can modify the variable with that too
+
+		#put_cpu_var(name);
+
+			must be called after the variable has been modified
+
+		#smp_processor_id()
+
+			get id of current processor
+
+			run this many times and it may change
+
+		#get_cpu(name, cpu)
+
+			like `get_cpu_var`, but from any processor
+	*/
+	{
+		get_cpu_var(cpu_int) = 0;
+		put_cpu_var(cpu_int);
+		printk(INFO_ID "cpu_int  = %d\n", get_cpu_var(cpu_int));
+
+		printk(INFO_ID "smp_processor_id()  = %d\n", smp_processor_id());
+	}
+
+	/*
+	#likely #unlikely
+
+	 	the unlikely function marks a condition as rare, and makes it easier
+	 	for compilers and processors to optimize the code
+
+	 	likelly does the exac oposite
+
+	 	those should only be used when the condition is extremelly rare (common)
+
+	 	a typical use case is to test for errors conditions (which should, in theory, be rare...)
+	*/
+	{
+		if (likely(0)) {
+			printk(INFO_ID "ERROR\n");
+		}
+
+		if (likely(1)) {
+			printk(INFO_ID "unlikely(1)\n");
+		}
+
+		if (unlikely(0)) {
+			printk(INFO_ID "ERROR\n");
+		}
+
+		if (unlikely(1)) {
+			printk(INFO_ID "unlikely(1)\n");
+		}
+	}
 
 	/*
 	#data structures
@@ -334,126 +473,6 @@ static int __init init(void)
 				return 1;
 		}
 	}
-
-	/*
-	#kernel version
-
-		device drivers depend on kernel version.
-
-		you can get some version flexibility with the preprocessor.
-
-		#LINUX_VERSION_CODE
-
-			example: on kernel `2.6.10` == 132618 (i.e., 0x02060a)
-	*/
-	{
-		/* printk( "UTS_RELEASE = %s", UTS_RELEASE ); */	/* TODO get working */
-		printk(INFO_ID "LINUX_VERSION_CODE = %d\n", LINUX_VERSION_CODE);
-	}
-
-	/*
-	#likely #unlikely
-
-	 	the unlikely function marks a condition as rare, and makes it easier
-	 	for compilers and processors to optimize the code
-
-	 	likelly does the exac oposite
-
-	 	those should only be used when the condition is extremelly rare (common)
-
-	 	a typical use case is to test for errors conditions (which should, in theory, be rare...)
-	*/
-	{
-		if (likely(0)) {
-			printk(INFO_ID "ERROR\n");
-		}
-
-		if (likely(1)) {
-			printk(INFO_ID "unlikely(1)\n");
-		}
-
-		if (unlikely(0)) {
-			printk(INFO_ID "ERROR\n");
-		}
-
-		if (unlikely(1)) {
-			printk(INFO_ID "unlikely(1)\n");
-		}
-	}
-
-	/*
-	#smp
-
-		stands for Symettrical MultiProcessing.
-
-		means using multiple cpus at once (multicore systems)
-
-	#per cpu variables
-
-		<http://www.makelinux.net/ldd3/chp-8-sect-5>
-
-		#DEFINE_PER_CPU
-
-			define a copy of given variable for each cpu
-
-		#get_cpu_var(name);
-
-			get variable for current cpu
-
-			this is a macro, so you can modify the variable with that too
-
-		#put_cpu_var(name);
-
-			must be called after the variable has been modified
-
-		#smp_processor_id()
-
-			get id of current processor
-
-			run this many times and it may change
-
-		#get_cpu(name, cpu)
-
-			like `get_cpu_var`, but from any processor
-	*/
-	{
-		get_cpu_var(cpu_int) = 0;
-		put_cpu_var(cpu_int);
-		printk(INFO_ID "cpu_int  = %d\n", get_cpu_var(cpu_int));
-
-		printk(INFO_ID "smp_processor_id()  = %d\n", smp_processor_id());
-	}
-
-
-	/*
-	#assembly instructions that only kernel code can do
-
-		some instructions require kernel priviledge to be used
-
-		those that can be demonstrated here shall be
-
-		the use of plain assembly should be avoided whenever possible,
-		since more portable alternatives have usually already been coded,
-		but understanding those instructions may give you insights
-		on how the system achieves certain effects.
-
-		#x86
-
-			- interrupt flag IF instruction
-
-				determines if interrupts are enabled or disabled
-
-			- IO instructions
-
-				- IN            Read from a port
-				- OUT           Write to a port
-				- INS/INSB      Input string from port/Input byte string from port
-				- INS/INSW      Input string from port/Input word string from port
-				- INS/INSD      Input string from port/Input doubleword string from port
-				- OUTS/OUTSB    Output string to port/Output byte string to port
-				- OUTS/OUTSW    Output string to port/Output word string to port
-				- OUTS/OUTSD    Output string to port/Output doubleword string to port
-	*/
 
 	/*
 	#page
@@ -883,6 +902,158 @@ static int __init init(void)
 		//default priority for new processes:
 
 			printk(INFO_ID "DEFAULT_PRIO  = %d\n", DEFAULT_PRIO);
+	}
+	/*
+	#filesystem
+
+		mnemonic: fs
+
+		Specifies exactly how data should be stored on the disk.
+
+		You can have a different filesystem per partition.
+
+	#virtual filesystem
+
+		An abstraction over all filesystem types.
+
+		To be supported, a filesystem has to implement this abstraction.
+
+		The concepts of the VS are largely bijective with the ext filesystem family,
+		since those are often used with Linux.
+
+		Support for each individual filesystem type can be loaded on kernel memory as a module.
+
+		The virtual filesystem has some similarities with RAM management because both deal with
+		the retreival and modification of data, but there are a few important differences:
+
+		- HDs data is persistent. If for example a poweroff happens in the middle of an operation,
+			the disk could remain corrupted, while RAM data is thrown away at each poweroff.
+
+		- HDs operations are *much* slower than RAM operations, because you have to wait for a magnetic
+			disk to turn around and read heads to be positioned at exact locations in order to get
+			your data.
+
+	#ext filesystem family
+
+		Free sources:
+
+		- <http://www.virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1.html>
+
+		Main versions used: ext2, ext3 and ext4.
+
+		A *block* or *sector* is the minimal unit of data transfer.
+
+		There are two types of blocks:
+
+		- physical: the actual minimum data transfer unit supported by the hardware.
+		- logical: a filesystem parameter. Can be configured at filesystem creation.
+
+			Determines the actual minimal blocksize that the OS will allow.
+
+			Must be a multipe of 2^10.
+
+			In the Linux ext c implementation of ext2 this is represented on the `s_log_block_size`
+			of the `superblock` struct `struct ext2_super_block`
+
+		You can get both physical and logical block sizethose values on `sh` with `sudo parted -l`.
+
+		Common values for logical block sizes are: 2^10, 2^11 and 2^12.
+
+		If the system is expected to have a few large files,
+		using larger block files will be more efficient.
+
+		Disk layout for ext2:
+
+			| boot block | block group 0 | ... | block group ng |
+
+		where:
+
+		- nb is total number of block groups
+
+		#boot block
+
+			aka boot sector
+
+			Fits into one block.
+
+			The boot block is not managed by the filesystem,
+			but its space must be reserved.
+
+			There are two types of boot blocks:
+
+			TODO difference between both, confirm all the following info:
+
+			- master boot record (MBR):
+
+				One at the very start of each hard disk.
+
+				Contains two pieces of information:
+
+				- code to boot the system
+				- a partition table, which indicates where each partition starts.
+
+			- volume boot record (VBR):
+
+		#block group
+
+			Each block groups is of type:
+
+				| super block | group descriptor 0 | ... | group descriptor ng | data block bitmap |
+				| inode bitmap | inode table 0 | ... | inode table ni | data block 0 | ... | data block ni |
+
+			where:
+
+			- nb is total number of block groups
+			- ni is total number of inodes
+
+			Each block must fit into one physical block.
+
+			The data of each super block and of the bg group descriptors of each group block are the same
+			on all group blocks.
+
+			This redundance is done to:
+
+			- keep metadata close to data to reduce the access time
+
+			- reduce probability of disk corruption (TODO confirm this)
+
+			##super block
+
+				Store global information about the entire filesystem.
+
+				Represented in the Linux kernel by `struct ext2_superblock`
+
+				This includes interesting fields such as:
+
+				- s_inodes_count: number of inodes in entire filesystem.
+
+				- s_blocks_count: size of the filesystem in blocks.
+
+				- s_log_block_size: log 2 of the multiplier of 1024 of the logical block size.
+
+					Ex: 0 means block size 1024, 1 means 2 x 1024.
+
+				- s_blocks_per_group: number of blocks for each group
+
+				- s_mount_count: number of times this has been mounted.
+
+				- s_max_mnt_count: maximun number of times it can be mounted.
+
+				- s_magic: major version number. Differentiates ext2 from ext3 and ext4.
+
+				- s_minor_rev_level: minor version number
+
+				- __u8[16] s_uuid: numerical identifier
+
+				- char[16] s_volume_name: numerical unique identifier for filesystem
+
+				- char[64] s_last_mounted: path where it was last mounted.
+
+			##group descriptor
+
+				ext2_group_desc
+	*/
+	{
 	}
 
 	/*

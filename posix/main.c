@@ -60,6 +60,7 @@ main cheat on the POSIX C API
 //#posix only headers
 
 #include <arpa/inet.h>
+#include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>          //file control options. O_CREAT,
 #include <libgen.h>
@@ -81,7 +82,7 @@ main cheat on the POSIX C API
 
 extern char **environ;
 
-int main(int argc, char** argv)
+int main( int argc, char** argv )
 {
     /*
     #erros
@@ -291,17 +292,19 @@ int main(int argc, char** argv)
     /*
     #sleep
 
-        non busy sleep, that is, stop program execution for a given time,
+        Non busy sleep, that is, stop program execution for a given time,
         and let other programs run in the meantime.
 
-        there is no portable standard way of doing this AFAIK
+        There is no portable standard way of doing this.
     */
     {
+        printf( "sleep:\n" );
         for(int i=0; i<3; i++)
         {
-            printf("%d",i);
-            //sleep(1);
+            printf( "%d\n", i );
+            //sleep( 1 );
         }
+        printf( "\n" );
     }
 
     /*
@@ -479,7 +482,7 @@ int main(int argc, char** argv)
 
             - dev_t st_dev            Device ID of device containing file.
             - ino_t st_ino            File serial number.
-            - mode_t st_mode          Mode of file (see below).
+            - mode_t st_mode          Mode of file
             - nlink_t st_nlink        Number of hard links to the file.
             - uid_t st_uid            User ID of file.
             - gid_t st_gid            Group ID of file.
@@ -572,6 +575,34 @@ int main(int argc, char** argv)
 
             if the number of hardlinks to a data equals 0, it gets deleted
         */
+
+        /*
+        #opendir
+
+            Open a directory for reading.
+
+        #readdir
+
+            Get next directory entry, or NULL if over.
+        */
+        {
+            DIR* dp;
+            struct dirent* entry;
+
+            dp = opendir( "." );
+            if ( dp == NULL )
+            {
+                perror( "opendir" );
+            }
+            else
+            {
+                printf( "opendir:\n" );
+                while ( ( entry = readdir( dp ) ) != NULL )
+                {
+                    printf( "  %s\n", entry->d_name );
+                }
+            }
+        }
     }
 
     /*

@@ -350,12 +350,12 @@ if it conatins a lib
 
 ### ldd
 
-list required shared libraries of an executable
-and if they can be found
+List required shared libraries of an executable
+and if they can be found.
 
-binutils package
+Binutils package.
 
-is a convenient subset of `readelf -d`
+Is a convenient subset of `readelf -d`
 
     ldd a.elf
 

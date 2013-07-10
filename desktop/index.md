@@ -1,3 +1,39 @@
+#standards
+
+##freedesktop.org
+
+aka XDG (freedesktop.org was formerly known as the X Desktop Group,
+and the acronym "XDG", remains common in their work.)
+
+http://www.freedesktop.org/wiki/
+
+Specifies:
+
+- autostart
+
+- <http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html>
+
+    basedir spec
+
+    Specifies where configuration and data files should be put,
+    and enviroment variables that indicate that place such as `$XDG_CONFIG_HOME`
+
+    All enviroment variables have a default value to be assumed in case they are not present.
+
+    - `$XDG_CONFIG_HOME`: base location of per-user configuration files. Default value: `.config`.
+
+    - `$XDG_CONFIG_DIRS`: comma separated list of where to look for cross user configuration files.
+
+        Default value: `/etc/xdg`
+
+- `echo $XDG_CURRENT_DESKTOP`: current DE in use.
+
+    Gnome 3 output: GNOME
+
+Also check the `man xdg-` tools. Not sure how much they have been adopted however.
+
+#x11
+
 Real name: X Window System
 
 x11 is a `window system`
@@ -65,7 +101,10 @@ Server:
 
     Display notation: `0.1` means: display 0, screen 1
 
-#xorg
+A good way to see some basic and useful application implemented in pure X as demos
+is to do `ls /etc/X11/app-defaults`
+
+##xorg
 
 Dominant implementation of the X server.
 
@@ -91,17 +130,17 @@ Log file
 
 where `0` is the display number.
 
-#X
+##X
 
 Get xserver version
 
     sudo X -version
 
-#xhost
+##xhost
 
 TODO
 
-#startx
+##startx
 
 TODO
 
@@ -117,7 +156,7 @@ More detailed info:
 
 	xlsclients -l
 
-#xprop
+##xprop
 
 Get window info on a window
 
@@ -128,7 +167,7 @@ Keep examining the properties, and print if changes happen:
 
 	xprop -spy -name Krusader
 
-#xmodmap
+##xmodmap
 
 Modify key maps.
 
@@ -151,11 +190,11 @@ To make this happen every time at startup TODO broken?:
 
 The `~/.xsession` file could also be used depending on system
 
-#xdotool
+##xdotool
 
 Send clicks and manage window properties from sh.
 
-##select window
+###select window
 
 Before you try to do things to a window,
 you must say which window you want to act on.
@@ -176,7 +215,7 @@ Act on windows with given name:
 
 Name is exactly what is shown on window titlebar.
 
-##keystrokes
+###keystrokes
 
 Keystroke types:
 
@@ -212,7 +251,7 @@ a, waits 1 ms, b:
 
     xdotool type --delay 1 'ab'
 
-##sync
+###sync
 
 Wait for application to start before sending a command to it:
 
@@ -221,7 +260,7 @@ Wait for application to start before sending a command to it:
 
 In this way, you can launch an app and send commands, making sure they will be received!
 
-#wmctrl
+##wmctrl
 
 Control windows from sh (maximize, minimize, focus, etc.)
 
@@ -233,7 +272,7 @@ TODO
 
 autokey: high level, gui interface x11 automation
 
-#xbacklight
+##xbacklight
 
 Control screen brightness
 
@@ -245,11 +284,11 @@ Set lightining to 80%:
 
     xbacklight -set 80
 
-#xsel
+##xsel
 
 Manipulate the x selection and clipboard
 
-##x selection
+###x selection
 
 X selection is the last focused selected text.
 
@@ -269,14 +308,14 @@ Get the x selection
     echo b | xsel -a
     assert [ "`xsel`" = $'a\nb\n' ]
 
-##x clipboard
+###x clipboard
 
 Set and get the clipboard (control c control v access):
 
     echo a | xsel -b
     assert [ `xsel -b` = a ]
 
-##follow
+###follow
 
 Follows stardard input as it grows
 
@@ -286,13 +325,13 @@ Follows stardard input as it grows
     echo b >> f
     assert [ "`xsel`" = $'a\nb\n' ]
 
-##stop
+###stop
 
     echo a | xsel
     echo c > f
     assert [ "`xsel`" = $'a\n' ]
 
-#xmodmap
+##xmodmap
 
 View and modify key mappings.
 
@@ -322,13 +361,43 @@ Up to 8 keysims bay be attached to each keycode.
 
 However, only the first 4 are commonly used.
 
-#xeyes
+##setxkblayout
 
-Fun x11 test program.
+TODO
 
-    xeyes
+##simple gui apps
 
-#xev
+Either for testing or usuful utilities.
+
+- xcalc
+
+    Simple scientific calculations
+
+- xgc
+
+    X Graphics Demo.
+
+- xeyes
+
+    Fun x11 test program.
+
+- xfontsel
+
+    Point and click and view how a font looks like.
+
+- xmag
+
+    Magnifying lens.
+
+- xmore
+
+    `more`, but in X!
+
+- xtime
+
+    Pointer clock.
+
+##xev
 
 Opens test window and prints x events description to stdout:
 
@@ -337,7 +406,7 @@ Opens test window and prints x events description to stdout:
 
 Try clicking on the windows, or using your keboard to see the outputs.
 
-#xwd
+##xwd
 
 Take screenshots.
 
@@ -376,6 +445,7 @@ The following exapmle was created using:
 - `lxsession` session manager
 - `openbox` window manager
 - `firefox` was started from openbox run (analogous to ubuntu dash)
+- `xterm` was started via autostart TODO put it there
 
 The abbridged output looks like:
 
@@ -391,6 +461,8 @@ The abbridged output looks like:
          |-firefox
          ...
 
+Other sessions may use different spawn strategies.
+
 So notice a few interesting facts:
 
 - `lightdm` comes first and spanws `Xorg` and `lxsession`
@@ -404,9 +476,104 @@ So notice a few interesting facts:
 - `firefox` is a direct child of init. Therefore `lxpanel` must have reparented it to `init`,
     so that it can keep running even if `lxpanel` is killed or restarted.
 
+Gnome 3 spawn tree (xterm launched via the dash) looks like:
+
+    init-+
+         |-lightdm-+-Xorg---2*[{Xorg}]
+         |         |-lightdm-+-gnome-session-+-deja-dup-monito---2*[{deja-dup-monito}]
+         |         |         |               |-firefox---35*[{firefox}]
+         |         |         |               |-gnome-shell-+-gnome-screensav---2*[{gnome-screensav}]
+         |         |         |               |             |-xterm---bash
+         |         |         |               ...
+         ...
+
+KDE spawn tree:
+
+
+    init-+
+         |-kdeinit4-+-deja-dup-monito---2*[{deja-dup-monito}]
+         |          |-firefox---33*[{firefox}]
+         |          |-xterm---bash
+         |          ...
+         |-lightdm-+-Xorg---2*[{Xorg}]
+         |         |-lightdm-+-startkde-+-kwrapper4
+         |         |         |          `-ssh-agent
+         |         |         `-{lightdm}
+         ...
+
+##gnome 3
+
+Default DE for Fedora.
+
+Default window manager: `mutter`
+
+Default session manager: `gnome-session`
+
+###dconf
+
+Sources:
+
+- <http://askubuntu.com/questions/22313/what-is-dconf-what-is-its-function-and-how-do-i-use-it>
+- <http://askubuntu.com/questions/249887/gconf-dconf-gsettings-and-the-relationship-between-them>
+
+Manage desktop configurations in a key/value manner, where keys are put in a `/` separated tree.
+
+It is a backend for gsettings for systems that do not already have a configuration backend.
+
+For example, on Linux `dconf` is the backend for `gsettings`, but on windows `gsettings` might use the registry.
+
+Therefore, you should always use gsettings if you want portability.
+
+Applications can use it to manage their data.
+
+`dconf` is the GNOME3 replacement for gconf. Should be faster becaues it is binary, while gconf is xml based.
+
+Gui version: `dconf-editor`
+
+View all configs at once:
+
+    dconf dump / | less
+
+Binary data file at:
+
+    /home/ciro/.config/dconf/user
+
+##unity
+
+Default DE for Ubuntu 12.04+.
+
+Default window manager: Ubuntu 13.04 ships with 2 compiz *and* metacity,
+the choice depends on your hardware support: <http://askubuntu.com/questions/24977/why-does-ubuntu-use-two-window-managers-compiz-and-metacity>
+
+##kde
+
+Default DE for the KDE distro.
+
+Uses qt toolkit instead of gtk.
+
 ##lxde
 
-###sources lxde
+Default DE for Archlinux.
+
+Very lightweight and fast.
+
+Follows `freedesktop.org` standards.
+
+Default window manager: openbox.
+
+For keyboard shortcuts, see info on openbox.
+
+Configuration files:
+
+Choose gtk themes with:
+
+    lxappearance
+
+Choose qt themes with:
+
+    qtconfig-qt4
+
+Sources:
 
 - <http://lxde.org/lxde>
 
@@ -420,17 +587,15 @@ So notice a few interesting facts:
 
     Default DE for archlinux, so lots of info there.
 
-Archlinux default.
+###keyboard layout
 
-Very lightweight and fast.
+<http://www.pclinuxos.com/forum/index.php?topic=87702.0>
 
-Default window manager: openbox.
+Right click on panel and add the Keyboard Layout Handler to the panel.
 
-Choose gtk themes with:
+Right click on the Keyboard layout manager and choose your settings.
 
-    lxappearance
-
-Customize keyboard shortcuts with:
+TODO what are the available layouts? what are the config files?
 
 #display manager
 
@@ -468,7 +633,7 @@ Default display manager for Ubuntu.
 
 - <https://wiki.ubuntu.com/LightDM>
 
-   #ubuntu docs
+   ubuntu docs
 
 ---
 
@@ -590,9 +755,40 @@ Restart after changing config file to take changes into consideration:
 
     openbox --restart
 
+##mutter
+
+Default for Gnome 3.
+
 #session manager
 
 TODO
+
+#startup programs
+
+User space startup programs can only start after the display manager has logged the use in.
+
+Therefore, they must either be launched by the DM at the end of its opertion, or by something spawned by it.
+
+##autostart
+
+Used by Ubuntu, LXDE, KDE, GNOME
+
+Specification by freedesktop.org: <http://standards.freedesktop.org/autostart-spec/autostart-spec-latest.html>
+
+Configuration files under:
+
+- `/etc/xdg/autostart`
+- `~/.config/autostart/`.
+
+Each file gets sourced.
+
+Example, in a file called `firefox`, put:
+
+[Desktop Entry]
+    Type=Application
+    Exec=firefox
+
+TODO who executable implements it? which DEs adopt it?
 
 #toolkits
 
@@ -601,11 +797,22 @@ more portable and more convenient interfaces such as:
 
 ##qt
 
+Used mainly by KDE.
+
+It is so associated with KDE that some settings are found under the kde configuration folders.
+
+Themes locations:
+
+- `/usr/share/kde4/apps/color-schemes`
+- `~/.kde/share/apps/color-schemes`
+
 Customize qt with GUI:
 
    qtconfig-qt4
 
 You can change themes there.
+
+If you choose the gtk+ theme, it will use your gtk theme.
 
 Most kde appliations have a command line qt interface part,
 and you can get the qt version, together with the KDE version required
@@ -621,14 +828,86 @@ which produces output like:
 
 ##gtk
 
+3 versions: 1, 2 and 3.
+
+Configuration files for 2.0:
+
+    ~/.gtkrc-2.0
+
+Configuration syntax for 2.0:
+
+    gtk-theme-name = "Clearlooks"
+
+Configuration files for 3.0:
+
+    $XDG_CONFIG_HOME/gtk-3.0/settings.ini
+
+Configuration syntax for 3.0:
+
+    [Settings]
+
+        gtk-icon-theme-name = <icon-theme-name>
+
+        gtk-theme-name = <gtk-3-theme-name> 
+
+        style "schrift"
+        {
+            font_name = "DejaVu Sans 10"
+        }
+        widget_class "*" style "schrift"
+        gtk-font-name = "DejaVu Sans 10"
+
+        gtk-toolbar-style   = GTK_TOOLBAR_ICONS              #Only icons
+        gtk-toolbar-style   = GTK_TOOLBAR_TEXT	             #Only text
+        gtk-toolbar-style   = GTK_TOOLBAR_BOTH	             #Both icons and text
+        gtk-toolbar-style   = GTK_TOOLBAR_BOTH_HORIZ	     #Icons and text next to the icons
+
 Very nice demo of lots of 2.0 features with easy to see source code side by side:
 
     gtk-demo
 
-TODO how to find if an application uses gtk and which version
+## TODO how to find if an application uses gtk and which version
+
+It is not generally possible to do so.
+
+If the program uses gtk as a dynamic library, you can try:
+
+    ldd /bin/ls
+
+However some programs seem to use gtk as a static library.
+
+Sometimes, programs also give gtk specific options from the command line.
+
+---
 TODO where is gtk configuration stored?
 
 You can install new gtk themes by placing their files under TODO.
 
 Note however that it is more recommended that you get themes from packages,
 so that those can get automatically updated.
+
+#themes
+
+Control how the system looks.
+
+Theme folders:
+
+- `/usr/share/themes/`
+- `~/.themes/`
+
+Those folders contain themes for gtk and window managers.
+
+Each dire structure is like:
+
+    - `/usr/share/themes/theme-name/gtk-2.0`
+    - `/usr/share/themes/theme-name/openbox-3.0`
+
+Todo: where are qt themes stored?
+
+#panels
+
+##lxpanel
+
+LXDE default.
+
+Config files: `.config/lxpanel/LXDE/`

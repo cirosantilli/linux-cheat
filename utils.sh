@@ -1194,7 +1194,7 @@
 
             #perl regexp is non POSIX
 
-            #see: <#extended regex>
+            #see: extended regex
 
             echo $'a\nb' | grep -E '(a|b)'
 
@@ -1545,7 +1545,7 @@
 
         #get columns from text databases
 
-        #for more complex ops, consider <#awk>
+        #for more complex ops, consider awk
 
         echo $'a\tb\nc\td' | cut -f1
             #$'a\nc'
@@ -1830,7 +1830,7 @@
 
         ##learning suggestion
 
-            #consider using <#perl> instead of this
+            #consider using perl instead of this
 
             #sed has only slightly better golfing than perl
 
@@ -2408,229 +2408,322 @@
         #execute only when system load average goes below 1.5
         #starting from now!
 
-        cd "`mktemp -d`"
-        echo "touch a" | batch
+            cd "`mktemp -d`"
+            echo "touch a" | batch
 
-        echo "touch a" | at -q b now
-            #same, but with at you can change to any time
+        #same, but with at you can change to any time
 
-##hd
+            echo "touch a" | at -q b now
 
-    #hard disk, mount partitions and filesystem
+##disk
+
+    #hard disks, mounting, partitions, filesystem, block devices
 
     ##du
 
-        du -sh * | sort -hr
-            #disk usage per file/dir
-                #s: summarize: only for dirs in *
-                #h: human readable: G, M, b
+        #POSIX 7
 
-    ##paritions
+        #get disk usage per file/dir:
+
+            du -sh * | sort -hr
+
+        #- s: summarize: only for dirs in *, not subdirs
+        #- h: human readable: G, M, b
+
+    ##filesystem
+
+        #determines how data will get stored in the hard disk
+
+        #ext2, ext3 and ext4 are the ones mainly used in linux today.
+
+        #on ext4, only one dir is created at the root: lost+found
+
+        #other important filesystems:
+
+        #- ntfs: windows today
+        #- nfat: dos
+
+        #to find out types see blkid or lsblk
+
+        #each partition can have a different filesystem.
+
+    ##partitions
+
+        #you can only have 4 primary partitions
+
+        #each one can be divided into logical partitions
+
+        #primary partitions get numbers from 1 to 4
+
+        #logical partitions get numbers starting from 5
 
         #you should unmount partitions before making change to them!
 
-        ##df
+        #to get info on partitions, start/end, filesystem type and flags,
+        #consider: `parted`, `df -f`
 
-            #show partitions, total and free space of each
+    ##df
+
+        #POSIX 7
+
+        #Disk Fill
+
+        #List mounted filesystems:
 
             df -h
-                #h: like `du -h`
+
+        #`-h` for human readable.
+
+        #Sample output:
+
+            Filesystem      Size  Used Avail Use% Mounted on
+            /dev/sda5       333G  155G  162G  49% /
+            none            4.0K     0  4.0K   0% /sys/fs/cgroup
+            udev            1.8G  4.0K  1.8G   1% /dev
+            tmpfs           376M  1.1M  375M   1% /run
+            none            5.0M     0  5.0M   0% /run/lock
+            none            1.9G  928K  1.9G   1% /run/shm
+            none            100M   28K  100M   1% /run/user
+            /dev/sda2        94G   64G   30G  69% /media/win7
+            /dev/sda7        16G  7.9G  6.6G  55% /media/ciro/375e62f3-b738-4670-8018-5e
+
+        #Sort by total size:
+
             df -h | sort -hrk2
-                #sort by total size
 
-        ##parition devices
+        #Sample output:
 
-            #each hd gets a device
+            /dev/sda5       333G  155G  162G  49% /
+            /dev/sda2        94G   64G   30G  69% /media/win7
+            /dev/sda7        16G  7.9G  6.6G  55% /media/ciro/375e62f3-b738-4670-8018-5ea1cb546cdf
+            none            1.9G  928K  1.9G   1% /run/shm
+            udev            1.8G  4.0K  1.8G   1% /dev
+            tmpfs           376M  1.1M  375M   1% /run
+            none            100M   28K  100M   1% /run/user
+            none            5.0M     0  5.0M   0% /run/lock
+            none            4.0K     0  4.0K   0% /sys/fs/cgroup
+            Filesystem      Size  Used Avail Use% Mounted on
 
-            #each partition gets a device
+        #Also show partition filesystems type:
 
-            #you can only have 4 primary partitions
+            df -T
 
-            #each one can be divided into logical partitions
+    ##lsblk
 
-            #primary partitions get numbers from 1 to 4
+        #list block devices (such as partitions, hard disks or DVD devices)
 
-            #logical partitions get numbers starting from 5
+            sudo lsblk -f
+
+            sudo lsblk
+
+    ##parted
+
+        #get information on all partitions
+
+        #very useful output form:
+
+            sudo parted -l
+
+        #sample output:
+
+            Number  Start   End     Size    Type      File system     Flags
+             1      1049kB  1574MB  1573MB  primary   ntfs            boot
+             2      1574MB  102GB   100GB   primary   ntfs
+             4      102GB   485GB   384GB   extended
+             5      102GB   465GB   363GB   logical   ext4
+             7      465GB   481GB   16.7GB  logical   ext4
+             6      481GB   485GB   4005MB  logical   linux-swap(v1)
+             3      485GB   500GB   14.7GB  primary   ntfs
+
+    ##device files
+
+        #each like hard disk    has a corresponding device files
+
+        #each partition         has a corresponding block device file
 
             ls -l /dev | grep -E ' (sd|hd)..?$'
-                #hda
-                #hda1
-                #hda2
-                #hda5
-                #sdb
-                #sdb1
-                #sdb2
-                #sdb3
-                #hdc
-                #hdc1
-                #^^^^
-                #1 23
-                #1: partition type. hd: IDE (older). sb: SCSI (newer)
-                #2: hard disk identifier.
-                #3: parition number inside hard disk.
-                #
-                #example above:
-                #3 hds: had, sdb and hdc
-                    #1 and 3 are hd
-                    #2 is sd
-                #1 has 3 partitions
-                #...
 
-        ##label
+        #sample output:
 
-            #an ext concept
+            hda
+            hda1
+            hda2
+            hda5
+            sdb
+            sdb1
+            sdb2
+            sdb3
+            hdc
 
-            #determines the mount name for the partition
+        #format:
 
-            #should be unique, but not sure this is enforced.
+            hdc1
+            ^^^^
+            1 23
 
-            ##e2label
+        #1. partition type. hd: IDE (older). sb: SCSI (newer)
+        #2. hard disk identifier.
+        #3. parition number inside hard disk.
 
-                #get/set ext[234] label info
+        #so on the example output given:
 
-                sudo e2label /dev/sda7
-                sudo e2label /dev/sda new_label
-                    #sets new label for partition
+        #- 3 hds: had, sdb and hdc
+        #- 1 and 3 are hd, 2 is sd
+        #- 1 has 3 partitions
 
-                #each partition may have a label up to 16 chars length.
-                #if it does, th partition will get that name when mounted.
+    ##uuid
 
-            ##list all labels:
+        #given when you create of format a partition
 
-                sudo blkid
+        #to view them, see blkid or lsblk or gparted
 
-        ##filesystem type
+        #get UUID of a device:
 
-            ##ext[234]: linux today
-                #on ext4, only one dir is created: lost+found
-            ##ntfs: windows today
-            ##nfat: dos
+            sudo lsblk -no UUID /dev/sda1
 
-            #to find out types see: <#blkid> or <#lsblk>
+    ##blkid
 
-        ##uuid
-
-            #given when you create of format a partition
-
-            #to view them, see <#blkid> or <#lsblk> or <#gparted>
-
-        ##swap
-
-            #used by os to store unused ram
-
-            #should be as large as your ram more or less, or twice it.
-
-            #can be shared by multiple os, since only one os can run at a time.
-
-            sudo swapon /dev/sda7
-                #tur swap on on partition /dev/sda7
-            swapon -s
-                #find the swap partition used on cur os
-
-            sudo swapoff
-                #disable swap partition
-
-            sudo mkswap -U random /dev/sda7
-                #make a swap partition on partition with random uuid
-                #swap must be off
-
-        ##blkid
-
-            #get UUID, label and filesystem type for all partitions
+        #get UUID, label and filesystem type for all partitions
 
             sudo blkid
 
-        ##lsblk
+    ##label
 
-            #list block devices (such as partitions)
+        #an ext partitions concept
 
-            sudo lsblk -f
-                #show filesystems (partitions) only
-                #shows type, label and mountpoint
-            sudo lsblk
-                #lis all block devices.
-                #to me, also lists `/dev/sr0`, my dvd.
-            sudo lsblk -no UUID /dev/sda1
-                #get UUID only
+        #determines the mount name for the partition
 
-        ##/dev/disk
+        #should be unique, but not sure this is enforced.
 
-            #symliks to partition identifiers
+    ##e2label
 
-            #allows you to get identifier info
+        #get/set ext[234] label info
 
-            #if id no present, link not there
+        #sets new label for partition:
 
-            cd /dev/disk/
-            ls -l
-                #by-id
-                #by-label
-                #by-path
-                #by-uuid
+            sudo e2label /dev/sda7
+            sudo e2label /dev/sda new_label
 
-            ls -l by-id
+        #Each partition may have a label up to 16 chars length.
+        #If it does, the partition will get that name when mounted.
 
-        ##fdisk
+    #list all labels:
 
-            #format disk
+        sudo blkid
 
-            #better use <#gparted> if you have X11
+    ##/dev/disk
 
-            #edit partition table. does not create filesystems. for that see: <#mke2fs>
+        #symliks to partition identifiers
 
-            #to view/edit partitions with interactive cli prompt interface
+        #allows you to get identifier info
 
-            #does not show labels and where partitions are mounted
+        #if id no present, link not there
+
+        cd /dev/disk/
+        ls -l
+            #by-id
+            #by-label
+            #by-path
+            #by-uuid
+
+        ls -l by-id
+
+    ##fdisk
+
+        #edit partition table. does not create filesystems. for that see: mke2fs
+
+        #mnemonic: Format disk.
+
+        #better use gparted for simple operations if you have X11
+
+        #to view/edit partitions with interactive cli prompt interface
+
+        #does not show labels and where partitions are mounted
+
+        #show partition table of hd
 
             sudo fdisk -l /dev/sda
-                #show partition table of hd
+
+        #view/edit partitions for hd sda:
+
             sudo fdisk /dev/sda
-                #view/edit partitions for hd sda
 
-            #a primary parition that is split into logical paritions is called `extended`
+        #a primary parition that is split into logical paritions is called `extended`
 
-            #logical partitions are limited to 16 scsi and 53 ide total.
+        #logical partitions are limited to 16 scsi and 53 ide total.
 
-            #interesting line:
-                #255 heads, 63 sectors/track, 60801 cylinders, total 976773168 sectors
-                #255 ^^^^^, 63 ^^^^^^^/^^^^^, 60801 ^^^^^^^^^, total 976773168 sectors
-                #    1         2       3            4
-                #
-                #2: sector: smalles adressable memory in hd. you must get the whole sector at once.
-                #4: defaults: rw, suid, dev, exec, auto, nouser, and async
-                #
-                #to understand, must see images:
-                #
-                #  <http://osr507doc.sco.com/en/HANDBOOK/hdi_dkinit.html>
-                #  <http://en.wikipedia.org/wiki/Track_%28disk_drive%29>
+        #sample output line:
 
-        ##mke2fs
+            #255 heads, 63 sectors/track, 60801 cylinders, total 976773168 sectors
+            #255 ^^^^^, 63 ^^^^^^^/^^^^^, 60801 ^^^^^^^^^, total 976773168 sectors
+            #    1         2       3            4
 
-            #make ext[234] partitions
+        #2. sector: smalles adressable memory in hd. you must get the whole sector at once.
+        #4. defaults: rw, suid, dev, exec, auto, nouser, and async
 
-            #better use <#gparted> if you have X11
+        #To understand each field, must see some images:
 
-        ##gparted
+        #- <http://osr507doc.sco.com/en/HANDBOOK/hdi_dkinit.html>
+        #- <http://en.wikipedia.org/wiki/Track_%28disk_drive%29>
 
-            #gui to <#fdisk> + <#mke2fs>
+    ##mke2fs
 
-            #really easy to use and informative
+        #make ext[234] partitions
 
-            sudo aptitude install -y gparted
+        #better use gparted if you have X11
 
-            ##format an external hd
-                #- erase partition table and create new one
-                #- gpt seems to be a good choice of partition table type.
-                #- create a partiion on the hd.
-                #- ntfs seems to be best cross platform choice now.
-                #- give a label. it will be mounted like that. I choose 300g for my 300 Gb hd.
-                #- all ops are very quick!
+    ##gparted
+
+        #gui to fdisk + mke2fs
+
+        #very good interface
+
+        ##format an external hd
+
+        #- erase partition table and create new one
+        #- gpt seems to be a good choice of partition table type.
+        #- create a partiion on the hd.
+        #- ntfs seems to be best cross platform choice now.
+        #- give a label. it will be mounted like that. I choose 300g for my 300 Gb hd.
+        #- all ops are very quick!
+
+    ##swap
+
+        #used by os to store unused ram
+
+        #should be as large as your ram more or less, or twice it.
+
+        #can be shared by multiple os, since only one os can run at a time.
+
+        #turn swap on on partition /dev/sda7:
+
+            sudo swapon /dev/sda7
+
+        #find the currently used swap partition:
+
+            swapon -s
+
+        #disable swapping:
+
+            sudo swapoff
+
+        #make a swap partition on partition with random uuid
+
+            sudo mkswap -U random /dev/sda7
+
+        #swap must be off
 
     ##mount
 
-        #mount block device file on filesystem
+        #mount block device file on filesystem:
 
             sudo mount /dev/sda1 /media/win/
+
+    ##umount
+
+        #unmount what is on this dir
+
+            sudo umount /media/win/
 
     ##bind
 
@@ -2646,12 +2739,6 @@
             sudo umount b
             assert [ `ls a` = $'a\nb' ]
             assert [ -z `ls b` ]
-
-    ##umount
-
-        #unmount what is on this dir
-
-            sudo umount /media/win/
 
     ##/etc/fstab
 
@@ -2681,43 +2768,59 @@
 
         #syntax:
 
-            #<file system> <mount point>   <type>  <options>       <dump>  <pass>
-            #1             2               3       4               5       6
-            #1: identifier to the file system.
-                #Ex:
-                    #- /dev/sda1
-                    #- UUID=ABCD1234ABCD1234
-                    #- LABEL=mylabel
-            #2: where it will get mounted.
-                #On ubuntu: make a subdir of /media like /media/windows
-                #This dir must exist before mount
-                #and preferably be used only for mounting a single filesystem.
-                #I don't think fstab can auto create/remove the missing dirs.
-            #3: type. ext[234], ntfs, etc.
-            #see sources for others.
+            <file system> <mount point>   <type>  <options>       <dump>  <pass>
+            1             2               3       4               5       6
 
-            ##windows
-                #use:
+        #1. identifier to the file system.
+
+            #Ex:
+
+            #- /dev/sda1
+            #- UUID=ABCD1234ABCD1234
+            #- LABEL=mylabel
+
+        #2. where it will get mounted.
+
+            #On ubuntu: make a subdir of /media like /media/windows
+            #This dir must exist before mount
+            #and preferably be used only for mounting a single filesystem.
+            #I don't think fstab can auto create/remove the missing dirs.
+
+        #3. Type. ext[234], ntfs, etc.
+
+        #see sources for others.
+
+        ##windows
+
+            #To mount windows filesystems such as NTFS or DOS use:
+
                 umask=111,dmask=000
-                #this way, dirs will be 000 and files 666 (not executable)
-                #see <#umask> to understand better
 
-            ##dvd
+            #This way, dirs will be 000 and files 666 (not executable)
 
-                #mounting dvds/usbs is similar to mounting partitions:
+        ##dvd
+
+            #Mounting dvds/usbs is similar to mounting partitions:
+
                 /dev/cdrom 	/media/dvd 	noauto 	ro 0 0
-                #however if you use auto, you always get errors when the dvd is empty
 
-                #it is best to use auto, because dvd can be of several formats.
+            #However if you use auto, you always get errors when the dvd is empty.
+
+            #It is best to use auto, because dvd can be of several formats.
 
     ##fuser
 
-        fuser -m /dev/sdb1
-            #which processes are keeping device busy
+        #View which processes are using a device:
+
+            fuser -m /dev/sdb1
+
+        #Useful if you want to unmont a filesystem, and you have to find out who is still using it.
 
     ##fsck
 
-        #check and repair linux filesystems
+        #File System Check
+
+        #Check and repair linux filesystems.
 
 ##system info
 
@@ -2741,7 +2844,7 @@
 
             #architecture
 
-            #subset of <#uname>
+            #subset of uname
 
             arch
                 #i686
@@ -3129,7 +3232,7 @@
 
         ##uptime
 
-            #echo first line of <#top>
+            #echo first line of top
 
             #sample:
                 #23:00:13 up 12:00,  3 users,  load average: 0.72, 0.66, 0.6
@@ -3364,7 +3467,7 @@
             #-rw-rw-r-- 1 ciro ciro    4 Feb 25 11:53 a
             #1          2 3    4       5 6            7
 
-        #1) file permissions. See <#permissions>
+        #1) file permissions. See permissions
         #2) for files, number of hardlinks. For dirs number of subdirs + parent + self (min is 2 therefore)
         #3) owner
         #4) group
@@ -3431,7 +3534,7 @@
 
         ##dircolors
 
-            #config <#ls> colors
+            #config ls colors
 
         ##gnu extensions
 
@@ -4049,7 +4152,7 @@
 
             #resolve all symbolic links and '.' and '..' entries of a path recursivelly
 
-            #prefer <#readlink> which is more widespread by default in distros
+            #prefer readlink which is more widespread by default in distros
 
             sudo aptitude install -y realpath
 
@@ -4097,9 +4200,9 @@
 
         #prints filenames to stdout, or do some few other actions
 
-        #great for combo with <#xargs>
+        #great for combo with xargs
 
-        #consider <#ack> instead when for searching code
+        #consider ack instead when for searching code
 
         ##preparation
 
@@ -4196,7 +4299,7 @@
 
             #do some command on lots of files.
 
-            #great for combo with <#find>.
+            #great for combo with find.
 
             ##alternatives
 
@@ -4286,9 +4389,9 @@
 
         #prints all matches
 
-        #this uses a database, which must be updated with <#updatedb> before your new file is found
+        #this uses a database, which must be updated with updatedb before your new file is found
 
-        #commonly, `updatedb` is a <#cronjob>
+        #commonly, `updatedb` is a cronjob
 
             locate a.h
 
@@ -5116,7 +5219,7 @@
         #it is best to install them from ppas
         #since at every update of gtk version themes break =)
 
-        #to change themes with a gui (recommended) use: <#gnome tweak tools>
+        #to change themes with a gui (recommended) use: gnome tweak tools
 
         ##manual theme management
 

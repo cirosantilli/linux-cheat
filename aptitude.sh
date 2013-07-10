@@ -296,14 +296,19 @@
 
 ##upgrade installed packages
 
-    #upgrade a single package
-    sudo apt-get -u install $PKG
+    #move to next version
+
+    #upgrade a single package:
+
+        sudo apt-get -u install $PKG
 
     #upgrades all packages for which upgrade does not involve installing more packages
-    sudo apt-get -u upgrade
+
+        sudo apt-get -u upgrade
 
     #upgrades all packages, even if upgrade requires installation of new packages
-    sudo apt-get dist-upgrade
+
+        sudo apt-get dist-upgrade
 
 ##remove packages. someday they have to die =(
 

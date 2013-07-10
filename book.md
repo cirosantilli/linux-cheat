@@ -101,9 +101,21 @@ output to stdout
 
 ## paps
 
-txt to ps
+Converts txt to ps.
 
-works for utf8
+Works for utf8.
+
+Much better defaults than a2ps.
+
+Outputs to stdout by default, so you want:
+
+    paps a.txt > a.ps
+
+Font:
+
+    paps --font="times 12" a.txt > a.ps
+
+TODO list all fonts?
 
 ## ps2pdf
 
@@ -233,3 +245,44 @@ remove empty margins of pdf files
 greatly increases filesize (10x)
 
 	pdfcrop a.pdf
+
+# fonts
+
+Description of how txt and utf data should look like.
+
+Locations:
+
+- /usr/share/X11/fonts
+- /usr/share/fonts
+
+## xlsfonts
+
+TODO
+
+---
+
+Formats:
+
+- TrueType:
+
+    Proprietary Apple.
+
+    Vector.
+
+    File extension: ttf
+
+- OpenType: 
+
+    Proprietary Microsoft (ironic name... *open* type)
+
+    Based on TrueType.
+
+    File extensions: .ttf or .otf (compressed)
+
+- Type-1:
+
+    Designed for postscript.
+
+    Was Adobe proprietary but has become free on condition that it is not modified. TODO check this crazy license.
+
+    Extensions: afm, pfb, pfm.
