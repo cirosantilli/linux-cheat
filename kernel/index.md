@@ -14,7 +14,15 @@ since the kernel itself itself if need to be working for user space to work.
 
 - `git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git`
 
-    the source code, *the* only definitive source
+    The source code, *the* only definitive source.
+
+    Nany important comment lacking however.
+
+- <http://www.amazon.com/books/dp/0596005652>
+
+    Bovet - 2005 - Understanding the Linux Kernel.
+
+    Very good and clear book.
 
 # what the kernel does
 
@@ -276,57 +284,6 @@ http://stackoverflow.com/questions/9094237/whats-the-difference-between-usr-incl
 
 	it is useful for example for people writting kernel modules,
 	and is automatically included by the standard module `Makefile`.
-
-# filesystem
-
-linux abstracts over several hardwares and filesystem types to create a simple interface for programs
-
-that abstraction is called the virtual filesystem (VFS)
-
-## structures
-
-some major structures represent files
-
-- inode struct:
-
-	represents a file in the usual sense: a chunk of data on disk with medatada such as
-
-	- filesize
-	- timestamps.
-
-	located in `fs.h`:
-
-- file struct:
-
-	represents a file open for reading.
-
-	serveral file structs can refer to a single inode
-
-	it contains information such as:
-
-	- current position in the file
-	- mode (read only, read-write)
-
-	located in `fs.h`:
-
-- dentry struct:
-
-	represents a path component
-
-	ex: the path `/usr/bin/env` will have the following path components:
-
-	- /
-	- usr
-	- bin
-	- env
-
-	and each one has an associated `dentry` object
-
-	located in `dcache.h`
-
-	it facilitates directory operations, and contains fields such as:
-
-	- pointer parent dentry
 
 ## proc filesystem representation
 

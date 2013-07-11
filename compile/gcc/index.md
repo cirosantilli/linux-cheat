@@ -279,3 +279,9 @@ or architecture than the one the compiler is running
 gcc cannot cross compile for windows from linux (TODO check)
 
 this can be done with mingw (TODO how)
+
+# infamous error messages
+
+Error messages that are difficult to interpret for noobs:
+
+- struct has incomplete type = struct undefined. You forgot to include some header.

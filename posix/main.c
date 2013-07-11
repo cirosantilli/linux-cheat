@@ -465,6 +465,7 @@ int main( int argc, char** argv )
         - portable lightweight: dirent.h
     */
     {
+
         /*
         #stat
 
@@ -606,16 +607,14 @@ int main( int argc, char** argv )
     }
 
     /*
-    rusage stands for Resource usage
-
-    the kernel allows processes to use a certain ammount of ressources such as
-    memory or processor time
-
-    exceeding those limits may lead the kernel to kill a processes
-    */
-
-    /*
     #getrusage
+
+        rusage stands for Resource usage
+
+        the kernel allows processes to use a certain ammount of ressources such as
+        memory or processor time
+
+        exceeding those limits may lead the kernel to kill a processes
 
         returns the total time usage of current process (non sleeping/waiting)
 
@@ -766,6 +765,35 @@ int main( int argc, char** argv )
         //maximum lengh of command line arguments + environment variables:
 
             printf( "_SC_ARG_MAX (MiB) = %ld\n", sysconf( _SC_ARG_MAX ) / ( 1 << 20 ) );
+    }
+
+    /*
+    #maximum path length
+
+        This is needed often when you need to deal with paths names.
+
+        Sources:
+
+        - <http://stackoverflow.com/questions/2285750/size-of-posix-path-max>
+
+        Keep in mind that this value can vary even while a program is running,
+        and depends of the underlying filesystem, and therefore of the direcotory you are in.
+
+        As a consequence of this, it does not make sense to have a macro constant and use it to create
+        fixed variable arrays: a function is needed, and memory must be allocated with malloc.
+
+    #pathconf
+
+        Similar to sysconf, but for parameters that depend on a path, such as maxium filename lengths.
+    */
+    {
+        //max basename in given dir including trailling null:
+
+            printf( "pathconf( \".\", _PC_NAME_MAX) = %ld\n", pathconf( ".", _PC_NAME_MAX) );
+
+        //max pathname in (TODO this is per device?)
+
+            printf( "pathconf( \".\", _PC_PATH_MAX) = %ld\n", pathconf( ".", _PC_PATH_MAX) );
     }
 
     /*
@@ -921,7 +949,13 @@ int main( int argc, char** argv )
 
         #setuid
 
-            #sets the user id if you have the priviledges
+            sets the user id if you have the priviledges
+
+        #getppid
+
+            Gets paren't pid.
+
+        TODO possible to list all children of a process? <http://stackoverflow.com/questions/1009552/how-to-find-all-child-processes>
 
         #getpriority and nice
 
@@ -965,6 +999,7 @@ int main( int argc, char** argv )
         printf( "geteuid()  = %llu\n",  (uintmax_t)euid    );
         printf( "getgid()   = %llu\n",  (uintmax_t)gid     );
         printf( "getegid()  = %llu\n",  (uintmax_t)egid    );
+        printf( "getppid()  = %llu\n",  (uintmax_t)getppid() );
         printf( "getpriority( PRIO_PROCESS, 0 )     = %d\n",  getpriority( PRIO_PROCESS,    0 ) );
         printf( "getpriority( PRIO_PGRP, 0 )        = %d\n",  getpriority( PRIO_PGRP,       0 ) );
         printf( "getpriority( PRIO_USER, 0 )        = %d\n",  getpriority( PRIO_USER,       0 ) );
@@ -977,6 +1012,12 @@ int main( int argc, char** argv )
         #getcwd
 
             pwd
+
+        #root directory
+
+            As of POSIX 7, this concept is not available.
+
+            It is implemented as a Glibc extension under `_BSD_SOURCE`.
         */
         {
             const int n = 1 << 10;
@@ -989,6 +1030,20 @@ int main( int argc, char** argv )
             {
                 printf( "getcwd() = %s\n", buf );
             }
+        }
+
+        /*
+        #getcwd
+
+            pwd
+
+        #root directory
+
+            As of POSIX 7, this concept is not available.
+
+            It is implemented as a Glibc extension under `_BSD_SOURCE`.
+        */
+        {
         }
     }
 

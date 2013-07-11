@@ -13,15 +13,17 @@ that can be exemplified in modules (much easier than recompiling and reinstallin
 		a type of locking directive
 */
 
-#include <linux/dcache.h>       /* dentry */
-#include <linux/fs_struct.h>    /* fs_struct */
-#include <linux/interrupt.h>    /* request_irq, IRQF_SHARED */
-#include <linux/kernel.h>       /* KERN_INFO */
-#include <linux/module.h>       /* module specific utilities: MODULE_* macros, module_param, module_init, module exit */
-#include <linux/path.h>         /* path */
-#include <linux/sched.h>        /* current */
-#include <linux/sched/rt.h>     /* MAX_PRIO, MAX_USER_RT_PRIO, DEFAULT_PRIO */
+#include <linux/dcache.h>	/* dentry, super_block */
+#include <linux/fs_struct.h>	/* fs_struct */
+#include <linux/fs.h>		/* super_block */
+#include <linux/interrupt.h> 	/* request_irq, IRQF_SHARED */
+#include <linux/kernel.h>	/* KERN_INFO */
+#include <linux/module.h>	/* module specific utilities: MODULE_* macros, module_param, module_init, module exit */
+#include <linux/path.h>		/* path */
+#include <linux/sched.h>	/* current */
+#include <linux/sched/rt.h>	/* MAX_PRIO, MAX_USER_RT_PRIO, DEFAULT_PRIO */
 #include <linux/spinlock.h>
+#include <linux/string.h>	/* memcpy, memcmp */
 #include <linux/version.h>
 #include <linux/slab.h>
 
@@ -476,6 +478,18 @@ static int __init init(void)
 	}
 
 	/*
+	#algorithms
+
+		Generally useful algorithms that you would take from libc.
+	*/
+	{
+		int is[] = {0,1,2};
+		int is2[3];
+		memcpy( is2, is, 3 * sizeof( int ) );
+		if ( memcmp( is, is2, 3 * sizeof(int)) != 0 ) return 1;
+	}
+
+	/*
 	#page
 
 		a page refers to the smallest virtual memory division that the kernel can get,
@@ -686,7 +700,7 @@ static int __init init(void)
 			}
 		}
 
-		///siblings transversal:
+		//siblings transversal:
 		{
 			struct task_struct *task_struct_ptr;
 
@@ -718,6 +732,8 @@ static int __init init(void)
 				Each process has a root.
 
 				It cannot see files located outside its root.
+
+				File operations such as `open` that start with slash `/` start at that root.
 
 				Root in inherited (TODO check), and by default the kernel stats the initial processes at `/`.
 
@@ -931,6 +947,7 @@ static int __init init(void)
 
 			printk(INFO_ID "DEFAULT_PRIO  = %d\n", DEFAULT_PRIO);
 	}
+
 	/*
 	#filesystem
 
@@ -940,9 +957,19 @@ static int __init init(void)
 
 		You can have a different filesystem per partition.
 
+	# filesystem
+
+		linux abstracts over several hardwares and filesystem types to create a simple interface for programs
+
+		that abstraction is called the virtual filesystem (VFS)
+
 	#virtual filesystem
 
+		aka VFS
+
 		An abstraction over all filesystem types.
+
+		Allows programs to use a single API for all types of block devices (HD, flash, DVD)
 
 		To be supported, a filesystem has to implement this abstraction.
 
@@ -961,6 +988,104 @@ static int __init init(void)
 			disk to turn around and read heads to be positioned at exact locations in order to get
 			your data.
 
+		4 major structures model the virtual filesystem:
+
+		- superblock
+		- inode
+		- dentry
+		- file
+
+		- inode struct:
+
+			represents a file in the usual sense: a chunk of data on disk with medatada such as
+
+			- filesize
+			- timestamps.
+			- superbloc owner
+
+			located in `fs.h`:
+
+		- file struct:
+
+			represents a file open for reading.
+
+			serveral file structs can refer to a single inode
+
+			it contains information such as:
+
+			- current position in the file
+			- mode (read only, read-write)
+
+			located in `fs.h`:
+
+		- dentry struct:
+
+			located under `dcache.h`
+
+			represents a path component
+
+			ex: the path `/usr/bin/env` will have the following path components:
+
+			- /
+			- usr
+			- bin
+			- env
+
+			and each one has an associated `dentry` object
+
+			located in `dcache.h`
+
+			it facilitates directory operations, and contains fields such as:
+
+			- d_parent:
+
+				Pointer to the parent dentry.
+
+				The root points to itself.
+	*/
+	{
+		/*
+		#superblock struct
+
+			located under `fs.h`
+
+			Represents an entire filesystem (partition).
+
+			Superblocks are kept in a linked list.
+
+			Fields:
+
+			- struct list_head s_inodes
+
+				list of all inodes
+
+			- const struct super_operations s_op: pointers to many functions that implement super block operations
+		*/
+		{
+			struct dentry *root;
+			struct super_block *root_sb;
+
+			root = current->fs->root.dentry;
+			root_sb = root->d_sb;
+
+			printk(INFO_ID "super_block:\n");
+
+			//virtual blocksize:
+			printk(INFO_ID "  s_blocksize = %ld\n", root_sb->s_blocksize);
+
+			printk(INFO_ID "  s_maxbytes (GiB) = %llu\n", (long long unsigned)root_sb->s_maxbytes / (1 << 30));
+
+			//name of corresponding block device
+			printk(INFO_ID "  s_id = %s\n", root_sb->s_id);
+
+			u8 s_uuid_string[17];
+			memcpy( s_uuid_string, root_sb->s_uuid, 16 * sizeof( u8 ) );
+			s_uuid_string[16] = '\0';
+			printk(INFO_ID "s_uuid = %s", s_uuid_string);
+		}
+	}
+
+	/*
 	#ext filesystem family
 
 		Free sources:
