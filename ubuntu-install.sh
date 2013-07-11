@@ -295,9 +295,10 @@
 
     ##program
 
-            sudo aptitude install -y build-essential
             sudo aptitude install -y automake
+            sudo aptitude install -y build-essential
             sudo aptitude install -y cmake
+            sudo aptitude install -y exuberant-ctags
             sudo aptitude install -y libtool
 
         #gcc docs:

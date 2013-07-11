@@ -799,22 +799,24 @@ int main( int argc, char** argv )
 
             which contains all the required user metadata specified by POSIX
         */
-        uid_t uid = getuid();
-        struct passwd* info = getpwuid( uid );
-        if ( info == NULL )
         {
-            perror( "getpwuid failed" );
-            exit( EXIT_FAILURE );
-        }
-        else
-        {
-            puts( "getpwuid" );
-            printf( "  pw_name        = %s\n", info->pw_name  );
-            printf( "  pw_uid         = %d\n", info->pw_uid   );
-            printf( "  pw_gid         = %d\n", info->pw_gid   );
-            printf( "  pw_dir         = %s\n", info->pw_dir   );
-            printf( "  pw_gecos       = %s\n", info->pw_gecos );
-            printf( "  pw_shell       = %s\n", info->pw_shell );
+            uid_t uid = getuid();
+            struct passwd* info = getpwuid( uid );
+            if ( info == NULL )
+            {
+                perror( "getpwuid failed" );
+                exit( EXIT_FAILURE );
+            }
+            else
+            {
+                puts( "getpwuid" );
+                printf( "  pw_name        = %s\n", info->pw_name  );
+                printf( "  pw_uid         = %d\n", info->pw_uid   );
+                printf( "  pw_gid         = %d\n", info->pw_gid   );
+                printf( "  pw_dir         = %s\n", info->pw_dir   );
+                printf( "  pw_gecos       = %s\n", info->pw_gecos );
+                printf( "  pw_shell       = %s\n", info->pw_shell );
+            }
         }
 
         /*
@@ -970,6 +972,24 @@ int main( int argc, char** argv )
         printf( "nice( 0 )    = %d\n",    nice( 0 ) );
         printf( "nice( 1 )    = %d\n",    nice( 1 ) );
         printf( "nice( 0 )    = %d\n",    nice( 0 ) );
+
+        /*
+        #getcwd
+
+            pwd
+        */
+        {
+            const int n = 1 << 10;
+            char buf[n];
+            if ( getcwd( buf, n ) == NULL )
+            {
+                perror( "getcwd" );
+            }
+            else
+            {
+                printf( "getcwd() = %s\n", buf );
+            }
+        }
     }
 
     //#execl, execlp, execsle, execv, execvp, execvpe

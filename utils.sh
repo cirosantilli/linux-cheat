@@ -938,6 +938,16 @@
                 ack -f | xargs perl -pie 's/z/Z/g'
             #prints nothing
 
+    ##ctags
+
+        #POSIX 7
+
+        #Reads c file and generates a list of symbol definitions / locations.
+
+        #Put output on a `tags` file on current dir:
+
+            ctags *.h
+
     ##exuberant-ctags
 
         #generate tags for given file
@@ -947,10 +957,8 @@
 
         #supports 55 languages
 
-        sudo aptitude install -y exuberant-ctags
-
-        exuberant-ctags a.c
-        less tags
+            exuberant-ctags a.c
+            less tags
 
     ##source-highlight
 

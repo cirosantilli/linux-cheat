@@ -509,34 +509,9 @@ Default window manager: `mutter`
 
 Default session manager: `gnome-session`
 
-###dconf
-
-Sources:
-
-- <http://askubuntu.com/questions/22313/what-is-dconf-what-is-its-function-and-how-do-i-use-it>
-- <http://askubuntu.com/questions/249887/gconf-dconf-gsettings-and-the-relationship-between-them>
-
-Manage desktop configurations in a key/value manner, where keys are put in a `/` separated tree.
-
-It is a backend for gsettings for systems that do not already have a configuration backend.
-
-For example, on Linux `dconf` is the backend for `gsettings`, but on windows `gsettings` might use the registry.
-
-Therefore, you should always use gsettings if you want portability.
-
-Applications can use it to manage their data.
-
-`dconf` is the GNOME3 replacement for gconf. Should be faster becaues it is binary, while gconf is xml based.
-
-Gui version: `dconf-editor`
-
-View all configs at once:
-
-    dconf dump / | less
-
-Binary data file at:
-
-    /home/ciro/.config/dconf/user
+Integrated control panel: `gnome-control-center`.
+Acts as a large frontend for several things such as printers, screen, etc.,
+much like Window > Start > System.
 
 ##unity
 
@@ -911,3 +886,34 @@ Todo: where are qt themes stored?
 LXDE default.
 
 Config files: `.config/lxpanel/LXDE/`
+
+##dconf
+
+Created by the gnome project
+
+Sources:
+
+- <http://askubuntu.com/questions/22313/what-is-dconf-what-is-its-function-and-how-do-i-use-it>
+- <http://askubuntu.com/questions/249887/gconf-dconf-gsettings-and-the-relationship-between-them>
+
+Manage desktop configurations in a key/value manner, where keys are put in a `/` separated tree.
+
+It is a backend for gsettings for systems that do not already have a configuration backend.
+
+For example, on Linux `dconf` is the backend for `gsettings`, but on windows `gsettings` might use the registry.
+
+Therefore, you should always use gsettings if you want portability.
+
+Applications can use it to manage their data.
+
+`dconf` is the GNOME3 replacement for gconf. Should be faster becaues it is binary, while gconf is xml based.
+
+Gui version: `dconf-editor`
+
+View all configs at once:
+
+    dconf dump / | less
+
+Binary data file at:
+
+    /home/ciro/.config/dconf/user

@@ -13,11 +13,14 @@ that can be exemplified in modules (much easier than recompiling and reinstallin
 		a type of locking directive
 */
 
+#include <linux/dcache.h>       /* dentry */
+#include <linux/fs_struct.h>    /* fs_struct */
 #include <linux/interrupt.h>    /* request_irq, IRQF_SHARED */
-#include <linux/kernel.h>	/* KERN_INFO */
-#include <linux/module.h>	/* module specific utilities: MODULE_* macros, module_param, module_init, module exit */
-#include <linux/sched.h>	/* current */
-#include <linux/sched/rt.h>	/* MAX_PRIO, MAX_USER_RT_PRIO, DEFAULT_PRIO */
+#include <linux/kernel.h>       /* KERN_INFO */
+#include <linux/module.h>       /* module specific utilities: MODULE_* macros, module_param, module_init, module exit */
+#include <linux/path.h>         /* path */
+#include <linux/sched.h>        /* current */
+#include <linux/sched/rt.h>     /* MAX_PRIO, MAX_USER_RT_PRIO, DEFAULT_PRIO */
 #include <linux/spinlock.h>
 #include <linux/version.h>
 #include <linux/slab.h>
@@ -261,10 +264,8 @@ static int __init init(void)
 	TODO what is the difference between using le and be?
 	*/
 	{
-		__u8 u8 = 127;
-		__s8 s8 = 255;
-
-		if ( le16 != be16 ) return 0;
+		//__u8 u8 = 127;
+		//__s8 s8 = 255;
 
 		__le16 le16 = 1;
 		__be16 be16 = 1;
@@ -705,6 +706,33 @@ static int __init init(void)
 		/* threadgroup leader */
 
 			printk(INFO_ID "current->group_leader->pid  = %lld\n", (long long)current->group_leader->pid);
+
+		/*
+		#fs
+
+			Process keeps a `include/linux/fs_struct.h` `fs_struct` structure,
+			which contains information relating the process to the filesystem such as:
+
+			- root path:
+
+				Each process has a root.
+
+				It cannot see files located outside its root.
+
+				Root in inherited (TODO check), and by default the kernel stats the initial processes at `/`.
+
+				Root can be changed on `sh` via `chroot`.
+
+			- pwd path:
+
+				Good and old current directory.
+		*/
+		{
+			printk(INFO_ID "basename pwd = %s\n", 		current->fs->pwd.dentry->d_name.name);
+			printk(INFO_ID "basename dirname pwd = %s\n", 	current->fs->pwd.dentry->d_parent->d_name.name);
+			printk(INFO_ID "basename root = %s\n", 		current->fs->root.dentry->d_name.name);
+			printk(INFO_ID "basename dirname root = %s\n", 	current->fs->root.dentry->d_parent->d_name.name);
+		}
 	}
 
 	/*
@@ -1021,7 +1049,7 @@ static int __init init(void)
 
 				Store global information about the entire filesystem.
 
-				Represented in the Linux kernel by `struct ext2_superblock`
+				Represented in the Linux kernel by `struct ext2_superblock` under `linux/kernel/fs/ext2.h`
 
 				This includes interesting fields such as:
 
@@ -1034,6 +1062,10 @@ static int __init init(void)
 					Ex: 0 means block size 1024, 1 means 2 x 1024.
 
 				- s_blocks_per_group: number of blocks for each group
+
+				- s_mtime: last mount time
+
+				- s_wtime: time of latest write opertion
 
 				- s_mount_count: number of times this has been mounted.
 
