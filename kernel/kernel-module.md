@@ -129,11 +129,11 @@ those come directly from the kernel source tree.
 
 #device drivers
 
-devices map to filesystem under `/dev/`. You can get info on them with:
+Devices map to filesystem under `/dev/`. You can get info on them with:
 
     ls -l /dev
 
-those files are not on disk files, but offer an interface similar to disk files
+Those files are not on disk files, but offer an interface similar to disk files
 via the same system calls.
 
 On this case however, it is entirely up to the device writer to specify what each call
@@ -141,7 +141,7 @@ should do. Obviously, developers should use intuitive calls for the operations,
 so for exapmle `open` should make any required initializations, `write` send data to the device,
 `read` get data from the device, and `close` make cleanup operations.
 
-there are three main types of devices:
+There are three main types of devices:
 
 - block and char
 
@@ -153,9 +153,9 @@ there are three main types of devices:
 - b: block
 - c: char
 
-the `b` here is my hd.
+The `b` here is my hd.
 
-each partition also gets a b file
+Each partition also gets a b file
 
 ##major and minor numbers
 
@@ -208,13 +208,32 @@ make a char file, major number 12, minor number 2:
 
     sudo mknod /dev/coffee c 12 2
 
-##sample device files
+##device files
 
-###/dev/null discards whatever input is given to it by a `write` sycall
+###/dev/sda
 
-    very useful to discard undesired stdout/stderr:
+Device files of this type represent block devices such as hard disks or flash memory.
 
-        echo a > /dev/null
+The first device is `sda`, the second `sdb`, and so on.
+
+Also, partitions inside those devices have device files for them too.
+
+The first main partion inside `sda` will be called `sda1`,
+the second main partition `sda2`, and so on.
+
+Logical partitions are numbered from `sda5` onwards.
+
+TODO examples of what you can do with those device files. A `dd` example should be here.
+
+###/dev/null
+
+Discards whatever input is given to it by a `write` sycall
+
+Very useful to discard undesired stdout / stderr:
+
+    echo a > /dev/null
+
+Generates no output.
 
 ###/dev/zero
 
@@ -242,21 +261,20 @@ Meaning if you don't speak `od` language (now is a good time to learn):
 
 if you write to it, the write returns ENOSPC error
 
-example:
+Example:
 
     echo a > /dev/full
 
-if you read from it, returns as many null chars as were asked for by read.
-
-example:
-
-    TODO
+If you read from it, returns as many null chars as were asked for by read, like `/dev/zero`.
 
 ###pseudorandom number generators
 
-the kernel implements a random number generator which draws entropy from
+The kernel implements a random number generator which draws entropy from
 non predictable events, typically device events such as mice movements
 or disk reads for example.
+
+Just like for `/dev/zero`, it is useless to cat those files,
+since they don't have and end, and `cat` tries to read to the end of the file before printing.
 
 ####/dev/random
 

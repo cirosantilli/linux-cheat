@@ -2,11 +2,11 @@ Info on how a linux system starts running.
 
 Summary of the boot process: <http://www.ibm.com/developerworks/library/l-linuxboot/>
 
-# BIOS
+#BIOS
 
 TODO
 
-# bootloading
+#bootloading
 
 Bootloading is the name of the process for starting up the system.
 
@@ -44,7 +44,7 @@ and enter BIOS options to choose for example which device to take MBR from.
 This way you can tell your BIOS to take a live CD or USB even if the OS
 is installed on the hard disk (usually default location to take MBR from).
 
-# grub
+#grub
 
 Grand Unified Bootloader.
 
@@ -57,7 +57,7 @@ basic graphical interaction even before starting any OS!
 also everything is configurable, from the menu entries to the background image!
 (reason why Ubuntu GRUB is purple!)
 
-## versions
+##versions
 
 Grub has 2 versions
 
@@ -80,7 +80,7 @@ Here we discuss GRUB 2.
 The MBR is too small for all the features that GRUB developers wanted,
 so they use it only to transfer control to another larger code section.
 
-## configuration
+##configuration
 
 The main grub file is `/boot/grub/grub.cfg`.
 
@@ -114,11 +114,11 @@ By default on Linux this is `/boot/`
 
 TODO grub install
 
-## sources
+##sources
 
 great configuration tutorial: <http://www.dedoimedo.com/computers/grub-2.html>
 
-# boot directory
+#boot directory
 
 By default is located at `/boot/`
 
@@ -131,7 +131,7 @@ It contains the following files:
 
 - abi-VERSION: TODO what is? looks like the kernel symbol table of exported symbols.
 
-# init
+#init
 
 First user-space process and parent of all processes!
 
@@ -147,7 +147,7 @@ A great way to understand what happens after `init` is to use `pstree`.
 
 This is distribution dependant.
 
-# run levels
+#run levels
 
 TODO understand better
 
@@ -165,7 +165,7 @@ Set runlevel:
 
 Attention: this would cause the system to reboot.
 
-# upstart
+#upstart
 
 some systems such as Ubunutu use upstart, newer replacement to the `system v` init system
 
@@ -177,7 +177,7 @@ some systems such as Ubunutu use upstart, newer replacement to the `system v` in
 
 	links to programs that get run on each runlevel at `/etc/rc\n.d/`
 
-## service
+##service
 
 Upstart interface to services.
 

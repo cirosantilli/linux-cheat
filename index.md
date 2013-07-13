@@ -12,7 +12,7 @@ released in 1991 by Linus Trovalds, however much of its core user space
 software comes from the gnu project. For this reason linux systems
 may also be called gnu/linux.
 
-# sources
+#sources
 
 - `git clone http://git.kernel.org/pub/scm/docs/man-pages/man-pages`
 
@@ -23,12 +23,15 @@ may also be called gnu/linux.
     - `Documentation/` for docs
     - `include/linux` for stuff you may use from modules
 
-# distributions
+#distributions
 
-a linux distribution is a linux system which in addition has end user
-applications such as text editors of music players.
+A linux distribution is a lsb complicant system.
 
-this work is left for third party enterprises of community projects such as Ubuntu
+Typically, distributions contain end user
+applications such as text editors of music players, making it usable
+out of the box for a large variety of non programmer users.
+
+This work is left for third party enterprises of community projects such as Ubuntu
 or Fedora which are maintained by Canonical and Red Had enterprises respectively.
 
 lsb is meant to contain all the core tools that allow compliant applications
@@ -38,15 +41,115 @@ lsb does however specifies many more tools than POSIX
 and supports almost all base tools used by user friendly applications
 found in distributions
 
-## find your distro
+##find current distro
 
-get distro maintainer, name, version and version codename:
+Get distro maintainer, name, version and version codename:
 
     lsb_release -a
 
 lsb this standas for `linux standard base`
 
-# certification
+##install a new distro
+
+Most distros are distributed in ISOs suitable to burning on a CD or DVD,
+from which you can then boot the computer and install them.
+
+It is also possible to put the CD or DVD image in a USB.
+
+Such CDs or USBs are commonly called Live.
+
+You can keep in mind that booting from a Live CD means that that CD
+contains at least the Kernel image so that you load that image into RAM
+instead of loading it from your HD.
+
+If you are on a read only CD however,
+you can usually not save any information to the CD while on a live boot,
+so it makes no sense to save a file to the CD.
+
+You could however mount your hard disk, and write to it after you booted from the CD.
+
+You will need a free partition for the installation. Mo
+
+###usb install
+
+Some distros offer a Windows method of USB installation which does not destroy USB data completelly.
+
+Some installers even allow you to reserve space on the USB for permanent storage,
+so that you can use your OS from the USB just as if it were an small and fast HD.
+
+If however you are already on Linux, you will probably have to destroy all USB information,
+because the ISO image has to be the very first thing on your usb, therfore erasing essential
+filesystem structures such as the main boot record partition table.
+
+Of course, you can always recreate a filesystem in your USB and use it
+as a storage device once you are done with the USB.
+
+###bootloader problems
+
+Most distributions install their own bootloader, meaning that they rewrite the existing bootloader.
+
+This means that if the new bootloader cannot recognize certain types of boot data on each partition,
+you will not see those partitions as bootable.
+
+This is for example the case if you install a distro with GRUB 2 (Ubuntu 13.04),
+and then install another distro which uses GRUB (Fedora 17)
+
+GRUB cannot recognize GRUB 2 booting data since it came before GRUB 2 existed,
+so you will not see your old bootable partitions as bootable.
+
+Therefore, if you have the choice, the best option in this case would be to fisrt install
+the GRUB distro, and only then the GRUB 2 distro, so that in the end you will have GRUB 2,
+which will see both partitions as bootable.
+
+This can be corrected in 2 ways:
+
+- if you can Live boot in the distro that uses GRUB 2 things are easy.
+
+    Boot with the Live CD, and then simply reinstall the GRUB 2 bootloader,
+    using the GRUB 2 installer that comes with the Live CD,
+    so that on next system start GRUB 2 will be used,
+    and will recognize both GRUB and GRUB 2 partitions.
+
+    All that is needed to do this is to issue:
+
+        sudo grub-install --root-directory=/media/grub2/system/mount/point /dev/sdX
+
+    Where:
+
+    - /media/grub2/system/mount/point
+
+        Mountpoint for you grub2 system.
+
+        You must have mounted it with `mount` before.
+
+        Some distros like Ubuntu's Live CD already mount all possible systems,
+        so you might not need to mount it.
+
+        If that is the case, you can check where you partitio is mounted with `sudo mount -l`,
+        and then looking into partitions that have the correct type and listing the files inside candidates
+        to make sure that it is the correct partition.
+
+    - /dev/sdX
+
+        Device file for the Hard disk you want to install GRUB on.
+
+        Remember that GRUB bootloader is installed at the very start of the entire HD, and not of some partition,
+        so it makes no sense to give a parition device such as `/dev/sda1` or `/dev/sda2`.
+
+    Source: <http://askubuntu.com/questions/59359/unable-to-boot-into-ubuntu-after-ubuntu-fedora-dual-boot/59376#59376>
+
+- if you do not have access to a Live CD, you can mount the GRUB 2 partition,
+    and `chroot` into it, and then reinstall GRUB 2.
+
+    It will be just as if you were issuing that command from that partition.
+
+    Procedure here: <>
+
+Keep in mind that what GRUB does is simply read its configuration files,
+and after interpreting those write data to specifi points of the HD (Master boot record,
+at the very beginning of the HD) instructions on how to boot.
+
+#certification
 
 the linux foundation offers certification and compliance verification
 tools for distribution developpers and application developpers.
@@ -66,7 +169,7 @@ notable certified systems include:
 
 - Red Hat Enterprise Linux 6.0
 
-# linux and gnu
+#linux and gnu
 
 [linux and gnu][]
 
@@ -97,7 +200,7 @@ the gnu software foundation is the creator and current maintainer
 of the GPL licence, and mostly uses that licence for its software and
 is the main enforcer of its infringements
 
-# lsb and posix
+#lsb and posix
 
 lsb is already highly posix compliant, and it states that it is on of its
 long term goals meant to become fully posix compatible
@@ -106,16 +209,16 @@ incompatibility are being listed for future resolution
 
 there some posix requirements that the linux kernel simply does not
 
-# fhs
+#fhs
 
 the filesystem hierarchy standard specifies base directories
 for the system and what should go in them
 
 it is also maintained by the linux foundation, and followed by the lsb
 
-# examples of what lsb specifies
+#examples of what lsb specifies
 
-## core
+##core
 
 - elf filetype
 - rpm is the default packaging format! The package is not specified
@@ -125,52 +228,52 @@ it is also maintained by the linux foundation, and followed by the lsb
 - libm: c math library shared object
 - libncurses: for command line interfaces
 
-## c++
+##c++
 
 - cstandard library shared objects are required
 
-## interpreted languages
+##interpreted languages
 
 - python
 - perl
 
-## desktop
+##desktop
 
 - opengl shared objects
 - x11, gtk+
 - jpeg, png shared object libraries
 - alsa (sound)
 
-# basename conventions
+#basename conventions
 
 not in the fhs, but you should know about
 
-### ^\.
+###^\.
 
 hidden files
 
 it is up to programs to decide how to treat them
 
-### \.~$
+###\.~$
 
 backup file
 
-### \.bak$
+###\.bak$
 
 backup file
 
-### \.orig$
+###\.orig$
 
 original installation file
 
-### \.d$
+###\.d$
 
 many theories, a plausible one:
 differentiate `a.conf file` from `a.conf.d` dir
 normally, all files in the `a.conf.d` dir will be sourced
 as if they wre inside `a.conf`
 
-# signals
+#signals
 
 Signals are an ANSI C concept, with extensions by POSIX and Linux.
 
