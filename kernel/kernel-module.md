@@ -23,7 +23,7 @@ are one specific type of kernel modules
 
 two devices can map to the same hardware!
 
-# config files
+#config files
 
 if file it gets read, if dir, all files in dir get read:
 
@@ -34,9 +34,9 @@ modules loaded at boot:
 
     sudo cat /etc/modules
 
-# module-init-tools
+#module-init-tools
 
-## package version
+##package version
 
 from any of the commands, --version
 
@@ -44,7 +44,7 @@ from any of the commands, --version
 
 package that provides utilities
 
-## lsmod
+##lsmod
 
 list loaded kernel modules
 
@@ -76,14 +76,14 @@ also contains two more columns:
 - status: Live, Loading or Unloading
 - memory offset: 0x129b0000
 
-## modinfo
+##modinfo
 
 get info about a module by filename or by module name:
 
     modinfo ./a.ko
     modinfo a
 
-## insmod
+##insmod
 
 loads the module
 
@@ -91,7 +91,7 @@ does not check for dependencies
 
     sudo insmod
 
-## modprobe
+##modprobe
 
 list available modules relative path to `/lib/modules/VERSION/`:
 
@@ -120,14 +120,14 @@ get info about given `.ko` module file:
     m=a
     sudo rmmod $m
 
-# includes
+#includes
 
 the default Makefile which is called by the Makefile in this directory automatically
 adds `/usr/src/linux-headers-$(CUR_KERNEL_VERSION)/` TODO check
 
 those come directly from the kernel source tree.
 
-# device drivers
+#device drivers
 
 devices map to filesystem under `/dev/`. You can get info on them with:
 
@@ -157,7 +157,7 @@ the `b` here is my hd.
 
 each partition also gets a b file
 
-## major and minor numbers
+##major and minor numbers
 
 using `ls -l`:
 
@@ -202,27 +202,43 @@ where:
 You could fix the major device number yourself, but this is more and more deprecated.
 This was done with the `register_chrdev_region` function.
 
-## mknod
+##mknod
 
 make a char file, major number 12, minor number 2:
 
     sudo mknod /dev/coffee c 12 2
 
-## sample device files
+##sample device files
 
-### /dev/null discards whatever input is given to it by a `write` sycall
+###/dev/null discards whatever input is given to it by a `write` sycall
 
     very useful to discard undesired stdout/stderr:
 
         echo a > /dev/null
 
-### /dev/zero
+###/dev/zero
 
-returns as many zeros as asked for by a read syscall
+Returns as many zeros as asked for by a read syscall.
 
-usage: initialize data sections to zero
+You cannot `cat` this because cat reads until the file is over,
+but this special file is *never* over.
 
-### /dev/full
+Application: reset entire partitions to 0.
+
+Example:
+
+    dd if=/dev/zero count=1 status=none | od -Ax -tx1
+
+Output:
+
+    000000 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    *
+    000200
+
+Meaning if you don't speak `od` language (now is a good time to learn):
+512 bytes with value 0.
+
+###/dev/full
 
 if you write to it, the write returns ENOSPC error
 
@@ -236,23 +252,38 @@ example:
 
     TODO
 
-### pseudorandom number generators
+###pseudorandom number generators
 
 the kernel implements a random number generator which draws entropy from
 non predictable events, typically device events such as mice movements
 or disk reads for example.
 
-#### /dev/random
+####/dev/random
 
 `/dev/random` returns random numbers one by one whenever enough entropy
 is generated. It is slower than `urandom`, but has greater entropy.
 
-#### /dev/urandom
+####/dev/urandom
 
 `/dev/urandom` returns random numbers continuously. It is faster than `random`,
 but has less entropy. It should however be good enough for most applications.
 
-### mice
+Example: get 16 random bytes:
+
+    dd bs=16 if=/dev/urandom count=1 status=none | od -Ax -tx1
+    dd bs=16 if=/dev/urandom count=1 status=none | od -Ax -tx1
+
+Sample output:
+
+    000000 51 e6 4d 6d 98 5f 3e 48 c9 9a 04 6f d7 f2 57 c6
+    000010
+
+    000000 7d 87 2c a3 32 9d d0 78 18 9d 5f ab c5 7a d2 ea
+    000010
+
+Since the 16 bytes are random, the lines are extremelly likelly to be different.
+
+###mice
 
 you can have some fun with mouses. Search for the mice or mouse device files and cat them:
 
@@ -266,9 +297,7 @@ now note that when you move the mouse, cat spits something out to the screen!
 
 `mice` is the combination of all mice, and each other `mouseX` is a single mouse device.
 
-## dev/random and dev/urandom
-
-## system calls that use the char file
+##system calls that use the char file
 
 since the char file is not a real file but a representation of some hardware,
 you have furnish methods used by system calls that deal with files
@@ -276,7 +305,7 @@ so those system calls can know what to do with that special file.
 
 all of those operations are defined under `fs.h`
 
-# hardware communication
+#hardware communication
 
 talking to hardware always comes down to writting bytes in specific registers
 at a given memory addres

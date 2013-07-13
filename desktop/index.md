@@ -62,7 +62,7 @@ X does not:
 
 - relegates certain jobs to x display managers and x window managers.
 
-- panel ( like Windows start menu or Ubuntu dash ) used to launch programs.
+- panel
 
 - a desktop that shows files contained in some predefined folder. TODO who does that?
 
@@ -517,8 +517,22 @@ much like Window > Start > System.
 
 Default DE for Ubuntu 12.04+.
 
+###unity window manager
+
 Default window manager: Ubuntu 13.04 ships with 2 compiz *and* metacity,
 the choice depends on your hardware support: <http://askubuntu.com/questions/24977/why-does-ubuntu-use-two-window-managers-compiz-and-metacity>
+
+Most modern laptops have enough hardware for compiz.
+
+You can decide which one is use via:
+
+    ps -A | grep -e compiz -e metacity
+
+###unity panel
+
+Named: unity-panel-service.
+
+An important part of Unity (basically the only distinctive feature of most DEs)
 
 ##kde
 
@@ -662,6 +676,8 @@ An X window manager interacts with X to do things like:
     the buttons to minimize, maximize, close, and what happens on drag (move window)
     or right click (show window options)
 
+Window managers are X Clients.
+
 It does not take care of:
 
 - panel
@@ -670,8 +686,8 @@ It does not take care of:
 
 Implementations:
 
-- metacity: ubuntu
-- compiz: gnome
+- metacity
+- compiz
 
 ##openbox
 
@@ -732,7 +748,22 @@ Restart after changing config file to take changes into consideration:
 
 ##mutter
 
-Default for Gnome 3.
+##compiz
+
+Passes window decoration to a compiz window decorator.
+
+Some compiz window decorators:
+
+- gtk-window-decorator: uses gtk for window decoration
+- emerald:
+
+Configurations: `gconf-editor` under `apps.compiz-1`.
+
+Restart compiz after modifying configurations to load them:
+
+    compiz --replace
+
+You should do this from a tty other than tty7.
 
 #session manager
 
@@ -881,39 +912,93 @@ Todo: where are qt themes stored?
 
 #panels
 
+Like windows GUI item that contains the start menu.
+
+Typically offer:
+
+- a way to launch programs so that users can:
+
+    - type any part in the middle and click on the desired match
+    - 
+
+- contain a list of all windows so that users can point click to open a window
+
+- contain a list of programs so that users can click to open the programs
+
+- holds applets: small icons that offer interface for processes which users don't want to have a window,
+    such as clock, logout/shutdown gui, internet connection.
+
+Panels are X clients.
+
 ##lxpanel
 
 LXDE default.
 
 Config files: `.config/lxpanel/LXDE/`
 
-##dconf
+##dconf gconf gsettings
 
-Created by the gnome project
+Applications can them to manage user preferences.
+in key/value manner, where keys are put in a `/` separated tree.
+
+Created by the gnome project.
 
 Sources:
 
 - <http://askubuntu.com/questions/22313/what-is-dconf-what-is-its-function-and-how-do-i-use-it>
 - <http://askubuntu.com/questions/249887/gconf-dconf-gsettings-and-the-relationship-between-them>
+- gconf vs dconf: <http://askubuntu.com/questions/34490/what-are-the-differences-between-gconf-and-dconf>
 
-Manage desktop configurations in a key/value manner, where keys are put in a `/` separated tree.
+###dconf
 
-It is a backend for gsettings for systems that do not already have a configuration backend.
+dconf is a the new backend for gsettings.
 
-For example, on Linux `dconf` is the backend for `gsettings`, but on windows `gsettings` might use the registry.
+It is also the name of a cli utility used to view and edit dconf settings.
 
-Therefore, you should always use gsettings if you want portability.
+Completelly separate schema to gconf.
 
-Applications can use it to manage their data.
+It should be used on new apps instead of gconf.
 
-`dconf` is the GNOME3 replacement for gconf. Should be faster becaues it is binary, while gconf is xml based.
+It is binary. This implies that:
 
-Gui version: `dconf-editor`
+- fast to parse. Specially important as startup.
+- not human readable.
+- corruption of part of it can kill all the data in one go.
+- binary config file located at: `~/.config/dconf/user`
 
-View all configs at once:
+View all dconf configs at once:
 
     dconf dump / | less
 
-Binary data file at:
+Here you see a reverse url dot notation:
 
-    /home/ciro/.config/dconf/user
+    org.gnome.metacity
+
+GUI editor: `dconf-editor`
+
+###gconf
+
+xml based
+
+Older than dconf.
+
+Each config tree is implemented as actual directories with files at the nodes.
+
+Config files: `~/.gconf/`
+
+CLI view / edit tool: `gconftool-2`
+
+Get all the xlm confs:
+
+    gconftool --dump / | less
+
+GUI editor: `gconf-editor`
+
+##gsettings
+
+gsettings is a frontend for both dconf on Linux,
+and possibly other backends on other systems such as the Windows registry (binary).
+
+Therefore, applications should only use it, and not dconf to have greater portability.
+
+On current gnome based desktops it is not a frontend for gconf.

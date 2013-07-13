@@ -512,9 +512,67 @@ static int __init init(void)
 	*/
 
 	/*
+	#memory zones
+
+		Each page belongs to a zone.
+
+		Defined in `mmzone.h`.
+
+		There are 3 zone types: ZONE_NORMAL, ZONE_DMA and ZONE_HIGHMEM.
+
+		#ZONE_NORMAL
+
+			Not any of the other pathological cases.
+
+		#ZONE_DMA
+
+			Used for hardware access communication.
+
+			ISA.
+
+			Mainly historical usage.
+
+		#ZONE_HIGHMEM
+
+			Memory that needs more than 32 bits to be addressed, that is,
+			if you have more than 4 Gb memory.
+
+			Harder to work with, but useful if you need lots of memory.
+
+			It is possible to use even on IA-32 because of the PAE extension,
+			which essentially adds 4 bits to the memory address bus, allowing
+			64 Gb of memory. PAE was introduced in 1995.
+
+			This zone is always empty on x64 since there is more than enough address space there.
+
+			TODO why book says memory above 986 Mb is high memory? Why not 4 Gb?
+
+	#page
+
+		A page is a hardware imposed minimal unit of data transfer between the CPU and the RAM.
+
+		Pages are modeled by `struct page` under `mm_types.h`.
+
+		Hardware deals in terms of pages to:
+
+		- make retrival faster, since the bus clock is much slower than the cpu clock
+			and because of memory locality.
+
+		- serve as a standard unit for page swap betweem RAM and HD
+
+	#page flags
+
+		Defined in `page-flags.h`.
+	*/
+
+	/*
 	#kmalloc
 
-		like libc malloc, but for the kernel
+		Like libc malloc, but for the kernel.
+
+		Relies on the slab allocator, so it is a quite high level operation.
+
+		Most convenient method to get small chunks of memory.
 
 		#flags
 
@@ -1094,11 +1152,14 @@ static int __init init(void)
 
 		Main versions used: ext2, ext3 and ext4.
 
+	#block ext
+
 		A *block* or *sector* is the minimal unit of data transfer.
 
 		There are two types of blocks:
 
 		- physical: the actual minimum data transfer unit supported by the hardware.
+
 		- logical: a filesystem parameter. Can be configured at filesystem creation.
 
 			Determines the actual minimal blocksize that the OS will allow.
@@ -1114,6 +1175,16 @@ static int __init init(void)
 
 		If the system is expected to have a few large files,
 		using larger block files will be more efficient.
+
+		Traditionally, a block could only contain a single file.
+		Therefore, a one byte file would occupy an entire block.
+
+		There are preparations for allowing block fragmentation TODO what is their status?
+
+		In any case, fragmenting blocks would necessarily mean that access to inner files
+		would be slower.
+
+	#disk layout
 
 		Disk layout for ext2:
 

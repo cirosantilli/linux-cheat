@@ -1003,123 +1003,6 @@
 
             assert [ "`printf "%s" "-n"`" == "-n" ]
 
-    ##grep
-
-        #posix 7
-
-        #select lines from stdin or files
-
-        #dont use egrep and fgrep variations,
-        #which are useless and deprecated
-
-        echo $'a\nb' | grep a
-        echo $'a\nb' > f
-        grep a f
-            #a
-
-        echo $'A\nB' | grep -i a
-            #A
-            #-i: case insensitive
-
-        ##invert
-
-            echo $'ab\ncd' | grep -v a
-                #cd
-                #-v: invert. print lines that don't match.
-
-            ##application
-
-                #remove line from file
-
-                f=
-                l="^$"
-                tmp="`mktemp`"
-                grep -v "$l" "$f" > "$tmp"
-                mv "$tmp" "$f"
-
-        ##exit status
-
-            echo a | grep -q b && assert false
-            echo a | grep -q a || assert false
-                #-q: suppress stdout
-                    #useful if you only want the exit status
-
-            ##application
-
-                #append line to file
-                #if it is not there already
-
-                    f=""
-                    l=""
-                    grep -q "^$l$" "$f" || echo "$l" >> "$f"
-
-                #very useful for files that have unordered
-                #sets of things separated by newlines
-
-        echo $'a\na' | grep -c a
-            #2
-            #-c: count lines that match
-
-        ##or
-
-            echo $'a\nb' | grep -e 'a' -e 'b'
-                #-e: multiple criteria or
-                #patters are BRE
-            echo $'a\nb' | grep -E -e 'a' -e 'b'
-                #patters are ERE
-            echo $'a\nb' | grep -F $'a\nb'
-                #multiple searche, separated by newline
-                #or
-                #literal match
-
-        ##regexp
-
-            #grep can use POSIX BRE and POSIX ERE
-
-            #don't forget: BRE is deprecated
-
-            #perl regexp is non POSIX
-
-            #see: extended regex
-
-            echo $'a\nb' | grep -E '(a|b)'
-
-        ##-n
-
-            #show matching line Numbers
-
-        #-v
-
-            #inVert selection: select non matching
-
-        ##gnu grep
-
-            #non posix, so be warned
-
-            ##-r
-
-                #recurse, print filenames. *VERY* tempting... no more `find . -type f | xargs` !!
-
-                    grep -r 'a'
-
-            ##-A
-
-                #also print n lines following the match
-
-                #example:
-                    assert [ "`echo $'a\nb' | grep -A1 a`" = $'a\nb' ]
-
-                ##application
-
-                    #get the nth line after matching line:
-                        assert [ "`echo $'a\nb' | grep -A1 a | tail -n1`" = $'b' ]
-
-                ##-B
-
-                    #before
-
-                    assert [ "`echo $'a\nb' | grep -B1 b`" = $'a\nb' ]
-
     ##cat
 
         #concatenate files to stdout
@@ -1150,68 +1033,79 @@
 
         #POSIX
 
-        #menemonic: Duplicate Data TODO check
+        #Menemonic: Duplicate Data.
 
-        #funny mnemonic: Data Destroyer ( because of danger of common usage with sda devices to copy hard disks quickly )
+        #Alternate mnemonic: Data Destroyer.
+        #Reason: can manipulate sda devices directly without considering file structure,
+        #making operations such as disk copy very fast, but potentially very destructive
+        #if for example you exchange input and output disks, compying an empty disk over
+        #useful data.
 
-        #advantages:
+        ##if of
 
-        #- gives more control than simpler utilities such as `cat`
-        #- supports the concept of `blocks`
+            #if = input file. If not given, stdin.
 
-        #if = input file. If not given, stdin.
+            #of = output file. If not given, stdout.
 
-        #of = output file. If not given, stdout.
+            #echo a | cat:
 
-        #echo a | cat:
+                echo a | dd
 
-            echo a | dd
+            #cat a:
 
-        #cat a:
+                echo a > a
+                dd if=a
 
-            echo a > a
-            dd if=a
+            #cp a b:
 
-        #cp a b:
+                dd if=a of=b
 
-            dd if=a of=b
+        ##status
 
-        #stop printing status lines:
+            #stop printing status lines:
 
-            echo a | dd status=none
+                echo a | dd status=none
 
         ##bs
 
-            #how many input and output bytes to read/write at once.
+            #How many input and output bytes to read/write at once.
 
-            #also defines the block size for count, skip and seek.
+            #Also defines the block size for count, skip and seek.
 
-            #obs and ibs for output and input seprately:
+            #Obs and ibs for output and input seprately.
 
-        #count: copy up to count blocks (defined by bs):
+            #Default values: 512 B.
 
-            assert [ `echo -n 1234 | dd status=none bs=2 count=1` = 12 ]
-            assert [ `echo -n 1234 | dd status=none bs=1 count=3` = 123 ]
+        ##count
 
-        #size suffixes:
+            #copy up to count blocks (defined by bs):
 
-        #-c: 1 (char)
-        #-w: 2 (word)
-        #-kB: 1000
-        #-K: 1024
-        #-MB: 1000*1000
-        #-M: 1024*1024
+                assert [ `echo -n 1234 | dd status=none bs=2 count=1` = 12 ]
+                assert [ `echo -n 1234 | dd status=none bs=1 count=3` = 123 ]
 
-        #and so on for G, T, P, E, Z and Y!
+        ##size suffixes
 
-            assert [ `echo -n 123 | dd status=none bs=1c count=1` = 1 ]
-            assert [ `echo -n 123 | dd status=none bs=1w count=1` = 12 ]
+            #-c: 1 (char)
+            #-w: 2 (word)
+            #-kB: 1000
+            #-K: 1024
+            #-MB: 1000*1000
+            #-M: 1024*1024
 
-        #skip: skip first n input blocks (defined by bs or ibs):
+            #and so on for G, T, P, E, Z and Y!
 
-            assert [ `echo -n 123 | dd status=none bs=1 skip=1` = 23 ]
+                assert [ `echo -n 123 | dd status=none bs=1c count=1` = 1 ]
+                assert [ `echo -n 123 | dd status=none bs=1w count=1` = 12 ]
 
-        #seek: skip first n output blocks (defined by bs or obs):
+        ##skip
+
+            #skip first n input blocks (defined by bs or ibs):
+
+                assert [ `echo -n 123 | dd status=none bs=1 skip=1` = 23 ]
+
+        ##seek
+
+            #skip first n output blocks (defined by bs or obs):
 
             #TODO minimal exmaple
 
@@ -1226,6 +1120,12 @@
         ##iflag oflag
 
             #TODO
+
+        ##applications
+
+            #zero an entire block device (CAUTION!!!!):
+
+                #TODO
 
     ##pagers
 
@@ -1592,25 +1492,201 @@
 
         assert [ `echo "a bcd" | fold -w 2` = $'a\nbcd' ]
 
+    ##od
+
+        #POSIX 7
+
+        #Octal dump.
+
+        #View byte values byte by byte in octal and other bases.
+
+        #Very useful for viewing binary data which contains values which
+        #cannot be interpreted as some character set (ASCII) and printed to screen.
+
+        #Sanest usage: view bytes in hexadecimal:
+
+            echo -n ab | od -Ax -tx1
+
+        #You should have an alias for this since it is much saner than the ocatal defaults:
+
+            alias ods='od -Ax -tx1'
+
+        #Which means `od` Sane.
+
+        #Output:
+
+            0000000 61 62
+            0000002
+            ^       ^   ^
+            1       2   3
+
+        #1. Number of the first byte in the line in.
+
+            #Here the first byte in line 1 is byte 0 of the file.
+            #The first byte of line 2, if it existed, would be byte 2.
+
+        #2. First byte of each line.
+
+            #`61` in hex is 97 in decimal, which is the ASCII for `a`.
+
+        #3. Second byte of each line.
+
+            #`62` in hex is 98 in decimal, which is the ASCII for `b`.
+
+        ##-t
+
+            #formaT specifier.
+
+            #x means hexadecimal
+
+            #1 and 2 means how many bytes per block.
+
+            #Example:
+
+                echo -n ab | od -tx1
+
+            #Output:
+
+                0000000 61 62
+                0000002
+
+            #Example:
+
+                echo -n ab | od -tx2
+
+            #Output:
+
+                0000000 6261
+                0000002
+
+            #Note how the bytes are inverted in each block.
+
+        ##-w
+
+            #Line width.
+
+            #Default value: 16.
+
+            #Example:
+
+                echo -n 0123 | od -tx1 -w2
+
+            #Output:
+
+                0000000 30 31
+                0000002 32 33
+                0000004
+
+            #Example:
+
+                echo -n 0123 | od -tx1 -w1
+
+            #Output:
+
+                0000000 30
+                0000001 31
+                0000002 32
+                0000003 33
+                0000004
+
+            #Example:
+
+                echo -n 01234 | od -tx1 -w2
+
+            #Output:
+
+                0000000 30 31
+                0000002 32 33
+                0000004 34
+                0000005
+
+            #Note how the last line is always present and empty.
+
+            #It always gives the total number of bytes.
+
+        ##duplicate lines
+
+            #od automatically hides one or more duplicate lines and represents them with an asterisk `*`.
+
+            #Example:
+
+                echo -n 0101010 | od -tx1 -w2
+
+            #Output:
+
+                0000000 30 31
+                *
+                0000006 30
+                0000007
+
+            #If there was no line hidding, it would have looked like this:
+
+                0000000 30 31
+                0000002 30 31
+                0000003 30 31
+                0000006 30
+                0000007
+
+            #This is a very good behaviour since it lest you focus on the differences only.
+
+        ##-A
+
+            #Radix of the line numbers.
+
+            #- o: octal
+            #- d: decimal
+            #- x: hexadecimal
+
+            #Default value: `o`
+
+            #Example:
+
+                echo {a..z} | od -Ax -tx1
+
+            #Output:
+
+                000000 61 20 62 20 63 20 64 20 65 20 66 20 67 20 68 20
+                000010 69 20 6a 20 6b 20 6c 20 6d 20 6e 20 6f 20 70 20
+                000020 71 20 72 20 73 20 74 20 75 20 76 20 77 20 78 20
+                000030 79 20 7a 0a
+                000034
+
+            #Note how the adresses are given in hexdecimal,
+
+            #Since there are 16 bytes per line, the second line starts at
+            #byte 16, so the address is `000010`.
+
+            #In decimal:
+
+                echo {a..z} | od -Ad -tx1
+
+            #Output:
+
+                0000000 61 20 62 20 63 20 64 20 65 20 66 20 67 20 68 20
+                0000016 69 20 6a 20 6b 20 6c 20 6d 20 6e 20 6f 20 70 20
+                0000032 71 20 72 20 73 20 74 20 75 20 76 20 77 20 78 20
+                0000048 79 20 7a 0a
+                0000052
+
+        ##-N
+
+            #Maximum number of bytes to read.
+
     ##hexdump
 
-        #view bytes in hexa
+        #Not POSIX 7.
+
+        #View bytes in hexadecimal.
 
             echo -n abc | hexdump -C
 
-        #-C : see bytes in hexadecimal
-        #-n32 : only 32 bytes
-        #-s32 : start at byte 32
-        #-v: show duplicate lines
-        #-e '1/1 " %02X"': format string
+        #Options:
 
-    ##od
-
-        #posix 7
-
-        #view bytes in octal
-
-            od "$f"
+        #- -C : see bytes in hexadecimal
+        #- -n32 : only 32 bytes
+        #- -s32 : start at byte 32
+        #- -v: show duplicate lines
+        #- -e '1/1 " %02X"': format string
 
     ##paste
 
@@ -1660,14 +1736,14 @@
 
             #you could use this for loops:
 
-            for i in `seq 10`; do echo $i; done
+                for i in `seq 10`; do echo $i; done
 
             #but don't
 
             #use brace expansion instead which is a bash built-in,
             #and thus potentially faster (possibly no new process spawned):
 
-            for i in {1..10}; do echo $i; done
+                for i in {1..10}; do echo $i; done
 
             #use this only if you really need to control
             #the output with the options
@@ -2396,11 +2472,42 @@
 
     ##lsblk
 
-        #list block devices (such as partitions, hard disks or DVD devices)
+        #List block devices (such as partitions, hard disks or DVD devices),
+        #including those which are not mounted.
+
+            sudo lsblk
+
+        #Sample output:
+
+            NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+            sda      8:0    0 465.8G  0 disk
+            |-sda1   8:1    0   1.5G  0 part
+            |-sda2   8:2    0  93.2G  0 part /media/win7
+            |-sda3   8:3    0  13.7G  0 part
+            |-sda4   8:4    0     1K  0 part
+            |-sda5   8:5    0 338.1G  0 part /
+            |-sda6   8:6    0   3.7G  0 part [SWAP]
+            `-sda7   8:7    0  15.6G  0 part
+            sdb      8:16   0 931.5G  0 disk
+            `-sdb1   8:17   0 931.5G  0 part /media/ciro/DC74FA7274FA4EB0
+
+        #-f: show mostly information on filesystems:
 
             sudo lsblk -f
 
-            sudo lsblk
+        #Sample output:
+
+            NAME   FSTYPE LABEL           MOUNTPOINT
+            sda
+            |-sda1 ntfs   SYSTEM_DRV
+            |-sda2 ntfs   Windows7_OS     /media/win7
+            |-sda3 ntfs   Lenovo_Recovery
+            |-sda4
+            |-sda5 ext4                   /
+            |-sda6 swap                   [SWAP]
+            `-sda7 ext4
+            sdb
+            `-sdb1 ntfs                   /media/ciro/DC74FA7274FA4EB0
 
     ##parted
 
@@ -2601,9 +2708,25 @@
 
     ##mount
 
-        #mount block device file on filesystem:
+        #Mount block device file on filesystem:
 
             sudo mount /dev/sda1 /media/win/
+
+        #List all mount points:
+
+            sudo mount -l
+
+        #Sample output:
+
+            /dev/sda5 on / type ext4 (rw,errors=remount-ro)
+            1            2      3     4
+
+        #Shows:
+
+        #1. device if any
+        #2. mountpoint
+        #3. type
+        #4. flags
 
     ##umount
 
@@ -2732,14 +2855,15 @@
 
             #subset of uname
 
-            arch
-                #i686
+                arch
+
+            #i686
 
         ##mpstat
 
             #processor related stats
 
-            mpstat
+                mpstat
 
         ##nproc
 
@@ -2770,6 +2894,51 @@
 
     ##performance
 
+        ##top
+
+            #ncurses constantly updated process list with cpu and memory usage
+
+            #interface:
+
+            #- h: help
+            #- f: field add/remove/sort
+            #- k: kill process
+            #- arrow keys: move view
+
+            #sample output:
+
+                23:00:13 up 12:00,  3 users,  load average: 0.72, 0.66, 0.6
+                ^^^^^^^^ up ^^^^^,  ^ users,  load average: ^^^^, ^^^^, ^^^
+                1           2       3                       4     5     6
+
+            #Meanings:
+
+            #- 1: cur time
+            #- 2: how long the system has been up for
+            #- 3: how many users are logged
+            #- 4: load average for past 1  minute
+            #- 5:                       5  minute
+            #- 6:                       15 minutes
+
+            ##load average
+
+                #0.75: 0.75  as many scheduled tasks as your cpu can run
+                    #rule of thumb maximum good value
+                #1   :       as many scheduled tasks as your cpu can run
+                    #break even point
+                    #risky, a littly more and you are behind schedule
+                #5   : 5x
+                    #system critically overloaded
+
+                #does not take into account how many cores you have!
+                #ex: for a dual core, breakeven at 2.0!
+
+            ##uptime
+
+                #echo first line of top
+
+                    uptime
+
         ##free
 
             #show RAM and swap memory in Megabytes
@@ -2777,7 +2946,7 @@
             #-t totals at bottom
             #-sN : repeat every N seconds
 
-            free -m
+                free -m
 
         ##vmstat
 
@@ -2827,23 +2996,28 @@
 
             #long term performance statistics
 
-            sudo aptitude install -y sysstat
-            #crontab -e
-            #
+            #you must run this as a cronjob:
+
+                crontab -e
+
             #paste:
-            #*/5 * * * * root /usr/lib/sa/sa1 1 1
 
-            sar -u
-                #cpu usage
+                */5 * * * * root /usr/lib/sa/sa1 1 1
 
-            sar –d
-                #disk io stats
+            #cpu usage
 
-            sar -n DEV | more
-            sar -n SOCK |more
-                #network stats
+                sar -u
 
-    ##hardware info
+            #disk io stats
+
+                sar –d
+
+            #network stats
+
+                sar -n DEV | more
+                sar -n SOCK |more
+
+    ##hardware specs
 
         ##bus
 
@@ -2889,13 +3063,13 @@
 
             ##ethernet
 
-                #
+        #cpu info
 
-        cat /proc/cpuinfo
-            #cpu info
+            cat /proc/cpuinfo
 
-        cat /proc/meminfo
-            #mem info
+        #mem info
+
+            cat /proc/meminfo
 
         ##lspci
 
@@ -2909,12 +3083,10 @@
 
 ##process
 
-    ##bash
+    #get cur pid in bash:
 
-        #get cur pid:
-
-            echo $$
-            echo $pid
+        echo $$
+        echo $pid
 
     ##pwd
 
@@ -3066,7 +3238,7 @@
 
             killall firefox
 
-        #this sengs SIGTERM, which programs may be programmed to handle, 
+        #this sengs SIGTERM, which programs may be programmed to handle,
         #so the progrma may still hang ( and in theory be trying to finish nicelly, although in practice this never happens... )
 
         #to kill it without mercy:
@@ -3106,44 +3278,6 @@
                     #some default vars might still be there!
                     #I get: SHLVL, PWD
                     exit
-
-    ##top
-
-        #ncurses constantly updated process list
-
-        #h: help
-        #f: field add/remove/sort
-        #k: kill process
-        #arrow keys: move view
-
-        ##uptime
-
-            #echo first line of top
-
-            #sample:
-                #23:00:13 up 12:00,  3 users,  load average: 0.72, 0.66, 0.6
-                #^^^^^^^^ up ^^^^^,  ^ users,  load average: ^^^^, ^^^^, ^^^
-                #1           2       3                       4     5     6
-                #
-                #1: cur time
-                #2: how long the system has been up for
-                #3: how many users are logged
-                #4: load average for past 1  minute
-                #5:                       5  minute
-                #6:                       15 minutes
-
-            ##load average
-
-                #0.75: 0.75  as many scheduled tasks as your cpu can run
-                    #rule of thumb maximum good value
-                #1   :       as many scheduled tasks as your cpu can run
-                    #break even point
-                    #risky, a littly more and you are behind schedule
-                #5   : 5x
-                    #system critically overloaded
-
-                #does not take into account how many cores you have!
-                #ex: for a dual core, breakeven at 2.0!
 
     ##nohup
 
@@ -3336,11 +3470,10 @@
 ##files
 
     ##ls
-        #POSIX
+
+        #POSIX 7
 
         #list files in dirs
-
-        #posix 7
 
         ##-l
 
@@ -3974,10 +4107,6 @@
 
     ##links
 
-        ##hard vs soft
-
-            #TODO lazy
-
         ##ln
 
             #make hardlinks and symlinks
@@ -4040,16 +4169,17 @@
 
             #prefer readlink which is more widespread by default in distros
 
-            sudo aptitude install -y realpath
+                mkdir a
+                ln -s a b
+                cd a
+                touch a
+                ln -s a b
+                cd ..
+                realpath ./b/b
 
-            mkdir a
-            ln -s a b
-            cd a
-            touch a
-            ln -s a b
-            cd ..
-            realpath ./b/b
-                #= "`pwd`/a/a"
+            #Output:
+
+                = "`pwd`/a/a"
 
             #readlink -f
 
@@ -4061,10 +4191,13 @@
 
     ##cmp
 
-        cmp "$F" "$G"
-        #compares F and G byte by byte, until first difference
-        #if equal, print nothing
-            #else, print location of first difference
+        #compares F and G byte by byte, until first difference is found.
+
+            cmp "$F" "$G"
+
+        #if equal, print nothing.
+
+        #else, print location of first difference.
 
         ##-s
 
@@ -4073,6 +4206,8 @@
             #return status 0 if equal
             #!= 0 otherwise
 
+            #print nothing.
+
                 cmp -s "$F" "$G"
                 if [ $? -eq 1 ]; then
                         echo neq
@@ -4080,194 +4215,96 @@
                         echo eq
                 fi
 
-    ##find
+    ##xargs
 
-        #recursivelly looks for files and dirs that match tons of possible criteria
+        #posix 7
 
-        #prints filenames to stdout, or do some few other actions
+        #do some command on lots of files.
 
-        #great for combo with xargs
+        #great for combo with find.
 
-        #consider ack instead when for searching code
+        ##alternatives
 
-        ##preparation
+            #downsides of xargs:
 
-            touch a b
+            #- max number of arguments
+            #- escaping madness for multiple commands
 
-        ##matching criteria
+            #upsides of xargs:
+            #- golfing!
 
-            ##-name
+            #in scripts, always use the more versatile (and slightly verbose) read while techinque:
 
-                #*entire* basename matches shell glob expression
+                while read f; do
+                    echo "$f";
+                done < <(find .)
 
-                ##-iname
+        ##test preparations
 
-                    #case insensitive
+                function f {
+                    echo $1
+                }
 
-                ##applications
+        ##basic operation
 
-                    #find by extension and act upon:
+            #read line from stdin, append as argument to the given command
 
-                        find . -type f -name '*.sh' | xargs cat
+            #does not automatically quote!
 
-            ##-type
+            #the default command is echo, which is basically useless
 
-                #f for files only, d for directories only
+                echo $'a\nb' | xargs
+                echo $'a\nb' | xargs echo
+                echo $'a\nb c' | xargs echo
 
-                    find . -type f
-                    find . -type d
+            #empty lines are ignored:
 
-            ##-perm
+                echo $'a\n\nb' | xargs
 
-                #permissions
+        ##-0
 
-                #mass permission changing!
+            #read up to nul char instead of newline char
 
-                #exact match:
-                    find . -perm 444
-                    find . -perm u+4,g+4,o+4
+            #allows for files with spaces, and even newlines!
 
-                #any one matches:
+                echo -en 'a\0b' | xargs -0
 
-                    find . -perm +111
+            #combo with `find -print0`:
 
-                #finds files that are readable by either u, g or o.
+                find . -print0 | xargs -0
 
-                ##applications
+        ##-I
 
-                    #give `g+x` to all files that have `u+x`:
+            #allows you to put the argument anywhere and to quote it
 
-                      find . -type f -perm +100 | xargs chmod g+x
+                    echo $'a\nb' | xargs -I '{}' echo '{}'
 
-            #-regex: entire basename matches emacs regex
+        ##multiple commands
 
-        ##actions
+            #must use bash
 
-            ##delete
+            #only use this for very simple commands, or you are in for an escaping hell!
 
-                #deletes matching files
+            #if you have to do this, use the read while technique instead
 
-                    #find . -delete
+                    echo $'a\nb' | xargs -I '{}' bash -c "echo 1: '{}'; echo 2: '{}'"
 
-                #very dangerous!
+        ##applications
 
-            ##printf
+            #find and replace in files found with perl regex:
 
-                #print formated data about files instead of filename
+                find . -type f | xargs perl -pie 's/a/A/g'
 
-                #%p	filename, including name(s) of directory the file is in
-                #%m	permissions of file, displayed in octal.
-                #%f	displays the filename, no directory names are included
-                #%g	name of the group the file belongs to.
-                #%h	display name of directory file is in, filename isn't included.
-                #%u	username of the owner of the file
+            ##find files whose path differ from other files only by case
 
-                    find . -printf '%f'
+                #useful when copying from linux to a system that does not accept
+                #files that differ only by case (the case for MacOS and Windows)
 
-        ##take multiple actions
+                    find . | sort -f | uniq -di
 
-            #this is the way to go:
+                #remove them:
 
-                while IFS= read -r -u3 -d '' f; do echo "$f"; done 3< <(find . -type f -print0)
-
-            #the only thing tha breaks this is having programs that use 3<. godlike
-
-            #this reverses find order of the find output, allowing you to rename directories also (with this, directories)
-            #will come last and be renamed last. -r is for 'reverse, and -z is for null terminated
-
-                while IFS= read -r -u3 -d $'\0' FILE; do
-                    echo "$FILE"
-                done 3< <(find /tmp -type f -print0 | sort -rz)
-
-        ##xargs
-
-            #posix 7
-
-            #do some command on lots of files.
-
-            #great for combo with find.
-
-            ##alternatives
-
-                #downsides of xargs:
-                #- max number of arguments
-                #- escaping madness for multiple commands
-
-                #upsides of xargs:
-                #- golfing!
-
-                #in scripts, always use the more versatile (and slightly verbose) read while techinque:
-
-                    while read f; do
-                        echo "$f";
-                    done < <(find .)
-
-            ##test preparations
-
-                    function f {
-                        echo $1
-                    }
-
-            ##basic operation
-
-                #read line from stdin, append as argument to the given command
-
-                #does not automatically quote!
-
-                #the default command is echo, which is basically useless
-
-                    echo $'a\nb' | xargs
-                    echo $'a\nb' | xargs echo
-                    echo $'a\nb c' | xargs echo
-
-                #empty lines are ignored:
-
-                    echo $'a\n\nb' | xargs
-
-            ##-0
-
-                #read up to nul char instead of newline char
-
-                #allows for files with spaces, and even newlines!
-
-                    echo -en 'a\0b' | xargs -0
-
-                #combo with `find -print0`:
-
-                    find . -print0 | xargs -0
-
-            ##-I
-
-                #allows you to put the argument anywhere and to quote it
-
-                      echo $'a\nb' | xargs -I '{}' echo '{}'
-
-            ##multiple commands
-
-                #must use bash
-
-                #only use this for very simple commands, or you are in for an escaping hell!
-
-                #if you have to do this, use the read while technique instead
-
-                      echo $'a\nb' | xargs -I '{}' bash -c "echo 1: '{}'; echo 2: '{}'"
-
-            ##applications
-
-                #find and replace in files found with perl regex:
-
-                    find . -type f | xargs perl -pie 's/a/A/g'
-
-                ##find files whose path differ from other files only by case
-
-                    #useful when copying from linux to a system that does not accept
-                    #files that differ only by case (the case for MacOS and Windows)
-
-                        find . | sort -f | uniq -di
-
-                    #remove them:
-
-                        find . | sort -f | uniq -di | xargs -I'{}' rm '{}'
+                    find . | sort -f | uniq -di | xargs -I'{}' rm '{}'
 
     ##locate
 
@@ -4279,7 +4316,10 @@
 
         #commonly, `updatedb` is a cronjob
 
-            locate a.h
+        #match any substring in entire path:
+
+            locate a
+            locate /a
 
         #to force update of file cache, use updatedb
 
@@ -4298,9 +4338,12 @@
         #this is in general impossible,
         #but program makes good guesses
 
-        echo a > a
-        file a
-            #a: ASCII text
+            echo a > a
+            file a
+
+        #Output:
+
+            a: ASCII text
 
         ##-L
 
@@ -4342,19 +4385,30 @@
 
         #prints full path of executable in path
 
-        which ls
-            #/bin/ls
-        which im-not-in-path
-            #
-        which im-not-executable
-            #
-        which cd
-            #
-            #cd is not a program! it is a bash builtin!
+        #very useful to understand where things are located
+
+        #If you give it a sh builtin like `cd`, outputs nothing,
+        #so this is a convenient test is something is a `sh` builtin or not.
+
+        #Examples:
+
+            which ls
+
+        #Sample output:
+
+            /bin/ls
+
+        #The following print nothing:
+
+            which im-not-in-path
+
+            which im-not-executable
+
+            which cd
 
         ##application
 
-            #quick and dirty install if not installed!
+            #quick and dirty install if not installed:
 
                 if [ -z "`which zenity`" ]; then
                         sudo aptitude install zenity
@@ -4362,41 +4416,39 @@
 
             #could also be done bashonly with `type -P`.
 
-    ##temp
+    ##mktemp
 
-        ##mktemp
+        #create temporary directories and files in currend directory
 
-            #create temporary directories and files in currend directory
+        #creates a temporary file in `/tmp/`:
 
-            #creates a temporary file in `/tmp/`:
+            f="$(mktemp)"
+            echo "$f"
+            assert test -f "$f"
+            rm "$f"
 
-                f="$(mktemp)"
-                echo "$f"
-                assert test -f "$f"
-                rm "$f"
+        #directory:
 
-            #directory:
+            d="$(mktemp -d)"
+            echo "$f"
+            assert test -d "$d"
+            rm -r "$d"
 
-                d="$(mktemp -d)"
-                echo "$f"
-                assert test -d "$d"
-                rm -r "$d"
+        #custom name template:
 
-            #custom name template:
+            f="$(mktemp --tmpdir abcXXXdef)"
+            assert echo "$f" | grep -E 'abc...def'
+            assert test -f "$f"
+            rm "$f"
 
-                f="$(mktemp --tmpdir abcXXXdef)"
-                assert echo "$f" | grep -E 'abc...def'
-                assert test -f "$f"
-                rm "$f"
-
-            #must use `--tmpdir` with template or else file is created in current dir
+        #must use `--tmpdir` with template or else file is created in current dir
 
     ##pathchk
 
         #check if path is portable across posix systems
 
-        pathchk -p 'a'
-        pathchk -p '\'
+            pathchk -p 'a'
+            pathchk -p '\'
 
     ##fdupes
 
@@ -4439,35 +4491,6 @@
                 esac
         done
 
-##yes
-
-    #coreutils
-
-    #repeat an output forever!
-
-    yes
-        #y
-        #y
-        #y
-        #...
-
-    yes a b c
-        #a b c
-        #a b c
-        #a b c
-        #...
-
-    yes | timeout 1 cat
-
-##users and groups
-
-    #to play around with those in ubuntu, do ctrl+alt+f2, f3 ... f7
-    #and you will go into login shells
-    #so you can log with different users at the same time
-    #while logged on a different shell, process on the other shells continue to run? TODO
-        #totem stops
-        #simple shell scripts continue
-
 ##setterm
 
     #outputs stdout that changes terminal properties
@@ -4476,6 +4499,19 @@
 
         setterm -cursor off
         setterm -cursor on
+
+##users and groups
+
+    #to play around with those in ubuntu, do ctrl+alt+f2, f3 ... f7
+
+    #and you will go into login shells
+
+    #so you can log with different users at the same time
+
+    #while logged on a different shell, process on the other shells continue to run? TODO
+
+    #- totem stops
+    #- simple shell scripts continue
 
     cat /etc/passwd
         #shows users
@@ -4910,6 +4946,14 @@
 
             ghci
 
+##setleds
+
+    #set/get capslock, numlock and scrolllock led state
+
+    #only works from tty (ctrl+alt+F[1-6] on ubuntu)
+
+        setleds
+
 ##scanner
 
     ##simple-scan
@@ -5080,44 +5124,32 @@
 
         #quite good at first sight
 
-##misc
+##shutdown
 
-    ##shutdown reboot
+    #sends TODO signal to running processes and waits for them to terminate nicely:
 
         sudo shutdown -P now
-            #brings down the system and powers off afterwards
-            #`usual` shutdown
-            #sends TODO signal to running processes and waits for their termination TODO?
 
-        sudo reboot now
-            #usual restart computer
+##reboot
 
-    ##setleds
+        sudo reboot
 
-        #set/get capslock, numlock and scrolllock led state
+##yes
 
-        #only works from tty (ctrl+alt+F[1-6] on ubuntu)
+    #coreutils
 
-            setleds
+    #repeat an output forever!
 
-    ##gtk themes
+    yes
+        #y
+        #y
+        #y
+        #...
 
-        #it is best to install them from ppas
-        #since at every update of gtk version themes break =)
+    yes a b c
+        #a b c
+        #a b c
+        #a b c
+        #...
 
-        #to change themes with a gui (recommended) use: gnome tweak tools
-
-        ##manual theme management
-
-            #to install for a single user, place themes folders under `~/.themes` and they will become available
-
-        ##webupd8team/themes ppa
-
-            #they have a many themes there!
-
-                sudo add-apt-repository -y ppa:webupd8team/themes
-                sudo aptitude update
-
-            #my favorourite theme:
-
-                sudo aptitude install -y gnomishdark-theme
+    yes | timeout 1 cat

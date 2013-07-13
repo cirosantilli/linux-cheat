@@ -127,19 +127,10 @@
 
         sudo aptitude install -y samba
 
-    ##sox
-
-            sudo aptitude intall -y sox
-            sudo aptitude intall -y libsox-fmt-mp3
-
-        #search for formats and install those you want:
-
-            #apt-cache search libsox-fmt-
 
     #usefull stuff that does not come by default or Canonical would have to pay royalties:
 
         sudo aptitude install -y ubuntu-restricted-extras
-
 
     #.ace files
 
@@ -202,6 +193,17 @@
 
         sudo aptitude install -y gimp
         sudo aptitude install -y inkscape
+
+    ##sox
+
+            sudo aptitude intall -y sox
+            sudo aptitude intall -y libsox-fmt-mp3
+
+        #now search for formats and install those you want:
+
+            #apt-cache search libsox-fmt-
+
+        sudo aptitude install -y sysstat
 
     ##video
 
@@ -373,7 +375,7 @@
                 sudo aptitude update
                 sudo aptitude install -y flashplugin-installer
 
-		##x11
+		##desktop
 
 			sudo aptitude install -y xbacklight
 			sudo aptitude install -y xsel
@@ -381,6 +383,14 @@
 			sudo aptitude install -y xdotool
 			#sudo apt-add-repository ppa:cdekter/ppa
 			#sudo aptitude install -y autokey-gtk
+
+            #gtk themes:
+
+                    sudo add-apt-repository -y ppa:webupd8team/themes
+                    sudo aptitude update
+                    sudo aptitude install -y gnomishdark-theme
+
+            sudo aptitude install -y compizconfig-settings-manager
 
 		##networking
 

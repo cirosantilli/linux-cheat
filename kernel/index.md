@@ -10,7 +10,7 @@ of the linux kernel.
 You cannot use user space libs such as libc to program the kernel,
 since the kernel itself itself if need to be working for user space to work.
 
-# sources
+#sources
 
 - `git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git`
 
@@ -24,7 +24,7 @@ since the kernel itself itself if need to be working for user space to work.
 
     Very good and clear book.
 
-# what the kernel does
+#what the kernel does
 
 the kernel does the most fundamental operations such as:
 
@@ -62,7 +62,7 @@ therefore it reaches general goals such as:
 - creating useful and simple abstractions which programs can rely on
 	(contiguous RAM memory, files, processes, user permissions, etc)
 
-# posix
+#posix
 
 of of the goals of linux is to highly ( but to 100% ) POSIX compliant
 
@@ -72,7 +72,7 @@ we strongly incourage you to look at exactly what POSIX specifies
 and what it does not, so as to be able to decide if your code cannot be made
 more portable by using the posix c api instead of Linux specific code.
 
-# special files for user space communication
+#special files for user space communication
 
 the kernel communicates parameters to user space using special files,
 located mainly under `/proc/`, `/sys/` and `/dev/`
@@ -91,7 +91,7 @@ interesting files:
 
 TODO where are those documenteded?
 
-# user programs
+#user programs
 
 User programs such as a simple hello world run inside an abstraction called *process* defined by the kernel.
 
@@ -105,12 +105,12 @@ probably via the `write` system call.
 
 Another simple example is file io.
 
-## floating point
+##floating point
 
 you cannto use floating point operations on kernel code because that would incur too much overhead
 of saving floating point registers on some architectures, so don't do it.
 
-# rings
+#rings
 
 x86 implemented concept
 
@@ -125,13 +125,13 @@ linux uses 2:
 
 this is used to separate who can do what
 
-# version number
+#version number
 
 - rc = Release Candidate
 
-# test a new kernel
+#test a new kernel
 
-## compile
+##compile
 
 this is a very slow test mechanism since you need to reboot everytime.
 
@@ -176,7 +176,7 @@ it is recommend to use:
 
 this may take more than one hour.
 
-## install
+##install
 
 tested on Ubuntu `13.04` with kernel dev version `3.10.0-rc5+`
 
@@ -202,7 +202,7 @@ TODO how to go back to the old kernel image by default at startup?
 
 TODO how to install the /usr/src/linux-headers- headers?
 
-## kernel module
+##kernel module
 
 can be inserted and removed while the kernel runs.
 
@@ -210,21 +210,21 @@ However, if you make an error at startup (dereference null pointer for example),
 the kernel module may become impossible to reinsert without a reboot.
 <http://unix.stackexchange.com/questions/78858/cannot-remove-or-reinsert-kernel-module-after-error-while-inserting-it-without-r/>
 
-## kernel virtual machine
+##kernel virtual machine
 
-# get kernel version
+#get kernel version
 
     uname -r
 
     cat /proc/version
 
-# sysctl
+#sysctl
 
 view/config kernel parameters at runtime
 
     sudo sysctl –a
 
-# kernel coding conventions
+#kernel coding conventions
 
 - tabs instead of spaces. Configure editors to view tabs as 8 spcaes. In `vim` you could source:
 
@@ -255,7 +255,7 @@ view/config kernel parameters at runtime
           c1     c2
           c1     c2
 
-# kernel source tree
+#kernel source tree
 
 - `arch`: architecture specific code. Ex: `x86`, `sparc`, `arm`
 - `include`: headers which may be useful for using kernel parameters and functions on user programs or kernel modules TODO confirm
@@ -270,7 +270,17 @@ view/config kernel parameters at runtime
 
 	- `fs.h`: filesystem structs
 
-## usr/include/linux vs usr/src/linux-headers
+##find definitions
+
+Ways to find info:
+
+- ctags
+
+Try to find the definition of struct `s`:
+
+    ack '^struct s \{'
+
+##usr/include/linux vs usr/src/linux-headers
 
 http://stackoverflow.com/questions/9094237/whats-the-difference-between-usr-include-linux-and-the-include-folder-in-linux
 
@@ -285,7 +295,7 @@ http://stackoverflow.com/questions/9094237/whats-the-difference-between-usr-incl
 	it is useful for example for people writting kernel modules,
 	and is automatically included by the standard module `Makefile`.
 
-## proc filesystem representation
+##proc filesystem representation
 
 each process has a representation on the file system under `/proc/\d+` which allows useres with enough
 priviledge to gather information on them. Sample interesting fields:
@@ -294,7 +304,7 @@ priviledge to gather information on them. Sample interesting fields:
 
     going over those limits may cause the kernel to terminate processes with certain signals
 
-# interruptions
+#interruptions
 
 - user space process can be interrupted by anyting, including other user space processes.
 - kernel space processes can be interrupted by other kernel processes or interrupts handlers,
@@ -310,29 +320,11 @@ priviledge to gather information on them. Sample interesting fields:
 
 - interrupt handlers cannot be interrupted by anyting else, not even other interrupt handlers.
 
-# memory
-
-the following kinds of memory exist for the kernel:
-
-- normal
-
-- high memory
-
-	Harder to work with, but useful if you need lots of memory.
-
-	TODO understand better.
-
-- DMA
-
-	Used for hardware access communication
-
-	TODO understand better
-
-# x86
+#x86
 
 This section discusses issues specific to the x86 linux implementation.
 
-## exceptions
+##exceptions
 
 Intel reserves interrupt numbers from 0 to 31 for exceptions:
 anormal execution of instructions such as division by zero,
