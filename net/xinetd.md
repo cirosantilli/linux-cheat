@@ -20,7 +20,7 @@ however POSIX does not specify which programs shall make the services available
 
 in linux, services are listed under: `cat /etc/services`.
 
-# configuration
+#configuration
 
 the conf file is `/etc/xinetd.conf`,
 which usually includes those inside `/etc/xinetd.d/` to enable/disable certain services.
@@ -41,22 +41,28 @@ Now you can restart `xinetd` via
 
 if your system uses upstart.
 
-# add new external service
+#add new external service
 
 include this file under xinet.d:
 
-    service SERVICE_NAME                    # Name from /etc/services;
+    service SERVICE_NAME                    #Name from /etc/services;
+    service SERVICE_NAME                    #Name from /etc/services;
     {
-            server      = /PATH/TO/SERVER   # The service executable
-            server_args = ANY_ARGS_HERE     # Any arguments; omit if none
-            user        = USER              # Run the service as this user
-            socket_type = TYPE              # stream, dgram, raw, or seqpacket
-            wait        = YES/NO            # yes = single-threaded, no = multithreaded
+            server      = /PATH/TO/SERVER   #The service executable
+            server      = /PATH/TO/SERVER   #The service executable
+            server_args = ANY_ARGS_HERE     #Any arguments; omit if none
+            server_args = ANY_ARGS_HERE     #Any arguments; omit if none
+            user        = USER              #Run the service as this user
+            user        = USER              #Run the service as this user
+            socket_type = TYPE              #stream, dgram, raw, or seqpacket
+            socket_type = TYPE              #stream, dgram, raw, or seqpacket
+            wait        = YES/NO            #yes = single-threaded, no = multithreaded
+            wait        = YES/NO            #yes = single-threaded, no = multithreaded
     }
 
 note how you can specify
 
-# check available services
+#check available services
 
 you can check which services are current turned on via:
 
@@ -66,11 +72,11 @@ note that this will list all services, not only those provided by xinetd
 
 you can get a list of the standard port services [here](http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers)
 
-# test services
+#test services
 
 you can use `nc` to read/write to sockets to test the different services
 
-## echo
+##echo
 
 protocol repets what was given:
 
@@ -80,7 +86,7 @@ output: `a`
 
 used to test the network
 
-## discard
+##discard
 
 server does nothing
 
@@ -88,7 +94,7 @@ server does nothing
 
 used to test the network.
 
-## daytime
+##daytime
 
 returns the date and time of the day:
 
@@ -100,7 +106,7 @@ a sample output would be:
 
     20 JUN 2013 23:30:46 CEST
 
-## chargen
+##chargen
 
 server generates a fixed printable chars string repeatedly until client closes the connection:
 
@@ -108,7 +114,7 @@ server generates a fixed printable chars string repeatedly until client closes t
 
 used to test the network
 
-## time
+##time
 
 time in seconds since 00:00 (midnight) 1 January, 1900 GMT as a c integer in network order:
 

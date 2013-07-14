@@ -1,4 +1,6 @@
-#  formats
+#formats
+#formats
+#formats
 
 - btm: bit by bit, no compression
 
@@ -84,13 +86,13 @@
 
 	algorithm: removes fourrier transform high freqs TODO confirm
 
-# get info on image
+#get info on image
 
 - `file`: type, size, and major parameters such as depth
 
-# editors
+#editors
 
-## gimp
+##gimp
 
 image manipulation
 
@@ -119,23 +121,23 @@ shortcuts:
 
 - `<c-PageDown>`: rotate selection tool
 
-## inkscape
+##inkscape
 
 svg gui editor
 
 very good
 
-## dia
+##dia
 
 gnome diagram editor
 
-## dot
+##dot
 
 graph editor
 
-# viewers
+#viewers
 
-## eog
+##eog
 
 eyes of gnome
 
@@ -143,7 +145,7 @@ lightweight
 
     eog a.jpg
 
-## aview
+##aview
 
 converts image to ascii art!!!
 
@@ -157,9 +159,9 @@ I CANT CHANGE THE WIDTH!!!
 
     asciiview -width a.jpg
 
-# caca-utils
+#caca-utils
 
-## img2txt
+##img2txt
 
 stdout output
 
@@ -170,13 +172,13 @@ stdout output
 
 fit to terminal
 
-## caca view
+##caca view
 
 img2text on x window
 
     cacaview a.pjg
 
-# imagemagick
+#imagemagick
 
 tons of image conversion tools
 
@@ -188,7 +190,7 @@ list supported formats:
 
     identify -list format
 
-## convert
+##convert
 
 - process images
 
@@ -202,7 +204,7 @@ does not do:
 
 tons of options available
 
-### resize
+###resize
 
 	convert large.png -resize 50% small.png
 
@@ -216,7 +218,7 @@ therefore, the image file size will be just a bit more than 1/4 of the original 
 - 1/2 x 1/2 = 1/4 of the number of pixels
 - the png metadata size is unchanged, so this is not divided by 4.
 
-### crop
+###crop
 
 `10x10`: rectangle to keep:
 
@@ -236,7 +238,7 @@ bottom 50 percent:
 
         convert -gravity south -crop 100x50% a.jpg b.jpg
 
-### color
+###color
 
 - `-colorspace Gray`: convert to grayscale
 
@@ -270,11 +272,11 @@ bottom 50 percent:
 
             convert -level -100,100 a.jpg b.jpg
 
-# exactimage
+#exactimage
 
 concurrence to imagemagick, supposedly faster. c++ template api
 
-# dvipng
+#dvipng
 
 convert dvi to png
 

@@ -24,7 +24,7 @@ after it was run:
 
 when you quit gdb, the process will continue to run
 
-# commands
+#commands
 
 commands you can run from inside gdb
 

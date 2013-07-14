@@ -1,6 +1,6 @@
 book formats, viewers and manipulation tools
 
-# formats
+#formats
 
 formats that contain image, text, fonts such as pdf or djvu
 but not not formats that map directly to bits such as png or jpeg
@@ -17,9 +17,9 @@ but not not formats that map directly to bits such as png or jpeg
 - mobi: mobipocket company, free format
 - rtf: proprietary microsoft
 
-# readers
+#readers
 
-## okular
+##okular
 
 open at given page of document:
 
@@ -32,11 +32,11 @@ single instance:
 
 `a.pdf` is closed, `b.pdf` is opened on same window.
 
-## fbreader
+##fbreader
 
 mobi reader
 
-# chm
+#chm
 
 microsoft proprietary
 
@@ -48,7 +48,7 @@ based on html?
 
 has been reverse ingeneered
 
-## chm to html
+##chm to html
 
 - archmage:
 
@@ -56,7 +56,7 @@ has been reverse ingeneered
 
         archmage a.chm
 
-## chm to pdf
+##chm to pdf
 
 - chm2pdf: <http://www.ubuntugeek.com/how-to-convert-chm-files-into-pdf-files-in-ubuntu.html>
 
@@ -64,18 +64,18 @@ has been reverse ingeneered
 
     `chm2pdf --book a.chm`: command did not work
 
-## chm readers
+##chm readers
 
 - chmsee: gtk+, few preferences, just works.
 - kchmreader: kde, broken colors on ubuntu
 
-# calibre
+#calibre
 
 book library management
 
-# manipulation
+#manipulation
 
-## a2ps
+##a2ps
 
 txt to ps
 
@@ -99,7 +99,7 @@ output to stdout
 
     a2ps -o - a.txt
 
-## paps
+##paps
 
 Converts txt to ps.
 
@@ -117,7 +117,7 @@ Font:
 
 TODO list all fonts?
 
-## ps2pdf
+##ps2pdf
 
     ps2pdf a.ps
 
@@ -131,14 +131,14 @@ out to stdout:
 
     ps2pdf a.ps -
 
-## pdftotext
+##pdftotext
 
 extracts text layer from pdf
 
     pdftotext a.pdf
     less a.txt
 
-## pdftk
+##pdftk
 
 pdf Tool Kit
 
@@ -206,15 +206,15 @@ Repair a PDF’s Corrupted XREF Table and Stream Lengths (If Possible):
 
     pdftk broken.pdf output fixed.pdf
 
-## edit pdf content
+##edit pdf content
 
 consider libreoffic draw + pdf importer.
 
-## djvulibre-bin
+##djvulibre-bin
 
 djvu cli tools
 
-### ddjvu
+###ddjvu
 
 convert djvu to other formats
 
@@ -232,13 +232,13 @@ outputs pages 1 and 3, followed by all the document pages in reverse order up to
 
 loses text layer
 
-### djvm
+###djvm
 
 get number of pages of djvu:
 
     djvm -l speak\ chinese\ 2.djvu | sed -nre '$ s/.+#([0-9]+).+/\1/p'
 
-# pdfcrop
+#pdfcrop
 
 remove empty margins of pdf files
 
@@ -246,7 +246,7 @@ greatly increases filesize (10x)
 
 	pdfcrop a.pdf
 
-# fonts
+#fonts
 
 Description of how txt and utf data should look like.
 
@@ -255,7 +255,7 @@ Locations:
 - /usr/share/X11/fonts
 - /usr/share/fonts
 
-## xlsfonts
+##xlsfonts
 
 TODO
 

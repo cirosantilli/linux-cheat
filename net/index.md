@@ -1,8 +1,9 @@
-# sources
+#sources
+#sources
 
 - <http://www.aboutdebian.com/network.htm>
 
-# netrc
+#netrc
 
 `$HOME/.netrc` is a config file that automates net logins
 (TODO: which type exactly of login?)
@@ -11,7 +12,7 @@ ex:
 
     machine code.google.com login <login> password <pass>
 
-# host
+#host
 
 any computer connected to a network
 
@@ -20,7 +21,7 @@ can be specified by
 - an IP or by
 - a string that will be resolved by a dns server to an ip
 
-## host user pair
+##host user pair
 
 a user may access a (system) computer from another computer using for example [ssh](#ssh)
 
@@ -29,11 +30,11 @@ to do so, he must be registered in the target computer.
 this is why user/host pairs are common: the host pair says from which computer
 user is trying to access his account.
 
-## hostname
+##hostname
 
 an alias for you ip
 
-### hostname
+###hostname
 
 print hostname
 
@@ -49,13 +50,13 @@ prompt `PS1` is not changed immediatelly:
     h=
     sudo hostname "$h"
 
-### host command
+###host command
 
 get ip for a given hostname:
 
     host www.google.com
 
-### lan
+###lan
 
 on your lan, people can use the host name to communicate between computers
 
@@ -68,24 +69,24 @@ mary is on the same netowk. Therefore, she can refer to john simply as john. For
 
 TODO if many people set up the same hostname, then what?
 
-### change hostname permanently
+###change hostname permanently
 
     h=
     echo "$h" | sudo tee /etc/hostname
 
-### windows
+###windows
 
 host is reffered to as "computer name". good name choice.
 
     wmic computersystem where name="%COMPUTERNAME%" call rename name="NEW-NAME"
 
-### wan
+###wan
 
 on the internet, hotnames are resolved to ips by DNS servers
 
 you must pay for hostnames to use them
 
-# port
+#port
 
 once you have determined a host (computer),
 you still have to talk to one of the specific programs running on that computer
@@ -98,11 +99,11 @@ there are 2 ports number 10: 10/tcp and 10/udp, each for a different protocol.
 
 on POSIX systems ports are typically implemented via sockets.
 
-## read and write to a port from the command line
+##read and write to a port from the command line
 
 you can write to a port in many ways using the command line.
 
-# tcp vs udp
+#tcp vs udp
 
 they are different protocols
 
@@ -118,11 +119,11 @@ some protocols include both a TCP and a UDP version, which may vary slightly
 while others only have either a TCP or an UDP version
 see <http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers> for a list
 
-# routers
+#routers
 
-## routing table
+##routing table
 
-### advantages
+###advantages
 
 - local requests don't go out
 - you can block all forbidden websites and services on a single computer
@@ -135,7 +136,7 @@ routing tables say: if the request should go to a given network, send it to a gi
 
 routers have two interfaes each: inside and outside
 
-## external vs internal ip
+##external vs internal ip
 
 if you use a router, all computers behind the router have a single external ip seen
 you have an external ip seen on the web and an internal ip seen on the private
@@ -152,7 +153,7 @@ different ones for wireless and for wired connections
 computers in the network only talk to the router.
 the server on the router is called **proxy server**.
 
-## internal ip ranges
+##internal ip ranges
 
 3 ip ranges are reserved for internal ips
 they are called class [ABC]
@@ -164,9 +165,9 @@ most common home range is the Class C:
 192.168.0.1 through 192.168.255.254
 subnet mask 255.255.255.0
 
-## subnet mask
+##subnet mask
 
-### get mask for an interface:
+###get mask for an interface:
 
     ifconfig wlan0 | sed -nr 's/.*Mask:([^ ]*)/\1/p'
 
@@ -190,13 +191,13 @@ network part, but different computer parts.
 
 each network (formally **network segment**) is run by a single router #TODO confirm
 
-## special adresses
+##special adresses
 
-### network address
+###network address
 
 aka #<zero address>
 
-#### sources
+####sources
 
 <http://serverfault.com/questions/135267/what-is-the-network-address-x-x-x-0-used-for>
 
@@ -206,7 +207,7 @@ it is used to refer to the network itself
 
 it is used when several networks, one one a different router must speak to each other
 
-### default gateway
+###default gateway
 
 0.0.0.0 network address in the routing table
 
@@ -222,16 +223,16 @@ or for programatic usage:
 
     route -n | awk '{ if( $1 ~ "0.0.0.0" ) print $2 }'
 
-### broadcast address
+###broadcast address
 
 for the last bytes, 255 is reserved
 
 the broadcast address means talking to all computers on a given network at once
 instead of a single computer
 
-#### examples
+####examples
 
-##### class c network
+#####class c network
 
 - network part: 192.168.3
 
@@ -241,19 +242,19 @@ broadcast is: 192.168.3.255
 
 broadcast is: 192.168.3.255
 
-##### class a network
+#####class a network
 
 - network part: 10
 
 broadcast is: 10.255.255.255
 
-### .1 addresses
+###.1 addresses
 
 .1 is not special, but in home networks is often already taken by the router's inner interface
 
 this is why your addresses may start at .2
 
-## NIC
+##NIC
 
 Network Interface Cards
 
@@ -263,11 +264,11 @@ come mostly built-in the motherboard today
 
 each router has 2 NICs: one external and one internal.
 
-### get all interface names
+###get all interface names
 
     ifconfig | perl -ne '/^(\S+)/ && print $1 . "\n"'
 
-## MAC
+##MAC
 
 aka:
 
@@ -304,7 +305,7 @@ get MAC addresses of computers i have already talked to in the lan:
     timeout 3 ping 192.168.1.3
     arp -a | sed -nr 's/([^ ]*) .*at (.*)/\1 \2/p'
 
-# /etc/hosts
+#/etc/hosts
 
 tells your computer  where to redirect the given names
 
@@ -324,19 +325,19 @@ undo that:
 
     sudo sed -i "$ d" /etc/hosts
 
-## windows
+##windows
 
 the file is:
 
     C:\Windows\System32\Drivers\Etc\hosts
 
-# dns
+#dns
 
 domain name system
 
 convert strings into ips
 
-# ifconfig
+#ifconfig
 
 network InterFace configuration
 
@@ -358,11 +359,11 @@ get local ips (behind router)
 
 remember, wlan0 and eth0 are two different interfaces!
 
-# iwconfig
+#iwconfig
 
 wireless network configuration
 
-# ping
+#ping
 
 name of a protocol and a command line tool that sends a request to a ping server to answer immediatelly,
 so the time for messages to go and return can be measured.
@@ -373,7 +374,7 @@ in online games, ping means the go and return time of the signal
 
     ping google.com
 
-# arp
+#arp
 
 can be:
 
@@ -386,7 +387,7 @@ shows info of computers you connected to
 
     timeout 3 ping 192.168.1.3; arp -a
 
-# route
+#route
 
 view kernel routing table
 
@@ -396,7 +397,7 @@ numeric instead of names
 
     route -n
 
-# whois
+#whois
 
 check info about ip (country and ISP included)
 
@@ -404,17 +405,17 @@ check info about ip (country and ISP included)
 
     whois `curl ifconfig.me`
 
-# ifup
+#ifup
 
 TODO
 
-## /etc/network/interfaces
+##/etc/network/interfaces
 
-### manual
+###manual
 
     man interfaces
 
-### set static ip
+###set static ip
 
 on a home network that you control,
 it is better to use intuitive hostnames
@@ -441,7 +442,7 @@ see hostname for how.
 
     from now on, define properties of if1
 
-# nmap
+#nmap
 
 show open ports, state and service name associated to the port
 
@@ -464,7 +465,7 @@ view UDP ports:
 
     sudo nmap -sU localhost
 
-# netstat
+#netstat
 
 shows lots of POSIX sockets info
 
@@ -493,7 +494,7 @@ sample output for internet section:
 
 - Proto: protocol. Basically tcp or udp
 
-# telnet
+#telnet
 
 protocol for comunicating between servers and name of command line tool that uses it
 
@@ -524,7 +525,7 @@ also consider:
 - nc
 - socat
 
-# nc
+#nc
 
 aka netcat
 
@@ -542,7 +543,7 @@ in both cases you should get the HTTP re
 
 `-u`: udp requests
 
-# ssh
+#ssh
 
 like telnet, but encrypted
 
@@ -551,7 +552,7 @@ predominant implementation: OpenSSH
     man ssh
     man ssh_config
 
-## server
+##server
 
     sudo cp /etc/ssh/ssh_config{,.bak}
     sudo vim /etc/ssh/ssh_config
@@ -560,7 +561,7 @@ predominant implementation: OpenSSH
     Port 22                 #open port 22
     AllowUsers user1 user2  #allow the given users
 
-## client
+##client
 
     h=
     u=
@@ -588,7 +589,7 @@ choose port:
     p=
     ssh -p $p $h
 
-## usage
+##usage
 
 once you log in, it is as if you had a shell on the given ssh server computer!
 
@@ -612,7 +613,7 @@ to close your connection:
 
 or hit <c-d>
 
-## scp
+##scp
 
 cp with ssh encryption
 
@@ -635,11 +636,11 @@ use -r
 multiple files/dirs:
     scp -r $u@$h:"$p1" $u@$h:"$p2"
 
-## sftp
+##sftp
 
 similar to ftp, ssh encryption
 
-# samba
+#samba
 
 open source linux implementation of the SMB/CIFS networking protocol
 used by default on windows
@@ -648,9 +649,9 @@ it allows for file, printer and driver sharing on a network
 
 best option for cross platform file transfers
 
-# browser
+#browser
 
-## firefox
+##firefox
 
 comes by default
 
@@ -660,35 +661,35 @@ search with default engine:
 starts with disabled extensions in case they are causing a crash:
     firefox -safe-mode
 
-## w3m
+##w3m
 
 ncurses web broser!
 
 might save you if x goes down
 
-# files
+#files
 
 TODO
 
-## /etc/protocols
+##/etc/protocols
 
-## /etc/services
+##/etc/services
 
-## /etc/udev/rules.d/70-persistent-net.rules
+##/etc/udev/rules.d/70-persistent-net.rules
 
-# deployment
+#deployment
 
-## zymic
+##zymic
 
 free php
 
 did not work well with wordpress, probably some php restrictions.
 
-## 000
+##000
 
 worked for wordpress
 
-## openshift
+##openshift
 
 open source
 
@@ -712,7 +713,7 @@ start app (apps are stopped by default):
 
 error logs:
 
-# vpn
+#vpn
 
 TODO get working
 

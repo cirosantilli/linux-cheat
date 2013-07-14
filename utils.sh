@@ -41,9 +41,15 @@
 
     #- man pages
 
-        #check [man[]
+        #Not many examples, but full function list, and you often can guess what they mean!
 
-        #not many examples, but full function list, and you often can guess what they mean!
+    #- info pages
+
+        #GNU project substitude for man.
+
+        #Usually much longer explanations and examples.
+
+        #Better nodewise navigation.
 
     #- linux from scratch
 
@@ -1098,6 +1104,10 @@
                 assert [ `echo -n 123 | dd status=none bs=1c count=1` = 1 ]
                 assert [ `echo -n 123 | dd status=none bs=1w count=1` = 12 ]
 
+            #The larger the chunck size, the potentially faster file transfers will be.
+
+            #Nowdays, `4M` is a good value for large file transfers.
+
         ##skip
 
             #skip first n input blocks (defined by bs or ibs):
@@ -1124,9 +1134,15 @@
 
         ##applications
 
-            #zero an entire block device (CAUTION!!!!):
+            #Zero an entire block device located at `/dev/sdb` (CAUTION!!!! VERY DANGEROUS!!!!):
 
-                #TODO
+                #sudo dd bs=4M if=/dev/zero of=/dev/sdb
+
+            #As of 2013 with mainstream system specs,
+            #this took around 6 minutes on a 2Gb flahs device (around 5.0 MB/s).
+
+            #If you are really serious about permanently deleting files,
+            #use a program for that with a potentially more advanced algorithm.
 
     ##pagers
 
@@ -1492,24 +1508,6 @@
         #wrap lines, but don't cut words
 
         assert [ `echo "a bcd" | fold -w 2` = $'a\nbcd' ]
-
-    ##hexdump
-
-        #Very similar to od, but not POSIX 7.
-
-        #Uses saner hexacedimal defaults.
-
-        #View bytes in hexadecimal.
-
-            echo -n abc | hexdump -C
-
-        #Options:
-
-        #- -C : see bytes in hexadecimal
-        #- -n32 : only 32 bytes
-        #- -s32 : start at byte 32
-        #- -v: show duplicate lines
-        #- -e '1/1 " %02X"': format string
 
     ##paste
 
@@ -2234,17 +2232,33 @@
 
     ##partitions
 
-        #you can only have 4 primary partitions
+        #There are 2 main types of partitions: MBR or GPT
 
-        #each one can be divided into logical partitions
+        ##MBR
 
-        #primary partitions get numbers from 1 to 4
+            #You can only have 4 primary partitions.
 
-        #logical partitions get numbers starting from 5
+            #Each one can be either divided into logical any number of logical partitions partitions.
 
-        #you should unmount partitions before making change to them!
+            #A primary parition that is split into logical paritions is called an extended partition.
 
-        #to get info on partitions, start/end, filesystem type and flags,
+            #Primary partitions get numbers from 1 to 4.
+
+            #Logical partitions get numbers starting from 5.
+
+            #You can visualise which partition is insde which disk with `sudo lsblk -l`.
+
+            #TODO more common?
+
+        ##GPT
+
+            #Arbitrary ammount of primary partitions.
+
+            #No logical partitions.
+
+        #You should unmount partitions before making change to them.
+
+        #To get info on partitions, start/end, filesystem type and flags,
         #consider: `parted`, `df -f`
 
     ##df
@@ -2292,6 +2306,23 @@
         #Also show partition filesystems type:
 
             df -T
+
+        ##-i
+
+            #Get percentage of inodes free / used:
+
+                df -i
+
+            #Sample output:
+
+                Filesystem       Inodes  IUsed    IFree IUse% Mounted on
+                /dev/sda5      22167552 832797 21334755    4% /
+                /dev/sda2      30541336 189746 30351590    1% /media/win7
+
+            #This is interesting because the number of inodes is a limitation of filesystems
+            #in addition to the ammount of data stored.
+
+            #This limits the ammount of files you can have on a system in case you have lots of small files.
 
     ##lsblk
 
@@ -2446,25 +2477,27 @@
 
     ##fdisk
 
-        #edit partition table. does not create filesystems. for that see: mke2fs
+        #View and edit partition tables.
 
-        #mnemonic: Format disk.
+        #REPL interface.
 
-        #better use gparted for simple operations if you have X11
+        #Does not create filesystems. For that see: `mke2fs` for ext systems..
 
-        #to view/edit partitions with interactive cli prompt interface
+        #Mnemonic: Format disk.
 
-        #does not show labels and where partitions are mounted
+        #Better use gparted for simple operations if you have X11
 
-        #show partition table of hd
+        #To view/edit partitions with interactive cli prompt interface.
+
+        #Show partition table of hd:
 
             sudo fdisk -l /dev/sda
 
-        #view/edit partitions for hd sda:
+        #Does not show labels and where partitions are mounted.
+
+        #View / edit partitions for hd sda:
 
             sudo fdisk /dev/sda
-
-        #a primary parition that is split into logical paritions is called `extended`
 
         #logical partitions are limited to 16 scsi and 53 ide total.
 
@@ -2482,11 +2515,56 @@
         #- <http://osr507doc.sco.com/en/HANDBOOK/hdi_dkinit.html>
         #- <http://en.wikipedia.org/wiki/Track_%28disk_drive%29>
 
+    ##create partitions
+
+        #aka format.
+
+        #Find all commands to make filesystems:
+
+            ls -l /sbin | grep mk
+
+        #Sample output:
+
+            -rwxr-xr-x 1 root root     26712 Feb 18 18:17 mkdosfs
+            -rwxr-xr-x 1 root root     88184 Jan  2  2013 mke2fs
+            -rwxr-xr-x 1 root root      9668 Feb  4 21:49 mkfs
+            -rwxr-xr-x 1 root root     17916 Feb  4 21:49 mkfs.bfs
+            -rwxr-xr-x 1 root root     30300 Feb  4 21:49 mkfs.cramfs
+            lrwxrwxrwx 1 root root         6 Jan  2  2013 mkfs.ext2 -> mke2fs
+            lrwxrwxrwx 1 root root         6 Jan  2  2013 mkfs.ext3 -> mke2fs
+            lrwxrwxrwx 1 root root         6 Jan  2  2013 mkfs.ext4 -> mke2fs
+            lrwxrwxrwx 1 root root         6 Jan  2  2013 mkfs.ext4dev -> mke2fs
+            -rwxr-xr-x 1 root root     26220 Feb  4 21:49 mkfs.minix
+            lrwxrwxrwx 1 root root         7 Feb 18 18:17 mkfs.msdos -> mkdosfs
+            lrwxrwxrwx 1 root root        16 Feb 25 14:54 mkfs.ntfs -> /usr/sbin/mkntfs
+            lrwxrwxrwx 1 root root         7 Feb 18 18:17 mkfs.vfat -> mkdosfs
+            -rwxr-xr-x 1 root root     18000 Mar 12 04:43 mkhomedir_helper
+            -rwxr-xr-x 1 root root     87484 Feb 25 14:54 mkntfs
+            -rwxr-xr-x 1 root root     22152 Feb  4 21:49 mkswap
+
+        #Where:
+
+        #- mkfs.XXX are uniformly named frontends for filesystem creation
+        #- mkfs is a frontend for all filesystem types.
+
     ##mke2fs
 
-        #make ext[234] partitions
+        #Make ext[234] partitions.
 
-        #better use gparted if you have X11
+        #Consider using gparted if you have X11.
+
+        #- -t: type: ext2, ext3, ext4
+        #- -L: label
+        #- -i: inodes per group (power of 2)
+        #- -j: use ext3 journaling. TODO for -t ext3/4, is it created by default?
+
+    ##tune2fs
+
+        #Get and set parameters of ext filesystems.
+
+        #List all parameters:
+
+            sudo tune2fs -l /dev/sda5
 
     ##gparted
 
@@ -3261,34 +3339,33 @@
 
     ##chroot
 
-        #execute single command with new root
+        #Execute single command with new root.
+
+        #The root of a process is a Linux concept: every process descriptor has a root field,
+        #and system calls issued from that process only look from under the root (known as `/` to that process).
 
         ##application
 
-            #you mounted another linux system
+            #You have a partition that contains a linux system,
+            #but for some reason you are unable to run it.
 
-            #you want to try it out from bash, without rebooting
+            #You can use that partition with bash by using chroot into it,
+            #and you might then try to fix it from there.
 
-            sudo chroot /media/other_linux /bin/env -i \
-                    HOME=/root                  \
-                    TERM="$TERM"                \
-                    PS1='\u:\w\$ '              \
-                    PATH=/bin:/usr/bin:/sbin:/usr/sbin \
-                ##1
+            #Example:
 
-                    #- -: regular file
-                    #- d: dir
-                    #- l: symlink (not for hardlink)
-                    #- p: named pipe (fifo)
-                    #- s: unix socket
-                    #- c: character file
-                    #- d: block device file
+                sudo chroot /media/other_linux/
 
-                    /bin/bash --login
+            #More advanced example, if you want to start from a completelly clean bash environment:
 
-            #`/bin/env` and `/bin/bash` must exist relavive to `/media/other_linux`
+                sudo chroot /media/other_linux /bin/env -i \
+                        HOME=/root                  \
+                        TERM="$TERM"                \
+                        PS1='\u:\w\$ '              \
+                        PATH=/bin:/usr/bin:/sbin:/usr/sbin \
+                        /bin/bash --login
 
-            #TODO check this and get asserts working =)
+            #This will in addition clear enviroment variables, and read login scripts found on the chroot.
 
 ##files
 
@@ -3409,6 +3486,7 @@
             #this is good if you want to paste output!
 
     ##cd
+
         #POSIX
 
         #go to dir
@@ -3426,7 +3504,11 @@
 
             cd -
 
-        #only works once
+        #cannot go 2 dirs back: goes back an forth between current and last dir.
+        #The following simply goes to current dir:
+
+            cd -
+            cd -
 
         #-a : (all) show hidden files
         #-h : human readable filesizes
@@ -3700,14 +3782,39 @@
             #but can overwrite if `-f` is given:
 
                 cp -fl a b
+    ##rm
+
+        #Remove files and dirs.
+
+        #-r: recursive. Mandatory for directories. Potentially dangerous.
+
+    ##recover data removed with rm like tools
+
+        #`rm` only removes files from filesystem indexes, but the data remains in place
+        #until the event that another file is writen on it, which may take severl minutes or hours.
+
+        #Even after the file data overwritten few times, it is still possible to recover
+        #the data using expensive forensic methods (only viable for organizations).
+
+        #To permanently remove data from hard disk, you must use a tool like shred,
+        #which writes certain sequences to the hard disk, making it impossible to
+        #recover the data even with forensic methods.
+
+        #Such operations take a very long time, and are not viable on entire hard disks,
+        #so if you serious about clearing a hard disk, mechanical desctruction is a better option
+        #(open the hard disk case and destroy the disk).
 
     ##rename
 
-        rename -n 's/^([0-9]) /0$1 /g' *.mp3
-            #does not make changes to all .mp3 files
+        #Mass file regex renaming.
 
-        rename 's/^([0-9]) /0$1 /g' *.mp3
-            #makes changes
+        #Dry run:
+
+            rename -n 's/^([0-9]) /0$1 /g' *.mp3
+
+        #Act:
+
+            rename 's/^([0-9]) /0$1 /g' *.mp3
 
     ##cpio
 

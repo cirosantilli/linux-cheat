@@ -14,7 +14,7 @@ b: OK
 
 checks checksums on current dir
 
-# application
+#application
 
 have I downloaded the right file?
 

@@ -9,7 +9,7 @@ The performance parameters are:
 - ability to break into chunks
 - keep file metadata such as permissions, hidden (windows), etc.
 
-# zip
+#zip
 
 most widely supported format
 
@@ -48,7 +48,7 @@ to a dir
     for F in *; do echo "$F"; echo "$F".zip; zip "$F".zip "$F"; done
 zip every file in cur dir to file.zip
 
-# tar tar.gz tgz tar.bz2 tb2
+#tar tar.gz tgz tar.bz2 tb2
 
 tar only turns dir into file, but no compression
 
@@ -83,7 +83,7 @@ extract:
 
 f: from file given as next arg, not stdin
 
-# rar
+#rar
 
 Proprietary Roshal ARchive.
 
@@ -138,7 +138,7 @@ sample output:
     f1
     f2
 
-# 7zip
+#7zip
 
 Microsoft proprietary program.
 
@@ -152,6 +152,6 @@ But *use only for 7z*, which it was made for.
 
 With 7zip, you can open .exe files to extract their inner data.
 
-# File roller
+#File roller
 
 Very good gui app to view inside archives and extrac them.

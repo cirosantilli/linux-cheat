@@ -1,4 +1,4 @@
-# concept
+#concept
 
 says which users can do what with each file
 
@@ -24,11 +24,11 @@ applies to all people who are in that group.
 - sgid
 - suid
 
-# notations
+#notations
 
 two standard types, symbolic and numeric.
 
-## numeric
+##numeric
 
 12 bits, logically grouped into 4 groups of three
 thus use of octal (3 bits per digit)
@@ -48,7 +48,7 @@ meanings:
 - 0002:       write
 - 0001:       exec
 
-## symbolic
+##symbolic
 
 sample
 
@@ -56,7 +56,7 @@ sample
     ^^^^^^^^^^
     123456789A
 
-### 1
+###1
 
 - -: regular file
 - d: dir
@@ -66,27 +66,27 @@ sample
 - c: character file
 - d: block device file
 
-### 2
+###2
 
 - r: owner can read
 - -: owner cannot read
 
-### 3
+###3
 
 - w: owner can write
 - -: owner cannot write
 
-### 4:
+###4:
 
 - x: owner can    execute. suid off
 - s:       can           .      on
 - S:       cannot        . suid on
 
-### 567
+###567
 
 same as 234, with 7 as 4 but for sgid
 
-### 89
+###89
 
 same as 23 and 56, but for others
 
@@ -95,9 +95,9 @@ A:
 same as 4 and 7, but replace `suid` by `sticky bit`,
 `s` by `t` and `S` by `T`.
 
-# directories
+#directories
 
-## read
+##read
 
 you can view the files it contain
 
@@ -111,21 +111,26 @@ only works if you have read permission to *all* of the parent directories!
 
     su b
     ls d
-        #  permission denied
+        #permission denied
+        #permission denied
     assert [ ! "$?" = 0 ]
 
     cat d/b
-        #  permission denied,
-        #  even if b owns the file!
+        #permission denied,
+        #permission denied,
+        #even if b owns the file!
+        #even if b owns the file!
     assert [ ! "$?" = 0 ]
 
     ls d/b
-        #  permission denied,
-        #  even if b owns the directory!
+        #permission denied,
+        #permission denied,
+        #even if b owns the directory!
+        #even if b owns the directory!
 
     assert [ ! "$?" = 0 ]
 
-## write
+##write
 
 you can change the list of contents in the dir:
 add, remove and rename
@@ -138,11 +143,11 @@ works even if `r` is off.
     mkdir -m 444 r
     mkdir r/d
     touch r/f
-        # permission denied
+        #permission denied
     touch r/d/f
-        # permission denied
+        #permission denied
 
-## execute
+##execute
 
 programs can cd into dir (every process has current dir informatio associated to it)
 
@@ -154,7 +159,7 @@ all of that can be done *even if `r` is off*!
 
 all only works if you have execute permissions to all of the parent dirs!
 
-## sticky bit
+##sticky bit
 
 if users cannot delete/move files in dir that don't belong to them
 
@@ -168,17 +173,19 @@ they can however create files.
 
     rm a/a
     mv a/a a/b
-        #  permission denied
+        #permission denied
+        #permission denied
 
     echo a > a/a
     cat a/a
-        #  ok
+        #ok
+        #ok
 
     chmod a-t a
     rm a/a
         #removed
 
-## sgid
+##sgid
 
 files created under sgid dir get the same group as the parent dir.
 
@@ -227,7 +234,7 @@ inherits the group of parent dir!
 g
 subdirs also get sgid!
 
-### application
+###application
 
 you want many users to colaborate under a single dir.
 
@@ -241,13 +248,13 @@ you:
 this way, only the group can work under the dir,
 and they all can access each other's files
 
-## files
+##files
 
-### suid and sgid
+###suid and sgid
 
-DOES NOT WORK PROPERLY ON SCRIPTS: YOU MUST HAVE AN EXECUTABLE!!!!
+Does not work properly on scripts: you *must* have an executable:
 
-    echo '# include <unistd.h>
+    echo '#include <unistd.h>
 
     int main(int argc, char** argv)
     {
@@ -262,13 +269,13 @@ DOES NOT WORK PROPERLY ON SCRIPTS: YOU MUST HAVE AN EXECUTABLE!!!!
     chmod 777 a.out
     chmod u-s a.out
     ./a.out
-        # your uid and gid twice
+        #your uid and gid twice
 
     sudo -u b ./a.out
-        # b's uid and gid twice
+        #b's uid and gid twice
 
     chmod u+s ./a.out
-        # same, except the effective id is b's, not yours!
+        #same, except the effective id is b's, not yours!
 
     chmod g+s ./a.out
-        # now effective group is also b's!
+        #now effective group is also b's!

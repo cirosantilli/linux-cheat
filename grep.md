@@ -1,5 +1,3 @@
-### grep
-
 posix 7
 
 select lines from stdin or files
@@ -15,7 +13,16 @@ Output:
 
     a
 
-#### i
+#pattern
+
+grep can use POSIX BRE and POSIX ERE
+
+don't forget: BRE is deprecated
+
+perl regexp is not specified in POSIX
+
+#-i
+
 case insensitive:
 
     echo $'A\nB' | grep -i a
@@ -24,15 +31,7 @@ Output:
 
     A
 
-#### pattern
-
-grep can use POSIX BRE and POSIX ERE
-
-don't forget: BRE is deprecated
-
-perl regexp is non POSIX
-
-##### E
+##-E
 
 Find with ERE:
 
@@ -40,7 +39,7 @@ Find with ERE:
 
 Much saner and more powerful than BREs.
 
-##### F
+##-F
 
 Fixed, that is, literal non BRE search:
 
@@ -50,7 +49,7 @@ Output:
 
     *
 
-#### -v
+#-v
 
 invert. print lines that don't match.
 
@@ -60,7 +59,7 @@ Output:
 
     cd
 
-##### application
+##application
 
 remove line from file
 
@@ -70,20 +69,20 @@ remove line from file
     grep -v "$l" "$f" > "$tmp"
     mv "$tmp" "$f"
 
-#### exit status
+#exit status
 
 0 if at least one match, 1 otherwise.
 
     echo a | grep -q b && assert false
     echo a | grep -q a || assert false
 
-#### -q
+#-q
 
 quiet, suppress stdout
 
 useful if you only want the exit status
 
-##### application
+##application
 
 append line to file
 if it is not there already
@@ -95,7 +94,7 @@ if it is not there already
 very useful for files that have unordered
 sets of things separated by newlines
 
-#### -c
+#-c
 
 count how many lines match
 
@@ -105,7 +104,7 @@ Output:
 
     2
 
-#### -e
+#-e
 
 -e: multiple criteria ORed. Mnemonic: Either.
 
@@ -117,13 +116,13 @@ all patters are ERE:
 
     echo $'a\nb' | grep -E -e 'a' -e 'b'
 
-#### -n
+#-n
 
 show matching line Numbers
 
-#### gnu extensions
+#gnu extensions
 
-##### -r
+##-r
 
 Recurse, print filenames before batches.
 
@@ -134,19 +133,19 @@ No more `find . -type f | xargs` !!
 
     grep -r 'a'
 
-##### -A
+##-A
 
 also print n lines following the match
 
     assert [ "`echo $'a\nb' | grep -A1 a`" = $'a\nb' ]
 
-###### application
+###application
 
 get the nth line after matching line:
 
     assert [ "`echo $'a\nb' | grep -A1 a | tail -n1`" = $'b' ]
 
-##### -B
+##-B
 
 Before. Contrary of `-A`.
 

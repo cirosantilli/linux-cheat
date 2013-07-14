@@ -2,7 +2,7 @@ aka: Portable Operating System Interface for uniX.
 
 aka: Single Unix specification (SUS)
 
-# sources
+#sources
 
 - Matthew; Stones - Beginning Linux Programming <http://www.amazon.com/Beginning-Linux-Programming-Neil-Matthew/dp/0470147628>
 
@@ -10,7 +10,7 @@ aka: Single Unix specification (SUS)
 
     very interesting examples and topics
 
-# intro
+#intro
 
 an operating system standardization by both IEEE and `the open group`
 (merger of the `Open software foundation` with `X/Open`)
@@ -27,7 +27,7 @@ highly recommended link: http://pubs.opengroup.org/onlinepubs/9699919799/
 
 Single UNIX Specification, Version 4: http://www.unix.org/version4/
 
-# the open group
+#the open group
 
 major open group supporters whose major supporters include:
 
@@ -36,15 +36,15 @@ US Department of Defense, NASA
 
 therefore some of the top users/creators of software
 
-# examples of what posix specifies
+#examples of what posix specifies
 
-## shell command language
+##shell command language
 
 a shell language including almost all the basic `bash` syntax.
 
 `bash` is copmliant with extensions
 
-## shell utilities
+##shell utilities
 
 utilities that should be available to the shell
 such as programs in path or shell builtins
@@ -58,7 +58,7 @@ examples:
 
 and tons of others which most people never heard of
 
-## system interface
+##system interface
 
 standard c interfaces to the system
 
@@ -78,7 +78,7 @@ however many of the linux system calls rassemble those
 closely because of the complience, so when you learn the POSIX interface
 you are already learning the Linux interface too
 
-## directory structure
+##directory structure
 
 very small, contains:
 
@@ -86,7 +86,7 @@ very small, contains:
 - `/tmp`
 - `/dev/null`
 
-## envinronment variables
+##envinronment variables
 
 posix defines some standard enviroment variables which every system should have
 
@@ -107,7 +107,7 @@ default program variables:
 - `EDITOR`
 - `PAGER`
 
-## regexp
+##regexp
 
     man 7 regex
 
@@ -121,7 +121,7 @@ basic is deprecated, so don't use it
 it is useful to learn since many posix compliant shell utilities may use
 them but not perl regexes, for example `grep` or `sed`.
 
-### examples
+###examples
 
     echo $'a\nb'    | grep -E '(a|b)'
     echo $'a\nb'    | grep -E 'a*'
@@ -134,7 +134,7 @@ them but not perl regexes, for example `grep` or `sed`.
     echo $'a\nb'    | grep -E '[[:alpha:]]'
     echo $'a\nA'    | grep -E '[[:upper:][:lower:]]'`" = $'a\nA' ]
 
-### predefined character classes
+###predefined character classes
 
 is the main difference between those and perl (except for very magic perl regex options)
 
@@ -151,7 +151,7 @@ full list:
 
 in perl these are backlash escaped chars, much shorter to write...
 
-## utility command line interface
+##utility command line interface
 
 suggests the following format for documenting clis:
 
@@ -174,6 +174,6 @@ a few of the most interesting suggests for argument and utility name syntax:
 - `-` means stdin/stdout when the utility expects a filename as argument
 - `-W` is reserved for vendor options
 
-# TODO
+#TODO
 
 - understand difference between the two: http://unix.stackexchange.com/questions/14368/difference-between-posix-single-unix-specification-and-open-group-base-specifi

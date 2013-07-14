@@ -61,10 +61,11 @@
 
 		#`-F: '/pattern/'`: set field separator for `-a`
 
-		#must be used with <#-a>
+		#must be used with `-a`
 
 		#change
-		assert[ "`echo $'a:b:c' | perl -naF':' -e 'print $F[0]. " " . $F[1] . " " . $F[2]'`" = "a b c"]
+
+            assert[ "`echo $'a:b:c' | perl -naF':' -e 'print $F[0]. " " . $F[1] . " " . $F[2]'`" = "a b c"]
 
 	##-0
 
@@ -110,13 +111,13 @@
 
     #Find files with matching names and print only new modified lines to stdout:
 
-        find . -iname `.tex` | perl -lane 'print if s/a/A/g'
+        find . -iname "*.tex" | xargs perl -lane 'print if s/a/A/g'
 
     #Useful before you do mass refactoring
 
     #Make the modifications on files with matching names, print nothing to stdout
 
-        find . -iname `.tex` | xargs perl -lapi -e 's/a/A/g'
+        find . -iname "*.tex" | xargs perl -lapi -e 's/a/A/g'
 
     #Useful to do mass regex refactoring.
     #*Very dangerous*, so make a backup of the current direcotyr before proceeding!
@@ -125,11 +126,13 @@
 
         echo $'a\nb\nc\nb' | perl -lane '$o = $_; if (s/b/B/g) { print $. . "  " . $o . "\n" . $. . "  " . $_ . "\n" }'
 
-	perl -0777 -lape 's/\n\n+/\n/\ng' F
-		#not linewise
+    #Not linewise
 
-	perl -ne 'print $., "  ", $_' F
-		#print file with line numbers, tab separated by 2 spaces from text
+        perl -0777 -lape 's/\n\n+/\n/\ng' F
+
+    #print file with line numbers, tab separated by 2 spaces from text:
+
+        perl -ne 'print $., "  ", $_' F
 
 	echo $'a\nb\nc\nda\nb\nc' | perl -ne 'print if /a/ .. /c/'
 		#$'a\nb\nc\na\nb\nc'

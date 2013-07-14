@@ -1,6 +1,6 @@
 points to a target path
 
-# create
+#create
 
 use `ln -s` (posix 7):
 
@@ -19,7 +19,7 @@ if a program tries to open them, it gets a permission error:
     mv a c
     if cat b; then exit 1; fi
 
-# check if path is symlink
+#check if path is symlink
 
 symlinks are identified by system metadata.
 programs can tell if a file is a symlink or not:
@@ -28,7 +28,7 @@ programs can tell if a file is a symlink or not:
     ln -s a b
     [ -L b ] || exit 1
 
-# get path to which symlink points to
+#get path to which symlink points to
 
 use `readlink`:
 
@@ -36,7 +36,7 @@ use `readlink`:
     ln -s a b
     [ `readlink b` = a ] || exit 1
 
-# relative vs absolute
+#relative vs absolute
 
 symlinks can contain either relative paths or absolute paths
 
@@ -44,7 +44,7 @@ symlinks can contain either relative paths or absolute paths
     mkdir d
     ln -s a d/a
 
-# what programs do when they see a symlink is up to them to decide
+#what programs do when they see a symlink is up to them to decide
 
 file content changes always affect the target of the link:
 
@@ -72,7 +72,7 @@ it is therefore possible to make hardlinks of symlinks:
     ln b c
     [ `readlink c` = a ] || exit 1
 
-# permissions
+#permissions
 
 symlinks always show 777 permission,
 but this permission means nothing:

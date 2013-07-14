@@ -3,7 +3,7 @@ ftp is:
 - tcp/ip file transfer protocol
 - a command line utility with the same name which implemets the client for that protocol
 
-# hosts
+#hosts
 
 to have some real fun, try commands on a real host
 
@@ -11,7 +11,7 @@ most free apache/php web hosts offer ftp mainly for users to uplod their sites:
 
 just find the one with the most space and uptime. htis is a list of good ones
 
-## freehostingnoads
+##freehostingnoads
 
 <http://freehostingnoads.net/>
 
@@ -34,7 +34,7 @@ good free hosts:
 
 urls of form: <http://cirosantilli.t15.org/>
 
-# commands
+#commands
 
 the `ftp` utility only contains very low level commands in bijection
 to the protocol
@@ -121,14 +121,14 @@ cannot do multiple commands per line:
 
     #ls; ls
 
-## recusive
+##recusive
 
 it seems that it is not possible to do recursive directory operations
 like download, remove or upload on non empty directories with a single command:
 http://stackoverflow.com/questions/10749517/ftp-delete-non-empty-directory
 lftp is a possible solution
 
-# lftp
+#lftp
 
 implements more convenient high level command line interface
 

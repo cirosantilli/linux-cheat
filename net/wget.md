@@ -57,7 +57,7 @@ use this for recursive site download only, and the more advanced curl for other 
 
 - -N : timestamping. only down if newer than already downloaded
 
-# combos
+#combos
 
 make local version of site
 

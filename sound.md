@@ -1,8 +1,8 @@
 sound and music players, editors and generators
 
-# players
+#players
 
-## cplay
+##cplay
 
 cli
 
@@ -10,9 +10,9 @@ has a file browser
 
     cplay
 
-# manipulation
+#manipulation
 
-## lame
+##lame
 
 encode, decode and modify mp3
 
@@ -20,7 +20,7 @@ increases volume 5x:
 
     lame --scale 5 a.mp3
 
-## id3tool
+##id3tool
 
 get id3 tags info (for mp3 for example)
 
@@ -32,19 +32,19 @@ get id3 tags info (for mp3 for example)
 
     install -D "$1" /music/mp3/"$ARTIST-$ALBUM-$YEAR"/"$TRACKNUM-$ARTIST-$TITLE".mp3
 
-## cut up flac cue into multiple files
+##cut up flac cue into multiple files
 
-### flacon
+###flacon
 
 has gui
 
-### shntool
+###shntool
 
 single ape and cue in dir, flac output, formatted as number, author, track
 
     shntool split -f *.cue -o flac *.ape -t '%n - %p - %t'
 
-## sox
+##sox
 
 record, play and modify files cli
 
@@ -64,9 +64,9 @@ plays `a.wav` file:
 
 terminates when over
 
-# system parameters
+#system parameters
 
-## alsamixer
+##alsamixer
 
 ncurses interface to view/control sound parameters
 
@@ -77,7 +77,7 @@ commands:
 - left/right : change active parameter
 - up/down    : change active parameter value
 
-## amixer
+##amixer
 
 cli for sound control
 
@@ -89,11 +89,11 @@ set master volume to 50%:
 
     amixer sset 'Master' 50%
 
-# rip
+#rip
 
-## abcde
+##abcde
 
-### cli
+###cli
 
 rip:
 

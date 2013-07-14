@@ -9,7 +9,7 @@ POSIX 7, however breaks almost all of of posix and gnu command line interface st
 
 Consider `locate` if you are going to look in the entire file system.
 
-# general syntax
+#general syntax
 
 There are 3 parts to a find:
 
@@ -47,11 +47,11 @@ Therefore, the minimal find command is:
 
 which finds all files and directories under the current dir
 
-# criteria
+#criteria
 
 Say *what* find should find
 
-## name
+##name
 
 Match **entire** basenames posix RE:
 
@@ -65,11 +65,11 @@ It is a posix RE:
 
 therefore the previous finds both `mp3` and `mp4` files (and `mp5` if that exists):
 
-## iname
+##iname
 
 Same as -name but case insensitive:
 
-## path
+##path
 
 Looks at *entire* file path posix RE
 
@@ -89,7 +89,7 @@ also consider [prune][] for this.
 
 finds anything under ./.vim folder. same as find ./vim
 
-## type
+##type
 
     find . -type f
 
@@ -99,7 +99,7 @@ files only
 
 directories only
 
-## perm
+##perm
 
 Find by permissions.
 
@@ -116,13 +116,13 @@ Either match:
 
 finds files that are readable by either u, g or o.
 
-### applications
+###applications
 
 Give `g+x` to all files that have `u+x`:
 
     find . -type f -perm +100 | xargs chmod g+x
 
-## prune
+##prune
 
 do not search into directories that match what comes before prune.
 
@@ -144,7 +144,7 @@ finds all files that are neither hidden themselves, nor are a child of a hidden 
 
 prunes with multiple criteria
 
-## depth
+##depth
 
 entries of the directory are acted upon before the directory
 
@@ -155,17 +155,17 @@ in which case you must first rename the files and later the directory
 
 this nullifies `prune`
 
-## xdev
+##xdev
 
 Do not go into other devices:
 
     find . -xdev file1
 
-# multiple criteria
+#multiple criteria
 
 you can combine criteria with boolean operations to make your search finer
 
-## and
+##and
 
 `-a` all conditions must be satisfied
 
@@ -179,13 +179,13 @@ same as above with explicit and:
 
     find . -type f -a -iname '*.pdf'
 
-## not
+##not
 
 find all paths which are not files:
 
     find . ! -type f
 
-## or
+##or
 
 paths with either pdf or djvu extension
 
@@ -226,7 +226,7 @@ which is the same as the original:
 
     find . -type f -iname '*.pdf' -o -iname '*.djvu'
 
-## parenthesis
+##parenthesis
 
 you can change logical operation precedence with parenthesis.
 
@@ -236,7 +236,7 @@ do not forget to escape your parenthesis!
 
 either files with extension pdf of paths (includes dirs) with extension djvu. Parenthesis are used to change precendence order.
 
-# actions
+#actions
 
 You can do things with the files you find.
 
@@ -244,13 +244,13 @@ The default action is to print found files to stdout.
 
 Find also offers a few other actions
 
-## delete
+##delete
 
 Deletes matching files.
 
     find . -iname '*.tmp' -delete
 
-## exec
+##exec
 
 Executes shell command on each found file.
 
@@ -290,7 +290,7 @@ if you want to do stuff like that, a better solution is:
 
 this is a *much* more flexible way of doing lots of operations in bash I could find
 
-# combos
+#combos
 
 remove all `Thubs.db` files (aka good bye Windows Media Player):
 
@@ -310,11 +310,11 @@ With GNU you get the better:
 
 which avoids calling rmdir on non empty directories.
 
-# gnu extensions
+#gnu extensions
 
-## criteria gnu extensions
+##criteria gnu extensions
 
-### mindepth
+###mindepth
 
 Same as find but no `.`:
 
@@ -324,7 +324,7 @@ Same as find but no `.`:
 
     find . ! -path .
 
-### maxdepth
+###maxdepth
 
 find in current dir only:
 
@@ -336,7 +336,7 @@ find in current dir and direct children dirs
 
 find in current and direct sons only
 
-### samefile
+###samefile
 
 Find all content duplicates of `file1`:
 
@@ -344,7 +344,7 @@ Find all content duplicates of `file1`:
 
 Usese hash comparison.
 
-### regex
+###regex
 
 Find regexes.
 
@@ -362,15 +362,19 @@ Finds paths under `/home`, that end in .txt:
 
     find . -regex '^/home/.*\.txt$'
 
-### empty
+###iregex
+
+Regex case insensitive.
+
+###empty
 
 Find empty files and directories:
 
     find . -empty
 
-## action gnu extensions
+##action gnu extensions
 
-### print0
+###print0
 
 Prints outputs ended in null character instead of newline.
 
@@ -389,7 +393,7 @@ Example:
 POSIX 7 mentions that this is included in several implementations,
 but was not adopted since it requires every utility that takes it as input to add a new `-0` option.
 
-### printf
+###printf
 
 Print formated data about files found. Format:
 

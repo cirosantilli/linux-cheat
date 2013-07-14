@@ -4,7 +4,7 @@ possibilities:
 
 *horc*: format that contains orc + info about page position and certainty
 
-# add text layer to pdfs
+#add text layer to pdfs
 
 *orc indexing*: tranform pdf textonly to searchable pdf
 
@@ -19,9 +19,9 @@ some good options are:
     convert -density 300 -monochrome -normalize a.pdf a.png
     convert -depth 1 -density 300 -normalize a.pdf a.png
 
-# tesseract
+#tesseract
 
-## chinese hack
+##chinese hack
 
 tesseract looks for zho instead of chi_sim
 there is probably a better way to do this in the tesseract configs, but apparently not directly from vobsub2srt
@@ -31,13 +31,13 @@ there is probably a better way to do this in the tesseract configs, but apparent
 
 -psm 1 : detects pages *and* script automatically. most magic mode.
 
-# cuneiform
+#cuneiform
 
     cuneiform -l eng -f text -o "$f.txt" "$f.png"
 
 -f: html, hocr
 -l: lang, see man cuneirform
 
-# hocr2pdf from the ExactImage package.
+#hocr2pdf from the ExactImage package.
 
     hocr2pdf -i "$f.png" -s -o "$f.pdf" < "$f.hocr"

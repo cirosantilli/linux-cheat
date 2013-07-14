@@ -1,4 +1,5 @@
-# binutils
+#binutils
+#binutils
 
 Gnu set of utilities to compile and view and modify compiled code.
 
@@ -6,7 +7,7 @@ Official site: <http://sourceware.org/binutils/>.
 
 As stated there, the two main utilities are `ld`, the gnu liner, and `as` the gnu assembler.
 
-## ar
+##ar
 
 Create `.a` archives from `.o` files:
 
@@ -14,13 +15,13 @@ Create `.a` archives from `.o` files:
 
 TODO this is deprecated in POSIX 7, why?
 
-## nm
+##nm
 
 Get symbol table for object files:
 
     nm a.o
 
-## readelf
+##readelf
 
 Get information stored inside executable files in a human readable way.
 
@@ -36,18 +37,18 @@ TODO ?:
 
     readelf --relocs a.o
 
-## elfedit
+##elfedit
 
 TODO
 
-## objdump
+##objdump
 
 See memory structure of executable:
 
     objdump --disassemble a.o
     objdump -h a.o
 
-## size
+##size
 
 Shows size of each memory part of a executable:
 
@@ -59,7 +60,7 @@ Shows size of each memory part of a executable:
 - data : init and uinit data
 - dec and hex : size of executable in dec and hex
 
-# strace
+#strace
 
 List system calls made by executable.
 

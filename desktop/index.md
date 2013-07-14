@@ -268,7 +268,7 @@ TODO
 
     wmctrl -m
 
-## keyboard and mouse automation
+##keyboard and mouse automation
 
 autokey: high level, gui interface x11 automation
 
@@ -872,7 +872,7 @@ Very nice demo of lots of 2.0 features with easy to see source code side by side
 
     gtk-demo
 
-## TODO how to find if an application uses gtk and which version
+##TODO how to find if an application uses gtk and which version
 
 It is not generally possible to do so.
 

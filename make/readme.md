@@ -16,7 +16,7 @@ it because it is yet a nother scripting language
 
 make is specified by posix and implemented by GNU with extensions
 
-# sources
+#sources
 
 - <http://www.jfranken.de/homepages/johannes/vortraege/make_inhalt.en.html>
 
@@ -24,7 +24,7 @@ make is specified by posix and implemented by GNU with extensions
 
 - <http://www-cip.physik.uni-bonn.de/pool/infos/make/advanced.html>
 
-# makefile vs Makefile
+#makefile vs Makefile
 
 - <http://stackoverflow.com/questions/12669367/should-i-name-makefile-or-makefile>
 

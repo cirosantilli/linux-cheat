@@ -8,7 +8,7 @@ one of the major techniques to speeding up is to find what is the slowest part o
 program (the bottle neck) and working on it, since most programs spend much of their
 running time on a single part.
 
-# time
+#time
 
 there are two utilities called time:
 
@@ -35,7 +35,7 @@ time without path is the bash built-in
 
 does memory iom etc profiles besides time profiles
 
-# gprof
+#gprof
 
 part of `binutils` package
 

@@ -16,7 +16,7 @@ assembly interface
 
 it is also possible to call them from c code via certain macros
 
-# sources
+#sources
 
 - <http://syscalls.kernelgrok.com/>
 
@@ -32,7 +32,7 @@ it is also possible to call them from c code via certain macros
 
     contains actual binary values of constants so you can make he calls from assembler
 
-# linux
+#linux
 
 300+ total, many deprecated, some not implemented
 
@@ -53,7 +53,7 @@ to make any of the system calls, one must use the instruction `int $0x80`
 
 `%ebx`, `%ecx`, `%edx`, `%esx`, `%edi` are the params
 
-## get info on linux system calls
+##get info on linux system calls
 
 the entire section 2 of `man` is about system calls. You should check:
 
@@ -69,17 +69,17 @@ to get info on specific system calls do:
 
     man 2 write
 
-## examples of linux calls
+##examples of linux calls
 
 this section shows system calls and what they do
 
 required concepts needed to understand the sytem calls are also discussed here
 
-### reboot
+###reboot
 
 reboots or enables/disables ctrl+alt+del reboot
 
-### file descriptors
+###file descriptors
 
 file descriptors contain know the position you are in the stream
 
@@ -100,7 +100,7 @@ elated system calls are:
 - return error code if error
 - increase position of fd
 
-#### lseek
+####lseek
 
 reposition read/write
 
@@ -111,7 +111,7 @@ cannot be done on pipes or sockets
 - dup3
 - fcntl
 
-### files and dirs
+###files and dirs
 
 - getcwdprocesses have working info associated
 - chdir
@@ -131,71 +131,71 @@ cannot be done on pipes or sockets
 - fhownby file descriptor
 - lchownno sym links
 
-### sethostnameprocess have associated hostname info
+###sethostnameprocess have associated hostname info
 
-### time
+###time
 
-#### timesince January 1, 1970
-#### stimeset system time
-#### timesprocess and waitee for time
-#### nanosleep
-#### utimechange access and modification time of files
+####timesince January 1, 1970
+####stimeset system time
+####timesprocess and waitee for time
+####nanosleep
+####utimechange access and modification time of files
 
-### threads
+###threads
 
-#### capget
-#### capset
-#### set_thread_area
-#### get_thread_area
-#### clone
+####capget
+####capset
+####set_thread_area
+####get_thread_area
+####clone
 
 creates thread: a process that can share open file descriptors and
 memory
 
-### process
+###process
 
-#### exit
-#### fork
+####exit
+####fork
 
 creates process that is exact copy of current
 
 open file descriptors TODO
 
-#### execve
+####execve
 
 run process. does not return on sucess: old program ends
 
 common combo: fork before, then execve
 
-#### kill
-#### waitpid
-#### wait4
-#### waitid
-#### set_thread_area
-#### priority
+####kill
+####waitpid
+####wait4
+####waitid
+####set_thread_area
+####priority
 
 process have a priority number from -20 to 19
 
 lower number means higher priority
 
-##### nice
-##### getpriority
-##### setpriority
+#####nice
+#####getpriority
+#####setpriority
 
-#### ptraceTODO ?
+####ptraceTODO ?
 
-#### ids
+####ids
 
 every process has the following associated information:
 
-##### real and effective useriddefaults to user who executed process
-##### real and effective groupiddefaults to main group of user who executed process
-##### supplementary group ids
-##### parent id and parent groupdefaults to TODO effective or real of parent?
+#####real and effective useriddefaults to user who executed process
+#####real and effective groupiddefaults to main group of user who executed process
+#####supplementary group ids
+#####parent id and parent groupdefaults to TODO effective or real of parent?
 
 it is possible to change those values at runtime
 
-##### getuid, setuid, geteuid, seteuid, setresuid, getresuid
+#####getuid, setuid, geteuid, seteuid, setresuid, getresuid
 
 get set
 
@@ -205,39 +205,39 @@ e = effective
 
 res = real, effective and save all at once
 
-##### getgroups setgroups
+#####getgroups setgroups
 
 set suplementary group ids
 
-##### parent process
+#####parent process
 
 every process has information about its parent's id
 
-###### getppidprocess parent id
-###### getpgidprocess group id
+######getppidprocess parent id
+######getpgidprocess group id
 
-### data segment size
+###data segment size
 
-#### brkset
-#### sbrkincrement. called if heap is not large enough on `malloc`
+####brkset
+####sbrkincrement. called if heap is not large enough on `malloc`
 
-### mount
-### umount
+###mount
+###umount
 
-### ipc
+###ipc
 
-#### signals
+####signals
 
-##### signal
-##### sigactionhandler gets more info than with signal
-##### sys_pausewait for signal
-##### alarmsend alarm signal in n secs
+#####signal
+#####sigactionhandler gets more info than with signal
+#####sys_pausewait for signal
+#####alarmsend alarm signal in n secs
 
-#### futex
+####futex
 
 basis for semaphores and posix pthread mutexes
 
-##### semaphores
+#####semaphores
 
 shared integer resources that can be possessed and freed
 indicating that other process may proceed
@@ -249,43 +249,43 @@ in general each semaphore can have multiple values
 
 binary semaphore = a mutex
 
-###### semget
-###### semop
-###### semtimedop
-###### semctl
+######semget
+######semop
+######semtimedop
+######semctl
 
-#### pipecreate pipe
-#### pipe2pipe with flags
+####pipecreate pipe
+####pipe2pipe with flags
 
-#### flockadvisory
+####flockadvisory
 
 file lock
 
-#### sockets
+####sockets
 
 main difference: can connect different computers!
 
-##### accept
-##### bind
-##### socket
-##### socketcall
-##### socketpair
-##### listen
+#####accept
+#####bind
+#####socket
+#####socketcall
+#####socketpair
+#####listen
 
-#### shared memory
-
-TODO
-
-#### memory queues
+####shared memory
 
 TODO
 
-### memory
+####memory queues
 
-#### cacheflush
+TODO
+
+###memory
+
+####cacheflush
 
 flush instruction or data cache contents
 
-#### getpagesize
+####getpagesize
 
 get memory page size

@@ -1,15 +1,16 @@
-# console
+#console
+#console
 
 nethack dungeon rpg
 
-## fortune
+##fortune
 
 tells you fortune to stdout!
 
     fortune
     fortune
 
-## cowsay
+##cowsay
 
 an ascii art cow echoes stdin
 
@@ -21,19 +22,19 @@ combo with fortune:
     fortune | cowsay
     fortune | cowsay
 
-## moon-buggy
+##moon-buggy
 
 simple, jump over obstacles
 
     moon-buggy
 
-## robotfindskitten
+##robotfindskitten
 
 cute!
 
     robotfindskitten
 
-## bsdgames
+##bsdgames
 
 lots of console games/cute apps
 
@@ -43,23 +44,23 @@ get a list of games:
 
     afsh bsdgames | grep /usr/games/
 
-### battlestar
+###battlestar
 
 MUD
 
-### backgammon
+###backgammon
 
-### number
+###number
 
 convert number in numerals to number in english
 
     assert [ `echo 1 | number` = "one." ]
 
-### pom
+###pom
 
 displays the phase of the moon
 
-### primes
+###primes
 
 print primes between 1 to 100:
 
@@ -69,7 +70,7 @@ count primes:
 
     primes 1 100 | wc -l
 
-### robots
+###robots
 
 simple, fun, a bit too much luck
 
@@ -79,7 +80,7 @@ play:
 play with better settings:
     alias robots="robots -ta`for i in {1..10000}; do echo -n n; done`"
 
-### atc
+###atc
 
 nice timing memory
 
@@ -97,27 +98,27 @@ play a scenario:
 
 cannot pause...
 
-### hack
+###hack
 
 nethack predecessor
 
     hack
 
-### hunt
+###hunt
 
 multiplayer shooter
 
 looks *very* promissing, but multiplayer only...
 
-# netreck
+#netreck
 
 2d spaceship battle multiplayer classic
 
-# urban terror
+#urban terror
 
 counter strike clone. best fps game on linux
 
-# golly
+#golly
 
 conways game of life simulator
 
@@ -129,13 +130,13 @@ minesweeper clone
 
     gnomine
 
-# gnotski
+#gnotski
 
 knotski clone
 
     gnotski
 
-# urban terror
+#urban terror
 
 my favorite linux free fps so far
 
@@ -145,15 +146,15 @@ good inertia, not too fast.
 
 free but closed source
 
-# world of padman
+#world of padman
 
 fps, very large scenarios, cool weaponsmoves
 
 but too fast for my taste.
 
-# snes
+#snes
 
-## zsnes
+##zsnes
 
 features:
 
@@ -161,9 +162,9 @@ features:
 - states
 - good rom support
 
-# nintendo 64
+#nintendo 64
 
-## mupen64plus
+##mupen64plus
 
 mupen64plus features:
 
@@ -181,11 +182,11 @@ fullscreen:
     alias mupen="mupen64plus --fullscreen"
     mupen rom.v64
 
-# ps1
+#ps1
 
-## pcsxr
+##pcsxr
 
-# dosbox
+#dosbox
 
 some good games there
 
@@ -195,7 +196,7 @@ some good games there
 
 there are also `.bat` and `.com` executables
 
-## inside the emulator
+##inside the emulator
 
     mount c /home/$USER/dos
     c:
@@ -204,7 +205,7 @@ there are also `.bat` and `.com` executables
     cd game
     game.exe
 
-## avoid mouting every time
+##avoid mouting every time
 
 put under the `[autoexec]` section:
 

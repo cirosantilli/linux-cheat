@@ -218,12 +218,22 @@ The first device is `sda`, the second `sdb`, and so on.
 
 Also, partitions inside those devices have device files for them too.
 
-The first main partion inside `sda` will be called `sda1`,
+The first primary partion inside `sda` will be called `sda1`,
 the second main partition `sda2`, and so on.
 
 Logical partitions are numbered from `sda5` onwards.
 
-TODO examples of what you can do with those device files. A `dd` example should be here.
+*Warning*: usage of block devices can be very dangerous and lead to data loss!
+
+Example: copy a block device on `/dev/sda/` to the one one `/dev/dsb`:
+
+    #sudo dd bs=4M if=/dev/zero of=/dev/sdb
+
+this could be used to make a full system backup.
+
+Example: write pseudorandom sequences into `/dev/sda/` to hide data:
+
+    #sudo dd bs=4M if=/dev/urandom of=/dev/sda
 
 ###/dev/null
 

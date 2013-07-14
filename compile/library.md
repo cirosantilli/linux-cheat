@@ -14,7 +14,7 @@ either those must be in you compiler find path
 (different for headers and compiled files)
 or you must explicitly add them to the path.
 
-# dynamic vs static
+#dynamic vs static
 
 dynamic libraries are compiled libraries
 kept outside of the executable and are used at run time
@@ -51,13 +51,13 @@ disadvantages:
 
 since the disadvantages are so minor, it is almost always better to use dynamic linking.
 
-# search path
+#search path
 
 find where gcc search path for both `.a` and `.so`:
 
     gcc -print-search-dirs | grep '^libraries' | tr ':' $'\n'
 
-# static
+#static
 
 gets included in program
 
@@ -70,23 +70,23 @@ you don't have to worry about dependancies
     ar rcs a.a a.o b.o
     gcc a.a c.c
 
-# dynamic
+#dynamic
 
-## loading vs linking
+##loading vs linking
 
 there are two methods of using dynamic libraries in linux
 
-### linking
+###linking
 
 link to lib for entire program
 
 simpler
 
-### loading
+###loading
 
 explicitly load needed functions during program execution
 
-## create so
+##create so
 
 *MUST* compile like this:
 
@@ -96,7 +96,7 @@ explicitly load needed functions during program execution
 
 using `-fPIC` and `-shared`
 
-## version numbering
+##version numbering
 
 standard: up to 3 numbers
 
@@ -155,7 +155,7 @@ rationale: if you underspecify the library you get by default the most recent
 
 convention: change in first number means possible interface break
 
-## compile executable that depends on an so
+##compile executable that depends on an so
 
 you must tell gcc which libs to use with the `-l` flag
 
@@ -169,7 +169,7 @@ how this information is represented is a part of the `.elf` format definition.
 *remember*: when the program will run, it must be able to find that `.so`
 again on the load path!
 
-### what can be passed to -l
+###what can be passed to -l
 
 the name given to -l must be EITHER:
 
@@ -182,7 +182,7 @@ the name given to -l must be EITHER:
 you need to compile like this so gcc
 can tell if all your functions are definied
 
-### relative vs absolute
+###relative vs absolute
 
 the path to the so gets stored inside the elf so that it can be found
 when the program will load
@@ -206,14 +206,14 @@ store the full path in the elf file:
 
 it must be in the load path
 
-### append path to so search path
+###append path to so search path
 
-#### -L option
+####-L option
 
     gcc a.c -o a.out -L/full/path/to/ -lm
     gcc a.c -o a.out -L./rel/path/to/ -lm
 
-#### LD_LIBRARY_PATH
+####LD_LIBRARY_PATH
 
     env LIBRARY_PATH=$LIBRARY_PATH:/path/to/ gcc a.c -o a.out -llib
 
@@ -221,7 +221,7 @@ it must be in the load path
 `LIBRARY_PATH` is only used at compile time
 while `LD_LIBRARY_PATH` is only used at compile time
 
-## use so at runtime
+##use so at runtime
 
 after an executable has been compiled to use an so,
 the so must be found at runtime
@@ -236,7 +236,7 @@ there is no need to use the load path if an absolute path
 was stored in the executable, but this is not recommended
 since it would not be portable
 
-### best production method
+###best production method
 
     sudo mv liba.so /some/where/in/link/path
     sudo ldconfig
@@ -244,7 +244,7 @@ since it would not be portable
 
 this suposes that when you compiled you used: `-lliba.so`
 
-### environment variable
+###environment variable
 
     env LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/absolute/path/to/lib ./a.out
     ./a.elf
@@ -261,7 +261,7 @@ since relative path is take to current dir
 which is used during compilation by gcc!
 `LD_LIBRARY_PATH` is used during execution by the linker!
 
-### load path
+###load path
 
 view library load path:
 
@@ -288,7 +288,7 @@ the following paths are hard codded in `ldconfig`:
 - `/lib/`
 - `/usr/lib/`
 
-### view load path
+###view load path
 
 print actual search path after resolving directives like `include`:
 
@@ -305,7 +305,7 @@ only where they link to:
 
     ldconfig -p
 
-#### hwcap
+####hwcap
 
 when using commands like `ldconfig -v`, you may see outputs like:
 
@@ -327,7 +327,7 @@ what the flags mean is defined by x86 and somewhat standardized across vendors:
 
 TODO where ldconfig finds this info:
 
-### cache
+###cache
 
 it would be very slow to search the path every time
 
@@ -348,7 +348,7 @@ so you still have to run `ldconfig`
 running ldconfig is a part of every package install/uninstall
 if it conatins a lib
 
-### ldd
+###ldd
 
 List required shared libraries of an executable
 and if they can be found.
@@ -365,7 +365,7 @@ possible outputs:
 - `liba.1.so => /lib/liba.1.so`
 - `liba.1.so => not found`
 
-##### environment
+#####environment
 
 you can also add to path with environment variables
 
@@ -373,7 +373,7 @@ don't rely on this method for production
 
     export LD_LIBRARY_PATH="/path/to/link"
 
-### interpreter
+###interpreter
 
 program that loades shared libs for other programs
 
@@ -387,7 +387,7 @@ this gives an output such as:
 
     /lib/ld-linux.so.2
 
-## override symbols in libraries
+##override symbols in libraries
 
 symbols in `a.o` will override symbols in linked libs
 

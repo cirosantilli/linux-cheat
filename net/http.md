@@ -2,13 +2,13 @@ http is the protocol which browsers use to request pages from servers.
 
 in general, it can be used to request just about anything from a server.
 
-# sources
+#sources
 
 best way to start: <http://www.jmarshall.com/easy/http/#structure>
 
-# headers
+#headers
 
-## Content-type
+##Content-type
 
 specifies Internet media type
 
@@ -22,22 +22,22 @@ common examples:
 - application/pdf
 - application/javascript
 
-# http authentication
+#http authentication
 
-## sources
+##sources
 
 goode one: <http://www.httpwatch.com/httpgallery/authentication/>
 comparison to form auth, nice diagrams: <http://docs.oracle.com/javaee/1.4/tutorial/doc/Security5.html>
 
-## form authentication
+##form authentication
 
 form authentication is the other form athentication
 
-### sources
+###sources
 
 great post: <http://stackoverflow.com/questions/549/the-definitive-guide-to-forms-based-website-authentication>
 
-### downsides of http
+###downsides of http
 
 parameters are left to the browser. So for example:
 
@@ -48,13 +48,13 @@ parameters are left to the browser. So for example:
 therefore, you cannot cusomize them
 and users will get different interfaces on different browsers, bad user interface consistency
 
-### updside of http
+###updside of http
 
 simple.
 
 for those reasons, form authentication is used on most large sites today.
 
-## 401
+##401
 
 server should include a `WWW-Authenticate` field specifying what kind of authentication is required.
 
@@ -71,11 +71,11 @@ so the type is Basic
 set by the server operators.
 in Apache it is given by the `AuthName` directive
 
-### 401 vs 403
+###401 vs 403
 
 <http://stackoverflow.com/questions/3297048/403-forbidden-vs-401-unauthorized-http-responses>
 
-## basic authentication
+##basic authentication
 
 authentication is sent on the header *unencrypted*!
 
@@ -92,7 +92,7 @@ you see the header line:
 just checking:
     assert [ "`echo dTpw | base64 -d`" = "u:p" ]
 
-### url convention
+###url convention
 
 many programs accept urls strings with user/pass included:
     curl -v u:p@google.com
@@ -101,7 +101,7 @@ this is however just a convention, since programs that accept it
 parse the string to extract the `u:p` part, and then send it
 on the header.
 
-## digest authentication
+##digest authentication
 
 pretty cool concept
 
@@ -111,7 +111,7 @@ authentication is sent on the header md5 hashed
 
     curl --digest -vu u:p google.com
 
-### why it works
+###why it works
 
 data is appended to the authentication with `:` before hashing:
 
@@ -131,7 +131,7 @@ merits:
 
 - simples than a full ssl to authenticate
 
-## ntml
+##ntml
 
 safer than digest: replay attacks impossible.
 
@@ -139,7 +139,7 @@ requires server state, so http 1.1 only.
 
 little current support/usage.
 
-# https
+#https
 
 assymetric key encryption between server and client.
 

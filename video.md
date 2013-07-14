@@ -1,6 +1,6 @@
 video formats, viewer and manipulation tools
 
-# definitions
+#definitions
 
 *ripping* is taking the dvd from the dvd to files in computer
 
@@ -11,13 +11,13 @@ video formats, viewer and manipulation tools
 - mkv
 - avi
 
-## subtitles
+##subtitles
 
 subtitles are often stored as images inside of containers in the format pair: idx + sub.
 
 If you want srts, which is a text-only, smaller and human editable format, use a tool [vobsub2srt][]
 
-# DVD
+#DVD
 
 DVDs have regions
 
@@ -29,11 +29,11 @@ dvd readers have a limited number of region changes, sometimes around 5
 
 for certain dvd readers, after this number of changes, YOU CANNOT CHANGE IT ANYMORE!!!!
 
-# vlc
+#vlc
 
 great cross plaform video player
 
-# handbrake
+#handbrake
 
 transcode
 
@@ -99,7 +99,7 @@ my results:
 
 to get subtitles: must extract the image subtitles with some other tool and do OCR
 
-# mkvtools
+#mkvtools
 
 see info about a:
 
@@ -122,7 +122,7 @@ the type is that contained in the tracks, not necessarily srt,
 
 maybe vobsub idx + sub if you want srt from vobsub, try vobsub2srt
 
-# vobsub2srt
+#vobsub2srt
 
 uses tesseract for the ocr: this means you must install tesseract lanugages
 
@@ -145,7 +145,7 @@ output goes to a.str.
 
 don't forget to rename output as as a.eng.srt before going to the next language.
 
-# srtmerge
+#srtmerge
 
 merge two srt files
 
@@ -157,6 +157,6 @@ great for language learning if you have multisubs
 
     srtmerge a b ab
 
-# guvcview
+#guvcview
 
 view + record video/audio with webcam

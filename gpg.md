@@ -1,17 +1,17 @@
 gnu private guard encryption
 
-# sources
+#sources
 
 - good tut: <http://www.spywarewarrior.com/uiuc/gpg/gpg-com-4.htm>
 - good tut: <http://www.madboa.com/geek/gpg-quickstart/>
 - <https://help.ubuntu.com/community/GnuPrivacyGuardHowto>
 
-# test preparation
+#test preparation
 
     F=a
     echo a > "$F"
 
-# encryption without keys
+#encryption without keys
 
 encryption and digital signing
 
@@ -41,7 +41,7 @@ decrypt from stdin:
 
     cat "$F".gpg | gpg -o "$F" -d
 
-# tar combos
+#tar combos
 
 targz encrypt "$F" to F.tgz.gpg, remove original:
 
@@ -52,12 +52,12 @@ targz decrypt "$F"
 
     gpg -d "$F" | tar xz && rm "$F"
 
-# encryption with keys
+#encryption with keys
 
 you have to understand the very basics of assymetric encryption
 such as RSA before reading this.
 
-## user id
+##user id
 
 uid can either be any case insensitive substring of the key name or email
 that only one user has:
@@ -65,7 +65,7 @@ that only one user has:
     U="me@mail.com"
     U="me"
 
-## key id
+##key id
 
 is an identifier of the key:
 
@@ -77,7 +77,7 @@ to get it, use:
 
 TODO: how is it calculated this id?
 
-## files
+##files
 
 private keys is kept under `~/.gnupg/secring.gpg`. **NEVER SHARE THIS FILE**
 
@@ -89,11 +89,11 @@ the keys here are called keyring
 
 each key file (`.asc` or `.gpg` may contain many keys)
 
-## genarate pub/private pair
+##genarate pub/private pair
 
     gpg --gen-key
 
-## manage keys
+##manage keys
 
 list pub keys which you trust
 
@@ -114,7 +114,7 @@ add pubkey ot the trust list:
 
     gpg --import
 
-## publicate you pubkey
+##publicate you pubkey
 
 - so that they can encrypt stuff so that you can read it.
 - so that they can verify you are the creator of files.
@@ -135,7 +135,7 @@ view keys in a key file (`.asc` or `.gpg`):
 
     gpg a.gpg
 
-### keyserver
+###keyserver
 
 this is the best method, people only have to know your keyserver,
 and they can look for your key themselves.
@@ -161,7 +161,7 @@ search for someone's key on a server:
 
 TODO not working
 
-## encrypt decrypt
+##encrypt decrypt
 
 finnally!
 
@@ -176,7 +176,7 @@ decrypt file for which you own the private key:
 
     gpg -o "$F".out -e "$F"
 
-## verify file
+##verify file
 
 prove that a file comes from who he claims to:
 

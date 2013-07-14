@@ -1,20 +1,20 @@
 points to an inode, a filesystem address id,
 analogous to what a c is to memory
 
-# create
+#create
 
 create with ln:
 
     echo a > a
     ln a b
 
-# get inode
+#get inode
 
     echo a > a
     ln a b
     [ `stat -c '%i' a` = `stat -c '%i' b ` ] || exit 1
 
-# mv
+#mv
 
 unlike symlinks, even if you move any of the files,
 changes in one file reflect immediatelly on the other:
@@ -26,14 +26,14 @@ changes in one file reflect immediatelly on the other:
     echo b > d/b
     [ `cat a` = b ] || exit 1
 
-# it is not efficient to find all paths of an inode
+#it is not efficient to find all paths of an inode
 
 the only way to do that is searching every file on the system,
 if you have permissions...
 
 the only way to check if two files are hardlinked is by comparing their inodes.
 
-# count
+#count
 
 it is possible to tell how many hardlinks a file has with stat:
 
@@ -42,7 +42,7 @@ it is possible to tell how many hardlinks a file has with stat:
 since the filesystem has to count this to be able to delete the file
 when the count reaches 0.
 
-# permissions
+#permissions
 
 you must have read *and* write premissions to the file in order to make a hardlink to it:
 

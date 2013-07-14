@@ -4,7 +4,7 @@ she: name for '#', bang: name for '!'
 
 *must* be first char of first line
 
-# what it does exactly
+#what it does exactly
 
 try `./print_args_shebang c d` to really understand what happens
 
@@ -36,7 +36,7 @@ which for the python interpreter means:
 
     Therefore: all interpreted languages should have `#` as their comment character!
 
-# env
+#env
 
 you could use `!#/bin/bash` instead but if you go on a system where bash is located
 at `/usr/bin/bash`, your script breaks.
@@ -46,7 +46,7 @@ Therefore: **always** use `env`.
 with env, path is used instead, so if `bash` is in the users $PATH,
 and `/usr/bin/env` exists it works.
 
-## why it works
+##why it works
 
 `env cmd` simply executes a program in current environment
 
@@ -57,15 +57,15 @@ the advantage of this is that:
 - env is more often located in `/usr/bin` than bash in `/usr` across *NIX TODO check
 - all you interpreters
 
-# why not determine interpreter from extension
+#why not determine interpreter from extension
 
 in windows, interpreter is determined by extension
 
-### advantage os extension
+###advantage os extension
 
 easier to spot program type from file browser
 
-### disadvantage os extension
+###disadvantage os extension
 
 you need an extra EXT env var that says: you can execute `a.py` as py, `a.sh` as a
 

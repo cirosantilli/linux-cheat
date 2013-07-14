@@ -4,7 +4,7 @@ it is a large frontend to several subprograms such as `as`, `cpp`
 
 it currently compiles: C, C++, Objective-C, Fortran, Java, Ada, and Go
 
-# g++ vs gcc
+#g++ vs gcc
 
 g++: http://stackoverflow.com/questions/172587/what-is-the-difference-between-g-and-gcc
 
@@ -13,23 +13,23 @@ most important:
 1) g++ treats both .c and .cpp files as c++, since .c is backwards compatible with c++, it works
 2) g++ links to (but does not include) stdlib automatically, gcc does not!
 
-# supported executable formats
+#supported executable formats
 
-## elf
+##elf
 
 linux
 
 superseeds `.coff` which superseeds `a.out`
 
-## mach-o
+##mach-o
 
 mac os
 
-## pe
+##pe
 
 windows' current `.exe`s
 
-# compilation steps
+#compilation steps
 
 it is good to understand which steps are done towards compilation
 
@@ -78,9 +78,9 @@ if you use make, it is faster to genterate `.o`
 and keep them, since if the source does not change,
 make will not recompile the corresponding `.o`
 
-# flags
+#flags
 
-## recommended compilation flags
+##recommended compilation flags
 
 always use this for production code if possible:
 
@@ -88,7 +88,7 @@ always use this for production code if possible:
 
 this will make for portable, efficient code.
 
-## Wall
+##Wall
 
 enables all warnings:
 
@@ -100,7 +100,7 @@ enables all warnings, except `unused-variable`:
 
     gcc -Wall -Wno-unused-variable
 
-## std
+##std
 
 std specifies version os the language to be used
 
@@ -118,7 +118,7 @@ to allow gnu extensions:
 
 this is necessary on projects that rely on the extensions, such as the linux kernel
 
-## ansi
+##ansi
 
 don't use this, use `std` instead
 
@@ -133,7 +133,7 @@ changes with time, currently equals:
 it is a bit confusing not to have a fixed version of the standard to comply to,
 so just use std instead.
 
-## pedantic
+##pedantic
 
 give warnings for code that does not comply with c1x standard:
 
@@ -147,7 +147,7 @@ give errors instead of warnings:
 
             gcc -std=c1x -pedantic-errors
 
-## march
+##march
 
 optimizes code to given cpu (arch is for archtecture)
 
@@ -165,7 +165,7 @@ Arm v.7, used on mobiles today:
 
                 gcc -march=armv7
 
-## optimization
+##optimization
 
 list possible optimizations for `-O`:
 
@@ -187,7 +187,7 @@ best general code optimization method:
 
 always use this for production code.
 
-## M
+##M
 
 don't compile, but generate a list of dependencies for the given source code
 in a format suitable for a makefile rule, and output it to stdout
@@ -222,7 +222,7 @@ you can then use those on a makefile as:
     $(shell gcc -MM a.c)
         gcc a.c
 
-# c preprocessor
+#c preprocessor
 
 does things like:
 
@@ -235,7 +235,7 @@ the executable is called `cpp`
 
 gcc uses it implicitly
 
-## define command line
+##define command line
 
 defines can be made from command line arguments:
 
@@ -248,7 +248,7 @@ which is the same as adding
 
 to top of file
 
-## find include search path
+##find include search path
 
     echo '' | cpp -v
 
@@ -257,7 +257,7 @@ look for sections:
 - `include "..." search starts here`:
 - `include <...> search starts here`:
 
-## view preprocessed file
+##view preprocessed file
 
 this is mostly useful for learing purposes only
 
@@ -271,7 +271,7 @@ using gcc as a frontend:
 
     gcc -E c.c
 
-# cross compile
+#cross compile
 
 cross compiling means to compile a program for a different OS
 or architecture than the one the compiler is running
@@ -280,7 +280,7 @@ gcc cannot cross compile for windows from linux (TODO check)
 
 this can be done with mingw (TODO how)
 
-# infamous error messages
+#infamous error messages
 
 Error messages that are difficult to interpret for noobs:
 

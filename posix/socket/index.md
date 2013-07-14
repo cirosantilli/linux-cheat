@@ -6,7 +6,7 @@ sockets are similar to pipes but:
 - allow multiple clients to connet to a single server
     (the concepts of client and server are clearly defined)
 
-# socket params
+#socket params
 
 sockets are characterized by three parameters:
 
@@ -16,7 +16,7 @@ sockets are characterized by three parameters:
 
 this are exactly the 3 parameters that the `socket` call receives
 
-## domain
+##domain
 
 - `AF_UNIX`: local sockets for single machine usage
 
@@ -28,7 +28,7 @@ this are exactly the 3 parameters that the `socket` call receives
 
 - `AF_INET6`: IPv6
 
-## type
+##type
 
 - `SOCK_STREAM`: connexion works like a file stream to the program
 
@@ -56,13 +56,13 @@ certain domains may have differnt types
 
 `AF_INET` has the following types:
 
-## protocol
+##protocol
 
 sometimes it is possible to choose different protocols for a given type
 
 `0` uses the default protocol
 
-# testing
+#testing
 
 1. run the server:
 
@@ -79,6 +79,6 @@ sometimes it is possible to choose different protocols for a given type
 
     and then hit <C-C>
 
-# local socket
+#local socket
 
 is inserted into the filesystem

@@ -8,14 +8,14 @@ make GET request, reponse body to stdout:
 
     curl amazon.com
 
-# -d
+#-d
 
 makes POST request
 
     curl -Ld "q=asdf" $URL
     curl -L "google.com?q=asdf" $URL
 
-## --data-urlencode
+##--data-urlencode
 
 encodes spaces and other signs for you:
 
@@ -26,15 +26,15 @@ resume download from where it stopped
 
     curl -C - -O http://www.gnu.org/software/gettext/manual/gettext.html
 
-# a-z range
+#a-z range
 
 example:
 
     curl ftp://ftp.uk.debian.org/debian/pool/main/[a-z]/
 
-# protocols
+#protocols
 
-## ftp
+##ftp
 
 download:
 
@@ -45,7 +45,7 @@ upload:
     curl -u ftpuser:ftppass -T myfile.txt ftp://ftp.testserver.com
     curl -u ftpuser:ftppass -T "{file1,file2}" ftp://ftp.testserver.com
 
-## mail
+##mail
 
 send mail:
 
@@ -53,7 +53,7 @@ send mail:
 
 body ends with a single dot '.' on a line
 
-## dict
+##dict
 
     curl dict://dict.org/show:db #dictionnaries
     curl dict://dict.org/d:bash #general
@@ -63,7 +63,7 @@ body ends with a single dot '.' on a line
 
     curl -Lv google.com
 
-# -L
+#-L
 
 follows redirects
 
@@ -79,7 +79,7 @@ with `-v` you can see the full transaction:
 
     curl -vL google.pn
 
-# -u user:pass
+#-u user:pass
 
 does <#basic authentication>
 
@@ -92,7 +92,7 @@ examples:
     curl          -u user:pass site.with.basic.auth.com
     curl --digest -u user:pass site.with.digest.auth.com
 
-# -x
+#-x
 
 specifies proxy server
 
@@ -100,7 +100,7 @@ example:
 
     curl -x proxysever.test.com:3128
 
-# -z
+#-z
 
 download iff it is modified after given date time (sounds like crawlers!)
 
@@ -110,7 +110,7 @@ example:
 
 I assure you, it has changed since then =).
 
-# -i
+#-i
 
 show received http header received. see: <#http>
 
@@ -118,7 +118,7 @@ example:
 
     curl -i google.com
 
-# -I
+#-I
 
 make http HEAD request. see: <#http>
 
@@ -128,7 +128,7 @@ example:
 
     curl -I google.com
 
-# -X
+#-X
 
 make custom request
 

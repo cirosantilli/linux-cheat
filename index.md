@@ -23,6 +23,38 @@ may also be called gnu/linux.
     - `Documentation/` for docs
     - `include/linux` for stuff you may use from modules
 
+- info
+
+    GNU project substitude for man.
+
+    Usually much longer explanations and examples.
+
+    Better nodewise navigation.
+
+- the geek stuff
+
+   <http://www.thegeekstuff.com>
+
+   Short tutorials with lots of examples.
+
+- <http://www.linuxfromscratch.org/>
+
+    Linux from scratch.
+
+    Teaches how to build a minimal linux distro from base standard packages.
+
+- <https://wiki.archlinux.org/index.php/Installation_Guide>
+
+    Archilinux installation guide.
+
+    Since Archlinux is very minimalistic, installing it can teach you a lot.
+
+    Like LFS but you start at a higher level already.
+
+- <http://www.cavecanen.org/linux/humour/horrorstories.txt>
+
+    Real *NIX sysadmin horror stories of things gone terribly wrong.
+
 #distributions
 
 A linux distribution is a lsb complicant system.
@@ -84,6 +116,23 @@ filesystem structures such as the main boot record partition table.
 Of course, you can always recreate a filesystem in your USB and use it
 as a storage device once you are done with the USB.
 
+To install images on a USB you can do:
+
+    dd bs=4M if=/path/to/iso.iso of=/dev/sdX
+
+Where `/dev/sdX` is the mount point of the USB.
+
+This will erase all data on the USB!
+
+- `/dev/sdX` is the block device for the USB, and it can be found with:
+
+        sudo lsblk -f
+
+    The usb must not be mounted (`lsblk` shows no mountpoint).
+
+    *Don't* write to the first partition `/dev/sdX1`, since what we want is to write
+    to the start of the device, not to the start of its first partition!
+
 ###bootloader problems
 
 Most distributions install their own bootloader, meaning that they rewrite the existing bootloader.
@@ -101,49 +150,55 @@ Therefore, if you have the choice, the best option in this case would be to fisr
 the GRUB distro, and only then the GRUB 2 distro, so that in the end you will have GRUB 2,
 which will see both partitions as bootable.
 
-This can be corrected in 2 ways:
+This can be corrected in 2 ways: from a live boot, or from an existing partition with GRUB 2.
 
-- if you can Live boot in the distro that uses GRUB 2 things are easy.
+####live boot
 
-    Boot with the Live CD, and then simply reinstall the GRUB 2 bootloader,
-    using the GRUB 2 installer that comes with the Live CD,
-    so that on next system start GRUB 2 will be used,
-    and will recognize both GRUB and GRUB 2 partitions.
+If you can Live boot in the distro that uses GRUB 2 things are easy.
 
-    All that is needed to do this is to issue:
+Boot with the Live CD, and then simply reinstall the GRUB 2 bootloader,
+using the GRUB 2 installer that comes with the Live CD,
+so that on next system start GRUB 2 will be used,
+and will recognize both GRUB and GRUB 2 partitions.
 
-        sudo grub-install --root-directory=/media/grub2/system/mount/point /dev/sdX
+All that is needed to do this is to issue:
 
-    Where:
+    sudo grub-install --root-directory=/media/grub2/system/mount/point /dev/sdX
 
-    - /media/grub2/system/mount/point
+Where:
 
-        Mountpoint for you grub2 system.
+- /media/grub2/system/mount/point
 
-        You must have mounted it with `mount` before.
+    Mountpoint for you grub2 system.
 
-        Some distros like Ubuntu's Live CD already mount all possible systems,
-        so you might not need to mount it.
+    You must have mounted it with `mount` before.
 
-        If that is the case, you can check where you partitio is mounted with `sudo mount -l`,
-        and then looking into partitions that have the correct type and listing the files inside candidates
-        to make sure that it is the correct partition.
+    Some distros like Ubuntu's Live CD already mount all possible systems,
+    so you might not need to mount it.
 
-    - /dev/sdX
+    If that is the case, you can check where you partitio is mounted with `sudo mount -l`,
+    and then looking into partitions that have the correct type and listing the files inside candidates
+    to make sure that it is the correct partition.
 
-        Device file for the Hard disk you want to install GRUB on.
+- /dev/sdX
 
-        Remember that GRUB bootloader is installed at the very start of the entire HD, and not of some partition,
-        so it makes no sense to give a parition device such as `/dev/sda1` or `/dev/sda2`.
+    Device file for the Hard disk you want to install GRUB on.
 
-    Source: <http://askubuntu.com/questions/59359/unable-to-boot-into-ubuntu-after-ubuntu-fedora-dual-boot/59376#59376>
+    Remember that GRUB bootloader is installed at the very start of the entire HD, and not of some partition,
+    so it makes no sense to give a parition device such as `/dev/sda1` or `/dev/sda2`.
 
-- if you do not have access to a Live CD, you can mount the GRUB 2 partition,
-    and `chroot` into it, and then reinstall GRUB 2.
+Source: <http://askubuntu.com/questions/59359/unable-to-boot-into-ubuntu-after-ubuntu-fedora-dual-boot/59376#59376>
 
-    It will be just as if you were issuing that command from that partition.
+####existing GRUB2 partitions
 
-    Procedure here: <>
+If you do not have access to a Live CD, you can mount the GRUB 2 partition,
+and `chroot` into it, and then reinstall GRUB 2.
+
+It will be just as if you were issuing that command from that partition.
+
+Procedure: <http://askubuntu.com/questions/88384/how-can-i-repair-grub-how-to-get-ubuntu-back-after-installing-windows>
+
+---
 
 Keep in mind that what GRUB does is simply read its configuration files,
 and after interpreting those write data to specifi points of the HD (Master boot record,
