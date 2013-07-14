@@ -2200,11 +2200,13 @@
 
 ##disk
 
-    #hard disks, mounting, partitions, filesystem, block devices
+    #This section is about: hard disks, mounting, partitions, filesystem, block devices.
 
     ##du
 
         #POSIX 7
+
+        #Mnemonic: Disk Usage.
 
         #get disk usage per file/dir:
 
@@ -2213,59 +2215,11 @@
         #- s: summarize: only for dirs in *, not subdirs
         #- h: human readable: G, M, b
 
-    ##filesystem
-
-        #determines how data will get stored in the hard disk
-
-        #ext2, ext3 and ext4 are the ones mainly used in linux today.
-
-        #on ext4, only one dir is created at the root: lost+found
-
-        #other important filesystems:
-
-        #- ntfs: windows today
-        #- nfat: dos
-
-        #to find out types see blkid or lsblk
-
-        #each partition can have a different filesystem.
-
-    ##partitions
-
-        #There are 2 main types of partitions: MBR or GPT
-
-        ##MBR
-
-            #You can only have 4 primary partitions.
-
-            #Each one can be either divided into logical any number of logical partitions partitions.
-
-            #A primary parition that is split into logical paritions is called an extended partition.
-
-            #Primary partitions get numbers from 1 to 4.
-
-            #Logical partitions get numbers starting from 5.
-
-            #You can visualise which partition is insde which disk with `sudo lsblk -l`.
-
-            #TODO more common?
-
-        ##GPT
-
-            #Arbitrary ammount of primary partitions.
-
-            #No logical partitions.
-
-        #You should unmount partitions before making change to them.
-
-        #To get info on partitions, start/end, filesystem type and flags,
-        #consider: `parted`, `df -f`
-
     ##df
 
         #POSIX 7
 
-        #Disk Fill
+        #Mnemonic: Disk Fill.
 
         #List mounted filesystems:
 
@@ -2324,6 +2278,48 @@
 
             #This limits the ammount of files you can have on a system in case you have lots of small files.
 
+    ##partitions
+
+        #There are 2 main types of partitions: MBR or GPT
+
+        ##MBR
+
+            #You can only have 4 primary partitions.
+
+            #Each one can be either divided into logical any number of logical partitions partitions.
+
+            #A primary parition that is split into logical paritions is called an extended partition.
+
+            #Primary partitions get numbers from 1 to 4.
+
+            #Logical partitions get numbers starting from 5.
+
+            #You can visualise which partition is insde which disk with `sudo lsblk -l`.
+
+            #TODO more common?
+
+        ##GPT
+
+            #Arbitrary ammount of primary partitions.
+
+            #No logical partitions.
+
+        #You should unmount partitions before making change to them.
+
+        #To get info on partitions, start/end, filesystem type and flags,
+        #consider: `parted`, `df -f`
+
+    ##format disks
+
+        #To format a disk is to prepare it for initial utilization, often destroying all data it contains.
+
+        #Disk formatation consists mainly of two steps:
+
+        #- create a partition table. This can be done with a tool such as `fdisk`.
+        #- create a filesystem. This can be done with a tool from the mkfs.XXX family.
+
+        #GUI tools such as gparted exist to make both those steps conveniently.
+
     ##lsblk
 
         #List block devices (such as partitions, hard disks or DVD devices),
@@ -2362,6 +2358,188 @@
             `-sda7 ext4
             sdb
             `-sdb1 ntfs                   /media/ciro/DC74FA7274FA4EB0
+
+    ##fdisk
+
+        #View and edit partition tables and disk parameters
+
+        #REPL interface.
+
+        #Does not create filesystems. For that see: `mke2fs` for ext systems..
+
+        #Mnemonic: Format disk.
+
+        #Better use gparted for simple operations if you have X11
+
+        #To view/edit partitions with interactive cli prompt interface.
+
+        ##-l
+
+            #Show lots of partition and disk data on all disks:
+
+                sudo fdisk -l
+
+            #Sample output for each disk:
+
+                Disk /dev/sda: 500.1 GB, 500107862016 bytes
+                255 heads, 63 sectors/track, 60801 cylinders, total 976773168 sectors
+                Units = sectors of 1 * 512 = 512 bytes
+                Sector size (logical/physical): 512 bytes / 4096 bytes
+                I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+                Disk identifier: 0x7ddcbf7d
+
+                   Device Boot      Start         End      Blocks   Id  System
+                /dev/sda1   *        2048     3074047     1536000    7  HPFS/NTFS/exFAT
+                /dev/sda2         3074048   198504152    97715052+   7  HPFS/NTFS/exFAT
+                /dev/sda3       948099072   976771071    14336000    7  HPFS/NTFS/exFAT
+                /dev/sda4       198504446   948099071   374797313    5  Extended
+                Partition 4 does not start on physical sector boundary.
+                /dev/sda5       198504448   907638783   354567168   83  Linux
+                /dev/sda6       940277760   948099071     3910656   82  Linux swap / Solaris
+                /dev/sda7       907640832   940267519    16313344   83  Linux
+
+        ##REPL
+
+            #Edit partitions for sdb on REPL interface:
+
+                sudo fdisk /dev/sdb
+
+            #Operation: make a list of changes to be made, then write them all to disk and exit with `w` (write).
+
+            #Most useful commands:
+
+            #- m: list options
+            #- p: print info on partition, same as using `-l` option.
+            #- o: create new DOS partition table.
+            #- n: create new partition.
+            #- d: delete a partition.
+            #- w: write enqueued changes and exit.
+
+    ##hard disks
+
+        #Hard disks are represented by the system as block devices.
+
+        #However, they have physical peculiarities which make their performance characteristics
+        #different from block devices such as USB sticks.
+
+        #The following parameters are relevant only to hard disks:
+
+        #- sectors: smalles adressable memory in hd. you must get the whole sector at once.
+        #- tracks
+        #- cylinders
+        #- heads
+
+        #To understand those concepts, you must visualise the hard disk's physical arrangement:
+
+        #- <http://osr507doc.sco.com/en/HANDBOOK/hdi_dkinit.html>
+        #- <http://en.wikipedia.org/wiki/Track_%28disk_drive%29>
+
+        #Those parameters can be gotten with commands such as `sudo fdisk -l`.
+
+    ##filesystem
+
+        #determines how data will get stored in the hard disk
+
+        #ext2, ext3 and ext4 are the ones mainly used in linux today.
+
+        #on ext4, only one dir is created at the root: lost+found
+
+        #other important filesystems:
+
+        #- ntfs: windows today
+        #- nfat: dos
+        #- mfs: Machintosh FileSystem. Mac OS X today.
+
+        #to find out types see blkid or lsblk
+
+        #each partition can have a different filesystem.
+
+
+    ##create filesystems
+
+        #Find all commands to make filesystems:
+
+            ls -l /sbin | grep mk
+
+        #Sample output:
+
+            -rwxr-xr-x 1 root root     26712 Feb 18 18:17 mkdosfs
+            -rwxr-xr-x 1 root root     88184 Jan  2  2013 mke2fs
+            -rwxr-xr-x 1 root root      9668 Feb  4 21:49 mkfs
+            -rwxr-xr-x 1 root root     17916 Feb  4 21:49 mkfs.bfs
+            -rwxr-xr-x 1 root root     30300 Feb  4 21:49 mkfs.cramfs
+            lrwxrwxrwx 1 root root         6 Jan  2  2013 mkfs.ext2 -> mke2fs
+            lrwxrwxrwx 1 root root         6 Jan  2  2013 mkfs.ext3 -> mke2fs
+            lrwxrwxrwx 1 root root         6 Jan  2  2013 mkfs.ext4 -> mke2fs
+            lrwxrwxrwx 1 root root         6 Jan  2  2013 mkfs.ext4dev -> mke2fs
+            -rwxr-xr-x 1 root root     26220 Feb  4 21:49 mkfs.minix
+            lrwxrwxrwx 1 root root         7 Feb 18 18:17 mkfs.msdos -> mkdosfs
+            lrwxrwxrwx 1 root root        16 Feb 25 14:54 mkfs.ntfs -> /usr/sbin/mkntfs
+            lrwxrwxrwx 1 root root         7 Feb 18 18:17 mkfs.vfat -> mkdosfs
+            -rwxr-xr-x 1 root root     18000 Mar 12 04:43 mkhomedir_helper
+            -rwxr-xr-x 1 root root     87484 Feb 25 14:54 mkntfs
+            -rwxr-xr-x 1 root root     22152 Feb  4 21:49 mkswap
+
+        #Where:
+
+        #- mkfs.XXX are uniformly named frontends for filesystem creation
+        #- mkfs is a frontend for all filesystem types.
+
+        #You should only use on partition devices (ex: `sda1`), not on the entire devices (ex: `sda`).
+
+        #If you want to edit the partition table,
+        first use a tool like `fdisk`.
+
+    ##mke2fs
+
+        #Make ext[234] partitions.
+
+        #Consider using gparted if you have X11.
+
+        #- -t: type: ext2, ext3, ext4
+        #- -L: label
+        #- -i: inodes per group (power of 2)
+        #- -j: use ext3 journaling. TODO for -t ext3/4, is it created by default?
+
+    ##tune2fs
+
+        #Get and set parameters of ext filesystems that can be tuned after creation.
+
+        #List all parameters:
+
+            sudo tune2fs -l /dev/sda5
+
+    ##swap
+
+        #used by OS to store RAM that is not being used at the moment to make room for more RAM.
+
+        #should be as large as your RAM more or less, or twice it.
+
+        #can be shared by multiple OS, since only one os can run at a time.
+
+        #turn swap on on partition /dev/sda7:
+
+            sudo swapon /dev/sda7
+
+        #find the currently used swap partition:
+
+            swapon -s
+
+        #disable swapping:
+
+            sudo swapoff
+
+        #make a swap partition on partition with random uuid
+
+            sudo mkswap -U random /dev/sda7
+
+        #swap must be off
+
+    ##gparted
+
+        #gui to fdisk + mke2fs
+
+        #very powerful and simple to use
 
     ##parted
 
@@ -2420,27 +2598,29 @@
 
     ##uuid
 
-        #given when you create of format a partition
+        #Unique identifier for a partition. Field exists in ext and NTFS concept.
 
-        #to view them, see blkid or lsblk or gparted
+        #Given when you create of format a partition.
 
-        #get UUID of a device:
+        #Can be found with tools such as lsblk, blkid or gparted.
+
+        #Get UUID of a device:
 
             sudo lsblk -no UUID /dev/sda1
 
     ##blkid
 
-        #get UUID, label and filesystem type for all partitions
+        #Get UUID, label and filesystem type for all partitions
 
             sudo blkid
 
     ##label
 
-        #an ext partitions concept
+        #An ext partitions concept.
 
-        #determines the mount name for the partition
+        #Determines the mount name for the partition.
 
-        #should be unique, but not sure this is enforced.
+        #Should be unique, but not sure this is enforced. TODO
 
     ##e2label
 
@@ -2466,148 +2646,40 @@
 
         #if id no present, link not there
 
-        cd /dev/disk/
-        ls -l
-            #by-id
-            #by-label
-            #by-path
-            #by-uuid
+        #Example:
 
-        ls -l by-id
+            cd /dev/disk/
+            ls -l
+                #by-id
+                #by-label
+                #by-path
+                #by-uuid
 
-    ##fdisk
-
-        #View and edit partition tables.
-
-        #REPL interface.
-
-        #Does not create filesystems. For that see: `mke2fs` for ext systems..
-
-        #Mnemonic: Format disk.
-
-        #Better use gparted for simple operations if you have X11
-
-        #To view/edit partitions with interactive cli prompt interface.
-
-        #Show partition table of hd:
-
-            sudo fdisk -l /dev/sda
-
-        #Does not show labels and where partitions are mounted.
-
-        #View / edit partitions for hd sda:
-
-            sudo fdisk /dev/sda
-
-        #logical partitions are limited to 16 scsi and 53 ide total.
-
-        #sample output line:
-
-            #255 heads, 63 sectors/track, 60801 cylinders, total 976773168 sectors
-            #255 ^^^^^, 63 ^^^^^^^/^^^^^, 60801 ^^^^^^^^^, total 976773168 sectors
-            #    1         2       3            4
-
-        #2. sector: smalles adressable memory in hd. you must get the whole sector at once.
-        #4. defaults: rw, suid, dev, exec, auto, nouser, and async
-
-        #To understand each field, must see some images:
-
-        #- <http://osr507doc.sco.com/en/HANDBOOK/hdi_dkinit.html>
-        #- <http://en.wikipedia.org/wiki/Track_%28disk_drive%29>
-
-    ##create partitions
-
-        #aka format.
-
-        #Find all commands to make filesystems:
-
-            ls -l /sbin | grep mk
-
-        #Sample output:
-
-            -rwxr-xr-x 1 root root     26712 Feb 18 18:17 mkdosfs
-            -rwxr-xr-x 1 root root     88184 Jan  2  2013 mke2fs
-            -rwxr-xr-x 1 root root      9668 Feb  4 21:49 mkfs
-            -rwxr-xr-x 1 root root     17916 Feb  4 21:49 mkfs.bfs
-            -rwxr-xr-x 1 root root     30300 Feb  4 21:49 mkfs.cramfs
-            lrwxrwxrwx 1 root root         6 Jan  2  2013 mkfs.ext2 -> mke2fs
-            lrwxrwxrwx 1 root root         6 Jan  2  2013 mkfs.ext3 -> mke2fs
-            lrwxrwxrwx 1 root root         6 Jan  2  2013 mkfs.ext4 -> mke2fs
-            lrwxrwxrwx 1 root root         6 Jan  2  2013 mkfs.ext4dev -> mke2fs
-            -rwxr-xr-x 1 root root     26220 Feb  4 21:49 mkfs.minix
-            lrwxrwxrwx 1 root root         7 Feb 18 18:17 mkfs.msdos -> mkdosfs
-            lrwxrwxrwx 1 root root        16 Feb 25 14:54 mkfs.ntfs -> /usr/sbin/mkntfs
-            lrwxrwxrwx 1 root root         7 Feb 18 18:17 mkfs.vfat -> mkdosfs
-            -rwxr-xr-x 1 root root     18000 Mar 12 04:43 mkhomedir_helper
-            -rwxr-xr-x 1 root root     87484 Feb 25 14:54 mkntfs
-            -rwxr-xr-x 1 root root     22152 Feb  4 21:49 mkswap
-
-        #Where:
-
-        #- mkfs.XXX are uniformly named frontends for filesystem creation
-        #- mkfs is a frontend for all filesystem types.
-
-    ##mke2fs
-
-        #Make ext[234] partitions.
-
-        #Consider using gparted if you have X11.
-
-        #- -t: type: ext2, ext3, ext4
-        #- -L: label
-        #- -i: inodes per group (power of 2)
-        #- -j: use ext3 journaling. TODO for -t ext3/4, is it created by default?
-
-    ##tune2fs
-
-        #Get and set parameters of ext filesystems.
-
-        #List all parameters:
-
-            sudo tune2fs -l /dev/sda5
-
-    ##gparted
-
-        #gui to fdisk + mke2fs
-
-        #very good interface
-
-        ##format an external hd
-
-        #- erase partition table and create new one
-        #- gpt seems to be a good choice of partition table type.
-        #- create a partiion on the hd.
-        #- ntfs seems to be best cross platform choice now.
-        #- give a label. it will be mounted like that. I choose 300g for my 300 Gb hd.
-        #- all ops are very quick!
-
-    ##swap
-
-        #used by os to store unused ram
-
-        #should be as large as your ram more or less, or twice it.
-
-        #can be shared by multiple os, since only one os can run at a time.
-
-        #turn swap on on partition /dev/sda7:
-
-            sudo swapon /dev/sda7
-
-        #find the currently used swap partition:
-
-            swapon -s
-
-        #disable swapping:
-
-            sudo swapoff
-
-        #make a swap partition on partition with random uuid
-
-            sudo mkswap -U random /dev/sda7
-
-        #swap must be off
+            ls -l by-id
 
     ##mount
+
+        #Mounting is the operation of making a block device available for operations such as open, read and write.
+
+        #This is what you must do before you can use devices such as USB.
+
+        #Many modern distributions mount such devices automatically.
+
+        #Linux has system calls dedicated to this operation.
+
+        #The block device will be mounted on a directory in the filesystem,
+        #and from then on shall be essentially indistinguishable from normal directories.
+        #This directory is known as mount point.
+
+        #If the directory was not empty, old contents will be hidden.
+
+        #You can mount several times on the same point,
+        #the last operation hiding the old mounted system
+        #until the latest mounted system is unmounted.
+
+        #You can mount with the mount utility, and unmount with the umount utility.
+
+    ##mount util
 
         #Mount block device file on filesystem:
 

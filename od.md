@@ -1,26 +1,35 @@
+Utilities similar to `od` that can be used to view binary data.
+
+Very useful for viewing binary data which contains values which
+cannot be interpreted as some character set (ASCII, UTF-8)
+that can be printed to terminal screen.
+
+You have some fun exploring things such as:
+
+- executables such as elf files
+
+- partition tables:
+
+        sudo hd -n 512 /dev/sda
+
+#od
+
 POSIX 7
 
 Octal dump.
 
 View byte values byte by byte in octal and other bases.
 
-Very useful for:
-
-- viewing binary data which contains values which
-cannot be interpreted as some character set (ASCII, UTF-8)
-that can be printed to terminal screen.
-
-- dealing with character encodings.
-
 Sanest usage: view bytes in hexadecimal:
 
     echo -n ab | od -Ax -tx1
 
-You should have an alias for this since it is much saner than the octal defaults:
+For interactive uses, you should either use another utility such as hd (non POSIX) which has saner defaults
+or have an alias for this since it is much saner than the octal defaults:
 
     alias ods='od -Ax -tx1'
 
-Which means `od` Sane.
+Which stands for `od` Sane.
 
 Output:
 
@@ -95,7 +104,13 @@ so it is not possible to have for example `444`.
 
 ##-tc
 
-Three possible cases:
+Show bytes that can be represented as ASCII characters as ASCII characters.
+
+Useful when the input should contain mostly ASCII characters,
+for example when trying to find some weird byte in a file such as source code
+that should not contain such characters.
+
+More precisely, there are the following cases:
 
 - if the byte has a corresponding non whitespace ascii character or space, print that character.
 
@@ -235,11 +250,42 @@ Output:
 
 Maximum number of bytes to read.
 
+#hd
+
+Very similar to od.
+
+Uses saner hexacedimal defaults and shows ascii side by side.
+
+Not POSIX 7.
+
+Saner than hexdump.
+
+Very close to hexdump, but also shows ASCII visualisation on the side of hexa visualisation.
+
+Example:
+
+    echo -en {a..z} "\n \x01" | hd
+
+Output:
+
+    00000000  61 20 62 20 63 20 64 20  65 20 66 20 67 20 68 20  |a b c d e f g h |
+    00000010  69 20 6a 20 6b 20 6c 20  6d 20 6e 20 6f 20 70 20  |i j k l m n o p |
+    00000020  71 20 72 20 73 20 74 20  75 20 76 20 77 20 78 20  |q r s t u v w x |
+    00000030  79 20 7a 20 0a 20 01                              |y z . .|
+    00000037
+
+Non ASCII and whitespace chars or control chars such as newline or `\x01`
+are represented as dots on the ASCII side notation.
+
+Offsets are in hexadecimal: 00, 10, 20.
+
 #hexdump
 
 Very similar to od, but not POSIX 7.
 
 Uses saner hexacedimal defaults.
+
+`hd` has even saner defaults.
 
 View bytes in hexadecimal.
 
