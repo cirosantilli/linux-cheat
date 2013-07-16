@@ -36,7 +36,7 @@ that can be exemplified in modules (much easier than recompiling and reinstallin
 #include <linux/interrupt.h> 	/* request_irq, IRQF_SHARED */
 #include <linux/kernel.h>	/* KERN_INFO */
 #include <linux/mm.h>		/* Memory Management. page_address. Includes mm_types.h. */
-#include <linux/mm_types.h>	/* page */
+#include <linux/mm_types.h>	/* page, mm_struct */
 #include <linux/module.h>	/* module specific utilities: MODULE_* macros, module_param, module_init, module exit */
 #include <linux/path.h>		/* path */
 #include <linux/sched.h>	/* current */
@@ -682,7 +682,7 @@ static int __init init(void)
 		} else {
 			char *cs = page_address(page);
 
-			if ( (long)cs % PAGE_SIZE != 0 ) printk( "fail PAGE_SIZE multiple" );
+			if ( (long)cs % PAGE_SIZE != 0 ) return -1;
 
 			for ( int i = 0; i < 2 * PAGE_SIZE; i++ ){
 				cs[i] = i;
@@ -690,7 +690,7 @@ static int __init init(void)
 
 			printk( INFO_ID "  _count = %d\n", atomic_read(&page->_count) );
 
-			free_pages(cs, 1);
+			free_pages( (long)cs, 1);
 		}
 	}
 
@@ -729,13 +729,13 @@ static int __init init(void)
 					size_t size,
 					size_t offset,
 					unsigned long flags,
-					void (*constructor)(void *, kmem_cache_t *,
-							unsigned long flags),
-					void (*destructor)(void *, kmem_cache_t *,
-							unsigned long flags)
+					void (*ctor)(void *)
 				);
 
 			In a module, this operation would be typically done at module startup time.
+
+			The constructor is called on the data at creation of every object.
+			NULL means no contructor.
 
 		#kmem_cache_alloc
 
@@ -756,13 +756,20 @@ static int __init init(void)
 		struct kmem_cache *cache;
 		int *is[2];
 
+		/* simple constructor function that initializes each array to { 1, 2 } */
+		void ctor(void *vobj){
+			int *obj = (int *)vobj;
+			obj[0] = 1;
+			obj[1] = 2;
+		}
+
 		//create the cache
 		cache = kmem_cache_create(
 			"test_cache_0",
-			2,
+			2 * sizeof( int ),
 			0,
 			0,
-			0
+			ctor
 		);
 		if (!cache) return -1;
 
@@ -771,16 +778,11 @@ static int __init init(void)
 		is[0] = kmem_cache_alloc(cache, GFP_KERNEL);
 		is[1] = kmem_cache_alloc(cache, GFP_KERNEL);
 
-		is[0][0] = 0;
-		is[0][1] = 1;
-		is[1][0] = 2;
-		is[1][1] = 3;
-
-		is[0][0]++;
+		is[1][1]++;
 
 		if ( is[0][0] != 1 ) return -1;
-		if ( is[0][1] != 1 ) return -1;
-		if ( is[1][0] != 2 ) return -1;
+		if ( is[0][1] != 2 ) return -1;
+		if ( is[1][0] != 1 ) return -1;
 		if ( is[1][1] != 3 ) return -1;
 
 		kmem_cache_free(cache, is[0]);
@@ -1010,6 +1012,48 @@ static int __init init(void)
 			printk(INFO_ID "basename dirname pwd = %s\n", 	current->fs->pwd.dentry->d_parent->d_name.name);
 			printk(INFO_ID "basename root = %s\n", 		current->fs->root.dentry->d_name.name);
 			printk(INFO_ID "basename dirname root = %s\n", 	current->fs->root.dentry->d_parent->d_name.name);
+		}
+
+		/*
+		#mm_struct
+
+			Describes the process adress space.
+
+			TODO mm vs active_mm
+
+			- struct rb_root mm_rb: root of the rb tree that orders memory
+
+			- unsigned long
+				start_code, end_code,
+				start_data, end_data,
+				start_brk, brk (end),
+				start_stack, (TODO no end)
+				arg_start, arg_end,
+				env_start, env_end:
+
+				start and end of all given memory zones.
+
+				The only cryptic one is brk which is the heap (malloc).
+
+			- unsigned long total_vm: number of pages in process address space
+
+			- unsigned long locked_vm: pages that cannot be swapped out
+		*/
+		{
+			printk(INFO_ID "mm_struct");
+			printk(INFO_ID "  start_code = %lx\n", current->mm->start_code);
+			printk(INFO_ID "  end_code   = %lx\n", current->mm->end_code);
+			printk(INFO_ID "  start_data = %lx\n", current->mm->start_data);
+			printk(INFO_ID "  end_data   = %lx\n", current->mm->end_data);
+			printk(INFO_ID "  start_brk  = %lx\n", current->mm->start_brk);
+			printk(INFO_ID "  brk        = %lx\n", current->mm->brk);
+			printk(INFO_ID "  arg_start  = %lx\n", current->mm->arg_start);
+			printk(INFO_ID "  arg_end    = %lx\n", current->mm->arg_end);
+			printk(INFO_ID "  env_start  = %lx\n", current->mm->env_start);
+			printk(INFO_ID "  env_end    = %lx\n", current->mm->env_end);
+
+			printk(INFO_ID "  total_vm   = %lu\n", current->mm->total_vm);
+			printk(INFO_ID "  locked_vm  = %lu\n", current->mm->locked_vm);
 		}
 	}
 

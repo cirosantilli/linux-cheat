@@ -1,5 +1,4 @@
-The linux kernel is written on mainly on c c99 standard,
-with **gasp** gcc extensions. Therefore the linux kernel is married to gcc.
+The linux kernel is written on mainly on c c99 standard,with **gasp** gcc extensions. Therefore the linux kernel is married to gcc.
 Just guessing here, but an important reason for that is to use inline assembly TODO check
 
 Also note that besides the linux kernel, what most people call a linux system, or more precisely
@@ -16,17 +15,60 @@ All code samples were tested on kernel 3.10.
 
 #sources
 
+Linux documentation kind of sucks.
+
+Most function definitions or declarations don't contain any comments,
+so you really need to have a book in your hands to understand things.
+
+Therefore, the only way to understand things is to hope to find them on some book,
+and if not, interpret source codes, which are possibly very convoluted for performance
+and other complex restrictions.
+
+Maybe there is a good reason for that.
+
+##free sources
+
 - `git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git`
 
     The source code, *the* only definitive source.
 
     Nany important comment lacking however.
 
+- `make htmldoc`
+
+    Generates documentation for the kernel from comments, and puts it under `Documentation/DocBook/index.html`
+
+    The most useful is under `kernel api`. Anyways, this is grossly incomplete.
+
+- <http://vger.kernel.org/vger-lists.html>
+
+    Kernel mailing lists.
+
+    Mostly bleeding edge design decisions.
+
+- <https://www.kernel.org/doc/>
+
+    kernel.org resources list
+
+##payed sources
+
 - <http://www.amazon.com/books/dp/0596005652>
 
     Bovet - 2005 - Understanding the Linux Kernel.
 
-    Very good and clear book.
+    Goes into lots of inner working concepts.
+
+    Could have more examples of using the kernel API.
+
+- <http://www.amazon.com/books/dp/0596005652>
+
+    Love - 2006 - Linux kernel devlopement.
+
+    Great intro on the hardware.
+
+- <http://www.amazon.com/books/dp/0596005903>
+
+    Corbet - 200
 
 #what the kernel does
 
