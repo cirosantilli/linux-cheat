@@ -11,21 +11,40 @@ that can be exemplified in modules (much easier than recompiling and reinstallin
 	#__rcu
 
 		a type of locking directive
+
+#__KERNEL__
+
+	Defined on the Makefile when compiling the kernel or kernel modules.
+
+	Used with `ifdef` blocks on files which may be included from userspace,
+	to avoid that parts of those files be used on userpace. Example:
+
+		//for kernel or userspace
+		#ifdef __KERNEL__
+			//only for the kernel
+		#endif
 */
 
+#include <asm/page.h>		/* PAGE_SIZE */
+#include <asm/atomic.h>		/* atomic_t */
+
 #include <linux/dcache.h>	/* dentry, super_block */
+#include <linux/errno.h>	/* ENOMEM,  */
 #include <linux/fs_struct.h>	/* fs_struct */
 #include <linux/fs.h>		/* super_block */
+#include <linux/gfp.h>		/* Mnemonic: Get Free Pages. alloc_pages */
 #include <linux/interrupt.h> 	/* request_irq, IRQF_SHARED */
 #include <linux/kernel.h>	/* KERN_INFO */
+#include <linux/mm.h>		/* Memory Management. page_address. Includes mm_types.h. */
+#include <linux/mm_types.h>	/* page */
 #include <linux/module.h>	/* module specific utilities: MODULE_* macros, module_param, module_init, module exit */
 #include <linux/path.h>		/* path */
 #include <linux/sched.h>	/* current */
 #include <linux/sched/rt.h>	/* MAX_PRIO, MAX_USER_RT_PRIO, DEFAULT_PRIO */
+#include <linux/slab.h> 	/* kmalloc, kmem_cach_create, kmem_cach_alloc */
 #include <linux/spinlock.h>
 #include <linux/string.h>	/* memcpy, memcmp */
 #include <linux/version.h>
-#include <linux/slab.h>
 
 #define MODID __FILE__ ": "
 #define INFO_ID KERN_INFO MODID
@@ -139,7 +158,12 @@ DEFINE_PER_CPU(int, cpu_int);
  * 	tells the compiler that this function is only used once at initialization,
  * 	so the kernel may free up its memory after using this function
  *
- * return value: a non 0 return means init_module failed; module can't be loaded.
+ * return value:i
+ * - 0 on success
+ * - non zero on failure.
+ *
+ *   	You should always return the negation of constants defined in `linux/errno.h`,
+ *   	for example as `return -ENOMEM`
  *
  * #__initdata TODO
  * #__initconst TODO
@@ -348,6 +372,39 @@ static int __init init(void)
 	}
 
 	/*
+	#atomic operations
+
+		ANSI C does not guarantee that any operation is atomic, not even things like: `a++`.
+
+		Therefore, you must use atomic opertation if you want to ensure atomicity.
+
+		In some cases, use of those instructions is enough to guarantee synchronization,
+		for example when incrementing usage counters. This is why usage counters are often `atomic_t`.
+
+		This is a very efficient, but restricted, synchornization mechanism if applicable.
+
+		Available operations do things like:
+
+		- add
+		- subtract
+		- subtract and test greater than
+		- binary operations
+
+	#atomic_t
+
+		Type used on all atomic operations.
+
+	#ATOMIC_INIT(int)
+
+		Initialize an atomic to given integer.
+	*/
+	{
+		atomic_t i = ATOMIC_INIT(0);
+		atomic_inc(&i);
+		if ( atomic_read(&i) != 1 ) return -1;
+	}
+
+	/*
 	#data structures
 
 		the kernel has some basic and effective data structure implementations
@@ -473,7 +530,7 @@ static int __init init(void)
 			*/
 
 			if ( container_of(&ca.list, struct char_list, list) != &ca )
-				return 1;
+				return -1;
 		}
 	}
 
@@ -486,19 +543,34 @@ static int __init init(void)
 		int is[] = {0,1,2};
 		int is2[3];
 		memcpy( is2, is, 3 * sizeof( int ) );
-		if ( memcmp( is, is2, 3 * sizeof(int)) != 0 ) return 1;
+		if ( memcmp( is, is2, 3 * sizeof(int)) != 0 ) return -1;
 	}
 
 	/*
 	#page
 
-		a page refers to the smallest virtual memory division that the kernel can get,
-		usually around 4Kib today. This size is equal to the size of the page frame.
+		First learn about hardware paging in a common architecture such as x86 family.
+		This will be not explained here.
+
+		Pages are modeled by `struct page` under `mm_types.h`.
+
+		Hardware deals in terms of pages to:
+
+		- make retrival faster, since the bus clock is much slower than the cpu clock
+			and because of memory locality.
+
+		- serve as a standard unit for page swap betweem RAM and HD
+
+	#page flags
+
+		Defined in `page-flags.h`.
 
 	#page frame
 
-		a page frame refers to the smalles physical memory that the processor can ask
+		A page frame refers to the smalles physical memory that the processor can ask
 		from the RAM.
+
+		Paging usually has hardware support today.
 
 	#linking pages to page frames
 
@@ -510,6 +582,9 @@ static int __init init(void)
 
 		this is done in a multilevel scheme
 	*/
+	{
+		printk(INFO_ID "PAGE_SIZE (Kib) = %lu", PAGE_SIZE / ( 1 << 10 ));
+	}
 
 	/*
 	#memory zones
@@ -546,65 +621,194 @@ static int __init init(void)
 			This zone is always empty on x64 since there is more than enough address space there.
 
 			TODO why book says memory above 986 Mb is high memory? Why not 4 Gb?
-
-	#page
-
-		A page is a hardware imposed minimal unit of data transfer between the CPU and the RAM.
-
-		Pages are modeled by `struct page` under `mm_types.h`.
-
-		Hardware deals in terms of pages to:
-
-		- make retrival faster, since the bus clock is much slower than the cpu clock
-			and because of memory locality.
-
-		- serve as a standard unit for page swap betweem RAM and HD
-
-	#page flags
-
-		Defined in `page-flags.h`.
 	*/
+
+	/*
+	#memory allocation
+
+		The following methods are common for memory allocation by the kernel for is own use:
+
+		- alloc_pages
+		- kmalloc
+		- slab alocator methods such as: kmem_cach_create + kmem_cache_alloc
+		- vmalloc
+
+		#gfp flags
+
+			Certain flags are used on all of those functions.
+
+			They are:
+
+			TODO
+	*/
+
+	/*
+	#alloc_pages
+
+		Gets a given number of contiguous (linear address) pages.
+
+		The number of pages is the log_2 of the multiplier.
+
+		Use this when you want the memory for a small number of large objects.
+
+		Based on the Buddy System.
+
+	#page_address
+
+		Returns start of linear address of given page, NULL if that page is on high memory
+		or is not mapped.
+
+		TODO page_address vs page->virtual?
+
+	#free_pages
+
+		Like aloc_pages, but takes the starting linear address.
+
+	#page struct
+
+		Fields:
+
+		- long virtual: address of current page
+
+		- atomic_t _count: usage count by whom TODO
+
+	*/
+	{
+		struct page *page;
+		page = alloc_pages(GFP_KERNEL, 1);
+		printk(INFO_ID "alloc_pages\n" );
+		if ( page == NULL ){
+			printk(INFO_ID "  NULL\n" );
+		} else {
+			char *cs = page_address(page);
+
+			if ( (long)cs % PAGE_SIZE != 0 ) printk( "fail PAGE_SIZE multiple" );
+
+			for ( int i = 0; i < 2 * PAGE_SIZE; i++ ){
+				cs[i] = i;
+			}
+
+			printk( INFO_ID "  _count = %d\n", atomic_read(&page->_count) );
+
+			free_pages(cs, 1);
+		}
+	}
+
+	/*
+	#slab allocator
+
+		Best way to allocate several objects of the same type (size and required initial data).
+
+		This is more efficicient than other methods because
+
+		- it tries to keep hardware caches correctly aligned
+
+		Structure:
+
+		- each cache contains many slabs.
+
+			All objects contained in those slabs will be of the same type.
+
+		- each slab contains objects.
+
+			Each slab occupies an integer number of contiguous pages.
+
+			Therefore, this method is only good if you are going to allocate enough
+			small objects to at least fill a page.
+
+			Objects can be either free or occupied.
+
+		#kmem_cache_create
+
+			Create a cache.
+
+			Signature:
+
+				kmem_cache *kmem_cache_create(
+					const char *name,
+					size_t size,
+					size_t offset,
+					unsigned long flags,
+					void (*constructor)(void *, kmem_cache_t *,
+							unsigned long flags),
+					void (*destructor)(void *, kmem_cache_t *,
+							unsigned long flags)
+				);
+
+			In a module, this operation would be typically done at module startup time.
+
+		#kmem_cache_alloc
+
+			Allocate data on a created chache.
+
+			You do not need to know in which slab it will be created.
+
+		#kmem_cache_free
+
+			Free data on a cache.
+
+		#kmem_cache_destroy
+
+			Delete a cache.
+
+	*/
+	{
+		struct kmem_cache *cache;
+		int *is[2];
+
+		//create the cache
+		cache = kmem_cache_create(
+			"test_cache_0",
+			2,
+			0,
+			0,
+			0
+		);
+		if (!cache) return -1;
+
+		//allocate memory for the cache
+		//we make two pairs of integers
+		is[0] = kmem_cache_alloc(cache, GFP_KERNEL);
+		is[1] = kmem_cache_alloc(cache, GFP_KERNEL);
+
+		is[0][0] = 0;
+		is[0][1] = 1;
+		is[1][0] = 2;
+		is[1][1] = 3;
+
+		is[0][0]++;
+
+		if ( is[0][0] != 1 ) return -1;
+		if ( is[0][1] != 1 ) return -1;
+		if ( is[1][0] != 2 ) return -1;
+		if ( is[1][1] != 3 ) return -1;
+
+		kmem_cache_free(cache, is[0]);
+		kmem_cache_free(cache, is[1]);
+
+		kmem_cache_destroy(cache);
+	}
 
 	/*
 	#kmalloc
 
 		Like libc malloc, but for the kernel.
 
-		Relies on the slab allocator, so it is a quite high level operation.
+		Use this when you want to create a single,
+		or a small number of objects of a type that is not too large.
 
-		Most convenient method to get small chunks of memory.
-
-		#flags
-
-			TODO
+		Based on the slab allocator.
 	*/
 	{
-		int *kmalloc_is = kmalloc(2 * sizeof(int), GFP_KERNEL);
-		kmalloc_is[0] = 0;
-		kmalloc_is[1] = 1;
-		printk(INFO_ID "kmalloc_is[0] = %d\n", kmalloc_is[0]);
-		printk(INFO_ID "kmalloc_is[1] = %d\n", kmalloc_is[1]);
-		kfree(kmalloc_is);
-	}
-
-	/*
-	#TASK_SIZE
-
-		*virtual memory* is divided as follows:
-
-		- memory from address from 0 to TASK_SIZE - 1 can be used by *each* processes
-		- other memory adressses (from  TASK_SIZE to the maxinum adressable memory, 2^32 on 32 bits platforms
-				of 2^64 on 64 ) belongs to the kernel
-
-		TASK_SIZE is typically around 3/4 of the total memory
-
-		note that this is *virtual* memory, so it is independant of the acutual size of the memory
-		as the hardware and the kernel can give processes the illusion that they actually have
-		ammounts of memory larger than the hardware for instance
-
-	*/
-	{
-		printk(INFO_ID "TASK_SIZE (GiBs) = %lu\n", TASK_SIZE / (1 << 30));
+		int *is = kmalloc(2 * sizeof(int), GFP_KERNEL);
+		if ( !is ) return -ENOMEM;
+		is[0] = 0;
+		is[1] = 1;
+		is[0]++;
+		is[1]++;
+		if ( is[0] != 1 ) return -1;
+		if ( is[1] != 2 ) return -1;
+		kfree(is);
 	}
 
 	/*
@@ -807,6 +1011,35 @@ static int __init init(void)
 			printk(INFO_ID "basename root = %s\n", 		current->fs->root.dentry->d_name.name);
 			printk(INFO_ID "basename dirname root = %s\n", 	current->fs->root.dentry->d_parent->d_name.name);
 		}
+	}
+
+	/*
+	#TASK_SIZE
+
+		*virtual memory* is divided as follows:
+
+		- memory from address from 0 to TASK_SIZE - 1 can be used by *each* processes
+		- other memory adressses (from  TASK_SIZE to the maxinum adressable memory, 2^32 on 32 bits platforms
+				of 2^64 on 64 ) belongs to the kernel
+
+		TASK_SIZE is typically around 3/4 of the total memory
+
+		Note that this is *virtual* memory, so it is independant of the acutual size of the memory
+		as the hardware and the kernel can give processes the illusion that they actually have
+		ammounts of memory larger than the hardware for instance.
+
+	*/
+	{
+		printk(INFO_ID "TASK_SIZE (GiB) = %lu\n", TASK_SIZE / (1 << 30));
+
+		//Kernel virtual memory must be above `TASK_SIZE`:
+
+			int i;
+			if ( (int)&i < TASK_SIZE ) return -1;
+			printk( INFO_ID "(void*)&i = %p\n", (void*)&i );
+
+		//User virtual memory will always be below TASK_SIZE.
+		//Print addresses of user space program variables to check this (3Gb = `0xc0000000`)
 	}
 
 	/*

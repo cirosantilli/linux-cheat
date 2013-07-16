@@ -262,11 +262,50 @@ In this way, you can launch an app and send commands, making sure they will be r
 
 ##wmctrl
 
-Control windows from sh (maximize, minimize, focus, etc.)
+Sources:
 
-TODO
+- amazing tutorial: <http://spiralofhope.com/wmctrl-examples.html>
 
-    wmctrl -m
+Control windows and get info on them from sh (maximize, minimize, focus, etc.)
+
+Get info:
+
+- `-d`: desktop info
+- `-m`: window manager info
+
+In the following, `- mozilla firefox` is a substring of the title of the window we want to act on.
+case insensitive. For concreteness, we will test with . No regex patterns are used
+
+Actions:
+
+Go to desktop of given window and maximize it (activate):
+
+    wmctrl -a '- mozilla firefox'
+
+Mnemonic: Activate.
+
+Close window:
+
+    wmctrl -c '- mozilla firefox'
+
+Resize and repozition window:
+
+    wmctrl -r '- mozilla firefox' -e 1,0,0,800,600
+                                     1 2 3 4   5
+
+`-r` selects the window for commands that already take other arguments such as `-e`
+
+1: gravity TODO
+
+2 and 3: position.
+
+4 and 5: size.
+
+If the window is maximized, this does nothing.
+
+Switch to desktop 1:
+
+    wmctrl -s 1
 
 ##keyboard and mouse automation
 
@@ -688,6 +727,10 @@ Implementations:
 
 - metacity
 - compiz
+
+Get currently used window manager info:
+
+    wmctrl -m
 
 ##openbox
 

@@ -10,6 +10,10 @@ of the linux kernel.
 You cannot use user space libs such as libc to program the kernel,
 since the kernel itself itself if need to be working for user space to work.
 
+#examples portability
+
+All code samples were tested on kernel 3.10.
+
 #sources
 
 - `git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git`
@@ -224,7 +228,7 @@ view/config kernel parameters at runtime
 
     sudo sysctl –a
 
-#kernel coding conventions
+#coding conventions
 
 - tabs instead of spaces. Configure editors to view tabs as 8 spcaes. In `vim` you could source:
 
@@ -255,20 +259,33 @@ view/config kernel parameters at runtime
           c1     c2
           c1     c2
 
+##double underscores
+
+Functions that start with two underscores are low level functions. This means that:
+
+1. there is probably a more convenient and usually more correct function available.
+2. it is more likelly to get deprecated some day.
+
+The message is then clear: avoid using those unless you know exactly what you are doing
+and you really need to do it.
+
 #kernel source tree
 
-- `arch`: architecture specific code. Ex: `x86`, `sparc`, `arm`
-- `include`: headers which may be useful for using kernel parameters and functions on user programs or kernel modules TODO confirm
+- `arch`: architecture specific code. Ex: `x86`, `sparc`, `arm`.
 
-	for kernel modules, those are automatically appended to the `cpp` include search path by the default makefile
+    `arch/include/asm` contains header files which differ from one architecture to another.
 
-- `include/linux`: TODO
+    Those files are used on source as `asm/XXX.h`.
 
-- `include/linux`: TODO
+    During compilation, the Makefile uses the correct architecture includes and definitions.
 
-	important headers there include:
+- `include/linux`:
 
-	- `fs.h`: filesystem structs
+	Almost all important headers.
+
+	TODO what are the other sibling directories?
+
+- `include/asm-generic`: what is this?? isn't all that is under `include` supposed to be generic already?
 
 ##find definitions
 
@@ -356,24 +373,3 @@ the process is notified via a predefined signal.
     17  Alignment check                 SIGBUS
     18  Machine check                   None
     19  SIMD floating point             SIGFPE
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

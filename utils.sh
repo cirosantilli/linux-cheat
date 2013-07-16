@@ -2454,6 +2454,9 @@
 
         #each partition can have a different filesystem.
 
+        #When creating partitions for external storage devices such as USB stick nowdays,
+        #the best option is NTFS since Linux can read write to it out of the box, and it can be used on
+        #the 95% of computers because they use Windows (which does not read / write to ext out of the box.)
 
     ##create filesystems
 

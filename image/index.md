@@ -123,9 +123,9 @@ shortcuts:
 
 ##inkscape
 
-svg gui editor
+svg gui editor.
 
-very good
+Very good.
 
 ##dia
 
