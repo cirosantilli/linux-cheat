@@ -1,11 +1,14 @@
 #standards
 
+Large community website, de facto standard on certin areas,
+use its software and follow its standards if you can.
+
 ##freedesktop.org
 
 aka XDG (freedesktop.org was formerly known as the X Desktop Group,
 and the acronym "XDG", remains common in their work.)
 
-http://www.freedesktop.org/wiki/
+<http://www.freedesktop.org/wiki/>
 
 Specifies:
 
@@ -1045,3 +1048,62 @@ and possibly other backends on other systems such as the Windows registry (binar
 Therefore, applications should only use it, and not dconf to have greater portability.
 
 On current gnome based desktops it is not a frontend for gconf.
+
+#power
+
+##shutdown
+
+Sends TODO signal to running processes and waits for them to terminate nicely:
+
+    sudo shutdown -P now
+
+##reboot
+
+    sudo reboot
+
+##suspend and hibernate
+
+Sources:
+
+- <https://help.ubuntu.com/community/PowerManagement/Overview>
+- <http://askubuntu.com/questions/1792/how-can-i-suspend-hibernate-from-command-line>
+
+Both can be done with pmi, pm-utils or dbus-send
+
+###suspend
+
+Keeps things on RAM, but pauses all processes that can be paused, and turns off screen.
+
+You need to use a bit of power to keep it suspended.
+
+###hibernate
+
+Save RAM to disk, shuts down almost everyting.
+
+Uses very little to no power.
+
+TODO pmi vs pm-utils?
+
+##ACPI
+
+TODO
+
+##pm-utils package
+
+Maintained by freedesktop.org: <http://pm-utils.freedesktop.org/wiki/>
+
+Mnemonic: Power Management.
+
+    pm-suspend
+    pm-hibernate
+
+##pmi
+
+    pmi action suspend
+    pmi action hibernate
+
+#dbus
+
+Maintained at freedesktop.org: <http://www.freedesktop.org/wiki/Software/dbus/>
+
+Used for interprocess communication.

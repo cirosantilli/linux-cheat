@@ -1,11 +1,11 @@
 # make all files with one of the given extensions by IN_EXTS
 # separatelly, possibly using a different rule per extension
 
-IN_DIR 	?= ./
+IN_DIR 		?= ./
 IN_EXTS 	?= .c
 OUT_DIR 	?= _out/
 OUT_EXT 	?=
-RUN		?= main
+RUN			?= main
 
 INS			:= $(foreach IN_EXT, $(IN_EXTS), $(wildcard $(IN_DIR)*$(IN_EXT)) )
 INS_NODIR 	:= $(notdir $(INS))
@@ -19,7 +19,7 @@ all: mkdir $(OUTS)
 
 # rule to make the c files
 $(OUT_DIR)%$(OUT_EXT): %.c
-	gcc -Wall -std=c99 -pedantic-errors -o "$@" "$<"
+	gcc -Wall -std=c99 -pedantic-errors -pthread -o "$@" "$<"
 
 clean:
 	rm -rf $(OUT_DIR)

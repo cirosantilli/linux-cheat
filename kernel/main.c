@@ -26,6 +26,7 @@ that can be exemplified in modules (much easier than recompiling and reinstallin
 */
 
 #include <asm/page.h>		/* PAGE_SIZE */
+#include <asm/param.h>		/* HZ */
 #include <asm/atomic.h>		/* atomic_t */
 
 #include <linux/dcache.h>	/* dentry, super_block */
@@ -34,7 +35,9 @@ that can be exemplified in modules (much easier than recompiling and reinstallin
 #include <linux/fs.h>		/* super_block */
 #include <linux/gfp.h>		/* Mnemonic: Get Free Pages. alloc_pages */
 #include <linux/interrupt.h> 	/* request_irq, IRQF_SHARED */
+#include <linux/jiffies.h> 	/* jiffies */
 #include <linux/kernel.h>	/* KERN_INFO */
+#include <linux/kthread.h>	/* kthread_create */
 #include <linux/mm.h>		/* Memory Management. page_address. Includes mm_types.h. */
 #include <linux/mm_types.h>	/* page, mm_struct */
 #include <linux/module.h>	/* module specific utilities: MODULE_* macros, module_param, module_init, module exit */
@@ -402,6 +405,38 @@ static int __init init(void)
 		atomic_t i = ATOMIC_INIT(0);
 		atomic_inc(&i);
 		if ( atomic_read(&i) != 1 ) return -1;
+	}
+
+	/*
+	#time
+
+		There are 2 types of time: absolute (1/1/2010) and relative (1 sec after now).
+
+	#system timer
+
+		Programmable hardware that emmits interrputs at a given frequency,
+		on the 10 - 1k Hz range as of 2013.
+
+	*/
+	{
+		/*
+		#HZ
+
+			Frequency of the system clock.
+
+		#jiffies
+
+			How many system clock periods have passed since boot.
+
+			Starts at 0.
+
+			Mnemonic: in a jiffy is an informal / old expression for in a while.
+			A jiffle then is a small amount of time.
+		*/
+		{
+			printk( INFO_ID "HZ = %d", HZ );
+			printk( INFO_ID "jiffies = %lu", jiffies );
+		}
 	}
 
 	/*
@@ -825,13 +860,6 @@ static int __init init(void)
 
 		threads are processes that share the same address space so they act on common variables
 
-	#kernel threads
-
-		kernel threads are like user space threads, but are created by the kernel
-		and execute on the kernel memory space with kernel priviledges.
-
-		They can also be listed with ps:
-
 	#current
 
 		macro that gives the `task_struct` representing the current process
@@ -1055,6 +1083,93 @@ static int __init init(void)
 			printk(INFO_ID "  total_vm   = %lu\n", current->mm->total_vm);
 			printk(INFO_ID "  locked_vm  = %lu\n", current->mm->locked_vm);
 		}
+	}
+
+	/*
+	#kernel threads
+
+		The kernel can spawn its own threads.
+
+		They are run on kernel space.
+
+		This is often used to do cyclical jobs such as swapping memory pages,
+		processing driver data, etc.
+
+		You can explicitly create a new thread via the `kthread_create` function.
+
+		Kernel threads are quite low level, so on real applications first check
+		if what you want to achieve cannot be achieved via sotfirq or other bottom halves
+		which is most often the case.
+
+	#kthread_create
+
+		Create kernel threads.
+
+		Signature:
+
+			struct task_struct *kthread_create(
+				int (*function)(void *data),
+				void *data,
+				const char name[],
+				...
+			)
+
+		- `function` is what will be run on the thread
+		- `data` is what will be passed to function
+		- `name` is an identifier for the thread
+
+		After creating a thread you must wake it up with a `wake_up_process(struc task_struct *)` call`
+
+	#kthread_run
+
+		Same as kthread_create, but also starts the thread.
+
+	#kthread_stop
+
+		TODO waits or kills? seems to kill. How to wait?
+
+		Signature:
+
+			kthread_stop(struc task_struct *)
+	*/
+	{
+		struct task_struct *thread;
+
+		struct data {
+			int i;
+			int j;
+		};
+
+		//int status;
+
+		int function(void* vdata)
+		{
+			struct data *data = (struct data *)vdata;
+			printk(INFO_ID "kthread %d %d", data->i, data->j);
+			return 0;
+		}
+
+		struct data data = {
+			.i = 1,
+			.j = 2
+		};
+
+		thread = kthread_run(
+			function,
+			&data,
+			"test_kthread_0"
+		);
+
+		//if we had used kthread_create:
+
+			//if ( thread != NULL ) {
+			//	wake_up_process(thread);
+			//}
+
+		//if we wanted to immeditally kill our thread:
+
+			//status = kthread_stop(thread);
+			//if ( status != 0 ) printk("kthread fail");
 	}
 
 	/*
@@ -1691,7 +1806,7 @@ module_init(init);
 	/*rtc_irq_data &= ~0xff;*/
 	/*rtc_irq_data |= (CMOS_READ(RTC_INTR_FLAGS) & 0xF0);*/
 	/*if (rtc_status & RTC_TIMER_ON)*/
-		/*mod_timer(&rtc_irq_timer, jiffies + HZ/rtc_freq + 2*HZ/100);*/
+		/*mod_timer(&rtc_irq_timer, jiffles + HZ/rtc_freq + 2*HZ/100);*/
 	/*spin_unlock(&rtc_lock);*/
 	/*
 	* Now do the rest of the actions

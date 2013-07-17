@@ -5129,15 +5129,14 @@
 
         #quite good at first sight
 
-##shutdown
+##dbus-send
 
-    #sends TODO signal to running processes and waits for them to terminate nicely:
+    #suspend computer:
 
-        sudo shutdown -P now
-
-##reboot
-
-        sudo reboot
+        dbus-send --system --print-reply \
+            --dest="org.freedesktop.UPower" \
+            /org/freedesktop/UPower \
+            org.freedesktop.UPower.Suspend
 
 ##yes
 

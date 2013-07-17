@@ -67,7 +67,6 @@ main cheat on the POSIX C API
 //#include <limits.h>
 #include <netdb.h>          //gethostbyname
 #include <netinet/in.h>
-#include <pthread.h>        //without this, one gets the glib.c version:
 #include <pwd.h>            //getpwuid, getpwnam, getpwent
 #include <regex.h>
 #include <sched.h>
@@ -1459,28 +1458,6 @@ int main( int argc, char** argv )
         */
         {
             sched_yield();
-        }
-    }
-
-    /*
-    #threads
-
-        posix threads
-
-        c11 will introduce a standard threading model,
-        so in time this may become less important
-
-        each thread has its own stack, but unlike process, global memory is shared
-
-        quicker to start than a process because less resource copy is needed
-
-        in Linux, based on the `clone` system call
-    */
-    {
-
-        //#pthread.h
-        {
-            //library, probably based on clone
         }
     }
 

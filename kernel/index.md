@@ -38,7 +38,12 @@ Maybe there is a good reason for that.
 
     Generates documentation for the kernel from comments, and puts it under `Documentation/DocBook/index.html`
 
-    The most useful is under `kernel api`. Anyways, this is grossly incomplete.
+    The most useful is under `kernel api`. Still, this is grossly incomplete.
+
+    The documentation seems to be stored in the `.c` files mostly rather than on the `.h`.
+
+    Weirdly the snapshots of htmldoc on kernel.org have some extra functions, check it out:
+    <https://www.kernel.org/doc/htmldocs/kernel-api.html>
 
 - <http://vger.kernel.org/vger-lists.html>
 
@@ -69,6 +74,32 @@ Maybe there is a good reason for that.
 - <http://www.amazon.com/books/dp/0596005903>
 
     Corbet - 200
+
+#kernel source tree
+
+- `arch`: architecture specific code. Ex: `x86`, `sparc`, `arm`.
+
+    `arch/XXX/include/`
+
+    `asm` contains header files which differ from one architecture to another.
+
+    Those files are used on source as `asm/file.h`, and the make process ensures that they
+    point to the target compilation architecture.
+
+    During compilation, the Makefile uses the correct architecture includes and definitions.
+
+	`uapi` contains arch dependant stuff that will be exposed to userspace applications: <http://lwn.net/Articles/507794/>
+
+- `include/linux`:
+
+	Almost all important headers.
+
+	TODO what are the other sibling directories?
+
+- `include/asm-generic`:
+
+    TODO what is this?? isn't all that is under `include` supposed to be generic already?
+        <http://stackoverflow.com/questions/3247770/what-is-the-linux-2-6-3x-x-include-asm-generic-for>
 
 #what the kernel does
 
@@ -310,24 +341,6 @@ Functions that start with two underscores are low level functions. This means th
 
 The message is then clear: avoid using those unless you know exactly what you are doing
 and you really need to do it.
-
-#kernel source tree
-
-- `arch`: architecture specific code. Ex: `x86`, `sparc`, `arm`.
-
-    `arch/include/asm` contains header files which differ from one architecture to another.
-
-    Those files are used on source as `asm/XXX.h`.
-
-    During compilation, the Makefile uses the correct architecture includes and definitions.
-
-- `include/linux`:
-
-	Almost all important headers.
-
-	TODO what are the other sibling directories?
-
-- `include/asm-generic`: what is this?? isn't all that is under `include` supposed to be generic already?
 
 ##find definitions
 
