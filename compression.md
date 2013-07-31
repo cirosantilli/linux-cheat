@@ -94,7 +94,7 @@ Split archive extensions:
 - .part\d+.rar
 - .r\d+
 
-extract contents of a.rar to ./
+Extract contents of `a.rar` to `./`
 
     unrar x a.rar
 
@@ -111,21 +111,21 @@ Before / after:
     dir1/f1
     dir1/f2
 
-out to ./out/, creates this folders if necessary:
+Out to `./out/` directory, creates this directory if necessary:
 
     unrar x a.rar out
 
-extract multipart rar
+Extract multipart rar:
 
     unrar x a.r00
     unrar x a.part1.rar
 
-recursivelly finds all files in a.rar, and outputs them to current dir
+Eecursivelly finds all files in `a.rar`, and outputs them to current dir
 with old basename possible name conflicts
 
     unrar e a.rar
 
-sample output:
+Sample output:
 
     a.rar
     /dir1/
@@ -137,6 +137,12 @@ sample output:
     a.rar
     f1
     f2
+
+##rar create
+
+`a` for add:
+
+    rar a dir.rar dir
 
 #7zip
 

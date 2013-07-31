@@ -1,39 +1,67 @@
-#standards
-
-Large community website, de facto standard on certin areas,
-use its software and follow its standards if you can.
-
-##freedesktop.org
+#freedesktop.org
 
 aka XDG (freedesktop.org was formerly known as the X Desktop Group,
 and the acronym "XDG", remains common in their work.)
 
+Large community website, de facto standard on certin areas,
+use its software and follow its standards if you can.
+
+Generally followed by both GNOME and KDE for example.
+
+Contains both standard specifications, and also hosts software projects.
+
 <http://www.freedesktop.org/wiki/>
+
+Hosts standard specifications and software projects.
 
 Specifies:
 
 - autostart
 
-- <http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html>
-
-    basedir spec
-
-    Specifies where configuration and data files should be put,
-    and enviroment variables that indicate that place such as `$XDG_CONFIG_HOME`
-
-    All enviroment variables have a default value to be assumed in case they are not present.
-
-    - `$XDG_CONFIG_HOME`: base location of per-user configuration files. Default value: `.config`.
-
-    - `$XDG_CONFIG_DIRS`: comma separated list of where to look for cross user configuration files.
-
-        Default value: `/etc/xdg`
-
 - `echo $XDG_CURRENT_DESKTOP`: current DE in use.
 
     Gnome 3 output: GNOME
 
-Also check the `man xdg-` tools. Not sure how much they have been adopted however.
+##xdg-utils
+
+<http://portland.freedesktop.org/xdg-utils-1.0/>.
+
+A few useful applications that should be standard.
+
+Adopted by the LSB 4.1.
+
+##basedir spec
+
+<http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html>
+
+Specifies where configuration and data files should be put,
+and enviroment variables that indicate that place such as `$XDG_CONFIG_HOME`
+
+All enviroment variables have a default value to be assumed in case they are not present.
+
+###XDG_CONFIG_HOME
+
+Base location of per-user configuration files. Default value: `.config`.
+
+###XDG_CONFIG_DIRS
+
+Comma separated list of where to look for cross user configuration files.
+
+Default value: `/etc/xdg`
+
+###XDG_DATA_HOME
+
+Data instead of configs. Default: `.local`.
+
+###XDG_DATA_DIRS
+
+Data instead of configs. Default: `/usr/local/share/:/usr/share/`.
+
+#xdg-settings
+
+    xdg-settings --list
+
+TODO why does it show a single line only? what should this list?
 
 #x11
 
@@ -1102,8 +1130,170 @@ Mnemonic: Power Management.
     pmi action suspend
     pmi action hibernate
 
+#lock screen
+
+State in which user must enter a password to be able to do or see anything.
+
+Does not necessarily suspend computer for power saving.
+
+Usually fires up the screensaver.
+
+#screensaver
+
+Available screensavers at `$XDG_CONFIG_DIRS/screensaver` as desktop files.
+
+You can execute screensavers under `TryExec` of the desktop entries to see how they look like.
+
+##xdg-screensaver
+
+xdg utils package
+
+Lock screen and activate screensaver:
+
+    xdg-screesaver activate
+
+Seems to reset to the current desktop's default if any is recognized such as gnome-screensaver.
+
+##xscreensaver
+
+Seems to fail is a nother screensaver such as gnome-screensaver can run.
+
+##gnome-screensaver
+
+Seems that it was rewritten and screensaver change is not implemented as of 07/2013:
+<http://askubuntu.com/questions/64086/how-can-i-change-or-install-screensavers>
+
 #dbus
 
 Maintained at freedesktop.org: <http://www.freedesktop.org/wiki/Software/dbus/>
 
 Used for interprocess communication.
+
+#desktop format
+
+Files with extension `.desktop`.
+
+Data format used on many different XDG specs.
+
+The fieds it can contain are left for each spec: this only specifies syntax.
+Analogy: this is `xml`, not `html`.
+
+Specs: <http://standards.freedesktop.org/desktop-entry-spec/latest/>
+
+#applications desktop files
+
+This discusses the desktop files under `$XDG_DATA_DIRS/applications` such as `$XDG_DATA_DIRS/applications/firefox.desktop`.
+
+Sources:
+
+- <https://developer.gnome.org/integration-guide/stable/desktop-files.html.en>
+
+    GNOME tutorial. Claims to follow freedesktop.org specs:
+    <http://standards.freedesktop.org/menu-spec/latest/index.html>
+
+Those files contain metadata about programs, which can be used by the DE to improve user experience.
+
+The commmonly understood difference between the terms application and program is exacly that:
+applications is mostly a program with DE metadata, while program is mostly the executable.
+
+Sample file (abridged):
+
+    [Desktop Entry]
+    Name=Firefox Web Browser
+    Name[es]=Navegador web Firefox
+    Comment=Browse the World Wide Web
+    Comment[es]=Navegue por la web
+    GenericName=Web Browser
+    GenericName[es]=Navegador web
+    Keywords=Internet;WWW;Browser;Web;Explorer
+    Keywords[es]=Explorador;Internet;WWW
+    Exec=firefox %u
+    Terminal=false
+    X-MultipleArgs=false
+    Type=Application
+    Icon=firefox
+    Categories=GNOME;GTK;Network;WebBrowser;
+    MimeType=text/html;text/xml [actually much longer than this!]
+    StartupNotify=true
+    Actions=NewWindow;NewPrivateWindow;
+
+    [Desktop Action NewWindow]
+    Name=Open a New Window
+    Exec=firefox -new-window
+    OnlyShowIn=Unity;
+
+    [Desktop Action NewPrivateWindow]
+    Name=Open a New Private Window
+    Exec=firefox -private-window
+    OnlyShowIn=Unity;
+
+How this file could be used by the DE:
+
+- when users whant to search for an application, and they don't know the exact name for the application,
+    they can querry for metadata.
+
+    For example on Ubuntu Panel, if you type `WWW`, firefox will be suggested, because `WWW` is in its keywords metadata.
+
+- when a file with uknown type is going to be opened, if there are no associations to it,
+    the DE could use the `MimeType` field to make suggestions, of possible suitable alternatives.
+
+##icon
+
+Icons are needed at several places to help identify the application:
+
+- when showing a program suggestion list
+- when switching windows
+
+The icon is identified by the `Icon` field, which corresponds to a file under `XDG_DATA_DIRS/icons`.
+That directory may contain multiple versions of each icon, at various resolutions, color depths and styles,
+since icon themes can also change with DE settings. `hicolor/48x48` should contains lots of standard icons.
+
+#default application
+
+This talks about how to allow users to choose their default application
+when opening certain types of file.
+
+##xdg-open
+
+xdg utils package
+
+sources:
+
+- <https://wiki.archlinux.org/index.php/Default_Applications>
+
+Preferred choice for default program opening commoand since it is desktop/window manager agnostic.
+
+See this: <https://wiki.archlinux.org/index.php/Xdg-open>
+
+It seems that if a desktop is detected such as GNOME,
+options for that desktop override this optios, so for example under GNOME,
+this just passes control to gnome-open.
+
+Based on MIME type of file to open, not extension.
+
+Configuration files:
+
+- MIME -> program mapping under `$XDG_DATA_DIRS/applications`, either `defaults.list` (old) or `mimeapps.list` (new).
+
+###update-mime-database
+
+shared-mime-info package.
+
+##gnome-open
+
+Gnome specific
+
+##kde-open
+
+KDE specific
+
+##/etc/alternatives/
+
+One configuration method is to make symbolic links such as `/usr/bin/editor` to either `vi` or `ed` for example.
+
+The standard way is to first link `/usr/bin/editor` to `/etc/alternatives/editor`,
+and then `/etc/alternatives/editor` to the desired executable (say `/usr/bin/vi`).
+
+In this way, all preferences are stored under `etc` as specified by the LSB.
+
+`update-alternatives` can be used to manage that system.

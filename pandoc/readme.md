@@ -21,7 +21,9 @@ generate pdf from markdown:
 
 #options
 
-    pandoc -s --toc -c pandoc.css -A footer.html README -o example3.html
+A good default is:
+
+    pandoc -s --toc -c pandoc.css -A footer.html -V geometry:margin=1in a.md -o a.html
 
 - -s : output is standalone. in output html for example,
 - includes ``<html>`` and ``<body>`` tags
@@ -30,3 +32,4 @@ generate pdf from markdown:
 - -A : include after
 - -c : link to css
 - -w rst : set input format to rst
+- -V geometry:margin=1in. Sets margins. Only meaningful for pdfs.

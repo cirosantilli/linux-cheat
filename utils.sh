@@ -643,46 +643,45 @@
 
         ##eclipse
 
-            #sudo aptitude install -y eclipse
-                #problems with cdt tools
+            #Extensible, lots of good existing plugins, coded in Java and therefore sane.
 
-            #MANUAL: install plugins.
+            #Whatever you want to do you must click 50 menu items, no good config textual interface.
 
-            #must be root for those operations so
-            gksudo eclipse
+            ##install plugins
 
-            #Help > Install new software > Availabe software sources > Check every single case there!
-            #Help > Install new software > New sources
+                #must be root for those operations so
 
-            #add vim like editing to eclipse
-            #http://vrapper.sourceforge.net/update-site/stable
+                    gksudo eclipse
 
-            #add eclipe functionality to vim
-            #http://vrapper.sourceforge.net/update-site/stable
+                #can only be done sanely manually from the GUI like everything else.
 
-            #color themes
+                #Help > Install new software > Availabe software sources > Check every single case there!
+                #Help > Install new software > New sources
 
-            #http://eclipse-color-theme.github.com/update
-            #	mine: http://www.eclipsecolorthemes.org/?view=theme&id=7915
-            #to install: File > Import > Preferences > Select *.epf (Eclipse menus are SO unintuitive...)
+            #add vim like editing to eclipse: http://vrapper.sourceforge.net/update-site/stable
 
-            #c and c++
-            #http://download.eclipse.org/tools/cdt/releases/indigo/
+            ##color themes
 
-            #python
-            #http://pydev.org/updates
+                #http://eclipse-color-theme.github.com/update
 
-            #html, javascript, php
-            #http://download.eclipse.org/webtools/repository/indigo/
+                #mine: http://www.eclipsecolorthemes.org/?view=theme&id=7915
 
-            #latex
-            #http://texlipse.sourceforge.net
-            #forward search to okular:
-            #
-            #
-            #inverse search from okular: Settings > Configure Okular > Editor
-            #  Editor: custom text editor,
-            #  Command: gvim --remote +%l %f
+                #to install: File > Import > Preferences > Select *.epf (Eclipse menus are SO unintuitive...)
+
+            #c and c++: #http://download.eclipse.org/tools/cdt/releases/indigo/
+
+            #python: http://pydev.org/updates
+
+            #html, javascript, php: http://download.eclipse.org/webtools/repository/indigo/
+
+            ##latex
+
+                #http://texlipse.sourceforge.net
+                #forward search to okular:
+                #
+                #inverse search from okular: Settings > Configure Okular > Editor
+                #  Editor: custom text editor,
+                #  Command: gvim --remote +%l %f
 
         ##vim
 
@@ -968,40 +967,90 @@
 
         #POSIX 7>
 
-        #Print to stdout:
+        ##versions
 
-            assert [ "`echo a`" = $'a' ]
+            #POSIX says that: A string to be written to standard output.
 
-        #Appends newline at end by default.
+                #If the first operand is -n, or if any of the operands contain a <backslash> character,
+                #the results are implementation-defined.
 
-        #-n: no final newline:
+            #Which means that is your `echo` input statrs with `-n` or contains a backslash `\`,
+            #behaviour is undetermined.
 
-            echo -n a
+            #To make things worse, in practice different implementations *do* have different standards.
 
-        #Print all given arguments, space separated:
+            #- On Ubuntu 13.04, `sh` has an `echo` built-in.
+
+                #This version only accepts `-n` as a command line option,
+                #and backslash escapes are always interpreted.
+
+            #- `/bin/echo` by GNU. On Ubuntu 13.04, `bash` has no built-in called `echo`,
+                #and therefore uses this one.
+
+                #In this version, you need to use the `-e` option to activate the backslash escapes.
+
+                #It seems that this is is slighltly *not* POSIX compliant since other options are introduced
+                #such as `-e`, and POSIX seems to mandate that such strings be printed (`echo -e 'a' would print `-e a`)
+
+            #The message then is clear: if you want to use escape chars, or ommit the ending newline,
+            #do *not* use `echo`. Or even better, never use echo, only `printf`.
+
+        #print to stdout:
+
+            assert [ "`echo a`" = a ]
+
+        #multiple arguments are space separated:
 
             assert [ "`echo a b c`" = "a b c" ]
 
-        #Does not interpret `\` escaped chars by default:
+        ##gnu implementation
 
-            assert [ "`echo 'a\nb'`" = $'a\\nb' ]
+            #As explained in the versions section, POSIX does not specificy behaviour
+            #if `-n` input starts or if input contains `\n`, and in practice inplementations
+            #recognze other command line options besides `-n`.
 
-        #-e: interprets \ escaped chars:
+            #Appends newline at end by default.
 
-            assert [ "`echo -e 'a\nb'`" = $'a\nb' ]
-            assert [ "`echo -e '\x61'`" = $'a' ]
+            #-n: no final newline:
 
-        #Print the `-n` string:
-        #IMPOSSIBLE! not even gnu echo supports `--`.
-        #=) use `printf`.
+                echo -n a
+
+            #Does not interpret `\` escaped chars by default:
+
+                assert [ "`echo 'a\nb'`" = $'a\\nb' ]
+
+            #-e: interprets \ escaped chars:
+
+                assert [ "`echo -e 'a\nb'`" = $'a\nb' ]
+                assert [ "`echo -e '\x61'`" = $'a' ]
+
+            #Print the `-n` string:
+            #IMPOSSIBLE! not even gnu echo supports `--` since POSIX says that this should be supported.
+            #=) use `printf`.
 
     ##printf
 
         #posix 7
 
-        #removes echo quicks
+        #goes around echo's quicks
 
-        #supports c format strings:
+        #anlogous to C printf.
+
+        #does not automatically append newline:
+
+            assert [ "`printf "a"`" == "a" ]
+
+        #automatically interprets backslash escapes like C printf:
+
+            printf "a\nb"
+
+        #automatically interprets backslash escapes like C printf:
+
+        #print the `-n` string:
+
+            assert [ "`printf "%s" "-n"`" == "-n" ]
+
+        #supports C format strings:
 
             assert [ "`printf "%1.2d" 1`"       == "01" ]
             assert [ "`printf "%1.2f" 1.23`"    == "1.23" ]
@@ -1009,6 +1058,22 @@
         #print the `-n` string:
 
             assert [ "`printf "%s" "-n"`" == "-n" ]
+
+        #print a string ignoring all escape sequences (always appends terminates in a single newline):
+
+            printf "%s\n" "\n\r"
+
+        #never terminate in a newline:
+
+            printf "%s" "\n\r"
+
+        #include trailling newlines:
+
+            TODO
+
+        #do interpret the escapes:
+
+            printf "%ba" "\n"
 
     ##cat
 
@@ -2725,13 +2790,15 @@
             assert [ `ls a` = $'a\nb' ]
             assert [ -z `ls b` ]
 
-    ##/etc/fstab
+    ##fstab
 
-        #options for fsck
+        #This is about he file located at `/etc/fstab`.
 
-        #basic usage: mount partitions at startup
+        #Options for fsck
 
-        #source
+        #Basic usage: mount partitions at startup
+
+        #Source
 
             #<http://www.tuxfiles.org/linuxhelp/fstab.html>
             #<https://wiki.archlinux.org/index.php/Fstab>
@@ -2766,16 +2833,18 @@
 
         #2. where it will get mounted.
 
-            #On ubuntu: make a subdir of /media like /media/windows
+            #The most standard option is to make a subdir of `/media` like `/media/windows`.
+
             #This dir must exist before mount
             #and preferably be used only for mounting a single filesystem.
-            #I don't think fstab can auto create/remove the missing dirs.
+
+            #It seems that fstab can auto create/remove the missing dirs.
 
         #3. Type. ext[234], ntfs, etc.
 
         #see sources for others.
 
-        ##windows
+        ##auto mount windwos filesystems
 
             #To mount windows filesystems such as NTFS or DOS use:
 
@@ -4903,27 +4972,6 @@
         #posix 7
 
             assert [ `echo '1+1' | bc` = 2 ]
-
-    ##java
-
-        #java specifies the interface, but not the implementation.
-
-        #There are two implementations of of the java virtual machine:
-
-        #- Oracle: Closed source.
-
-            #Oracle created Java.
-
-            #You get only the binaries.
-
-        #- OpenJDK: Open source.
-
-        #As is the case with many products,
-        #some companies will recommend that you use this proprietary implementation,
-        #and might even rely on proprietary extensions, meaning that the other implementations
-        #won't work...
-
-        #Also, to run java apps on your browser you also need the Java plugin for your browser.
 
     ##ruby
 

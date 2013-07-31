@@ -83,7 +83,6 @@
         sudo aptitude install -y cplay
         sudo aptitude install -y dvipng
         #sudo aptitude install -y exactimage
-        sudo aptitude install -y file-roller
 
     #glasgow haskell compiler:
 
@@ -113,28 +112,15 @@
 
         #sudo aptitude install -y mpack
 
-    #7 zip:
-
-        sudo aptitude install -y p7zip-full
-
         sudo aptitude install -y ppa-purge
         sudo aptitude install -y python-scipy
         sudo aptitude install -y python-matplotlib
-
-    #shell archives:
-
-        #sudo aptitude install -y sharutils
-
         sudo aptitude install -y samba
 
 
     #usefull stuff that does not come by default or Canonical would have to pay royalties:
 
         sudo aptitude install -y ubuntu-restricted-extras
-
-    #.ace files
-
-        #sudo aptitude install -y unace
 
     #uuencode, xxencode, BASE64, quoted printable, BinHex
 
@@ -244,6 +230,25 @@
 
         sudo aptitude install -y mkvtools
 
+    ##compression
+
+        #shell archives:
+
+            #sudo aptitude install -y sharutils
+
+            sudo aptitude install -y file-roller
+
+        #7 zip:
+
+            sudo aptitude install -y p7zip-full
+
+        #.ace files
+
+            #sudo aptitude install -y unace
+
+            sudo aptitude install -y rar
+            sudo aptitude install -y unrar
+
     ##game
 
         ##getdeb
@@ -294,6 +299,7 @@
 
         sudo aptitude install -y vim
         sudo aptitude install -y vim-gtk
+        #sudo aptitude install -y eclipse
 
     ##program
 
@@ -326,6 +332,19 @@
             sudo aptutide install -y mercurial
             sudo aptitude install -y subversion
 
+    ##virtualization
+
+        ##virtualbox
+
+                #wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add -
+                #sudo sh -c 'echo "deb http://download.virtualbox.org/virtualbox/debian raring contrib" >> /etc/apt/sources.list.d/virtualbox.list'
+                #sudo aptitude update
+                #sudo aptitude install -y virtualbox-4.2
+
+            #On the guest:
+
+                #sudo apt-get install virtualbox-guest-utils
+
     ##language
 
         #interpreters and related libs
@@ -355,7 +374,7 @@
 
                 sudo add-apt-repository ppa:webupd8team/java
                 sudo aptitude update
-                sudo aptitude install oracle-java8-installer
+                sudo aptitude install -y oracle-java8-installer
 
             #This already comes with the browser plugin
 

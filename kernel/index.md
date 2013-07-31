@@ -428,3 +428,15 @@ the process is notified via a predefined signal.
     17  Alignment check                 SIGBUS
     18  Machine check                   None
     19  SIMD floating point             SIGFPE
+
+#kernel ring buffer
+
+See: dmesg.
+
+#dmesg
+
+Print the system log:
+
+    dmesg
+
+<http://www.web-manual.net/linux-3/the-kernel-ring-buffer-and-dmesg/>

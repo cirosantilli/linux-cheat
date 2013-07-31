@@ -1,6 +1,4 @@
 #formats
-#formats
-#formats
 
 - btm: bit by bit, no compression
 
@@ -94,21 +92,21 @@
 
 ##gimp
 
-image manipulation
+Image manipulation.
 
-huge amount of functions
+Huge amount of functions.
 
-learn the shortcuts and be happy
+Learn the shortcuts and be happy.
 
-avoid multi window madness:
+Avoid multi window madness:
 
     Menu > Windows > Single-Window Mode
 
-resize image:
+Resize image:
 
     Menu > Image > Scale Image
 
-shortcuts:
+Shortcuts:
 
 - `<C-PageDown>`: go to previous tab
 
@@ -120,6 +118,8 @@ shortcuts:
 - `R`: rotate selection tool
 
 - `<c-PageDown>`: rotate selection tool
+
+- `<c-s-v>`: create new file containing only the clipboard selection (rect + control c)
 
 ##inkscape
 
@@ -203,6 +203,14 @@ does not do:
 - djvu
 
 tons of options available
+
+###convert gif
+
+Gif to several images:
+
+    convert a.gif a.png
+
+Generates `a-N.png` images.
 
 ###resize
 

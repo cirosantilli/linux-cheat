@@ -14,6 +14,13 @@
 	#summary: always use colon unless you have a very good reason not to do so,
 	#non colon equals is confusing!
 
+	##eval and =
+
+		#lazy eval also works with eval built-in
+
+		nocolon_eval_rvar := a
+		nocolon_eval = $(nocolon_eval_rvar)
+
 ##+=
 
 	#evaluates immediately like `:=` if lvar was first defined with `:=`
@@ -33,9 +40,24 @@
 
 ##?=
 
-	#define variable only if it is not defined
+	#Define variable only if it is not defined.
 
-	#empty variables are still defined
+	question_var := a
+	question_var ?= b
+
+	#Empty variables are still defined.
+
+	#Evaluation is defferred like in `=` (unlike `:=`)
+
+	question_rval_defer := a
+	question_var_defer ?= $(question_rval_defer)
+	question_rval_defer := b
+
+##$$
+
+	#you can also use shell vars here:
+
+	shell_var = $$a
 
 ##where variables can be used
 
@@ -119,13 +141,18 @@ all:
 	@#here you see how variables can be used inside recipes:
 	@if [ ! "$(colon)" 				= "a"				]; then exit 1; fi
 	@if [ ! "$(nocolon)" 			= "b" 				]; then exit 1; fi
+	$(eval nocolon_eval_rvar := b)
+	@if [ ! "$(nocolon_eval)" 		= "b" 				]; then exit 1; fi
 	@if [ ! "$(colon_plus)"			= "a b c" 			]; then exit 1; fi
 	@if [ ! "$(nocolon_plus)" 		= "a b d" 			]; then exit 1; fi
 	@if [ ! "$(avarname)" 			= "avarname_val"	]; then exit 1; fi
+	@if [ ! "$(question_var)"		= "a"				]; then exit 1; fi
+	@if [ ! "$(question_var_defer)"	= "b"				]; then exit 1; fi
 	@#you can use variables inside variables: varname2 -> avarname -> avarname:
 	@if [ ! "$($(varname2))" 		= "avarname"		]; then exit 1; fi
 	@#@if [ ! "$(multiline)" 			= $$'1\n2'			]; then exit 1; fi
 	@#@if [ ! "$(vardef_name)"		= "vardef_val"		]; then exit 1; fi
+	@a="b" && if [ ! "$(shell_var)" = b ]; then exit 1; fi
 	$(multiline)
 	@echo "CURDIR       = $(CURDIR)"
 	@echo "MAKE         = $(MAKE)"

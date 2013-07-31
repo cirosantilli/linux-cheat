@@ -222,7 +222,7 @@ you can then use those on a makefile as:
     $(shell gcc -MM a.c)
         gcc a.c
 
-#c preprocessor
+#preprocessor
 
 does things like:
 

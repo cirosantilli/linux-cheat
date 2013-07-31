@@ -266,12 +266,16 @@ there some posix requirements that the linux kernel simply does not
 
 #fhs
 
-the filesystem hierarchy standard specifies base directories
-for the system and what should go in them
+The filesystem hierarchy standard specifies base directories
+for the system and what should go in them.
 
-it is also maintained by the linux foundation, and followed by the lsb
+It is also maintained by the linux foundation, and followed by the lsb.
 
-#examples of what lsb specifies
+##de facto but not mentioned in fhs
+
+- `/etc/alternatives`: see `man update-alternatives`.
+
+#lsb
 
 ##core
 
@@ -295,7 +299,7 @@ it is also maintained by the linux foundation, and followed by the lsb
 ##desktop
 
 - opengl shared objects
-- x11, gtk+
+- x11, gtk+, qt runtimes
 - jpeg, png shared object libraries
 - alsa (sound)
 

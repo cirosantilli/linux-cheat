@@ -1,4 +1,9 @@
-book formats, viewers and manipulation tools
+Book formats, viewers and manipulation tools.
+
+A book format is in general a format that can represent multiple images,
+text and multiple pages such as pdf, djvu or ps.
+
+Pure image or text formats such as jpeg or tex are not covered here.
 
 #formats
 
@@ -13,11 +18,20 @@ but not not formats that map directly to bits such as png or jpeg
 
 - eps:
 - djvu:
-- pdf: text layers, image layers, can be viewd page by page
 - mobi: mobipocket company, free format
 - rtf: proprietary microsoft
 
-#readers
+##pdf
+
+Text layers, image layers, each page can be serially downloaded and viewed.
+
+A common viewing library is poppler: <http://en.wikipedia.org/wiki/Poppler_%28software%29>.
+It also contains many useful utilities.
+
+PDF fonts can be either found in a renderer path, or be embedded in the document.
+The [standard 14 fonts]](http://en.wikipedia.org/wiki/Portable_Document_Format#Standard_Type_1_Fonts_.28Standard_14_Fonts.29)must always be supported.
+
+#viewers
 
 ##okular
 
@@ -35,39 +49,6 @@ single instance:
 ##fbreader
 
 mobi reader
-
-#chm
-
-microsoft proprietary
-
-discontinued
-
-non plain text: compiled
-
-based on html?
-
-has been reverse ingeneered
-
-##chm to html
-
-- archmage:
-
-    produce non searchable html:
-
-        archmage a.chm
-
-##chm to pdf
-
-- chm2pdf: <http://www.ubuntugeek.com/how-to-convert-chm-files-into-pdf-files-in-ubuntu.html>
-
-    `chm2pdf --website a.chm`: index links were broken and did not show index pages
-
-    `chm2pdf --book a.chm`: command did not work
-
-##chm readers
-
-- chmsee: gtk+, few preferences, just works.
-- kchmreader: kde, broken colors on ubuntu
 
 #calibre
 
@@ -131,16 +112,13 @@ out to stdout:
 
     ps2pdf a.ps -
 
-##pdftotext
-
-extracts text layer from pdf
-
-    pdftotext a.pdf
-    less a.txt
-
 ##pdftk
 
 pdf Tool Kit
+
+large feature set on dealing with pdfs pagewise.
+
+rather non standard command line interface (nothing to do with common POSIX or GNU conventions).
 
 merge two or more pdfs into a new document:
 
@@ -206,9 +184,40 @@ Repair a PDF’s Corrupted XREF Table and Stream Lengths (If Possible):
 
     pdftk broken.pdf output fixed.pdf
 
-##edit pdf content
+##pdfjam
 
-consider libreoffic draw + pdf importer.
+Pakcage that includes several pdf utils.
+
+##popler
+
+###pdftotext
+
+Extract text layer from pdf:
+
+    pdftotext a.pdf
+    less a.txt
+
+###pdfimages
+
+Extracts all images of a pdf as ppm or pbm.
+
+    pdfimages a.pdf
+
+###pdffonts
+
+TODO lists which fonts? available on computer? used by given pdf?
+
+    pdffonts a.pdf
+
+###pdfinfo
+
+Get various specs on the given pdf:
+
+    pdfinfo a.pdf
+
+##edit pdf content in gui
+
+Consider libreoffic draw + pdf importer.
 
 ##djvulibre-bin
 
@@ -286,3 +295,37 @@ Formats:
     Was Adobe proprietary but has become free on condition that it is not modified. TODO check this crazy license.
 
     Extensions: afm, pfb, pfm.
+
+#chm
+
+microsoft proprietary
+
+discontinued
+
+non plain text: compiled
+
+compiled form of html
+
+has been reverse ingeneered
+
+##chm to html
+
+- archmage:
+
+    produce non searchable html:
+
+        archmage a.chm
+
+##chm to pdf
+
+- chm2pdf: <http://www.ubuntugeek.com/how-to-convert-chm-files-into-pdf-files-in-ubuntu.html>
+
+    `chm2pdf --website a.chm`: index links were broken and did not show index pages
+
+    `chm2pdf --book a.chm`: command did not work
+
+##chm readers
+
+- chmsee: gtk+, few preferences, just works.
+- kchmreader: kde, broken colors on ubuntu
+

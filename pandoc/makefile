@@ -4,12 +4,12 @@
 
 CC := pandoc
 	#flags that apply to all output formats: (html, pdf, etc):
-FLAGS ?= -s --toc --mathml -N
+FLAGS ?= -s --toc --mathml -N -V geometry:margin=1in
 ID ?=
 IN_EXT ?= .md
 OUT_DIR ?= _out/
 	#basename without extension of file to view (with firefox, okular, etc.):
-RUN_NOEXT ?= a
+VIEW ?= md
 
 SRCS := $(wildcard *$(IN_EXT))
 OUTEXT := .html
@@ -36,10 +36,10 @@ html: mkdir $(OUT_HTML)
 pdf: mkdir $(OUT_PDF)
 
 firefox:
-	firefox "$(OUT_DIR)$(RUN_NOEXT).html$(ID)"
+	firefox "$(OUT_DIR)$(VIEW).html$(ID)"
 
-okular:
-	nohup okular --unique "$(OUT_DIR)$(RUN_NOEXT).pdf" >/dev/null &
+view:
+	nohup okular --unique "$(OUT_DIR)$(VIEW).pdf" >/dev/null &
 
 $(OUT_DIR)%.html: %$(IN_EXT)
 	$(CC) $(FLAGS) -o "$@" "$<"

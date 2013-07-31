@@ -11,28 +11,24 @@ most free apache/php web hosts offer ftp mainly for users to uplod their sites:
 
 just find the one with the most space and uptime. htis is a list of good ones
 
+main quality parameters to consider:
+
+- max data
+- max data transfer
+- max file size
+
 ##freehostingnoads
 
 <http://freehostingnoads.net/>
 
 Free Hosting No Ads
 
-    20 GB space
-    200 GB traffic
-
-main quality parameters:
-
-- max data
-- max data transfer
-- max file size
-
-good free hosts:
-
-    - 2Gb      storage
-    - 2Gb      max file size
-    - 10Gb/mo  transfer
+- 20 GB space
+- 200 GB traffic
 
 urls of form: <http://cirosantilli.t15.org/>
+
+Deleted my data after 30 days innactivity!
 
 #commands
 

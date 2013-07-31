@@ -60,7 +60,8 @@ ins: all
 
 # view system log file for printk messages
 log:
-	cat "$(LOG_PATH)"
+	#cat "$(LOG_PATH)"
+	dmesg
 
 rm:
 	sudo rmmod "$(RUN_EXT)"

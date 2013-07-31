@@ -120,12 +120,23 @@ get info about given `.ko` module file:
     m=a
     sudo rmmod $m
 
-#includes
+#makefile
 
-the default Makefile which is called by the Makefile in this directory automatically
-adds `/usr/src/linux-headers-$(CUR_KERNEL_VERSION)/` TODO check
+Kernel modules are built using a makefile located at:
 
-those come directly from the kernel source tree.
+	/lib/modules/$(uname -r)/build
+
+##includes
+
+Header files come from the same directory as the makefile: `/lib/modules/$(uname -r)/build`.
+
+TODO what is: `/usr/src/linux-headers-$(uname -r)/` ?
+
+Those come directly from the kernel source tree.
+
+##headers
+
+See [this](#includes).
 
 #device drivers
 

@@ -224,17 +224,55 @@ f("abc")
 
 Inline: $x^2$
 
-Firs chars after first dollar and before lats one must not be space: $ x^2$ $x^2 $ $ x^2 $
-
-##latex
-
-is ignored on html output, so don't use it.
+Display on a single line:
 
 $$x^2$$
+
+Firs chars after first dollar and before lats one must not be space: $ x^2$ $x^2 $ $ x^2 $
+
+Multiline and align:
+
+$$
+\begin{aligned}
+a + b & = c     \\
+    d & = e + f \\
+\end{aligned}
+$$
+
+Must use double dollars `$$`!
+
+#latex
+
+Plain latex is ignored on html output:
 
 \begin{equation}
     x^2
 \end{equation}
+
+Application: remove page number from a single page document: add the following line to the top:
+
+    % A pdf file without page numbers created from pandoc markdown
+    % sieste
+    % June 2013
+
+    \pagenumbering{gobble}
+
+    # First header
+    etc
+
+It will not appear on html output.
+
+#html
+
+only works for html output, not for pdf, so never use it unless you really need it and can break pdf.
+
+<p>par</p>
+
+<p>par</p>
+
+<ul>
+    <li>item</li>
+</ul>
 
 #escaping stuff
 
@@ -249,18 +287,6 @@ $$x^2$$
 \```
 
 \```
-
-#html
-
-only works for html output, not for pdf, so never use it unless you really need it and can break pdf.
-
-<p>par</p>
-
-<p>par</p>
-
-<ul>
-    <li>item</li>
-</ul>
 
 ##inner content is md parsed:
 

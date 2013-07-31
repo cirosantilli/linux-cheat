@@ -25,6 +25,8 @@ that can be exemplified in modules (much easier than recompiling and reinstallin
 		#endif
 */
 
+#include <linux/version.h> 	/* include/generated/uapi/linux. LINUX_VERSION_CODE, KERNEL_VERSION */
+
 #include <asm/page.h>		/* PAGE_SIZE */
 #include <asm/param.h>		/* HZ */
 #include <asm/atomic.h>		/* atomic_t */
@@ -43,14 +45,12 @@ that can be exemplified in modules (much easier than recompiling and reinstallin
 #include <linux/module.h>	/* module specific utilities: MODULE_* macros, module_param, module_init, module exit */
 #include <linux/path.h>		/* path */
 #include <linux/sched.h>	/* current */
-#include <linux/sched/rt.h>	/* MAX_PRIO, MAX_USER_RT_PRIO, DEFAULT_PRIO */
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 9, 0)
+	#include <linux/sched/rt.h>	/* MAX_PRIO, MAX_USER_RT_PRIO, DEFAULT_PRIO */
+#endif
 #include <linux/slab.h> 	/* kmalloc, kmem_cach_create, kmem_cach_alloc */
 #include <linux/spinlock.h>
 #include <linux/string.h>	/* memcpy, memcmp */
-#include <linux/version.h>
-
-#define MODID __FILE__ ": "
-#define INFO_ID KERN_INFO MODID
 
 /*
 #module description
@@ -141,6 +141,7 @@ EXPORT_SYMBOL_GPL(exported_symbol_gpl);
 
 //must be global:
 DEFINE_PER_CPU(int, cpu_int);
+static atomic_t i_global_atomic;
 
 /*
  * this function is defined as the entry point by the `module_init` call below.
@@ -186,45 +187,73 @@ DEFINE_PER_CPU(int, cpu_int);
  * */
 static int __init init(void)
 {
-	i_global = 0;
-	printk(INFO_ID "i_global = %d\n", i_global);
+	/* separate from older entries in log*/
+	printk(KERN_INFO __FILE__ ": \n============================================================\n");
 
 	/*
 	#printk
 
-		the kernel has no simple way to communicate with a terminal
-		so you the simplest thing to do is dump program output to a file
+		The kernel has no simple way to communicate with a terminal
+		so you the simplest thing to do is dump program output to a file.
 
-		printk does this in a very reliable manner
+		`printk` does this in a very reliable manner
 
-		at the time of writting on Ubuntu 13.04 the file is: `/var/log/syslog`
+		At the time of writting on Ubuntu 13.04 the file is: `/var/log/syslog`
+
+		This can be viewed with `dmesg`.
 
 		`KERN_INFO` is a message priority string macro
 
-		it is understood by printk when put at the beginning of the input string
+		It is understood by printk when put at the beginning of the input string.
 
-		8 levels are defined:
+		8 levels are defined in order of decreasing priority:
+
+		- LOG_EMERG: 	system is unusable
+		- LOG_ALERT: 	action must be taken immediately
+		- LOG_CRIT: 	critical conditions
+		- LOG_ERR: 	error conditions
+		- LOG_WARNING: 	warning conditions
+		- LOG_NOTICE: 	normal, but significant, condition
+		- LOG_INFO: 	informational message
+		- LOG_DEBUG: 	debug-level message
 
 		printk takes printf format strings with containing things like `%d`
 	*/
 	{
-		printk(INFO_ID "%s\n", __func__ );
+		printk(KERN_INFO "%s\n", __func__ );
 	}
 
+	/* Don't be afraid, it's just a c program. Globals are still globals. */
+	i_global = 0;
+	printk(KERN_INFO "i_global = %d\n", i_global);
+
 	/*
-	#kernel version
+	#version
 
-		device drivers depend on kernel version.
+		Device drivers depend on kernel version.
 
-		you can get some version flexibility with the preprocessor.
+		You can get some version flexibility with the preprocessor.
 
 		#LINUX_VERSION_CODE
 
-			example: on kernel `2.6.10` == 132618 (i.e., 0x02060a)
+			Example: on kernel `2.6.10` == 0x02060a
+
+		#KERNEL_VERSION
+
+			Transform human version numbers into HEXA notation:
+
+				0x02060a == KERNEL_VERSION(2, 6, 10)
+
+			Always use it in case some day the version organization changes.
 	*/
 	{
 		/* printk( "UTS_RELEASE = %s", UTS_RELEASE ); */	/* TODO get working */
-		printk(INFO_ID "LINUX_VERSION_CODE = %d\n", LINUX_VERSION_CODE);
+		printk(KERN_INFO "LINUX_VERSION_CODE = %d\n", LINUX_VERSION_CODE);
+
+		/* are we at least at 2.6.10? */
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 10)
+		printk(KERN_INFO "LINUX_VERSION_CODE >= 2.6.10\n");
+#endif
 	}
 
 	/*
@@ -258,21 +287,22 @@ static int __init init(void)
 	*/
 
 #ifdef __i386__
+	{
+		/*
+		cheat on instructions that can only be done from kernel space
 
-	/*
-	cheat on instructions that can only be done from kernel space
+		in the kernel, those are be separated from non architecture specific files
+		*/
 
-	in the kernel, those are be separated from non architecture specific files
-	*/
+		//TODO how to get cr0?
 
-	//TODO how to get cr0?
-
-		//int out = 0;
-		//asm (
-		//	"mov %%cr0, %0"
-		//	: "=m" (out)
-		//);
-		//printk( "%d", out );
+			//int out = 0;
+			//asm (
+			//	"mov %%cr0, %0"
+			//	: "=m" (out)
+			//);
+			//printk( "%d", out );
+	}
 #endif
 
 	/*
@@ -339,9 +369,9 @@ static int __init init(void)
 	{
 		get_cpu_var(cpu_int) = 0;
 		put_cpu_var(cpu_int);
-		printk(INFO_ID "cpu_int  = %d\n", get_cpu_var(cpu_int));
+		printk(KERN_INFO "cpu_int  = %d\n", get_cpu_var(cpu_int));
 
-		printk(INFO_ID "smp_processor_id()  = %d\n", smp_processor_id());
+		printk(KERN_INFO "smp_processor_id()  = %d\n", smp_processor_id());
 	}
 
 	/*
@@ -358,19 +388,19 @@ static int __init init(void)
 	*/
 	{
 		if (likely(0)) {
-			printk(INFO_ID "ERROR\n");
+			printk(KERN_INFO "ERROR\n");
 		}
 
 		if (likely(1)) {
-			printk(INFO_ID "unlikely(1)\n");
+			printk(KERN_INFO "unlikely(1)\n");
 		}
 
 		if (unlikely(0)) {
-			printk(INFO_ID "ERROR\n");
+			printk(KERN_INFO "ERROR\n");
 		}
 
 		if (unlikely(1)) {
-			printk(INFO_ID "unlikely(1)\n");
+			printk(KERN_INFO "unlikely(1)\n");
 		}
 	}
 
@@ -400,9 +430,19 @@ static int __init init(void)
 	#ATOMIC_INIT(int)
 
 		Initialize an atomic to given integer.
+
+		Only works at compile time and for initialization.
+
+	#atomic_set(int *, int)
+
+		Set value of atomic.
+
+		Unlike ATOMIC_INIT can be used anywhere.
 	*/
 	{
 		atomic_t i = ATOMIC_INIT(0);
+		//ERROR: not initialization
+		//i = ATOMIC_INIT(0);
 		atomic_inc(&i);
 		if ( atomic_read(&i) != 1 ) return -1;
 	}
@@ -410,7 +450,17 @@ static int __init init(void)
 	/*
 	#time
 
-		There are 2 types of time: absolute (1/1/2010) and relative (1 sec after now).
+		There are 2 types of time:
+
+		- absolute. Ex: 1/1/2010. Hardware: RTC. Precision: Hz.
+		- relative: Ex: 1 sec after now.
+
+			Hardware: system timer. Precision: kHz. Interface: jiffies.
+
+			Greater precision interfaces (up to nanoseconds are also available)
+
+		Time is important on the kernel,
+		for example when giving hardware time to complete certain tasks.
 
 	#system timer
 
@@ -432,10 +482,43 @@ static int __init init(void)
 
 			Mnemonic: in a jiffy is an informal / old expression for in a while.
 			A jiffle then is a small amount of time.
+
+		#wraparound
+
+			jiffies is an unsigned long, so if we reach its limit it wraps around to 0.
+
+			Example:
+
+				//half a second in the future
+				unsigned long timeout = jiffies + HZ/2;
+
+				//work
+
+				//see whether we took too long
+				if (timeout > jiffies) {
+					//we did not time out, good
+				} else {
+					//we timed out, error
+				}
+
+			What if `jiffies` goes around and comes back to 0?
+
+			This is why you should use:
+
+				#define time_after(unknown, known) ((long)(known) - (long)(unknown) < 0)
+				#define time_before(unknown, known) ((long)(unknown) - (long)(known) < 0)
+				#define time_after_eq(unknown, known) ((long)(unknown) - (long)(known) >= 0)
+				#define time_before_eq(unknown, known) ((long)(known) - (long)(unknown) >= 0)
+
+			to compare times as:
+
+				if (time_before(jiffies, timeout)) {
+
+			TODO why does this work?
 		*/
 		{
-			printk( INFO_ID "HZ = %d", HZ );
-			printk( INFO_ID "jiffies = %lu", jiffies );
+			printk( KERN_INFO "HZ = %d\n", HZ );
+			printk( KERN_INFO "jiffies = %lu\n", jiffies );
 		}
 	}
 
@@ -538,10 +621,10 @@ static int __init init(void)
 
 				TODO why is this skipping the a character?
 			*/
-			printk(INFO_ID "linked list:\n" );
+			printk(KERN_INFO "linked list:\n" );
 			struct char_list *char_list_ptr;
 			list_for_each_entry(char_list_ptr, &alist, list) {
-				printk(INFO_ID "  %c\n", char_list_ptr->c );
+				printk(KERN_INFO "  %c\n", char_list_ptr->c );
 			}
 
 			/*
@@ -618,7 +701,7 @@ static int __init init(void)
 		this is done in a multilevel scheme
 	*/
 	{
-		printk(INFO_ID "PAGE_SIZE (Kib) = %lu", PAGE_SIZE / ( 1 << 10 ));
+		printk(KERN_INFO "PAGE_SIZE (Kib) = %lu\n", PAGE_SIZE / ( 1 << 10 ));
 	}
 
 	/*
@@ -711,9 +794,9 @@ static int __init init(void)
 	{
 		struct page *page;
 		page = alloc_pages(GFP_KERNEL, 1);
-		printk(INFO_ID "alloc_pages\n" );
+		printk(KERN_INFO "alloc_pages\n" );
 		if ( page == NULL ){
-			printk(INFO_ID "  NULL\n" );
+			printk(KERN_INFO "  NULL\n" );
 		} else {
 			char *cs = page_address(page);
 
@@ -723,7 +806,7 @@ static int __init init(void)
 				cs[i] = i;
 			}
 
-			printk( INFO_ID "  _count = %d\n", atomic_read(&page->_count) );
+			printk( KERN_INFO "  _count = %d\n", atomic_read(&page->_count) );
 
 			free_pages( (long)cs, 1);
 		}
@@ -897,8 +980,20 @@ static int __init init(void)
 
 			#state
 
-				- TASK_RUNNING: running
-				- TASK_INTERRUPTIBLE: task is waiting for some event to continue running
+				#TASK_RUNNING
+
+					The scheduler may run it at any time running.
+
+				#TASK_INTERRUPTIBLE
+
+					Will not be scheduled until:
+
+					- someone calls `wake_up_interruptible` on it
+					- it receives a signal
+
+				#TASK_UNINTERRUPTIBLE
+
+					Same as TASK_INTERRUPTIBLE, except that it cannot receive signals.
 
 			#static_priority
 
@@ -950,45 +1045,45 @@ static int __init init(void)
 				TODO
 	*/
 	{
-		printk(INFO_ID "TASK_RUNNING = %d\n", TASK_RUNNING);
-		printk(INFO_ID "TASK_INTERRUPTIBLE = %d\n", TASK_INTERRUPTIBLE);
+		printk(KERN_INFO "TASK_RUNNING = %d\n", TASK_RUNNING);
+		printk(KERN_INFO "TASK_INTERRUPTIBLE = %d\n", TASK_INTERRUPTIBLE);
 
 		//self is obviously running when state gets printed, parent may be not:
 
-			printk(INFO_ID "current->state  = %ld\n", current->state);
-			printk(INFO_ID "current->parent->state  = %ld\n", current->parent->state);
+			printk(KERN_INFO "current->state  = %ld\n", current->state);
+			printk(KERN_INFO "current->parent->state  = %ld\n", current->parent->state);
 
-		printk(INFO_ID "current->comm = %s\n", current->comm);
-		printk(INFO_ID "current->pid  = %lld\n", (long long)current->pid);
-		printk(INFO_ID "current->tgid = %lld\n", (long long)current->tgid);
+		printk(KERN_INFO "current->comm = %s\n", current->comm);
+		printk(KERN_INFO "current->pid  = %lld\n", (long long)current->pid);
+		printk(KERN_INFO "current->tgid = %lld\n", (long long)current->tgid);
 
-		printk(INFO_ID "current->prio = %d\n", current->prio);
-		printk(INFO_ID "current->static_prio = %d\n", current->static_prio);
-		printk(INFO_ID "current->normal_prio = %d\n", current->normal_prio);
-		printk(INFO_ID "current->rt_priority = %d\n", current->rt_priority);
-		printk(INFO_ID "current->policy = %u\n", current->policy);
-		printk(INFO_ID "SCHED_NORMAL = %u\n", SCHED_NORMAL);
+		printk(KERN_INFO "current->prio = %d\n", current->prio);
+		printk(KERN_INFO "current->static_prio = %d\n", current->static_prio);
+		printk(KERN_INFO "current->normal_prio = %d\n", current->normal_prio);
+		printk(KERN_INFO "current->rt_priority = %d\n", current->rt_priority);
+		printk(KERN_INFO "current->policy = %u\n", current->policy);
+		printk(KERN_INFO "SCHED_NORMAL = %u\n", SCHED_NORMAL);
 
-		printk(INFO_ID "current->nr_cpus_allowed  = %d\n", current->nr_cpus_allowed);
+		printk(KERN_INFO "current->nr_cpus_allowed  = %d\n", current->nr_cpus_allowed);
 
-		printk(INFO_ID "current->exit_state = %d\n", current->exit_state);
-		printk(INFO_ID "current->exit_code = %d\n", current->exit_code);
-		printk(INFO_ID "current->exit_signal = %d\n", current->exit_signal);
+		printk(KERN_INFO "current->exit_state = %d\n", current->exit_state);
+		printk(KERN_INFO "current->exit_code = %d\n", current->exit_code);
+		printk(KERN_INFO "current->exit_signal = %d\n", current->exit_signal);
 
 		/*  the signal sent when the parent dies  */
 
-			printk(INFO_ID "current->pdeath_signal = %d\n", current->pdeath_signal);
+			printk(KERN_INFO "current->pdeath_signal = %d\n", current->pdeath_signal);
 
-		printk(INFO_ID "current->parent->pid  = %lld\n", (long long)current->parent->pid);
-		printk(INFO_ID "current->parent->parent->pid  = %lld\n", (long long)current->parent->parent->pid);
-		printk(INFO_ID "current->real_parent->pid  = %lld\n", (long long)current->real_parent->pid);
+		printk(KERN_INFO "current->parent->pid  = %lld\n", (long long)current->parent->pid);
+		printk(KERN_INFO "current->parent->parent->pid  = %lld\n", (long long)current->parent->parent->pid);
+		printk(KERN_INFO "current->real_parent->pid  = %lld\n", (long long)current->real_parent->pid);
 
 		//children transversal:
 		{
 			struct task_struct *task_struct_ptr;
-			printk(INFO_ID "current->children pids:\n");
+			printk(KERN_INFO "current->children pids:\n");
 			list_for_each_entry(task_struct_ptr, &current->children, children) {
-				printk(INFO_ID "  %lld\n", (long long)task_struct_ptr->pid);
+				printk(KERN_INFO "  %lld\n", (long long)task_struct_ptr->pid);
 			}
 		}
 
@@ -996,14 +1091,14 @@ static int __init init(void)
 		{
 			struct task_struct *task_struct_ptr;
 
-			printk(INFO_ID "current->sibling pids:\n");
+			printk(KERN_INFO "current->sibling pids:\n");
 			list_for_each_entry(task_struct_ptr, &current->sibling, children) {
-				printk(INFO_ID "  %lld\n", (long long)task_struct_ptr->pid);
+				printk(KERN_INFO "  %lld\n", (long long)task_struct_ptr->pid);
 			}
 
-			printk(INFO_ID "current->parent->sibling pids:\n");
+			printk(KERN_INFO "current->parent->sibling pids:\n");
 			list_for_each_entry(task_struct_ptr, &current->parent->sibling, children) {
-				printk(INFO_ID "  %lld\n", (long long)task_struct_ptr->pid);
+				printk(KERN_INFO "  %lld\n", (long long)task_struct_ptr->pid);
 			}
 		}
 
@@ -1011,7 +1106,7 @@ static int __init init(void)
 
 		/* threadgroup leader */
 
-			printk(INFO_ID "current->group_leader->pid  = %lld\n", (long long)current->group_leader->pid);
+			printk(KERN_INFO "current->group_leader->pid  = %lld\n", (long long)current->group_leader->pid);
 
 		/*
 		#fs
@@ -1036,10 +1131,10 @@ static int __init init(void)
 				Good and old current directory.
 		*/
 		{
-			printk(INFO_ID "basename pwd = %s\n", 		current->fs->pwd.dentry->d_name.name);
-			printk(INFO_ID "basename dirname pwd = %s\n", 	current->fs->pwd.dentry->d_parent->d_name.name);
-			printk(INFO_ID "basename root = %s\n", 		current->fs->root.dentry->d_name.name);
-			printk(INFO_ID "basename dirname root = %s\n", 	current->fs->root.dentry->d_parent->d_name.name);
+			printk(KERN_INFO "basename pwd = %s\n", 		current->fs->pwd.dentry->d_name.name);
+			printk(KERN_INFO "basename dirname pwd = %s\n", 	current->fs->pwd.dentry->d_parent->d_name.name);
+			printk(KERN_INFO "basename root = %s\n", 		current->fs->root.dentry->d_name.name);
+			printk(KERN_INFO "basename dirname root = %s\n", 	current->fs->root.dentry->d_parent->d_name.name);
 		}
 
 		/*
@@ -1068,137 +1163,21 @@ static int __init init(void)
 			- unsigned long locked_vm: pages that cannot be swapped out
 		*/
 		{
-			printk(INFO_ID "mm_struct");
-			printk(INFO_ID "  start_code = %lx\n", current->mm->start_code);
-			printk(INFO_ID "  end_code   = %lx\n", current->mm->end_code);
-			printk(INFO_ID "  start_data = %lx\n", current->mm->start_data);
-			printk(INFO_ID "  end_data   = %lx\n", current->mm->end_data);
-			printk(INFO_ID "  start_brk  = %lx\n", current->mm->start_brk);
-			printk(INFO_ID "  brk        = %lx\n", current->mm->brk);
-			printk(INFO_ID "  arg_start  = %lx\n", current->mm->arg_start);
-			printk(INFO_ID "  arg_end    = %lx\n", current->mm->arg_end);
-			printk(INFO_ID "  env_start  = %lx\n", current->mm->env_start);
-			printk(INFO_ID "  env_end    = %lx\n", current->mm->env_end);
+			printk(KERN_INFO "mm_struct");
+			printk(KERN_INFO "  start_code = %lx\n", current->mm->start_code);
+			printk(KERN_INFO "  end_code   = %lx\n", current->mm->end_code);
+			printk(KERN_INFO "  start_data = %lx\n", current->mm->start_data);
+			printk(KERN_INFO "  end_data   = %lx\n", current->mm->end_data);
+			printk(KERN_INFO "  start_brk  = %lx\n", current->mm->start_brk);
+			printk(KERN_INFO "  brk        = %lx\n", current->mm->brk);
+			printk(KERN_INFO "  arg_start  = %lx\n", current->mm->arg_start);
+			printk(KERN_INFO "  arg_end    = %lx\n", current->mm->arg_end);
+			printk(KERN_INFO "  env_start  = %lx\n", current->mm->env_start);
+			printk(KERN_INFO "  env_end    = %lx\n", current->mm->env_end);
 
-			printk(INFO_ID "  total_vm   = %lu\n", current->mm->total_vm);
-			printk(INFO_ID "  locked_vm  = %lu\n", current->mm->locked_vm);
+			printk(KERN_INFO "  total_vm   = %lu\n", current->mm->total_vm);
+			printk(KERN_INFO "  locked_vm  = %lu\n", current->mm->locked_vm);
 		}
-	}
-
-	/*
-	#kernel threads
-
-		The kernel can spawn its own threads.
-
-		They are run on kernel space.
-
-		This is often used to do cyclical jobs such as swapping memory pages,
-		processing driver data, etc.
-
-		You can explicitly create a new thread via the `kthread_create` function.
-
-		Kernel threads are quite low level, so on real applications first check
-		if what you want to achieve cannot be achieved via sotfirq or other bottom halves
-		which is most often the case.
-
-	#kthread_create
-
-		Create kernel threads.
-
-		Signature:
-
-			struct task_struct *kthread_create(
-				int (*function)(void *data),
-				void *data,
-				const char name[],
-				...
-			)
-
-		- `function` is what will be run on the thread
-		- `data` is what will be passed to function
-		- `name` is an identifier for the thread
-
-		After creating a thread you must wake it up with a `wake_up_process(struc task_struct *)` call`
-
-	#kthread_run
-
-		Same as kthread_create, but also starts the thread.
-
-	#kthread_stop
-
-		TODO waits or kills? seems to kill. How to wait?
-
-		Signature:
-
-			kthread_stop(struc task_struct *)
-	*/
-	{
-		struct task_struct *thread;
-
-		struct data {
-			int i;
-			int j;
-		};
-
-		//int status;
-
-		int function(void* vdata)
-		{
-			struct data *data = (struct data *)vdata;
-			printk(INFO_ID "kthread %d %d", data->i, data->j);
-			return 0;
-		}
-
-		struct data data = {
-			.i = 1,
-			.j = 2
-		};
-
-		thread = kthread_run(
-			function,
-			&data,
-			"test_kthread_0"
-		);
-
-		//if we had used kthread_create:
-
-			//if ( thread != NULL ) {
-			//	wake_up_process(thread);
-			//}
-
-		//if we wanted to immeditally kill our thread:
-
-			//status = kthread_stop(thread);
-			//if ( status != 0 ) printk("kthread fail");
-	}
-
-	/*
-	#TASK_SIZE
-
-		*virtual memory* is divided as follows:
-
-		- memory from address from 0 to TASK_SIZE - 1 can be used by *each* processes
-		- other memory adressses (from  TASK_SIZE to the maxinum adressable memory, 2^32 on 32 bits platforms
-				of 2^64 on 64 ) belongs to the kernel
-
-		TASK_SIZE is typically around 3/4 of the total memory
-
-		Note that this is *virtual* memory, so it is independant of the acutual size of the memory
-		as the hardware and the kernel can give processes the illusion that they actually have
-		ammounts of memory larger than the hardware for instance.
-
-	*/
-	{
-		printk(INFO_ID "TASK_SIZE (GiB) = %lu\n", TASK_SIZE / (1 << 30));
-
-		//Kernel virtual memory must be above `TASK_SIZE`:
-
-			int i;
-			if ( (int)&i < TASK_SIZE ) return -1;
-			printk( INFO_ID "(void*)&i = %p\n", (void*)&i );
-
-		//User virtual memory will always be below TASK_SIZE.
-		//Print addresses of user space program variables to check this (3Gb = `0xc0000000`)
 	}
 
 	/*
@@ -1222,6 +1201,21 @@ static int __init init(void)
 		- throughput is the total average performance. Constant context switches reduce it because they have a cost
 		- latency is the time it takes to attend to new matters such as refreshing the screen for the user.
 			Reducing latency means more context switches which means smaller throughput
+
+		#sources
+
+			#sleep
+
+				- <http://www.linuxjournal.com/node/8144/print>
+
+					how to sleep in the kernel
+
+				Low level way:
+
+					set_current_state(TASK_INTERRUPTIBLE);
+					schedule();
+
+				Higher level way: wait queues.
 
 		#state
 
@@ -1383,19 +1377,323 @@ static int __init init(void)
 			chooses which process to run next
 
 			there is one runqueu per processor.
+
+	#schedule()
+
+		Tell the scheduler that he can schedule another process for now.
+
+		Like posix yield.
+
+	#wake_up_process(struct task_struct)
+
+		Sets process to `TASK_RUNNING`.
+
+	#set_current_state
+
+		Set state for current process. Ex:
+
+			set_current_state(TASK_INTERRUPTIBLE)
 	*/
 	{
 		//max priority of an rt process:
 
-			printk(INFO_ID "MAX_USER_RT_PRIO  = %d\n", MAX_USER_RT_PRIO);
+			printk(KERN_INFO "MAX_USER_RT_PRIO  = %d\n", MAX_USER_RT_PRIO);
 
 		//max priority of any process:
 
-			printk(INFO_ID "MAX_PRIO  = %d\n", MAX_PRIO);
+			printk(KERN_INFO "MAX_PRIO  = %d\n", MAX_PRIO);
 
 		//default priority for new processes:
 
-			printk(INFO_ID "DEFAULT_PRIO  = %d\n", DEFAULT_PRIO);
+			printk(KERN_INFO "DEFAULT_PRIO  = %d\n", DEFAULT_PRIO);
+
+		schedule();
+	}
+
+	/*
+	#kernel threads #kthread
+
+		The kernel can spawn its own threads.
+
+		They are run on kernel space.
+
+		This is often used to do cyclical jobs such as swapping memory pages,
+		processing driver data, etc.
+
+		You can explicitly create a new thread via the `kthread_create` function.
+
+		Kernel threads are quite low level, so on real applications first check
+		if what you want to achieve cannot be achieved via sotfirq or other bottom halves
+		which is most often the case.
+
+		This is a low level mechanism which is not very often used diretcly.
+		Prefer higher level mechanisms is possible such as:
+
+		- wait queue
+		- bottom half
+
+		#kthread_create
+
+			Create kernel threads.
+
+			Signature:
+
+				struct task_struct *kthread_create(
+					int (*function)(void *data),
+					void *data,
+					const char name[],
+					...
+				)
+
+			- `function` is what will be run on the thread
+			- `data` is what will be passed to function
+			- `name` is an identifier for the thread
+
+			After creating a thread you must wake it up with a `wake_up_process(struc task_struct *)` call`
+
+		#kthread_run
+
+			Same as kthread_create, but also starts the thread.
+
+		#kthread_stop
+
+			<https://www.kernel.org/doc/htmldocs/device-drivers/API-kthread-stop.html>
+
+			TODO how to use it. Waits or kills? Seems to kill. How to wait?
+
+			Signature:
+
+				kthread_stop(struc task_struct *)
+
+		#kthread_should_stop
+
+			TODO how to use it
+	*/
+
+	//single thread
+	{
+		struct task_struct *thread;
+
+		struct data {
+			int i;
+			struct task_struct* caller;
+		};
+
+		//int status;
+
+		int function(void* vdata)
+		{
+			struct data *data = (struct data *)vdata;
+			printk(KERN_INFO "kthread. i = %d, pid = %lld", data->i, (long long)current->pid);
+			i_global++;
+			//wake up our caller so he can continue
+			wake_up_process(data->caller);
+			return 0;
+		}
+
+		struct data data = {
+			.i = 0,
+			.caller = current
+		};
+
+		i_global = 0;
+
+		thread = kthread_run(
+			function,
+			&data,
+			"test_kthread_0"
+		);
+
+		//if we had used kthread_create:
+
+			//if ( thread != NULL ) {
+			//	wake_up_process(thread);
+			//}
+
+		set_current_state(TASK_INTERRUPTIBLE);
+		schedule();
+
+		//assert that the thread finished
+		//if ( i_global_atomic != 1 ) return -1;
+		if ( i_global != 1 ) printk("fail");
+	}
+
+	/*
+	*/
+	if ( 0 ) //TODO get working on mulitple threads. Sync problem?
+	{
+		const int n_threads = 4;
+		struct task_struct *threads[n_threads];
+
+		struct data {
+			int i;
+			struct task_struct* caller;
+		};
+
+		//int status;
+
+		int function(void* vdata)
+		{
+			struct data *data = (struct data *)vdata;
+			printk(KERN_INFO "kthread. i = %d, pid = %lld", data->i, (long long)current->pid);
+			atomic_inc(&i_global_atomic);
+			//wake up our caller so he can continue
+			wake_up_process(data->caller); //TODO: is the sync problem here?
+			return 0;
+		}
+
+		atomic_set(&i_global_atomic, 0);
+
+		for ( int i = 0; i < n_threads; i++ ) {
+
+			struct data data = {
+				.i = i,
+				.caller = current
+			};
+
+			threads[i] = kthread_run(
+				function,
+				&data,
+				"test_kthread_0"
+			);
+		}
+
+		while( atomic_read(&i_global_atomic) < n_threads ) {
+			//sleep until the kthread wakes us up
+			set_current_state(TASK_INTERRUPTIBLE);
+			schedule();
+		}
+
+		//assert that all threads finished
+		//if ( i_global_atomic != 1 ) return -1;
+		if ( atomic_read(&i_global_atomic) != n_threads ) printk("fail");
+	}
+
+	/*
+	#wait queues
+
+		[ldd3e]
+
+		High level method to create kthreads and wait for them to end.
+
+		Create one statically:
+
+			DECLARE_WAIT_QUEUE_HEAD(name);
+
+		dynamicly:
+
+			wait_queue_head_t my_queue;
+			init_waitqueue_head(&my_queue);
+
+		Sleep macros:
+
+		- void wait_event(queue, condition)
+
+			Sleep, not interruptible by signals.
+
+		- int wait_event_interruptible(queue, condition)
+
+			Sleep, interruptible by signals.
+
+			Return value: `0` means we were not interrupted,
+			`1` means we were.
+
+		- timeout versions
+
+			- int wait_event_timeout(queue, condition, timeout)
+			- int wait_event_interruptible_timeout(queue, condition, timeout)
+
+			timeout given in jiffles
+
+			After timeout, functions return 0.
+
+		Conditions: the process sleeps in the first place only if the contidion is not met.
+
+		Wake up methods:
+
+		- void wake_up(wait_queue_head_t *queue);
+
+			Wakes single method from queue.
+
+		- void wake_up_all(wait_queue_head_t *queue);
+
+			Wakes all methods from queue.
+
+		- void wake_up_interruptible(wait_queue_head_t *queue);
+
+			Wakes single interruptible method from queue.
+	*/
+	if ( 0 ) //TODO get working.
+	{
+		struct task_struct *thread;
+
+		DECLARE_WAIT_QUEUE_HEAD(wq); //BUG i think I can't do this
+
+		struct data {
+			int i;
+			int j;
+		};
+
+		//int status;
+
+		int function(void* vdata)
+		{
+			struct data *data = (struct data *)vdata;
+			printk(KERN_INFO "kthread. i = %d, j = %d, pid = %lld", data->i, data->j, (long long)current->pid);
+			i_global++;
+			//wake up our caller so he can continue
+			wake_up_all(&wq);
+			return 0;
+		}
+
+		struct data data = {
+			.i = 1,
+			.j = 2
+		};
+
+		i_global = 0;
+
+		//for ( int i = 0; i < 2; i++ )
+		thread = kthread_run(
+			function,
+			&data,
+			"test_kthread_0"
+		);
+
+		wait_event_interruptible(wq, i_global == 1);
+
+		//assert that the function finished
+		//if ( i_global != 1 ) return -1;
+		if ( i_global != 1 ) printk("fail");
+	}
+
+	/*
+	#TASK_SIZE
+
+		*virtual memory* is divided as follows:
+
+		- memory from address from 0 to TASK_SIZE - 1 can be used by *each* processes
+		- other memory adressses (from  TASK_SIZE to the maxinum adressable memory, 2^32 on 32 bits platforms
+				of 2^64 on 64 ) belongs to the kernel
+
+		TASK_SIZE is typically around 3/4 of the total memory
+
+		Note that this is *virtual* memory, so it is independant of the acutual size of the memory
+		as the hardware and the kernel can give processes the illusion that they actually have
+		ammounts of memory larger than the hardware for instance.
+
+	*/
+	{
+		printk(KERN_INFO "TASK_SIZE (GiB) = %lu\n", TASK_SIZE / (1 << 30));
+
+		//Kernel virtual memory must be above `TASK_SIZE`:
+
+			int i;
+			if ( (int)&i < TASK_SIZE ) return -1;
+			printk( KERN_INFO "(void*)&i = %p\n", (void*)&i );
+
+		//User virtual memory will always be below TASK_SIZE.
+		//Print addresses of user space program variables to check this (3Gb = `0xc0000000`)
 	}
 
 	/*
@@ -1518,20 +1816,20 @@ static int __init init(void)
 			root = current->fs->root.dentry;
 			root_sb = root->d_sb;
 
-			printk(INFO_ID "super_block:\n");
+			printk(KERN_INFO "super_block:\n");
 
 			//virtual blocksize:
-			printk(INFO_ID "  s_blocksize = %ld\n", root_sb->s_blocksize);
+			printk(KERN_INFO "  s_blocksize = %ld\n", root_sb->s_blocksize);
 
-			printk(INFO_ID "  s_maxbytes (GiB) = %llu\n", (long long unsigned)root_sb->s_maxbytes / (1 << 30));
+			printk(KERN_INFO "  s_maxbytes (GiB) = %llu\n", (long long unsigned)root_sb->s_maxbytes / (1 << 30));
 
 			//name of corresponding block device
-			printk(INFO_ID "  s_id = %s\n", root_sb->s_id);
+			printk(KERN_INFO "  s_id = %s\n", root_sb->s_id);
 
 			u8 s_uuid_string[17];
 			memcpy( s_uuid_string, root_sb->s_uuid, 16 * sizeof( u8 ) );
 			s_uuid_string[16] = '\0';
-			printk(INFO_ID "s_uuid = %s", s_uuid_string);
+			printk(KERN_INFO "s_uuid = %s\n", s_uuid_string);
 		}
 	}
 
@@ -1775,18 +2073,20 @@ static int __init init(void)
 		{
 			//version is was set with the MODULE_VERSION macro:
 
-			printk(INFO_ID "THIS_MODULE->version = %s\n", THIS_MODULE->version );
+			printk(KERN_INFO "THIS_MODULE->version = %s\n", THIS_MODULE->version );
 		}
 
 		/*
 		#parameters
 		*/
 		{
-			printk(INFO_ID "param_i = %d\n", param_i);
-			printk(INFO_ID "param_s = %s\n", param_s);
+			printk(KERN_INFO "param_i = %d\n", param_i);
+			printk(KERN_INFO "param_s = %s\n", param_s);
 			/*printk("param_is = %d, %d, %d\n", param_is[0], param_is[1], param_is[2]);*/
 		}
 	}
+
+	printk(KERN_INFO "============================================================\n");
 
 	return 0;
 }
@@ -1833,7 +2133,7 @@ module_init(init);
  * */
 static void __exit cleanup(void)
 {
-	printk(INFO_ID "%s\n", __func__ );
+	printk(KERN_INFO "%s\n", __func__ );
 }
 
 module_exit(cleanup);
