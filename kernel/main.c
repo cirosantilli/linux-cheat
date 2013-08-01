@@ -1163,7 +1163,7 @@ static int __init init(void)
 			- unsigned long locked_vm: pages that cannot be swapped out
 		*/
 		{
-			printk(KERN_INFO "mm_struct");
+			printk(KERN_INFO "mm_struct\n");
 			printk(KERN_INFO "  start_code = %lx\n", current->mm->start_code);
 			printk(KERN_INFO "  end_code   = %lx\n", current->mm->end_code);
 			printk(KERN_INFO "  start_data = %lx\n", current->mm->start_data);
@@ -1446,7 +1446,14 @@ static int __init init(void)
 				)
 
 			- `function` is what will be run on the thread
-			- `data` is what will be passed to function
+			- `data` is what will be passed to function.
+
+				Note that data is passed by address, not by copy,
+				so if you define data from a function such as init,
+				you must make sure that the threads finish before the function finishes.
+
+				If that is not the case, you must declare the data on the global scope.
+
 			- `name` is an identifier for the thread
 
 			After creating a thread you must wake it up with a `wake_up_process(struc task_struct *)` call`
@@ -1472,8 +1479,6 @@ static int __init init(void)
 
 	//single thread
 	{
-		struct task_struct *thread;
-
 		struct data {
 			int i;
 			struct task_struct* caller;
@@ -1484,18 +1489,18 @@ static int __init init(void)
 		int function(void* vdata)
 		{
 			struct data *data = (struct data *)vdata;
-			printk(KERN_INFO "kthread. i = %d, pid = %lld", data->i, (long long)current->pid);
+			printk(KERN_INFO "kthread: i = %d, pid = %lld\n", data->i, (long long)current->pid);
 			i_global++;
 			//wake up our caller so he can continue
 			wake_up_process(data->caller);
 			return 0;
 		}
 
+		struct task_struct *thread;
 		struct data data = {
 			.i = 0,
 			.caller = current
 		};
-
 		i_global = 0;
 
 		thread = kthread_run(
@@ -1514,59 +1519,66 @@ static int __init init(void)
 		schedule();
 
 		//assert that the thread finished
-		//if ( i_global_atomic != 1 ) return -1;
-		if ( i_global != 1 ) printk("fail");
+		if ( i_global != 1 ) return -1;
 	}
 
 	/*
+	multiple threads
 	*/
-	if ( 0 ) //TODO get working on mulitple threads. Sync problem?
 	{
-		const int n_threads = 4;
-		struct task_struct *threads[n_threads];
-
 		struct data {
 			int i;
 			struct task_struct* caller;
 		};
 
-		//int status;
-
 		int function(void* vdata)
 		{
 			struct data *data = (struct data *)vdata;
-			printk(KERN_INFO "kthread. i = %d, pid = %lld", data->i, (long long)current->pid);
+			printk(KERN_INFO "kthread. i = %d, pid = %lld\n", data->i, (long long)current->pid);
 			atomic_inc(&i_global_atomic);
-			//wake up our caller so he can continue
-			wake_up_process(data->caller); //TODO: is the sync problem here?
+			//TODO is it permissible to let the threads interrupt execution here,
+			//or is synchronization necessary?
+			//
+			//without synchronization, it is possible that we wake up the caller once more
+			//after the checked the loop end contition. Could that ever cause a problem?
+			//
+			//Also, the caller may have terminated.
+			//What happens if we call wake_up_process on it?
+			wake_up_process(data->caller);
 			return 0;
+		}
+
+		const int n_threads = 4;
+		struct task_struct *threads[n_threads];
+		struct data datas[n_threads];
+
+		for ( int i = 0; i < n_threads; i++ ) {
+			datas[i].i = i;
+			datas[i].caller = current;
 		}
 
 		atomic_set(&i_global_atomic, 0);
 
 		for ( int i = 0; i < n_threads; i++ ) {
 
-			struct data data = {
-				.i = i,
-				.caller = current
-			};
-
 			threads[i] = kthread_run(
 				function,
-				&data,
+				&datas[i],
 				"test_kthread_0"
 			);
 		}
 
+		//sleep until we have the good result
+		//this can only happen when all threads are over
 		while( atomic_read(&i_global_atomic) < n_threads ) {
-			//sleep until the kthread wakes us up
+			//when each thread ends, it tries to wake us up
+			//because it might be that the end condition has been reached.
 			set_current_state(TASK_INTERRUPTIBLE);
 			schedule();
 		}
 
 		//assert that all threads finished
-		//if ( i_global_atomic != 1 ) return -1;
-		if ( atomic_read(&i_global_atomic) != n_threads ) printk("fail");
+		if ( atomic_read(&i_global_atomic) != n_threads ) return -1;
 	}
 
 	/*

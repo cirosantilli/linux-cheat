@@ -1,5 +1,42 @@
-//_GNU_SOURCE needs to enable the gnu extensions
-//it *must* come before includes header
+/*
+#feature macros
+
+    Most glibc extensions are contained inside existing POSIX headers.
+
+    To enable them, you must define a feature macro.
+
+    There are different feature macros, each anabling a different set of functions,
+
+    You can get info on those macros with:
+
+        man feature_test_macros
+
+    Some common ones are:
+
+    - `_XOPEN_SOURCE`: enables a given POSIX version. Defined in POSIX
+    - `_GNU_SOURCE`: enables everyting on the GLIBC.
+
+    The feature macro definition *must* come before includes header so that the
+    preprocessor can see it when it inteprets the header.
+
+#lsb
+
+    Linux standard base seems to require only the two following gnu extensions to be available:
+
+    - gnu_get_libc_version() returns a string that identifies the version of the C library running the program making the call.
+    - gnu_get_libc_release()
+
+    All the other functions seem to be present on all Linux distros only because glibc is a de-facto standard. TODO any others?
+
+#glibc vs gnulib
+
+    gnulib seems is meant to be a source of code to be copied pasted, not preinstalled.
+
+    However some stuff such as `gnu_get_libc_release` seems to be only documented there,
+    and comes with glibc. TODO I'm confused.
+
+    <http://stackoverflow.com/questions/2240120/glibc-glib-and-gnulib>
+*/
 
 #define _GNU_SOURCE
 
@@ -7,9 +44,8 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-//#define __USE_GNU
 
-#include <sched.h>      //SCHED_BATCH, SCHED_IDLE, sched_getaffinity, clone
+#include <sched.h>              //SCHED_BATCH, SCHED_IDLE, sched_getaffinity, clone
 
 #include <gnu/libc-version.h>   //gnu_get_libc_version
 

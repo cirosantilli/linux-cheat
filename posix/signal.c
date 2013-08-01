@@ -12,29 +12,16 @@ as implementation dependant, so this may only work in linux.
 
 Please look for ANSI C info for any feature used but not explained here.
 
-# actions in linux
+#POSIX
 
-each signal has a default action handler action documented in TODO
-if processes don't register their own handlers
+List of all signals and default actions taken: <http://pubs.opengroup.org/onlinepubs/009696699/basedefs/signal.h.html>.
 
-in linux, the possible default actions are:
+POSIX defines several signals and their default behaviours in addition to the ANSI C signals.
 
-- Term   Default action is to terminate the process.
-- Ign    Default action is to ignore the signal.
-- Core   Default action is to terminate the process and dump core (see core(5)).
-- Stop   Default action is to stop the process.
-- Cont   Default action is to continue the process if it is currently stopped.
-
-the most common being Term, which kills the program.
-
-# signals specified by POSIX
-
-POSIX defines several signals and their behaviours in addition to the ANSI C signals.
-
-to send arbitrary signals to a process from a terminal, consider using the `kill` utility
+To send arbitrary signals to a process from a terminal, consider using the `kill` utility
 (it does more than killing via a SIGTERM, as in general it sends any signal to a process)
 
-simple list:
+POSIX specific signals include:
 
 - SIGKILL
 
@@ -61,7 +48,7 @@ simple list:
 
 - SIGCHLD
 
-    child terminated
+    child terminated, stopped or continued
 
 - SIGALRM
 
@@ -69,7 +56,21 @@ simple list:
 
 - SIGUSR1 and SIGUSR2: left to users to do whatever they want with
 
-# sources
+#parent death signal
+
+    In POSIX, no signal needs to be sent to the child if the parent exits:
+    <http://stackoverflow.com/questions/284325/how-to-make-child-process-die-after-parent-exits>
+    In Linux, this can be achieved via the `prctl` syscall.
+    This may seem surprising considering that:
+
+    - parents can wait for children
+
+    - children get a NOHUP when controling process is killed
+        This is mentioned at: <http://pubs.opengroup.org/onlinepubs/009695399/functions/exit.html>
+
+        TODO what is a controlling process?
+
+#sources
 
 - <http://www.alexonlinux.com/signal-handling-in-linux>
 
@@ -78,6 +79,21 @@ simple list:
 - man 7 signal
 
     man pages
+
+#linux
+
+Each signal has a default action handler action documented in TODO
+if processes don't register their own handlers.
+
+in linux, the possible default actions are:
+
+- Term   Default action is to terminate the process.
+- Ign    Default action is to ignore the signal.
+- Core   Default action is to terminate the process and dump core (see core(5)).
+- Stop   Default action is to stop the process.
+- Cont   Default action is to continue the process if it is currently stopped.
+
+the most common being Term, which kills the program.
 
 # TODO
 

@@ -67,6 +67,7 @@ main cheat on the POSIX C API
 //#include <limits.h>
 #include <netdb.h>          //gethostbyname
 #include <netinet/in.h>
+#include <pthread.h>
 #include <pwd.h>            //getpwuid, getpwnam, getpwent
 #include <regex.h>
 #include <sched.h>
@@ -81,10 +82,32 @@ main cheat on the POSIX C API
 
 extern char **environ;
 
+/* pthreads related */
+
+#define NUM_THREADS      5
+
+    pthread_mutex_t main_thread_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+    void* main_thread( void* vargument )
+    {
+        int argument;
+
+        argument = *((int*)vargument);
+
+        pthread_mutex_lock( &main_thread_mutex );
+        printf( "tid = %d\n", argument );
+        //all threads of a process have the same PID
+        printf( "  getpid() = %llu\n", (uintmax_t)getpid() );
+        printf( "  pthread_self() = %llu\n", (uintmax_t)pthread_self() );
+        pthread_mutex_unlock( &main_thread_mutex );
+
+        return NULL;
+    }
+
 int main( int argc, char** argv )
 {
     /*
-    #erros
+    #errors
 
         typical error dealing conventions POSIX are:
 
@@ -120,8 +143,8 @@ int main( int argc, char** argv )
         - EISDIR: Is a directory
         - ENOTDIR: Isn’t a directory
 
-        those error descriptions are also programatically accessible through functions
-        such as `perror` or `strerror`
+        Those error descriptions are also programatically accessible through functions
+        such as `perror` or `strerror`.
     */
     {
         /*
@@ -280,12 +303,34 @@ int main( int argc, char** argv )
         the `M_PI` constants are defined by POSIX inside of math.h
     */
     {
-        //ansi c way of calculating pi:
-        const float pi = acos( -1 );
+        //#constants
+        {
+            //ansi c way of calculating some constants:
+                const float PI = acos( -1 );
+                const float E = exp( 1 );
 
-        assert( fabs( M_PI - pi ) < 1e-6  );
-        assert( fabs( M_PI/2.0 - M_PI_2 ) < 1e-6  );
-        assert( fabs( M_PI/4.0 - M_PI_4 ) < 1e-6  );
+            //POSIX provides macros that expand to those constants:
+                assert( fabs( M_E - E ) < 1e-6  );
+                assert( fabs( M_PI - PI ) < 1e-6  );
+                assert( fabs( M_PI/2.0 - M_PI_2 ) < 1e-6  );
+                assert( fabs( M_PI/4.0 - M_PI_4 ) < 1e-6  );
+        }
+
+        /*
+        #bessel
+
+            As of POSIX 7, the only major function addition to the math library
+            seems to be bessel functions.
+
+            TODO understand, specially why is it so important to be here?
+
+            <http://en.wikipedia.org/wiki/Bessel_function>
+        */
+        {
+            //double      j0(double);
+            //double      j1(double);
+            //double      jn(int, double);
+        }
     }
 
     /*
@@ -466,7 +511,7 @@ int main( int argc, char** argv )
     {
 
         /*
-        #stat
+        #stat family
 
             get info on paths
 
@@ -475,6 +520,13 @@ int main( int argc, char** argv )
             if you get a 0, you know the file exists!
 
             this fills in the `struct stat` given by pointer
+
+            The family contains the following variants:
+
+            - stat: takes string path. Grouped under fstatat.
+            - lstat: does not dereference symbolic links. Grouped under fstatat.
+            - fstat: takes fd.
+            - fstatat: can't understand, does not seem important.
 
         #struct stat
 
@@ -1030,20 +1082,6 @@ int main( int argc, char** argv )
                 printf( "getcwd() = %s\n", buf );
             }
         }
-
-        /*
-        #getcwd
-
-            pwd
-
-        #root directory
-
-            As of POSIX 7, this concept is not available.
-
-            It is implemented as a Glibc extension under `_BSD_SOURCE`.
-        */
-        {
-        }
     }
 
     //#execl, execlp, execsle, execv, execvp, execvpe
@@ -1080,10 +1118,253 @@ int main( int argc, char** argv )
     }
 
     /*
+    #fork
+
+        makes a copy of this process
+
+        this includes open file descriptors
+
+        global memory space (`.DATA` and `.BSD`) is copied to current value but separated
+        (unlike threads, which share memory space)
+
+        #fork and buffering
+
+            <http://stackoverflow.com/questions/3513242/working-of-fork-in-linux-gcc>
+
+            there are three buffering methods:
+
+            - unbuffered
+            - fully buffered
+            - line buffered
+
+            when you fork, the streams get forked too,
+            with unflushed data still inside
+
+            stdout and stderr flush at newlines
+            if you don't put newlines, if does not flush,
+            and fork copies the buffers
+
+
+            this will print everything twice
+
+    #vfork
+
+        fork but keep same address space. POSIX 7 discourages its use,
+        and says that it may be deprecated in the future
+
+    #wait()
+
+        wait for any child to terminate and then wake up
+
     #waitpid()
 
         wait for child with given PID to terminate
+
+    #copy on write #COW
+
+        often the fork is followed by an operation which does not use the old memory
+        such as `exec`, making copying the data useless.
+
+        some operating systems may at first not copy memory from old process,
+        but wait util memory is written to do that.
+
+        this has page granularity (physical RAM parameter, larger than most variables)
     */
+    {
+        //this variable will be duplicated on the parent and on the child
+        int i = 0;
+
+        //this variable is visible only by the parent
+        //TODO is the compiler smart enough not to duplicate this to the child?
+        {
+            //int i = 0;
+        }
+
+        //happens on parent only and before child:
+        puts( "fork parent only before child" );
+
+        //flush before fork so that existing output won't be repeated twice:
+        fflush( stdout );
+
+        //in case of success, pid is set differently on parent and child
+        //so you can distinguish between them. For the child, `pid = 0`.
+        pid_t pid = fork();
+        if ( pid < 0 )
+        {
+            puts( "fork failed" );
+            assert( false );
+        }
+        else
+        {
+            //happens on both child and parent
+            puts( "fork child and parent" );
+            printf( "pid = %d, i = % d\n", pid, i );
+
+            //happens on child only:
+            if ( pid == 0 )
+            {
+                /*
+                this puts is assynchonous with the process stdout
+
+                so it might not be in the line program order
+
+                but they both go to the same terminal
+                */
+                puts( "fork child only" );
+
+                //this shall only change the child's `i` because memory was cloned (unlike threads)
+                i++;
+
+                //the child exits here:
+                exit( EXIT_SUCCESS );
+            }
+
+            //happens on parent only, before or after child.
+            puts( "fork parent only" );
+
+            //parent waits for the child to end.
+            //only the parent reaches this point because of the exit call
+            //done on the child above
+            int status;
+            wait( &status );
+            assert( status == EXIT_SUCCESS );
+
+            //happens on parent and only after child:
+            puts( "fork parent only after child" );
+
+            //memory was cloned, parent i was only modified in child memory
+            assert( i == 0 );
+        }
+    }
+
+    /*
+    #process synchronization
+
+        Threads can be synchronized via:
+
+        - semaphores
+
+        - mutexes
+
+        Threads have the specific synchronization mechanisms:
+
+    #semaphore
+
+    #mutex
+    */
+
+    /*
+    #threads
+
+        See pthread.
+
+    #pthread
+
+        Sources:
+
+        - <https://computing.llnl.gov/tutorials/pthreads/>
+
+        Posix threads.
+
+        Complex model with around 100 functions prefixed by `pthread`.
+
+        c11 will introduce a standard threading model,
+        so in time this may become less important
+
+        Each thread has its own stack, but unlike process, global memory is shared.
+
+        Quicker to start than a process because less resource copy is needed.
+
+        In Linux, based on the `clone` system call.
+
+        In gcc you must compile with `-pthread`.
+
+    #thread synchronization mechanisms
+
+        - mutexes - Mutual exclusion lock: Block access to variables by other threads.
+            This enforces exclusive access by a thread to a variable or set of variables.
+
+        - joins - Make a thread wait till others are complete (terminated).
+
+        - condition variables - data type pthread_cond_t
+
+        Good tutorial: <http://www.yolinux.com/TUTORIALS/LinuxTutorialPosixThreads.html#SYNCHRONIZATION>
+
+    #pthread_create
+
+        Create a new thread.
+
+            int pthread_create(
+                pthread_t *restrict thread,
+                const pthread_attr_t *restrict attr,
+                void *(*start_routine)(void*),
+                void *restrict arg
+            )
+
+            - thread:
+
+                unique id of the created thread
+
+                can be retreived from the thread with `pthread_self()`
+
+                In POSIX all threads of a process have the same PID. TODO confirm with reference
+
+            - attr:
+            - start_routine:    function that runs the thread code
+            - arg:              argument to start_routine
+
+    #pthread_join
+
+        Wait for a given thread to terminated.
+
+        If it has already terminated, does not wait.
+
+    #pthread_self
+
+        Get thread id of current running thread.
+
+        vs linux gettid: <http://stackoverflow.com/questions/6372102/what-is-the-difference-between-pthread-self-and-gettid-which-one-should-i-u>
+
+    #pthread_mutex methods
+
+        Allows a single thread to enter some code region.
+
+        #PTHREAD_MUTEX_INITIALIZER
+
+            New pthread_mutex_t should be initialized to it.
+
+        #pthread_mutex_lock
+
+            Acquire mutex: from now one no one else can enter.
+
+        #pthread_mutex_unlock
+
+            Release mutex: from now one others can enter.
+    */
+    {
+        pthread_t threads[NUM_THREADS];
+        int thread_args[NUM_THREADS];
+        int rc, i;
+
+        /* create all threads */
+        for ( i = 0; i < NUM_THREADS; ++i )
+        {
+            thread_args[i] = i;
+            rc = pthread_create( &threads[i], NULL, main_thread, (void *) &thread_args[i] );
+            assert( rc == 0 );
+            printf( "created thread: %ju\n", (uintmax_t)threads[i] );
+        }
+
+        /* wait for all threads to complete */
+        for ( i = 0; i < NUM_THREADS; ++i )
+        {
+            rc = pthread_join( threads[i], NULL );
+            if( rc != 0 ) {
+                printf( "%s\n", strerror( rc ) );
+                exit( EXIT_FAILURE );
+            }
+        }
+    }
 
     /*
     #IPC
@@ -1170,7 +1451,7 @@ int main( int argc, char** argv )
             those 256 chunks will conatain its own header information)
         */
         {
-            fprintf( stderr, "BUFSIZ = %llu\n", (intmax_t) BUFSIZ );
+            printf( "BUFSIZ = %ju\n", (uintmax_t) BUFSIZ );
             assert( BUFSIZ >= 256 );
         }
 
@@ -1230,7 +1511,7 @@ int main( int argc, char** argv )
 
                 sprintf(
                     cmd,
-                    "for i in `seq %llu`; do echo -n a; done",
+                    "for i in `seq %ju`; do echo -n a; done",
                     (uintmax_t)(desired_read_cycles-1) * BUFSIZ + desired_last_char_read
                 );
                 read_fp = popen( cmd, "r" );
@@ -1238,8 +1519,7 @@ int main( int argc, char** argv )
                 {
                     do
                     {
-                            chars_read = fread( buffer, sizeof( char ), BUFSIZ, read_fp );
-
+                        chars_read = fread( buffer, sizeof( char ), BUFSIZ, read_fp );
                         buffer[chars_read] = '\0';
                         printf( "======== n bytes read: %d\n", chars_read );
                         //printf( "%s\n", buffer); //if you want to see a bunch of 'a's...
@@ -1252,7 +1532,7 @@ int main( int argc, char** argv )
                 }
                 else
                 {
-                    fprintf( stderr, "could not open pipe" );
+                    printf( "could not open pipe" );
                     exit( EXIT_FAILURE );
                 }
             }
@@ -1518,7 +1798,7 @@ int main( int argc, char** argv )
             hostinfo = gethostbyname( hostname );
             if ( !hostinfo )
             {
-                fprintf( stderr, "gethostbyname failed for hostname = %s\n", hostname );
+                printf( "gethostbyname failed for hostname = %s\n", hostname );
                 exit( EXIT_FAILURE );
             }
             printf( "gethostbyname\n" );
@@ -1533,7 +1813,7 @@ int main( int argc, char** argv )
             //assert that it is an inet address
             if ( hostinfo -> h_addrtype != AF_INET )
             {
-                fprintf( stderr, "host is not AF_INET\n" );
+                printf( "host is not AF_INET\n" );
                 exit( EXIT_FAILURE );
             }
 

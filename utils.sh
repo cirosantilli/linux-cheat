@@ -57,20 +57,116 @@
 
 ##man
 
-    #the manuals
+    #The manuals.
 
-    #posix 7 specifies the single option `-k` and nothing about pages
+    #POSIX 7 specifies only the option `-k` and nothing about pages,
+    #those are linux concepts.
 
-    ##search
+    ##pages
 
-        man intro
-            #exact search on title
-            #shows only first match
+        #The manual is organized into 7 pages.
+
+        #When you install a new page, the developers decide where to put the documentation.
+
+        #Every page has an intro section which says what it is about:
+
+            man 2 intro
+            man 3 intro
+
+        #As in the case of the intro, you can distinguish ambiguities by giving the page number.
+
+        #`write` system call:
+
+            man 2 write
+
+        #`write` shell command:
+
+            man 1 write
+
+        #List all entries of a page:
+
+            man -k . | grep '(8)'
+
+        #- 1: user commands (executables in path)
+
+            #This is normally the largest section.
+
+                man 1 passwd
+
+        #- 2: system calls (c interface)
+
+            #Those are *not* actual system calls, but portable low level system interfaces.
+
+            #Most of the POSIX C library is here.
+
+            #POSIX write function:
+
+                man 2 write
+
+        #- 3: library. system call wrappers.
+
+            #Higher level than 2.
+
+            #Distinction from `man 2` is hard to tell.
+
+            #Contains for example:
+
+            #- some POSIX apis like pthreads
+            #- X11 APIs
+
+        #- 4: special files such as device files
+
+                man 4 zero
+                man 4 random
+                man 4 mouse
+
+        #- 5: file formats specifications.
+
+            #Examples:
+
+            #/etc/passwd file syntax:
+
+                man 5 passwd
+
+            #elf executable format:
+
+                man 5 elf
+
+        #- 6: games
+
+        #- 7: standards.
+
+            #Contains standards summaries such as:
+
+                man unicode
+                man url
+                man X
+
+        #- 8: system administration
+
+            #Commands that mostly only root can do.
+
+            #Their binaries are typically under `/usr/sbin/`.
+
+            #Examples:
+
+                man 8 adduser
+                man 8 grub-install
+                man 8 mount
+
+    ##GNU command line options
+
+        #exact search on title. Shows only first page found match:
+
+            man intro
+
         man -a intro
             #shows each match in succession
             #asks if you want to continue on each quit
+
         man -k password
             #search for commands with password word on summary
+
         man -K password
             #search on all of manual pages
             #may take some time
@@ -82,43 +178,26 @@
 
             man --regex 'a.c'
                 #regex on title
+
             man --regex -K 'a.c'
                 #regex on entire manual
 
         apropos password
             #same
+
         man -k .
             #list all manual pages
-            #pages whose summaries match '.' reges: anychar)
-        man -k . | grep '(8)'
-            #list manual section
+            #pages whose summaries match '.' regex: anychar)
 
-    ##show
+    ##linux man-pages project
 
-        ##sections
+        #<https://www.kernel.org/doc/man-pages/>
 
-            man 2 intro
-                #read intro about section 2
-            #1: commands (executables in path)
-                #is the default section
-                man 1 passwd
-            #2: system calls (c interface)
-                man 2 write
-                    #write system call
-                man 1 write
-                    #write command
-            #3: library. system call wrappers.
-            #4: special files
-                man 4 mouse
-            #5: file formats
-                man 5 passwd
-                    #/etc/passwd file syntax
-                man 5 elf
-                    #elf executable format
-            #6: games
-            #8: system administration
-                man 8 adduser
-                    #commands that mostly only root can to
+        #Project that maintains many Linux related manpages and also some non Linux specific entries.
+
+        #Most distros to come with those manpages installed.
+
+        #It is not a part of the kernel tree, and does not seem to be mentioned in the LSB.
 
     ##whatis
 
@@ -4143,6 +4222,7 @@
         #cli for sys_stat
 
         #get file/dir info such as:
+
         #- size
         #- owner
         #- group
