@@ -405,49 +405,6 @@ static int __init init(void)
 	}
 
 	/*
-	#atomic operations
-
-		ANSI C does not guarantee that any operation is atomic, not even things like: `a++`.
-
-		Therefore, you must use atomic opertation if you want to ensure atomicity.
-
-		In some cases, use of those instructions is enough to guarantee synchronization,
-		for example when incrementing usage counters. This is why usage counters are often `atomic_t`.
-
-		This is a very efficient, but restricted, synchornization mechanism if applicable.
-
-		Available operations do things like:
-
-		- add
-		- subtract
-		- subtract and test greater than
-		- binary operations
-
-	#atomic_t
-
-		Type used on all atomic operations.
-
-	#ATOMIC_INIT(int)
-
-		Initialize an atomic to given integer.
-
-		Only works at compile time and for initialization.
-
-	#atomic_set(int *, int)
-
-		Set value of atomic.
-
-		Unlike ATOMIC_INIT can be used anywhere.
-	*/
-	{
-		atomic_t i = ATOMIC_INIT(0);
-		//ERROR: not initialization
-		//i = ATOMIC_INIT(0);
-		atomic_inc(&i);
-		if ( atomic_read(&i) != 1 ) return -1;
-	}
-
-	/*
 	#time
 
 		There are 2 types of time:
@@ -934,14 +891,14 @@ static int __init init(void)
 	/*
 	#process
 
-		the kernel manages user processes and kernel processes, scheduling them with some algorithm
+		The kernel manages user processes and kernel processes, scheduling them with some algorithm
 		so that users see all process make some progress more or less at the same time.
 
-		process representation is found under `sched.h` and is named `struct task_struct`
+		The process model is found under `sched.h` and is named `struct task_struct`.
 
 	#threads
 
-		threads are processes that share the same address space so they act on common variables
+		Threads are processes that share the same address space so they act on common variables.
 
 	#current
 
@@ -974,26 +931,21 @@ static int __init init(void)
 
 			processes keep a linked list of its siblings
 
-		#scheduling
+		#task_struct scheduling fields
 
-			the following fields relate to process scheduling
+			The following fields relate to process scheduling.
 
 			#state
 
-				#TASK_RUNNING
+				Possible values are:
 
-					The scheduler may run it at any time running.
-
-				#TASK_INTERRUPTIBLE
-
-					Will not be scheduled until:
-
-					- someone calls `wake_up_interruptible` on it
-					- it receives a signal
-
-				#TASK_UNINTERRUPTIBLE
-
-					Same as TASK_INTERRUPTIBLE, except that it cannot receive signals.
+				- TASK_RUNNING
+				- TASK_INTERRUPTIBLE
+				- TASK_UNINTERRUPTIBLE
+				- TASK_STOPPED
+				- TASK_TRACED
+				- TASK_ZOMBIE
+				- EXIT_DEAD
 
 			#static_priority
 
@@ -1104,9 +1056,14 @@ static int __init init(void)
 
 		//struct list_head sibling;	/* linkage in my parent's children list */
 
-		/* threadgroup leader */
+		/*
+		#groupr_leader
 
+			TODO what is this
+		*/
+		{
 			printk(KERN_INFO "current->group_leader->pid  = %lld\n", (long long)current->group_leader->pid);
+		}
 
 		/*
 		#fs
@@ -1183,20 +1140,20 @@ static int __init init(void)
 	/*
 	#scheduling
 
-		modern systems are preemptive: they can stop tasks to start another ones, and continue with the old task later
+		Modern systems are preemptive: they can stop tasks to start another ones, and continue with the old task later
 
-		a major reason for this is to give users the illusion that
+		A major reason for this is to give users the illusion that
 		their text editor, compiler and music player can
 		run at the same time even if they have a single cpu
 
-		scheduling is chooshing which processes will run next
+		Scheduling is chooshing which processes will run next
 
-		the processes which stopped running is said to have been *preempted*
+		The processes which stopped running is said to have been *preempted*
 
-		the main difficulty is that switching between processes (called *context switch*)
+		The main difficulty is that switching between processes (called *context switch*)
 		has a cost because if requires copying old memory out and putting new memory in.
 
-		balancing this is a question throughput vs latency balace.
+		Balancing this is a question throughput vs latency balace.
 
 		- throughput is the total average performance. Constant context switches reduce it because they have a cost
 		- latency is the time it takes to attend to new matters such as refreshing the screen for the user.
@@ -1219,13 +1176,44 @@ static int __init init(void)
 
 		#state
 
-			processes can be in one of the following states:
+			Processes can be in one of the following states (`task_struct->state` fields)
 
-			- running: running
+			- running: running. `state = TASK_RUNNING`
+
 			- waiting: wants to run, but scheduler let another one run for now
+
+				`state = TASK_RUNNING`, but the scheduler is letting other processes run for the moment.
+
 			- sleeping: is waiting for an event before it can run
-			- stopped: killed but is waiting for its parent to call wait and get exit status
-			- zombie: has been killed, but parent also without calling wait
+
+				`state = TASK_INTERRUPTIBLE` or `TASK_UNINTERRUPTIBLE`.
+
+			- stopped: execution purpusifully stopped for exaple by SIGSTOP for debugging
+
+				`state = TASK_STOPPED` or `TASK_TRACED`
+
+			- zombie: has been killed but is waiting for parent to call wait on it.
+
+				`state = TASK_ZOMBIE`
+
+			- dead: the process has already been waited for,
+				and is now just waiting for the system to come and free its resources.
+
+				`state = TASK_DEAD`
+
+			The following transitions are possible:
+
+
+				+----------+ +--------+
+				|          | |        |
+				v          | v        |
+				running -> waiting    sleeping
+				|                     ^
+				|                     |
+				+---------------------+
+				|
+				v
+				stopped
 
 		#policy
 
@@ -1411,7 +1399,9 @@ static int __init init(void)
 	}
 
 	/*
-	#kernel threads #kthread
+	#kernel threads
+
+	#kthread
 
 		The kernel can spawn its own threads.
 
@@ -1431,6 +1421,8 @@ static int __init init(void)
 
 		- wait queue
 		- bottom half
+
+		Each kernel thread has its own PID.
 
 		#kthread_create
 
@@ -1489,10 +1481,17 @@ static int __init init(void)
 		int function(void* vdata)
 		{
 			struct data *data = (struct data *)vdata;
+
+			//each kernel thread has its own pid
 			printk(KERN_INFO "kthread: i = %d, pid = %lld\n", data->i, (long long)current->pid);
+
+			//we can use a simple integer here because there is only goint to be one thread using it,
+			//if there were more than one we would need an atomic_int.
 			i_global++;
+
 			//wake up our caller so he can continue
 			wake_up_process(data->caller);
+
 			return 0;
 		}
 
@@ -1534,21 +1533,32 @@ static int __init init(void)
 		int function(void* vdata)
 		{
 			struct data *data = (struct data *)vdata;
-			printk(KERN_INFO "kthread. i = %d, pid = %lld\n", data->i, (long long)current->pid);
+			printk(
+				KERN_INFO "kthread: i = %d, pid = %lld, ppid = %lld, tgid = %lld\n",
+				data->i,
+				(long long)current->pid,
+				(long long)current->parent->pid,
+				(long long)current->tgid
+			);
 			atomic_inc(&i_global_atomic);
-			//TODO is it permissible to let the threads interrupt execution here,
-			//or is synchronization necessary?
-			//
-			//without synchronization, it is possible that we wake up the caller once more
-			//after the checked the loop end contition. Could that ever cause a problem?
-			//
-			//Also, the caller may have terminated.
-			//What happens if we call wake_up_process on it?
+
+			/*
+			TODO is it permissible to let the threads preempt execution here,
+			or is synchronization necessary?
+
+			without synchronization, it is possible that we wake up the caller once more
+			after the checked the loop end contition. Could that ever cause a problem?
+
+			Also, the caller may have terminated (if this preempts here, i_global_atomic
+			may have reached the total count )
+			What happens if we call wake_up_process on it?
+			*/
 			wake_up_process(data->caller);
+
 			return 0;
 		}
 
-		const int n_threads = 4;
+		const int n_threads = 8;
 		struct task_struct *threads[n_threads];
 		struct data datas[n_threads];
 
@@ -1582,11 +1592,85 @@ static int __init init(void)
 	}
 
 	/*
+	#synchronization
+
+		There are severl methods adapted for different cases:
+
+		- semaphore: general. May cause process to sleep,
+			and therefore cannot be used in contexts where sleep is forbidden such as interrupts
+			or inside spinlocks
+
+			TODO reentrant?
+
+		- spinlock: more lightweight than semaphores. Busy wait. Does not sleep.
+			Not reentrant. Disables preemption. Process cannot
+			sleep in the critical region
+
+		- atomic operations: very lightweight. Works only when dealing with individual integers,
+			such as in the case of counters.
+	*/
+
+	/*
+	#atomic operations
+
+		ANSI C does not guarantee that any operation is atomic, not even things like: `a++`.
+
+		Therefore, you must use atomic opertation if you want to ensure atomicity.
+
+		In some cases, use of those instructions is enough to guarantee synchronization,
+		for example when incrementing usage counters. This is why usage counters are often `atomic_t`.
+
+		This is a very efficient, but restricted, synchornization mechanism if applicable.
+
+		Available operations do things like:
+
+		- add
+		- subtract
+		- subtract and test greater than
+		- binary operations
+
+	#atomic_t
+
+		Type used on all atomic operations.
+
+	#ATOMIC_INIT(int)
+
+		Initialize an atomic to given integer.
+
+		Only works at compile time and for initialization.
+
+	#atomic_set(int *, int)
+
+		Set value of atomic.
+
+		Unlike ATOMIC_INIT can be used anywhere.
+	*/
+	{
+		atomic_t i = ATOMIC_INIT(0);
+		//ERROR: not initialization
+		//i = ATOMIC_INIT(0);
+		atomic_inc(&i);
+		if ( atomic_read(&i) != 1 ) return -1;
+	}
+
+	/*
 	#wait queues
 
-		[ldd3e]
+		High level method where a thread waits for a certain condition to become true.
 
-		High level method to create kthreads and wait for them to end.
+		This condition can only be true after operations have been carried out on other
+		threads, and those threads must notify the sleeping thread that the contition may have
+		become true.
+
+		This method is more or less equivalent to: TODO confirm
+
+			while( ! condition ) {
+				set_current_state(TASK_INTERRUPTIBLE);
+				schedule();
+			}
+
+		but the loop is already factored out, so you write less code,
+		and have a smaller change of making a mistake if you try implement things that way.
 
 		Create one statically:
 
@@ -1635,15 +1719,10 @@ static int __init init(void)
 
 			Wakes single interruptible method from queue.
 	*/
-	if ( 0 ) //TODO get working.
 	{
-		struct task_struct *thread;
-
-		DECLARE_WAIT_QUEUE_HEAD(wq); //BUG i think I can't do this
-
 		struct data {
 			int i;
-			int j;
+			wait_queue_head_t* wq;
 		};
 
 		//int status;
@@ -1651,16 +1730,19 @@ static int __init init(void)
 		int function(void* vdata)
 		{
 			struct data *data = (struct data *)vdata;
-			printk(KERN_INFO "kthread. i = %d, j = %d, pid = %lld", data->i, data->j, (long long)current->pid);
+			printk(KERN_INFO "wq kthread: i = %d, pid = %lld\n", data->i, (long long)current->pid);
 			i_global++;
 			//wake up our caller so he can continue
-			wake_up_all(&wq);
+			wake_up_all(data->wq);
 			return 0;
 		}
 
+		struct task_struct *thread;
+		DECLARE_WAIT_QUEUE_HEAD(wq);
+
 		struct data data = {
 			.i = 1,
-			.j = 2
+			.wq = &wq
 		};
 
 		i_global = 0;
@@ -1675,8 +1757,49 @@ static int __init init(void)
 		wait_event_interruptible(wq, i_global == 1);
 
 		//assert that the function finished
-		//if ( i_global != 1 ) return -1;
-		if ( i_global != 1 ) printk("fail");
+		if ( i_global != 1 ) return -1;
+	}
+
+	{
+		struct data {
+			int i;
+			wait_queue_head_t* wq;
+		};
+
+		int function(void* vdata)
+		{
+			struct data *data = (struct data *)vdata;
+			printk(KERN_INFO "wq kthread: i = %d, pid = %lld\n", data->i, (long long)current->pid);
+			atomic_inc(&i_global_atomic);
+			wake_up_all(data->wq);
+			return 0;
+		}
+
+		const int n_threads = 8;
+		struct task_struct *threads[n_threads];
+		struct data datas[n_threads];
+		DECLARE_WAIT_QUEUE_HEAD(wq);
+
+		for ( int i = 0; i < n_threads; i++ ) {
+			datas[i].i = i;
+			datas[i].wq = &wq;
+		}
+
+		atomic_set(&i_global_atomic, 0);
+
+		for ( int i = 0; i < n_threads; i++ ) {
+
+			threads[i] = kthread_run(
+				function,
+				&datas[i],
+				"test_kthread_0"
+			);
+		}
+
+		wait_event_interruptible(wq, atomic_read(&i_global_atomic) == n_threads);
+
+		//assert that all threads finished
+		if ( atomic_read(&i_global_atomic) != n_threads ) return -1;
 	}
 
 	/*

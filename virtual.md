@@ -73,7 +73,19 @@ Reboot and you have a working system.
 Certain key combinations are always captured by the host, such as <C-A-DEL> or <C-A-BACKSPACE>.
 You can send any <C-A-KEY> combination by using host_key + KEY, where host_key is right control version 4.2.
 
+##guest utils
+
 Certain features require that you install virtualbox utilities on the guest,
-for example directory sharing. You should really install that See [this](http://www.virtualbox.org/manual/ch04.html#idp11306688) for how to install.
+for example directory sharing.
+
 You should *really* install that immediately after you get your host working,
 since some very basic features may require those utils to work (X server on Linux for example).
+
+If your distribution has a package manager, it is possible that you can install the utils on
+the guest via the package manager: this is the case for Ubuntu 13.04 for example.
+This should be your preferred method if available.
+
+Otherwise, see [this](http://www.virtualbox.org/manual/ch04.html#idp11306688) for how to install.
+
+If you don't have X, you may be able to switch to terminal mode via some special key combination
+(Ctrl-Alt-F2 on Ubuntu for example) install the utils via the terminal, and then reboot.

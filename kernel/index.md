@@ -206,13 +206,9 @@ this is used to separate who can do what
 
 - rc = Release Candidate
 
-#test a new kernel
+#compile
 
-##compile
-
-this is a very slow test mechanism since you need to reboot everytime.
-
-get the source:
+Get the source:
 
 	git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
 
@@ -253,7 +249,7 @@ it is recommend to use:
 
 this may take more than one hour.
 
-##install
+#install
 
 tested on Ubuntu `13.04` with kernel dev version `3.10.0-rc5+`
 
@@ -279,15 +275,35 @@ TODO how to go back to the old kernel image by default at startup?
 
 TODO how to install the /usr/src/linux-headers- headers?
 
+#test
+
+Tips on how to test with the kernel.
+
 ##kernel module
 
-can be inserted and removed while the kernel runs.
+A kernel module can be inserted and removed while the kernel is running,
+so it may prevent a time costly rebooting.
 
 However, if you make an error at startup (dereference null pointer for example),
 the kernel module may become impossible to reinsert without a reboot.
 <http://unix.stackexchange.com/questions/78858/cannot-remove-or-reinsert-kernel-module-after-error-while-inserting-it-without-r/>
 
-##kernel virtual machine
+Furthermore, if your module messes up bad enough, it could destroy disk data, so be careful.
+
+Consider using a virtual machine instead.
+
+##virtual machine
+
+A virtul machine is a program that emulates another operating system entirely,
+including a different on from the host.
+
+You can then simulate running a new kernel inside the virtual machine.
+
+It stores disk data on a separate place from the host data (either in a special file, or in a reserved partition),
+so that if kernel modifications would cause disk damage, all you have to do is reinstall things on the virtual machine,
+but your computer won't be damaged.
+
+Also, it is faster to reboot the virtual machine than the host system if your module cannot be inserted anymore.
 
 #get kernel version
 
