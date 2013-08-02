@@ -1422,7 +1422,7 @@ static int __init init(void)
 		- wait queue
 		- bottom half
 
-		Each kernel thread has its own PID.
+		Each kernel thread has its own pid a tgid.
 
 		#kthread_create
 
@@ -1468,62 +1468,6 @@ static int __init init(void)
 
 			TODO how to use it
 	*/
-
-	//single thread
-	{
-		struct data {
-			int i;
-			struct task_struct* caller;
-		};
-
-		//int status;
-
-		int function(void* vdata)
-		{
-			struct data *data = (struct data *)vdata;
-
-			//each kernel thread has its own pid
-			printk(KERN_INFO "kthread: i = %d, pid = %lld\n", data->i, (long long)current->pid);
-
-			//we can use a simple integer here because there is only goint to be one thread using it,
-			//if there were more than one we would need an atomic_int.
-			i_global++;
-
-			//wake up our caller so he can continue
-			wake_up_process(data->caller);
-
-			return 0;
-		}
-
-		struct task_struct *thread;
-		struct data data = {
-			.i = 0,
-			.caller = current
-		};
-		i_global = 0;
-
-		thread = kthread_run(
-			function,
-			&data,
-			"test_kthread_0"
-		);
-
-		//if we had used kthread_create:
-
-			//if ( thread != NULL ) {
-			//	wake_up_process(thread);
-			//}
-
-		set_current_state(TASK_INTERRUPTIBLE);
-		schedule();
-
-		//assert that the thread finished
-		if ( i_global != 1 ) return -1;
-	}
-
-	/*
-	multiple threads
-	*/
 	{
 		struct data {
 			int i;
@@ -1533,6 +1477,8 @@ static int __init init(void)
 		int function(void* vdata)
 		{
 			struct data *data = (struct data *)vdata;
+
+			//each kernel thread has its own pid and tgid
 			printk(
 				KERN_INFO "kthread: i = %d, pid = %lld, ppid = %lld, tgid = %lld\n",
 				data->i,
@@ -1543,6 +1489,8 @@ static int __init init(void)
 			atomic_inc(&i_global_atomic);
 
 			/*
+			wake up our caller so he can continue
+
 			TODO is it permissible to let the threads preempt execution here,
 			or is synchronization necessary?
 
@@ -1576,6 +1524,12 @@ static int __init init(void)
 				&datas[i],
 				"test_kthread_0"
 			);
+
+			//if we had used kthread_create:
+
+				//if ( thread != NULL ) {
+				//	wake_up_process(thread);
+				//}
 		}
 
 		//sleep until we have the good result
@@ -1719,47 +1673,6 @@ static int __init init(void)
 
 			Wakes single interruptible method from queue.
 	*/
-	{
-		struct data {
-			int i;
-			wait_queue_head_t* wq;
-		};
-
-		//int status;
-
-		int function(void* vdata)
-		{
-			struct data *data = (struct data *)vdata;
-			printk(KERN_INFO "wq kthread: i = %d, pid = %lld\n", data->i, (long long)current->pid);
-			i_global++;
-			//wake up our caller so he can continue
-			wake_up_all(data->wq);
-			return 0;
-		}
-
-		struct task_struct *thread;
-		DECLARE_WAIT_QUEUE_HEAD(wq);
-
-		struct data data = {
-			.i = 1,
-			.wq = &wq
-		};
-
-		i_global = 0;
-
-		//for ( int i = 0; i < 2; i++ )
-		thread = kthread_run(
-			function,
-			&data,
-			"test_kthread_0"
-		);
-
-		wait_event_interruptible(wq, i_global == 1);
-
-		//assert that the function finished
-		if ( i_global != 1 ) return -1;
-	}
-
 	{
 		struct data {
 			int i;
