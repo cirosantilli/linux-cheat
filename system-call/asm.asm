@@ -9,7 +9,7 @@ section .data
         ;MUST FOLLOW bs5 immediately
         ;$ is the cur adress
 
-    filepath db './_out/out.tmp', 0
+    filepath db 'out.tmp', 0
 
 section .bss
     ;unitialized data
@@ -38,12 +38,15 @@ _start:
         ;file descriptor is an int
         ;it represents a file that is open to read/write
         ;once you close a fd, the int is freed
+
         ;in linux, devices and pipes are treated as files and thus get fds
+
         ;you can only tell you have read all the bytes of a fd when it
-            ;reads less than you asked
-            ;the exception to this are regular files,
-            ;where you can use the ``sys_stat``
-            ;that amongs other things returns the filesize info
+        ;reads less than you asked
+
+        ;the exception to this are regular files,
+        ;where you can use the `sys_stat`
+        ;that amongst other things returns the filesize info
 
         ;#write
 

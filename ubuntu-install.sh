@@ -152,6 +152,8 @@
         sudo aptitude install -y flac
         sudo aptitude install -y wavpack
 
+        sudo aptitude install -y libportaudio-dev libportaudio-doc
+
     ##ftp
 
         #very secure ftp deamon ftp server:

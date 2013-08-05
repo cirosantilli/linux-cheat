@@ -81,7 +81,15 @@ extract:
     tar vxzf "$F".tgz
     tar vxjf "$F".tbz
 
-f: from file given as next arg, not stdin
+#gz
+
+gzip files.
+
+If a file is only gz but not tgz you cannot use tar to extract it
+
+Extract `a.gz` and erase it if sucessful:
+
+    gunzip a.gz
 
 #rar
 

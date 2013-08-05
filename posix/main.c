@@ -50,6 +50,7 @@ main cheat on the POSIX C API
     //only stuff that becomes available with posix defines is commented here
 
 #include <assert.h>
+#include <limits.h>         //NZERO
 #include <math.h>           //M_PI, M_PI_2, M_PI_4:
 #include <stdbool.h>
 #include <stdio.h>          //popen(), perror()
@@ -64,7 +65,6 @@ main cheat on the POSIX C API
 #include <errno.h>
 #include <fcntl.h>          //file control options. O_CREAT,
 #include <libgen.h>
-//#include <limits.h>
 #include <netdb.h>          //gethostbyname
 #include <netinet/in.h>
 #include <pthread.h>
@@ -109,23 +109,28 @@ int main( int argc, char** argv )
     /*
     #errors
 
-        typical error dealing conventions POSIX are:
+        Typical error dealing conventions POSIX are:
 
         - if the return value is not needed, functions return 0 on successs and either -1 on failure
             or an integer which indicates failure cause
-        - if the return value is strictly positive, return a negative value on error
+
+        - if the return value is strictly positive, return -1 on error
+
         - if the return value is a pointer, return `NULL` on error
 
-        whenever there is an error, set `errno` accordingly to determine what was the cause of the erro
+        - if the return value can be any integer (`ptrace` for example), return `-1`, but force the user to
+            clear `errno` before making the call, and check if `errno != -` after the call.
+
+        Whenever there is an error, set `errno` accordingly to determine what was the cause of the erro
 
     #errno.h
 
-        is defined by ANSI, but more predefined error constants are added extended in POSIX,
-        and each error has a standard associated error message TODO check
+        Is defined by ANSI, but more predefined error constants are added extended in POSIX,
 
-        including functions that deal with the error messages
+        In POSIX, each error has a standard associated error message
+        which can be retreived and printed with functions such as `perror`.
 
-        some of the POSIX only errors are: TODO check that those are not in ansi c
+        Some of the POSIX specific errors and their error messages are: TODO check that those are not in ansi c
 
         - EPERM: Operation not permitted
 
@@ -143,8 +148,10 @@ int main( int argc, char** argv )
         - EISDIR: Is a directory
         - ENOTDIR: Isn’t a directory
 
-        Those error descriptions are also programatically accessible through functions
-        such as `perror` or `strerror`.
+        Functions that modify errno document that. The convention is that only functions which fail modify
+        errno, not those that succeed.
+
+        errno can be modified as `errno = 0` for example.
     */
     {
         /*
@@ -155,25 +162,24 @@ int main( int argc, char** argv )
 
             0 indicates no error (ANSI C)
 
-            since any function may change errno, you must use the functions that
+            Since many function may change errno, you must use the functions that
             depend on errno immediatelly after the function that generates the error
         */
         {
-            //assure tmpdir does not exist
-            struct stat s;
-            if( stat( "tmpdir", &s ) == 0 )
-                assert( rmdir( "tmpdir" ) != -1 );
+            char *dirname = "i_dont_exist";
 
-            printf( "errno = %d\n", errno );
+            //assure that dirname does not exist
+            if( access( dirname, F_OK ) == 0 )
+                assert( rmdir( dirname ) != -1 );
+            errno = 0;
 
-            rmdir( "tmpdir" );
-            printf( "errno = %d\n", errno );
+            rmdir( dirname );
+            assert( errno != 0 );
 
-            //TODO why is errno unchanged even if the second rmdir worked?
-
-            mkdir( "tmpdir", 0777 );
-            rmdir( "tmpdir" );
-            printf( "errno = %d\n", errno );
+            //sucessful calls do *not* set errno to 0
+            mkdir( dirname, 0777 );
+            rmdir( dirname );
+            assert( errno != 0 );
         }
 
         /*
@@ -204,6 +210,34 @@ int main( int argc, char** argv )
         */
         {
             printf( "strerror(EISDIR) = \"%s\"\n", strerror(EISDIR) );
+        }
+    }
+
+    /*
+    #printf
+
+        This discusses `printf` and `sprintf` extensions.
+    */
+    {
+        /*
+        #dollar
+
+            `%2$d` means: use second argument. Treat the following arguments as if this one did not exist.
+
+            Has been incorporated in POSIX, but may break ANCI C code! (unlikely).
+
+            For that reason, compiling this generates warnings on gcc, and you should avoid this feature as:
+
+            - it is unlikely to be incorporated in ANSI C since it is a breaking change
+
+            - if you ever decide to increase portability to ANSI C
+                (in case some other key functions you were using someday get ANSI C alternatives),
+                you will have to correct this
+        */
+        {
+            //char buf[256];
+            //sprintf( buf, "%2$d %d %d", 0, 1 );
+            //assert( strcmp( buf, "1 0 1") == 0 );
         }
     }
 
@@ -449,20 +483,50 @@ int main( int argc, char** argv )
 
     //#pathname operations
     {
-        //#realpath
-        //{
-        //    //resolves symlinks recursivelly
-        //    char rp[PATH_MAX+1];
-        //    char *r = realpath( ".", rp );
-        //    if ( r )
-        //    {
-        //        printf( "realpath(\".\") = %s", rp );
-        //    }
-        //    else
-        //    {
-        //        assert(false);
-        //    }
-        //}
+        /*
+        #realpath
+
+            Return:
+
+            - absolute path
+            - cannonical: does not contain `.` nor `..`.
+
+            Interface:
+
+                char *realpath(const char *restrict file_name,
+                    char *restrict resolved_name);
+
+            The function does completelly different things depending if resolved_name is NULL or not:
+
+            - `resolved_name == NULL`: realpath mallocs the path for you and returns it.
+
+                You have to free it in the future.
+
+                This is a good options if you don't already have a buffer of the right size, since calculating the required buffer size
+                would be annoying ( would require calling `pathconf` ).
+
+            - `resolved_name == NULL`: the pathname is copied to `resolved_name`.
+
+                You must make sure that you have enough space there.
+
+                This is a good option if you already have a large enough buffer laying around,
+                since it does not require dynamic allocation.
+
+                Of course, ensuring that your buffer is large enough means doing messy `pathconfs` at some point.
+        */
+        {
+            char *rp = realpath( ".", NULL );
+            if ( rp )
+            {
+                printf( "realpath(\".\") = %s\n", rp );
+            }
+            else
+            {
+                perror( "realpath" );
+                assert(false);
+            }
+            free( rp );
+        }
 
         /*
         #dirname #basename
@@ -517,9 +581,11 @@ int main( int argc, char** argv )
 
             return value: 0 on success, other constants on errors.
 
-            if you get a 0, you know the file exists!
+            If you get a 0, you know the file exists!
+            This is not however the best way to check if a file exists since it incurs the large overhead
+            of getting the parameters. Use access for that instead.
 
-            this fills in the `struct stat` given by pointer
+            This fills in the `struct stat` given by pointer.
 
             The family contains the following variants:
 
@@ -593,6 +659,34 @@ int main( int argc, char** argv )
             else
             {
                 assert( false );
+            }
+        }
+
+        /*
+        #access
+
+            Check if file or directory exists and or has a given permission (rwx):
+
+            - R_OK
+            - W_OK
+            - X_OK
+            - F_OK: file exists
+
+            If the access is not permitted, errno is still set even if this call did not give an error.
+        */
+        {
+            char *exist = realpath( ".", NULL );
+            if( access( exist, F_OK ) == -1 ) {
+                perror( "access" );
+                assert(false);
+            }
+            free( exist );
+
+            char *dont_exist = "/i/dont/canot/must/not/exist.asdf";
+            if( access( dont_exist, F_OK ) == -1 ) {
+                perror( "access( dont_exist, F_OK )" );
+            } else {
+                assert(false);
             }
         }
 
@@ -801,50 +895,77 @@ int main( int argc, char** argv )
     }
 
     /*
-    #sysconf
+    #limits.h
 
-        get lots of info on the system configuration
+        This header exists in ANSI C, and POSIX extends it with several values.
 
-        meanings for the constants can be found under
-        the `limits.h` and `unistd.h` corresponding variables
+        Defines current and possible maximuns, minimums for several resources.
+
+        Some resources cannot cannot be evaluated statically.
+
+        For example the maximum path length depends on which directory we are talking about,
+        since diferent directories can be on differnet mount points.
+
+        Also some resources can change maximum values at anytime while the program is executing.
+
+        In those cases, limits defines a KEY value which can be passed to a function that gets
+        the actual values for a given key, for example pathconf or sysconf.
+
+        For resources that have fixed values, this header furnishes them directly.
     */
     {
-        //number of processors:
+        //static macros
+        {
+            //maximum length of
+            printf( "NL_ARGMAX = %d\n", NL_ARGMAX );
+        }
 
-            printf( "_SC_NPROCESSORS_ONLN = %ld\n", sysconf( _SC_NPROCESSORS_ONLN ) );
+        /*
+        #sysconf
 
-        //maximum lengh of command line arguments + environment variables:
+            get lots of info on the system configuration
 
-            printf( "_SC_ARG_MAX (MiB) = %ld\n", sysconf( _SC_ARG_MAX ) / ( 1 << 20 ) );
-    }
+            meanings for the constants can be found under
+            the `limits.h` and `unistd.h` corresponding variables
 
-    /*
-    #maximum path length
+        #maximum path length
 
-        This is needed often when you need to deal with paths names.
+            This is needed often when you need to deal with paths names.
 
-        Sources:
+            Sources:
 
-        - <http://stackoverflow.com/questions/2285750/size-of-posix-path-max>
+            - <http://stackoverflow.com/questions/2285750/size-of-posix-path-max>
 
-        Keep in mind that this value can vary even while a program is running,
-        and depends of the underlying filesystem, and therefore of the direcotory you are in.
+            Keep in mind that this value can vary even while a program is running,
+            and depends of the underlying filesystem, and therefore of the direcotory you are in.
 
-        As a consequence of this, it does not make sense to have a macro constant and use it to create
-        fixed variable arrays: a function is needed, and memory must be allocated with malloc.
+            As a consequence of this, it does not make sense to have a macro constant and use it to create
+            fixed variable arrays: a function is needed, and memory must be allocated with malloc.
+        */
+        {
+            //number of processors:
 
-    #pathconf
+                printf( "_SC_NPROCESSORS_ONLN = %ld\n", sysconf( _SC_NPROCESSORS_ONLN ) );
 
-        Similar to sysconf, but for parameters that depend on a path, such as maxium filename lengths.
-    */
-    {
-        //max basename in given dir including trailling null:
+            //maximum lengh of command line arguments + environment variables:
 
-            printf( "pathconf( \".\", _PC_NAME_MAX) = %ld\n", pathconf( ".", _PC_NAME_MAX) );
+                printf( "_SC_ARG_MAX (MiB) = %ld\n", sysconf( _SC_ARG_MAX ) / ( 1 << 20 ) );
+        }
 
-        //max pathname in (TODO this is per device?)
+        /*
+        #pathconf
 
-            printf( "pathconf( \".\", _PC_PATH_MAX) = %ld\n", pathconf( ".", _PC_PATH_MAX) );
+            Similar to sysconf, but for parameters that depend on a path, such as maxium filename lengths.
+        */
+        {
+            //max basename in given dir including trailling null:
+
+                printf( "pathconf( \".\", _PC_NAME_MAX) = %ld\n", pathconf( ".", _PC_NAME_MAX) );
+
+            //max pathname in (TODO this is per device?)
+
+                printf( "pathconf( \".\", _PC_PATH_MAX) = %ld\n", pathconf( ".", _PC_PATH_MAX) );
+        }
     }
 
     /*
@@ -1006,38 +1127,8 @@ int main( int argc, char** argv )
 
             Gets paren't pid.
 
-        TODO possible to list all children of a process? <http://stackoverflow.com/questions/1009552/how-to-find-all-child-processes>
-
-        #getpriority and nice
-
-            each process, user and group has a priority associated to it
-
-            those priorities are called *nice* values, since 
-            the higher the nice, the less time it takes ( it is nicer to other processes)
-
-            nice:
-
-                int nice( int incr )
-
-            - incr: how much to increase the nice value
-            - return: the new nice value after the increase
-
-            getpriority:
-
-                int getpriority(int which, id_t who);
-                int setpriority(int which, id_t who, int priority);
-
-            - which:
-
-                - PRIO_PROCESS: TODO what is the difference between this and nice?
-                - PRIO_PGRP: TODO what is this?
-                - PRIO_USER: TODO what is this?
-
-            - who: pid, uid or gid depending on which. `0` means current.
-
-            TODO what is the value range or priorities? POSIX says > 0, but I've read something
-                on linux I've heard of -20 to 20? what about that NZERO value mentioned in the docs?
-                where to get it?
+        It seems that it is not possible to list all children of a process in POSIX:
+        <http://stackoverflow.com/questions/1009552/how-to-find-all-child-processes>
     */
     {
         uid_t uid  = getuid();
@@ -1051,13 +1142,6 @@ int main( int argc, char** argv )
         printf( "getgid()   = %llu\n",  (uintmax_t)gid     );
         printf( "getegid()  = %llu\n",  (uintmax_t)egid    );
         printf( "getppid()  = %llu\n",  (uintmax_t)getppid() );
-        printf( "getpriority( PRIO_PROCESS, 0 )     = %d\n",  getpriority( PRIO_PROCESS,    0 ) );
-        printf( "getpriority( PRIO_PGRP, 0 )        = %d\n",  getpriority( PRIO_PGRP,       0 ) );
-        printf( "getpriority( PRIO_USER, 0 )        = %d\n",  getpriority( PRIO_USER,       0 ) );
-        printf( "nice( 0 )    = %d\n",    nice( 0 ) );
-        printf( "nice( 0 )    = %d\n",    nice( 0 ) );
-        printf( "nice( 1 )    = %d\n",    nice( 1 ) );
-        printf( "nice( 0 )    = %d\n",    nice( 0 ) );
 
         /*
         #getcwd
@@ -1081,6 +1165,110 @@ int main( int argc, char** argv )
             {
                 printf( "getcwd() = %s\n", buf );
             }
+        }
+
+        /*
+        #getpriority
+
+            Each process, user and group has a priority associated to it.
+
+            Those priorities are commonly called *nice* values on UNIX, since 
+            the higher the nice, the less time it takes ( it is nicer to other processes)
+
+            POSIX does not fix the nice range, but it does specify that:
+
+            - lower values are more favorable
+            - the values must be between `-{NZERO}` and x{NZERO}-1`.
+
+            where NZERO is a paremeter that can be reterived with TODO
+
+            The minimum value for NZERO if 20, it is also the most common.
+
+            The actual effect of priority is undefined.
+
+            Nice:
+
+                int nice( int incr )
+
+            - incr: how much to increase the nice value
+            - return: the new nice value after the increase
+
+            getpriority:
+
+                int getpriority(int which, id_t who);
+
+            - which:
+
+                - PRIO_PROCESS:
+                - PRIO_PGRP: TODO
+                - PRIO_USER: TODO
+
+            - who: pid, uid or gid depending on which. `0` means current.
+
+            #error checking
+
+                On error, returns `-1` and errno set to indicate the error.
+
+                Therefore simply checking the return value is not enough to detect an error
+                since `-1` is a valid return value.
+
+                Therefore, to do error checking one *must* check `errno != 0`:
+
+                - set `errno = 0`
+                - make the call
+                - there is an error iff ret = -1 errno != 0.
+
+        #setpriority
+
+            Return value is the same as getpriority after the modification.
+
+        #nice
+
+            Same as setpriority, but only for `PRIO_PROCESS` but increments (or decrements) the value instead of setting it to an absolute value.
+
+            Return value is the same as getpriority after the modification.
+        */
+        {
+            int prio;
+
+            printf( "NZERO = %d\n", NZERO );
+
+            errno = 0;
+            prio = getpriority( PRIO_PROCESS, 0 );
+            if ( prio == -1 && errno != 0 ) {
+                perror( "getpriority( PRIO_PROCESS, 0 )" );
+            } else {
+                printf( "getpriority( PRIO_PROCESS, 0 ) = %d\n",  prio );
+            }
+
+            errno = 0;
+            prio = getpriority( PRIO_PGRP, 0 );
+            if ( prio == -1 && errno != 0 ) {
+                perror( "getpriority( PRIO_PGRP, 0 )" );
+            } else {
+                printf( "getpriority( PRIO_PGRP, 0 ) = %d\n",  prio );
+            }
+
+            errno = 0;
+            prio = getpriority( PRIO_USER, 0 );
+            if ( prio == -1 && errno != 0 ) {
+                perror( "getpriority( PRIO_USER, 0 )" );
+            } else {
+                printf( "getpriority( PRIO_USER, 0 ) = %d\n",  prio );
+            }
+
+            errno = 0;
+            prio = nice( 0 );
+            if ( prio == -1 && errno != 0 ) {
+                perror( "nice( 0 )" );
+            } else {
+                printf( "nice( 0 )    = %d\n",    nice( 0 ) );
+            }
+
+            //ok, tired of erro checking:
+            printf( "nice( 0 )    = %d\n",    nice( 0 ) );
+            printf( "nice( 1 )    = %d\n",    nice( 1 ) );
+            printf( "nice( 0 )    = %d\n",    nice( 0 ) );
         }
     }
 
@@ -1799,40 +1987,42 @@ int main( int argc, char** argv )
             if ( !hostinfo )
             {
                 printf( "gethostbyname failed for hostname = %s\n", hostname );
-                exit( EXIT_FAILURE );
             }
-            printf( "gethostbyname\n" );
-            printf( "name: %s\n", hostinfo -> h_name );
-            printf( "aliases:\n" );
-            names = hostinfo -> h_aliases;
-            while ( *names )
+            else
             {
-                printf( "  %s\n", *names );
-                names++;
-            }
-            //assert that it is an inet address
-            if ( hostinfo -> h_addrtype != AF_INET )
-            {
-                printf( "host is not AF_INET\n" );
-                exit( EXIT_FAILURE );
-            }
+                printf( "gethostbyname\n" );
+                printf( "name: %s\n", hostinfo -> h_name );
+                printf( "aliases:\n" );
+                names = hostinfo -> h_aliases;
+                while ( *names )
+                {
+                    printf( "  %s\n", *names );
+                    names++;
+                }
+                //assert that it is an inet address
+                if ( hostinfo -> h_addrtype != AF_INET )
+                {
+                    printf( "host is not AF_INET\n" );
+                    exit( EXIT_FAILURE );
+                }
 
-            //show addresses
-            printf( "IPs:\n" );
-            addrs = hostinfo -> h_addr_list;
-            while ( *addrs )
-            {
-                /*
-                #inet_ntoa
+                //show addresses
+                printf( "IPs:\n" );
+                addrs = hostinfo -> h_addr_list;
+                while ( *addrs )
+                {
+                    /*
+                    #inet_ntoa
 
-                    converts integer representation of ip (4 bytes) to a string
+                        converts integer representation of ip (4 bytes) to a string
 
-                    also corrects network byte ordering into correct representation
-                */
-                printf( "  %s", inet_ntoa( *(struct in_addr*)*addrs ) );
-                addrs++;
+                        also corrects network byte ordering into correct representation
+                    */
+                    printf( "  %s", inet_ntoa( *(struct in_addr*)*addrs ) );
+                    addrs++;
+                }
+                printf( "\n" );
             }
-            printf( "\n" );
         }
 
         /*
@@ -1862,6 +2052,29 @@ int main( int argc, char** argv )
 
                 struct servent *getservbyname(const char *name, const char *proto);
         */
+    }
+
+    /*
+    #sync
+
+        Makes all cached writes to all filesystems.
+
+        OSes may keep disk writes for later for efficienty, grouping several writes into one.
+
+        This explicitly tells the OS to write everything down.
+
+        TODO what is an application for this, except before shutting down the system?
+
+    #fsync
+
+        Same as sync, but only for filesystem containing given fd.
+    */
+    {
+        sync();
+
+        int fd = open( __FILE__, O_RDONLY );
+        fsync( fd );
+        close( fd );
     }
 
     return EXIT_SUCCESS;

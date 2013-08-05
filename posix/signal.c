@@ -18,6 +18,24 @@ List of all signals and default actions taken: <http://pubs.opengroup.org/online
 
 POSIX defines several signals and their default behaviours in addition to the ANSI C signals.
 
+You can change those behavious by creating your own handlers.
+
+The possible default behaviours are:
+
+- T: Abnormal termination of the process. The process is terminated with all the consequences of _exit() except that the status made available to wait() and waitpid() indicates abnormal termination by the specified signal.
+
+- A :Abnormal termination of the process.
+    [XSI] [Option Start] Additionally, implementation-defined abnormal termination actions, such as creation of a core file, may occur. [Option End]
+
+- I: Ignore the signal.
+
+- S: Stop the process.
+
+- C: Continue the process, if it is stopped; otherwise, ignore the signal.
+
+Most signals can be caught and handled, but a few such as `SIGKILL` and `SIGSTOP` cannot.
+This is also specified in the man.
+
 To send arbitrary signals to a process from a terminal, consider using the `kill` utility
 (it does more than killing via a SIGTERM, as in general it sends any signal to a process)
 
@@ -25,34 +43,37 @@ POSIX specific signals include:
 
 - SIGKILL
 
-    kills program immeiatelly
+    Kills program.
 
-    contrary to `SIGINT`, programs cannot handle those signals
-    and try to finish off nicely: the program finishes immediatelly.
+    Cannot be handled. This is unlike to `SIGINT` and `SIGTERM`.
 
 - SIGSTOP
 
-    freezes program. ctrl+z.
+    Freezes program. ctrl+z, in linux terminals.
 
-    programs cannot handle this signal, it always freezes the process immediatelly
+    Programs cannot handle this signal, it always freezes the process immediatelly.
+
+- SIGCONT
+
+    Continues a process that
 
 - SIGHUP
 
-    controlling terminal was killed
+    Controlling terminal was killed.
 
-    this is why killing the terminal kills the process by default
+    This is why killing the terminal kills most process by default unless those process implement a handler.
 
 - SIGPIPE
 
-    process write to a pipe with no readers on other side
+    Process write to a pipe with no readers on other side
 
 - SIGCHLD
 
-    child terminated, stopped or continued
+    Child terminated, stopped or continued.
 
 - SIGALRM
 
-    received after the alarm call after given no of secs
+    Received after the alarm call after given no of secs.
 
 - SIGUSR1 and SIGUSR2: left to users to do whatever they want with
 
@@ -79,21 +100,6 @@ POSIX specific signals include:
 - man 7 signal
 
     man pages
-
-#linux
-
-Each signal has a default action handler action documented in TODO
-if processes don't register their own handlers.
-
-in linux, the possible default actions are:
-
-- Term   Default action is to terminate the process.
-- Ign    Default action is to ignore the signal.
-- Core   Default action is to terminate the process and dump core (see core(5)).
-- Stop   Default action is to stop the process.
-- Cont   Default action is to continue the process if it is currently stopped.
-
-the most common being Term, which kills the program.
 
 # TODO
 

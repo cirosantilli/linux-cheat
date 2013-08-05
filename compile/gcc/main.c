@@ -217,7 +217,8 @@ int main( int argc, char** argv )
 
         both inputs and outputs are constrats. `X` will indicate the constraint type
 
-        TODO: __asm__ vs asm
+        TODO #__asm__ vs asm
+        TODO #asmlinkage
     */
 
         /*

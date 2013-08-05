@@ -3275,6 +3275,8 @@
 
         #psmisc package
 
+        #implementations commonly use the proc filesystem.
+
         sleep 100
         sleep 100
         ps

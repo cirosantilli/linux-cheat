@@ -221,6 +221,14 @@ make a char file, major number 12, minor number 2:
 
 ##device files
 
+Device file are special files similar to those in the proc filesystem.
+
+They do not have a disk representation, and serve as a means of communication
+between userspace and the kernel.
+
+The advantage of such files is that they use existing system calls such as
+open read an write to perform IO operations between userpace and kernel space.
+
 ###/dev/sda
 
 Device files of this type represent block devices such as hard disks or flash memory.

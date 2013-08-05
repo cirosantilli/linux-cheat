@@ -4,25 +4,9 @@ that can be exemplified in modules (much easier than recompiling and reinstallin
 
 #TODO
 
-	#__user
-
-		userspace values
-
 	#__rcu
 
 		a type of locking directive
-
-#__KERNEL__
-
-	Defined on the Makefile when compiling the kernel or kernel modules.
-
-	Used with `ifdef` blocks on files which may be included from userspace,
-	to avoid that parts of those files be used on userpace. Example:
-
-		//for kernel or userspace
-		#ifdef __KERNEL__
-			//only for the kernel
-		#endif
 */
 
 #include <linux/version.h> 	/* include/generated/uapi/linux. LINUX_VERSION_CODE, KERNEL_VERSION */
@@ -38,7 +22,7 @@ that can be exemplified in modules (much easier than recompiling and reinstallin
 #include <linux/gfp.h>		/* Mnemonic: Get Free Pages. alloc_pages */
 #include <linux/interrupt.h> 	/* request_irq, IRQF_SHARED */
 #include <linux/jiffies.h> 	/* jiffies */
-#include <linux/kernel.h>	/* KERN_INFO */
+#include <linux/kernel.h>	/* KERN_DEBUG */
 #include <linux/kthread.h>	/* kthread_create */
 #include <linux/mm.h>		/* Memory Management. page_address. Includes mm_types.h. */
 #include <linux/mm_types.h>	/* page, mm_struct */
@@ -188,7 +172,7 @@ static atomic_t i_global_atomic;
 static int __init init(void)
 {
 	/* separate from older entries in log*/
-	printk(KERN_INFO __FILE__ ": \n============================================================\n");
+	printk(KERN_DEBUG __FILE__ ": \n============================================================\n");
 
 	/*
 	#printk
@@ -202,30 +186,30 @@ static int __init init(void)
 
 		This can be viewed with `dmesg`.
 
-		`KERN_INFO` is a message priority string macro
+		`KERN_DEBUG` is a message priority string macro
 
 		It is understood by printk when put at the beginning of the input string.
 
 		8 levels are defined in order of decreasing priority:
 
-		- LOG_EMERG: 	system is unusable
-		- LOG_ALERT: 	action must be taken immediately
-		- LOG_CRIT: 	critical conditions
-		- LOG_ERR: 	error conditions
-		- LOG_WARNING: 	warning conditions
-		- LOG_NOTICE: 	normal, but significant, condition
-		- LOG_INFO: 	informational message
-		- LOG_DEBUG: 	debug-level message
+		- KERN_EMERG: 	system is unusable
+		- KERN_ALERT: 	action must be taken immediately
+		- KERN_CRIT: 	critical conditions
+		- KERN_ERR: 	error conditions
+		- KERN_WARNING: 	warning conditions
+		- KERN_NOTICE: 	normal, but significant, condition
+		- KERN_INFO: 	informational message
+		- KERN_DEBUG: 	debug-level message
 
 		printk takes printf format strings with containing things like `%d`
 	*/
 	{
-		printk(KERN_INFO "%s\n", __func__ );
+		printk(KERN_DEBUG "%s\n", __func__ );
 	}
 
 	/* Don't be afraid, it's just a c program. Globals are still globals. */
 	i_global = 0;
-	printk(KERN_INFO "i_global = %d\n", i_global);
+	printk(KERN_DEBUG "i_global = %d\n", i_global);
 
 	/*
 	#version
@@ -248,11 +232,27 @@ static int __init init(void)
 	*/
 	{
 		/* printk( "UTS_RELEASE = %s", UTS_RELEASE ); */	/* TODO get working */
-		printk(KERN_INFO "LINUX_VERSION_CODE = %d\n", LINUX_VERSION_CODE);
+		printk(KERN_DEBUG "LINUX_VERSION_CODE = %d\n", LINUX_VERSION_CODE);
 
 		/* are we at least at 2.6.10? */
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 10)
-		printk(KERN_INFO "LINUX_VERSION_CODE >= 2.6.10\n");
+		printk(KERN_DEBUG "LINUX_VERSION_CODE >= 2.6.10\n");
+#endif
+	}
+
+	/*
+	#__KERNEL__
+
+		Defined on the Makefile when compiling the kernel or kernel modules.
+
+		Used with `ifdef` blocks on files which may be included from userspace,
+		to avoid that parts of those files be used on userpace. Example:
+
+		TODO how would a single source file be usable by both kernel and userspace?
+	*/
+	{
+#ifdef __KERNEL__
+		printk(KERN_DEBUG "__KERNEL__");
 #endif
 	}
 
@@ -369,9 +369,9 @@ static int __init init(void)
 	{
 		get_cpu_var(cpu_int) = 0;
 		put_cpu_var(cpu_int);
-		printk(KERN_INFO "cpu_int  = %d\n", get_cpu_var(cpu_int));
+		printk(KERN_DEBUG "cpu_int  = %d\n", get_cpu_var(cpu_int));
 
-		printk(KERN_INFO "smp_processor_id()  = %d\n", smp_processor_id());
+		printk(KERN_DEBUG "smp_processor_id()  = %d\n", smp_processor_id());
 	}
 
 	/*
@@ -388,19 +388,19 @@ static int __init init(void)
 	*/
 	{
 		if (likely(0)) {
-			printk(KERN_INFO "ERROR\n");
+			printk(KERN_DEBUG "ERROR\n");
 		}
 
 		if (likely(1)) {
-			printk(KERN_INFO "unlikely(1)\n");
+			printk(KERN_DEBUG "unlikely(1)\n");
 		}
 
 		if (unlikely(0)) {
-			printk(KERN_INFO "ERROR\n");
+			printk(KERN_DEBUG "ERROR\n");
 		}
 
 		if (unlikely(1)) {
-			printk(KERN_INFO "unlikely(1)\n");
+			printk(KERN_DEBUG "unlikely(1)\n");
 		}
 	}
 
@@ -474,8 +474,8 @@ static int __init init(void)
 			TODO why does this work?
 		*/
 		{
-			printk( KERN_INFO "HZ = %d\n", HZ );
-			printk( KERN_INFO "jiffies = %lu\n", jiffies );
+			printk( KERN_DEBUG "HZ = %d\n", HZ );
+			printk( KERN_DEBUG "jiffies = %lu\n", jiffies );
 		}
 	}
 
@@ -578,10 +578,10 @@ static int __init init(void)
 
 				TODO why is this skipping the a character?
 			*/
-			printk(KERN_INFO "linked list:\n" );
+			printk(KERN_DEBUG "linked list:\n" );
 			struct char_list *char_list_ptr;
 			list_for_each_entry(char_list_ptr, &alist, list) {
-				printk(KERN_INFO "  %c\n", char_list_ptr->c );
+				printk(KERN_DEBUG "  %c\n", char_list_ptr->c );
 			}
 
 			/*
@@ -658,7 +658,7 @@ static int __init init(void)
 		this is done in a multilevel scheme
 	*/
 	{
-		printk(KERN_INFO "PAGE_SIZE (Kib) = %lu\n", PAGE_SIZE / ( 1 << 10 ));
+		printk(KERN_DEBUG "PAGE_SIZE (Kib) = %lu\n", PAGE_SIZE / ( 1 << 10 ));
 	}
 
 	/*
@@ -751,9 +751,9 @@ static int __init init(void)
 	{
 		struct page *page;
 		page = alloc_pages(GFP_KERNEL, 1);
-		printk(KERN_INFO "alloc_pages\n" );
+		printk(KERN_DEBUG "alloc_pages\n" );
 		if ( page == NULL ){
-			printk(KERN_INFO "  NULL\n" );
+			printk(KERN_DEBUG "  NULL\n" );
 		} else {
 			char *cs = page_address(page);
 
@@ -763,7 +763,7 @@ static int __init init(void)
 				cs[i] = i;
 			}
 
-			printk( KERN_INFO "  _count = %d\n", atomic_read(&page->_count) );
+			printk( KERN_DEBUG "  _count = %d\n", atomic_read(&page->_count) );
 
 			free_pages( (long)cs, 1);
 		}
@@ -997,45 +997,45 @@ static int __init init(void)
 				TODO
 	*/
 	{
-		printk(KERN_INFO "TASK_RUNNING = %d\n", TASK_RUNNING);
-		printk(KERN_INFO "TASK_INTERRUPTIBLE = %d\n", TASK_INTERRUPTIBLE);
+		printk(KERN_DEBUG "TASK_RUNNING = %d\n", TASK_RUNNING);
+		printk(KERN_DEBUG "TASK_INTERRUPTIBLE = %d\n", TASK_INTERRUPTIBLE);
 
 		//self is obviously running when state gets printed, parent may be not:
 
-			printk(KERN_INFO "current->state  = %ld\n", current->state);
-			printk(KERN_INFO "current->parent->state  = %ld\n", current->parent->state);
+			printk(KERN_DEBUG "current->state  = %ld\n", current->state);
+			printk(KERN_DEBUG "current->parent->state  = %ld\n", current->parent->state);
 
-		printk(KERN_INFO "current->comm = %s\n", current->comm);
-		printk(KERN_INFO "current->pid  = %lld\n", (long long)current->pid);
-		printk(KERN_INFO "current->tgid = %lld\n", (long long)current->tgid);
+		printk(KERN_DEBUG "current->comm = %s\n", current->comm);
+		printk(KERN_DEBUG "current->pid  = %lld\n", (long long)current->pid);
+		printk(KERN_DEBUG "current->tgid = %lld\n", (long long)current->tgid);
 
-		printk(KERN_INFO "current->prio = %d\n", current->prio);
-		printk(KERN_INFO "current->static_prio = %d\n", current->static_prio);
-		printk(KERN_INFO "current->normal_prio = %d\n", current->normal_prio);
-		printk(KERN_INFO "current->rt_priority = %d\n", current->rt_priority);
-		printk(KERN_INFO "current->policy = %u\n", current->policy);
-		printk(KERN_INFO "SCHED_NORMAL = %u\n", SCHED_NORMAL);
+		printk(KERN_DEBUG "current->prio = %d\n", current->prio);
+		printk(KERN_DEBUG "current->static_prio = %d\n", current->static_prio);
+		printk(KERN_DEBUG "current->normal_prio = %d\n", current->normal_prio);
+		printk(KERN_DEBUG "current->rt_priority = %d\n", current->rt_priority);
+		printk(KERN_DEBUG "current->policy = %u\n", current->policy);
+		printk(KERN_DEBUG "SCHED_NORMAL = %u\n", SCHED_NORMAL);
 
-		printk(KERN_INFO "current->nr_cpus_allowed  = %d\n", current->nr_cpus_allowed);
+		printk(KERN_DEBUG "current->nr_cpus_allowed  = %d\n", current->nr_cpus_allowed);
 
-		printk(KERN_INFO "current->exit_state = %d\n", current->exit_state);
-		printk(KERN_INFO "current->exit_code = %d\n", current->exit_code);
-		printk(KERN_INFO "current->exit_signal = %d\n", current->exit_signal);
+		printk(KERN_DEBUG "current->exit_state = %d\n", current->exit_state);
+		printk(KERN_DEBUG "current->exit_code = %d\n", current->exit_code);
+		printk(KERN_DEBUG "current->exit_signal = %d\n", current->exit_signal);
 
 		/*  the signal sent when the parent dies  */
 
-			printk(KERN_INFO "current->pdeath_signal = %d\n", current->pdeath_signal);
+			printk(KERN_DEBUG "current->pdeath_signal = %d\n", current->pdeath_signal);
 
-		printk(KERN_INFO "current->parent->pid  = %lld\n", (long long)current->parent->pid);
-		printk(KERN_INFO "current->parent->parent->pid  = %lld\n", (long long)current->parent->parent->pid);
-		printk(KERN_INFO "current->real_parent->pid  = %lld\n", (long long)current->real_parent->pid);
+		printk(KERN_DEBUG "current->parent->pid  = %lld\n", (long long)current->parent->pid);
+		printk(KERN_DEBUG "current->parent->parent->pid  = %lld\n", (long long)current->parent->parent->pid);
+		printk(KERN_DEBUG "current->real_parent->pid  = %lld\n", (long long)current->real_parent->pid);
 
 		//children transversal:
 		{
 			struct task_struct *task_struct_ptr;
-			printk(KERN_INFO "current->children pids:\n");
+			printk(KERN_DEBUG "current->children pids:\n");
 			list_for_each_entry(task_struct_ptr, &current->children, children) {
-				printk(KERN_INFO "  %lld\n", (long long)task_struct_ptr->pid);
+				printk(KERN_DEBUG "  %lld\n", (long long)task_struct_ptr->pid);
 			}
 		}
 
@@ -1043,14 +1043,14 @@ static int __init init(void)
 		{
 			struct task_struct *task_struct_ptr;
 
-			printk(KERN_INFO "current->sibling pids:\n");
+			printk(KERN_DEBUG "current->sibling pids:\n");
 			list_for_each_entry(task_struct_ptr, &current->sibling, children) {
-				printk(KERN_INFO "  %lld\n", (long long)task_struct_ptr->pid);
+				printk(KERN_DEBUG "  %lld\n", (long long)task_struct_ptr->pid);
 			}
 
-			printk(KERN_INFO "current->parent->sibling pids:\n");
+			printk(KERN_DEBUG "current->parent->sibling pids:\n");
 			list_for_each_entry(task_struct_ptr, &current->parent->sibling, children) {
-				printk(KERN_INFO "  %lld\n", (long long)task_struct_ptr->pid);
+				printk(KERN_DEBUG "  %lld\n", (long long)task_struct_ptr->pid);
 			}
 		}
 
@@ -1062,7 +1062,7 @@ static int __init init(void)
 			TODO what is this
 		*/
 		{
-			printk(KERN_INFO "current->group_leader->pid  = %lld\n", (long long)current->group_leader->pid);
+			printk(KERN_DEBUG "current->group_leader->pid  = %lld\n", (long long)current->group_leader->pid);
 		}
 
 		/*
@@ -1088,10 +1088,10 @@ static int __init init(void)
 				Good and old current directory.
 		*/
 		{
-			printk(KERN_INFO "basename pwd = %s\n", 		current->fs->pwd.dentry->d_name.name);
-			printk(KERN_INFO "basename dirname pwd = %s\n", 	current->fs->pwd.dentry->d_parent->d_name.name);
-			printk(KERN_INFO "basename root = %s\n", 		current->fs->root.dentry->d_name.name);
-			printk(KERN_INFO "basename dirname root = %s\n", 	current->fs->root.dentry->d_parent->d_name.name);
+			printk(KERN_DEBUG "basename pwd = %s\n", 		current->fs->pwd.dentry->d_name.name);
+			printk(KERN_DEBUG "basename dirname pwd = %s\n", 	current->fs->pwd.dentry->d_parent->d_name.name);
+			printk(KERN_DEBUG "basename root = %s\n", 		current->fs->root.dentry->d_name.name);
+			printk(KERN_DEBUG "basename dirname root = %s\n", 	current->fs->root.dentry->d_parent->d_name.name);
 		}
 
 		/*
@@ -1120,20 +1120,20 @@ static int __init init(void)
 			- unsigned long locked_vm: pages that cannot be swapped out
 		*/
 		{
-			printk(KERN_INFO "mm_struct\n");
-			printk(KERN_INFO "  start_code = %lx\n", current->mm->start_code);
-			printk(KERN_INFO "  end_code   = %lx\n", current->mm->end_code);
-			printk(KERN_INFO "  start_data = %lx\n", current->mm->start_data);
-			printk(KERN_INFO "  end_data   = %lx\n", current->mm->end_data);
-			printk(KERN_INFO "  start_brk  = %lx\n", current->mm->start_brk);
-			printk(KERN_INFO "  brk        = %lx\n", current->mm->brk);
-			printk(KERN_INFO "  arg_start  = %lx\n", current->mm->arg_start);
-			printk(KERN_INFO "  arg_end    = %lx\n", current->mm->arg_end);
-			printk(KERN_INFO "  env_start  = %lx\n", current->mm->env_start);
-			printk(KERN_INFO "  env_end    = %lx\n", current->mm->env_end);
+			printk(KERN_DEBUG "mm_struct\n");
+			printk(KERN_DEBUG "  start_code = %lx\n", current->mm->start_code);
+			printk(KERN_DEBUG "  end_code   = %lx\n", current->mm->end_code);
+			printk(KERN_DEBUG "  start_data = %lx\n", current->mm->start_data);
+			printk(KERN_DEBUG "  end_data   = %lx\n", current->mm->end_data);
+			printk(KERN_DEBUG "  start_brk  = %lx\n", current->mm->start_brk);
+			printk(KERN_DEBUG "  brk        = %lx\n", current->mm->brk);
+			printk(KERN_DEBUG "  arg_start  = %lx\n", current->mm->arg_start);
+			printk(KERN_DEBUG "  arg_end    = %lx\n", current->mm->arg_end);
+			printk(KERN_DEBUG "  env_start  = %lx\n", current->mm->env_start);
+			printk(KERN_DEBUG "  env_end    = %lx\n", current->mm->env_end);
 
-			printk(KERN_INFO "  total_vm   = %lu\n", current->mm->total_vm);
-			printk(KERN_INFO "  locked_vm  = %lu\n", current->mm->locked_vm);
+			printk(KERN_DEBUG "  total_vm   = %lu\n", current->mm->total_vm);
+			printk(KERN_DEBUG "  locked_vm  = %lu\n", current->mm->locked_vm);
 		}
 	}
 
@@ -1385,15 +1385,15 @@ static int __init init(void)
 	{
 		//max priority of an rt process:
 
-			printk(KERN_INFO "MAX_USER_RT_PRIO  = %d\n", MAX_USER_RT_PRIO);
+			printk(KERN_DEBUG "MAX_USER_RT_PRIO  = %d\n", MAX_USER_RT_PRIO);
 
 		//max priority of any process:
 
-			printk(KERN_INFO "MAX_PRIO  = %d\n", MAX_PRIO);
+			printk(KERN_DEBUG "MAX_PRIO  = %d\n", MAX_PRIO);
 
 		//default priority for new processes:
 
-			printk(KERN_INFO "DEFAULT_PRIO  = %d\n", DEFAULT_PRIO);
+			printk(KERN_DEBUG "DEFAULT_PRIO  = %d\n", DEFAULT_PRIO);
 
 		schedule();
 	}
@@ -1480,7 +1480,7 @@ static int __init init(void)
 
 			//each kernel thread has its own pid and tgid
 			printk(
-				KERN_INFO "kthread: i = %d, pid = %lld, ppid = %lld, tgid = %lld\n",
+				KERN_DEBUG "kthread: i = %d, pid = %lld, ppid = %lld, tgid = %lld\n",
 				data->i,
 				(long long)current->pid,
 				(long long)current->parent->pid,
@@ -1682,7 +1682,7 @@ static int __init init(void)
 		int function(void* vdata)
 		{
 			struct data *data = (struct data *)vdata;
-			printk(KERN_INFO "wq kthread: i = %d, pid = %lld\n", data->i, (long long)current->pid);
+			printk(KERN_DEBUG "wq kthread: i = %d, pid = %lld\n", data->i, (long long)current->pid);
 			atomic_inc(&i_global_atomic);
 			wake_up_all(data->wq);
 			return 0;
@@ -1716,29 +1716,30 @@ static int __init init(void)
 	}
 
 	/*
-	#TASK_SIZE
+	#process memory space
 
-		*virtual memory* is divided as follows:
+		#TASK_SIZE
 
-		- memory from address from 0 to TASK_SIZE - 1 can be used by *each* processes
-		- other memory adressses (from  TASK_SIZE to the maxinum adressable memory, 2^32 on 32 bits platforms
-				of 2^64 on 64 ) belongs to the kernel
+			*virtual memory* is divided as follows:
 
-		TASK_SIZE is typically around 3/4 of the total memory
+			- memory from address from 0 to TASK_SIZE - 1 can be used by *each* processes
+			- other memory adressses (from  TASK_SIZE to the maxinum adressable memory, 2^32 on 32 bits platforms
+					of 2^64 on 64 ) belongs to the kernel
 
-		Note that this is *virtual* memory, so it is independant of the acutual size of the memory
-		as the hardware and the kernel can give processes the illusion that they actually have
-		ammounts of memory larger than the hardware for instance.
+			TASK_SIZE is typically around 3/4 of the total memory
 
+			Note that this is *virtual* memory, so it is independant of the acutual size of the memory
+			as the hardware and the kernel can give processes the illusion that they actually have
+			ammounts of memory larger than the hardware for instance.
 	*/
 	{
-		printk(KERN_INFO "TASK_SIZE (GiB) = %lu\n", TASK_SIZE / (1 << 30));
+		printk(KERN_DEBUG "TASK_SIZE (GiB) = %lu\n", TASK_SIZE / (1 << 30));
 
 		//Kernel virtual memory must be above `TASK_SIZE`:
 
 			int i;
 			if ( (int)&i < TASK_SIZE ) return -1;
-			printk( KERN_INFO "(void*)&i = %p\n", (void*)&i );
+			printk( KERN_DEBUG "(void*)&i = %p\n", (void*)&i );
 
 		//User virtual memory will always be below TASK_SIZE.
 		//Print addresses of user space program variables to check this (3Gb = `0xc0000000`)
@@ -1864,20 +1865,20 @@ static int __init init(void)
 			root = current->fs->root.dentry;
 			root_sb = root->d_sb;
 
-			printk(KERN_INFO "super_block:\n");
+			printk(KERN_DEBUG "super_block:\n");
 
 			//virtual blocksize:
-			printk(KERN_INFO "  s_blocksize = %ld\n", root_sb->s_blocksize);
+			printk(KERN_DEBUG "  s_blocksize = %ld\n", root_sb->s_blocksize);
 
-			printk(KERN_INFO "  s_maxbytes (GiB) = %llu\n", (long long unsigned)root_sb->s_maxbytes / (1 << 30));
+			printk(KERN_DEBUG "  s_maxbytes (GiB) = %llu\n", (long long unsigned)root_sb->s_maxbytes / (1 << 30));
 
 			//name of corresponding block device
-			printk(KERN_INFO "  s_id = %s\n", root_sb->s_id);
+			printk(KERN_DEBUG "  s_id = %s\n", root_sb->s_id);
 
 			u8 s_uuid_string[17];
 			memcpy( s_uuid_string, root_sb->s_uuid, 16 * sizeof( u8 ) );
 			s_uuid_string[16] = '\0';
-			printk(KERN_INFO "s_uuid = %s\n", s_uuid_string);
+			printk(KERN_DEBUG "s_uuid = %s\n", s_uuid_string);
 		}
 	}
 
@@ -2052,17 +2053,33 @@ static int __init init(void)
 		is a function that does what must be done in case of an interrupt,
 		typically a message sent by hardware such as a mouse saying "hey I moved"
 
-		it cannot be interrupted by other kernel process, so it should be real quick in its job
-		and do only what is absolutelly essential
+		It is not possible to sleep in an interrupt handler TODO why, so it should be real quick in its job
+		and do only what is absolutelly essential.
 
-		typically the jobs it will do are:
+		An interrupt handler can however he interruptd by another interrupt handler TODO check, this depends on line I think.
+
+		Typically the jobs it will do are:
 
 		      - save the data from some buffer into RAM. this prevents small buffers from getting filled up.
 		      - send an aknowledgment to the hardware that the interrupt was handled so the hardware can
 		          //continue to send data for example
 
-		what it typically should *not* do it to actually procees the data that was aquired
+		What it typically should *not* do it to actually procees the data that was aquired
 		this should be left for the bottom half.
+
+		TODO x86 mechanism
+
+		TODO following functions
+
+		void  enable_irq(int irq);
+		void  disable_irq(int irq);
+		void  disable_irq_nosync(int irq);
+
+		void  local_irq_save(unsigned long flags);
+		void  local_irq_disable(void);
+
+		void  local_irq_restore(unsigned long flags);
+		void  local_irq_enable(void);
 
 	#request_irq
 
@@ -2098,12 +2115,115 @@ static int __init init(void)
 			Can be `NULL` if irq is not shared. TODO understand
 
 	*/
-
+	{
 		//TODO get working
 		/*if (request_irq(rtc_irq, rtc_interrupt, IRQF_SHARED, "rtc", (void *)&rtc_port)) {*/
 			/*printk(KERN_ERR "rtc: cannot register IRQ %d\n", rtc_irq);*/
 			/*return -EIO;*/
 		/*}*/
+	}
+
+	/*
+	#syscall
+
+		See system calls.
+
+	#system calls
+
+		This covers system calls from a kernel internal point of view, not from userland point of view.
+
+		You should first learn to use system calls from userspace before reading this.
+
+		Systems calls run in a context that:
+
+		- can preempt
+		- can sleep
+		- `current` give the `task_struct` of the calling process
+
+		Arguments are passed on CPU registers. This simplifies things since program memory can be swapped of.
+
+		TODO where is errno stored?
+
+		Example of implementation:
+
+			SYSCALL_DEFINE0(getpid)
+			{
+				return task_tgid_vnr(current); // returns current->tgid
+			}
+
+		#declaration
+
+			#SYSCALL_DEFINExxx
+
+				Expands to a system call declaration that takes `xxx` arguments.
+
+				Defined under `include/linux/syscalls.h`
+
+			#COMPAT_SYSCALL_DEFINExxx
+
+				TODO
+
+			TODO why did a book say that sytem calls are named sys_XXX by default?
+				In kenrel source they are are all implemeneted as SYSCALL_DEFINE XXX.
+
+		#location
+
+			Portable system calls can be implemented anywhere on the source tree,
+			in the place that fits their purporse more closely.
+
+				grep -r 'SYSCALL_DEFINE'
+
+			Syscalls that don't fit well in any existing category fall by default under: `kernel/sys.c`.
+
+		#__NR_XXX
+
+			For most architectures those macros are defined under `uapi/asm/unistd.h`.
+
+			For x86, those macros are generated programatically from TODO0 and placed under:
+			`include/generated/uapi/asm/unistd_XXX.h`.
+
+			TODO what binds each __NR_XXX to the actual syscall implementation? My 2006 books
+				says entry.S, but either those files do not exist, or dont contains sycall info.
+
+	#capable
+
+		Returns true iff the current process has a capability. For example:
+
+			capable(CAP_SYS_BOOT)
+
+		returns true iff the current process can reboot the computer,
+		which usually requires some priviledges.
+
+		The typical place to use this is on system calls, where current
+		points to the caller user process.
+
+		TODO do kthreads always have all the capabilities?
+
+	#__user
+
+		Indicates that the following pointer comes from userspace.
+
+		An example is the wrtie system call
+
+			asmlinkage long sys_write(unsigned int fd, const char __user *buf,
+						size_t count);
+
+		The buffer comes from user space.
+
+		Raionale:
+
+		- userspace programs can be outside of main memory at the time of calling
+
+		- userspace programs are not to be trusted: they can make mistakes / malicious moves,
+			and the pointer could be invalide, for example NULL, leading to a page fault in the kernel.
+	*/
+	{
+		if(capable(CAP_SYS_BOOT)) {
+			printk(KERN_DEBUG "CAP_SYS_BOOT = true\n" );
+		} else {
+			printk(KERN_DEBUG "CAP_SYS_BOOT = false\n" );
+		}
+	}
 
 	/*
 	#modules
@@ -2121,20 +2241,20 @@ static int __init init(void)
 		{
 			//version is was set with the MODULE_VERSION macro:
 
-			printk(KERN_INFO "THIS_MODULE->version = %s\n", THIS_MODULE->version );
+			printk(KERN_DEBUG "THIS_MODULE->version = %s\n", THIS_MODULE->version );
 		}
 
 		/*
 		#parameters
 		*/
 		{
-			printk(KERN_INFO "param_i = %d\n", param_i);
-			printk(KERN_INFO "param_s = %s\n", param_s);
+			printk(KERN_DEBUG "param_i = %d\n", param_i);
+			printk(KERN_DEBUG "param_s = %s\n", param_s);
 			/*printk("param_is = %d, %d, %d\n", param_is[0], param_is[1], param_is[2]);*/
 		}
 	}
 
-	printk(KERN_INFO "============================================================\n");
+	printk(KERN_DEBUG "============================================================\n");
 
 	return 0;
 }
@@ -2181,7 +2301,7 @@ module_init(init);
  * */
 static void __exit cleanup(void)
 {
-	printk(KERN_INFO "%s\n", __func__ );
+	printk(KERN_DEBUG "%s\n", __func__ );
 }
 
 module_exit(cleanup);

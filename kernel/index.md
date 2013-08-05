@@ -45,15 +45,17 @@ Maybe there is a good reason for that.
     Weirdly the snapshots of htmldoc on kernel.org have some extra functions, check it out:
     <https://www.kernel.org/doc/htmldocs/kernel-api.html>
 
+- <https://www.kernel.org/doc/>
+
+    kernel.org resources list
+
+- <http://kernelnewbies.org/>
+
 - <http://vger.kernel.org/vger-lists.html>
 
     Kernel mailing lists.
 
     Mostly bleeding edge design decisions.
-
-- <https://www.kernel.org/doc/>
-
-    kernel.org resources list
 
 ##payed sources
 
@@ -75,31 +77,129 @@ Maybe there is a good reason for that.
 
     Corbet - 200
 
-#kernel source tree
+#source tree
 
-- `arch`: architecture specific code. Ex: `x86`, `sparc`, `arm`.
+It is fundamental that you understand the global architecture of kernel code
+so that you are able to find what you are looking for, and contribute to the kernel.
 
-    `arch/XXX/include/`
+##sizes
 
-    `asm` contains header files which differ from one architecture to another.
+Top folders by size of a compiled v3.10-rc5 kernel:
 
-    Those files are used on source as `asm/file.h`, and the make process ensures that they
-    point to the target compilation architecture.
+    3.7G    drivers
+    727M    net
+    598M    fs
+    334M    sound
+    255M    arch
 
-    During compilation, the Makefile uses the correct architecture includes and definitions.
+##arch
 
-	`uapi` contains arch dependant stuff that will be exposed to userspace applications: <http://lwn.net/Articles/507794/>
+Architecture specific code. Ex: `x86`, `sparc`, `arm`.
 
-- `include/linux`:
+`/arch/XXX/include/`
 
-	Almost all important headers.
+##asm
 
-	TODO what are the other sibling directories?
+`asm` directories contains header files which differ from one architecture to another.
 
-- `include/asm-generic`:
+Those files are used on source as `asm/file.h`, and the make process ensures that they
+point to the target compilation architecture.
 
-    TODO what is this?? isn't all that is under `include` supposed to be generic already?
-        <http://stackoverflow.com/questions/3247770/what-is-the-linux-2-6-3x-x-include-asm-generic-for>
+During compilation, the Makefile uses the correct architecture includes and definitions.
+
+Most `asm` directories are subdirectories of `arch/XXX/include/`.
+
+Even though the code in those headers is architecture dependant, it is possible to use
+some interfaces on arch portable code since those are implemented on all archs,
+and this is done throughout the kernel as a `grep -r asm include/linux` will reveal.
+It is not however true that all interfaces provided are reliable on all platforms.
+TODO which ones exactly can be used on all platforms? <http://stackoverflow.com/questions/17674452/linux-kernel-which-asm-headers-symbols-macros-are-available-on-all-architect>
+
+##uapi
+
+`uapi` contains arch dependant stuff that will be exposed to userspace applications: <http://lwn.net/Articles/507794/>
+
+An example is system calls macro numbers such as `__NR_WRITE`.
+
+TODO how do user programs use import those headers?
+
+##generated
+
+Files under such directories have been generated programatically from other files.
+
+An example in 3.10-rc5 is `arch/x86/include/generated/uapi/asm/unistd_32.h` which contains the `__NR_XXX`
+system call macro numbers.
+
+One major application of this is to ignore those files from source control. The following is a quote from the
+`3.10-rc5` `.gitignore`:
+
+    #
+    # Generated include files
+    #
+    include/config
+    include/generated
+    arch/*/include/generated
+
+##include/linux
+
+`include/linux`
+
+Almost all important headers for intefaces that can be used across the kernel.
+
+TODO what are the other sibling directories?
+
+TODO what is `syscalls.h`? Aren't syscalls arch dependant?
+
+##include/asm-generic
+
+TODO what is this? isn't all that is under `include` supposed to be generic already?
+<http://stackoverflow.com/questions/3247770/what-is-the-linux-2-6-3x-x-include-asm-generic-for>
+
+##Documentation
+
+Kernel documentation.
+
+##init
+
+Initialization code. Specially important is `main.c` which ties the whole kernel together.
+
+##kernel
+
+TODO
+
+##lib
+
+Kernel global boilerplate:
+
+- data structures such as linked lists in `llist.c` or `rbtree.c`
+
+##scripts
+
+Scripts used to build the kernel.
+
+##driver
+
+Device drivers. Contains the majority of the kernel's code.
+
+##net
+
+Networking code.
+
+##fs
+
+Filesystems code.
+
+##sound
+
+Sound code.
+
+##mm
+
+Memory management.
+
+##ipc
+
+IPC stuff such as semaphores under `sem.c` or message queues under `mqueue.c`.
 
 #what the kernel does
 

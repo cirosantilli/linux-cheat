@@ -64,7 +64,15 @@ plays `a.wav` file:
 
 terminates when over
 
-#system parameters
+#alsa
+
+Advanced Linus Sound API.
+
+Replaced OSS in 2008 when it when proprietary. OSS came back to open source, but it lost much momentume back to open source, but it lost much momentum.
+
+The kernel soud subsystem is called ALSA.
+
+There are a few tools that interact with it.
 
 ##alsamixer
 
@@ -88,6 +96,10 @@ view available controls:
 set master volume to 50%:
 
     amixer sset 'Master' 50%
+
+##aplay
+
+Command line tool that takes numeric input from stdin and generate sound!
 
 #rip
 
