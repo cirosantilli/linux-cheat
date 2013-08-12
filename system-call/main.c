@@ -58,7 +58,7 @@ shall only be mentioned but not explained in detail.
 
 #TODO
 
-    TODO what is the `_LIBC` preprocessor var? 
+    TODO what is the `_LIBC` preprocessor var?
 
     TODO how to get the system call constants such as PRIO_PROCESS without going into POSIX libs?
         is this exactly how those are exposed? Or is there a way that does not require POSIX headers?

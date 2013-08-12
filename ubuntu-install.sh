@@ -303,6 +303,9 @@
         sudo aptitude install -y vim-gtk
         #sudo aptitude install -y eclipse
 
+        sudo aptitude install -y libreoffice
+        sudo aptitude install -y libreoffice-base
+
     ##program
 
             sudo aptitude install -y ant
@@ -472,6 +475,59 @@
         #for `qtconfig-qt4`:
 
             sudo aptitude install qt4-qtconfig
+
+    ##chat messaging voice video
+
+        #skype
+
+            sudo add-apt-repository -y "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
+            sudo aptitude update
+            sudo aptitude install -y skype
+
+        #google talk
+
+            wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+            sudo sh -c 'echo "deb http://dl.google.com/linux/talkplugin/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+            sudo aptitude update
+            sudo aptitude install -y google-talkplugin
+
+        #pidgin
+
+            sudo aptitude install -y pidgin
+
+    ##file sharing
+
+        ##torrent
+
+            #deluge
+
+                sudo add-apt-repository -y ppa:deluge-team/ppa
+                sudo aptitude update
+                sudo aptitude install -y deluge
+
+        #dropbox
+
+            sudo aptitude install -y nautilus-dropbox
+
+        #ubuntuone taskbar indicator
+
+            sudo add-apt-repository -y ppa:noobslab/initialtesting
+            sudo apt-get update
+            sudo apt-get install indicator-ubuntuone
+
+        ##soulseek
+
+            sudo aptitude install -y nicotine+
+
+    ##file manager
+
+        #krusader and highly recommended tools
+
+            sudo aptitude install -y krusader
+            sudo aptitude install -y konqueror          #needs to manage bookmarks. (otherwise, button does nothing)
+            sudo aptitude install -y konsole            #needs to terminal emulator. (otherwise, button does nothing)
+            sudo aptitude install -y khelpcenter4       #help
+            sudo aptitude install -y kwalletmanager     #password manager
 
 ##xinit
 

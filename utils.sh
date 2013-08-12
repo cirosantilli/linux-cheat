@@ -322,18 +322,23 @@
 
     #desktop/windows control
 
-        gnome-open "$FILE"
-            #opens with the deafult application. works in Ubuntu Unity 12.04
+        #opens with the deafult application. works in Ubuntu Unity 12.04
 
-    #key logging
+            gnome-open "$FILE"
 
-        #writes all keypresses to a file
+    #logkeys
 
-        sudo logkeys -s
-            #start
+        #Writes all keypresses to a file.
 
-        sudo logkeys -k
-            #end
+        #Great way to steal people's passwords if they use your computer.
+
+        #Start logging:
+
+            sudo logkeys -s
+
+        #End logging:
+
+            sudo logkeys -k
 
     #ibus input methods
 
@@ -347,102 +352,7 @@
 
     ##weather indicator
 
-##dictionnary
-
-    ##dictionnary formats
-
-        ##stardict
-        #<http://goldendict.org/dictionaries.php>
-
-        #for dicts, go: <www.stardict.org/download.php>
-
-        ##bgl
-        #babylon
-        #windows oriented: exes on site!
-        #can open .exe with 7zip to extract data content
-        #now most exes are downloader without blgs, probably vendor lockin
-        #I found some that actually contained the blg here:
-        #  http://www.babylon.com/dictionaries-glossaries
-
-    ##goldendict
-
-        #fork of stardict
-
-        #select text can make popup windows!
-
-        #supported formats: stardict, blg,
-
-    ##sdcv
-
-        #command line stardict
-
-        #supported formats: stardict only
-
-        #to install dict place it under:
-
-            /usr/share/stardict/dic
-            $(HOME)/.stardict/dic
-
-        #list available dicts:
-
-            sdcv -l
-
-    ##spell checking
-
-        ##aspell
-
-            ##features
-
-                #can add words to dict
-
-                #understands some predefined formats!
-
-            #interactively checks files for spelling errors:
-
-                aspell -c f
-
-            #if modified, change inline but create `.bak` file
-
-            #french:
-
-                aspell -l fr -c f
-
-            #must first install wordlist
-
-            #same but ignore language constructs (modes):
-
-                aspell --mode=tex -c f
-                aspell --mode=html -c f
-
-            #modes can be added/removed. They are called `filters`
-
-                sudo aspell --add-filter=$f
-                sudo aspell --remove-filter=$f
-
-#codecs #ERROR: mpg123libjpeg-progs cannot locate
-
-    #use TAB to navigate msfonts
-
-    #TODO explain or remove:
-
-            sudo aptitude install -y mencoder totem-mozilla icedax tagtool libmad0 mpg321 mpg123libjpeg-progs
-
 ##chat messaging voice video
-
-    ##skype
-
-        sudo add-apt-repository -y "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
-        sudo aptitude update
-        sudo aptitude install -y skype
-
-    ##google talk
-
-        wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-        sudo sh -c 'echo "deb http://dl.google.com/linux/talkplugin/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-        sudo aptitude update
-        sudo aptitude install -y google-talkplugin
-
-    sudo aptitude install -y pidgin
 
     ##mseg write wall
 
@@ -611,97 +521,6 @@
 
             sudo aptitude install -y mutt
 
-
-##file sharing
-
-    ##torrent
-
-        ##deluge
-
-            sudo add-apt-repository -y ppa:deluge-team/ppa
-            sudo aptitude update
-            sudo aptitude install -y deluge
-
-    ##dropbox
-
-        sudo aptitude install -y nautilus-dropbox
-
-        firefox https://www.dropbox.com/home
-            #see your home files on browser
-
-        dropbox filestatus
-        dropbox filestatus "$F" "$G"
-                #a: up to date
-                #b: unwatched
-
-        #Get status:
-
-            dropbox status
-
-        #Possible status:
-
-        #- idle: program running but doing nothing
-
-
-        #get information on sync status of files on current dir:
-
-            dropbox ls
-
-        #- green: synced
-
-        #Get public url of F into the clipboard:
-
-            dropbox puburl "$F"
-            echo "wget `dropbox puburl "$F"`" > xsel
-
-        #The file must be inside Public folder.
-
-        #Autostart dropbox at startup:
-
-            dropbox autostart y
-
-    ##ubuntu one
-
-        #open source cross platform canonical dropbox like program
-
-        #web interface:
-
-            firefox https://one.ubuntu.com/dashboard/
-
-        #check deamon status:
-
-            u1sdtool -s
-
-        #publish a file:
-
-            u1sdtool --publish-file a
-
-        #get file public url to the clipboard:
-
-            u1sdtool --publish-file a | perl -ple 's/.+\s//' | xsel -b
-
-        #To shows icon with sync status on task bar:
-
-            sudo add-apt-repository -y ppa:noobslab/initialtesting
-            sudo apt-get update
-            sudo apt-get install indicator-ubuntuone
-
-    ##nicotine+
-
-        #soulseek client
-
-            sudo aptitude install -y nicotine+
-
-        #behind a proxy router
-        #go to the router admin panel, port forwarding part
-        #  (http://192.168.0.1/RgForwarding.asp on dlink for example, default login:admin pass:motorola)
-        #open ports 2234 to 2239 on local ip found at
-        #  ifconfig eth0 | grep "inet addr:"
-        #
-        #now either put your files in another partition at the root, or symlink
-        #your share and download dirs to somewhere above user so that people cannot
-        #see your username
-
 ##programming
 
     ##pkg-config
@@ -717,57 +536,6 @@
 
             CFLAGS=$(shell pkg-config --cflags pkgname)
             LIBS=$(shell pkg-config --libs pkgname)
-
-    ##editors ides
-
-        ##eclipse
-
-            #Extensible, lots of good existing plugins, coded in Java and therefore sane.
-
-            #Whatever you want to do you must click 50 menu items, no good config textual interface.
-
-            ##install plugins
-
-                #must be root for those operations so
-
-                    gksudo eclipse
-
-                #can only be done sanely manually from the GUI like everything else.
-
-                #Help > Install new software > Availabe software sources > Check every single case there!
-                #Help > Install new software > New sources
-
-            #add vim like editing to eclipse: http://vrapper.sourceforge.net/update-site/stable
-
-            ##color themes
-
-                #http://eclipse-color-theme.github.com/update
-
-                #mine: http://www.eclipsecolorthemes.org/?view=theme&id=7915
-
-                #to install: File > Import > Preferences > Select *.epf (Eclipse menus are SO unintuitive...)
-
-            #c and c++: #http://download.eclipse.org/tools/cdt/releases/indigo/
-
-            #python: http://pydev.org/updates
-
-            #html, javascript, php: http://download.eclipse.org/webtools/repository/indigo/
-
-            ##latex
-
-                #http://texlipse.sourceforge.net
-                #forward search to okular:
-                #
-                #inverse search from okular: Settings > Configure Okular > Editor
-                #  Editor: custom text editor,
-                #  Command: gvim --remote +%l %f
-
-        ##vim
-
-            #gvim, runs in gtk outside command line
-            #and thus gets around many command line limitations such as reserved shortcuts
-
-                gvim
 
     ##diff
 
@@ -958,25 +726,19 @@
 
     ##krusader
 
-        #great file manager
+        #Features:
 
-        #features:
+        #- useractions
 
-        #- useractions:
             #Execute shell scripts wich access to things like current directory or selected files
 
         #- give shortcuts to useractions
-            #you can give shortcuts to anything, including user actions!
+
+            #You can give shortcuts to anything, including user actions!
 
         #- ftp. Just enter an ftp url on the address bar and it all works.
 
             #filezilla is still better at this I think.
-
-        sudo aptitude install -y krusader
-        sudo aptitude install -y konqueror          #needs to manage bookmarks. (otherwise, button does nothing)
-        sudo aptitude install -y konsole            #needs to terminal emulator. (otherwise, button does nothing)
-        sudo aptitude install -y  khelpcenter4      #help
-        sudo aptitude install -y  kwalletmanager    #password manager
 
 ##time date
 
@@ -1030,15 +792,68 @@
             $TIMEZONE_NAME=
             cp $TIMEZONE_LOCATION/$TIMEZONE_NAME /etc/localtime
 
-##libreoffice
+##editor IDE
 
-    #wysiwyg text editor, tables, image editor:
+    ##vim
 
-        sudo aptitude install -y libreoffice
+        #Move very fast with your keyboard without using a mouse.
 
-    #database management:
+        #Works inside terminals therefore no need for X display manager
 
-        sudo aptitude install -y libreoffice-base
+        #gvim, runs in gtk outside command line
+        #and thus gets around many command line limitations such as reserved shortcuts
+
+            gvim
+
+    ##eclipse
+
+        #programming IDE.
+
+        #Extensible, lots of good existing plugins, coded in Java and therefore sane.
+
+        #Whatever you want to do you must click 50 menu items, no good config textual interface.
+
+        ##install plugins
+
+            #must be root for those operations so
+
+                gksudo eclipse
+
+            #can only be done sanely manually from the GUI like everything else.
+
+            #Help > Install new software > Availabe software sources > Check every single case there!
+            #Help > Install new software > New sources
+
+        #add vim like editing to eclipse: http://vrapper.sourceforge.net/update-site/stable
+
+        ##color themes
+
+            #http://eclipse-color-theme.github.com/update
+
+            #mine: http://www.eclipsecolorthemes.org/?view=theme&id=7915
+
+            #to install: File > Import > Preferences > Select *.epf (Eclipse menus are SO unintuitive...)
+
+        #c and c++: #http://download.eclipse.org/tools/cdt/releases/indigo/
+
+        #python: http://pydev.org/updates
+
+        #html, javascript, php: http://download.eclipse.org/webtools/repository/indigo/
+
+        ##latex
+
+            #http://texlipse.sourceforge.net
+            #forward search to okular:
+            #
+            #inverse search from okular: Settings > Configure Okular > Editor
+            #  Editor: custom text editor,
+            #  Command: gvim --remote +%l %f
+
+    ##libreoffice
+
+        #Project contains wysiwyg text editor, tables, image editor, database management.
+
+        #How to add new spellchecking language:<http://askubuntu.com/questions/72099/how-to-install-a-libreoffice-dictionary-spelling-check-thesaurus>
 
 ##text
 
@@ -2247,48 +2062,80 @@
 
 ##cron
 
-    #you can't launch graphical applications!
+    #Tell the computer to do things at specified times automatially.
 
-    crontab -e
-    #edit user cron jobs in vim
-    #1 2 3 4 5 /path/to/cmd.sh arg1 arg2 >/dev/null 2>&1
-        #1: Minute (0-59)
-        #2: Hours (0-23)
-        #3: Day (0-31)
-        #4: Month (0-12 [12 == December])
-        #5: Day of the week(0-7 [7 or 0 == sunday])
-        #/path/to/command - Script or command name to schedule#
-        #
-        #* : every
-        #*/5 : every five
-        #1,3,6 : several
-        #1-5 : ranges
-        #
-        #>/dev/null 2>&1 to avoid recieving emails
-        #
-        #otherwise:
-        #MAILTO="vivek@nixcraft.in"
-        #1 2 3 ...
+    ##crontab
 
-        crontab -l
-            #list all cronjobs
-        crontab -u user -l
-            #for a given user
-        crontab -r
-            #erase all crontabs
-        crontab -r -u username
-            #for a given user only
+        #POSIX 7
 
-        #@reboot	Run once, at startup.
-        #@yearly	Run once a year, "0 0 1 1 *".
-        #@annually	(same as @yearly)
-        #@monthly	Run once a month, "0 0 1 * *".
-        #@weekly	Run once a week, "0 0 * * 0".
-        #@daily	Run once a day, "0 0 * * *".
-        #@midnight	(same as @daily)
-        #@hourly	Run once an hour, "0 * * * *".
-        #
-        #can use instead of the 5 fields
+        #Utility to manage crobjobs.
+
+        #It is basically a frontend for the `/etc/crontab` file which an be edited directly.
+
+        #It is not possible launch graphical applications via cron!
+
+        #Edit user cron jobs in vim
+
+            crontab -e
+
+        #Sample line:
+
+            1 2 3 4 5 /path/to/cmd.sh arg1 arg2 >/dev/null 2>&1
+
+        #Fields:
+
+        #- 1: Minute (0-59)
+        #- 2: Hours (0-23)
+        #- 3: Day (0-31)
+        #- 4: Month (0-12 [12 == December])
+        #- 5: Day of the week(0-7 [7 or 0 == sunday])
+        #- /path/to/command - Script or command name to schedule#
+
+        #Special notations:
+
+        #- * : every
+        #- */5 : every five
+        #- 1,3,6 : several
+        #- 1-5 : ranges
+
+        #Convenient altenatives to the fields:
+
+        #- @reboot	Run once, at startup.
+        #- @yearly	Run once a year, "0 0 1 1 *".
+        #- @annually	(same as @yearly)
+        #- @monthly	Run once a month, "0 0 1 * *".
+        #- @weekly	Run once a week, "0 0 * * 0".
+        #- @daily	Run once a day, "0 0 * * *".
+        #- @midnight	(same as @daily)
+        #- @hourly	Run once an hour, "0 * * * *".
+
+        #Example:
+
+            @daily /path/to/cmd.sh arg1 arg2 >/dev/null 2>&1
+
+        #`>/dev/null 2>&1` prevents cron from sending notification emails.
+
+        #Otherwise if you want them add:
+
+            #MAILTO="vivek@nixcraft.in"
+
+        #to the config file.
+
+        #List all cronjobs:
+
+            crontab -l
+
+        #List all cronjobs for a given user:
+
+            crontab -u user -l
+
+        #Erase all cronjobs:
+
+            crontab -r
+
+        #Erase all cronjobs for a given user only
+
+            crontab -r -u username
 
     ##at
 

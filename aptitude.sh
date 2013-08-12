@@ -38,10 +38,11 @@
         #are packages that contain libraries to build stuff, typically .so files
 
     ##source types
-        #Main - Officially supported software.
-        #Restricted - Supported software that is not available under a completely free license.
-        #Universe - Community maintained software, i.e. not officially supported software.
-        #Multiverse - Software that is not free.
+
+        #- Main - Officially supported software.
+        #- Restricted - Supported software that is not available under a completely free license.
+        #- Universe - Community maintained software, i.e. not officially supported software.
+        #- Multiverse - Software that is not free.
 
 ##first time
 
