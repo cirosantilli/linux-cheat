@@ -142,9 +142,11 @@ One major application of this is to ignore those files from source control. The 
 
 ##include/linux
 
-`include/linux`
+Default places for almost all important headers for intefaces that can be used across the kernel.
 
-Almost all important headers for intefaces that can be used across the kernel.
+Some subsystems however have spilled out:
+
+- `include/net`: networking includes
 
 TODO what are the other sibling directories?
 
@@ -273,7 +275,7 @@ TODO where are those documenteded?
 User programs such as a simple hello world run inside an abstraction called *process* defined by the kernel.
 
 The kernel restricts what user programs can do directly basically to basic processor operations (adding)
-and memory operations (setting or getting RAM memory)
+and memory operations (setting or getting RAM memory).
 
 User programs can, however, ask the kernel to do certain operations for them via *system calls*.
 
@@ -556,3 +558,170 @@ Print the system log:
     dmesg
 
 <http://www.web-manual.net/linux-3/the-kernel-ring-buffer-and-dmesg/>
+
+#page
+
+First learn about hardware paging in a common architecture such as x86 family.
+This will be not explained here.
+
+Pages are modeled by `struct page` under `mm_types.h`.
+
+Hardware deals in terms of pages to:
+
+- make retrival faster, since the bus clock is much slower than the cpu clock
+    and because of memory locality.
+
+- serve as a standard unit for page swap betweem RAM and HD
+
+##page flags
+
+Defined in `page-flags.h`.
+
+##page frame
+
+A page frame refers to the smalles physical memory that the processor can ask
+from the RAM.
+
+Paging usually has hardware support today.
+
+##linking pages to page frames
+
+it would be too expensive to keep a link from every virtual memory:
+
+    4 GiB / 4 KiB = 1 M structures per processes
+
+the solution is then to only keep links between used pages and frames
+
+this is done in a multilevel scheme
+
+#process address space
+
+Sources:
+
+- good beginner's tutorial: <http://duartes.org/gustavo/blog/post/anatomy-of-a-program-in-memory>
+
+The process memory space is divided as follows:
+
+    kernel
+
+    ------------------
+                      |
+                      | random stack offset
+                      |
+    ------------------ <== TASK_SIZE
+
+    stack
+
+    ||| (grows down)
+    vvv
+
+    ------------------
+
+
+    ------------------ <== RLIMIT_STACK
+                      |
+                      | random mmap offset
+                      |
+    ------------------
+
+    memory mapping
+
+    ||| (grows down)
+    vvv
+
+    ------------------
+
+    ------------------ <== brk
+
+    ^^^
+    ||| (grows up)
+
+    heap
+
+    ------------------ <== start_brk
+                      |
+                      | random brk offset
+                      |
+    ------------------
+
+    BSS
+
+    ------------------ <== end_data
+
+    data
+
+                       <== start_data
+    ------------------ <== end_code
+
+    text
+
+    ------------------ <== 0x08048000
+
+    ------------------ <== 0
+
+##valid adresses
+
+Valid program accesses:
+
+- RW on: data, BSS, heap, memory mappings and stack
+- R on: text
+
+If a process tries to access addresses between TASK_SIZE and RLIMIT_STACK
+the kernel may allow its stack to grow.
+
+Any other access attempt will generate a TODO page or seg fault?
+
+##kernel segment
+
+Never changes between processes.
+
+TASK_SIZE is typically 3/4 of the total memory.
+
+Note that this is *virtual* memory, so it is independant of the acutual size of the memory
+as the hardware and the kernel can give processes the illusion that they actually have
+ammounts of memory larger than the hardware for instance.
+
+##random offset segments
+
+Randomly generated for each proess to avoid attacks.
+
+Must be small not to take too much space.
+
+##stack
+
+Grows down.
+
+May be allowed to increase by the OS access is done before the maximum stack value `RLIMIT_STACK`.
+
+##memory mapping
+
+Created via `mmap` system calls.
+
+Stores dynamically loaded library code.
+
+##heap
+
+Usually managed by language libraries such as C malloc.
+
+Manipulated on the system level by the `brk` syscall.
+
+##BSS
+
+Unitialized variables.
+
+No need to store their value on the binary file,
+only need to reserve space for them after startup.
+
+Does not change size.
+
+##data
+
+Initialized variables.
+
+Directly copied from the executable file.
+
+##text
+
+Code to be executed + certain char strings.
+
+Is directly copied from the executable file.

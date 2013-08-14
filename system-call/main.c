@@ -18,6 +18,9 @@ shall only be mentioned but not explained in detail.
     the same processing that is done for the POSIX library is done in case of error,
     with error returns always `-1` and `errno` being set accordingly.
 
+    This function automatically puts RAM variables into registers before calling the system call,
+    and gets the return value from `eax` into RAM.
+
     It is however an exact system call when there is no error situation. For example,
     syscall getpriority returns values between 0 and 39, while the POSIX version
     can always return negative values.
@@ -30,6 +33,8 @@ shall only be mentioned but not explained in detail.
     Most system calls are defined on most architectures and have names which map
     to the actual number, depending on the architecture. This is done with the
     `__NR_XXX` constants in `asm/unistd.h` or SYS_<NAME> in `sys/types`
+
+    TODO return value type is long int?
 
 #__NR_XXX macros
 
@@ -72,8 +77,9 @@ Cannot have strict ansi ( implied by `-std=c99` or `-ansi`. See: `features.h`.
 #define _GNU_SOURCE
 
 #include <assert.h>
-#include <stdio.h>
+#include <stdbool.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include <unistd.h>             /* syscall */
 #include <sys/time.h>
@@ -204,6 +210,83 @@ int main( int argc, char** argv )
             perror( "reboot" );
         }
 
+    }
+
+    /*
+    #brk
+
+        Sources:
+
+        - man brk
+        - <http://stackoverflow.com/questions/6988487/what-does-brk-system-call-do>
+
+        Set data segment to given pointer.
+
+        One of the ways in which malloc may be implemented by libc under linux.
+        The other option is mmap.
+
+        If this method is used exclusively, all malloc memory goes into a single segment,
+        and it is up to the library to ensure that pointers by malloc do not overlap with
+        other pointers.
+
+        Beware that the glibc `brk()` does some error checking on top of the system call.
+
+        Return value:
+
+        - success: new location
+        - failure: old location
+
+        Error checking is done by checking that the new location moved relative to the old one.
+
+        Heaps grow up.
+
+    #sbrk
+
+        Non POSIX library level only, not a system call, so it shall not be discussed here.
+        Implemented with the brk system call.
+
+        More convenient than `brk`.
+    */
+    {
+        //TODO0 confirm all of this. Hard to find docs!
+
+        unsigned long p, old_p;
+        char *cp;
+
+        //allocation is sure to fail and return current address
+        //TODO0 is this correct? is there another way to get the end of the data?
+        p = syscall( __NR_brk, NULL );
+        printf( "brk = %lu\n", p );
+
+        old_p = p;
+
+        //allocate memory
+        p = syscall( __NR_brk, p + 1 );
+
+        //system call did not work
+        if ( p < old_p ) {
+            assert( false );
+        }
+
+        //check that the alloation works
+        p = syscall( __NR_brk, NULL );
+        assert( p == old_p + 1 );
+
+        //use newly allocated memory
+        cp = (char*)p;
+        *cp = 1;
+
+        //deallocate
+        p = syscall( __NR_brk, old_p );
+        if ( p > old_p ) {
+            assert( false );
+        }
+    }
+
+    /*
+    #mmap
+    */
+    {
     }
 
     /*

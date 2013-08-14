@@ -86,7 +86,7 @@
 
 #get info on image
 
-- `file`: type, size, and major parameters such as depth
+- `file`: type, and for certain formats size other major parameters such as depth.
 
 #editors
 
@@ -180,15 +180,23 @@ img2text on x window
 
 #imagemagick
 
-tons of image conversion tools
+Tons of image conversion tools.
 
-cli + apis in lots of langs, includeing c (native), c++ and python
+CLI + APIs in lots of langs, includeing c (native), c++ and python.
 
-reading the manual is a great image manipulation course!
+Reading the manual is a great image manipulation course!
 
-list supported formats:
+##identify
+
+Get info on imagemagick or specifig images.
+
+List supported formats:
 
     identify -list format
+
+Get size of an image:
+
+    identify -format "%[fx:w]x%[fx:h]" a.jpg
 
 ##convert
 
@@ -216,12 +224,12 @@ Generates `a-N.png` images.
 
 	convert large.png -resize 50% small.png
 
-this:
+This:
 
-- takes averages to make smaller
+- takes averages between pixels to make image have less pixels
 - keeps bit depth
 
-therefore, the image file size will be just a bit more than 1/4 of the original because:
+Therefore, the image file size will be just a bit more than 1/4 of the original because:
 
 - 1/2 x 1/2 = 1/4 of the number of pixels
 - the png metadata size is unchanged, so this is not divided by 4.

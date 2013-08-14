@@ -622,40 +622,9 @@ static int __init init(void)
 	}
 
 	/*
-	#page
+	#PAGE_SIZE
 
-		First learn about hardware paging in a common architecture such as x86 family.
-		This will be not explained here.
-
-		Pages are modeled by `struct page` under `mm_types.h`.
-
-		Hardware deals in terms of pages to:
-
-		- make retrival faster, since the bus clock is much slower than the cpu clock
-			and because of memory locality.
-
-		- serve as a standard unit for page swap betweem RAM and HD
-
-	#page flags
-
-		Defined in `page-flags.h`.
-
-	#page frame
-
-		A page frame refers to the smalles physical memory that the processor can ask
-		from the RAM.
-
-		Paging usually has hardware support today.
-
-	#linking pages to page frames
-
-		it would be too expensive to keep a link from every virtual memory:
-
-			4 GiB / 4 KiB = 1 M structures per processes
-
-		the solution is then to only keep links between used pages and frames
-
-		this is done in a multilevel scheme
+		Size of a page.
 	*/
 	{
 		printk(KERN_DEBUG "PAGE_SIZE (Kib) = %lu\n", PAGE_SIZE / ( 1 << 10 ));
@@ -1715,31 +1684,16 @@ static int __init init(void)
 		if ( atomic_read(&i_global_atomic) != n_threads ) return -1;
 	}
 
-	/*
-	#process memory space
-
-		#TASK_SIZE
-
-			*virtual memory* is divided as follows:
-
-			- memory from address from 0 to TASK_SIZE - 1 can be used by *each* processes
-			- other memory adressses (from  TASK_SIZE to the maxinum adressable memory, 2^32 on 32 bits platforms
-					of 2^64 on 64 ) belongs to the kernel
-
-			TASK_SIZE is typically around 3/4 of the total memory
-
-			Note that this is *virtual* memory, so it is independant of the acutual size of the memory
-			as the hardware and the kernel can give processes the illusion that they actually have
-			ammounts of memory larger than the hardware for instance.
-	*/
 	{
 		printk(KERN_DEBUG "TASK_SIZE (GiB) = %lu\n", TASK_SIZE / (1 << 30));
 
 		//Kernel virtual memory must be above `TASK_SIZE`:
-
+		{
+			//i is in the kernel since this is a kernel module
 			int i;
 			if ( (int)&i < TASK_SIZE ) return -1;
 			printk( KERN_DEBUG "(void*)&i = %p\n", (void*)&i );
+		}
 
 		//User virtual memory will always be below TASK_SIZE.
 		//Print addresses of user space program variables to check this (3Gb = `0xc0000000`)

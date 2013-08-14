@@ -71,7 +71,9 @@ main cheat on the POSIX C API
 #include <pwd.h>            //getpwuid, getpwnam, getpwent
 #include <regex.h>
 #include <sched.h>
+#include <sys/mman.h>       //mmap, munmap
 #include <sys/resource.h>   //rusage, getrusage, rlimit, getrlimit
+#include <sys/shm.h>        //shmget, shmat, etc.
 #include <sys/socket.h>
 #include <sys/stat.h>       //S_IRUSR and family,
 #include <sys/types.h>      //lots of posix realted typedef types
@@ -375,22 +377,28 @@ int main( int argc, char** argv )
 
         There is no portable standard way of doing this.
     */
+    if ( 0 )
     {
         printf( "sleep:\n" );
         for(int i=0; i<3; i++)
         {
             printf( "%d\n", i );
-            //sleep( 1 );
+            sleep( 1 );
         }
         printf( "\n" );
     }
 
     /*
-    open, close, write, file operations can do operations more specific
-    than the corresponding ansi c `fopen`, `fclose`, etc functions
+    #open vs fopen
 
-    if you don't need that greater level of control,
-    just use the ansi functions for greater portability
+        open, close, write, file operations can do operations more specific
+        than the corresponding ANSI C `fopen`, `fclose`, etc functions
+
+        They are also needed in POSIX contexts in which one must deal directly with file descriptors,
+        such as pipes.
+
+        If you don't need that greater level of control,
+        just use the ANSI functions for greater portability.
 
     #open
 
@@ -398,13 +406,13 @@ int main( int argc, char** argv )
 
         returns an `int` (file descriptor number) instead of a file
 
-        flags. Must specify one and only of the following:
+        Flags. Must specify one and only of the following:
 
         - O_WRONLY: write only
         - O_RDONLY: read only
         - O_RW: read only
 
-        the following may all be specified:
+        The following may all be specified:
 
         - O_APPEND: Place written data at the end of the file.
         - O_TRUNC: Set the length of the file to zero, discarding existing contents.
@@ -413,9 +421,9 @@ int main( int argc, char** argv )
             it’s performed with just one function call. This protects against two programs creating the file at
             the same time. If the file already exists, open will fail.
 
-        return value: `-1` on error.
+        Return value: `-1` on error.
 
-        you can also use standard flags for permissions:
+        You can also use standard flags for permissions:
 
         - S_IRUSR: Read permission, owner
         - S_IWUSR: Write permission, owner
@@ -441,6 +449,10 @@ int main( int argc, char** argv )
         0 if at end of file descriptor already
 
         -1 if error
+
+    #lseek
+
+        TODO0 confirm like fseek for bare file descriptors with plus control?
     */
     {
         int fd;
@@ -478,6 +490,182 @@ int main( int argc, char** argv )
         else
         {
             assert( false );
+        }
+    }
+
+    /*
+    #mmap
+
+        Good man page:
+
+            man mmap
+
+        Initial code source: <http://www.linuxquestions.org/questions/programming-9/mmap-tutorial-c-c-511265/>
+
+        Map RAM memory to a file.
+
+        TODO application?
+    */
+    {
+        char *filepath = "mmap.tmp";
+        int numints = 4;
+        int filesize = numints * sizeof(int);
+
+        int i;
+        int fd;
+        int result;
+        int *map;  /* mmapped array of int's */
+
+        //write to file with mmap
+        {
+            /* `O_WRONLY` is not sufficient when mmaping, need `O_RDWR`.*/
+            fd = open(filepath, O_RDWR | O_CREAT | O_TRUNC, (mode_t)0600);
+            if (fd == -1) {
+                perror("open");
+                exit(EXIT_FAILURE);
+            }
+
+            /* set fd position and write to it to strech the file */
+            result = lseek(fd, filesize - 1, SEEK_SET);
+            if (result == -1) {
+                close(fd);
+                perror("lseek");
+                exit(EXIT_FAILURE);
+            }
+
+            /* write something to the file to actually strech it */
+            result = write(fd, "", 1);
+            if (result != 1) {
+                close(fd);
+                perror("write");
+                exit(EXIT_FAILURE);
+            }
+
+            /* do the actual mapping call */
+            map = mmap(NULL, filesize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+            if ( map == MAP_FAILED ) {
+                close( fd );
+                perror( "mmap" );
+                exit( EXIT_FAILURE );
+            }
+
+            /* write int's to the file as if it were memory because MAP_SHARED was used */
+            for ( i = 0; i < numints; ++i ) {
+                map[i] = i;
+            }
+
+            /* free mmapped memory */
+            if (munmap(map, filesize) == -1) {
+                perror("munmap");
+                exit(EXIT_FAILURE);
+            }
+
+            /* un-mmaping doesn't close the file, so we still need to do that. */
+            if (close(fd) == -1) {
+                perror("close");
+                exit(EXIT_FAILURE);
+            }
+        }
+
+        //read result back in
+        {
+            fd = open(filepath, O_RDONLY, 0);
+            if (fd == -1) {
+                perror("open");
+                exit(EXIT_FAILURE);
+            }
+
+            map = mmap(0, filesize, PROT_READ, MAP_SHARED, fd, 0);
+            if ( map == MAP_FAILED ) {
+                close( fd );
+                perror( "mmap" );
+                exit( EXIT_FAILURE );
+            }
+
+            assert( map[1] == 1 );
+
+            //segmentation fault because no PROT_WRITE:
+            {
+                //map[1] = 2;
+            }
+
+            if (munmap(map, filesize) == -1) {
+                perror("munmap");
+                exit(EXIT_FAILURE);
+            }
+
+            if (close(fd) == -1) {
+                perror("close");
+                exit(EXIT_FAILURE);
+            }
+        }
+
+        /*
+        MAP_PRIVATE
+
+            Creates a copy-on-write version of file in memory.
+
+            Changes do not reflect on the file.
+
+            TODO0 application?
+        */
+        {
+            //private write
+            {
+                fd = open(filepath, O_RDONLY, 0);
+                if (fd == -1) {
+                    perror("open");
+                    exit(EXIT_FAILURE);
+                }
+
+                map = mmap(NULL, filesize, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
+                if ( map == MAP_FAILED ) {
+                    close( fd );
+                    perror( "mmap" );
+                    exit( EXIT_FAILURE );
+                }
+
+                map[0] = 1;
+
+                if (munmap(map, filesize) == -1) {
+                    perror("munmap");
+                    exit(EXIT_FAILURE);
+                }
+
+                if (close(fd) == -1) {
+                    perror("close");
+                    exit(EXIT_FAILURE);
+                }
+            }
+
+            //read
+            {
+                fd = open(filepath, O_RDONLY, 0);
+                if (fd == -1) {
+                    perror("open");
+                    exit(EXIT_FAILURE);
+                }
+
+                map = mmap(0, filesize, PROT_READ, MAP_SHARED, fd, 0);
+                if ( map == MAP_FAILED ) {
+                    close( fd );
+                    perror( "mmap" );
+                    exit( EXIT_FAILURE );
+                }
+
+                //did not change!
+                assert( map[0] == 0 );
+
+                if (munmap(map, filesize) == -1) {
+                    perror("munmap");
+                    exit(EXIT_FAILURE);
+                }
+
+                if (close(fd) == -1) {
+                    perror("close");
+                    exit(EXIT_FAILURE);
+                }
+            }
         }
     }
 
@@ -523,7 +711,7 @@ int main( int argc, char** argv )
             else
             {
                 perror( "realpath" );
-                assert(false);
+                exit( EXIT_FAILURE );
             }
             free( rp );
         }
@@ -1308,45 +1496,48 @@ int main( int argc, char** argv )
     /*
     #fork
 
-        makes a copy of this process
+        Makes a copy of this process.
 
-        this includes open file descriptors
+        This includes open file descriptors.
 
-        global memory space (`.DATA` and `.BSD`) is copied to current value but separated
-        (unlike threads, which share memory space)
+        Global memory space (`.DATA` and `.BSD`) is copied to current value but separated
+        (unlike threads, which share memory space).
 
         #fork and buffering
 
             <http://stackoverflow.com/questions/3513242/working-of-fork-in-linux-gcc>
 
-            there are three buffering methods:
+            There are three buffering methods:
 
             - unbuffered
             - fully buffered
             - line buffered
 
-            when you fork, the streams get forked too,
+            When you fork, the streams get forked too,
             with unflushed data still inside
 
             stdout and stderr flush at newlines
             if you don't put newlines, if does not flush,
             and fork copies the buffers
 
-
-            this will print everything twice
+            This will print everything twice.
 
     #vfork
 
         fork but keep same address space. POSIX 7 discourages its use,
         and says that it may be deprecated in the future
 
-    #wait()
+    #wait
 
-        wait for any child to terminate and then wake up
+        Wait for any child to terminate and then wake up.
 
-    #waitpid()
+        Same as:
 
-        wait for child with given PID to terminate
+            waitpid( -1, &status, 0 );
+
+    #waitpid
+
+        Wait for child with given PID to terminate.
 
     #copy on write #COW
 
@@ -1361,14 +1552,21 @@ int main( int argc, char** argv )
     {
         //this variable will be duplicated on the parent and on the child
         int i = 0;
+        int ppid; /* parent pid */
+
+        ppid = getpid();
+        if ( ppid == -1 )
+        {
+            perror( "getpid" );
+            exit( EXIT_FAILURE );
+        }
 
         //this variable is visible only by the parent
-        //TODO is the compiler smart enough not to duplicate this to the child?
+        //TODO0 is the compiler smart enough not to duplicate this to the child?
         {
             //int i = 0;
         }
 
-        //happens on parent only and before child:
         puts( "fork parent only before child" );
 
         //flush before fork so that existing output won't be repeated twice:
@@ -1377,16 +1575,14 @@ int main( int argc, char** argv )
         //in case of success, pid is set differently on parent and child
         //so you can distinguish between them. For the child, `pid = 0`.
         pid_t pid = fork();
-        if ( pid < 0 )
+        if ( pid == -1 )
         {
-            puts( "fork failed" );
+            perror( "fork" );
             assert( false );
         }
         else
         {
-            //happens on both child and parent
             puts( "fork child and parent" );
-            printf( "pid = %d, i = % d\n", pid, i );
 
             //happens on child only:
             if ( pid == 0 )
@@ -1399,6 +1595,15 @@ int main( int argc, char** argv )
                 but they both go to the same terminal
                 */
                 puts( "fork child only" );
+
+                //child has a different pid from its parent
+                int pid = getpid();
+                if ( pid == -1 )
+                {
+                    perror( "getpid" );
+                    exit( EXIT_FAILURE );
+                }
+                assert( pid != ppid );
 
                 //this shall only change the child's `i` because memory was cloned (unlike threads)
                 i++;
@@ -1426,20 +1631,467 @@ int main( int argc, char** argv )
     }
 
     /*
-    #process synchronization
+    #IPC
 
-        Threads can be synchronized via:
+        inter process communication
 
-        - semaphores
+        the basic ways are:
 
-        - mutexes
+        at startup:
 
-        Threads have the specific synchronization mechanisms:
+        - command line arguments
+        - environment variables
 
-    #semaphore
+        during execution:
 
-    #mutex
+        - pipes
+        - regular files
+        - signals
+        - shared memory
+        - sockets
     */
+
+    /*
+    #pipe
+
+        pipes can be either unnamed (more common) or nammed
+    */
+    {
+        /*
+        #unnamed pipe
+
+            unidirectional child ----> parent transfer
+
+            can be created either via `popen` or `pipe`
+
+            single process must start two children process: data source and the data consumer
+            and connect them
+
+            advantages over files:
+
+            - simple: no need to agree on a filename to communicate over
+            - fast: no need to modify the filesystem or worse: do disk io!
+            - secure: other process cannot se the data as they could in a file
+
+            data very limited per buffer! BUFSIZ ~= 1000-10000 today,
+            and the only guarantee is being at least 256 bytes wide.
+
+            i think it is not possible to know if a file pointer
+            is open for reading or writtin besides looking at how
+            it was created
+
+            workflow:
+
+            - child fills the buffer, then parent takes control
+            - child fills ...
+        */
+
+        /*
+        #BUFSIZ
+
+            a measure of the ideal maxinum ammount of that that
+            should should be written/read to a pipe at a time for good performance.
+
+            in practice you could read/write much more than that,
+            but BUFSIZ is a good value:
+
+            - fast
+            - not larger than the maximum
+
+            so in practice you will should just use this value as a maximum.
+
+            if you try to read write more than the max,
+            it just flushes all when the buffer gets filled
+
+            the larger the buffer the faster the transfer
+
+            the only guarantee is BUFSIZ >= 256
+
+            if you want to be very portable, you must design systems
+            whose messages need no more than 256 bytes at a time
+
+            with such a system, you could just pass many 256 chunks at once
+            if your large buffer allows (of course, it is likelly that each of
+            those 256 chunks will conatain its own header information)
+        */
+        {
+            printf( "BUFSIZ = %ju\n", (uintmax_t) BUFSIZ );
+            assert( BUFSIZ >= 256 );
+        }
+
+        /*
+        #popen
+
+            Creates unnamed pipes.
+
+            Consider using ansi c `system` instead of this.
+
+            Opens a new process running the given command.
+
+            Given string runs inside `sh` in a separated process and therefore it is:
+
+            - slow
+            - does magic stuff like pathname expansion (`*.txt`)
+            - harder to port to non posix systems if one day you decide to do that
+
+            It seems from the POSIX docs that the interpreter `sh` cannot be changed.
+
+            Unlike the ANSI C `system` function,
+            does not automatically wait for the command to return: see `pclose` for that.
+
+            For that reason, `popen` is slightly more general than `system`,
+            as you can do more work in the current program begore getting the shell output.
+
+            This is not however extremely useful since you usually need the shell output
+            to continue working anyways.
+
+            It is possible to either:
+
+            - read output from stdout of a command
+            - write to stdin of a command
+
+            TODO0 possible to both set stdin *and* get stdout?
+
+            The output of popen is put on an unnamed pipe, which is accessible via
+            ANSI C FILE type returned by the function, instead of POSIX file descriptor (integers)
+            Therefore you must use ANSI C file io functions like `fopen` or `fclose` with it,
+            instead of the more low level POSIX `open` or `write` family.
+
+        #pclose
+
+            waits for child generated process.
+
+            returns child exit status.
+
+            if child was already waited for, returns -1 to indicate an error.
+        */
+        {
+            //read from stdout of command and get its exit status
+            {
+                //popen uses ANSI C fread which uses ANSI C FILE type:
+                FILE* read_fp;
+                char buffer[BUFSIZ + 1];
+                char cmd[1024];
+                int chars_read;
+                int exit_status;
+                int read_cycles = 0;
+                int desired_read_cycles = 3;
+                int desired_last_char_read = 1;
+                assert( desired_last_char_read < BUFSIZ );
+
+                sprintf(
+                    cmd,
+                    "for i in `seq %ju`; do echo -n a; done",
+                    (uintmax_t)(desired_read_cycles-1) * BUFSIZ + desired_last_char_read
+                );
+                read_fp = popen( cmd, "r" );
+                if ( read_fp != NULL )
+                {
+                    do
+                    {
+                        chars_read = fread( buffer, sizeof( char ), BUFSIZ, read_fp );
+                        buffer[chars_read] = '\0';
+                        printf( "======== n bytes read: %d\n", chars_read );
+                        //printf( "%s\n", buffer); //if you want to see a bunch of 'a's...
+                        read_cycles++;
+                    } while ( chars_read == BUFSIZ );
+                    exit_status = pclose( read_fp );
+                    assert( read_cycles == desired_read_cycles );
+                    assert( chars_read == desired_last_char_read );
+                    assert( exit_status == 0 );
+                }
+                else
+                {
+                    printf( "could not open pipe" );
+                    exit( EXIT_FAILURE );
+                }
+            }
+
+            //write to stdin of command, its stdout goes to current stdout
+            {
+                FILE *write_fp;
+                char buf[BUFSIZ];
+                int exit_status;
+
+                memset( buf, 'b', BUFSIZ );
+                //conuts how many charaters were given to stdin
+                //shows clearly how this is run inside a sh instance
+                //because of the many sh features used
+                write_fp = popen( "read A; printf 'popen write = '; printf $A | wc -c", "w" );
+                if ( write_fp != NULL )
+                {
+                    //TODO0 is safe to write twice BUFSIZ without a newline in the middle?
+                    fwrite( buf, sizeof( char ), BUFSIZ, write_fp );
+                    fwrite( buf, sizeof( char ), BUFSIZ, write_fp );
+
+                    //prints 2 * BUFSIZ
+                    //command waits until pipe close
+                    exit_status = pclose( write_fp );
+                    assert( exit_status == 0 );
+                }
+                else
+                {
+                    assert( false );
+                }
+            }
+        }
+
+        /*
+        #pipe
+
+            Create unnamed pipes.
+
+            Very close to the linux pipe system call.
+
+            differences from popen:
+
+            - does not use a shell, avoiding many of its problems
+
+            - uses integer file descriptors instead of ANSI C FILE type
+                therefore you manipulate pipes with file descriptor functions
+                like `open` and `write` instead of ANSI C `fopen` family.
+
+            This potentially gives you more control over the operations.
+
+            It may however be a bit harder to setup.
+
+            Typically used with fork + exec.
+        */
+        {
+            {
+                int nbytes;
+                int pipes[2];
+                    //note the integers
+                    //for file descriptors
+                char data[] = "123";
+                char buf[BUFSIZ + 1];
+                if ( pipe(pipes) == 0 )
+                {
+                    nbytes = write( pipes[1], data, strlen(data) );
+                        //cannot use the c standard fwrite
+                        //dealing with posix specific file desciptors here
+                        //#write
+
+                            //system calls
+
+                            //returns the number of bytes written
+                            //it may be less than the desired if there is not
+                            //enough space on medium
+
+                            //if does not write enough TODO
+                            //guess you have to do another call
+                    assert( nbytes = strlen(data) );
+                    nbytes = read( pipes[0], buf, BUFSIZ);
+                    assert( nbytes = strlen(data) );
+                    buf[nbytes] = '\0';
+                    assert( strcmp( buf, data ) == 0 );
+                }
+                else
+                {
+                    assert(false);
+                }
+            }
+
+            /*
+            parent writes to child
+
+            this works because if ever read happens before, it blocks
+            */
+            {
+
+                int nbytes;
+                int file_pipes[2];
+                const char data[] = "123";
+                char buf[BUFSIZ + 1];
+                pid_t pid;
+                if ( pipe( file_pipes ) == 0 )
+                {
+                    fflush(stdout);
+                    pid = fork();
+                    if ( pid == -1 )
+                    {
+                        assert(false);
+                    }
+                    else if ( pid == 0 )
+                    {
+                        nbytes = read( file_pipes[0], buf, BUFSIZ );
+                        printf( "pipe child. data: %s\n", buf );
+                        exit(EXIT_SUCCESS);
+                    }
+                    else
+                    {
+                        nbytes = write( file_pipes[1], data, strlen(data) );
+                        assert( nbytes == strlen(data) );
+                        strlen(data);
+                    }
+                }
+                else
+                {
+                    assert(false);
+                }
+            }
+        }
+
+        /*
+        #FIFO
+
+            aka named pipes
+
+            appear on the filesystem
+
+            therefore can be accessed as by any process who sees it
+            and has enough priviledge level
+
+            are however faster than writting to files,
+            since everything happens on RAM
+
+            cannot open for rw
+
+            application: simple client/servers!
+
+            created with mkfifo
+
+        #mkfifo
+
+            used to create a FIFO
+        */
+        {
+                //TODO example
+        }
+    }
+
+    /*
+    #shared memory
+
+        Memory that can be accessed by multiple separate processes.
+
+        In this example, both parent and child processes access the same shared memory.
+    */
+    {
+        int shmid;
+        int *shmem;
+
+        /*
+        #shmget
+
+            Allocate shared memory
+
+                int shmget(key_t key, size_t size, int shmflg);
+
+            - key: TODO0 what is this
+            - size: num of bytes
+            - shmflg: permission flags like for files + other specific flags
+                IPC_CREAT is required to allocate the memory
+
+            Return:
+
+            - negative if error
+            - unique identifier of memory if positive
+        */
+        {
+            shmid = shmget( (key_t)1234, sizeof( int ) * 2, IPC_CREAT | 0666 );
+            assert( shmid >= 0 );
+        }
+
+        /*
+        #shmat
+
+            Attach shared memory to current process so it can be used afterwards
+
+                void *shmat(int shm_id, const void *shm_addr, int shmflg);
+
+            - shm_id: memory id given to shmget
+            - shm_id: where to map to. Usual choice: `NULL` so the system choses on its own.
+            - shm_flg:
+        */
+        {
+            shmem = shmat( shmid, NULL, 0 );
+            if ( shmem == (void*)-1 )
+            {
+                assert( false );
+            }
+            else
+            {
+                shmem[0] = 1;
+                fflush( stdout );
+                pid_t pid = fork();
+                if ( pid < 0 ) {
+                    assert( false );
+                }
+                else {
+
+                    if ( pid == 0 ) { //child only
+
+                        //child inherits attached memory
+                        shmem[0]++;
+
+                        //detach from child:
+                        assert( shmdt( shmem ) == 0 );
+
+                        exit( EXIT_SUCCESS );
+                    }
+
+                    //parent after child
+                    int status;
+                    wait( &status );
+                    assert( status == EXIT_SUCCESS );
+
+                    //TODO why this mail fail with shmem == 1?
+                    //how can the child not have finished yet after the wait?
+
+                        //printf( "shmem 0 = %d", shmem[0] );
+                        //assert( shmem[0] == 2 );
+
+                    /*
+                    #shmdt
+
+                        detach shared memory from current process
+
+                            int shmdt( void* shmem );
+
+                        each process should detach it separatelly before deleting the memory
+                    */
+                    {
+                        //detach from parent:
+                        assert( shmdt( shmem ) == 0 );
+                    }
+
+                    /*
+                    #shmctl
+
+                        controls the shared memory, doing amongst other things its deletion
+
+                            int shmctl(int shm_id, int command, struct shmid_ds *buf);
+
+                        - shm_id returned by shmget
+                        - command one of the following:
+
+                            - IPC_STAT: get parameters of memory into buf
+                            - IPC_SET:  set parameters of memory to match buf
+                            - IPC_RMID: delete memory.
+
+                                It must be detached from all processes, or you get unspecified behaviour.
+
+                        - buf the following struct:
+
+                                struct shmid_ds {
+                                    uid_t shm_perm.uid;
+                                    uid_t shm_perm.gid;
+                                    mode_t shm_perm.mode;
+                                }
+
+                            it can be `NULL` for `PIC_RMID`
+
+                        - return: 0 on success, -1 on failure
+                    */
+                    {
+                        assert( shmctl( shmid, IPC_RMID, NULL ) == 0 );
+                        return EXIT_SUCCESS;
+                    }
+                }
+            }
+        }
+    }
 
     /*
     #threads
@@ -1555,322 +2207,20 @@ int main( int argc, char** argv )
     }
 
     /*
-    #IPC
+    #thread synchronization
 
-        inter process communication
+        Threads can be synchronized via:
 
-        the basic ways are:
+        - semaphores
 
-        at startup:
+        - mutexes
 
-        - command line arguments
-        - environment variables
+        Threads have the specific synchronization mechanisms:
 
-        during execution:
+    #semaphore
 
-        - pipes
-        - regular files
-        - signals
-        - shared memory
-        - sockets
+    #mutex
     */
-
-    /*
-    #pipe
-
-        pipes can be either unnamed (more common) or nammed
-    */
-    {
-        /*
-        #unnamed pipe
-
-            unidirectional child ----> parent transfer
-
-            can be created either via `popen` or `pipe`
-
-            single process must start two children process: data source and the data consumer
-            and connect them
-
-            advantages over files:
-
-            - simple: no need to agree on a filename to communicate over
-            - fast: no need to modify the filesystem or worse: do disk io!
-            - secure: other process cannot se the data as they could in a file
-
-            data very limited per buffer! BUFSIZ ~= 1000-10000 today,
-            and the only guarantee is being at least 256 bytes wide.
-
-            i think it is not possible to know if a file pointer
-            is open for reading or writtin besides looking at how
-            it was created
-
-            workflow:
-
-            - child fills the buffer, then parent takes control
-            - child fills ...
-        */
-
-        /*
-        #BUFSIZ
-
-            a measure of the ideal maxinum ammount of that that
-            should should be written/read to a pipe at a time for good performance.
-
-            in practice you could read/write much more than that,
-            but BUFSIZ is a good value:
-
-            - fast
-            - not larger than the maximum
-
-            so in practice you will should just use this value as a maximum.
-
-            if you try to read write more than the max,
-            it just flushes all when the buffer gets filled
-
-            the larger the buffer the faster the transfer
-
-            the only guarantee is BUFSIZ >= 256
-
-            if you want to be very portable, you must design systems
-            whose messages need no more than 256 bytes at a time
-
-            with such a system, you could just pass many 256 chunks at once
-            if your large buffer allows (of course, it is likelly that each of
-            those 256 chunks will conatain its own header information)
-        */
-        {
-            printf( "BUFSIZ = %ju\n", (uintmax_t) BUFSIZ );
-            assert( BUFSIZ >= 256 );
-        }
-
-        /*
-        #popen
-
-            creates unnamed pipes
-
-            consider using ansi c `system` instead of this.
-
-            opens a new process running the given command.
-
-            given string runs inside `sh` in a separated process and therefore it is:
-
-            - slow
-            - does magic stuff like pathname expansion (`*.txt`)
-            - harder to port to non posix systems if one day you decide to do that
-
-            it seems from the posix docs that the interpreter `sh` cannot be changed.
-
-            Unlike the ANSI C `system` function,
-            does not automatically wait for the command to return: see `pclose` for that.
-
-            For that reason, `popen` is slightly more general than `system`,
-            as you can do more work in the current program begore getting the shell output.
-
-            This is not however extremelly useful since you usually need the shell output
-            to continue working anyways.
-
-            The output of peopen is put on an unnamed pipe, which is accessible via
-            ANSI C FILE type returned by the function, instead of posix file descriptor (integers)
-
-            Therefore you must use ANSI C file io functions like `fopen` or `fclose` with it,
-            instead of the more low level POSIX `open` or `write` family.
-
-        #pclose
-
-            waits for child generated process.
-
-            returns child exit status.
-
-            if child was already waited for, returns -1 to indicate an error.
-        */
-        {
-            //read from command and get exit status
-            {
-                //popen uses ANSI C fread which uses ANSI C FILE type:
-                FILE* read_fp;
-                char buffer[BUFSIZ + 1];
-                char cmd[1024];
-                int chars_read;
-                int exit_status;
-                int read_cycles = 0;
-                int desired_read_cycles = 3;
-                int desired_last_char_read = 1;
-                assert( desired_last_char_read < BUFSIZ );
-
-                sprintf(
-                    cmd,
-                    "for i in `seq %ju`; do echo -n a; done",
-                    (uintmax_t)(desired_read_cycles-1) * BUFSIZ + desired_last_char_read
-                );
-                read_fp = popen( cmd, "r" );
-                if ( read_fp != NULL )
-                {
-                    do
-                    {
-                        chars_read = fread( buffer, sizeof( char ), BUFSIZ, read_fp );
-                        buffer[chars_read] = '\0';
-                        printf( "======== n bytes read: %d\n", chars_read );
-                        //printf( "%s\n", buffer); //if you want to see a bunch of 'a's...
-                        read_cycles++;
-                    } while ( chars_read == BUFSIZ );
-                    exit_status = pclose( read_fp );
-                    assert( read_cycles == desired_read_cycles );
-                    assert( chars_read == desired_last_char_read );
-                    assert( exit_status == 0 );
-                }
-                else
-                {
-                    printf( "could not open pipe" );
-                    exit( EXIT_FAILURE );
-                }
-            }
-
-            //write to stdin of command
-            {
-                FILE* write_fp;
-                char buf[BUFSIZ];
-                int exit_status;
-
-                memset( buf, 'c', BUFSIZ );
-                write_fp = popen( "cat; echo", "w" );
-                    //w for write
-                    //simply copies to stdout and adds newline
-                if( write_fp != NULL )
-                {
-                    fwrite( buf, sizeof(char), BUFSIZ, write_fp );
-                    exit_status = pclose( write_fp );
-                    assert( exit_status == 0 );
-                }
-                else
-                {
-                    assert( false );
-                }
-            }
-        }
-
-        /*
-        #pipe
-
-            create unnamed pipes
-
-            very close to the linux pipe system call
-
-            differences from popen:
-
-            - does not use a shell, avoiding many of its problems
-
-            - uses integer file descriptors instead of ANSI C FILE type
-                therefore you manipulate pipes with file descriptor functions
-                like `open` and `write` instead of ANSI C `fopen` family.
-
-                This potentially gives you more control over the operations.
-
-            it may however be a bit harder to setup
-
-            typically used with fork + exec
-        */
-        {
-            {
-                int nbytes;
-                int pipes[2];
-                    //note the integers
-                    //for file descriptors
-                char data[] = "123";
-                char buf[BUFSIZ + 1];
-                if ( pipe(pipes) == 0 )
-                {
-                    nbytes = write( pipes[1], data, strlen(data) );
-                        //cannot use the c standard fwrite
-                        //dealing with posix specific file desciptors here
-                        //#write
-
-                            //system calls
-
-                            //returns the number of bytes written
-                            //it may be less than the desired if there is not
-                            //enough space on medium
-
-                            //if does not write enough TODO
-                            //guess you have to do another call
-                    assert( nbytes = strlen(data) );
-                    nbytes = read( pipes[0], buf, BUFSIZ);
-                    assert( nbytes = strlen(data) );
-                    buf[nbytes] = '\0';
-                    assert( strcmp( buf, data ) == 0 );
-                }
-                else
-                {
-                    assert(false);
-                }
-            }
-
-            /*
-            parent writes to child
-
-            this works because if ever read happens before, it blocks
-            */
-            {
-
-                int nbytes;
-                int file_pipes[2];
-                const char data[] = "123";
-                char buf[BUFSIZ + 1];
-                pid_t pid;
-                if ( pipe( file_pipes ) == 0 )
-                {
-                    fflush(stdout);
-                    pid = fork();
-                    if ( pid == -1 )
-                    {
-                        assert(false);
-                    }
-                    else if ( pid == 0 )
-                    {
-                        nbytes = read( file_pipes[0], buf, BUFSIZ );
-                        printf( "pipe child. data: %s\n", buf );
-                        exit(EXIT_SUCCESS);
-                    }
-                    else
-                    {
-                        nbytes = write( file_pipes[1], data, strlen(data) );
-                        assert( nbytes == strlen(data) );
-                        strlen(data);
-                    }
-                }
-                else
-                {
-                    assert(false);
-                }
-            }
-        }
-
-        /*
-        #FIFO
-
-            aka named pipes
-
-            appear on the filesystem
-
-            therefore can be accessed as by any process who sees it
-            and has enough priviledge level
-
-            are however faster than writting to files,
-            since everything happens on RAM
-
-            cannot open for rw
-
-            application: simple client/servers!
-
-            created with mkfifo
-
-        #mkfifo
-
-            used to create a FIFO
-        */
-        {
-                //TODO example
-        }
-    }
 
     /*
     #sched.h

@@ -1222,38 +1222,6 @@
         # -d : dupe lines only
         # -c : counts how many dupes
 
-    ##read
-
-        #-p print message
-
-            read -p "enter string: " s
-            echo "you entered $s"
-
-        #read from file descriptor linewise and assign to variable
-
-            ##applications
-
-                #read file linewise:
-
-                    while read l; do
-                        echo "$l";
-                    done < "$f"
-
-                #read stdout linewise:
-
-                    while read l; do
-                        echo "$l"
-                    done < <( echo -e "a\nb\na b" )
-
-                #split into fields:
-
-                    IFS_OLD="$IFS"
-                    while IFS=' : ' read f1 f2
-                    do
-                        echo "$f1 $f2"
-                    done < <( echo -e "a : b\nc : d" )
-                    IFS="$IFS_OLD"
-
     ##tee
 
         #POSIX 7
@@ -1490,7 +1458,7 @@
 
         #expand tabs to spaces
 
-        echo -e "a\tb" | expand
+            echo -e "a\tb" | expand
 
         ##unexpand
 

@@ -88,24 +88,34 @@ very small, contains:
 
 ##envinronment variables
 
-posix defines some standard enviroment variables which every system should have
+In POSIX 7, those are defined in: Base Definitions > Enviroment Variables.
 
-in posix 7, those are defined in: Base Definitions > Enviroment Variables
+POSIX specifies:
 
-sample variables
+- a few envioment variables and their functions
+
+- many enviromnt variables which it is *unwise* (quote) to override because
+    they are frequently used in implementations, but does not specify their exact function.
+
+###fixed functions
+
+The following variables have fixed purposes in POSIX 7:
 
 - `PATH`
 - `HOME`
 - `PWD`
 - `TMPDIR`
 - `COLUMNS` and `LINES`: current width of terminal
-
-default program variables:
-
 - `SHELL`: this is *not* the current shell! it conatains the path of the defualt shell
 - `TERM`: analogous to shell
-- `EDITOR`
-- `PAGER`
+
+###use with caution
+
+The following variables don't have fixed purposes, but POSIX says that they must be used with caution:
+
+- `EDITOR`: default text editor
+- `PAGER`: default pager program ( `more`, `less`, etc. )
+- `PPID`: PID of parent process
 
 ##regexp
 
