@@ -218,7 +218,7 @@ int main( int argc, char** argv )
     /*
     #printf
 
-        This discusses `printf` and `sprintf` extensions.
+        This discusses `printf` and `sprintf` POSIX extensions to ANSI.
     */
     {
         /*
@@ -273,7 +273,7 @@ int main( int argc, char** argv )
         - %m: errno message string
     */
     {
-        //TODO this breaks my poor program, why?
+        //TODO0 this breaks my poor program, why? needs root?
 
             //syslog( LOG_ERR | LOG_USER, "syslog test: %m\n");
     }
@@ -389,16 +389,36 @@ int main( int argc, char** argv )
     }
 
     /*
-    #open vs fopen
+    #file descriptors vs FILE pointers
 
-        open, close, write, file operations can do operations more specific
-        than the corresponding ANSI C `fopen`, `fclose`, etc functions
+        ANSI C supports only the concept of file pointers via the `FILE` macro.
 
-        They are also needed in POSIX contexts in which one must deal directly with file descriptors,
-        such as pipes.
+        POSIX extends ANSI C and contains both function that manipulate ANSI C `FILE` objects
+        and file descriptors, which are integers that identify a file descriptor for the OS.
+
+        Operations that use file desriptors:
+
+        - open, close, write
+
+        Operations that use FILE pointers:
+
+        - ANSI C `fopen`, `fclose`, `ftell`, etc. functions
+
+        Since they are specific to POSIX, functions that use file pointers often give more options
+        than ANSI C functions that use `FILE*` objects.
 
         If you don't need that greater level of control,
-        just use the ANSI functions for greater portability.
+        just use the ANSI C functions for greater portability.
+
+        It is possible to convert freely from `FILE*`
+
+    #fdopen
+
+        Convert file descriptor to `FILE*`.
+
+    #fileno
+
+        Convert `FILE*` to file descriptor.
 
     #open
 
@@ -453,6 +473,12 @@ int main( int argc, char** argv )
     #lseek
 
         TODO0 confirm like fseek for bare file descriptors with plus control?
+
+    #fcntl
+
+        Manipulate a file descriptor.
+
+        Check if it is open: <http://stackoverflow.com/questions/12340695/how-to-check-if-a-given-file-descriptor-stored-in-a-variable-is-still-valid>
     */
     {
         int fd;
@@ -490,6 +516,27 @@ int main( int argc, char** argv )
         else
         {
             assert( false );
+        }
+
+        /*
+        File descriptors open by default to all processes.
+
+        #STDIN_FILENO
+
+            stdin
+
+        #STDOUT_FILENO
+
+            stdout
+
+        #STDERR_FILENO
+
+            stderr
+        */
+        {
+            printf( "STDIN_FILENO  = %d\n", STDIN_FILENO );
+            printf( "STDOUT_FILENO = %d\n", STDOUT_FILENO );
+            printf( "STDERR_FILENO = %d\n", STDERR_FILENO );
         }
     }
 
@@ -1111,10 +1158,14 @@ int main( int argc, char** argv )
         /*
         #sysconf
 
-            get lots of info on the system configuration
+            Get lots of info on the system configuration
 
-            meanings for the constants can be found under
+            Meanings for the constants can be found under
             the `limits.h` and `unistd.h` corresponding variables
+
+            If the value can be negative, it is necessary to check errno changes for error.
+
+            It seems
 
         #maximum path length
 
@@ -1654,27 +1705,81 @@ int main( int argc, char** argv )
     /*
     #pipe
 
-        pipes can be either unnamed (more common) or nammed
+        Must read man page:
+
+            man 7 pipe
+
+        Unidirectional data transfer from the write side to the read side.
+
+        The write side in on one process (producer)
+        and the read side on another one (consumer).
+
+        The consumer and producer can be the same process, but in that case pipes are useless.
+
+        There are two types of pipes:
+
+        - unnamed pipes
+        - FIFOs
+
+        Both pipe sides are represented by either a file descriptor int or by a `FILE*`,
+        and many operations on them are the same as operation on disk files using
+        functions such as `write` and `read`.
+
+        #pipes are RAM only
+
+            Pipes are meant to be implementable on RAM only without using the filesystem.
+
+            This means that reading and writing to pipes is potentially much faster
+            than reading and writing to files.
+
+            The price to pay is that some operations
+            such as `ftell` and `fseek` are not possible.
+            There are also fcntl flags which cannot be applied to pipes.
+
+        #forbidden pipe operations
+
+            Since pipes are meant to be implemented on RAM only, pipes cannot be rewinded.
+
+            For example, using `ftell` on a pipe generate `errno=ESPIPE`.
+
+            Therefore, once the data has been read from the read side it can be discareded by the OS,
+            preventing all its RAM from being used up easily.
+
+            It seems that the only way to ask for forgiveness rather than permission and just do a `ftell`.
+            <http://stackoverflow.com/questions/3238788/how-to-determine-if-a-file-descriptor-is-seekable>
+
+        #advantages over using files
+
+            Potentially faster because possible to be RAM only.
+
+            If the read happens before the write it blocks untill the write is done.
+            This lets the OS manage all the synchronization.
+
+        #pipe capacity
+
+            There is a maximum data ammount that can be writen to a pipe.
+
+            If a process tries to write more data than the maximum to the pipe, it blocks until
+            part of the data is read.
+
+            This is a good source of deadlocks!
+
+            It seems that it is not possible to get the maximum pipe capacity:
+            <http://pubs.opengroup.org/onlinepubs/009695399/functions/write.html#tag_03_866>.
     */
     {
         /*
         #unnamed pipe
 
-            unidirectional child ----> parent transfer
+            Can be created either via `popen` or `pipe`
 
-            can be created either via `popen` or `pipe`
+            A single process must start two children process:
+            the data source and the data consumer and connect them
 
-            single process must start two children process: data source and the data consumer
-            and connect them
-
-            advantages over files:
+            Advantages over named pipes:
 
             - simple: no need to agree on a filename to communicate over
-            - fast: no need to modify the filesystem or worse: do disk io!
             - secure: other process cannot se the data as they could in a file
-
-            data very limited per buffer! BUFSIZ ~= 1000-10000 today,
-            and the only guarantee is being at least 256 bytes wide.
 
             i think it is not possible to know if a file pointer
             is open for reading or writtin besides looking at how
@@ -1687,40 +1792,9 @@ int main( int argc, char** argv )
         */
 
         /*
-        #BUFSIZ
-
-            a measure of the ideal maxinum ammount of that that
-            should should be written/read to a pipe at a time for good performance.
-
-            in practice you could read/write much more than that,
-            but BUFSIZ is a good value:
-
-            - fast
-            - not larger than the maximum
-
-            so in practice you will should just use this value as a maximum.
-
-            if you try to read write more than the max,
-            it just flushes all when the buffer gets filled
-
-            the larger the buffer the faster the transfer
-
-            the only guarantee is BUFSIZ >= 256
-
-            if you want to be very portable, you must design systems
-            whose messages need no more than 256 bytes at a time
-
-            with such a system, you could just pass many 256 chunks at once
-            if your large buffer allows (of course, it is likelly that each of
-            those 256 chunks will conatain its own header information)
-        */
-        {
-            printf( "BUFSIZ = %ju\n", (uintmax_t) BUFSIZ );
-            assert( BUFSIZ >= 256 );
-        }
-
-        /*
         #popen
+
+                man popen
 
             Creates unnamed pipes.
 
@@ -1757,6 +1831,8 @@ int main( int argc, char** argv )
             Therefore you must use ANSI C file io functions like `fopen` or `fclose` with it,
             instead of the more low level POSIX `open` or `write` family.
 
+            errno may or not be set depending on what caused the error.
+
         #pclose
 
             waits for child generated process.
@@ -1764,6 +1840,8 @@ int main( int argc, char** argv )
             returns child exit status.
 
             if child was already waited for, returns -1 to indicate an error.
+
+            errno may or not be set depending on what caused the error.
         */
         {
             //read from stdout of command and get its exit status
@@ -1785,7 +1863,12 @@ int main( int argc, char** argv )
                     (uintmax_t)(desired_read_cycles-1) * BUFSIZ + desired_last_char_read
                 );
                 read_fp = popen( cmd, "r" );
-                if ( read_fp != NULL )
+                if ( read_fp == NULL )
+                {
+                    printf( "popen failed\n" );
+                    exit( EXIT_FAILURE );
+                }
+                else
                 {
                     do
                     {
@@ -1795,15 +1878,17 @@ int main( int argc, char** argv )
                         //printf( "%s\n", buffer); //if you want to see a bunch of 'a's...
                         read_cycles++;
                     } while ( chars_read == BUFSIZ );
+
                     exit_status = pclose( read_fp );
+                    if ( exit_status == -1 )
+                    {
+                        printf( "pclose failed\n" );
+                        exit( EXIT_FAILURE );
+                    }
+
                     assert( read_cycles == desired_read_cycles );
                     assert( chars_read == desired_last_char_read );
                     assert( exit_status == 0 );
-                }
-                else
-                {
-                    printf( "could not open pipe" );
-                    exit( EXIT_FAILURE );
                 }
             }
 
@@ -1814,11 +1899,16 @@ int main( int argc, char** argv )
                 int exit_status;
 
                 memset( buf, 'b', BUFSIZ );
-                //conuts how many charaters were given to stdin
-                //shows clearly how this is run inside a sh instance
-                //because of the many sh features used
+
+                //counts how many charaters were given to stdin
+                //using many sh features to make it clear that a sh interpreter is called
                 write_fp = popen( "read A; printf 'popen write = '; printf $A | wc -c", "w" );
-                if ( write_fp != NULL )
+
+                if ( write_fp == NULL )
+                {
+                    assert( false );
+                }
+                else
                 {
                     //TODO0 is safe to write twice BUFSIZ without a newline in the middle?
                     fwrite( buf, sizeof( char ), BUFSIZ, write_fp );
@@ -1828,10 +1918,6 @@ int main( int argc, char** argv )
                     //command waits until pipe close
                     exit_status = pclose( write_fp );
                     assert( exit_status == 0 );
-                }
-                else
-                {
-                    assert( false );
                 }
             }
         }
@@ -1843,12 +1929,14 @@ int main( int argc, char** argv )
 
             Very close to the linux pipe system call.
 
-            differences from popen:
+            Differences from popen:
 
             - does not use a shell, avoiding many of its problems
 
-            - uses integer file descriptors instead of ANSI C FILE type
-                therefore you manipulate pipes with file descriptor functions
+            - uses two integer file descriptors, one for each end of the pipe,
+                instead of ANSI C `FILE` typedef.
+
+                Therefore you manipulate pipes with file descriptor functions
                 like `open` and `write` instead of ANSI C `fopen` family.
 
             This potentially gives you more control over the operations.
@@ -1861,73 +1949,74 @@ int main( int argc, char** argv )
             {
                 int nbytes;
                 int pipes[2];
-                    //note the integers
-                    //for file descriptors
                 char data[] = "123";
                 char buf[BUFSIZ + 1];
-                if ( pipe(pipes) == 0 )
+
+                if ( pipe( pipes ) == -1 )
                 {
-                    nbytes = write( pipes[1], data, strlen(data) );
-                        //cannot use the c standard fwrite
-                        //dealing with posix specific file desciptors here
-                        //#write
-
-                            //system calls
-
-                            //returns the number of bytes written
-                            //it may be less than the desired if there is not
-                            //enough space on medium
-
-                            //if does not write enough TODO
-                            //guess you have to do another call
-                    assert( nbytes = strlen(data) );
-                    nbytes = read( pipes[0], buf, BUFSIZ);
-                    assert( nbytes = strlen(data) );
-                    buf[nbytes] = '\0';
-                    assert( strcmp( buf, data ) == 0 );
+                    perror( "pipe" );
+                    exit( EXIT_FAILURE );
                 }
                 else
                 {
-                    assert(false);
+                    nbytes = write( pipes[1], data, strlen(data) );
+                    assert( nbytes == strlen(data) );
+                    nbytes = read( pipes[0], buf, BUFSIZ);
+                    assert( nbytes == strlen(data) );
+                    buf[nbytes] = '\0';
+                    assert( strcmp( buf, data ) == 0 );
                 }
             }
 
             /*
-            parent writes to child
+            Parent writes to child.
 
-            this works because if ever read happens before, it blocks
+            This works because if ever read happens before, it blocks.
             */
             {
-
                 int nbytes;
                 int file_pipes[2];
                 const char data[] = "123";
                 char buf[BUFSIZ + 1];
                 pid_t pid;
-                if ( pipe( file_pipes ) == 0 )
+
+                if ( pipe( file_pipes ) == -1 )
+                {
+                    perror( "pipe" );
+                    exit( EXIT_FAILURE );
+                }
+                else
                 {
                     fflush(stdout);
                     pid = fork();
                     if ( pid == -1 )
                     {
-                        assert(false);
-                    }
-                    else if ( pid == 0 )
-                    {
-                        nbytes = read( file_pipes[0], buf, BUFSIZ );
-                        printf( "pipe child. data: %s\n", buf );
-                        exit(EXIT_SUCCESS);
+                        perror( "fork" );
+                        exit( EXIT_FAILURE );
                     }
                     else
                     {
+                        if ( pid == 0 )
+                        {
+                            //child only
+
+                            //if read happens before write, it blocks
+                            nbytes = read( file_pipes[0], buf, BUFSIZ );
+
+                            printf( "pipe child. data: %s\n", buf );
+                            exit(EXIT_SUCCESS);
+                        }
+
+                        //parent only
                         nbytes = write( file_pipes[1], data, strlen(data) );
                         assert( nbytes == strlen(data) );
-                        strlen(data);
+
+                        int status;
+                        wait( &status );
+
+                        //parent only after child
+                        assert( status == EXIT_SUCCESS );
                     }
-                }
-                else
-                {
-                    assert(false);
                 }
             }
         }
@@ -1957,6 +2046,60 @@ int main( int argc, char** argv )
         */
         {
                 //TODO example
+        }
+
+        /*
+        #PIPE_BUF
+
+            Maximum size that guarantees that a pipe write operation will be atomic.
+
+            PIPE_BUF is guaranteed to be at least 512.
+
+            See `man 7 pipe` for an explanation.
+
+            Quoting POSIX 7:
+
+                If path refers to a FIFO, or fildes refers to a pipe or FIFO,
+                the value returned shall apply to the referenced object.
+
+                If path or fildes refers to a directory, the value returned shall apply to any FIFO that exists
+                or can be created within the directory.
+
+                If path or fildes refers to any other type of file,
+                it is unspecified whether an implementation supports an association of the variable name with the specified file.
+
+            Conclusions:
+
+            - the PIPE_BUF of an unnamed pipe can only be determined after it is created via `fpathconf`.
+            - the PIPE_BUF of FIFOs is the same for all fifos on given directory.
+
+                It can be retreived with `pathconf`.
+        */
+        {
+            long pipe_buf;
+            int pipes[2];
+
+            //unnamed pipe
+            if ( pipe( pipes ) == -1 )
+            {
+                perror( "pipe" );
+                exit( EXIT_FAILURE );
+            }
+            else
+            {
+                pipe_buf = fpathconf( pipes[0], _PC_PIPE_BUF );
+                printf( "PIPE_BUF pipes[0] = %ld\n", pipe_buf );
+                assert( pipe_buf >= 512 );
+
+                pipe_buf = fpathconf( pipes[1], _PC_PIPE_BUF );
+                printf( "PIPE_BUF pipes[1] = %ld\n", pipe_buf );
+                assert( pipe_buf >= 512 );
+            }
+
+            //directory
+            pipe_buf = pathconf( ".", _PC_PIPE_BUF );
+            printf( "PIPE_BUF \".\" = %ld\n", pipe_buf );
+            assert( pipe_buf >= 512 );
         }
     }
 
@@ -2031,16 +2174,11 @@ int main( int argc, char** argv )
                         exit( EXIT_SUCCESS );
                     }
 
-                    //parent after child
                     int status;
                     wait( &status );
+                    //parent after child
                     assert( status == EXIT_SUCCESS );
-
-                    //TODO why this mail fail with shmem == 1?
-                    //how can the child not have finished yet after the wait?
-
-                        //printf( "shmem 0 = %d", shmem[0] );
-                        //assert( shmem[0] == 2 );
+                    assert( shmem[0] == 2 );
 
                     /*
                     #shmdt
