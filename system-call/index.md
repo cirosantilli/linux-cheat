@@ -144,18 +144,51 @@ TODO where are the descriptions of what a system call does in official docs (in 
 
 TODO how to get a list of syscalls available on all architectures without grepping/processing kernel code?
 
+##posix
+
+Linux is highly POSIX compatible, which means that many of its system calls exist to
+implement POSIX C library functions.
+
+Often those functions have very similar names and arguments, and the POSIX descriptions are really good,
+which makes this a good way to learn what syscalls do.
+
+POSIX is portable so in learning it you also learn an interface which works on many other systems.
+
+POSIX functions are more basic than those which are not in POSIX but on the Linux API,
+so it is a good idea to start with them.
+
 ##man pages
 
 TODO is the `man-pages` project official?
 
-The man pages project documents the syscalls that are available on most archs
-on their C interface.
+The man pages project documents portable glibc C interfaces to system calls.
 
-Unfortunatelly they seem to describe an undiscernable mixture of POSIX APIs
-and actual system calls. For example, `man 2 reboot` describes reboot which not a POSIX API
-and therefore must be a system call, but `man 2 getpriority` says that it can return
-negative values, which is not the case for the actual system call, which returns positive
-values on the range 0 .. 39.
+This inclues many POSIX C library functions, plus LInux extensions
+which glibc makes available via feature test macros such as `_BSD_SOURCE` which must be defined
+before the headers are included.
+
+For example, to enable the BSD extensions, one would need to do:
+
+    #define _BSD_SOURCE
+    #include <unistd.h>
+
+but the contrary would not work:
+
+    #include <unistd.h>
+    #define _BSD_SOURCE
+
+Remember that all extensions can be enabled at once via:
+
+    _GNU_SOURCE
+
+and that all feature test macros are defined under:
+
+    man feature_test_macros
+
+While not bare system calls, most of those wrappers have the same names and interfaces as the actual system calls,
+and do very little processing of their own.
+
+Also almost all portable system calls have a glibc wrapper.
 
 The entire section 2 of `man` is about system calls. You should check:
 

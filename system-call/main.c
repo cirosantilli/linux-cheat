@@ -1,8 +1,14 @@
-/*How to make a system call from c,
+/*
+How to make a system call from c,
 and main cheat on system calls that can be exemplified.
 
 System calls that have very similar POSIX wrappers such as `getpid`
 shall only be mentioned but not explained in detail.
+
+System calls that have glibc interfaces very similar to bare syscalls
+shall be documented using the more convenient glibc interface.
+
+Other calls can be documented with `system`.
 
 #syscall
 
@@ -81,10 +87,12 @@ Cannot have strict ansi ( implied by `-std=c99` or `-ansi`. See: `features.h`.
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <fcntl.h>
 #include <unistd.h>             /* syscall */
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <sys/syscall.h>        /* __NR_XXX, SYS_XXX*/
+#include <sys/wait.h>       //wait, sleep
 /* #include <asm/unistd.h>      // __NR_XXX. Already included by `sys/syscall.h` */
 /* #include <sys/types.h>       // for SYS_<name> */
 
@@ -285,6 +293,63 @@ int main( int argc, char** argv )
 
     /*
     #mmap
+    */
+    {
+    }
+
+    /*
+    #stime
+
+        Set time retreived by time system call.
+    */
+
+    /*
+    #acct
+
+        Write acconting information on process that start and end to given file.
+
+        Given file must exist.
+
+        Must be sudo to do it.
+
+        Description of output under:
+
+            man 5 acct
+    */
+    {
+        char *fname = "acct.tmp";
+
+        if ( creat( fname, S_IRWXU ) == -1 )
+        {
+            perror( "creat" );
+        }
+
+        if ( acct( fname ) == -1 )
+        {
+            perror( "acct" );
+        }
+        else
+        {
+            sleep( 1 );
+        }
+    }
+
+    /*
+    #uselib
+
+        Load dynamic library.
+
+        So there is (unsurprisingly) a syscall for this.
+    */
+    {
+    }
+
+    /*
+    #swapon
+
+        Manage in shich devices swap memory can exist.
+
+    #swapoff
     */
     {
     }

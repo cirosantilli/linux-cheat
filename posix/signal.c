@@ -177,5 +177,11 @@ int main()
         sleep( 2 );
     }
 
+    /*
+    #pause
+
+        Stop program until it receives a signal.
+    */
+
     return EXIT_SUCCESS;
 }

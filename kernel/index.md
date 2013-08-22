@@ -15,6 +15,10 @@ All code samples were tested on kernel 3.10.
 
 #sources
 
+Consider reading books on general operating system concepts,
+as those tend to explain better concepts which are used on Linux
+as well as other OS.
+
 Linux documentation kind of sucks.
 
 Most function definitions or declarations don't contain any comments,
@@ -32,9 +36,9 @@ Maybe there is a good reason for that.
 
     The source code, *the* only definitive source.
 
-    Nany important comment lacking however.
+    The builtin docs are not very good though.
 
-- `make htmldoc`
+- `make htmldoc` on the source.
 
     Generates documentation for the kernel from comments, and puts it under `Documentation/DocBook/index.html`
 
@@ -45,13 +49,19 @@ Maybe there is a good reason for that.
     Weirdly the snapshots of htmldoc on kernel.org have some extra functions, check it out:
     <https://www.kernel.org/doc/htmldocs/kernel-api.html>
 
-- <https://www.kernel.org/doc/>
+[kernel-org]: https://www.kernel.org/doc/
+
+- [kernel-org][]
 
     kernel.org resources list
 
-- <http://kernelnewbies.org/>
+[kernelnewbies]: http://kernelnewbies.org/
 
-- <http://vger.kernel.org/vger-lists.html>
+- [kernelnewbies][]
+
+[kernel-mail]: http://vger.kernel.org/vger-lists.html
+
+- [kernel-mail][]
 
     Kernel mailing lists.
 
@@ -59,23 +69,37 @@ Maybe there is a good reason for that.
 
 ##payed sources
 
-- <http://www.amazon.com/books/dp/0596005652>
+###books on general operating systems
 
-    Bovet - 2005 - Understanding the Linux Kernel.
+[stallings11]: http://www.amazon.com/Operating-Systems-Internals-Principles-Edition/dp/013230998X
 
-    Goes into lots of inner working concepts.
+- [stallings11][]
 
-    Could have more examples of using the kernel API.
+###books on the linux kernel
 
-- <http://www.amazon.com/books/dp/0596005652>
+[corbet05]: http://www.amazon.com/books/dp/0596005903
+
+- [corbet05][]
+
+    Shows lots of kernel to kernel interfaces, but not the internals.
+
+    Tons of examples.
+
+    Good first linux book read.
+
+[bovet05]: http://www.amazon.com/books/dp/0596005652
+
+- [bovet05][]
+
+    Inner workings.
+
+    Reasonable info on x86 hardware.
+
+[love06]: http://www.amazon.com/books/dp/0596005652
+
+- [love06][]
 
     Love - 2006 - Linux kernel devlopement.
-
-    Great intro on the hardware.
-
-- <http://www.amazon.com/books/dp/0596005903>
-
-    Corbet - 200
 
 #source tree
 
@@ -559,46 +583,79 @@ Print the system log:
 
 <http://www.web-manual.net/linux-3/the-kernel-ring-buffer-and-dmesg/>
 
-#page
+#process virtual address space
 
-First learn about hardware paging in a common architecture such as x86 family.
-This will be not explained here.
+How the kernel fits multiple processes, kernel and user, into a single RAM.
 
-Pages are modeled by `struct page` under `mm_types.h`.
+##sources
 
-Hardware deals in terms of pages to:
-
-- make retrival faster, since the bus clock is much slower than the cpu clock
-    and because of memory locality.
-
-- serve as a standard unit for page swap betweem RAM and HD
-
-##page flags
-
-Defined in `page-flags.h`.
-
-##page frame
-
-A page frame refers to the smalles physical memory that the processor can ask
-from the RAM.
-
-Paging usually has hardware support today.
-
-##linking pages to page frames
-
-it would be too expensive to keep a link from every virtual memory:
-
-    4 GiB / 4 KiB = 1 M structures per processes
-
-the solution is then to only keep links between used pages and frames
-
-this is done in a multilevel scheme
-
-#process address space
-
-Sources:
+Free:
 
 - good beginner's tutorial: <http://duartes.org/gustavo/blog/post/anatomy-of-a-program-in-memory>
+
+- good tutorial: <http://www.bottomupcs.com/virtual_address_and_page_tables.html>
+
+[rutgers-memory]: http://www.cs.rutgers.edu/~pxk/416/notes/09-memory.html
+
+- [Rutgers lecture notes on Memory Management][rutgers-memory]
+
+    Good info on the historical development of virtual adress space techniques.
+
+Non-free:
+
+- bovet - 2005 - Understanding the Linux Kernel. Chapter "Memory Adressing".
+
+    Good info on the x86 memory hardware.
+
+##goals of a virtual memory space
+
+- allow multiple programs to share a single RAM, while having the
+    the convenient illusion that their memory is contiguous.
+
+    It would be hard to do this without paging because the memory size of programs
+    changes with time and is not predictable.
+
+- protection: control which addresses process can or cannot use.
+
+    For example, processes cannot accesses pages of another process, specially the kernel itself!
+
+    If a page cannot be found in the page table of a process
+    then the processes does not have the right to access it.
+
+- swap to disk: allow for programs to use more RAM than is available.
+
+    It suffices to store a flag indicating if memory is on main memory or on disk,
+    and if it is on disk then the address indicates the disk address of the page.
+
+- fast process switch.
+
+    Switching the entire processes in memory comes down to
+    a single operation of changing the page table in use.
+
+##ancient approaches
+
+In order to understand why virtual memory via paging is good,
+it is a good idea to see older solutions to the problem and why they were not good enough.
+
+[This tutorial][rutgers-memory] is a good source of such information.
+
+##hardware support
+
+RAM memory access is one of the most common operations doen by a program.
+
+Therefore if any control is to be done at every single memory operation,
+it must be *very* fast. This is why most architectures have some hardware support
+for those control operations.
+
+It is then necessary to first understand how those hardware cirquits work.
+Architecture specifics shall not be discussed here: look for specific
+info on each Architecture.
+
+A good place to start is with x86 paging circuitry.
+
+As usual, Linux adopts a single unified model that covers several architectures.
+
+#virtual memory space for a single process
 
 The process memory space is divided as follows:
 
@@ -725,3 +782,38 @@ Directly copied from the executable file.
 Code to be executed + certain char strings.
 
 Is directly copied from the executable file.
+
+#page
+
+First learn about hardware paging in a common architecture such as x86 family.
+This will be not explained here.
+
+Pages are modeled by `struct page` under `mm_types.h`.
+
+Hardware deals in terms of pages to:
+
+- make retrival faster, since the bus clock is much slower than the cpu clock
+    and because of memory locality.
+
+- serve as a standard unit for page swap betweem RAM and HD
+
+##page flags
+
+Defined in `page-flags.h`.
+
+##page frame
+
+A page frame refers to the smalles physical memory that the processor can ask
+from the RAM.
+
+Paging usually has hardware support today.
+
+##multilevel scheme
+
+it would be too expensive to keep a link from every virtual memory:
+
+    4 GiB / 4 KiB = 1 M structures per processes
+
+the solution is then to only keep links between used pages and frames
+
+this is done in a multilevel scheme

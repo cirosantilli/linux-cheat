@@ -875,7 +875,7 @@ static int __init init(void)
 
 	#task_struct
 
-		represents processes (called taks on the kern), found in `sched.h`
+		Represents processes (called taks on the kern), found in `sched.h`
 
 		#tgid
 
@@ -1061,48 +1061,6 @@ static int __init init(void)
 			printk(KERN_DEBUG "basename dirname pwd = %s\n", 	current->fs->pwd.dentry->d_parent->d_name.name);
 			printk(KERN_DEBUG "basename root = %s\n", 		current->fs->root.dentry->d_name.name);
 			printk(KERN_DEBUG "basename dirname root = %s\n", 	current->fs->root.dentry->d_parent->d_name.name);
-		}
-
-		/*
-		#mm_struct
-
-			Describes the process adress space.
-
-			TODO mm vs active_mm
-
-			- struct rb_root mm_rb: root of the rb tree that orders memory
-
-			- unsigned long
-				start_code, end_code,
-				start_data, end_data,
-				start_brk, brk (end),
-				start_stack, (TODO no end)
-				arg_start, arg_end,
-				env_start, env_end:
-
-				start and end of all given memory zones.
-
-				The only cryptic one is brk which is the heap (malloc).
-
-			- unsigned long total_vm: number of pages in process address space
-
-			- unsigned long locked_vm: pages that cannot be swapped out
-		*/
-		{
-			printk(KERN_DEBUG "mm_struct\n");
-			printk(KERN_DEBUG "  start_code = %lx\n", current->mm->start_code);
-			printk(KERN_DEBUG "  end_code   = %lx\n", current->mm->end_code);
-			printk(KERN_DEBUG "  start_data = %lx\n", current->mm->start_data);
-			printk(KERN_DEBUG "  end_data   = %lx\n", current->mm->end_data);
-			printk(KERN_DEBUG "  start_brk  = %lx\n", current->mm->start_brk);
-			printk(KERN_DEBUG "  brk        = %lx\n", current->mm->brk);
-			printk(KERN_DEBUG "  arg_start  = %lx\n", current->mm->arg_start);
-			printk(KERN_DEBUG "  arg_end    = %lx\n", current->mm->arg_end);
-			printk(KERN_DEBUG "  env_start  = %lx\n", current->mm->env_start);
-			printk(KERN_DEBUG "  env_end    = %lx\n", current->mm->env_end);
-
-			printk(KERN_DEBUG "  total_vm   = %lu\n", current->mm->total_vm);
-			printk(KERN_DEBUG "  locked_vm  = %lu\n", current->mm->locked_vm);
 		}
 	}
 
@@ -1684,10 +1642,15 @@ static int __init init(void)
 		if ( atomic_read(&i_global_atomic) != n_threads ) return -1;
 	}
 
+	//#process address space
 	{
 		printk(KERN_DEBUG "TASK_SIZE (GiB) = %lu\n", TASK_SIZE / (1 << 30));
 
-		//Kernel virtual memory must be above `TASK_SIZE`:
+		/*
+		kernel virtual memory must be above `TASK_SIZE`:
+
+		compare to the addresses of user space program variables to check this (3Gb = `0xc0000000`)
+		*/
 		{
 			//i is in the kernel since this is a kernel module
 			int i;
@@ -1695,8 +1658,52 @@ static int __init init(void)
 			printk( KERN_DEBUG "(void*)&i = %p\n", (void*)&i );
 		}
 
-		//User virtual memory will always be below TASK_SIZE.
-		//Print addresses of user space program variables to check this (3Gb = `0xc0000000`)
+		/*
+		#mm_struct
+
+			Describes the process adress space.
+
+			Notably contained inside `task_struct` to represent process address space.
+
+			Most fields are meaningless for kernel processes and make sense only for user processes.
+
+			TODO mm vs active_mm
+
+			- struct rb_root mm_rb: root of the rb tree that orders memory
+
+			- unsigned long
+
+				- start_code, end_code,
+				- start_data, end_data,
+				- start_brk, brk (end),
+				- start_stack, (TODO no end)
+				- arg_start, arg_end,
+				- env_start, env_end:
+
+				start and end of all given memory zones.
+
+				The only cryptic one is brk which is the heap (malloc).
+
+			- unsigned long total_vm: number of pages in process address space
+
+			- unsigned long locked_vm: pages that cannot be swapped out
+		*/
+		{
+			printk(KERN_DEBUG "mm_struct\n");
+			printk(KERN_DEBUG "  start_code = %lx\n", current->mm->start_code);
+			printk(KERN_DEBUG "  end_code   = %lx\n", current->mm->end_code);
+			printk(KERN_DEBUG "  start_data = %lx\n", current->mm->start_data);
+			printk(KERN_DEBUG "  end_data   = %lx\n", current->mm->end_data);
+			printk(KERN_DEBUG "  start_brk  = %lx\n", current->mm->start_brk);
+			printk(KERN_DEBUG "  brk        = %lx\n", current->mm->brk);
+			printk(KERN_DEBUG "  arg_start  = %lx\n", current->mm->arg_start);
+			printk(KERN_DEBUG "  arg_end    = %lx\n", current->mm->arg_end);
+			printk(KERN_DEBUG "  env_start  = %lx\n", current->mm->env_start);
+			printk(KERN_DEBUG "  env_end    = %lx\n", current->mm->env_end);
+
+			printk(KERN_DEBUG "  total_vm   = %lu\n", current->mm->total_vm);
+			printk(KERN_DEBUG "  locked_vm  = %lu\n", current->mm->locked_vm);
+		}
 	}
 
 	/*

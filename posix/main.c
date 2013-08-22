@@ -63,8 +63,9 @@ main cheat on the POSIX C API
 #include <arpa/inet.h>
 #include <dirent.h>
 #include <errno.h>
-#include <fcntl.h>          //file control options. O_CREAT,
+#include <fcntl.h>          //creat, O_CREAT
 #include <libgen.h>
+#include <monetary.h>       //strfmon
 #include <netdb.h>          //gethostbyname
 #include <netinet/in.h>
 #include <pthread.h>
@@ -109,6 +110,13 @@ extern char **environ;
 int main( int argc, char** argv )
 {
     /*
+    #Namespace
+
+        POSIX adds many further per header reserved names which it would be wise to follow even on ANSI C:
+        <http://pubs.opengroup.org/onlinepubs/9699919799/functions/V2_chap02.html> section "The Name Space".
+    */
+
+    /*
     #errors
 
         Typical error dealing conventions POSIX are:
@@ -127,12 +135,12 @@ int main( int argc, char** argv )
 
     #errno.h
 
-        Is defined by ANSI, but more predefined error constants are added extended in POSIX,
+        Is defined by ANSI C, but more predefined error constants are added extended in POSIX,
 
-        In POSIX, each error has a standard associated error message
-        which can be retreived and printed with functions such as `perror`.
+        Only differences from ANSI C shall be commented here. Note that errno,
+        perror and strerror for example are all in ANSI C.
 
-        Some of the POSIX specific errors and their error messages are: TODO check that those are not in ansi c
+        Some of the POSIX specific errors and their error messages are:
 
         - EPERM: Operation not permitted
 
@@ -160,7 +168,11 @@ int main( int argc, char** argv )
         #errno
 
             errno can be modified by functions to contain a description of certain
-            standard errors. TODO check: can user functions also modify errno?
+            standard errors.
+
+            errno is a lvalue and users can explicitly modify it.
+            This is necessary in certain error checking situations, when the error can only be decided
+            by changes in errno and not by the return value.
 
             0 indicates no error (ANSI C)
 
@@ -182,36 +194,6 @@ int main( int argc, char** argv )
             mkdir( dirname, 0777 );
             rmdir( dirname );
             assert( errno != 0 );
-        }
-
-        /*
-        #perror
-
-            print description of errno to stderr with given prefix appended, `NULL` for no prefix.
-
-            *base* basic way to print error messages after error on a posix function
-        */
-        {
-            perror( "perror" );
-
-            //assure tmpdir does not exist
-            struct stat s;
-            if( stat( "tmpdir", &s ) == 0 )
-                assert( rmdir( "tmpdir" ) != -1 );
-
-            assert( unlink( "idontexist" ) == -1 );
-            perror( "perror" );
-        }
-
-        /*
-        #strerror
-
-            returns a readonly pointer to the description of the error with the given number:
-
-                char *strerror( int errnum );
-        */
-        {
-            printf( "strerror(EISDIR) = \"%s\"\n", strerror(EISDIR) );
         }
     }
 
@@ -240,6 +222,30 @@ int main( int argc, char** argv )
             //char buf[256];
             //sprintf( buf, "%2$d %d %d", 0, 1 );
             //assert( strcmp( buf, "1 0 1") == 0 );
+        }
+    }
+
+    /*
+    #string functions
+
+        POSIX offers some extra convenience functions to common string operations which are not present in ANSI C.
+    */
+    {
+        /*
+        str
+        */
+
+        /*
+        #strfmon
+
+            Monetary string formatting.
+        */
+        {
+            const int size = 16;
+            char out[size];
+            strfmon( out, size, "%n", 1234.567 );
+            printf( "%s", out );
+            assert( strcmp( out, "1234.57" ) == 0 );
         }
     }
 
@@ -389,28 +395,46 @@ int main( int argc, char** argv )
     }
 
     /*
-    #file descriptors vs FILE pointers
+    #times
 
-        ANSI C supports only the concept of file pointers via the `FILE` macro.
+        Get real time, user time and system time.
+    */
+    {
+        //TODO0 example
+    }
 
-        POSIX extends ANSI C and contains both function that manipulate ANSI C `FILE` objects
-        and file descriptors, which are integers that identify a file descriptor for the OS.
+    /*
+    #file descriptors
 
-        Operations that use file desriptors:
+        `int` identifier to a data stream.
 
-        - open, close, write
+        Many file descriptors can point to a single file.
 
-        Operations that use FILE pointers:
+        One very important property of file descriptors is the current position from which read and write shall operate.
+        Reads and writes move the current position forward.
 
-        - ANSI C `fopen`, `fclose`, `ftell`, etc. functions
+        #file descriptors vs ANSI C FILE objects
 
-        Since they are specific to POSIX, functions that use file pointers often give more options
-        than ANSI C functions that use `FILE*` objects.
+            ANSI C supports only the concept of file pointers via the `FILE` macro.
 
-        If you don't need that greater level of control,
-        just use the ANSI C functions for greater portability.
+            POSIX extends ANSI C and contains both function that manipulate ANSI C `FILE` objects
+            and file descriptors, which are integers that identify a file descriptor for the OS.
 
-        It is possible to convert freely from `FILE*`
+            Operations that use file desriptors:
+
+            - open, close, write
+
+            Operations that use FILE pointers:
+
+            - ANSI C `fopen`, `fclose`, `ftell`, etc. functions
+
+            Since they are specific to POSIX, functions that use file pointers often give more options
+            than ANSI C functions that use `FILE*` objects.
+
+            If you don't need that greater level of control,
+            just use the ANSI C functions for greater portability.
+
+            It is possible to convert freely to and from `FILE*` via fdopen and fileno.
 
     #fdopen
 
@@ -422,104 +446,438 @@ int main( int argc, char** argv )
 
     #open
 
+            man 2 open
+
         open file descriptors such as files
 
         returns an `int` (file descriptor number) instead of a file
 
+        Interfaces:
+
+            int open(const char *pathname, int flags);
+            int open(const char *pathname, int flags, mode_t mode);
+
         Flags. Must specify one and only of the following:
 
         - O_WRONLY: write only
-        - O_RDONLY: read only
-        - O_RW: read only
+        - O_RDONLY: read only.
 
-        The following may all be specified:
+            Undefined behaviour with O_TRUNC.
 
-        - O_APPEND: Place written data at the end of the file.
-        - O_TRUNC: Set the length of the file to zero, discarding existing contents.
-        - O_CREAT: Creates the file, if necessary, with permissions given in mode.
-        - O_EXCL: Used with O_CREAT, ensures that the caller creates the file. The open is atomic; that is,
-            it’s performed with just one function call. This protects against two programs creating the file at
-            the same time. If the file already exists, open will fail.
+            TODO0 can be used with O_CREAT?
 
-        Return value: `-1` on error.
+        - O_RDWR:   read and write
 
-        You can also use standard flags for permissions:
+        Other important flags.
 
-        - S_IRUSR: Read permission, owner
-        - S_IWUSR: Write permission, owner
-        - S_IXUSR: Execute permission, owner
+        - O_APPEND: If the file exists, open fd at the end of the file.
 
-        GRP for group versions
-        OTH for other versions
+        - O_TRUNC: If the file exists, open fd at the end of the file,
+            set its length to zero, discarding existing contents.
+
+            Undefined behaviour with O_RDONLY.
+
+        - O_CREAT: If the file does not exit, creat it, with permissions given in mode.
+
+            Mode must be specified when this flag is set, and is ignored if this is not set.
+
+        - O_EXCL: Used with O_CREAT, ensures that the caller creates the file.
+
+            The open is atomic; that is, no two opens can open at the same time.
+
+            If the file already exists, open will fail.
+
+            Useful if multiple programs may try to create the same file.
+
+        Mode can be specified via oring predefine permission values of type:
+
+        - S_IRWXU  00700 user (file owner) has read, write and execute permission
+        - S_IRUSR  00400 user has read permission
+        - S_IWUSR  00200 user has write permission
+        - S_IXUSR  00100 user has execute permission
+
+        For group and other: G and GRP, O and OTH.
+
+        Return value: `-1` on error and set perror.
+
+    #creat
+
+        Same as:
+
+            open(path, O_WRONLY|O_CREAT|O_TRUNC, mode);
+
+    #close
+
+        File descriptors occupy memory and are thus a finite resource.
+
+        When you are done with one, release it with a close call.
 
     #write
 
-        write to file descriptor, such as one gotten with `open`
+        Write to file descriptor, such as one representing a file gotten via `open`
+        or one representing a pipe obtained with `pipe`.
 
-        returns number of bytes written
+        Increments the current position of the file descriptor.
+        For regular files, if this becomes greater than the current file size,
+        then the file size is increased as needed.
 
-        it writes as many bytes as possible
+        Returns number of bytes writen.
 
-        if it receives a signal before writting, returns -1
+        For regular files, the number of bytes writen is less than required only in bad cases:
+
+        - signal received in the middle of a write
+
+            If it receives a signal before writing anything, returns -1.
+
+        - no more space in the filesystem
+
+        - no permission to write such large files
+
+        For pipes, this may occur in less bad scenarios. See pipe for more info.
+
+        On error, return -1 and set errno.
+
+        TODO0 are writes to seekable files atomic? Seems not: <http://stackoverflow.com/questions/10650861/atomicity-of-write2-to-a-local-filesystem>
+            for pipes we know yes for writes smaller than PIPE_BUF.
+
+    #pwrite
+
+        Same as write, but writes to a given offset and does not update fd position.
+
+        It cannot be done on non seekable files.
 
     #read
 
-        returns number of bytes read
+        POSIX 7 docs: <http://pubs.opengroup.org/onlinepubs/9699919799/functions/read.html>
 
-        0 if at end of file descriptor already
+        Read bytes from a file descriptor.
 
-        -1 if error
+        Interface:
+
+            ssize_t read(int fildes, void *buf, size_t nbyte);
+
+        The behavior of multiple concurrent reads on the same pipe, FIFO, or terminal device is unspecified.
+
+        If the starting position is at or after the end-of-file, 0 shall be returned.
+
+        If the value of `nbytes` is larger than {SSIZE_MAX}, the result is implementation-defined.
+        In practice this is rarely the case, because `SSIZE_MAX` is the size of a `size_t` type,
+        which is usually an integer, giving around 2Gb.
+
+        The exact behaviour of read depends on the fd type: pipes and regular files have slightly different rules.
+
+        #read pipe
+
+            When attempting to read from an empty pipe or FIFO:
+
+            - If no process has the pipe open for writing, read() shall return 0 to indicate end-of-file.
+
+            - If some process has the pipe open for writing and O_NONBLOCK is set,
+                read() shall return -1 and set errno to [EAGAIN].
+
+            - If some process has the pipe open for writing and O_NONBLOCK is clear,
+                read() shall block the calling thread until some data is written or
+                the pipe is closed by all processes that had the pipe open for writing.
+
+        #return value
+
+            Returns number of bytes read.
+
+            Quoting POSIX:
+
+            The value returned may be less than nbyte if:
+
+            - the number of bytes left in the file is less than nbyte
+            - the read() request was interrupted by a signal
+            - if the file is a pipe or FIFO or special file and has fewer than nbyte bytes immediately available for reading.
+
+            Therefore on a regular file, this is how the end of file can be recognized.
+
+            On error return -1 and set errno.
 
     #lseek
 
-        TODO0 confirm like fseek for bare file descriptors with plus control?
+        Like ANSI C fseek for file descriptors.
 
+        lseek cannot be done on certain file descriptor types which are not seekable,
+        for example on pipes.
+
+        #lseek after eof
+
+            If data is writen with offset after file size, file size is increased and data skipped reads `(int)0` (`'\0'`).
+
+            This contrasts with ANSI C fseek, in which this is undefined behaviour.
     #fcntl
 
         Manipulate a file descriptor.
 
-        Check if it is open: <http://stackoverflow.com/questions/12340695/how-to-check-if-a-given-file-descriptor-stored-in-a-variable-is-still-valid>
+        Check if a fd is open: <http://stackoverflow.com/questions/12340695/how-to-check-if-a-given-file-descriptor-stored-in-a-variable-is-still-valid>
+
+    #dup
+
+        Duplicate file descriptor.
+
+        Same as:
+
+            fcntl(fildes, F_DUPFD, 0);
     */
     {
         int fd;
-        char in[] = "open\n";
+        char in[] = "abcd";
         int nbytes = strlen( in );
-        char* out = malloc ( nbytes + 1 );
+        char *out = malloc ( nbytes + 1 );
+        char *fname = "open.tmp";
 
-        fd = open( "open.tmp", O_WRONLY | O_CREAT, 0777 );
-        if ( fd != -1 )
+        //write
         {
-            if ( write( fd, in, nbytes ) != nbytes )
+            fd = open( fname, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU );
+            if ( fd == -1 )
             {
-                assert( false );
+                perror( "open" );
+                exit( EXIT_FAILURE );
             }
-            close( fd );
-        }
-        else
-        {
-            assert( false );
+            else
+            {
+                if ( write( fd, in, nbytes ) != nbytes )
+                {
+                    perror( "write" );
+                    exit( EXIT_FAILURE );
+                }
+
+                if ( close( fd ) == -1 )
+                {
+                    perror( "close" );
+                    exit( EXIT_FAILURE );
+                }
+            }
         }
 
-        fd = open( "open.tmp", O_RDONLY );
-        if ( fd != -1 )
+        //read
         {
-            if ( read( fd, out, nbytes ) == nbytes )
+            fd = open( fname, O_RDONLY );
+            if ( fd == -1 )
             {
-                assert( strcmp( in, out ) == 0 );
+                perror( "open" );
+                exit( EXIT_FAILURE );
+            }
+            else
+            {
+                if ( read( fd, out, nbytes ) != nbytes )
+                {
+                    perror( "read" );
+                    exit( EXIT_FAILURE );
+                }
+                else
+                {
+                    assert( memcmp( in, out, nbytes ) == 0 );
+                }
+
+                if ( close( fd ) == -1 )
+                {
+                    perror( "close" );
+                    exit( EXIT_FAILURE );
+                }
+                close( fd );
+            }
+        }
+
+        //BAD forget O_CREAT on non-existent file gives ENOENT
+        {
+            fd = open( "i_do_not_exist.tmp", O_RDONLY, S_IRWXU );
+            if ( fd == -1 )
+            {
+                assert( errno == ENOENT );
             }
             else
             {
                 assert( false );
             }
-            close( fd );
         }
-        else
+
+        //BAD write on a O_RDONLY fd gives errno EBADF
         {
-            assert( false );
+            int fd;
+            char *fname = "write_rdonly.tmp";
+
+            fd = open( fname, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU );
+            if ( fd == -1 )
+            {
+                perror( "open" );
+                exit( EXIT_FAILURE );
+            }
+            else
+            {
+                if ( close( fd ) == -1 )
+                {
+                    perror( "close" );
+                    exit( EXIT_FAILURE );
+                }
+            }
+
+            fd = open( fname, O_RDONLY );
+            if ( fd == -1 )
+            {
+                perror( "open" );
+                exit( EXIT_FAILURE );
+            }
+            else
+            {
+                if ( write( fd, "a", 1 ) == -1 )
+                {
+                    assert( errno == EBADF );
+                }
+                else
+                {
+                    assert( false );
+                }
+
+                if ( close( fd ) == -1 )
+                {
+                    perror( "close" );
+                    exit( EXIT_FAILURE );
+                }
+            }
+        }
+
+        /*
+        open and write without truncate
+
+        after write 1: abcd
+        after write 2: 01cd
+        */
+        {
+            //set file to abc
+            {
+                fd = open( fname, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU );
+                if ( fd == -1 )
+                {
+                    perror( "open" );
+                    exit( EXIT_FAILURE );
+                }
+                else
+                {
+                    if ( write( fd, in, nbytes ) != nbytes )
+                    {
+                        perror( "write" );
+                        exit( EXIT_FAILURE );
+                    }
+
+                    if ( close( fd ) == -1 )
+                    {
+                        perror( "close" );
+                        exit( EXIT_FAILURE );
+                    }
+                }
+            }
+
+            //open and write to it without truncating
+            {
+                fd = open( fname, O_RDWR );
+                if ( fd == -1 )
+                {
+                    perror( "open" );
+                    exit( EXIT_FAILURE );
+                }
+                else
+                {
+                    if ( write( fd, "01", 2 ) != 2 )
+                    {
+                        perror( "write" );
+                        exit( EXIT_FAILURE );
+                    }
+                }
+            }
+
+            //check the new result
+            {
+                if ( lseek( fd, 0, SEEK_SET ) != 0 )
+                {
+                    perror( "lseek" );
+                    exit( EXIT_FAILURE );
+                }
+
+                if ( read( fd, out, nbytes ) != nbytes )
+                {
+                    perror( "read" );
+                    exit( EXIT_FAILURE );
+                }
+                else
+                {
+                    //the first two bytes were overwriten
+                    assert( memcmp( out, "01cd", nbytes ) == 0 );
+                }
+
+                if ( close( fd ) == -1 )
+                {
+                    perror( "close" );
+                    exit( EXIT_FAILURE );
+                }
+                close( fd );
+            }
+        }
+
+        /*
+        lseek after eof
+        */
+        {
+            int fd;
+            char out[2];
+
+            fd = open( "lseek.tmp", O_RDWR | O_CREAT | O_TRUNC, S_IRWXU );
+            if ( fd == -1 )
+            {
+                perror( "open" );
+                exit( EXIT_FAILURE );
+            }
+            else
+            {
+                if ( lseek( fd, 1, SEEK_SET ) != 1 )
+                {
+                    perror( "lseek" );
+                    exit( EXIT_FAILURE );
+                }
+
+                if ( write( fd, "a", 1 ) != 1 )
+                {
+                    perror( "write" );
+                    exit( EXIT_FAILURE );
+                }
+
+                //read after eof, return 0 and read nothing
+                if ( read( fd, out, 1 ) != 0 )
+                {
+                    assert( false );
+                }
+
+                if ( lseek( fd, 0, SEEK_SET ) != 0 )
+                {
+                    perror( "lseek" );
+                    exit( EXIT_FAILURE );
+                }
+
+                //byte 0 was never writen, so reading it returns (int)0
+                if ( read( fd, out, 2 ) != 2 )
+                {
+                    perror( "read" );
+                    exit( EXIT_FAILURE );
+                }
+                else
+                {
+                    assert( memcmp( out, "\0a", 2 ) == 0 );
+                }
+
+                if ( close( fd ) == -1 )
+                {
+                    perror( "close" );
+                    exit( EXIT_FAILURE );
+                }
+            }
         }
 
         /*
         File descriptors open by default to all processes.
+
+        Analogous to ANSI C `stdout`, `stdin` and `stderr`, except that the ANSI C `FILE*` objects.
 
         #STDIN_FILENO
 
@@ -539,6 +897,138 @@ int main( int argc, char** argv )
             printf( "STDERR_FILENO = %d\n", STDERR_FILENO );
         }
     }
+
+    /*
+    #link
+
+        Create hardlink to file.
+
+        If newfile exists, the link is not created, returns -1 and sets `errno = EEXIST`
+
+    #unlink
+
+        Delete file.
+
+        Is called unlink because what you are doing is not to directly remove a file from disk
+        but instead remove one hardlink for the data.
+
+        if the number of hardlinks to a data equals 0, it the data gets deleted.
+
+        If the given path does not exist `errno = ENOENT`.
+    */
+    {
+        int fd;
+        char in[] = "a";
+        char in_new[] = "b";
+        int nbytes = strlen( in );
+        char *out = malloc( nbytes );
+        char *oldpath = "link_old.tmp";
+        char *newpath = "link_new.tmp";
+
+        //create old
+        fd = open( oldpath, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU );
+        if ( fd == -1 )
+        {
+            perror( "open" );
+            exit( EXIT_FAILURE );
+        }
+        else
+        {
+            if ( write( fd, in, nbytes ) != nbytes )
+            {
+                perror( "write" );
+                exit( EXIT_FAILURE );
+            }
+
+            if ( close( fd ) == -1 )
+            {
+                perror( "close" );
+                exit( EXIT_FAILURE );
+            }
+        }
+
+        //ensure that the new path does not exist
+        //ENOENT is ok since the path may not exist
+        errno = 0;
+        if ( unlink( newpath ) == -1 && errno != ENOENT )
+        {
+            perror( "link" );
+            exit( EXIT_FAILURE );
+        }
+
+        //make the hardlink
+        if ( link( oldpath, newpath ) == -1 )
+        {
+            perror( "link" );
+            exit( EXIT_FAILURE );
+        }
+
+        //write to new
+        fd = open( newpath, O_WRONLY );
+        if ( fd == -1 )
+        {
+            perror( "open" );
+            exit( EXIT_FAILURE );
+        }
+        else
+        {
+            if ( write( fd, in_new, nbytes ) != nbytes )
+            {
+                perror( "write" );
+                exit( EXIT_FAILURE );
+            }
+
+            if ( close( fd ) == -1 )
+            {
+                perror( "close" );
+                exit( EXIT_FAILURE );
+            }
+        }
+
+        //assert that it reflected on old
+        fd = open( oldpath, O_RDONLY );
+        if ( fd == -1 )
+        {
+            perror( "open" );
+            exit( EXIT_FAILURE );
+        }
+        else
+        {
+            if ( read( fd, out, nbytes ) != nbytes )
+            {
+                perror( "read" );
+                exit( EXIT_FAILURE );
+            }
+
+            assert( memcmp( out, in_new, nbytes ) == 0 );
+
+            if ( close( fd ) == -1 )
+            {
+                perror( "close" );
+                exit( EXIT_FAILURE );
+            }
+        }
+
+        free( out );
+    }
+
+    /*
+    #symlink
+
+        create symbolic link
+
+        TODO0 example
+    */
+    {
+    }
+
+    /*
+    #select
+
+        Wait for one of multiple file descriptors to become availabel for some operation.
+
+        Sounds like server implementation!
+    */
 
     /*
     #mmap
@@ -818,7 +1308,7 @@ int main( int argc, char** argv )
 
             If you get a 0, you know the file exists!
             This is not however the best way to check if a file exists since it incurs the large overhead
-            of getting the parameters. Use access for that instead.
+            of getting the parameters. Use `access` for that instead.
 
             This fills in the `struct stat` given by pointer.
 
@@ -871,11 +1361,10 @@ int main( int argc, char** argv )
         {
             char in[] = "123\n";
             char fname[] = "stat.tmp";
-            int perms = 0777;
             struct stat s;
 
             //create the file
-            int fd = open( fname, O_WRONLY | O_CREAT, perms );
+            int fd = open( fname, O_WRONLY | O_CREAT, S_IRWXU );
             int nbytes = strlen( in );
             if ( fd != -1 )
             {
@@ -945,17 +1434,6 @@ int main( int argc, char** argv )
             if( rmdir( "rmdir" ) == -1 )
                 assert( false );
         }
-
-        /*
-        #unlink
-
-            deletes file
-
-            is called unlink because what you are doing is not to directly remove a file from disk
-            but instead remove one hardlink for the data.
-
-            if the number of hardlinks to a data equals 0, it gets deleted
-        */
 
         /*
         #opendir
@@ -1151,8 +1629,12 @@ int main( int argc, char** argv )
     {
         //static macros
         {
-            //maximum length of
+            //TODO0
             printf( "NL_ARGMAX = %d\n", NL_ARGMAX );
+
+            //maximum value that fits into a `size_t`.
+            printf( "SSIZE_MAX (Mib) = %ju\n", (uintmax_t)SSIZE_MAX / ( 1 << 20 ) );
+
         }
 
         /*
@@ -1284,30 +1766,6 @@ int main( int argc, char** argv )
                 info = getpwent();
             }
             endpwent();
-        }
-    }
-
-    /*
-    #terminal
-
-        some POSIX functions deal with the controlling terminal which called the program if any
-
-    #getlogin
-
-        gets login name of controlling terminal
-
-        note that this is different from getuid, since it looks at the controlling terminal,
-        and not at processes specific information.
-    */
-    {
-        char* login = getlogin();
-        if ( login == NULL )
-        {
-            perror( "getlogin failed" );
-        }
-        else
-        {
-            printf( "getlogin() = %s\n", getlogin() );
         }
     }
 
@@ -1736,6 +2194,16 @@ int main( int argc, char** argv )
             such as `ftell` and `fseek` are not possible.
             There are also fcntl flags which cannot be applied to pipes.
 
+        #read and write operations on pipes
+
+            Read and write operations may be slightly differnt depending on the file descriptor type.
+
+            This is specially the case for pipes vs regular files with respect to blocking.
+
+            For example, pipes usually block if there is no more data available, and wait for data to become available.
+
+            See the documentation of read and write for the details.
+
         #forbidden pipe operations
 
             Since pipes are meant to be implemented on RAM only, pipes cannot be rewinded.
@@ -1946,6 +2414,11 @@ int main( int argc, char** argv )
             Typically used with fork + exec.
         */
         {
+            /*
+            Producer and consumer are the same process.
+
+            Useuless but simple illustration of a pipe call.
+            */
             {
                 int nbytes;
                 int pipes[2];
@@ -2000,7 +2473,7 @@ int main( int argc, char** argv )
                         {
                             //child only
 
-                            //if read happens before write, it blocks
+                            //if read happens before write, it blocks because there is no data
                             nbytes = read( file_pipes[0], buf, BUFSIZ );
 
                             printf( "pipe child. data: %s\n", buf );
@@ -2132,7 +2605,7 @@ int main( int argc, char** argv )
             - unique identifier of memory if positive
         */
         {
-            shmid = shmget( (key_t)1234, sizeof( int ) * 2, IPC_CREAT | 0666 );
+            shmid = shmget( (key_t)1234, sizeof( int ) * 2, IPC_CREAT | S_IRWXU | S_IRWXO );
             assert( shmid >= 0 );
         }
 
@@ -2563,6 +3036,39 @@ int main( int argc, char** argv )
         int fd = open( __FILE__, O_RDONLY );
         fsync( fd );
         close( fd );
+    }
+
+    /*
+    #termios.h
+
+        Terminal management
+    */
+    {
+        //TODO0
+    }
+
+    /*
+    #terminal
+
+        some POSIX functions deal with the controlling terminal which called the program if any
+
+    #getlogin
+
+        gets login name of controlling terminal
+
+        note that this is different from getuid, since it looks at the controlling terminal,
+        and not at processes specific information.
+    */
+    {
+        char* login = getlogin();
+        if ( login == NULL )
+        {
+            perror( "getlogin failed" );
+        }
+        else
+        {
+            printf( "getlogin() = %s\n", getlogin() );
+        }
     }
 
     return EXIT_SUCCESS;

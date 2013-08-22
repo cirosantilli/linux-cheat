@@ -52,7 +52,11 @@ mobi reader
 
 #calibre
 
-book library management
+book library management + command line utils
+
+##ebook-convert
+
+Convert between ebook formats: pdf, mobi,
 
 #manipulation
 
