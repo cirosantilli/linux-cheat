@@ -1,11 +1,11 @@
 # make all files with one of the given extensions by IN_EXTS
 # separatelly, possibly using a different rule per extension
 
-IN_DIR 	?= ./
+IN_DIR 		?= ./
 IN_EXTS 	?= .c
 OUT_DIR 	:= _out/
 OUT_EXT 	:= .elf
-RUN		?= main
+RUN			?= main
 
 INS			:= $(foreach IN_EXT, $(IN_EXTS), $(wildcard $(IN_DIR)*$(IN_EXT)) )
 INS_NODIR 	:= $(notdir $(INS))
@@ -24,6 +24,9 @@ $(OUT_DIR)%$(OUT_EXT): %.c
 
 clean:
 	rm -rf $(OUT_DIR)
+
+asm:
+	gcc -O0 -g -c -fverbose-asm -Wa,-adhln "$(RUN)$(IN_EXTS)" \
 
 mkdir:
 	mkdir -p $(OUT_DIR)

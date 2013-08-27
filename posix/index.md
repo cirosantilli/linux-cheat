@@ -12,15 +12,15 @@ aka: Single Unix specification (SUS)
 
 #intro
 
-an operating system standardization by both IEEE and `the open group`
+An operating system standardization by both IEEE and `the open group`
 (merger of the `Open software foundation` with `X/Open`)
 
-currently, gnu/linux and mac systems are largely posix compliant but not certified,
+Currently, gnu/linux and mac systems are largely posix compliant but not certified,
 windows is not largely compliant.
 
-the specification if free to view
+The specification if free to view.
 
-has several versions. The last at the time of writting was made in 2008
+Has several versions. The last at the time of writting was made in 2008
 
 POSIX issue 7: IEEE formal name: `IEEE Std 1003.1-2008`
 highly recommended link: http://pubs.opengroup.org/onlinepubs/9699919799/
@@ -60,9 +60,9 @@ and tons of others which most people never heard of
 
 ##system interface
 
-standard c interfaces to the system
+Standard C interfaces to the system.
 
-they allow for operations such as:
+They allow for operations such as:
 
 - threads
 - ipc
@@ -71,12 +71,15 @@ they allow for operations such as:
 - maths: `cos`, `sin()`
 - path operations: `basename()`, `dirname()`
 
-it does not however specify the *exact* system calls,
+It does not however specify the *exact* system calls,
 and those are then implemented using a given os system calls.
 
-however many of the linux system calls rassemble those
+However many of the linux system calls rassemble those
 closely because of the complience, so when you learn the POSIX interface
-you are already learning the Linux interface too
+you are already learning the Linux interface too.
+
+In most Linux, the POSIX C interface is implemented as part of `glibc`,
+which also implements ANCI libc and Linux extensions.
 
 ##directory structure
 

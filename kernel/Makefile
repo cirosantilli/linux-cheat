@@ -37,6 +37,7 @@ ccflags-y := -Wno-declaration-after-statement -std=gnu99
 all:
 	make -C /lib/modules/$(shell uname -r)/build M="$(PWD)" modules
 	#make -C /lib/modules/$(shell uname -r)/build M="$(PWD)" O="$(PWD)/$(OUT_DIR)" modules
+	#vim /lib/modules/`uname -r`/build/Makefile
 
 # convenient way to test a module insertion:
 #

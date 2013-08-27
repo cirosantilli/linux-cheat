@@ -1,5 +1,4 @@
-/*
-cheat on gnu c extensions both on gcc and libc (called glibc in its gnu version)
+/*cheat on gnu c extensions both on gcc and libc (called glibc in its gnu version)
 
 non gnu specific  features (ex: ansi c, posix) will not be put here.
 the latest stable version of those standards will be considered.
@@ -40,16 +39,123 @@ because of the large influence of gcc.
         <http://www.gnu.org/software/libc/manual/html_mono/libc.html>
 */
 
-#include "assert.h"
-#include "complex.h"    //complex integer types
-#include "math.h"
-#include "stdio.h"
-#include "stdlib.h"
+#include <assert.h>
+#include <complex.h>    //complex integer types
+#include <math.h>
+#include <stdarg.h>    //..., va_list, va_start, va_arg, va_end
+#include <stdio.h>
+#include <stdlib.h>
 
 int nested()
 {
     return 0;
 }
+
+//#__attribute__
+
+    char not_aligned16 = 0;
+    char aligned16 __attribute__ ((aligned (16))) = 0;
+
+    int sprintf_wrapper( char *s, int useless, const char *fmt, int useless2, ...)
+    {
+        int ret;
+        va_list args;
+
+        va_start( args, useless2 );
+        ret = vsprintf( s, fmt, args );
+        va_end( args );
+        return ret;
+    }
+
+    //format
+
+        /*
+        3 says: the 3rd argument is the format string
+        5 says: the va_list starts at the 5th argument
+
+        Declaration and definition *must* be separated.
+        */
+        int sprintf_wrapper_attr( char *s, int useless, const char *fmt, int useless2, ... ) __attribute__((format(printf, 3, 5)));
+
+        int sprintf_wrapper_attr( char *s, int useless, const char *fmt, int useless2, ... )
+        {
+            int ret;
+            va_list args;
+
+            va_start( args, useless2 );
+            ret = vsprintf( s, fmt, args );
+            va_end( args );
+            return ret;
+        }
+
+    /*
+    #noreturn
+
+        It is possible that the function makes the program exit and therefore does not return.
+
+        Makes compiler ommit "possible no return" warnings.
+
+        Used on glibc exit and abort:
+
+            extern void exit(int)   __attribute__((noreturn));
+            extern void abort(void) __attribute__((noreturn));
+    */
+
+        void exitnow()
+        {
+            exit( EXIT_SUCCESS );
+        }
+
+        //warning: control reaches end of non void function
+        /*
+        int noreturn_possible( int n )
+        {
+            if ( n > 0 )
+                exitnow();
+            else
+                return 0;
+        }
+        */
+
+        void exitnow_attr() __attribute__((noreturn));
+
+        void exitnow_attr()
+        {
+            exit( EXIT_SUCCESS );
+        }
+
+        int noreturn_possible_attr( int n )
+        {
+            if ( n > 0 )
+                exitnow_attr();
+            else
+                return 0;
+        }
+
+        /*
+        Does not emmit a warning because the libc exit has the `noreturn` attribute.
+        */
+        int noreturn_possible_exit( int n )
+        {
+            if ( n > 0 )
+                exit(EXIT_SUCCESS);
+            else
+                return 0;
+        }
+
+    //const
+
+        int next( int cur )
+        {
+            return cur + 1;
+        }
+
+        int next_const( int cur ) __attribute__((const));
+
+        int next_const( int cur )
+        {
+            return cur + 1;
+        }
 
 int main( int argc, char** argv )
 {
@@ -164,13 +270,113 @@ int main( int argc, char** argv )
 #endif
 
     /*
+    #__attribute__
+
+        Specifies special attributes of functions or data.
+
+        There are three types of attributes:
+
+        - functions: http://gcc.gnu.org/onlinedocs/gcc/Function-Attributes.html
+        - variables: http://gcc.gnu.org/onlinedocs/gcc/Variable-Attributes.html#Variable-Attributes
+        - types: http://gcc.gnu.org/onlinedocs/gcc/Type-Attributes.html#Type-Attributes
+
+        Can be used to:
+
+        - do error checking at compile time that would not be possible otherwise:
+
+            - format
+            - noreturn
+
+        - control certain aspects of low level assembly code output.
+
+            For example, `aligned` controls data alignment on the text section.
+
+        - help the compiler optimize by giving it extra information:
+
+            - const
+            - hot
+
+    */
+    {
+        /*
+        #format
+
+            If this is used, gcc can check if printf format strings are correct because of the use of attributes,
+            and emmit errors otherwise.
+        */
+        {
+            char s[32];
+            sprintf_wrapper( s, 0, "%c", 0, 'a' );
+            assert( s[0] == 'a' );
+
+            sprintf_wrapper_attr( s, 0, "%c", 0, 'b' );
+            assert( s[0] == 'b' );
+
+            /*
+            With `__attribute__((format,X,Y))` the compile time error checking gets done.
+            */
+            {
+                //compile error check not done
+                //could segfault at runtime
+                if ( 0 )
+                {
+                    sprintf_wrapper( s, 0, "%s", 0 );
+                }
+
+                //compile error check is done
+                {
+                    //sprintf_wrapper_attr( s, 0, "%s", 0 );
+                }
+            }
+        }
+
+        /*
+        #aligned
+
+            Aligns variables on X bit lines.
+
+            This may be required for certain processor specific functions.
+
+            The generated gas assembly code should mark this alignment with the `.align` directive.
+        */
+        {
+            assert( aligned16 == 0 );
+            assert( not_aligned16 == 0 );
+        }
+
+        /*
+        #const
+
+            A function marked const may be optimized in the sense that the compiler calculates its value at compile time,
+            or chaches its result of each calculation.
+
+            A function can only be marked const if:
+
+            - its return value is only a function of its arguments, and not of any global or static function variable
+            - the function has no desired side effect besides returning the value
+
+            Marking a function which does one of the above const will lead to serious hard to find bugs.
+        */
+        {
+            assert( next( 0 ) == 1 );
+            assert( next( 0 ) == 1 );
+            assert( next_const( 0 ) == 1 );
+            assert( next_const( 0 ) == 1 );
+        }
+
+        /*
+        #section
+        */
+        {
+        }
+    }
+
+    /*
     #inline assembly
 
         #sources
 
             - great intro: <http://www.ibm.com/developerworks/library/l-ia/index.html>
-
-            - docs: 
 
         can be used if you really, really want to optimize at the cost of:
 
@@ -217,21 +423,21 @@ int main( int argc, char** argv )
 
         both inputs and outputs are constrats. `X` will indicate the constraint type
 
-        TODO #__asm__ vs asm
-        TODO #asmlinkage
+        TODO0 #__asm__ vs asm
+        TODO0 #asmlinkage
     */
 
         /*
-            examples of inline assembly in i386
+        examples of inline assembly in i386
 
-            this is the main place for contains more comments and explanations
-            if other archs are also exemplified
+        this is the main place for contains more comments and explanations
+        if other archs are also exemplified
         */
 
 #ifdef __i386__
 
         /*
-            #m constraint
+        #m constraint
 
             instructs gcc to store keep value of given expressions into RAM
 

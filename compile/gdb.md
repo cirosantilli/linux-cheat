@@ -1,19 +1,11 @@
 gdb uses symbol information contained in executables to debug them
 
-for this to work, executables must be compiled with that extra information,
-making it slightly larger.
-
-add debug information to executable on compilation:
+See info on gcc debug flags for how to generate that information.
+As a summary, to get the maximum amount of debug information just use:
 
     gcc -ggdb3 a.c
 
-options
-
-- g : generate debug info for gdb
-- ggdb : adds more info
-- ggdb3 : adds max info. default if 2 when ggdb is used.
-
-to run executable and debug it:
+To run executable and debug it with gdb use:
 
     gdb a.out
 

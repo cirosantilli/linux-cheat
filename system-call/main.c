@@ -88,11 +88,12 @@ Cannot have strict ansi ( implied by `-std=c99` or `-ansi`. See: `features.h`.
 #include <stdio.h>
 
 #include <fcntl.h>
+#include <sched.h>              /* syscall */
 #include <unistd.h>             /* syscall */
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <sys/syscall.h>        /* __NR_XXX, SYS_XXX*/
-#include <sys/wait.h>       //wait, sleep
+#include <sys/wait.h>           //wait, sleep
 /* #include <asm/unistd.h>      // __NR_XXX. Already included by `sys/syscall.h` */
 /* #include <sys/types.h>       // for SYS_<name> */
 
@@ -101,36 +102,12 @@ Cannot have strict ansi ( implied by `-std=c99` or `-ansi`. See: `features.h`.
 int main( int argc, char** argv )
 {
     /*
-    #write
+    #syscall
 
-        Write to an open file descriptor.
-
-        1 and 2 are stdout and stderr.
-
-            asmlinkage long sys_write(unsigned int fd, const char __user *buf,
-                        size_t count);
-
-        - fd: file descriptor to write to
-        - buf: what to write in an array
-        - count: number of bytes to write
+        Example os syscall usage.
     */
     {
-        char s[] = "ab\ncd";
-        syscall( __NR_write, 1, s, 3 );
-        syscall( SYS_write,  1, s, 3 );
-    }
-
-    /*
-    #getpid
-
-        Same as POSIX getpid
-
-    #getppid
-
-        Same as POSIX getppid
-    */
-    {
-        assert( syscall( __NR_getpid ) == getpid() );
+        assert( syscall( __NR_getpid )  == getpid() );
         assert( syscall( __NR_getppid ) == getppid() );
     }
 
@@ -147,6 +124,49 @@ int main( int argc, char** argv )
         long int prio = syscall( __NR_getpriority, PRIO_PROCESS, 0 );
         printf( "getpriority = %ld\n", prio );
         assert( getpriority( PRIO_PROCESS, 0 ) + 20 == prio );
+    }
+
+    /*
+    #sched_setscheduler
+
+        Linux adds other schedulers in addition to the POSIX ones.
+
+        Only the Linux extensions are described here.
+
+        - SCHED_OTHER is SCHED_NORMAL inside the kernel, but other is used outside to be compatible with POSIX.
+
+        - SCHED_IDLE: very low priority, lower than SCHED_BACH with nice 20.
+
+            Only run if there is nothing else to do.
+
+        - SCHED_BATCH:
+
+            Gets somehow disfavoured since it does not need big interaction.
+    */
+    {
+        printf( "SCHED_FIFO     = %d\n",  SCHED_FIFO      );
+        printf( "SCHED_RR       = %d\n",  SCHED_RR        );
+        //printf( "SCHED_SPORADIC = %d\n",  SCHED_SPORADIC  );
+        printf( "SCHED_OTHER    = %d\n",  SCHED_OTHER     );
+        printf( "SCHED_BATCH    = %d\n",  SCHED_BATCH   );
+        printf( "SCHED_IDLE     = %d\n",  SCHED_IDLE    );
+
+        //int policy = SCHED_BATCH;
+        int policy = SCHED_IDLE;
+
+        struct sched_param sched_param = {
+            .sched_priority = 0
+        };
+
+        if ( sched_setscheduler( 0, policy, &sched_param ) == -1 )
+        {
+            perror( "sched_setscheduler" );
+            //exit( EXIT_FAILURE );
+        }
+        else
+        {
+            assert( sched_getscheduler( 0 ) == policy );
+        }
     }
 
     /*
@@ -321,16 +341,14 @@ int main( int argc, char** argv )
 
         if ( creat( fname, S_IRWXU ) == -1 )
         {
+            //may fail because the file was owned by root
             perror( "creat" );
         }
 
         if ( acct( fname ) == -1 )
         {
             perror( "acct" );
-        }
-        else
-        {
-            sleep( 1 );
+            //may happen if we are not root
         }
     }
 

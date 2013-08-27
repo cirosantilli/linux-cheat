@@ -1863,109 +1863,217 @@ int main( int argc, char** argv )
                 printf( "getcwd() = %s\n", buf );
             }
         }
+    }
+
+    /*
+    #getpriority
+
+        Each process, user and group has a priority associated to it.
+
+        Those priorities are commonly called *nice* values on UNIX, since
+        the higher the nice, the less time it takes ( it is nicer to other processes)
+
+        Any process can reduce its priority.
+        Only a priviledged process can increaes its priority,
+        even if the process just decreased it himself.
+
+        POSIX does not fix the nice range, but it does specify that:
+
+        - lower values are more favorable
+        - the values must be between `-{NZERO}` and x{NZERO}-1`.
+
+        where `NZERO` is implementation defined parameter.
+
+        The minimum value for NZERO if 20, it is also the most common.
+
+        The actual effect of priority is undefined.
+
+        Nice:
+
+            int nice( int incr )
+
+        - incr: how much to increase the nice value
+        - return: the new nice value after the increase
+
+        getpriority:
+
+            int getpriority(int which, id_t who);
+
+        - which:
+
+            - PRIO_PROCESS:
+            - PRIO_PGRP: TODO
+            - PRIO_USER: TODO
+
+        - who: pid, uid or gid depending on which. `0` means current.
+
+        #error checking
+
+            On error, returns `-1` and errno set to indicate the error.
+
+            Therefore simply checking the return value is not enough to detect an error
+            since `-1` is a valid return value.
+
+            Therefore, to do error checking one *must* check `errno != 0`:
+
+            - set `errno = 0`
+            - make the call
+            - there is an error iff ret = -1 errno != 0.
+
+    #setpriority
+
+        Return value is the same as getpriority after the modification.
+
+    #nice
+
+        Same as setpriority, but only for `PRIO_PROCESS` but increments
+        (or decrements) the value instead of setting it to an absolute value.
+
+        Return value is the same as getpriority after the modification.
+
+        Can only be negative if we have `sudo`, since a negative value means to increase the priority.
+    */
+    {
+        int prio;
+
+        printf( "NZERO = %d\n", NZERO );
+
+        errno = 0;
+        prio = getpriority( PRIO_PROCESS, 0 );
+        if ( prio == -1 && errno != 0 ) {
+            perror( "getpriority( PRIO_PROCESS, 0 )" );
+        } else {
+            printf( "getpriority( PRIO_PROCESS, 0 ) = %d\n",  prio );
+        }
+
+        errno = 0;
+        prio = getpriority( PRIO_PGRP, 0 );
+        if ( prio == -1 && errno != 0 ) {
+            perror( "getpriority( PRIO_PGRP, 0 )" );
+        } else {
+            printf( "getpriority( PRIO_PGRP, 0 ) = %d\n",  prio );
+        }
+
+        errno = 0;
+        prio = getpriority( PRIO_USER, 0 );
+        if ( prio == -1 && errno != 0 ) {
+            perror( "getpriority( PRIO_USER, 0 )" );
+        } else {
+            printf( "getpriority( PRIO_USER, 0 ) = %d\n",  prio );
+        }
+
+        errno = 0;
+        prio = nice( 0 );
+        if ( prio == -1 && errno != 0 ) {
+            perror( "nice( 0 )" );
+        } else {
+            printf( "nice( 0 )    = %d\n",    nice( 0 ) );
+        }
+
+        //ok, tired of errno checking:
+        printf( "nice( 0 )    = %d\n",    nice( 0 ) );
+        printf( "nice( 1 )    = %d\n",    nice( 1 ) );
+        printf( "nice( 0 )    = %d\n",    nice( 0 ) );
+
+        errno = 0;
+        prio = nice( -1 );
+        if ( prio == -1 && errno != 0 ) {
+            //if not root we end up here
+            perror( "nice( -1 )" );
+        } else {
+            printf( "nice( -1 )  = %d\n", prio );
+        }
+    }
+
+    /*
+    #sched.h
+
+        Get or set scheduler information
+
+        POSIX 7 specifies four scheduling policies, more can be defined by the implementation
+
+        The precise decription of those policies can be found under System interfaces > Scheduling policies.
+
+        TODO0 what happens if there is both a FIFO and a RR process running?
+
+        - SCHED_FIFO:
+
+            First in first out. Process runs untill it finishes, blocking the CPU while it runs.
+
+            An infinite loop could be catastrophic.
+
+            In linux, applied to realtime process.
+
+        - SCHED_RR:
+
+            Round robin.
+
+            Assign time slices proportional to prio and turn around the pie.
+
+            In linux, applied to realtime process.
+
+        - SCHED_SPORADIC:
+
+            TODO0
+
+            Optional, so don't rely on it.
+
+        - SCHED_OTHER:
+
+            Any other type of scheduling.
+
+            In linux, includes SCHED_NORMAL, the normal scheduling policy.
+
+            POSIX explicitly says that it is implementation defined what happens
+            when there are both process of `SCHED_OTHER` and another type at the same time.
+
+    #sched_getscheduler
+
+        pid_t for given pid, 0 for current process
+
+    #sched_get_priority_max
+
+        Get maximum possible priority for a given policy.
+
+    #sched_get_priority_min
+    */
+    {
+        printf( "SCHED_FIFO = %d\n",  SCHED_FIFO      );
+        printf( "sched_get_priority_max(SCHED_FIFO) = %d\n", sched_get_priority_max(SCHED_FIFO) );
+        printf( "sched_get_priority_min(SCHED_FIFO) = %d\n", sched_get_priority_min(SCHED_FIFO) );
+
+        printf( "SCHED_RR = %d\n",  SCHED_RR        );
+        printf( "sched_get_priority_max(SCHED_RR) = %d\n", sched_get_priority_max(SCHED_RR) );
+        printf( "sched_get_priority_min(SCHED_RR) = %d\n", sched_get_priority_min(SCHED_RR) );
+
+        //printf( "SCHED_SPORADIC = %d\n",  SCHED_SPORADIC  );
+
+        printf( "SCHED_OTHER = %d\n",  SCHED_OTHER     );
+        printf( "sched_get_priority_max(SCHED_OTHER) = %d\n", sched_get_priority_max(SCHED_OTHER) );
+        printf( "sched_get_priority_min(SCHED_OTHER) = %d\n", sched_get_priority_min(SCHED_OTHER) );
+
+        printf( "sched_getscheduler( 0 ) = %d\n",  sched_getscheduler( 0 ) );
 
         /*
-        #getpriority
+        #sched_setscheduler()
 
-            Each process, user and group has a priority associated to it.
-
-            Those priorities are commonly called *nice* values on UNIX, since 
-            the higher the nice, the less time it takes ( it is nicer to other processes)
-
-            POSIX does not fix the nice range, but it does specify that:
-
-            - lower values are more favorable
-            - the values must be between `-{NZERO}` and x{NZERO}-1`.
-
-            where NZERO is a paremeter that can be reterived with TODO
-
-            The minimum value for NZERO if 20, it is also the most common.
-
-            The actual effect of priority is undefined.
-
-            Nice:
-
-                int nice( int incr )
-
-            - incr: how much to increase the nice value
-            - return: the new nice value after the increase
-
-            getpriority:
-
-                int getpriority(int which, id_t who);
-
-            - which:
-
-                - PRIO_PROCESS:
-                - PRIO_PGRP: TODO
-                - PRIO_USER: TODO
-
-            - who: pid, uid or gid depending on which. `0` means current.
-
-            #error checking
-
-                On error, returns `-1` and errno set to indicate the error.
-
-                Therefore simply checking the return value is not enough to detect an error
-                since `-1` is a valid return value.
-
-                Therefore, to do error checking one *must* check `errno != 0`:
-
-                - set `errno = 0`
-                - make the call
-                - there is an error iff ret = -1 errno != 0.
-
-        #setpriority
-
-            Return value is the same as getpriority after the modification.
-
-        #nice
-
-            Same as setpriority, but only for `PRIO_PROCESS` but increments (or decrements) the value instead of setting it to an absolute value.
-
-            Return value is the same as getpriority after the modification.
+            You need root permissions to change to higher priority modes such as from SCHED_NORMAL to SCHED_FIFO or SCHED_RR.
         */
         {
-            int prio;
+            int policy = SCHED_FIFO;
+            struct sched_param sched_param = {
+                .sched_priority = 99
+            };
 
-            printf( "NZERO = %d\n", NZERO );
-
-            errno = 0;
-            prio = getpriority( PRIO_PROCESS, 0 );
-            if ( prio == -1 && errno != 0 ) {
-                perror( "getpriority( PRIO_PROCESS, 0 )" );
-            } else {
-                printf( "getpriority( PRIO_PROCESS, 0 ) = %d\n",  prio );
+            if ( sched_setscheduler( 0, policy, &sched_param ) == -1 )
+            {
+                perror( "sched_setscheduler" );
+                //exit( EXIT_FAILURE );
             }
-
-            errno = 0;
-            prio = getpriority( PRIO_PGRP, 0 );
-            if ( prio == -1 && errno != 0 ) {
-                perror( "getpriority( PRIO_PGRP, 0 )" );
-            } else {
-                printf( "getpriority( PRIO_PGRP, 0 ) = %d\n",  prio );
+            else
+            {
+                assert( sched_getscheduler( 0 ) == policy );
             }
-
-            errno = 0;
-            prio = getpriority( PRIO_USER, 0 );
-            if ( prio == -1 && errno != 0 ) {
-                perror( "getpriority( PRIO_USER, 0 )" );
-            } else {
-                printf( "getpriority( PRIO_USER, 0 ) = %d\n",  prio );
-            }
-
-            errno = 0;
-            prio = nice( 0 );
-            if ( prio == -1 && errno != 0 ) {
-                perror( "nice( 0 )" );
-            } else {
-                printf( "nice( 0 )    = %d\n",    nice( 0 ) );
-            }
-
-            //ok, tired of erro checking:
-            printf( "nice( 0 )    = %d\n",    nice( 0 ) );
-            printf( "nice( 1 )    = %d\n",    nice( 1 ) );
-            printf( "nice( 0 )    = %d\n",    nice( 0 ) );
         }
     }
 
@@ -2832,54 +2940,7 @@ int main( int argc, char** argv )
 
     #mutex
     */
-
-    /*
-    #sched.h
-
-        get or set scheduler information
-
-        posix 7 specifies four scheduling policies, more can be defined by the implementation
-
-        - fifo: first in first out. Process runs untill it finishes.
-        - rr: round robin. Assign time slices and turn around the pie.
-        - other:
-
-    #sched_getscheduler
-
-        pid_t for given pid, 0 for current process
-    */
     {
-        printf( "SCHED_FIFO     = %d\n",  SCHED_FIFO      );
-        printf( "SCHED_RR       = %d\n",  SCHED_RR        );
-        //TODO why no sched sporadic
-            //printf( "SCHED_SPORADIC = %d\n",  SCHED_SPORADIC  );
-        printf( "SCHED_OTHER    = %d\n",  SCHED_OTHER     );
-
-        printf( "sched_getscheduler( 0 ) = %d\n",  sched_getscheduler( 0 ) );
-
-        /*
-        #sched_setscheduler()
-
-            you need root permissions to change to higher priority modes such SCHED_FIFO
-        */
-        {
-            int policy = SCHED_FIFO;
-            struct sched_param sched_param = {
-                .sched_priority = 99
-            };
-
-            if ( sched_setscheduler( 0, policy, &sched_param ) == -1 )
-            {
-                perror( "sched_setscheduler" );
-                //no error in case this is not run as root:
-                    //exit( EXIT_FAILURE );
-            }
-            else
-            {
-                assert( sched_getscheduler( 0 ) == policy );
-            }
-        }
-
         /*
         #sched_yield
 

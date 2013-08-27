@@ -1,12 +1,13 @@
 /*
-main cheat on the kernel kernel modules and on kernel concepts
-that can be exemplified in modules (much easier than recompiling and reinstalling the kernel)
+Main cheat on the kernel kernel modules and on kernel concepts
+that can be exemplified in modules, which is much easier than recompiling and reinstalling the kernel.
 
-#TODO
+Some of the information about general concepts may fit better in another markup file such as a `.md`.
+If a concept is not clearly explained here, do check on separate information files.
 
-	#__rcu
+#__rcu
 
-		a type of locking directive
+	TODO0 a type of locking directive
 */
 
 #include <linux/version.h> 	/* include/generated/uapi/linux. LINUX_VERSION_CODE, KERNEL_VERSION */
@@ -127,6 +128,9 @@ EXPORT_SYMBOL_GPL(exported_symbol_gpl);
 DEFINE_PER_CPU(int, cpu_int);
 static atomic_t i_global_atomic;
 
+static int initdata __initdata = 0;
+static int initconst __initconst = 0;
+
 /*
  * this function is defined as the entry point by the `module_init` call below.
  *
@@ -141,33 +145,17 @@ static atomic_t i_global_atomic;
  * - register an interrupt handler
  * - register a the bottom half of the interrupt handler
  *
- * #__init
- *
- * 	tells the compiler that this function is only used once at initialization,
- * 	so the kernel may free up its memory after using this function
- *
  * return value:i
+ *
  * - 0 on success
  * - non zero on failure.
  *
- *   	You should always return the negation of constants defined in `linux/errno.h`,
- *   	for example as `return -ENOMEM`
- *
- * #__initdata TODO
- * #__initconst TODO
- * #__devinit TODO
- *
- * 	they are used as:
- *
- * 		static int init_variable __initdata = 0;
- * 		static const char linux_logo[] __initconst = { 0x32, 0x36, ... };
- *
- * but what do they do?
+ * You should always return the negation of constants defined in `linux/errno.h`,
+ * for example as `return -ENOMEM`
  *
  * #cleanup
  *
- * 	module insertion forget to nicely cleanup in case 
- *
+ * 	module insertion forget to nicely cleanup in case
  * */
 static int __init init(void)
 {
@@ -405,79 +393,55 @@ static int __init init(void)
 	}
 
 	/*
-	#time
+	#__init macros
 
-		There are 2 types of time:
+		Put data on speial sections:
 
-		- absolute. Ex: 1/1/2010. Hardware: RTC. Precision: Hz.
-		- relative: Ex: 1 sec after now.
+			#define __init          __attribute__ ((__section__ (".init.text")))
+			#define __initdata      __attribute__ ((__section__ (".init.data")))
+			#define __exitdata      __attribute__ ((__section__(".exit.data")))
+			#define __exit_call     __attribute_used__ __attribute__ ((__section__ (".exitcall.exit")))
 
-			Hardware: system timer. Precision: kHz. Interface: jiffies.
+			#ifdef MODULE
+			#define __exit          __attribute__ ((__section__(".exit.text")))
+			#else
+			#define __exit          __attribute_used__ __attribute__ ((__section__(".exit.text")))
+			#endif
 
-			Greater precision interfaces (up to nanoseconds are also available)
+		Functions and data in those sections are meant to be used only at initialization processes (kernel or modules),
+		and are then removed from RAM by `free_initmem()`.
 
-		Time is important on the kernel,
-		for example when giving hardware time to complete certain tasks.
+		Sources:
 
-	#system timer
+		- <http://stackoverflow.com/questions/8832114/what-does-init-mean-in-this-linux-kernel-code>
+		- <http://kernelnewbies.org/FAQ/InitExitMacros>
 
-		Programmable hardware that emmits interrputs at a given frequency,
-		on the 10 - 1k Hz range as of 2013.
+	#__init
 
+		Tells the compiler that this function is only used once at initialization,
+		so the kernel may free up the code memory after the initialization.
+
+	#__initdata
+
+		Marks data instead of functions.
+
+	#__initconst
+	#__devinit
+
+		TODO0
+
+	#__exit
+
+		Only used for modules.
+
+		Functions marked as such are removed from the RAM if the module is not loaded.
 	*/
 	{
-		/*
-		#HZ
-
-			Frequency of the system clock.
-
-		#jiffies
-
-			How many system clock periods have passed since boot.
-
-			Starts at 0.
-
-			Mnemonic: in a jiffy is an informal / old expression for in a while.
-			A jiffle then is a small amount of time.
-
-		#wraparound
-
-			jiffies is an unsigned long, so if we reach its limit it wraps around to 0.
-
-			Example:
-
-				//half a second in the future
-				unsigned long timeout = jiffies + HZ/2;
-
-				//work
-
-				//see whether we took too long
-				if (timeout > jiffies) {
-					//we did not time out, good
-				} else {
-					//we timed out, error
-				}
-
-			What if `jiffies` goes around and comes back to 0?
-
-			This is why you should use:
-
-				#define time_after(unknown, known) ((long)(known) - (long)(unknown) < 0)
-				#define time_before(unknown, known) ((long)(unknown) - (long)(known) < 0)
-				#define time_after_eq(unknown, known) ((long)(unknown) - (long)(known) >= 0)
-				#define time_before_eq(unknown, known) ((long)(known) - (long)(unknown) >= 0)
-
-			to compare times as:
-
-				if (time_before(jiffies, timeout)) {
-
-			TODO why does this work?
-		*/
-		{
-			printk( KERN_DEBUG "HZ = %d\n", HZ );
-			printk( KERN_DEBUG "jiffies = %lu\n", jiffies );
-		}
+		initdata = 1;
+		if (initdata  != 1) return -1;
+		if (initconst != 0) return -1;
 	}
+
 
 	/*
 	#data structures
@@ -619,6 +583,81 @@ static int __init init(void)
 		int is2[3];
 		memcpy( is2, is, 3 * sizeof( int ) );
 		if ( memcmp( is, is2, 3 * sizeof(int)) != 0 ) return -1;
+	}
+
+	/*
+	#time
+
+		There are 2 types of time:
+
+		- absolute. Ex: 1/1/2010. Hardware: RTC. Precision: Hz.
+		- relative: Ex: 1 sec after now.
+
+			Hardware: system timer. Precision: kHz. Interface: jiffies.
+
+			Greater precision interfaces (up to nanoseconds are also available)
+
+		Time is important on the kernel,
+		for example when giving hardware time to complete certain tasks.
+
+	#system timer
+
+		Programmable hardware that emmits interrputs at a given frequency,
+		on the 10 - 1k Hz range as of 2013.
+
+	*/
+	{
+		/*
+		#HZ
+
+			Frequency of the system clock.
+
+		#jiffies
+
+			How many system clock periods have passed since boot.
+
+			Starts at 0.
+
+			Mnemonic: in a jiffy is an informal / old expression for in a while.
+			A jiffle then is a small amount of time.
+
+		#wraparound
+
+			jiffies is an unsigned long, so if we reach its limit it wraps around to 0.
+
+			Example:
+
+				//half a second in the future
+				unsigned long timeout = jiffies + HZ/2;
+
+				//work
+
+				//see whether we took too long
+				if (timeout > jiffies) {
+					//we did not time out, good
+				} else {
+					//we timed out, error
+				}
+
+			What if `jiffies` goes around and comes back to 0?
+
+			This is why you should use:
+
+				#define time_after(unknown, known) ((long)(known) - (long)(unknown) < 0)
+				#define time_before(unknown, known) ((long)(unknown) - (long)(known) < 0)
+				#define time_after_eq(unknown, known) ((long)(unknown) - (long)(known) >= 0)
+				#define time_before_eq(unknown, known) ((long)(known) - (long)(unknown) >= 0)
+
+			to compare times as:
+
+				if (time_before(jiffies, timeout)) {
+
+			TODO why does this work?
+		*/
+		{
+			printk( KERN_DEBUG "HZ = %d\n", HZ );
+			printk( KERN_DEBUG "jiffies = %lu\n", jiffies );
+		}
 	}
 
 	/*
@@ -1065,239 +1104,11 @@ static int __init init(void)
 	}
 
 	/*
-	#scheduling
-
-		Modern systems are preemptive: they can stop tasks to start another ones, and continue with the old task later
-
-		A major reason for this is to give users the illusion that
-		their text editor, compiler and music player can
-		run at the same time even if they have a single cpu
-
-		Scheduling is chooshing which processes will run next
-
-		The processes which stopped running is said to have been *preempted*
-
-		The main difficulty is that switching between processes (called *context switch*)
-		has a cost because if requires copying old memory out and putting new memory in.
-
-		Balancing this is a question throughput vs latency balace.
-
-		- throughput is the total average performance. Constant context switches reduce it because they have a cost
-		- latency is the time it takes to attend to new matters such as refreshing the screen for the user.
-			Reducing latency means more context switches which means smaller throughput
-
-		#sources
-
-			#sleep
-
-				- <http://www.linuxjournal.com/node/8144/print>
-
-					how to sleep in the kernel
-
-				Low level way:
-
-					set_current_state(TASK_INTERRUPTIBLE);
-					schedule();
-
-				Higher level way: wait queues.
-
-		#state
-
-			Processes can be in one of the following states (`task_struct->state` fields)
-
-			- running: running. `state = TASK_RUNNING`
-
-			- waiting: wants to run, but scheduler let another one run for now
-
-				`state = TASK_RUNNING`, but the scheduler is letting other processes run for the moment.
-
-			- sleeping: is waiting for an event before it can run
-
-				`state = TASK_INTERRUPTIBLE` or `TASK_UNINTERRUPTIBLE`.
-
-			- stopped: execution purpusifully stopped for exaple by SIGSTOP for debugging
-
-				`state = TASK_STOPPED` or `TASK_TRACED`
-
-			- zombie: has been killed but is waiting for parent to call wait on it.
-
-				`state = TASK_ZOMBIE`
-
-			- dead: the process has already been waited for,
-				and is now just waiting for the system to come and free its resources.
-
-				`state = TASK_DEAD`
-
-			The following transitions are possible:
-
-
-				+----------+ +--------+
-				|          | |        |
-				v          | v        |
-				running -> waiting    sleeping
-				|                     ^
-				|                     |
-				+---------------------+
-				|
-				v
-				stopped
-
-		#policy
-
-			policy is the way of choosing which process will run next
-
-			POSIX specifies some policies, Linux implements them and defines new ones
-
-			policy in inherited by children processes
-
-			#normal vs real time policies
-
-				policies can be divided into two classes: normal and real time
-
-				real time processes always have higher priority:
-				whenever a real time process is runnable it runs instead of normal processes
-				therefore they must be used with much care not to bog the system down
-
-				the name real time policy is not very true: Linux does not absolutelly ensure
-				that process will finish before some deadline.
-
-				however, realtime processes are very priviledged,
-				and in absense of other real time processes without even higher priorities,
-				the processes will run as fast as the hardware can possibly run it.
-
-		#priorities
-
-			priorities are a measure of how important processes are,
-			which defines how much cpu time
-			they shall get relative to other processes
-
-			there are 2 types of priority:
-
-			- real time priority
-
-				ranges from 0 to 99
-
-				only applies to process with a real time scheduling policy
-
-			- normal priorities
-
-				ranges from -20 to 19
-
-				only applies to proces with a normal scheduling policy
-
-				also known as *nice value*. The name relates to the fact that higher nice values
-				mean less priority, so the process is being nice to others and letting them run first.
-
-				nice has an exponential meaning: each increase in nice value means that
-				the relative importance of a process increases in 1.25.
-
-			for both of them, lower numbers mean higher priority
-
-			internally, both real time and normal priorities are represented on a single
-			integer which ranges from 0 to 140:
-
-			- real time processes are in the 0 - 99 range
-			- normal processes are in the 100 - 140 range
-
-			once again, the lower values correspond to the greater priorities
-
-			priority is inherited by children processes
-
-			#nice
-
-				is the traditional name for normal priority,
-				ranging from -20 (greater priority) to 19.
-
-				an increase in 1 nice level means 10% more cpu power
-
-		#normal policies
-
-			#completelly fair scheduler
-
-				all normal processes are currently dealt with internally by the *completelly fair scheduler* (CFS)
-
-				the idea behind this scheduler is imagining a system where there are as many cpu's
-				as there are processeimagining a system where there are as many cpu's as there are processes
-
-				being fair means giving one processor for each processes
-
-				what the CFS tries to do is to get as close to that behaviour as possible,
-				even though the actual number of processors is much smaller.
-
-			#normal scheduling policy
-
-				represented by the `SCHED_NORMAL` define
-
-			#batch scheduling prolicy
-
-				represented by the `SCHED_BATCH` define
-
-				gets lower priority than normal processes TODO exactly how much lower
-
-			#idle scheduling prolicy
-
-				the lowest priority possible
-
-				processes with this policy only run when the system has absolutely
-
-				represented by the `SCHED_IDLE` define
-
-		#real time policies
-
-			#fifo
-
-				represented by the `SCHED_FIFO` define
-
-				highes priority possible
-
-				handled by the real time scheduler.
-
-				the process with highest real time priority runs however much it wants
-
-				it can only be interrupted by:
-
-				- another real time processes with even higher priority becomes RUNNABLE
-				- a SIGSTOP
-				- a sched_yield() call
-				- a blocking operation such as a pipe read which puts it to sleep
-
-				therefore, lots of care must be taken because an infinite loop here
-				can easily take down the system.
-
-			#round robin
-
-				represented by the `SCHED_RR` define
-
-				processes run fixed ammounts of time proportional to their real time priority
-
-				like turning around in a pie where each process has a slice proportional to
-				it real time priority
-
-				can only be preempted like fifo processes, except that it may also be preempted
-				by other round robin processes
-
-			TODO if there is a round robin and a fifo processes, who runs?
-
-		#swapper process
-
-			when there are no other processes to do,
-			the scheduler chooses a (TODO dummy?) processes called *swapper process*
-
-		#runqueues
-
-			a runqueue is a list of processes that will be given cpu time
-			in order which process will be activated.
-
-			it is managed by schedulers, and is a central part of how the scheduler
-			chooses which process to run next
-
-			there is one runqueu per processor.
-
 	#schedule()
 
 		Tell the scheduler that he can schedule another process for now.
 
-		Like posix yield.
+		Like POSIX yield.
 
 	#wake_up_process(struct task_struct)
 
@@ -2203,6 +2014,19 @@ static int __init init(void)
 			//version is was set with the MODULE_VERSION macro:
 
 			printk(KERN_DEBUG "THIS_MODULE->version = %s\n", THIS_MODULE->version );
+		}
+
+		/*
+		#MODULE
+
+			Defined on the Makefile only if current code is a module.
+		*/
+		{
+#ifdef MODULE
+#else
+			//we are sure this is a module.
+			return -1;
+#endif
 		}
 
 		/*

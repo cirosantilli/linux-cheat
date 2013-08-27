@@ -101,6 +101,54 @@ Maybe there is a good reason for that.
 
     Love - 2006 - Linux kernel devlopement.
 
+#what the kernel does
+
+the kernel does the most fundamental operations such as:
+
+- **user permission control**
+
+    the kernel determines what programs can do or not,
+    enforcing for example file permissions
+
+- **virtual address space**
+
+     all programs see is a virtual address space from 0 to a max size,
+     even if the physical memory may be split in a complex way in the physical RAM
+
+     if they try write out of this space, the kernel termiates them,
+     so that they don't mess up with other process memory
+
+     this also increases portability across different memory devices and architectures.
+
+- **filesystem**
+
+     the kernel abstracts individual filesystems into a simple directory file tree
+     easily usable by any program, without considering the filesystem type or
+     the hardware type (hd, flash device, floppy disk, etc)
+
+- **concurrence**
+
+     the kernel schedules programs one after another quite quickly and in a smart way,
+     so that even users with a single processor can have the impression that they are
+     running multiple applications at the same time, while in reality all they are doing
+     is switching very quicly between applications.
+
+therefore it reaches general goals such as:
+
+- increasing code portability across different hardware and architectures
+- creating useful and simple abstractions which programs can rely on
+	(contiguous RAM memory, files, processes, user permissions, etc)
+
+#posix
+
+of of the goals of linux is to highly ( but to 100% ) POSIX compliant
+
+therefore, many of its system calls and concepts map directly to POSIX concepts
+
+we strongly incourage you to look at exactly what POSIX specifies
+and what it does not, so as to be able to decide if your code cannot be made
+more portable by using the posix c api instead of Linux specific code.
+
 #source tree
 
 It is fundamental that you understand the global architecture of kernel code
@@ -227,53 +275,31 @@ Memory management.
 
 IPC stuff such as semaphores under `sem.c` or message queues under `mqueue.c`.
 
-#what the kernel does
+##find definitions
 
-the kernel does the most fundamental operations such as:
+A possible way to find and navigate the kernel source code is via: ctags.
 
-- **user permission control**
+Also consier `ack` or good and old GNU `grep -r`.
 
-    the kernel determines what programs can do or not,
-    enforcing for example file permissions
+For example, to try to find the definition of struct `s`:
 
-- **virtual address space**
+    ack '^struct s \{'
 
-     all programs see is a virtual address space from 0 to a max size,
-     even if the physical memory may be split in a complex way in the physical RAM
+##usr/include/linux vs usr/src/linux-headers
 
-     if they try write out of this space, the kernel termiates them,
-     so that they don't mess up with other process memory
+<http://stackoverflow.com/questions/9094237/whats-the-difference-between-usr-include-linux-and-the-include-folder-in-linux>
 
-     this also increases portability across different memory devices and architectures.
+- `/usr/include/linux` is owned by libc on linux, and used to call kernel services from userspace.
+	TODO understand with a sample usage
 
-- **filesystem**
+- `/usr/src/linux-headers-$(uname -r)/include/linux/` is exactly part of the kernel tree under `include`
+	for a given kernel version.
 
-     the kernel abstracts individual filesystems into a simple directory file tree
-     easily usable by any program, without considering the filesystem type or
-     the hardware type (hd, flash device, floppy disk, etc)
+	can be used to offer access to the kernel's inner workings
 
-- **concurrence**
+	it is useful for example for people writting kernel modules,
+	and is automatically included by the standard module `Makefile`.
 
-     the kernel schedules programs one after another quite quickly and in a smart way,
-     so that even users with a single processor can have the impression that they are
-     running multiple applications at the same time, while in reality all they are doing
-     is switching very quicly between applications.
-
-therefore it reaches general goals such as:
-
-- increasing code portability across different hardware and architectures
-- creating useful and simple abstractions which programs can rely on
-	(contiguous RAM memory, files, processes, user permissions, etc)
-
-#posix
-
-of of the goals of linux is to highly ( but to 100% ) POSIX compliant
-
-therefore, many of its system calls and concepts map directly to POSIX concepts
-
-we strongly incourage you to look at exactly what POSIX specifies
-and what it does not, so as to be able to decide if your code cannot be made
-more portable by using the posix c api instead of Linux specific code.
 
 #special files for user space communication
 
@@ -308,9 +334,9 @@ probably via the `write` system call.
 
 Another simple example is file io.
 
-##floating point
+#floating point
 
-you cannto use floating point operations on kernel code because that would incur too much overhead
+Uou Cannto use floating point operations on kernel code because that would incur too much overhead
 of saving floating point registers on some architectures, so don't do it.
 
 #rings
@@ -484,31 +510,6 @@ Functions that start with two underscores are low level functions. This means th
 The message is then clear: avoid using those unless you know exactly what you are doing
 and you really need to do it.
 
-##find definitions
-
-Ways to find info:
-
-- ctags
-
-Try to find the definition of struct `s`:
-
-    ack '^struct s \{'
-
-##usr/include/linux vs usr/src/linux-headers
-
-http://stackoverflow.com/questions/9094237/whats-the-difference-between-usr-include-linux-and-the-include-folder-in-linux
-
-- `/usr/include/linux` is owned by libc on linux, and used to call kernel services from userspace.
-	TODO understand with a sample usage
-
-- `/usr/src/linux-headers-$(uname -r)/include/linux/` is exactly part of the kernel tree under `include`
-	for a given kernel version.
-
-	can be used to offer access to the kernel's inner workings
-
-	it is useful for example for people writting kernel modules,
-	and is automatically included by the standard module `Makefile`.
-
 ##proc filesystem representation
 
 each process has a representation on the file system under `/proc/\d+` which allows useres with enough
@@ -586,6 +587,17 @@ Print the system log:
 #process virtual address space
 
 How the kernel fits multiple processes, kernel and user, into a single RAM.
+
+##prerequisites
+
+Before reading any of this, *understand paging on a popular architecture* such as x86.
+Even better, leran it on a second popular platform such as ARM, which will make it clearer
+how the kernel why the kernel chooses certain models that will fit manu platforms.
+
+The kernel uses complicated features of the CPU to manage paging, so if you don't understand
+those it will be impossible to understand what is being said here.
+
+Good source on the subject: <http://stackoverflow.com/questions/18431261/how-does-x86-paging-work>.
 
 ##sources
 
@@ -810,10 +822,247 @@ Paging usually has hardware support today.
 
 ##multilevel scheme
 
-it would be too expensive to keep a link from every virtual memory:
+Modern systems are preemptive: they can stop tasks to start another ones, and continue with the old task later
 
-    4 GiB / 4 KiB = 1 M structures per processes
+A major reason for this is to give users the illusion that
+their text editor, compiler and music player can
+run at the same time even if they have a single cpu
 
-the solution is then to only keep links between used pages and frames
+Scheduling is chooshing which processes will run next
 
-this is done in a multilevel scheme
+The processes which stopped running is said to have been *preempted*
+
+The main difficulty is that switching between processes (called *context switch*)
+has a cost because if requires copying old memory out and putting new memory in.
+
+Balancing this is a question throughput vs latency balace.
+
+- throughput is the total average performance. Constant context switches reduce it because they have a cost
+- latency is the time it takes to attend to new matters such as refreshing the screen for the user.
+Reducing latency means more context switches which means smaller throughput
+
+#scheduling
+
+Modern systems are preemptive: they can stop tasks to start another ones, and continue with the old task later
+
+A major reason for this is to give users the illusion that
+their text editor, compiler and music player can
+run at the same time even if they have a single cpu
+
+Scheduling is chooshing which processes will run next
+
+The processes which stopped running is said to have been *preempted*
+
+The main difficulty is that switching between processes (called *context switch*)
+has a cost because if requires copying old memory out and putting new memory in.
+
+Balancing this is a question throughput vs latency balace.
+
+- throughput is the total average performance. Constant context switches reduce it because they have a cost
+- latency is the time it takes to attend to new matters such as refreshing the screen for the user.
+    Reducing latency means more context switches which means smaller throughput
+
+##sleep
+
+- <http://www.linuxjournal.com/node/8144/print>
+
+how to sleep in the kernel
+
+Low level way:
+
+set_current_state(TASK_INTERRUPTIBLE);
+schedule();
+
+Higher level way: wait queues.
+
+##state
+
+Processes can be in one of the following states (`task_struct->state` fields)
+
+- running: running. `state = TASK_RUNNING`
+
+- waiting: wants to run, but scheduler let another one run for now
+
+    `state = TASK_RUNNING`, but the scheduler is letting other processes run for the moment.
+
+- sleeping: is waiting for an event before it can run
+
+    `state = TASK_INTERRUPTIBLE` or `TASK_UNINTERRUPTIBLE`.
+
+- stopped: execution purpusifully stopped for exaple by SIGSTOP for debugging
+
+    `state = TASK_STOPPED` or `TASK_TRACED`
+
+- zombie: has been killed but is waiting for parent to call wait on it.
+
+    `state = TASK_ZOMBIE`
+
+- dead: the process has already been waited for,
+and is now just waiting for the system to come and free its resources.
+
+    `state = TASK_DEAD`
+
+The following transitions are possible:
+
+
+    +----------+ +--------+
+    |          | |        |
+    v          | v        |
+    running -> waiting    sleeping
+    |                     ^
+    |                     |
+    +---------------------+
+    |
+    v
+    stopped
+
+##policy
+
+policy is the way of choosing which process will run next
+
+POSIX specifies some policies, Linux implements them and defines new ones
+
+policy in inherited by children processes
+
+###normal vs real time policies
+
+policies can be divided into two classes: normal and real time
+
+real time processes always have higher priority:
+whenever a real time process is runnable it runs instead of normal processes
+therefore they must be used with much care not to bog the system down
+
+the name real time policy is not very true: Linux does not absolutelly ensure
+that process will finish before some deadline.
+
+however, realtime processes are very priviledged,
+and in absense of other real time processes without even higher priorities,
+the processes will run as fast as the hardware can possibly run it.
+
+##priorities
+
+priorities are a measure of how important processes are,
+which defines how much cpu time
+they shall get relative to other processes
+
+there are 2 types of priority:
+
+- real time priority
+
+ranges from 0 to 99
+
+only applies to process with a real time scheduling policy
+
+- normal priorities
+
+ranges from -20 to 19
+
+only applies to proces with a normal scheduling policy
+
+also known as *nice value*. The name relates to the fact that higher nice values
+mean less priority, so the process is being nice to others and letting them run first.
+
+nice has an exponential meaning: each increase in nice value means that
+the relative importance of a process increases in 1.25.
+
+for both of them, lower numbers mean higher priority
+
+internally, both real time and normal priorities are represented on a single
+integer which ranges from 0 to 140:
+
+- real time processes are in the 0 - 99 range
+- normal processes are in the 100 - 140 range
+
+once again, the lower values correspond to the greater priorities
+
+priority is inherited by children processes
+
+###nice
+
+is the traditional name for normal priority,
+ranging from -20 (greater priority) to 19.
+
+an increase in 1 nice level means 10% more cpu power
+
+##normal policies
+
+###completelly fair scheduler
+
+all normal processes are currently dealt with internally by the *completelly fair scheduler* (CFS)
+
+the idea behind this scheduler is imagining a system where there are as many cpu's
+as there are processeimagining a system where there are as many cpu's as there are processes
+
+being fair means giving one processor for each processes
+
+what the CFS tries to do is to get as close to that behaviour as possible,
+even though the actual number of processors is much smaller.
+
+###normal scheduling policy
+
+represented by the `SCHED_NORMAL` define
+
+###batch scheduling prolicy
+
+represented by the `SCHED_BATCH` define
+
+gets lower priority than normal processes TODO exactly how much lower
+
+###idle scheduling prolicy
+
+the lowest priority possible
+
+processes with this policy only run when the system has absolutely
+
+represented by the `SCHED_IDLE` define
+
+##real time policies
+
+###fifo
+
+represented by the `SCHED_FIFO` define
+
+highes priority possible
+
+handled by the real time scheduler.
+
+the process with highest real time priority runs however much it wants
+
+it can only be interrupted by:
+
+- another real time processes with even higher priority becomes RUNNABLE
+- a SIGSTOP
+- a sched_yield() call
+- a blocking operation such as a pipe read which puts it to sleep
+
+therefore, lots of care must be taken because an infinite loop here
+can easily take down the system.
+
+###round robin
+
+represented by the `SCHED_RR` define
+
+processes run fixed ammounts of time proportional to their real time priority
+
+like turning around in a pie where each process has a slice proportional to
+it real time priority
+
+can only be preempted like fifo processes, except that it may also be preempted
+by other round robin processes
+
+TODO if there is a round robin and a fifo processes, who runs?
+
+##swapper process
+
+when there are no other processes to do,
+the scheduler chooses a (TODO dummy?) processes called *swapper process*
+
+##runqueues
+
+a runqueue is a list of processes that will be given cpu time
+in order which process will be activated.
+
+it is managed by schedulers, and is a central part of how the scheduler
+chooses which process to run next
+
+there is one runqueu per processor.
