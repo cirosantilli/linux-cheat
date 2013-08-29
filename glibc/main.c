@@ -150,6 +150,26 @@ int main(int argc, char** argv)
         }
     }
 
+    /*
+    #sysconf
+
+        sysconf extensions
+    */
+    {
+            /*
+            Find the number of processors.
+            Seems not to be possible in POSIX: <http://stackoverflow.com/questions/2693948/how-do-i-retrieve-the-number-of-processors-on-c-linux>
+
+            - conf: configured on kernel.
+            - onln: online, that is currently running. Processors can be disabled.
+
+            */
+            {
+                printf( "_SC_NPROCESSORS_ONLN = %ld\n", sysconf( _SC_NPROCESSORS_ONLN ) );
+                printf( "_SC_NPROCESSORS_CONF = %ld\n", sysconf( _SC_NPROCESSORS_CONF ) );
+            }
+    }
+
     printf( "gnu_get_libc_version() = %s\n", gnu_get_libc_version() );
 
     return EXIT_SUCCESS;

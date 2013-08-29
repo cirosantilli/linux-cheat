@@ -4,7 +4,7 @@
 IN_DIR 		?= ./
 IN_EXTS 	?= .c
 OUT_DIR 	:= _out/
-OUT_EXT 	:= .elf
+OUT_EXT 	:=
 RUN			?= main
 
 INS			:= $(foreach IN_EXT, $(IN_EXTS), $(wildcard $(IN_DIR)*$(IN_EXT)) )

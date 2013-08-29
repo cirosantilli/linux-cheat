@@ -15,19 +15,11 @@ most important:
 
 #supported executable formats
 
-##elf
+- elf (linux)
+- mach-o (mac os)
+- pe (windows)
 
-linux
-
-superseeds `.coff` which superseeds `a.out`
-
-##mach-o
-
-mac os
-
-##pe
-
-windows' current `.exe`s
+and more.
 
 #compilation steps
 

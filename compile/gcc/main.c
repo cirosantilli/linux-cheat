@@ -53,31 +53,12 @@ int nested()
 
 //#__attribute__
 
-    char not_aligned16 = 0;
-    char aligned16 __attribute__ ((aligned (16))) = 0;
+    //#function attributes
 
-    int sprintf_wrapper( char *s, int useless, const char *fmt, int useless2, ...)
-    {
-        int ret;
-        va_list args;
+        char not_aligned16 = 0;
+        char aligned16 __attribute__ ((aligned (16))) = 0;
 
-        va_start( args, useless2 );
-        ret = vsprintf( s, fmt, args );
-        va_end( args );
-        return ret;
-    }
-
-    //format
-
-        /*
-        3 says: the 3rd argument is the format string
-        5 says: the va_list starts at the 5th argument
-
-        Declaration and definition *must* be separated.
-        */
-        int sprintf_wrapper_attr( char *s, int useless, const char *fmt, int useless2, ... ) __attribute__((format(printf, 3, 5)));
-
-        int sprintf_wrapper_attr( char *s, int useless, const char *fmt, int useless2, ... )
+        int sprintf_wrapper( char *s, int useless, const char *fmt, int useless2, ...)
         {
             int ret;
             va_list args;
@@ -88,74 +69,126 @@ int nested()
             return ret;
         }
 
-    /*
-    #noreturn
+        //format
 
-        It is possible that the function makes the program exit and therefore does not return.
+            /*
+            3 says: the 3rd argument is the format string
+            5 says: the va_list starts at the 5th argument
 
-        Makes compiler ommit "possible no return" warnings.
+            Declaration and definition *must* be separated.
+            */
+            int sprintf_wrapper_attr( char *s, int useless, const char *fmt, int useless2, ... ) __attribute__((format(printf, 3, 5)));
 
-        Used on glibc exit and abort:
+            int sprintf_wrapper_attr( char *s, int useless, const char *fmt, int useless2, ... )
+            {
+                int ret;
+                va_list args;
 
-            extern void exit(int)   __attribute__((noreturn));
-            extern void abort(void) __attribute__((noreturn));
-    */
-
-        void exitnow()
-        {
-            exit( EXIT_SUCCESS );
-        }
-
-        //warning: control reaches end of non void function
-        /*
-        int noreturn_possible( int n )
-        {
-            if ( n > 0 )
-                exitnow();
-            else
-                return 0;
-        }
-        */
-
-        void exitnow_attr() __attribute__((noreturn));
-
-        void exitnow_attr()
-        {
-            exit( EXIT_SUCCESS );
-        }
-
-        int noreturn_possible_attr( int n )
-        {
-            if ( n > 0 )
-                exitnow_attr();
-            else
-                return 0;
-        }
+                va_start( args, useless2 );
+                ret = vsprintf( s, fmt, args );
+                va_end( args );
+                return ret;
+            }
 
         /*
-        Does not emmit a warning because the libc exit has the `noreturn` attribute.
+        #noreturn
+
+            It is possible that the function makes the program exit and therefore does not return.
+
+            Makes compiler ommit "possible no return" warnings.
+
+            Used on glibc exit and abort:
+
+                extern void exit(int)   __attribute__((noreturn));
+                extern void abort(void) __attribute__((noreturn));
         */
-        int noreturn_possible_exit( int n )
-        {
-            if ( n > 0 )
-                exit(EXIT_SUCCESS);
-            else
-                return 0;
-        }
 
-    //const
+            void exitnow()
+            {
+                exit( EXIT_SUCCESS );
+            }
 
-        int next( int cur )
-        {
-            return cur + 1;
-        }
+            //warning: control reaches end of non void function
+            /*
+            int noreturn_possible( int n )
+            {
+                if ( n > 0 )
+                    exitnow();
+                else
+                    return 0;
+            }
+            */
 
-        int next_const( int cur ) __attribute__((const));
+            void exitnow_attr() __attribute__((noreturn));
 
-        int next_const( int cur )
-        {
-            return cur + 1;
-        }
+            void exitnow_attr()
+            {
+                exit( EXIT_SUCCESS );
+            }
+
+            int noreturn_possible_attr( int n )
+            {
+                if ( n > 0 )
+                    exitnow_attr();
+                else
+                    return 0;
+            }
+
+            /*
+            Does not emmit a warning because the libc exit has the `noreturn` attribute.
+            */
+            int noreturn_possible_exit( int n )
+            {
+                if ( n > 0 )
+                    exit(EXIT_SUCCESS);
+                else
+                    return 0;
+            }
+
+        //const
+
+            int next( int cur )
+            {
+                return cur + 1;
+            }
+
+            int next_const( int cur ) __attribute__((const));
+
+            int next_const( int cur )
+            {
+                return cur + 1;
+            }
+
+    //#variabe attributes
+
+        /*
+        #section
+
+            Put *initilized* data on an arbitrary new section.
+
+            Cannot be used for uninitialized data.
+
+            Arbitrary sections may not be supported on all output formats. ELF at least supports them.
+
+            Applications:
+
+            - linux kernel `__initdata` puts declarations on a special section which is removed at the end of initialization,
+                reclaiming otherwise wasted text space.
+
+            Result on GCC 4.7 i386:
+
+            - generated gas contains `.section` directives:
+
+                .section        newsection1,"aw",@progbits
+
+            - `readelf -a | grep newsec` shows that those two sections exist on the ELF:
+
+                [25] newsection1       PROGBITS        0804a034 001034 000004 00  WA  0   0  4
+                [26] newsection2       PROGBITS        0804a038 001038 000004 00  WA  0   0  4
+        */
+
+            int __attribute__((section("newsection1"))) newsection1_var = 1;
+            int __attribute__((section("newsection2"))) newsection2_var = 2;
 
 int main( int argc, char** argv )
 {
@@ -296,6 +329,38 @@ int main( int argc, char** argv )
             - const
             - hot
 
+    #multiple attributes
+
+        Two syntaxes:
+
+            extern void die(const char *format, ...)
+                __attribute__((noreturn))
+                __attribute__((format(printf, 1, 2)));
+
+        or:
+
+            extern void die(const char *format, ...)
+                __attribute__((noreturn, format(printf, 1, 2)));
+
+    #reason for double parenthesis
+
+        See next section.
+
+    #eliminating __attribute__ on non gnu projects
+
+        This is really easy:
+
+            #ifndef __GNUC__
+            #  define  __attribute__(x)
+            #endif
+
+        This only work because attributes can only take a single argument: `(...)`.
+
+    #alternative syntax
+
+        Add prefix and suffix `__` to keywords and dispense `__attribute__`. Ex:
+
+            __noreturn__
     */
     {
         /*
@@ -362,12 +427,6 @@ int main( int argc, char** argv )
             assert( next( 0 ) == 1 );
             assert( next_const( 0 ) == 1 );
             assert( next_const( 0 ) == 1 );
-        }
-
-        /*
-        #section
-        */
-        {
         }
     }
 

@@ -127,49 +127,6 @@ int main( int argc, char** argv )
     }
 
     /*
-    #sched_setscheduler
-
-        Linux adds other schedulers in addition to the POSIX ones.
-
-        Only the Linux extensions are described here.
-
-        - SCHED_OTHER is SCHED_NORMAL inside the kernel, but other is used outside to be compatible with POSIX.
-
-        - SCHED_IDLE: very low priority, lower than SCHED_BACH with nice 20.
-
-            Only run if there is nothing else to do.
-
-        - SCHED_BATCH:
-
-            Gets somehow disfavoured since it does not need big interaction.
-    */
-    {
-        printf( "SCHED_FIFO     = %d\n",  SCHED_FIFO      );
-        printf( "SCHED_RR       = %d\n",  SCHED_RR        );
-        //printf( "SCHED_SPORADIC = %d\n",  SCHED_SPORADIC  );
-        printf( "SCHED_OTHER    = %d\n",  SCHED_OTHER     );
-        printf( "SCHED_BATCH    = %d\n",  SCHED_BATCH   );
-        printf( "SCHED_IDLE     = %d\n",  SCHED_IDLE    );
-
-        //int policy = SCHED_BATCH;
-        int policy = SCHED_IDLE;
-
-        struct sched_param sched_param = {
-            .sched_priority = 0
-        };
-
-        if ( sched_setscheduler( 0, policy, &sched_param ) == -1 )
-        {
-            perror( "sched_setscheduler" );
-            //exit( EXIT_FAILURE );
-        }
-        else
-        {
-            assert( sched_getscheduler( 0 ) == policy );
-        }
-    }
-
-    /*
     #reboot
 
         Reboots or enables/disables ctrl+alt+del reboot.
@@ -196,16 +153,14 @@ int main( int argc, char** argv )
         Their actual values are the dates of Linus and his three daughters birthdays when vied in hexa:
         <http://stackoverflow.com/questions/4808748/magic-numbers-of-the-linux-reboot-system-call>
 
-        TODO what the H are those magic numbers that must have fixed values?
-
-        TODO how to shut the system down nicely, asking processes to terminate?
+        TODO0 how to shut the system down nicely, asking processes to terminate?
             Is it necessary to loop over pids via proc filesystem and send terminate signals explicitly?
 
-        TODO restart2 message is printed where?
+        TODO0 restart2 message is printed where?
 
-        TODO what is halt?
+        TODO0 what is halt?
 
-        TODO why CAD on did nothing (c-a-del still does nothing)? how do i get my cad key?
+        TODO0 why CAD on did nothing (c-a-del still does nothing)? how do i get my cad key?
 
     #sync
 

@@ -660,24 +660,6 @@
                 ack -f | xargs perl -pie 's/z/Z/g'
             #prints nothing
 
-    ##ctags
-
-        #POSIX 7
-
-        #Reads c file and generates a list of symbol definitions / locations.
-
-        #Put output on a `tags` file on current dir:
-
-            ctags *.h
-
-        ##gnu extensions
-
-            #Recurse:
-
-                ctags -R
-
-            #Makes a single ctags in current directory!
-
     ##exuberant-ctags
 
         #generate tags for given file
@@ -721,6 +703,18 @@
 
         #input and output formats here were inferred from extension,
         #but can be explicitly set too.
+
+    ##c99
+
+        #POSIX C99 compiler!
+
+        #On Linux as of 2013, acts as a simple GCC frontend.
+
+        #At first glance `gcc -std=c99` is largely compatible with the POSIX c99.
+
+    ##fort77
+
+        #POSIX fortran compiler.
 
 ##file management
 
@@ -1193,53 +1187,51 @@
 
         #POSIX 7
 
-        #ajacent dupe line operations
+        #*Ajacent* dupe line operations.
 
-        echo $'a\nb' | uniq
-            #a
-            #b
+        #Remove adjacent dupes lines:
 
-        echo $'a\na' | uniq
-            #a
+            [ "$(echo $'a\nb' | uniq )" = $'a\nb' ] || exit 1
+            [ "$(echo $'a\na' | uniq )" = $'a' ]    || exit 1
 
-        echo $'a\nb\na' | uniq
-        #a
-        #b
-        #a
-        #not adjacent
+        #Non adjacent dupes are not removed:
 
-        #sort combo detected
+            [ "$(echo $'a\nb\na\na' | uniq )" = $'a\nb\na' ] || exit 1
 
-            echo $'a\nb\na' | sort | uniq
-            #a
-            #b
+        #Thus the sort combo:
 
-        echo $'a\na' > a
-        uniq a
-            #a
+            [ "$(echo $'a\nb\na\na' | sort | uniq )" = $'a\nb' ] || exit 1
 
-        # -u : only show lines that have no dupe
-        # -d : dupe lines only
-        # -c : counts how many dupes
+        #Other options:
+
+        #-u : only show lines that have no dupe
+        #-d : dupe lines only
+        #-c : shows dupe count before each ine
 
     ##tee
 
         #POSIX 7
 
         ls | tee file
-            #ls to stdou and file
+            #ls to stdout and file
+
         ls | tee file 1>&2
-            #ls to
+            #ls to file and stderr
+
         ls -l | tee file | sort
             #ls to file and sort
+
         ls | tee –a file
             #ls append to file
+
         ls | tee f1 f2 f3
             #ls to multple files
 
         #tee to multiple processes:
+
             echo a | tee >(seqn 2) tee >(seqn 2) | tr a b
-        #note how process are run in parallel and output order is not variable.
+
+        #note how process are run in parallel and output order is variable.
 
     ##tr
 

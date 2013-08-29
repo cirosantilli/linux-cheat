@@ -45,8 +45,6 @@
 
             sudo apt-get install -y aptitude
 
-    ##manual
-
         ##printer
 
             #worked for: EPSON xp-202

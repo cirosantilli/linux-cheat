@@ -1,4 +1,25 @@
-#binutils
+#formats
+
+There are different types of executable and object files.
+
+##elf
+
+Defined in the LSB.
+
+Superseeds `.coff` which superseeds `a.out`.
+
+Specifies format for both object files (`.o`), shared object files (`.so`) and executable files.
+
+Its structure can be examined in a human readable way via `readelf` and `objdump`.
+
+##mach-o
+
+MAC OS.
+
+##pe
+
+Windows current `.exe` as of 2013.
+
 #binutils
 
 Gnu set of utilities to compile and view and modify compiled code.
@@ -25,17 +46,16 @@ Get symbol table for object files:
 
 Get information stored inside executable files in a human readable way.
 
-Show symtable (defined stuff) of elf .o or .so:
+See all information:
 
-    readelf -s liba.so
+    readelf -a a.out
 
-Show dependencies of an executable (symbols and shared libs):
+TODO understand all the information, and therefore the entire elf format.
 
-    readelf -d a.out
+To show only specific informations:
 
-TODO ?:
-
-    readelf --relocs a.o
+- `-s`: symtable (defined stuff) of elf .o or .so
+- `-d`: dependencies of an executable (symbols and shared libs)
 
 ##elfedit
 

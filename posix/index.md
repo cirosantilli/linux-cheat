@@ -46,15 +46,16 @@ a shell language including almost all the basic `bash` syntax.
 
 ##shell utilities
 
-utilities that should be available to the shell
-such as programs in path or shell builtins
+Utilities that should be available to the shell
+( either as programs in path or shell builtins, this is not specified ).
 
-examples:
+Examples:
 
 - cd
 - ls
 - cat
 - mkdir
+- c99 and fortr77: compiler interfaces for C99 and fortran77!
 
 and tons of others which most people never heard of
 

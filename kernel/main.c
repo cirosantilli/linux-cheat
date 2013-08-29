@@ -975,11 +975,6 @@ static int __init init(void)
 
 				real time priority. Range: 0 to 99, like nice, smallest is most urgent.
 
-			#sched_class
-
-				contains mainly function pointers that
-				determine the operation of the scheduler.
-
 			- policy
 
 				one of:
@@ -1101,6 +1096,63 @@ static int __init init(void)
 			printk(KERN_DEBUG "basename root = %s\n", 		current->fs->root.dentry->d_name.name);
 			printk(KERN_DEBUG "basename dirname root = %s\n", 	current->fs->root.dentry->d_parent->d_name.name);
 		}
+
+		/*
+		#sched_entity
+
+			Represents either a single task or a group of tasks to the scheduler.
+		*/
+		{
+			printk("sched_entity\n");
+			printk(KERN_DEBUG "  current->se.load.weight = %lu\n", 		current->se.load.weight);
+			printk(KERN_DEBUG "  current->se.load.inv_weight = %lu\n", 	current->se.load.inv_weight);
+			printk(KERN_DEBUG "  current->se.on_rq = %d\n", 		current->se.on_rq);
+		}
+
+		/*
+		#sched_class
+
+			Defined at `kernel/sched/sched.h`.
+
+			An abstract class of a scheduler: a bunch of function pointers that schedulers need to implement.
+
+			Every process must be on one and only one scheduling class.
+
+			Scheduling classes have a priority ordering. Processes on class which has greater priority always run first.
+			TODO0 check.
+
+			The order is imposed by linking classes one to another: the element 
+
+				const struct sched_class *sched_class;
+
+			Points to the next class with lower precedence.
+
+			As of 3.10, there seem to exist the following scheduling classes:
+
+				extern const struct sched_class stop_sched_class;
+				extern const struct sched_class rt_sched_class; 	//real time
+				extern const struct sched_class fair_sched_class; 	//completelly faire, cfs
+				extern const struct sched_class idle_sched_class;
+
+			declared on `kernel/sched/sche.h`.
+
+			#sched_class_highes
+
+				Some self documentation also tells us that:
+
+					#define sched_class_highest (&stop_sched_class)
+
+				means that stop_sched_class has the highes priority.
+
+			#for_each_class
+
+				Loop all members classes:
+
+					#define for_each_class(class) \
+						for (class = sched_class_highest; class; class = class->next)
+		*/
+		{
+		}
 	}
 
 	/*
@@ -1134,6 +1186,26 @@ static int __init init(void)
 			printk(KERN_DEBUG "DEFAULT_PRIO  = %d\n", DEFAULT_PRIO);
 
 		schedule();
+	}
+
+	/*
+#define
+ cpu_rq(cpu)
+#define
+ this_rq()
+#define
+ task_rq(p)
+#define
+ cpu_curr(cpu)
+(&per_cpu(runqueues, (cpu)))
+(&__get_cpu_var(runqueues))
+cpu_rq(task_cpu(p))
+(cpu_rq(cpu)->curr)
+*/
+
+	/**/
+	{
+
 	}
 
 	/*

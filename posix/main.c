@@ -1671,6 +1671,9 @@ int main( int argc, char** argv )
             //maximum lengh of command line arguments + environment variables:
 
                 printf( "_SC_ARG_MAX (MiB) = %ld\n", sysconf( _SC_ARG_MAX ) / ( 1 << 20 ) );
+
+            //TODO0 find the number of processors / cpus / cores: not possible without glibc extension?
+            //<http://stackoverflow.com/questions/2693948/how-do-i-retrieve-the-number-of-processors-on-c-linux>
         }
 
         /*
@@ -2075,6 +2078,57 @@ int main( int argc, char** argv )
                 assert( sched_getscheduler( 0 ) == policy );
             }
         }
+
+        /*
+        Bogging the computer down.
+
+        Time to have some destructive fun by making your computer bog down because of infinite loops on real time processes.
+
+        This will generate an infinite number of `SCHED_FIFO` classes with maximum priority.
+
+        *SAVE ALL DATA BEFORE DOING THIS!!!*
+
+        Needs root to work.
+
+        I recommend running this with music on the background to see the music break up.
+        The mouse also becomes very irresponsive.
+
+        However userspace system does not halt. It seems that POSIX does not specify how operating systems
+        should deal with different simultaneous scheduling policies, and my Linux does not let SCHED_FIFO run 100% of the time.
+        maybe as explained here: <http://stackoverflow.com/a/10290305/895245>.
+
+        I could therefore kill the parent and all children with a C-C on the starting terminal.
+        */
+        if ( 0 )
+        {
+            int policy = SCHED_FIFO;
+            struct sched_param sched_param = {
+                .sched_priority = sched_get_priority_max(policy)
+            };
+
+            if ( sched_setscheduler( 0, policy, &sched_param ) == -1 )
+            {
+                perror( "sched_setscheduler" );
+            }
+            else
+            {
+                while ( 1 )
+                {
+                    pid_t pid = fork();
+                    if ( pid == -1 )
+                    {
+                        perror( "fork" );
+                        assert( false );
+                    }
+                    else
+                    {
+                        if ( pid == 0 )
+                            break;
+                    }
+                }
+                while ( 1 );
+            }
+        }
     }
 
     //#execl, execlp, execsle, execv, execvp, execvpe
@@ -2244,6 +2298,30 @@ int main( int argc, char** argv )
 
             //memory was cloned, parent i was only modified in child memory
             assert( i == 0 );
+        }
+    }
+
+    /*
+    Forking too many processes
+
+    Time to have some destructive fun and test the limits on how many processes the system can have.
+
+    This will generate an infinite number of processes. Each one will sleep and terminate.
+
+    *SAVE ALL DATA BEFORE DOING THIS!!!*
+
+    My computer bogged down and I could do nothing about it except turn off the power.
+    */
+    if ( 0 )
+    {
+        while ( 1 )
+        {
+            pid_t pid = fork();
+            if ( pid == -1 )
+            {
+                perror( "fork" );
+                assert( false );
+            }
         }
     }
 
