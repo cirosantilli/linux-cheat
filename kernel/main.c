@@ -108,12 +108,30 @@ module_param(param_s, charp, S_IRUGO);
 /*module_param_array(param_is, int, 3, S_IRUGO);*/
 
 /*
-#export symbols
+#EXPORT_SYMBOL
 
-	when the a module gets inserted in to the kernel, it can see symbols defined in the kernel
+	When the a module gets inserted in to the kernel, it can see symbols defined in the kernel
 
-	however other modules cannot see the symbols defined in a module unless you explicitly
+	However other modules cannot see the symbols defined in a module unless you explicitly
 	export them. This can be done with `EXPORT_SYMBOL` and its `GPL` version
+
+	Modules on the other hand can only see symbols that the kernel exported.
+
+	For example, the function `schedule()` is defined in `kernel/sched/core.c`
+	and exported there.
+
+	It is visible to modules becaues `include/linux/sched.h` declares it,
+	but linking can only work because it was exported.
+
+	Symbols which are not exported cannot be used.
+
+	Defined in `include/linux/export.h`.
+
+	TODO0 understand how this works?
+
+#ksymtab
+
+#ksymtab
 */
 
 static int i_global;
@@ -957,19 +975,19 @@ static int __init init(void)
 
 			#static_priority
 
-				priority when the process was started
+				Priority when the process was started
 
-				can be changed with `nice` and `sched_setscheduler` system calls
+				can be changed with `nice` and `sched_setscheduler` system calls.
 
 			#normal_priority
 
-				priority based on the static priority and on the scheduling policy
+				Priority based on the static priority and on the scheduling policy only.
 
 			#prio
 
-				actual priority. Can be different from normal priority under certain conditions
+				Actual priority.
 
-				that the kernel decides to increase priorities
+				The kernel may change this at runtime for certain reasons.
 
 			#rt_priority
 
@@ -1130,9 +1148,11 @@ static int __init init(void)
 			As of 3.10, there seem to exist the following scheduling classes:
 
 				extern const struct sched_class stop_sched_class;
-				extern const struct sched_class rt_sched_class; 	//real time
-				extern const struct sched_class fair_sched_class; 	//completelly faire, cfs
-				extern const struct sched_class idle_sched_class;
+				extern const struct sched_class rt_sched_class; 	//real time (rt)
+				extern const struct sched_class fair_sched_class; 	//completelly fair scheduler (cfs)
+				extern const struct sched_class idle_sched_class; 	//implements glibc `SCHED_IDLE`?
+
+			As the name suggests, `stop_sched_class` stops everything else from happening on.
 
 			declared on `kernel/sched/sche.h`.
 
@@ -1144,6 +1164,8 @@ static int __init init(void)
 
 				means that stop_sched_class has the highes priority.
 
+				<http://stackoverflow.com/questions/15399782/what-is-the-use-of-stop-sched-class-in-linux-kernel>
+
 			#for_each_class
 
 				Loop all members classes:
@@ -1152,6 +1174,8 @@ static int __init init(void)
 						for (class = sched_class_highest; class; class = class->next)
 		*/
 		{
+			//sched_class is not visible outside the kernel (to modules for example)
+			//struct sched_class sc = sched_class_highest();
 		}
 	}
 
@@ -1171,6 +1195,13 @@ static int __init init(void)
 		Set state for current process. Ex:
 
 			set_current_state(TASK_INTERRUPTIBLE)
+
+	#__sched
+
+		Attribute added to functions that may call `schedule()` (`sched.h`):
+
+			#define __sched		__attribute__((__section__(".sched.text")))
+
 	*/
 	{
 		//max priority of an rt process:

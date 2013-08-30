@@ -54,7 +54,7 @@ TODO understand all the information, and therefore the entire elf format.
 
 To show only specific informations:
 
-- `-s`: symtable (defined stuff) of elf .o or .so
+- `-s`: symtable (defined stuff) of elf, .o or .so
 - `-d`: dependencies of an executable (symbols and shared libs)
 
 ##elfedit

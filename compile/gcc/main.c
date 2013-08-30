@@ -45,13 +45,14 @@ because of the large influence of gcc.
 #include <stdarg.h>    //..., va_list, va_start, va_arg, va_end
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int nested()
 {
     return 0;
 }
 
-//#__attribute__
+//attribute
 
     //#function attributes
 
@@ -89,6 +90,26 @@ int nested()
                 va_end( args );
                 return ret;
             }
+
+        //deprecated
+
+            void func_deprecated() __attribute__((deprecated));
+
+            void func_deprecated(){}
+
+        //used
+
+            void func_used() __attribute__((used));
+
+            void func_used(){}
+
+            void func_not_used(){}
+
+        //warn_unused_result
+
+            int func_warn_unused_result() __attribute__((warn_unused_result));
+            int func_warn_unused_result(){ return 0; }
+            int func_not_warn_unused_result(){ return 0; }
 
         /*
         #noreturn
@@ -159,6 +180,17 @@ int nested()
                 return cur + 1;
             }
 
+        //always inline
+
+            /* function must also be `inline` */
+            inline int incr_always_inline( int i ) __attribute__((always_inline));
+
+            inline int incr_always_inline( int i ){ return i + 1; }
+
+            inline int incr_inline( int i ){ return i + 1; }
+
+            int incr( int i ){ return i + 1; }
+
     //#variabe attributes
 
         /*
@@ -189,6 +221,28 @@ int nested()
 
             int __attribute__((section("newsection1"))) newsection1_var = 1;
             int __attribute__((section("newsection2"))) newsection2_var = 2;
+
+//do some random operations to try and get the cache dirty
+void get_cache_dirty()
+{
+    int i;
+    int is[1024];
+    for (i = 0; i < 1024; i++)
+        is[i] = 1;
+    assert( is[0] == 1 );
+}
+
+int main( int argc, char** argv );
+
+void builtin_return_address_test()
+{
+    printf( "main                           = %p\n", main );
+    //0 means for current function
+    //1 for the parent of current function
+    //etc.
+    printf( "__builtin_return_address(0)    = %p\n", __builtin_return_address(0) );
+    return;
+}
 
 int main( int argc, char** argv )
 {
@@ -303,7 +357,7 @@ int main( int argc, char** argv )
 #endif
 
     /*
-    #__attribute__
+    #attribute
 
         Specifies special attributes of functions or data.
 
@@ -396,17 +450,41 @@ int main( int argc, char** argv )
         }
 
         /*
-        #aligned
+        #deprecated
 
-            Aligns variables on X bit lines.
-
-            This may be required for certain processor specific functions.
-
-            The generated gas assembly code should mark this alignment with the `.align` directive.
+            Using a function marked as deprecated will emmit warnings.
         */
         {
-            assert( aligned16 == 0 );
-            assert( not_aligned16 == 0 );
+            //func_deprecated();
+        }
+
+        /*
+        #used
+
+            Useful when the function may be called from assembly code, in which case GCC
+            may not be easily able to detect that it was called.
+
+            TODO0 what is this for? If a func is not called, what does gcc do? Remove it from text?
+        */
+        {
+        }
+
+        /*
+        #warn_unused_result
+
+            Always emmit a warning if the return value is not used.
+
+            Useful to enforce callers to do error checks when the return value signals the error.
+        */
+        {
+            //no warning
+            func_not_warn_unused_result();
+
+            assert( func_warn_unused_result() == 0 );
+
+            //WARNING ignored return value
+
+                //func_warn_unused_result();
         }
 
         /*
@@ -427,6 +505,69 @@ int main( int argc, char** argv )
             assert( next( 0 ) == 1 );
             assert( next_const( 0 ) == 1 );
             assert( next_const( 0 ) == 1 );
+        }
+
+        /*
+        #always_inline
+
+            Always inline the function.
+
+            ANSI C99 `inline` does not guarantee that, it only hints it to the compiler.
+
+            Must see generated assembly code to notice this ( except for the possible desired speedup effect ).
+
+            On `gcc -O0 4.7`, only the `incr_always_inline` was inlined.
+        */
+        {
+             int i = 0;
+             i = incr( i );
+             i = incr_inline( i );
+             i = incr_always_inline( i );
+        }
+
+        /*
+        #variable attributes
+        */
+        {
+            /*
+            #aligned
+
+                Aligns variables on X bit lines.
+
+                This may be required for certain processor specific functions.
+
+                The generated gas assembly code should mark this alignment with the `.align` directive.
+            */
+            {
+                assert( aligned16 == 0 );
+                assert( not_aligned16 == 0 );
+            }
+
+            /*
+            #packed
+
+                Chars in structs are normally put on 32 bit lines to speed up retrival.
+
+                This however makes the struc larger than necessary, since a struct with
+                2 chars then takes 8 bytes instead of 2.
+
+                Packed prevents this and puts the chars side by side.
+            */
+            {
+                struct not_packed {
+                    char c1;
+                    char c2;
+                };
+                struct not_packed not_packed = { 0, 1 };
+                assert( sizeof(not_packed) >= 2 * sizeof(char) );
+
+                struct packed {
+                    char c1;
+                    char c2;
+                } __attribute__((packed));
+                struct packed packed = { 0, 1 };
+                assert( sizeof(packed) == 2 * sizeof(char) );
+            }
         }
     }
 
@@ -635,6 +776,165 @@ int main( int argc, char** argv )
             assert( x == 1 );
         }
 #endif
+
+    /*
+    #typeof
+
+        Like C++11 decltype.
+    */
+    {
+        typeof( 1 + 0.5 ) j = 0.5;
+        assert( j == 0.5 );
+    }
+
+    /*
+    #range notation
+    */
+    {
+        /*case*/
+        {
+            int i = 1;
+            switch ( i ) {
+                case 0 ... 2:
+                    assert( 1 );
+                break;
+
+                case 3 ... 5:
+                    assert( 0 );
+                break;
+
+                default:
+                    assert( 0 );
+                break;
+            }
+        }
+
+        /* intializations */
+        {
+            int is[] = { [0 ... 2] = 0, [3 ... 5 ] = 1  };
+            assert( memcmp( is, &(int[6]){ 0, 0, 0, 1, 1, 1 }, sizeof(typeof(is)) ) == 0 );
+        }
+    }
+
+    /*
+    #zero length arrays
+
+        TODO0 application?
+    */
+    {
+        int is[0];
+        int i;
+        printf( "&is[0] = %p\n", &is[0] );
+        printf( "&i     = %p\n", &i );
+
+    }
+
+    /*
+    #builtin
+
+        Many gcc special functions and macros are prefixed `__builtin_`.
+    */
+    {
+        /*
+        #builtin_return_address
+
+            Get address that function will return to after return.
+
+            It seems that it is not possible to jump to a location without assemby:
+            <http://stackoverflow.com/questions/8158007/how-to-jump-the-program-execution-to-a-specific-address-in-c>
+
+            This is most useful for debugging.
+        */
+        {
+            builtin_return_address_test();
+        }
+
+        /*
+        #builtin_constant_p()
+
+            Returns true iff gcc could determine that the given expression is constant,
+            to decide if compile time optimizations may be done or not.
+
+            Gcc is not smart enough to decide all cases correctly.
+
+            TODO0 what is a compile time constant? How to use this?
+        */
+        {
+            assert( __builtin_constant_p( 1 ) );
+            assert( __builtin_constant_p( 1 + 1 ) );
+
+            //TODO0 why does thie fail?
+            //const int i = 0;
+            //assert( ! __builtin_constant_p( i ) );
+        }
+
+        /*
+        #builtin_expect
+
+            Basis for the `likely` and `unlikely` macros used extensively on the Linux kernel to help with branch prediction:
+
+                #define likely(x)	__builtin_expect(!!(x), 1)
+                #define unlikely(x)	__builtin_expect(!!(x), 0)
+
+            TODO0 why the double negation?
+
+            Says that we expect the left side expression and the right side long value to be the same almost always.
+        */
+        {
+            int x = 0;
+            int y;
+            if (__builtin_expect(x, 0))
+                y = 1;
+            if ( x == 0 )
+                y = 1;
+            assert( y == 1 );
+        }
+
+        /*
+        #builtin_prefetch
+
+            Pulls data into cache shortly before it is needed.
+
+            Signature:
+
+                void __builtin_prefetch( const void *addr, ... );
+
+            - addr: The address of the data
+            - rw:
+
+                Second optional argument.
+
+                Indicates whether the data is being pulled in for Read or preparing for a Write operation
+
+                - 0 = r (default)
+                - 1 = w
+
+            - locality:
+
+                Degree of temporal locality of variable.
+
+                Third optional argument.
+
+                Integer in [0,3] range.
+
+                - 0 means no temporal locality, so it can be removed from cache immediately after use.
+                - 3 means very high temporal locality, should stay on the cache afterwards.
+
+                3 is the default value.
+
+            I could not manage to make GCC generate different assembly output in the two cases.
+        */
+        {
+            int j = 1;
+
+            get_cache_dirty();
+            __builtin_prefetch(&j, 0, 0);
+            assert( j == 1 );
+
+            get_cache_dirty();
+            assert( j == 1 );
+        }
+    }
 
     return EXIT_SUCCESS;
 }

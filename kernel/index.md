@@ -247,6 +247,14 @@ Kernel global boilerplate:
 
 - data structures such as linked lists in `llist.c` or `rbtree.c`
 
+##tools
+
+TODO what is the difference from `lib`?
+
+Seems to conatin utilities which are useful throughout the kernel, such as:
+
+- `EXPORT_SYMBOL` under perf/util/include/linux/export.h
+
 ##scripts
 
 Scripts used to build the kernel.
@@ -300,6 +308,9 @@ For example, to try to find the definition of struct `s`:
 	it is useful for example for people writting kernel modules,
 	and is automatically included by the standard module `Makefile`.
 
+##System.map
+
+Generated at the top level and then placed at `/boot/System.map-<version>`.
 
 #special files for user space communication
 
@@ -411,7 +422,9 @@ tested on Ubuntu `13.04` with kernel dev version `3.10.0-rc5+`
 this will place:
 
 - the compiled kernel under `/boot/vmlinuz-<version>`
+
 - config file `.config` as `/boot/config-<version>`
+
 - `System.map` under `/boot/System.map-<version>`.
 
 	This contains symbolic debug information.

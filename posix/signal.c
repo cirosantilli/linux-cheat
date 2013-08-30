@@ -1,43 +1,76 @@
 /*
-in short:
+In short:
 
 - signals are a simple way for processes to communicate
 - signals are limited to passing a single byte between two processes
 
+To send arbitrary signals to a process from a terminal, consider using the `kill` utility
+(it does more than killing via a SIGTERM, as in general it sends any signal to a process)
+
+Also consider the convenient non POSIX stadardized VT100 control characters such as `<C-C>`
+which generate certain signals such as `SIGTERM`.
+
 #ANSI
 
-ANSI C supports the concept of signals, and only POSIX specific features
-shall be discussed here. It seems that POSIX also leaves many signals
-as implementation dependant, so this may only work in linux.
+ANSI C supports the concept of signals, and only POSIX specific features shall be discussed here.
 
 Please look for ANSI C info for any feature used but not explained here.
 
+Linux extends POSIX by adding new signals, Those shall not be discussed here.
+
 #POSIX
 
-List of all signals and default actions taken: <http://pubs.opengroup.org/onlinepubs/009696699/basedefs/signal.h.html>.
+Docs here: <http://pubs.opengroup.org/onlinepubs/009696699/basedefs/signal.h.html>.
 
-POSIX defines several signals and their default behaviours in addition to the ANSI C signals.
+POSIX defines several signals in addition to the ANSI C signals.
 
-You can change those behavious by creating your own handlers.
+As in ANSI C, each signal has the following attributes:
 
-The possible default behaviours are:
+- general description of which conditions generate the signal
 
-- T: Abnormal termination of the process. The process is terminated with all the consequences of _exit() except that the status made available to wait() and waitpid() indicates abnormal termination by the specified signal.
+- the signal can or cannot be handled.
 
-- A :Abnormal termination of the process.
-    [XSI] [Option Start] Additionally, implementation-defined abnormal termination actions, such as creation of a core file, may occur. [Option End]
+    Most signals can be handled, but there are a few exceptions such as:
 
-- I: Ignore the signal.
+    - `SIGKILL`: always kill processes, cannot be handled.
+    - `SIGKSTOP` and `SIGCONT`
 
-- S: Stop the process.
+- default action to take
 
-- C: Continue the process, if it is stopped; otherwise, ignore the signal.
+    For signals that can be handled, you can change those behavious by creating your own handlers.
 
-Most signals can be caught and handled, but a few such as `SIGKILL` and `SIGSTOP` cannot.
-This is also specified in the man.
+    The possible default behaviours are:
 
-To send arbitrary signals to a process from a terminal, consider using the `kill` utility
-(it does more than killing via a SIGTERM, as in general it sends any signal to a process)
+    - T:
+
+        Abnormal termination of the process.
+
+        The process is terminated with all the consequences of `_exit()` except that the status made available to
+        `wait()` and `waitpid()` indicates abnormal termination by the specified signal.
+
+        Default action for most signals.
+
+    - A :Abnormal termination of the process.
+
+        [XSI] [Option Start] Additionally, implementation-defined abnormal termination actions,
+        such as creation of a core file, may occur. [Option End]
+
+        Linux implements concept of core dumps on those cases.
+        Note however that those may be turned on or off depending on the system configuration.
+
+    - I: Ignore the signal.
+
+        An important example is `SIGCHLD`, which is generated when a child terminates,
+        but has no effect by default, since in general killing the parent is not what
+        should happen on most programs.
+
+    - S: Stop the process.
+
+        Mainly `SIGSTOP`.
+
+    - C: Continue the process, if it is stopped; otherwise, ignore the signal.
+
+        Mainly `SIGCONT`.
 
 POSIX specific signals include:
 
@@ -45,13 +78,25 @@ POSIX specific signals include:
 
     Kills program.
 
-    Cannot be handled. This is unlike to `SIGINT` and `SIGTERM`.
+    Cannot be handled unlike to `SIGINT` and `SIGTERM`.
+
+- SIGQUIT
+
+    Quit program.
+
+    Used in case of abnormal termination, unlike `SIGINT` and `SIGTERM`.
+
+    May therefore generate a core dump on certain systems (for example Linux with the right configurations)
+
+    Can be generated on VT100 with `<C-\>`.
 
 - SIGSTOP
 
-    Freezes program. ctrl+z, in linux terminals.
+    Freezes program.
 
-    Programs cannot handle this signal, it always freezes the process immediatelly.
+    `ctrl+z`, in linux terminals.
+
+    Cannot be handle.
 
 - SIGCONT
 
@@ -70,6 +115,8 @@ POSIX specific signals include:
 - SIGCHLD
 
     Child terminated, stopped or continued.
+
+    Ignored by default.
 
 - SIGALRM
 

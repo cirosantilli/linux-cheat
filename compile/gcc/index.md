@@ -388,3 +388,9 @@ The generated assembly code is in the `gas` format.
 - .LCFI:
 - .LBB:
 - .LBE:
+
+#sources
+
+- <http://www.ibm.com/developerworks/library/l-gcc-hacks/>
+
+    Good selection of useful features.

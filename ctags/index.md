@@ -4,11 +4,22 @@ Reads source files and generates a list of objects that can be later searched.
 
 Objects are things like C symbols: variable names, function names, structure names, macros.
 
-Therefore the output os this program is useful if you want to find where something is defined in a large source code.
+Therefore the output os this program is useful if you want to find where something is defined in a large source code,
+such as the Linux kernel for example.
 
-The output is computer readable, and editors such as VIM have functionalinties such as:
-move cursor on top of the symbol, click something (`<C-]>`), and magically jump to the definition
-( there could however be many symbols with the same name...).
+The output is both human and computer readable, therefore to use it you can either:
+
+- look at the file yourself and search.
+
+    Useful when there are many possible definition places,
+    and you might be able to guess the correct one by looking at the extra fields of the file.
+
+- use an editor such as VIM which has built-in functionalinties that allows you to
+    move cursor on top of the symbol, click something (`<C-]>`), and magically jump to the definition
+
+    There could however be many candidate objects with the same nameso you might have to loop a large list of tags.
+
+    If that is the case, it might be easier to read the `tags` file directly.
 
 #basic usage
 
@@ -25,7 +36,6 @@ Recurse (GNU extension):
     ctags -R
 
 Makes a single ctags in current directory recursing into all child dirs.
-
 
 #supported languages
 

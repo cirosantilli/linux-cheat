@@ -2308,7 +2308,7 @@ int main( int argc, char** argv )
 
     This will generate an infinite number of processes. Each one will sleep and terminate.
 
-    *SAVE ALL DATA BEFORE DOING THIS!!!*
+    **SAVE ALL DATA BEFORE DOING THIS!!!**
 
     My computer bogged down and I could do nothing about it except turn off the power.
     */
