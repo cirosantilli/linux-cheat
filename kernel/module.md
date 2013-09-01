@@ -197,11 +197,17 @@ You can manipulate dev_t with the macros:
 - `MINOR(dev_t dev)`: get major number of a `dev_t`
 - `MKDEV(int major, int minor)`: make `dev_t` from major and minor
 
----
+##alloc_chrdev_region
 
-To register the char use:
+Allocate character device major and minor number for a new driver.
 
-	int alloc_chrdev_region(dev_t *dev, unsigned int firstminor, unsigned int count, char *name);
+Defined in `fs/char_dev.c`.
+
+Declared in `include/linux/fs.h`.
+
+Defined in `fs/char_dev.c`.
+
+    int alloc_chrdev_region(&dev, 0, 1, "char_cheat");
 
 where:
 
@@ -210,147 +216,67 @@ where:
 - `count` is the number of minor number which should be allocated.
 - `name` is what will appear under `/proc/devices` and on the sysfs under TODO
 
+Returns `0` on success, negative integer on error.
+
 You could fix the major device number yourself, but this is more and more deprecated.
 This was done with the `register_chrdev_region` function.
 
-##mknod
+The only disadvantage of using dynamic allocation of major numbers is that we must create
+the character device files under `/dev` after registering the module,
+and to do so we must process information
+available at `/proc/devices` which contains char dev name / device number pairs.
 
-make a char file, major number 12, minor number 2:
+Before being able to use those numbers, you still need to allocate a `cdev` with `cdev_init`,
+and then tell the kernel about it and which device numbers it represents via `cdev_add`.
+
+Once a module is done with the device numbers,
+it should free those numbers via `unregister_chrdev_region`.
+
+This does not create actual device files.
+
+##cdev
+
+Represents a character device in the kernel
+
+##cdev_init
+
+Initializes a cdev, allocating data for it, and setting its file operations:
+
+    void cdev_init(struct cdev *cdev, struct file_operations *fops);
+
+##cdev_add
+
+Register a `cdev` structure once it has been set up.
+
+    int cdev_add(struct cdev *dev, dev_t num, unsigned int count);
+
+##iminor and imajor
+
+Inodes contain references to cdev.
+
+To get the major and minor numbers from a character dev inode, use:
+
+    unsigned int iminor(struct inode *inode);
+    unsigned int imajor(struct inode *inode);
+
+##create a character file from sh
+
+Character files can be created with the `mknod` command.
+
+Since `mknod` also serves other purposes such as creating FIFOs,
+it shall not be documented here.
+
+As a short reminder, to make a char file with major number 12 and minor number 2 use:
 
     sudo mknod /dev/coffee c 12 2
 
-##device files
+Whatever device file you create with a given major and minor number pair will be handled by the same cdev,
+which in particular specifies the `file_operations` struct.
 
-Device file are special files similar to those in the proc filesystem.
+Therefore all of the following device files will do the same thing for example when you `cat` them:
 
-They do not have a disk representation, and serve as a means of communication
-between userspace and the kernel.
-
-The advantage of such files is that they use existing system calls such as
-open read an write to perform IO operations between userpace and kernel space.
-
-###/dev/sda
-
-Device files of this type represent block devices such as hard disks or flash memory.
-
-The first device is `sda`, the second `sdb`, and so on.
-
-Also, partitions inside those devices have device files for them too.
-
-The first primary partion inside `sda` will be called `sda1`,
-the second main partition `sda2`, and so on.
-
-Logical partitions are numbered from `sda5` onwards.
-
-*Warning*: usage of block devices can be very dangerous and lead to data loss!
-
-Example: copy a block device on `/dev/sda/` to the one one `/dev/dsb`:
-
-    #sudo dd bs=4M if=/dev/zero of=/dev/sdb
-
-this could be used to make a full system backup.
-
-Example: write pseudorandom sequences into `/dev/sda/` to hide data:
-
-    #sudo dd bs=4M if=/dev/urandom of=/dev/sda
-
-###/dev/null
-
-Discards whatever input is given to it by a `write` sycall
-
-Very useful to discard undesired stdout / stderr:
-
-    echo a > /dev/null
-
-Generates no output.
-
-###/dev/zero
-
-Returns as many zeros as asked for by a read syscall.
-
-You cannot `cat` this because cat reads until the file is over,
-but this special file is *never* over.
-
-Application: reset entire partitions to 0.
-
-Example:
-
-    dd if=/dev/zero count=1 status=none | od -Ax -tx1
-
-Output:
-
-    000000 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    *
-    000200
-
-Meaning if you don't speak `od` language (now is a good time to learn):
-512 bytes with value 0.
-
-###/dev/full
-
-if you write to it, the write returns ENOSPC error
-
-Example:
-
-    echo a > /dev/full
-
-If you read from it, returns as many null chars as were asked for by read, like `/dev/zero`.
-
-###pseudorandom number generators
-
-The kernel implements a random number generator which draws entropy from
-non predictable events, typically device events such as mice movements
-or disk reads for example.
-
-Just like for `/dev/zero`, it is useless to cat those files,
-since they don't have and end, and `cat` tries to read to the end of the file before printing.
-
-####/dev/random
-
-`/dev/random` returns random numbers one by one whenever enough entropy
-is generated. It is slower than `urandom`, but has greater entropy.
-
-####/dev/urandom
-
-`/dev/urandom` returns random numbers continuously. It is faster than `random`,
-but has less entropy. It should however be good enough for most applications.
-
-Example: get 16 random bytes:
-
-    dd bs=16 if=/dev/urandom count=1 status=none | od -Ax -tx1
-    dd bs=16 if=/dev/urandom count=1 status=none | od -Ax -tx1
-
-Sample output:
-
-    000000 51 e6 4d 6d 98 5f 3e 48 c9 9a 04 6f d7 f2 57 c6
-    000010
-
-    000000 7d 87 2c a3 32 9d d0 78 18 9d 5f ab c5 7a d2 ea
-    000010
-
-Since the 16 bytes are random, the lines are extremelly likelly to be different.
-
-###mice
-
-you can have some fun with mouses. Search for the mice or mouse device files and cat them:
-
-	sudo cat /dev/input/mice
-
-and then:
-
-	sudo cat /dev/input/mouse0
-
-now note that when you move the mouse, cat spits something out to the screen!
-
-`mice` is the combination of all mice, and each other `mouseX` is a single mouse device.
-
-##system calls that use the char file
-
-since the char file is not a real file but a representation of some hardware,
-you have furnish methods used by system calls that deal with files
-so those system calls can know what to do with that special file.
-
-all of those operations are defined under `fs.h`
+    sudo mknod /dev/test c 1 2
+    sudo mknod /tmp/asdf c 1 2
 
 #hardware communication
 

@@ -3012,6 +3012,221 @@
 
             hwinfo | less
 
+##ulimit
+
+    #Get and set limits for applications running under curent shell.
+
+    #POSIX 7.
+
+    #POSIX only mandates a single option: `-f` for the maximum file size.
+
+    #Get value of limit:
+
+        ulimit -f
+
+    #Set value:
+
+        ulimit -f 0
+        sudo ulimit -f unlimited
+
+    #Certain limits may require root priviledges to increase.
+
+    ##GNU extensions
+
+        #GNU adds many more options in its sh and bash implementations.
+
+        #In both cases `ulimit` is implemented as a built-in.
+
+        #View all limits (including the unit and the option name):
+
+            ulimit -a
+
+##eval
+
+    #POSIX 7.
+
+    #exec string in current bash
+
+        eval "a=b"
+        assert [ $a = b ]
+
+    #concatenates arguments, space separated:
+
+        assert [ `eval echo a` = a ]
+
+    ##applications
+
+        #make varname from var
+
+            a=b
+            eval "$a=c"
+            assert [ $b = c ]
+
+##exec
+
+    #POSIX 7.
+
+    #Interface similar to an exec system call:
+    #ends current shell and runs given command instead
+
+    #destroys the calling bash!
+
+        assert [ $SHLVL = 1 ]
+        exec bash
+        assert [ $SHLVL = 1 ]
+
+    #exec bash
+
+        #ls then exits bash!
+        #you don't see anything
+
+    ##application
+
+        #start a new bash with a custom environment
+
+        #and discard the old one
+
+            exec env -i a=b c=d bash --norc --noprofile
+            env
+            exit
+
+##read
+
+    #Reads from stdin and stores in shell variables.
+
+    #Therefore, this *must* be a shell BUILTIN, since it modifies shell variables directly
+
+    #POSIX 7.
+
+    #Get string from user into variable `a`:
+
+        #read a
+        #echo "$a"
+
+    #Cannot write with pipe into read because the pipe spawns a subshell,
+    #which cannot modify a variable in its parent shell:
+    #<http://stackoverflow.com/questions/13763942/bash-why-piping-input-to-read-only-works-when-fed-into-while-read-const>
+
+        a=a
+        echo b | read a         #`read a` is executed in a subshell!
+        [ $a = a ] || exit 1
+
+    #Creating a subshell does work however:
+
+        echo abc | ( read b; [ $b = abc ] || exit 1 ) || echo fail
+
+    #and so do while combos, which also create one subshell per loop body:
+
+        while read l; do
+            echo "$l"
+        done < <( echo -e "a\nb\na b" )
+
+    #Read from file descriptor linewise and assign to variable.
+
+        ##applications
+
+            #Read file linewise:
+
+                #while read l; do
+                #    echo "$l";
+                #done < "$f"
+
+            #Read stdout linewise:
+
+                while read l; do
+                    echo "$l"
+                done < <( echo -e "a\nb\na b" )
+
+            #Split into fields:
+
+                #IFS_OLD="$IFS"
+                #while IFS=' : ' read f1 f2
+                #do
+                #    echo "$f1 $f2"
+                #done < <( echo -e "a : b\nc : d" )
+                #IFS="$IFS_OLD"
+
+    ##GNU extensions
+
+        #-p print a prompt message:
+
+            read -p "enter string: " s
+            echo "you entered $s"
+
+##test
+
+    #Compare values and check files, answer on exit status.
+
+    #Equivalent convenient shorthand form via squre brackets: `[ ]`
+
+    #Can do tons of different tests.
+
+    #May also exist as a separate binary implementation on certain systems,
+    #but the built-in has precedence:
+
+        which test
+
+    ##string compare
+
+            test a = a && echo a
+                #a
+            test a = b && echo a
+                #
+
+    ##integer compare
+
+        #always use `-eq` family, never `=` family:
+
+            assert [ 1 -eq 1 ]
+            assert [ 1 -eq 01 ]
+            assert [ 1 -lt 2 ]
+            assert [ 2 -gt 2 ]
+            assert [ 1 -le 2 ]
+            assert [ 2 -ge 2 ]
+
+    ##file ops
+
+        ##-f
+
+            #exists and is regular file (not a symlink or directory)
+
+                init_test
+                touch a
+                assert test -f a
+                cleanup_test
+
+        ##-r
+
+            #File or directory exists and has read permission.
+
+            #Useful in conjunction with `-f` before taking input from a file,
+            #since just checking its exsitence is not enough to read from it.
+
+        ##-e
+
+            #file exists
+
+            #may be a symlink or directory
+
+            #useful to avoid overwriting useful files
+
+        ##-s
+
+            #exists and has size > 0
+
+                rm -rf a
+                touch a
+                assert test -f a
+
+    ##logical
+
+            test ! a = a        && assert false
+            test a = a -a b = b && assert false
+            test a = a -a a = b && assert false
+            test a = a -o a = b && assert false
+            test a = b -o a = b && assert false
+
+
 ##process
 
     #get cur pid in bash:
@@ -3118,6 +3333,90 @@
         p=
         ps -p $p -o ppid=
             #get pid of parent of process with pid p
+
+    ##jobs
+
+        #Shows:
+
+        #- jobspec      : a local job id.
+        #- status       : runnning, stopped, done
+        #- invocation   : exact program call, including command line args. Ex: `ls ~`
+
+            jobs
+
+        #show pids of background jobs:
+
+            jobs -p
+
+        ##jobspecs
+
+            #local job id, found by using <#jobs>
+
+            #certain commands such as ``kill``, ``fg`` them in addition to pids
+
+            #they are:
+
+            #- %N	Job number [N]
+            #- %S	Invocation (command line) of job begins with string S
+                #if several matches, ambiguous, and does nothing
+            #- ?S	Invocation (command line) of job contains within it string S
+            #- %%	"current" job (last job stopped in foreground or started in background)
+            #- %+	"current" job (last job stopped in foreground or started in background)
+            #- %-	last job
+
+    #ls &
+    #sleep 100 &
+    #sleep 100 &
+    #sleep 100 &
+        #runs on background
+        #
+        #[1] 12345678
+        #means local id 1
+        #process number 12345678
+        #
+        #when process ends, it prints ``[n] 1234`` and disappears
+        #
+        #stdout continues to go to cur terminal, even if in bg
+
+    #firefox
+        #Ctrl z
+        #puts currently foreground running on background stopped
+
+    ##bg
+
+        #POSIX 7
+
+            #bg %3
+                #starts running job 3 which was stopped on background
+            #bg
+            #bg %+
+            #bg %%
+                #last bg job [+]
+            #bg %-
+                #before last bg job [-]
+
+    ##fg
+
+        #POSIX 7
+
+            #fg %3
+                #starts running job 3 which was on background on foreground
+            #fg
+                #last job
+
+    #kill %1
+        #kill subprocess [1]
+    #kill $PID
+        #kill by process id
+
+    ##disown
+
+        #vlc 100 &
+        #vlc 100 &
+        #vlc 100 &
+        #disown %3
+            #remove job 3 from list of sub jobs
+            #closing bash will not kill it anymore
 
     ##kill
 
@@ -3889,23 +4188,40 @@
 
     ##mkfifo
 
+        #POSIX 7
+
         #make a fifo (named pipe)
 
-        mkfifo f
-        echo a > f &
-            #the other end of the pipe has not been opened to read
-            #therefore the echo write system call blocks
-        cat f
-            #a
-            #requests for data
-            #echo sends its data
-            #echo terminates
-            #this closes the echo input pipe
+        #Example:
 
-            #TODO understand this!
+            mkfifo f
+            echo a > f &
+
+        #`echo` writes to the pipe with a write system call.
+
+        #The pipe has not been opened to read
+        #therefore the echo write system call blocks.
+
+            cat f
+
+        #Outputs `a`. Both `echo` and `cat` finish.
+
+        #- `cat` reads the pipe to read
+        #- `echo` puts its data on the pipe
+        #- `echo` terminates
+        #- `cat` reads the data from the pipe and terminates
+
+    ##mknod
+
+        #Create character, block or FIFO (named pipe) files.
+
+        #Make a char file with major number 12 and minor number 2:
+
+            sudo mknod /dev/coffee c 12 2
 
     ##chown
-        #POSIX
+
+        #POSIX 7
 
         #change owner and group of files
 

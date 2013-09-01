@@ -84,9 +84,12 @@ POSIX specific signals include:
 
     Quit program.
 
-    Used in case of abnormal termination, unlike `SIGINT` and `SIGTERM`.
+    Used in case of abnormal termination (`A`), unlike `SIGINT` and `SIGTERM`.
 
-    May therefore generate a core dump on certain systems (for example Linux with the right configurations)
+    May therefore generate a core dump on certain systems.
+
+    On Linux, you must first enable core dumps on the current terminal via `ulimit -c unlimited`,
+    since coredumps may be turned off by default.
 
     Can be generated on VT100 with `<C-\>`.
 

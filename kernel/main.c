@@ -16,6 +16,7 @@ If a concept is not clearly explained here, do check on separate information fil
 #include <asm/param.h>		/* HZ */
 #include <asm/atomic.h>		/* atomic_t */
 
+#include <linux/cdev.h> 	/* cdev_init, cdev_add, cdev_del */
 #include <linux/dcache.h>	/* dentry, super_block */
 #include <linux/errno.h>	/* ENOMEM,  */
 #include <linux/fs_struct.h>	/* fs_struct */
@@ -148,6 +149,81 @@ static atomic_t i_global_atomic;
 
 static int initdata __initdata = 0;
 static int initconst __initconst = 0;
+
+static dev_t dev;
+static int dev_count = 1;
+static struct cdev cdev;
+
+/*
+#file_operations
+
+	Pointers to functions which describe what file system calls such as open, read, write or close
+	do on a given file.
+
+		static struct file_operations fops = {
+			.owner = THIS_MODULE,
+			.llseek = llseek,
+			.read = read,
+			.write = test_write,
+			.ioctl = test_ioctl,
+			.open = open,
+			.release = release,
+		};
+
+	In most cases, `NULL` entries mean that any corresponding system calls will fail. Exceptions:
+
+	- open and release: if NULL, always sucessful.
+*/
+
+	ssize_t read_infinte(struct file *filp, char __user *buf, size_t count, loff_t *off){
+		buf[0] = 'a';
+		return 1;
+	}
+
+	/*
+	Always return the `a` character on read.
+
+	When catted will print an infinite amount of `a` chars to screen,
+	since `cat` keeps reading while data is available.
+	*/
+
+		static struct file_operations fops_infinite = {
+			.owner = THIS_MODULE,
+			.open = NULL,
+			.read = read_infinite,
+			.release = NULL,
+		};
+
+	/*
+	Return the `a` character on read first read, and 0 bytes on the following reads.
+
+	When catted will print a single `a` char to screen and then stop,
+	since the 0 byte return means EOF: no more data available.
+	*/
+		static int read_once_done = 0;
+
+		ssize_t read_once(struct file *filp, char __user *buf, size_t count, loff_t *off){
+			if (!read_once_done) {
+				buf[0] = 'a';
+				read_once_done = 1;
+				return 1;
+			} else {
+				/*
+				Teturning 0 bytes tells the reading application that there are no more bytes to be read.
+
+				In the case that more bytes could become availabe in the future,
+				the reader should sleep waiting for them.
+				*/
+				return 0;
+			}
+		}
+
+		static struct file_operations fops_once = {
+			.owner = THIS_MODULE,
+			.open = NULL,
+			.read = read_infinite,
+			.release = NULL,
+		};
 
 /*
  * this function is defined as the entry point by the `module_init` call below.
@@ -459,7 +535,6 @@ static int __init init(void)
 		if (initdata  != 1) return -1;
 		if (initconst != 0) return -1;
 	}
-
 
 	/*
 	#data structures
@@ -1220,26 +1295,6 @@ static int __init init(void)
 	}
 
 	/*
-#define
- cpu_rq(cpu)
-#define
- this_rq()
-#define
- task_rq(p)
-#define
- cpu_curr(cpu)
-(&per_cpu(runqueues, (cpu)))
-(&__get_cpu_var(runqueues))
-cpu_rq(task_cpu(p))
-(cpu_rq(cpu)->curr)
-*/
-
-	/**/
-	{
-
-	}
-
-	/*
 	#kernel threads
 
 	#kthread
@@ -1629,7 +1684,7 @@ cpu_rq(task_cpu(p))
 
 		You can have a different filesystem per partition.
 
-	# filesystem
+	#filesystem
 
 		linux abstracts over several hardwares and filesystem types to create a simple interface for programs
 
@@ -1667,17 +1722,34 @@ cpu_rq(task_cpu(p))
 		- dentry
 		- file
 
-		- inode struct:
+		#inode struct
 
-			represents a file in the usual sense: a chunk of data on disk with medatada such as
+			Represents a file in the usual sense: a chunk of data on disk with medatada such as
 
 			- filesize
 			- timestamps.
 			- superbloc owner
 
-			located in `fs.h`:
+			Defined in `fs.h`.
 
-		- file struct:
+			Interesting members:
+
+				kuid_t i_uid; 			//uid
+				kgid_t i_gid; 			//gid
+
+				//cdev represents character devices
+				//block_device and pipe_inode_info block devices and pipes
+				//so only one of those can apply at a time, thus the union
+				union {
+					struct pipe_inode_info	*i_pipe;
+					struct block_device	*i_bdev;
+					struct cdev		*i_cdev;
+				};
+
+				dev_t i_rdev; //device numbers if this represents
+
+
+		#file struct
 
 			represents a file open for reading.
 
@@ -1690,7 +1762,16 @@ cpu_rq(task_cpu(p))
 
 			located in `fs.h`:
 
-		- dentry struct:
+			Interesting fields:
+
+				umode_t i_mode;		 	//rwx
+				loff_t f_pos; 			//current read/write position
+				unsigned int f_flags; 		//file flags, such as O_RDONLY, O_NONBLOCK, and O_SYNC
+				struct file_operations *f_op; 	//what file operations do
+				void *private_data; 		//used to store any state information implementation may wish to use
+				struct dentry *f_dentry; 	//associated dentry
+
+		#dentry struct
 
 			located under `dcache.h`
 
@@ -1897,30 +1978,6 @@ cpu_rq(task_cpu(p))
 	*/
 	{
 	}
-
-	/*
-	#device driver
-
-	there are 3 main types of device drivers:
-
-	- character devices: simplest one. Applications can only access data as a stream, not randomly.
-
-		Useful for devices like mice, keyboard
-
-	- block device: devices like hard disks or dvd readers. Random access is required.
-
-	- network device: TODO
-	*/
-
-	/*
-	#character device
-
-		they are represented by the struct cdev found in TODO
-
-		dev_t dev;
-		int alloc_chrdev_region(&dev, 0, 1, "char_cheat");
-	*/
-
 
 	/*
 	#interrupt handler
@@ -2142,6 +2199,42 @@ cpu_rq(task_cpu(p))
 		}
 	}
 
+	/*
+	#device driver
+
+		there are 3 main types of device drivers:
+
+		- character devices: simplest one. Applications can only access data as a stream, not randomly.
+
+			Useful for devices like mice, keyboard
+
+		- block device: devices like hard disks or dvd readers. Random access is required.
+
+		- network device: TODO0
+	*/
+
+	/*
+	#character device
+	*/
+	{
+		struct file_operations *fops;
+
+		if (alloc_chrdev_region(&dev, 0, dev_count, "test") < 0 )
+			printk(KERN_DEBUG "alloc_chrdev_region error\n");
+
+		printk(KERN_DEBUG "major = %d\n", MAJOR(dev));
+		printk(KERN_DEBUG "minor = %d\n", MINOR(dev));
+
+		fops = &fops_once;
+		cdev_init(&cdev, fops);
+		cdev.owner = THIS_MODULE;
+		cdev.ops = fops;
+		if (cdev_add(&cdev, dev, dev_count) < 0)
+			printk(KERN_DEBUG "cdev_add error\n");
+		//from now on, character device files with the given `dev_t`
+		//numbers will use the given fops, so create some with mknod and cat away.
+	}
+
 	printk(KERN_DEBUG "============================================================\n");
 
 	return 0;
@@ -2178,18 +2271,22 @@ module_init(init);
 
 /*
  * same as init, with `module_exit` to fix this as exit point.
- *
- * naming this `module_cleanup` worked.
- *
- * #__exit
- *
- * 	if this is module is ever built into the kernel,
- * 	`__exit` functions are simply discarded to make up free space.
- *
  * */
 static void __exit cleanup(void)
 {
+	printk(KERN_DEBUG __FILE__ ": \n============================================================\n");
 	printk(KERN_DEBUG "%s\n", __func__ );
+
+	/*
+	#unregister_chrdev_region
+
+		void unregister_chrdev_region(dev_t from, unsigned count)
+	*/
+	{
+		cdev_del(&cdev);
+		unregister_chrdev_region(dev, dev_count);
+	}
+	printk(KERN_DEBUG "============================================================\n");
 }
 
 module_exit(cleanup);
