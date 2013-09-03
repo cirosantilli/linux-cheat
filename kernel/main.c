@@ -2,9 +2,6 @@
 Main cheat on the kernel kernel modules and on kernel concepts
 that can be exemplified in modules, which is much easier than recompiling and reinstalling the kernel.
 
-Some of the information about general concepts may fit better in another markup file such as a `.md`.
-If a concept is not clearly explained here, do check on separate information files.
-
 #__rcu
 
 	TODO0 a type of locking directive
@@ -37,6 +34,24 @@ If a concept is not clearly explained here, do check on separate information fil
 #include <linux/slab.h> 	/* kmalloc, kmem_cach_create, kmem_cach_alloc */
 #include <linux/spinlock.h>
 #include <linux/string.h>	/* memcpy, memcmp */
+
+/*
+#errors
+
+	The kernel defines a series of macros starting with the prefix `E` under:
+
+		include/uapi/asm-generic/errno.h
+		include/uapi/asm-generic/errno-base.h
+
+	For each error a short comment describing it is available on those files.
+
+	Error numbers are meant to be returned from functions to indicate the cause of errors
+	after being multiplied by `-1`. Ex:
+
+		return -EBADF
+
+	TODO0 errno.h vs errno-base.h
+*/
 
 /*
 #module description
@@ -111,26 +126,36 @@ module_param(param_s, charp, S_IRUGO);
 /*
 #EXPORT_SYMBOL
 
-	When the a module gets inserted in to the kernel, it can see symbols defined in the kernel
+	Defined in `include/linux/export.h`.
 
-	However other modules cannot see the symbols defined in a module unless you explicitly
-	export them. This can be done with `EXPORT_SYMBOL` and its `GPL` version
+	When the a module gets inserted in to the kernel, it will want to interact with symbols present on the kernel,
+	it will want to interact with symbols present on the kernel.
 
-	Modules on the other hand can only see symbols that the kernel exported.
+	This is not possible on normal executable ELF files, since those do not contain the symbol names.
+	A special method is therefore needed, and that method relies on `EXPORT_SYMBOL`.
+
+	Only symbols which the kernel exports via `EXPORT_SYMBOL` can be seen by modules.
 
 	For example, the function `schedule()` is defined in `kernel/sched/core.c`
-	and exported there.
+	and exported there via `EXPOT_SYMBOL(schedule)`.
 
-	It is visible to modules becaues `include/linux/sched.h` declares it,
+	It is visible to modules at compile time becaues `include/linux/sched.h` declares it,
 	but linking can only work because it was exported.
 
-	Symbols which are not exported cannot be used.
+	Therefore only exported symbols are part of the API that the kernel gives modules.
 
-	Defined in `include/linux/export.h`.
+	The same goes for if one module wants to access symbols of the other module.
+
+	Only exported symbols can be accessed. Also, if one module requires symbols from another one,
+	it should obviously have the other one as a dependence.
+
+	The kernel of course cannot depend on symbols offered by modules since those may not be present.
 
 	TODO0 understand how this works?
 
-#ksymtab
+	The list of exported symbols is made available via the `proc` filesystem as:
+
+		cat /proc/kallsyms | less
 
 #ksymtab
 */
@@ -151,34 +176,55 @@ static int initdata __initdata = 0;
 static int initconst __initconst = 0;
 
 static dev_t dev;
-static int dev_count = 1;
-static struct cdev cdev;
+/* number of devices */
+#define N_DEVS 2
+static struct cdev cdevs[N_DEVS];
 
 /*
 #file_operations
 
-	Pointers to functions which describe what file system calls such as open, read, write or close
-	do on a given file.
+	Pointers to functions which implement central parts of file related system calls
+	such as open, read, write or close do on a given file.
 
-		static struct file_operations fops = {
-			.owner = THIS_MODULE,
-			.llseek = llseek,
-			.read = read,
-			.write = test_write,
-			.ioctl = test_ioctl,
-			.open = open,
-			.release = release,
-		};
+	The functions inside `file_operations` are wrapped around inside the system calls,
+	so you must read the system call code to understand what exactly is passed on to each function operation.
+	Those system calls are defined under `fs` in files such as `read_write.c` and others.
+
+	Defined under `include/inux/fs.h`.
 
 	In most cases, `NULL` entries mean that any corresponding system calls will fail. Exceptions:
 
 	- open and release: if NULL, always sucessful.
-*/
 
-	ssize_t read_infinte(struct file *filp, char __user *buf, size_t count, loff_t *off){
-		buf[0] = 'a';
-		return 1;
-	}
+	#read file operation
+
+		Prototype:
+
+			ssize_t read_infinte(struct file *filp, char __user *buf, size_t count, loff_t *off){
+
+		See the `read` system call for how this is wrapped.
+
+		- filp:	 file structure being read from
+
+		- buf:	 user supplied buffer to write output to
+
+		- count: maximum number of bytes that should be read.
+
+			The supplied `buf` should be at least that large.
+
+			TODO0 can assume `>0` ?
+
+		- off:   current file offset.
+
+			At return it should contain the new offset.
+
+		- return value: number of bytes actually read.
+
+			May not be equal to the number requested if the file ended
+			or if there was too much data for a single read operation because of kernel limitations.
+
+			May only be `0` if there is not more data to be read, or if an error ocurred.
+*/
 
 	/*
 	Always return the `a` character on read.
@@ -186,6 +232,11 @@ static struct cdev cdev;
 	When catted will print an infinite amount of `a` chars to screen,
 	since `cat` keeps reading while data is available.
 	*/
+
+		ssize_t read_infinite(struct file *filp, char __user *buf, size_t count, loff_t *off){
+			buf[0] = 'a';
+			return 1;
+		}
 
 		static struct file_operations fops_infinite = {
 			.owner = THIS_MODULE,
@@ -200,16 +251,14 @@ static struct cdev cdev;
 	When catted will print a single `a` char to screen and then stop,
 	since the 0 byte return means EOF: no more data available.
 	*/
-		static int read_once_done = 0;
-
 		ssize_t read_once(struct file *filp, char __user *buf, size_t count, loff_t *off){
-			if (!read_once_done) {
+			if (*off == 0) {
 				buf[0] = 'a';
-				read_once_done = 1;
+				(*off)++;
 				return 1;
 			} else {
 				/*
-				Teturning 0 bytes tells the reading application that there are no more bytes to be read.
+				Returning 0 bytes tells the reading application that there are no more bytes to be read.
 
 				In the case that more bytes could become availabe in the future,
 				the reader should sleep waiting for them.
@@ -221,7 +270,7 @@ static struct cdev cdev;
 		static struct file_operations fops_once = {
 			.owner = THIS_MODULE,
 			.open = NULL,
-			.read = read_infinite,
+			.read = read_once,
 			.release = NULL,
 		};
 
@@ -558,6 +607,10 @@ static int __init init(void)
 				}
 
 			but you should use methods and macros instead of next and prev directly
+
+		#list_head
+
+			Represents a node of a linked list.
 		*/
 		{
 			struct char_list {
@@ -573,7 +626,7 @@ static int __init init(void)
 				for example, you would pass this to functions that expect a list
 			*/
 
-			LIST_HEAD( alist );
+				LIST_HEAD( alist );
 
 			/*
 			#LIST_HEAD_INIT
@@ -592,9 +645,9 @@ static int __init init(void)
 				we need the differentiated element
 			*/
 
-			struct char_list ca = {
-				.c = 'a',
-			};
+				struct char_list ca = {
+					.c = 'a',
+				};
 
 			/*
 			#list_add
@@ -608,38 +661,41 @@ static int __init init(void)
 				if we use THE list head, this is the same as adding to the end of the list
 			*/
 
-			list_add_tail(&ca.list, &alist);
+				list_add_tail(&ca.list, &alist);
 
-			struct char_list cb = {
-				.c = 'b'
-			};
+				struct char_list cb = {
+					.c = 'b'
+				};
 
-			list_add_tail(&cb.list, &alist);
+				list_add_tail(&cb.list, &alist);
 
-			struct char_list cc = {
-				.c = 'c'
-			};
+				struct char_list cc = {
+					.c = 'c'
+				};
 
-			list_add_tail(&cc.list, &alist);
+				list_add_tail(&cc.list, &alist);
 
 			/*
 			#list_for_each_entry
 
-				does the whole loop for us
+				Simplifies a loop over a list:
 
-					list_for_each_entry( list* list_pointer, list_head* list_head_ptr, field_name) {
+					list_for_each_entry( list_pointer, list_head_ptr, field_name) {
 
-				- list_pointer will contain each value of the list
-				- list_head is the list head we want to start from
-				- field name: name of the field of the struct that contains the list head
+				- `list_pointer`: `container*` type that will point to each value of the list
+
+				- `list_head`: `container*` first element of the list
+
+				- `field_name`: name of the field of the struct that contains the `list_head*`
 
 				TODO why is this skipping the a character?
 			*/
-			printk(KERN_DEBUG "linked list:\n" );
-			struct char_list *char_list_ptr;
-			list_for_each_entry(char_list_ptr, &alist, list) {
-				printk(KERN_DEBUG "  %c\n", char_list_ptr->c );
-			}
+
+				printk(KERN_DEBUG "linked list:\n" );
+				struct char_list *char_list_ptr;
+				list_for_each_entry(char_list_ptr, &alist, list) {
+					printk(KERN_DEBUG "  %c\n", char_list_ptr->c );
+				}
 
 			/*
 			to modify the list items while looping use:
@@ -661,8 +717,8 @@ static int __init init(void)
 				that is inheriting
 			*/
 
-			if ( container_of(&ca.list, struct char_list, list) != &ca )
-				return -1;
+				if ( container_of(&ca.list, struct char_list, list) != &ca )
+					return -1;
 		}
 	}
 
@@ -1003,7 +1059,21 @@ static int __init init(void)
 
 	#current
 
-		macro that gives the `task_struct` representing the current process
+		Macro that gives the `task_struct` representing the current process.
+
+		Defined in `include/asm-generic/current.h` as `current_thread_info()->task`,
+		which is finally defined for each arch under `asm/thread_info.h`.
+
+		`current` is so important that `x86` Linux 3.10 reserves the unused `ESP` stack pointer
+		only to point to the `task_struct` of the current task via:
+
+			(current_stack_pointer & ~(THREAD_SIZE - 1));
+
+		Note how `THREAD_SIZE - 1` is of the form: `00000FFF`, `~` makes it `FFFFF000`,
+		so that only the top bits of `current_stack_pointer` (ESP) are considered.
+
+
+	#current_thread_info
 
 	#task_struct
 
@@ -1130,7 +1200,7 @@ static int __init init(void)
 		{
 			struct task_struct *task_struct_ptr;
 			printk(KERN_DEBUG "current->children pids:\n");
-			list_for_each_entry(task_struct_ptr, &current->children, children) {
+			list_for_each_entry(task_struct_ptr, &current->children, sibling) {
 				printk(KERN_DEBUG "  %lld\n", (long long)task_struct_ptr->pid);
 			}
 		}
@@ -1140,12 +1210,12 @@ static int __init init(void)
 			struct task_struct *task_struct_ptr;
 
 			printk(KERN_DEBUG "current->sibling pids:\n");
-			list_for_each_entry(task_struct_ptr, &current->sibling, children) {
+			list_for_each_entry(task_struct_ptr, &current->sibling, sibling) {
 				printk(KERN_DEBUG "  %lld\n", (long long)task_struct_ptr->pid);
 			}
 
 			printk(KERN_DEBUG "current->parent->sibling pids:\n");
-			list_for_each_entry(task_struct_ptr, &current->parent->sibling, children) {
+			list_for_each_entry(task_struct_ptr, &current->parent->sibling, sibling) {
 				printk(KERN_DEBUG "  %lld\n", (long long)task_struct_ptr->pid);
 			}
 		}
@@ -1684,11 +1754,9 @@ static int __init init(void)
 
 		You can have a different filesystem per partition.
 
-	#filesystem
+		Linux abstracts over several hardwares and filesystem types to create a simple interface for programs
 
-		linux abstracts over several hardwares and filesystem types to create a simple interface for programs
-
-		that abstraction is called the virtual filesystem (VFS)
+		That abstraction is called the virtual filesystem (VFS).
 
 	#virtual filesystem
 
@@ -1771,30 +1839,23 @@ static int __init init(void)
 				void *private_data; 		//used to store any state information implementation may wish to use
 				struct dentry *f_dentry; 	//associated dentry
 
-		#dentry struct
+		#umode_t
 
-			located under `dcache.h`
+			Encodes file permissions and type (regular file, character device, etc.)
+			for example for sytem calls.
 
-			represents a path component
+			`umode_t` is defined in `include/linux/types.h`
 
-			ex: the path `/usr/bin/env` will have the following path components:
+			The possible values are defined under: `include/uapi/linux/stat.h`
+			and coincide with the POSIX names when possible, for example `S_IRWXU`
+			is for owner has rwx.
 
-			- /
-			- usr
-			- bin
-			- env
+		#file io from the kernel
 
-			and each one has an associated `dentry` object
+			It seems that it is a bad practice to do file creation / reading / writing from the kernel:
+			<http://www.linuxjournal.com/article/8110>
 
-			located in `dcache.h`
-
-			it facilitates directory operations, and contains fields such as:
-
-			- d_parent:
-
-				Pointer to the parent dentry.
-
-				The root points to itself.
+			One acceptable solution for certain cases is using a special filesystem such as the proc filesystem.
 	*/
 	{
 		/*
@@ -1818,6 +1879,7 @@ static int __init init(void)
 			struct dentry *root;
 			struct super_block *root_sb;
 
+			//get the `/` dentry
 			root = current->fs->root.dentry;
 			root_sb = root->d_sb;
 
@@ -1835,6 +1897,94 @@ static int __init init(void)
 			memcpy( s_uuid_string, root_sb->s_uuid, 16 * sizeof( u8 ) );
 			s_uuid_string[16] = '\0';
 			printk(KERN_DEBUG "s_uuid = %s\n", s_uuid_string);
+		}
+
+		/*
+		#dentry struct
+
+			Defined under `dcache.h`.
+
+			Represents a path component.
+
+			Ex: the path `/usr/bin/env` will have the following path components:
+
+			- /
+			- usr
+			- bin
+			- env
+
+			and each one has an associated `dentry` object.
+
+			`dentry` structs have no disk representation, since both regular files
+			and directories are represented via inode + data on disk.
+
+			The raison detre of `dentry` is for the cache system which stores
+			parts of paths that have already been translated, so that less disk accesses
+			need to be done. This is why it is defined under `dcache`, which is a cache
+			for `dentry` obejcts.
+
+			The actual path to dentry translation is done by the `do_path_lookup` function
+			defined under `fs/namei.c`, considering the cache and many other possible problems.
+			That function is not exported.
+
+			It facilitates directory operations, and contains fields such as:
+
+			- `struct dentry *d_parent`:
+
+				Pointer to the parent dentry.
+
+				The root points to itself.
+
+			- `struct list_head d_subdirs`
+
+				List of children of current dentry.
+
+			- `struct list_head d_child`
+
+				Our siblings.
+
+			- `qstr d_name`
+
+				Name of the path component.
+
+			- `unsigned char d_iname`
+
+				TODO0
+		*/
+		{
+			struct dentry *root;
+
+			//get `/` dentry
+			root = current->fs->root.dentry;
+			printk(KERN_DEBUG "root->dname.name = %s\n", root->d_name.name );
+
+			/*
+			#ls
+
+				dentry children transversal
+
+				TODO0 why do I see files which are not there on the root
+				such as `libglibXXX` and vmlinuz?
+			*/
+			{
+				printk(KERN_DEBUG "ls /:\n" );
+				struct dentry *dentry;
+				list_for_each_entry(dentry, &root->d_subdirs, d_u.d_child) {
+					printk(KERN_DEBUG "  %s\n", dentry->d_name.name );
+				}
+			}
+
+			/*
+			get child dentry by name
+			*/
+			{
+				printk(KERN_DEBUG "ls /tmp:\n" );
+				struct dentry *dentry;
+
+				list_for_each_entry(dentry, &root->d_subdirs, d_u.d_child) {
+					printk(KERN_DEBUG "  %s\n", dentry->d_name.name );
+				}
+			}
 		}
 	}
 
@@ -2074,38 +2224,94 @@ static int __init init(void)
 
 		Arguments are passed on CPU registers. This simplifies things since program memory can be swapped of.
 
-		TODO where is errno stored?
+		#create a system call
 
-		Example of implementation:
+			This describes how to add a new system call.
 
-			SYSCALL_DEFINE0(getpid)
-			{
-				return task_tgid_vnr(current); // returns current->tgid
-			}
+			This is specially useful if you want to find out exactly which system calls are available
+			for each arch.
 
-		#declaration
+			The necessary steps are:
 
-			#SYSCALL_DEFINExxx
+			- decare and define the system call using the `SYSCALL_DEFINE` family of macros.
 
-				Expands to a system call declaration that takes `xxx` arguments.
+			- inform the kerne that a function is a system call by registering it.
 
-				Defined under `include/linux/syscalls.h`
+		#declaration and definition
+
+			Syscalls inside the kernel are functions.
+
+			System calls are defined by useing macros of the SYSCALL_DEFINE family
+			to keep declarations uniform and portable.
+
+			Those macros are defined under `include/linux/syscalls.h`.
+
+			Those macros automaticaly add the prefix `sys_` to the actual function names
+			of the sytem calls.
+
+			To actually turn one of those functions into a system call it must be registered
+			as a system call.
+
+			#SYSCALL_DEFINE<nargs>
+
+				Defined at `syscalls.h`.
+
+				Expands to a system call declaration that takes `<nargs>` arguments.
+
+				Sample usage:
+
+					SYSCALL_DEFINE0(getpid)
+					{
+						return task_tgid_vnr(current); // returns current->tgid
+					}
 
 			#COMPAT_SYSCALL_DEFINExxx
 
-				TODO
+				TODO0
 
-			TODO why did a book say that sytem calls are named sys_XXX by default?
-				In kenrel source they are are all implemeneted as SYSCALL_DEFINE XXX.
+			#location on the source tree
 
-		#location
+				Portable system calls can be implemented anywhere on the source tree,
+				in the place that fits their purporse more closely.
 
-			Portable system calls can be implemented anywhere on the source tree,
-			in the place that fits their purporse more closely.
+				Syscalls that don't fit well in any existing category fall by default under: `kernel/sys.c`.
 
-				grep -r 'SYSCALL_DEFINE'
+				You can easily find all system call definitions with:
 
-			Syscalls that don't fit well in any existing category fall by default under: `kernel/sys.c`.
+					grep -R 'SYSCALL_DEFINE'
+
+				or if you are looking for a specific system call, say `sys_read`, use:
+
+					grep -ER 'SYSCALL_DEFINE..read'
+
+		#registration
+
+			This describes how to inform the kernel that a function is a system call.
+
+			As of 3.10 each arch seems to have a different internal method for the registration of system calls.
+
+			In general, one must add to `asm/unistd.h` the `__NR_XXX` macros which define sytem call numbers.
+
+			For example x86 puts it under: `arch/x86/include/asm`.
+
+			Note that `unistd.h` may include other files according to the current architecture.
+			For example on x86 unistd includes either `unistd_32` or `unistd_64` depending on the configuration options,
+			and it is those files that do the actual registration.
+
+			#x86
+
+				This arch includes both 32 and 64 bits to factor out common points.
+
+				System call information is stored under:
+
+					arch/x86/syscalls/syscall_32.tbl
+					arch/x86/syscalls/syscall_64.tbl
+
+				The arch specific unistd are generated by scripts from these files and stored under:
+
+				arch/x86/include/generated/uapi/unistd_XXX.h
+
+				x32 concept definition: <http://en.wikipedia.org/wiki/X32_ABI>
 
 		#__NR_XXX
 
@@ -2113,10 +2319,32 @@ static int __init init(void)
 
 			For x86, those macros are generated programatically from TODO0 and placed under:
 			`include/generated/uapi/asm/unistd_XXX.h`.
+	*/
 
-			TODO what binds each __NR_XXX to the actual syscall implementation? My 2006 books
-				says entry.S, but either those files do not exist, or dont contains sycall info.
+	/*
+	#__user
 
+		Indicates that the following pointer comes from userspace.
+
+		An example is the wrtie system call:
+
+			asmlinkage long sys_write(unsigned int fd, const char __user *buf,
+						size_t count);
+
+		The buffer comes from user space.
+
+		A typical place to use those is on system calls, where user supplied pointers
+		must be read or written to such as the read system call.
+
+		Rationale:
+
+		- userspace programs can be outside of main memory at the time of calling
+
+		- userspace programs are not to be trusted: they can make mistakes / malicious moves,
+			and the pointer could be invalide, for example NULL, leading to a page fault in the kernel.
+	*/
+
+	/*
 	#capable
 
 		Returns true iff the current process has a capability. For example:
@@ -2130,24 +2358,6 @@ static int __init init(void)
 		points to the caller user process.
 
 		TODO do kthreads always have all the capabilities?
-
-	#__user
-
-		Indicates that the following pointer comes from userspace.
-
-		An example is the wrtie system call
-
-			asmlinkage long sys_write(unsigned int fd, const char __user *buf,
-						size_t count);
-
-		The buffer comes from user space.
-
-		Raionale:
-
-		- userspace programs can be outside of main memory at the time of calling
-
-		- userspace programs are not to be trusted: they can make mistakes / malicious moves,
-			and the pointer could be invalide, for example NULL, leading to a page fault in the kernel.
 	*/
 	{
 		if(capable(CAP_SYS_BOOT)) {
@@ -2217,22 +2427,43 @@ static int __init init(void)
 	#character device
 	*/
 	{
-		struct file_operations *fops;
+		int major;
+		int minor;
+		struct file_operations * fopss[N_DEVS];
 
-		if (alloc_chrdev_region(&dev, 0, dev_count, "test") < 0 )
+		if (alloc_chrdev_region(&dev, 0, N_DEVS, "test") < 0 ) {
 			printk(KERN_DEBUG "alloc_chrdev_region error\n");
+			return -1;
+		}
 
-		printk(KERN_DEBUG "major = %d\n", MAJOR(dev));
-		printk(KERN_DEBUG "minor = %d\n", MINOR(dev));
+		major = MAJOR(dev);
+		minor = MINOR(dev);
+		printk(KERN_DEBUG "major = %d\n", major);
+		printk(KERN_DEBUG "minor = %d\n", minor);
 
-		fops = &fops_once;
-		cdev_init(&cdev, fops);
-		cdev.owner = THIS_MODULE;
-		cdev.ops = fops;
-		if (cdev_add(&cdev, dev, dev_count) < 0)
-			printk(KERN_DEBUG "cdev_add error\n");
-		//from now on, character device files with the given `dev_t`
-		//numbers will use the given fops, so create some with mknod and cat away.
+		//TODO why ils ony 
+		fopss[0] = &fops_infinite;
+		fopss[1] = &fops_once;
+
+		for (int i = 0; i < N_DEVS; i++) {
+			cdev_init(&cdevs[i], fopss[i]);
+			cdevs[i].owner = THIS_MODULE;
+			cdevs[i].ops = fopss[i];
+			if (cdev_add(&cdevs[i], MKDEV(major, minor + i), 1) < 0) {
+				printk(KERN_DEBUG "cdev_add error\n");
+				return -1;
+			}
+		}
+
+		/*
+		from now on, character device files with the given `dev_t`
+		numbers will use the given fops, so create some with mknod and cat away.
+
+		At this poin we are tempted to create the char files here on the module,
+		however as discussed in [file io from the kernel][#file-io-from-the-kernel], this is a bad thing,
+		and has no convenient support on the kernel API.
+		*/
+
 	}
 
 	printk(KERN_DEBUG "============================================================\n");
@@ -2283,8 +2514,10 @@ static void __exit cleanup(void)
 		void unregister_chrdev_region(dev_t from, unsigned count)
 	*/
 	{
-		cdev_del(&cdev);
-		unregister_chrdev_region(dev, dev_count);
+		for (int i = 0; i < N_DEVS; i++) {
+			cdev_del(&cdevs[0]);
+		}
+		unregister_chrdev_region(dev, N_DEVS);
 	}
 	printk(KERN_DEBUG "============================================================\n");
 }

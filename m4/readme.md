@@ -1,3 +1,5 @@
-macro engine
+Macro engine: substitutes certain substrings on input by others.
 
-absolutelly insane escaping! =)
+Absolutelly insane escaping! =)
+
+POSIX 7.

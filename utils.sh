@@ -1265,29 +1265,36 @@
 
     ##cut
 
-        #get columns from text databases
+        #POSIX 7
 
-        #for more complex ops, consider awk
+        #Select columns from text tables.
 
-        echo $'a\tb\nc\td' | cut -f1
+        #For more complex operation such as selecting a line from a certain field, consider `awk`.
+
+        #`-f`: field. what column to print.
+
+            echo $'a\tb\nc\td' | cut -f1
             #$'a\nc'
-            #-f: field. what column to print.
 
-        echo $'a:b\nc:d' | cut -d: -f1
+        #`-d`: delimier
+
+            echo $'a:b\nc:d' | cut -d: -f1
             #$'a\nc'
-            #-d: delimier
 
-        echo $'a' | cut -d: -f2
+        #Gets last if delimier too large:
+
+            echo $'a' | cut -d: -f2
             #$'a'
-            #gets last if larger
 
-        echo $'a:b:c\nd:e:f' | cut -d: -f1,3
+        #Multiple columns, first and third:
+
+            echo $'a:b:c\nd:e:f' | cut -d: -f1,3
             #$'a:c\nd:f'
-            #first and columns
+
+        #Column range from first to third:
 
         echo $'a:b:c:d\ne:f:g:h' | cut -d: -f1-3
             #$'a:b:c\ne:f:g'
-            #first to third columns
 
     ##wc
 
@@ -1297,7 +1304,7 @@
 
         #mnemonic: Word Count.
 
-        echo -n $'a\nb c' | wc
+            echo -n $'a\nb c' | wc
             #1 3 5
             #^ ^ ^
 
@@ -1520,21 +1527,21 @@
 
     ##sed
 
-        ##sources
-
-            #beginner to pro tutorial: <http://www.grymoire.com/Unix/Sed.html>
+        #POSIX 7
 
         #Stream EDitor
 
-        #posix 7
+        #Modifies files non-interactively.
 
-        #modifies files non-interactively
+        #beginner to pro tutorial: <http://www.grymoire.com/Unix/Sed.html>
 
-        ##learning suggestion
+        ##alternatives
 
-            #consider using perl instead of this
+            #Consider using perl instead of this
 
-            #sed has only slightly better golfing than perl
+            #sed has only slightly better golfing than perl.
+
+            #The only real advantage of sed over perl is being POSIX, while perl is only LSB.
 
         ##s command
 
@@ -1585,6 +1592,7 @@
                 ##w
 
                     #write lines to file:
+
                         echo $'a\nb\na' | sed -n 's/a/A/w f'
                         assert [ "`cat a`" = $'A\nA' ]
 
@@ -1592,30 +1600,36 @@
 
             #only exec next command if match
 
-            assert [ "`echo $'a\nb' | sed -n '/a/p'`" = $'a' ]
+                assert [ "`echo $'a\nb' | sed -n '/a/p'`" = $'a' ]
 
         ##restrict lines
 
             #line number:
+
                 assert [ "`echo $'a\nb' | sed -n '1 p'`" = $'a' ]
 
             #last line:
+
                 assert [ "`echo $'a\nb' | sed -n '$ p'`" = $'b' ]
 
             #before last line:
+
                 assert [ "`echo $'a\nb' | sed -n '$-1 p'`" = $'a' ]
 
             #line matches pattern:
+
                 assert [ "`echo $'a\nb' | sed '/a/ s/./c/'`" = $'c\nb' ]
 
             #line range:
+
                 assert [ "`echo $'a\nb\nc\nd' | sed '1,3 s/./e/'`" = $'e\ne\ne\nd' ]
 
             ##pattern range
 
-                assert [ "`echo $'a\nb\nc\nd' | sed '/a/,/c/ s/./0/'`" = $'0\n0\n0\nd' ]
+                    assert [ "`echo $'a\nb\nc\nd' | sed '/a/,/c/ s/./0/'`" = $'0\n0\n0\nd' ]
 
                 #non-greedy:
+
                     assert [ "`echo $'a\nb\n0\n0\na\nb' | sed '/a/,/b/ s/./A/'`" = $'A\nA\n0\n0\nA\nA' ]
 
             ##multiple commands per restriction
@@ -1635,27 +1649,27 @@
 
             #concatenate with ; or newlines
 
-            assert [ "`echo $'a\nb' | sed '/a/ s/./B/; /B/ {s/B/C/; s/C/D/}'`" = $'D\nb' ]
+                assert [ "`echo $'a\nb' | sed '/a/ s/./B/; /B/ {s/B/C/; s/C/D/}'`" = $'D\nb' ]
 
         ##q
 
             #quit
 
-            assert [ "`echo $'a\nb' | sed 's/./c/; q'`" = $'c' ]
+                assert [ "`echo $'a\nb' | sed 's/./c/; q'`" = $'c' ]
 
         ##d
 
             #delete
 
-            assert [ "`echo $'a\nb' | sed '/a/ d'`" = $'b' ]
+                assert [ "`echo $'a\nb' | sed '/a/ d'`" = $'b' ]
 
         ##a, i, c
 
             #append (after), insert (before), change
 
-            assert [ "`echo $'a\nb' | sed '1 i 0'`" = $'a\n0\nb' ]
-            assert [ "`echo $'a\nb' | sed '1 i 0'`" = $'0\na\nb' ]
-            assert [ "`echo $'a\nb' | sed '1 c 0'`" = $'0\nb' ]
+                assert [ "`echo $'a\nb' | sed '1 i 0'`" = $'a\n0\nb' ]
+                assert [ "`echo $'a\nb' | sed '1 i 0'`" = $'0\na\nb' ]
+                assert [ "`echo $'a\nb' | sed '1 c 0'`" = $'0\nb' ]
 
             ##newlines and spaces
 
@@ -1665,14 +1679,14 @@
 
             #=
 
-            assert [ "`echo $'a\nb\na' | sed -n '/a/ ='`" = $'1\n3' ]
+                assert [ "`echo $'a\nb\na' | sed -n '/a/ ='`" = $'1\n3' ]
 
         ##replace chars
 
             #y
 
-            assert [ "`echo $'a\nb' | sed -n 'y/ab/01'`" = $'0\n1' ]
-            assert [ "`echo $'a\nb' | sed -n 'y/ab/AB'`" = $'A\nB' ]
+                assert [ "`echo $'a\nb' | sed -n 'y/ab/01'`" = $'0\n1' ]
+                assert [ "`echo $'a\nb' | sed -n 'y/ab/AB'`" = $'A\nB' ]
 
         ##multiline
 
@@ -1683,9 +1697,11 @@
             #- n: empty pattern space, put next line into it. default action at end.
 
                 #print first line after matching `/a/`:
+
                     assert [ "`echo $'a\nb' | sed -n '/a/ {n;p}'`" = $'b' ]
 
                 #print second line after matching `/a/`:
+
                     assert [ "`echo $'a\nb\nc' | sed -n '/a/ {n;n;p}'`" = $'c' ]
 
             #- N: append next line to pattern space. Next line is not read again.
@@ -1718,9 +1734,11 @@
                 #exchange storage and pattern
 
                 #print old/new newline pairs after substitution
+
                     assert [ "`echo $'a\nb' | sed -n 'h; /a/ {s/a/c/; s/$/\n/; x;p;x;p}'`" = $'a\nc\n' ]
 
                 #print first line before matching `/b/`:
+
                     assert [ "`echo $'a\nb' | sed -n '/b/ {x;p;d}; h'`" = $'a' ]
 
             ##g
@@ -1733,7 +1751,7 @@
 
                 #pattern space += hold space
 
-                assert [ "`echo $'a\nb' | sed -n 'h; /a/ {s/a/c/;x;G;p}'`" = $'a\nc' ]
+                    assert [ "`echo $'a\nb' | sed -n 'h; /a/ {s/a/c/;x;G;p}'`" = $'a\nc' ]
 
         ##goto
 
@@ -1747,18 +1765,20 @@
 
                 #unconditional
 
-                assert [ "`echo $'a\nb' | sed '/a/ b c; s/./c/; :c'`" = $'a\nc' ]
-                assert [ "`echo $'a\nb' | sed '/a/ b c; s/./c/; :c s/c/d'`" = $'a\nd' ]
+                    assert [ "`echo $'a\nb' | sed '/a/ b c; s/./c/; :c'`" = $'a\nc' ]
+                    assert [ "`echo $'a\nb' | sed '/a/ b c; s/./c/; :c s/c/d'`" = $'a\nd' ]
 
             ##t
 
                 #jump if last s changed pattern space
 
                 #remove spaces after a:
-                assert [ "`echo $'a  b  c' | sed ':a s/a /a/; t a'`" = $'ab  c' ]
+
+                    assert [ "`echo $'a  b  c' | sed ':a s/a /a/; t a'`" = $'ab  c' ]
 
                 #remove everything between a and c
-                assert [ "`echo $'a  b  c' | sed ':a s/a[^c]/a/; t a'`" = $'ac' ]
+
+                    assert [ "`echo $'a  b  c' | sed ':a s/a[^c]/a/; t a'`" = $'ac' ]
 
         ##command line arguments
 
@@ -1817,45 +1837,48 @@
 
                     #!/bin/sed -f
 
-        ##combos
+        ##applications
 
-            #if modified, print line number, old line, new line
-            #
+            #If modified, print line number, old line, new line
+
             #Ex:
-            #
+
             #input:
-            #
-            #a
-            #b
-            #a
-            #b
-            #
+
+                #a
+                #b
+                #a
+                #b
+
             #regex: s/a/c/
-            #
+
             #output:
-            #
-            #1
-            #a
-            #c
-            #
-            #3
-            #a
-            #c
+
+                #1
+                #a
+                #c
+                #
+                #3
+                #a
+                #c
 
             assert [ "`echo $'a\nb\na\nb' | sed -n 'h; s/a/c/; t p; d; :p {=;x;G;s/$/\n/;p}'`" = $'1\na\nc\n\n3\na\nc\n' ]
 
     ##awk
 
-        #use only for text table field manipulation
+        #POSIX 7.
 
-        #consider not to learn this and just learn pearl one liners instead
-        #since pearl is more flexible, powerful, good for golfing and has similar syntax
+        #Use only for text table field manipulation
 
         #awk only gets slightly better golfing on a very limited problem set
 
-        #for more complex tasks, use python or real databases
+        #The only real advantage of awk over perl is the fact that it is in POSIX,
+        #while perl is only in LSB. awk only has slighty better golfing.
+        #Therefore: don't rely on awk GNU extensions, or you lose the only major advantage of awk!
 
-        #variables
+        #For more even more sanity, use python.
+
+        ##variables
 
             #same as c
 
@@ -1875,21 +1898,35 @@
             #NR: number of current record
             #FNR: total number of records in cur file
 
-        #arithmetic: same as c
-        #string comp: ~, !~
-        #posix ERE regex: ~// !~// (inner match ok)
-        #if else for while: like c
+        #- arithmetic: same as C: +, *, -, /
 
-        echo $'1 2\n3 4' | awk 'BEGIN{print "b"}1<2{print "l"}1<2{print "l2"; print "l3"}1>2{print "l4"}END{print "e"}'
+        #- string comp: `==` and `!=`
+
+        #- posix string ERE regex comp: ~// !~// (sub match accepted unless you use `^$`)
+
+        #- if else for while: like C
+
+        ##general syntax
+
+            #A general awk program is of the type:
+
+                #BEGIN          { STATEMENT_BEGIN }
+                #CONDITION0     { STATEMENT0      }
+                #CONDITION1     { STATEMENT1      }
+                #...
+                #CONDITION_N    { STATEMENT_N     }
+                #END            { STATEMENT_END   }
+
+            echo $'1 2\n3 4' | awk 'BEGIN{print "b"}1<2{print "l"}1<2{print "l2"; print "l3"}1>2{print "l4"}END{print "e"}'
             #$'b\nl\nl2\nl3\nl\nl2\nl3\ne
 
-        echo '0.5 0.5' | awk '{print $1+$2}'
+            echo '0.5 0.5' | awk '{print $1+$2}'
             #1
 
         ##string num conversion
 
-            awk 'BEGIN{print "1"+1}'
-            awk 'BEGIN{print " 1"+1}'
+                awk 'BEGIN{print "1"+1}'
+                awk 'BEGIN{print " 1"+1}'
                 #2
 
         ##print
@@ -1903,13 +1940,19 @@
             awk '{print}'
                 #cat
 
-    ##m4
+        ##applications
 
-        #macro language
+            #Print second field of all entries if first field equals:
 
-        sudo aptitude install -y m4
+                [ "$(echo $'1 a\n2 b\n1 c' | awk '$1 == 1 { print $2 }')" = "$(printf 'a\nc')" ] || exit 1
 
-        #TODO
+            #Same as above, but print only first match:
+
+                [ "$(echo $'1 a\n2 b\n1 c' | awk '$1 == 1 { print $2; exit }')" = a ] || exit 1
+
+            #Same as above, but match EREs:
+
+                [ "$(echo $'1 a\n2 b\n1 c' | awk '$1 ~/^1$/ { print $2; exit }')" = a ] || exit 1
 
 ##moreutils
 

@@ -2701,10 +2701,34 @@ int main( int argc, char** argv )
 
         #mkfifo
 
-            used to create a FIFO
+            Create a FIFO.
+
+        #mknod
+
+            Create a FIFO, character device, block device, directory or file.
+
+                int mknod(const char *path, mode_t mode, dev_t dev);
+
+            POSIX only demands that this work for FIFOs, all other are optional suggested interfaces.
+
+            The type is ored into mode and can be:
+
+                S_IFIFO
+                S_IFCHR
+                S_IFDIR
+                S_IFBLK
+                S_IFREG //regular file
+
+            however implementation need only support `S_IFIFO`.
+
+            `dev` represents the device corresponding to the file, and must be `0` in the case of `S_IFIFO`,
+            since FIFOs have no associated devices.
+
+            Linux implements all the options except `S_IFDIR` via the `sys_mknod` syscall.
+            It also adds `S_IFSOCK` for UNIX domain sockets. Glibc provides a wrapper for all the extended linux
+            functionality.
         */
         {
-                //TODO example
         }
 
         /*

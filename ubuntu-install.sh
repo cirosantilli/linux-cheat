@@ -312,6 +312,7 @@
             sudo aptitude install -y cmake
             sudo aptitude install -y exuberant-ctags
             sudo aptitude install -y libtool
+            #sudo aptitude install -y m4
 
         #gcc docs:
 

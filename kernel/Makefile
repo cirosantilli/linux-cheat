@@ -19,6 +19,10 @@ OBJS_NODIR	:= $(addsuffix $(OBJ_EXT), $(basename $(INS_NODIR)))
 OBJS		:= $(addprefix $(OUT_DIR), $(OBJS_NODIR))
 RUN_EXT		:= $(RUN)$(OUT_EXT)
 
+#same name given in `alloc_chrdev_region`
+MODULE_NAME := test
+DEV_EXT 	:= .tmp
+
 # `obj-m` is all that needs to be defined for the standard makefile to work:
 
 #TODO why this does not work but the next line does? there is no `:` version of `+=`: it depends on how it is first defined. If if is first defined with `:`: then `+=` is `:`
@@ -43,17 +47,22 @@ all:
 #
 # - removes module if inserted
 # - inserts
-# - shows log in a pager
+# - echoes log
+# - create test character device files
 #
 # this is called run to keep consistency with retular user space programs,
 # where you run the program to test it.
-run: all
-	if [ ! -z "`lsmod | grep '^$(RUN) '`" ]; then sudo rmmod "$(RUN_EXT)"; fi
+run: all rm
 	make ins
 	make log
+	major=$$(awk "\$$2 == \"$(MODULE_NAME)\" {print \$$1}" /proc/devices) ;\
+	sudo mknod read_infinite$(DEV_EXT) 	c $$major 0 ;\
+	sudo mknod read_once$(DEV_EXT)		c $$major 1
 
+#clean built files, but not necessarily remove
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+	sudo rm *$(DEV_EXT)
 
 ins: all
 	sudo insmod $(RUN_EXT) param_i=1 param_s="bbb"
@@ -64,5 +73,7 @@ log:
 	#cat "$(LOG_PATH)"
 	dmesg
 
+#does not clean build files, only makes everything ready for a new run
 rm:
-	sudo rmmod "$(RUN_EXT)"
+	if [ ! -z "`lsmod | grep '^$(RUN) '`" ]; then sudo rmmod "$(RUN_EXT)"; fi
+	sudo rm *$(DEV_EXT)

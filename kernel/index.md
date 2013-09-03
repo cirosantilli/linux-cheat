@@ -1,10 +1,11 @@
-The linux kernel is written on mainly on c c99 standard,with **gasp** gcc extensions. Therefore the linux kernel is married to gcc.
-Just guessing here, but an important reason for that is to use inline assembly TODO check
+The linux kernel is written on mainly on C99 standard,with **gasp** gcc extensions,
+which it uses extensively, both on points which cannot be done in any other way without the extensions (inline assembly),
+but also at points where those are not strictly necessary, for example to improve debugging and preformance.
 
-Also note that besides the linux kernel, what most people call a linux system, or more precisely
+Besides the linux kernel, what most people call a linux system, or more precisely
 a linux distribution, must also contain many more user level basic services such as the python
-interpreter, the X server, etc. The extra user space services are specified by the lsb, and are not a part
-of the linux kernel.
+interpreter, the X server, etc.
+The extra user space services are specified by the lsb, and are not a part of the linux kernel.
 
 You cannot use user space libs such as libc to program the kernel,
 since the kernel itself itself if need to be working for user space to work.
@@ -49,10 +50,20 @@ Maybe there is a good reason for that.
 
 - `ctags -R`
 
-    Better than grep to find where things are defined / declared,
-    but the file generated at the kernel root will be very large.
+    Better than grep to find where things are defined / declared.
 
-    Might be better to just go with [free-electrons][].
+    Doing:
+
+        ctags -R --c-kinds=-m
+
+    on the kerne root generated a file of 134M, but this might be worth it as it may save lots of grepping time.
+
+    You will might then want to add the following to your `.bashrc`:
+
+            function ctag { grep "^$1" tags; } #CTAgs Grep for id
+            function rctag { cd `git rev-parse --show-toplevel` && grep "^$1" tags; }
+
+    Another similar option is to use [free-electrons][].
 
 [kernel-org]: https://www.kernel.org/doc/
 
@@ -244,22 +255,36 @@ One major application of this is to ignore those files from source control. The 
 
 Default places for almost all important headers for intefaces that can be used across the kernel.
 
-Some subsystems however have spilled out:
+Some subsystems however are large enough to merit separate directories in include such as `net` which
+holds the networking includes.
 
-- `include/net`: networking includes
+Important files include:
 
-TODO what are the other sibling directories?
-
-TODO what is `syscalls.h`? Aren't syscalls arch dependant?
+- `sched.h`:    scheduling and task key structures
+- `fs.h`:       key filesystem structures
+- `compiler.h`: compiler related stuff such as `__user`, which expands to a gcc `__attribute__`.
+- `types.h`:    typedefs
 
 ##include/asm-generic
 
-TODO what is this? isn't all that is under `include` supposed to be generic already?
+Holds declarations of things that are defined in assembly.
+
+Possible rationale: make it clear what new ports will need to implement;
+things that are not there are defined in C, so no need to port those.
+
+It is a very fun to explore part of the code as it is a gateway for low level code.
+
 <http://stackoverflow.com/questions/3247770/what-is-the-linux-2-6-3x-x-include-asm-generic-for>
 
 ##Documentation
 
 Kernel documentation.
+
+Very incomplete.
+
+Important files and directories:
+
+- `DocBook`: documentation automatically generated from well formatted source code comments.
 
 ##init
 
@@ -683,6 +708,37 @@ so that if kernel modifications would cause disk damage, all you have to do is r
 but your computer won't be damaged.
 
 Also, it is faster to reboot the virtual machine than the host system if your module cannot be inserted anymore.
+
+Use a virtual machine that supports directory sharing such as Oracle Virtualbox,
+that is, sharing a directory from host into the client.
+
+You can then easily test your kernel moduels on the virtual machine by using a script like the following from the virtual machine:
+
+    UNAME=
+    DIRNAME=kernel
+
+    sudo rm -rf $DIRNAME
+    sudo cp -r /media/sf_kernel $DIRNAME
+    sudo chown -R $UNAME $DIRNAME
+    cd $DIRNAME
+    make clean
+    make run
+
+where:
+
+- `UNAME`:
+
+    username of the user on the virtual machine
+
+- `DIRNAME`:
+
+    Directory name to be used for compilation relative to current dir.
+
+    Its content is removed at every compile, so don't put important stuff in there.
+
+- `/media/sf_kernel`:
+
+    Directory shared between client and host, that corresponds to the host's location of the module code and `Makefile`.
 
 #get kernel version
 
