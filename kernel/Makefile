@@ -21,7 +21,7 @@ RUN_EXT		:= $(RUN)$(OUT_EXT)
 
 #same name given in `alloc_chrdev_region`
 MODULE_NAME := test
-DEV_EXT 	:= .tmp
+DEV_EXT 	:= .dev.tmp
 
 # `obj-m` is all that needs to be defined for the standard makefile to work:
 
@@ -58,6 +58,9 @@ run: all rm
 	major=$$(awk "\$$2 == \"$(MODULE_NAME)\" {print \$$1}" /proc/devices) ;\
 	sudo mknod read_infinite$(DEV_EXT) 	c $$major 0 ;\
 	sudo mknod read_once$(DEV_EXT)		c $$major 1
+	uname=`id -un` ;\
+	gname=`id -gn` ;\
+	sudo chown $$uname:$$gname *$(DEV_EXT)
 
 #clean built files, but not necessarily remove
 clean:
@@ -76,4 +79,4 @@ log:
 #does not clean build files, only makes everything ready for a new run
 rm:
 	if [ ! -z "`lsmod | grep '^$(RUN) '`" ]; then sudo rmmod "$(RUN_EXT)"; fi
-	sudo rm *$(DEV_EXT)
+	rm -f *$(DEV_EXT)

@@ -309,6 +309,8 @@
             sudo aptitude install -y ant
             sudo aptitude install -y automake
             sudo aptitude install -y build-essential
+            sudo aptitude install -y doxygen
+            sudo aptitude install -y doxygen-doc
             sudo aptitude install -y cmake
             sudo aptitude install -y exuberant-ctags
             sudo aptitude install -y libtool
@@ -316,9 +318,9 @@
 
         #gcc docs:
 
-            sudo aptitude install -y gcc-doc
+                sudo aptitude install -y gcc-doc
 
-        #located at: `/usr/share/doc/gcc-doc`
+            #located at: `/usr/share/doc/gcc-doc`
 
         ##fortran
 

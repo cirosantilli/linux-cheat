@@ -1,0 +1,7 @@
+# where to put generated documentation
+
+OUTPUT_DIRECTORY = _doc
+
+# use a separate markdown file as the main page
+
+USE_MDFILE_AS_MAINPAGE = mainpage.md

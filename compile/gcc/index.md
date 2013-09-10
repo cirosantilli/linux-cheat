@@ -74,11 +74,15 @@ make will not recompile the corresponding `.o`
 
 ##recommended compilation flags
 
-always use this for production code if possible:
+Good discussion: <http://stackoverflow.com/questions/154630/recommended-gcc-warning-options-for-c>
 
-    gcc -std=c99 -pedantic-errors -Wall -03 -march=native -o a a.c
+Always use this for production output code if possible:
+
+    gcc -std=c99 -pedantic-errors -Wall -Wextra -03 -march=native -o a a.c
 
 this will make for portable, efficient code.
+
+For test code, ommit the `-03`, since that will make compilation faster.
 
 ##o
 
@@ -90,15 +94,18 @@ For stdout: `-o -`.
 
 ##Wall
 
-enables all warnings:
+Enables many useful warnings:
 
     gcc -Wall
 
-ALWAYS USE IT
+Understanding each warning and being able to write warning free code
+is a good way to improve language skills.
 
-enables all warnings, except `unused-variable`:
+##Wextra
 
-    gcc -Wall -Wno-unused-variable
+Enables even more useful warnings than wall.
+
+    `gcc -Wextra`
 
 ##std
 

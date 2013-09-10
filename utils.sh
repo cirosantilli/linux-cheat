@@ -4852,18 +4852,20 @@
     #- totem stops
     #- simple shell scripts continue
 
-    cat /etc/passwd
-        #shows users
-        #includes special users
-        #format:
-            #ciro:x:1000:1000:ciro,,,:/home/ciro:/bin/bash
-            #ciro: user name
-            #x: password is encrypted and stored in /etc/shadow
-            #1000: user id. 0: root. 1-99: predefined. 100-999: reserved by system. 1000: first `normal` user
-            #1000: primary user group
-            #ciro,,, : comment field. used by finger command.
-            #/home/ciro: home dir
-            #/bin/bash: login shell
+    #Show users, including special users:
+
+        cat /etc/passwd
+
+    #Sample output:
+
+        #ciro:x:1000:1000:ciro,,,:/home/ciro:/bin/bash
+        #ciro: user name
+        #x: password is encrypted and stored in /etc/shadow
+        #1000: user id. 0: root. 1-99: predefined. 100-999: reserved by system. 1000: first `normal` user
+        #1000: primary user group
+        #ciro,,, : comment field. used by finger command.
+        #/home/ciro: home dir
+        #/bin/bash: login shell
 
     cat /etc/group
         #show groups
@@ -4886,44 +4888,58 @@
 
     ##who
 
+        #POSIX 7.
+
         #list who is logged on system
 
-        who
-
-    ##last
-
-        #list last user logins on system
-
-        last
-
-    ##whoami
-
-        #print effective user name
-
-        whoami
+            who
 
     ##id
 
-        #shows user and groups id and names
+        #POSIX 7.
 
-        #whoami/groups superset
+        #Shows user and group ids and names.
 
-        id "$u"
-            #for user u
-        id
-            #cur user
-        id -u
-            #effective userid
-        id -un
-            #effective username
-        id -ur
-            #real userid
-        id -urn
-            #real username
-        id -g
-            #groupid
-        id -gn
-            #groupname
+        #Show all info for a given user:
+
+            u=root
+            id "$u"
+
+        #For current user:
+
+            id
+
+        #Effective userid:
+
+            id -u
+
+        #Effective username:
+
+            id -un
+
+        #Real userid:
+
+            id -ur
+
+        #Same but for groups:
+
+            id -g
+            id -gn
+            id -gr
+
+    ##whoami
+
+        #Print effective user name:
+
+            whoami
+
+        #Same as `id -un`, but not POSIX, so never rely on it.
+
+    ##last
+
+        #List last user logins on system:
+
+            last
 
     ##tty
 
