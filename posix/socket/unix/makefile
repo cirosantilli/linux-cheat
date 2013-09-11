@@ -28,4 +28,7 @@ mkdir:
 	mkdir -p $(OUT_DIR)
 
 run: all
-	cd $(OUT_DIR) && ./$(RUN)$(OUT_EXT)
+	cd $(OUT_DIR) && ./server$(OUT_EXT) &
+	cd $(OUT_DIR) && ./client$(OUT_EXT) &
+	cd $(OUT_DIR) && ./client$(OUT_EXT) &
+	cd $(OUT_DIR) && ./client$(OUT_EXT) &

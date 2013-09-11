@@ -420,6 +420,7 @@
 		##networking
 
             sudo aptitude install -y apache2
+            sudo aptitude install -y wireshark
 
             #php:
 

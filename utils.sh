@@ -4959,43 +4959,47 @@
 
     ##su
 
-        #become another user, such as root
+        #Become another user, such as root:
 
-        su otheruser
-            #enter otheruser pass
-        whoami
-            #otheruser
-
-        #BAD
-            #never become root
-
-            sudo passwd root
-                #give root a pass so people can log into it
-                #this is disabled by defaut on some systems as ubuntu for security
-            su
-                #enter root pass
+            su otheruser
+                #enter otheruser pass
             whoami
-                #root
+                #otheruser
 
-        #login
-
-            #TODO login vs su?
-
-        ##login shell
+        #Start a login shell as user a:
 
             su - a
-                #start a login shell
-                #without this starts a non-login shell
+
+        #without this starts a non-login shell
+
+        ##become root
+
+            #BAD: never become root, as it is dangerous.
+
+            #Give root a pass so people can log into it:
+
+                sudo passwd root
+
+            #On some systems such as ubuntu, sudo has no pass by default.
+
+                su
+                    #enter root pass
+                whoami
+                    #root
+
+        ##login
+
+            #TODO0 login vs su?
 
     ##sudo
 
-        #do next single command as another user or super user
+        #Do next single command as another user or super user
 
-        #safer than becoming root with su
+        #Safer than becoming root with su
 
-        #in order to see who can sudo what as who and with what pass
+        #In order to see who can sudo what as who and with what pass
 
-            sudo cat /etc/sudoers
+                sudo cat /etc/sudoers
 
             #syntax:
 
@@ -5055,23 +5059,23 @@
 
             #sudo group allows members to sudo whatever they want as root
 
-            groups
-                #sudo is in my groups!
-            sudo whoami
-                #root
-            sudo -u test whoami
-                #test
-            sudo -l
-                #find cur user sudo permissions
-            sudo env
-                #you don't have your cur users env anymore
-                #you are root now!
-            sudo env PATH=$PATH env
-                #use your user's path on sudo
-            #alias sudo='sudo env PATH=$PATH'
-                #tempting, but it will make options fail!
-                #sudo -L --> sudo env PATH=$PATH -l
-                #env thinks -l is his option
+                groups
+                    #sudo is in my groups!
+                sudo whoami
+                    #root
+                sudo -u test whoami
+                    #test
+                sudo -l
+                    #find cur user sudo permissions
+                sudo env
+                    #you don't have your cur users env anymore
+                    #you are root now!
+                sudo env PATH=$PATH env
+                    #use your user's path on sudo
+                #alias sudo='sudo env PATH=$PATH'
+                    #tempting, but it will make options fail!
+                    #sudo -L --> sudo env PATH=$PATH -l
+                    #env thinks -l is his option
 
     ##logout
 

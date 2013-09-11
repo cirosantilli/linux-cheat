@@ -6,10 +6,15 @@
 #include "stdlib.h"
 #include "string.h"
 
+#include <errno.h>
 #include <sys/socket.h>
 #include <sys/un.h>         //sockaddr_un
 #include "unistd.h"
 
+/**
+Simple server that takes one char per connection,
+increases it, and returns it to the client.
+*/
 int main( int argc, char** argv )
 {
     //name of the socket file
@@ -17,20 +22,53 @@ int main( int argc, char** argv )
     char ch;
     char name[] = "server_socket";
     size_t client_len;
-    struct sockaddr_un client_address;
     int server_sockfd, client_sockfd;
-    struct sockaddr_un server_address;
+    struct sockaddr_un client_address, server_address;
 
-    //remove any existing socket file and create a new one:
-    unlink( name );
+    //remove any existing socket file and create a new one
+    if ( unlink( name ) == -1 && errno != ENOENT ) {
+        perror( "unlink" );
+        exit(EXIT_FAILURE);
+    }
+
+    /*
+    #setsockopt
+
+        Set several socket options
+
+            int setsockopt(int sockfd, int level, int optname,
+                        const void *optval, socklen_t optlen)
+
+        TODO it seems that setting SO_REUSEADDR allows to immediately reuse this socket.
+            Otherwise, bind fails because the address is already used.
+
+        Discussion on the python interface: <http://www.gossamer-threads.com/lists/python/bugs/714277>
+     */
+
+        /*
+            if ( setsockopt(
+                int sockfd,
+                int level,
+                int optname,
+                const void *optval,
+                socklen_t optlen
+            ) == -1 )
+            {
+            }
+        */
+
     server_sockfd = socket( AF_UNIX, SOCK_STREAM, 0 );
+    if ( server_sockfd == -1 ) {
+        perror( "socket" );
+        exit(EXIT_FAILURE);
+    }
 
     /*
     #bind
 
-        create the socket file for the socket
+        Bind an address to the socket file.
 
-        may take different address formats depending on the socket parameters
+        May take different address formats depending on the socket parameters.
 
         #AF_INET
 
@@ -53,34 +91,44 @@ int main( int argc, char** argv )
     */
         server_address.sun_family = AF_UNIX;
         strcpy( server_address.sun_path, name );
-        bind( server_sockfd, (struct sockaddr*)&server_address, sizeof( server_address ) );
+        if ( bind(
+                server_sockfd,
+                (struct sockaddr*)&server_address,
+                sizeof( server_address )
+            ) == -1 )
+        {
+            perror( "bind" );
+            exit(EXIT_FAILURE);
+        }
 
     /*
     #listen
 
-        create a connection queue
+        Create a connection queue
 
             int listen(int socket, int backlog);
 
-        backlog is the max queue size
+        Backlog is the max queue size.
 
-        if overflows TODO
+        If overflows TODO.
     */
 
-        listen( server_sockfd, 5 );
+        if ( listen( server_sockfd, 5 ) == -1 ) {
+            perror( "listen" );
+            exit(EXIT_FAILURE);
+        }
 
     //run server
     while ( 1 )
     {
-        printf( "server waiting\n" );
         /*
         #accept
 
-            accept connect from client
+            Accept connect from client.
 
-            for each accept a new file descriptor is created to communicate with the client
+            For each accept a new file descriptor is created to communicate with the client.
 
-            by default blocks until a connexion is requested by a client via `connect`
+            Blocks until a connexion is requested by a client via `connect`
         */
         client_len = sizeof( client_address );
         client_sockfd = accept(
@@ -88,9 +136,20 @@ int main( int argc, char** argv )
             (struct sockaddr*)&client_address,
             &client_len
         );
-        read( client_sockfd, &ch, 1 );
+        if ( client_sockfd == -1 ) {
+            perror( "accept" );
+            exit(EXIT_FAILURE);
+        }
+
+        if ( read( client_sockfd, &ch, 1 ) == -1 ) {
+            perror( "read" );
+            exit(EXIT_FAILURE);
+        }
         ch++;
-        write( client_sockfd, &ch, 1 );
+        if ( write( client_sockfd, &ch, 1 ) == -1 ) {
+            perror( "write" );
+            exit(EXIT_FAILURE);
+        }
 
         //you should close the connection on both client and server
 

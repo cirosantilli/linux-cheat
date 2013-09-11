@@ -1,169 +1,148 @@
 #sources
-#sources
 
 - <http://www.aboutdebian.com/network.htm>
 
-#netrc
+#osi vs ips
 
-`$HOME/.netrc` is a config file that automates net logins
-(TODO: which type exactly of login?)
+Both model the network.
 
-ex:
+IPS model has only 4 layers, OSI has 7.
 
-    machine code.google.com login <login> password <pass>
+Both models are layered.
 
-#host
+Each layer adds a header to the layer below containing its information.
 
-any computer connected to a network
+#ips
 
-can be specified by
+<http://en.wikipedia.org/wiki/Internet_protocol_suite>
 
-- an IP or by
-- a string that will be resolved by a dns server to an ip
+    | Application |
+    | TCP data    | TCP header |
+    | IP data                  | IP header |
+    | transport data                       | transport header |
 
-##host user pair
+#ip
 
-a user may access a (system) computer from another computer using for example [ssh](#ssh)
+Protocol that allows to:
 
-to do so, he must be registered in the target computer.
+- assign addresses to network interfaces (which have distinct hardware addresses),
 
-this is why user/host pairs are common: the host pair says from which computer
-user is trying to access his account.
+- find path between one computer to another, possibly passing through many routers
 
-##hostname
+#ip header
 
-an alias for you ip
+Learn what the IP header contains:
 
-###hostname
+<http://en.wikipedia.org/wiki/IPv4_header#Header>
 
-print hostname
+Interesting notes:
 
-    echo $HOSTNAME
-    hostname
+- contains IPs of destination and origin
 
-in the default bash `PS1` line for ubuntu and many systems you see:
-`ciro@ciro-Thinkpad-T430`, then the hostname is `ciro-Thinkpad-T430`
+Versions
 
-change hostname for cur session
-prompt `PS1` is not changed immediatelly:
+#ip address
 
-    h=
-    sudo hostname "$h"
+An unique address that identifies a host, for example a separate workstation.
 
-###host command
+IPv4 addresses are 4 bytes long.
 
-get ip for a given hostname:
+They are often noted byte by byte as:
 
-    host www.google.com
+    192.156.0.1
 
-###lan
+Each computer knows its IP address.
 
-on your lan, people can use the host name to communicate between computers
+This can be set in two ways:
 
-for example, john is running an apache server on the usual port 80. He has hostname `john`.
+- statically and manually: admin enters those values for each computer.
 
-mary is on the same netowk. Therefore, she can refer to john simply as john. For example:
+    They never change.
 
-    ping john
-    firefox john
+- dynamically and automatically.
 
-TODO if many people set up the same hostname, then what?
+##ip classes
 
-###change hostname permanently
+Each address has two parts: network part and host part.
 
-    h=
-    echo "$h" | sudo tee /etc/hostname
+###example: network and host parts
 
-###windows
+- 2 networks
 
-host is reffered to as "computer name". good name choice.
+- 3 bytes for the network part
+- 1 router
+- 3 computers on the same network
 
-    wmic computersystem where name="%COMPUTERNAME%" call rename name="NEW-NAME"
+Things could look like:
 
-###wan
+    +---------------+  +---------------+  +---------------+
+    | computer 1    |  | computer 2    |  | computer 3    |
+    |---------------|  |---------------|  |---------------|
+    | 192.156.0.2   |  | 192.156.0.3   |  | 192.156.0.4   |
+    |+--------------+  |+--------------+  |+--------------+
+    ||                 ||                 ||
+    |+=================++=================++
+    ||
+    |+---------------+
+    || 192.156.0.1   |
+    ||---------------+
+    || router        |
+    ||---------------|
+    || 192.157.0.1   |
+    |+---------------+
+    ||
+    |+=================++=================++
+    ||                 ||                 ||
+    |+--------------+  |+--------------+  |+--------------+
+    | computer 3    |  | computer 4    |  | computer 5    |
+    |---------------|  |---------------|  |---------------|
+    | 192.157.0.2   |  | 192.157.0.3   |  | 192.157.0.4   |
+    +---------------+  +---------------+  +---------------+
 
-on the internet, hotnames are resolved to ips by DNS servers
 
-you must pay for hostnames to use them
+How many bytes are the network, and how many bytes are the host was determined
+only by the class of the IP in the past.
 
-#port
+Each computer must know how many bytes are network and how many are host.
 
-once you have determined a host (computer),
-you still have to talk to one of the specific programs running on that computer
+In the past, there were 5 IP ranges:
 
-each program listens on an specific port which is set by convention.
+- A: starts with 0
+- B: starts with 10
+- C: starts with 110
+- D: starts with 1110
+- E: all others
 
-ports from 1 - 1000 all have reserved or standardized functions:
+IPs on classes A, B and C were reseverved for internal use.
 
-there are 2 ports number 10: 10/tcp and 10/udp, each for a different protocol.
-
-on POSIX systems ports are typically implemented via sockets.
-
-##read and write to a port from the command line
-
-you can write to a port in many ways using the command line.
-
-#tcp vs udp
-
-they are different protocols
-
-tcp guarantees that information packages arrive, udp does not
-
-for that, tcp has to maintain a connection,
-while udp simply sends the packages and hopes for the bes
-
-for this reason, udp has less overhead, but is only used when the transaction
-will limit itself to a single request/answer.
-
-some protocols include both a TCP and a UDP version, which may vary slightly
-while others only have either a TCP or an UDP version
-see <http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers> for a list
-
-#routers
-
-##routing table
-
-###advantages
-
-- local requests don't go out
-- you can block all forbidden websites and services on a single computer
-
-great lan routing example: <http://en.wikipedia.org/wiki/Default_gateway>
-
-routing tables say: if the request should go to a given network, send it to a given interface
-
-0.0.0.0 is the default if no other is found
-
-routers have two interfaes each: inside and outside
-
-##external vs internal ip
-
-if you use a router, all computers behind the router have a single external ip seen
-you have an external ip seen on the web and an internal ip seen on the private
-local network (lan)
-
-    curl http://ipecho.net/plain
-    curl ifconfig.me
-get external ip
-
-    ifconfig | grep -B1 "inet addr" | awk '{ if ( $1 == "inet" ) { print $2 } else if ( $2 == "Link" ) { printf "%s:" ,$1 } }' | awk -F: '{ print $1 ": " $3 }'
-internal adresses for current computer
-different ones for wireless and for wired connections
-
-computers in the network only talk to the router.
-the server on the router is called **proxy server**.
-
-##internal ip ranges
-
-3 ip ranges are reserved for internal ips
-they are called class [ABC]
-if your address is in those ranges,
+If your address is in those ranges,
 the routers proxy server knows it is an internal one you are asking about
 
 most common home range is the Class C:
 
 192.168.0.1 through 192.168.255.254
 subnet mask 255.255.255.0
+
+##external vs internal ip
+
+If you use a router, all computers behind the router have a single external ip seen
+you have an external ip seen on the web and an internal ip seen on the private
+local network (lan).
+
+Get external ip:
+
+    curl http://ipecho.net/plain
+    curl ifconfig.me
+
+Get internal adresses for current computer:
+
+    ifconfig | grep -B1 "inet addr" | awk '{ if ( $1 == "inet" ) { print $2 } else if ( $2 == "Link" ) { printf "%s:" ,$1 } }' | awk -F: '{ print $1 ": " $3 }'
+
+Different ones for wireless and for wired connections
+
+Computers in the network only talk to the router.
+
+The server on the router is called **proxy server**.
 
 ##subnet mask
 
@@ -305,37 +284,291 @@ get MAC addresses of computers i have already talked to in the lan:
     timeout 3 ping 192.168.1.3
     arp -a | sed -nr 's/([^ ]*) .*at (.*)/\1 \2/p'
 
-#/etc/hosts
 
-tells your computer  where to redirect the given names
+#tcp vs udp
 
-big downside: you have to have one of this file on every pc
+Different protocols
+
+TCP guarantees that information packages arrive, UDP does not.
+
+For that, tcp has to maintain a connection,
+while udp simply sends the packages and hopes for the bes
+
+For this reason, udp has less overhead, but is only used when the transaction
+will limit itself to a single request/answer.
+
+Some protocols include both a TCP and a UDP version, which may vary slightly
+while others only have either a TCP or an UDP version
+see <http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers> for a listcounting acknowledge packages
+
+#tcp
+
+Learn the tcp header:
+
+<http://en.wikipedia.org/wiki/Transmission_Control_Protocol#TCP_segment_structure>
+
+Interesting notes:
+
+- tcp determines the ports
+
+#tcpdump
+
+CLI utility that allows to visualize tcp packets sent and received.
+
+Good intro tutorial: <http://danielmiessler.com/study/tcpdump/>
+
+Most useful options:
+
+- `-X` show ascii and hex side by side:
+- `-n` don't resolve hostnames, show numeric IPs
+- `-S` don't resolve hostnames, show numeric IPs
+
+    sudo tcpdump -SXn
+
+#wireshark
+
+Set of utilities that that capture TCP IP packages similarly to tcpdump.
+
+Also analyses packages if possible, and presents them on a human readable way.
+
+Open source and cross platform (Linux and Windows).
+
+#netrc
+
+`$HOME/.netrc` is a config file that automates net logins
+(TODO: which type exactly of login?)
+
+ex:
+
+    machine code.google.com login <login> password <pass>
+
+#host
+
+A host is anything able to send and receive packages over a network:
+this includes workstations (computers) and routers.
+
+Can be specified by either
+
+- an IP
+- a string that will be resolved by a dns server to an IP
+
+##host user pair
+
+A user may access a (system) computer from another computer using for example ssh.
+
+To do so, he must be registered in the target computer.
+
+This is why user/host pairs are common:
+the host pair says from which computer user is trying to access his account.
+
+#hostname
+
+An alias for your desired IP on a local network.
+
+Must be converted into an IP via DNS.
+
+#dhcp
+
+Dynamic host configuration protocol.
+
+<http://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol>
+
+Application layer protocol that automatically assigns configurations to the hosts on a network,
+such as their IP.
+
+Default IANA ports: udp 67 and 68 (same as its less advanced and less common predecessor `BOOTP`)
+
+When a computer enters a network and it does not know its own IP.
+
+It must first send a DHCP request to be assigned an IP.
+
+#hosts file
+
+Located at:
+
+    /etc/hosts
+
+Tells your computer where to redirect the given names.
+
+Takes precedence over DNS.
+
+Big downside: you have to have one of this file on every PC.
 
 therfore, use a dns server instead
 
     cat /etc/hosts
 
-redirect wikipiedia to localhost:
+Redirect wikipiedia to localhost:
 
     echo "127.0.0.1 www.wikipedia.org" | sudo -a /etc/hosts
 
+Now:
+
     firefox www.wikipedia.org &
 
-undo that:
+will go to localhost, and you will see your apache page if you are running apache.
+
+Undo that:
 
     sudo sed -i "$ d" /etc/hosts
 
 ##windows
 
-the file is:
+The file is:
 
     C:\Windows\System32\Drivers\Etc\hosts
 
 #dns
 
-domain name system
+Domain name system.
 
-convert strings into ips
+Part of the application layer of the IPS.
+
+Standard IANA port: 53/udp
+
+Protocol that convert strings into ips, for example:
+
+    http://www.google.com -> 173.194.34.34
+
+Before before using an address such as `www.google.com`, any program such as a browser
+must first resolve the hostname `www.google.com` into an IP.
+by asking that from a server.
+
+Linux systems usually offer `man resolver` C library interface, which any program can use to resolve
+DNS names. The resolver library may cache results across applications that have already been resolved.
+
+###dns on wan
+
+On the internet, hostnames are resolved to IPs by DNS servers.
+
+You must pay to reserve hostnames so they can be resolved to the IP of your choice.
+
+TODO how to DNS servers find out all the hostnames in the world?
+
+##dns on lan
+
+DNS can also be done for local networks:
+
+    computer2 -> 192.168.0.3
+
+in which case the DNS server normally resides on the router.
+
+Clients computers on the network are informed that it is a DNS server via DHCP.
+
+On your lan, people can use the host name to communicate between computers
+
+For example, John is running an apache server on the usual port 80. He has hostname `john`.
+
+Mary is on the same netowk. Therefore, she can refer to john simply as john. For example:
+
+    ping john
+    firefox john
+
+TODO if many people set up the same hostname, then what?
+
+##host utility
+
+Get ip for a given hostname:
+
+    host www.google.com
+
+Sample output:
+
+    173.194.78.105
+
+##resolv.conf file
+
+Located at:
+
+    /etc/resolv.conf
+
+Lists DNS servers (they resolve hostnames into IPs ).
+
+This file may be automatically generated by utilities.
+
+Weirdly, mine contains:
+
+    nameserver 127.0.1.1
+
+which is localhost. TODO understand why? It seems that the DHPC deamon set that.
+
+The actual nameserver can be found with the `dig | grep SERVER` command.
+
+##hostname utility
+
+Print currently desired hostname:
+
+    echo $HOSTNAME
+    hostname
+
+In the default bash `PS1` line for ubuntu and many systems you see:
+`ciro@ciro-Thinkpad-T430`, then the hostname is `ciro-Thinkpad-T430`.
+
+Change hostname for cur session:
+
+    h=
+    sudo hostname "$h"
+
+prompt `PS1` is not changed immediatelly.
+
+##change hostname permanently
+
+    h=
+    echo "$h" | sudo tee /etc/hostname
+
+###windows
+
+host is reffered to as "computer name". good name choice.
+
+    wmic computersystem where name="%COMPUTERNAME%" call rename name="NEW-NAME"
+
+#port
+
+Once you have determined a host (computer),
+you still have to talk to one of the specific programs running on that computer.
+
+Each program listens on an specific port which is set by convention.
+
+Ports from 1 - 1000 all have reserved or standardized functions by an organization called IANA:
+<http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers>
+
+There are 2 ports number 10: 10/tcp and 10/udp, each for a different protocol.
+
+On POSIX systems, ports are typically implemented via sockets.
+
+##read and write to a port from the command line
+
+You can write to a port in many ways using the command line.
+
+#router
+
+Routers send packages from one place to another.
+
+Most routers will have at least two network interfaces, one on each network.
+
+##configure you router
+
+If you wanto to play around with routers, you should get your hands dirty and do some router configuring.
+
+Routers are generally configured through a browser.
+
+First you must make a wired connection to the router.
+
+You must enter the IP address of your router. This is fixed and supplied by the router manufacturer.
+
+You must then enter a username and a password. A default will be supplied by the manufacturer,
+such as `admin` `admin`, or `admin` `password`. This can be changed once you logged in.
+
+##routing table
+
+Great lan routing example: <http://en.wikipedia.org/wiki/Default_gateway>
+
+Routing tables say: if the request should go to a given network,
+send it to a given interface.
+
+0.0.0.0 is the default if no other is found
+
+routers have two interfaes each: inside and outside
 
 #ifconfig
 
@@ -376,9 +609,10 @@ in online games, ping means the go and return time of the signal
 
 #arp
 
-can be:
+A protocol used to find the MAC address from an IP on a LAN.
 
-- a protocol used to find the MAC address from an IP on a LAN
+When a computer wants to communicate with an IP in a LAN,
+it looks inside a physical address to IP table called ARP table. its ARP table to see if
 
 - a command line tool that allows to visualise the MAC cache,
     that is, table with IP -> MAC addresses
@@ -467,32 +701,64 @@ view UDP ports:
 
 #netstat
 
-shows lots of POSIX sockets info
+Shows lots of POSIX sockets info.
 
-get list pid and program name of programs using ports:
+Get list pid and program name of programs using ports:
 
-    netstat -p
+Shows both tcp/udp internet connections and UNIX domain sockets
 
-output has 2 sections: Internet connections and UNIX domain sockets
-
-in short: Internet connections are done via sockets whose address is given by
+In short: Internet connections are done via sockets whose address is given by
 an ip and a port number, and can communicate across computers
 
-UNIX domain sockets are only for local communication. They are put into the filesystem
-and identified by a path on the filesystem
+UNIX domain sockets are only for local communication.
+They are put into the filesystem and identified by a path on the filesystem
 
-when a program uses a socket, it binds to it, and other programs cannot use it.
+When a program uses a socket, it binds to it, and other programs cannot use it.
 
-sample output for internet section:
+Most useful options:
+
+- `-n`
+
+    Don't resolve IPs into hostnames.
+
+    Gretly speeds up the output generation.
+
+- `-a`
+
+    Show both listening and not listening ports.
+
+- `-p`
+
+    Show program name and pid.
+
+- `-t`
+
+    Show only tcp
+
+- `-u`
+
+    Show only udp
+
+- `-x`
+
+    Show only UNIX sockets
+
+- `i`
+
+    Show information on interfaces.
+
+- `r`
+
+    Show kernel routing table.
+
+- `-s`
+
+    Show statistics on serveral protocols.
+
+Sample output for internet section:
 
     Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
     tcp        0      0 localhost:32842         localhost:48553         ESTABLISHED 3497/GoogleTalkPlug
-
-- TODO: understand every field
-
-- TODO: why is my apache server not shown here?
-
-- Proto: protocol. Basically tcp or udp
 
 #telnet
 
@@ -500,7 +766,7 @@ protocol for comunicating between servers and name of command line tool that use
 
 no encryption, therefore *DONT'T SEND PASSWORDS ON UNTRUSTED NETWORK WITH THIS*!!
 
-always use <#ssh> which is encrypted for anything even remotelly Pserious
+always use ssh which is encrypted for anything even remotelly Pserious
 
 the other computer must be running a telnet server
 
@@ -545,79 +811,138 @@ in both cases you should get the HTTP re
 
 #ssh
 
-like telnet, but encrypted
+Like telnet, but encrypted
 
-predominant implementation: OpenSSH
+Predominant implementation: OpenSSH, open source.
 
-    man ssh
-    man ssh_config
+For ssh to work you will need:
+
+- a ssh server running on a machine.
+
+- a ssh client running on another machine.
+
+It is possible to do tests using `localhost` on a single machine.
 
 ##server
 
-    sudo cp /etc/ssh/ssh_config{,.bak}
-    sudo vim /etc/ssh/ssh_config
+Known as `sshd`, which standas for ssh deamon.
 
-    Host *                    #config for all hosts
+Must be installed and running on a machine for users from other computers to log into that machine.
+
+The server part of ssh is called sshd.
+
+Configuration:
+
+    sudo cp  /etc/ssh/sshd_config{,.bak}
+    sudo vim /etc/ssh/sshd_config
+
+For the server to work, thw following configuration is minimal:
+
+    Host *                  #config for all hosts
     Port 22                 #open port 22
     AllowUsers user1 user2  #allow the given users
 
+The server is often started as part of the initrd system.
+
+Therefore, to get it running you will probably use:
+
+    sudo service ssh start
+
+and to stop it:
+
+    sudo service ssh stop
+
+and to check its status:
+
+    sudo service ssh status
+
 ##client
 
-    h=
-    u=
+Make sure that the configuration file is correct:
 
-get the version of you ssh:
+    sudo cp  /etc/ssh/ssh_config{,.bak}
+    sudo vim /etc/ssh/ssh_config
+
+For local tests, use localhost and the current user:
+
+    host=localhost
+    user=`id -un`
+
+Get the version of you ssh:
 
     ssh -V
 
-connect to hostname with your current username:
+Connect to hostname with your current username:
 
-    ssh $h
+    ssh $host
 
-for this to work you need:
-your host (computer) is allowed. see <#ssh#server>
-your user is allowed. see <#ssh#server>
-your user exists in the server computer. see <#useradd>
+For this to work you need:
 
-connect to hostname with the given username:
+- your host (computer) is allowed. See ssh server.
 
-    ssh $u@$h
-    ssh -l $u $h
+- your user is allowed. See ssh server.
 
-choose port:
+- your user exists in the *server* computer. See useradd.
 
-    p=
+Connect to hostname with the given username:
+
+    ssh $user@$host
+
+or:
+
+    ssh -l $user $host
+
+Choose port:
+
+    p=22
     ssh -p $p $h
+
+The default is 22 specified by IANA, so don't change it if you can avoid it.
 
 ##usage
 
-once you log in, it is as if you had a shell on the given ssh server computer!
+Once you log in, it is as if you had a shell on the given ssh server computer!
 
-you canno copy files between computer with ssh directly,
+You cannot copy files between computer with ssh directly,
 but you can use scp or sftp to do it
 
-note how you appear on the who list:
+Note how you appear on the who list:
+
     who
 
-you cannot launch x11 programs:
-
-    xeyes
-
-gives:
-
-    Error: can't open display
-
-to close your connection:
+To close your connection:
 
     logout
 
-or hit <c-d>
+or enter `CTRL-D`.
 
-##scp
+###gui applications
+
+It is possible to run X applications remotely,
+but it may be that the default configurations don't allow you to do that.
+
+To allow X, make sure that the line:
+
+    ForwardX11 yes
+
+is present and uncommented on both client and server configuration files.
+
+Now you can do:
+
+    firefox
+
+and it should work.
+
+If you forget to let `ForwardX11 yes`, you would get errors like:
+
+    Error: can't open display
+    Error: display not specified
+
+#scp
 
 cp with ssh encryption
 
-get a file:
+Get a file:
 
     p= #path to file
     d= #destination directory
@@ -636,9 +961,9 @@ use -r
 multiple files/dirs:
     scp -r $u@$h:"$p1" $u@$h:"$p2"
 
-##sftp
+#sftp
 
-similar to ftp, ssh encryption
+ftp with ssh encryption
 
 #samba
 

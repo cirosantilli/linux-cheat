@@ -1,11 +1,11 @@
 # make all files with one of the given extensions by IN_EXTS
 # separatelly, possibly using a different rule per extension
 
-IN_DIR 	?= ./
+IN_DIR 		?= ./
 IN_EXTS 	?= .c
 OUT_DIR 	?= _out/
 OUT_EXT 	?=
-RUN		?= main
+RUN			?= main
 
 INS			:= $(foreach IN_EXT, $(IN_EXTS), $(wildcard $(IN_DIR)*$(IN_EXT)) )
 INS_NODIR 	:= $(notdir $(INS))
@@ -28,4 +28,7 @@ mkdir:
 	mkdir -p $(OUT_DIR)
 
 run: all
-	cd $(OUT_DIR) && ./$(RUN)$(OUT_EXT)
+	cd $(OUT_DIR) && ./server$(OUT_EXT) &
+	cd $(OUT_DIR) && ./client$(OUT_EXT) &
+	cd $(OUT_DIR) && ./client$(OUT_EXT) &
+	cd $(OUT_DIR) && ./client$(OUT_EXT) &

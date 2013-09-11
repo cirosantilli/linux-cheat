@@ -22,20 +22,37 @@ int main( int argc, char** argv )
 
     //this is the struct used by UNix addresses
     struct sockaddr_un address;
-    int result;
     char ch_init = 'a';
     char ch = ch_init;
 
     /*
-    #sockfd
+    #socket
 
-        create the socket, and get a file descrpitor to it
+        Create the socket, and get a file descrpitor to it.
 
-        this must be doe by both clients and servers
+        This must be done by both clients and servers.
+
+            int socket(int domain, int type, int protocol);
+
+        - protocol:
+
+            For a given domain, select which protocol id to use.
+
+            `0` uses a default protocol for the domain.
+
+            Many domains have a single protocol.
+
+            Other do not, for example `AF_INET` has both `tcp` adn `udp`.
+
+            To get a protocol id, use `struct protoent *protoent = getprotobyname('tcp')`,
+            and then extract `protoent->p_proto`.
     */
 
-        //create the socket
         sockfd = socket( AF_UNIX, SOCK_STREAM, 0 );
+        if ( sockfd == -1 ) {
+            perror( "socket" );
+            exit(EXIT_FAILURE);
+        }
 
     /*
     #connect
@@ -53,22 +70,25 @@ int main( int argc, char** argv )
 
         len = sizeof( address );
 
-        result = connect( sockfd, ( struct sockaddr* )&address, len );
-
-    if ( result == -1 )
-    {
-        perror( "client error:" );
-        assert( false );
+    if ( connect( sockfd, ( struct sockaddr* )&address, len ) == -1 ) {
+        perror( "connect" );
+        exit( EXIT_FAILURE );
     }
 
-    write( sockfd, &ch, 1 );
-    read( sockfd, &ch, 1 );
+    if ( write( sockfd, &ch, 1 ) == -1 ) {
+        perror( "write" );
+        exit(EXIT_FAILURE);
+    }
+    if ( read( sockfd, &ch, 1 ) == -1 ) {
+        perror( "read" );
+        exit(EXIT_FAILURE);
+    }
 
     //you should close the connection on both client and server
 
         close( sockfd );
 
-    printf( "char from server = %c\n", ch );
+    //assert that the server did its job of increasing the char we gave it
     assert( ch == ch_init + 1 );
 
     exit( EXIT_SUCCESS );

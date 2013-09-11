@@ -947,39 +947,32 @@ int main( int argc, char** argv )
             }
         }
 
-        //ensure that the new path does not exist
-        //ENOENT is ok since the path may not exist
-        errno = 0;
-        if ( unlink( newpath ) == -1 && errno != ENOENT )
-        {
+        /* ensure that the new path does not exist
+        ENOENT is ok since the path may not exist */
+        if ( unlink( newpath ) == -1 && errno != ENOENT ) {
             perror( "link" );
             exit( EXIT_FAILURE );
         }
 
         //make the hardlink
-        if ( link( oldpath, newpath ) == -1 )
-        {
+        if ( link( oldpath, newpath ) == -1 ) {
             perror( "link" );
             exit( EXIT_FAILURE );
         }
 
         //write to new
         fd = open( newpath, O_WRONLY );
-        if ( fd == -1 )
-        {
+        if ( fd == -1 ) {
             perror( "open" );
             exit( EXIT_FAILURE );
-        }
-        else
-        {
-            if ( write( fd, in_new, nbytes ) != nbytes )
-            {
+        } else {
+
+            if ( write( fd, in_new, nbytes ) != nbytes ) {
                 perror( "write" );
                 exit( EXIT_FAILURE );
             }
 
-            if ( close( fd ) == -1 )
-            {
+            if ( close( fd ) == -1 ) {
                 perror( "close" );
                 exit( EXIT_FAILURE );
             }
@@ -987,23 +980,18 @@ int main( int argc, char** argv )
 
         //assert that it reflected on old
         fd = open( oldpath, O_RDONLY );
-        if ( fd == -1 )
-        {
+        if ( fd == -1 ) {
             perror( "open" );
             exit( EXIT_FAILURE );
-        }
-        else
-        {
-            if ( read( fd, out, nbytes ) != nbytes )
-            {
+        } else {
+            if ( read( fd, out, nbytes ) != nbytes ) {
                 perror( "read" );
                 exit( EXIT_FAILURE );
             }
 
             assert( memcmp( out, in_new, nbytes ) == 0 );
 
-            if ( close( fd ) == -1 )
-            {
+            if ( close( fd ) == -1 ) {
                 perror( "close" );
                 exit( EXIT_FAILURE );
             }
@@ -2832,12 +2820,9 @@ int main( int argc, char** argv )
         */
         {
             shmem = shmat( shmid, NULL, 0 );
-            if ( shmem == (void*)-1 )
-            {
+            if ( shmem == (void*)-1 ) {
                 assert( false );
-            }
-            else
-            {
+            } else {
                 shmem[0] = 1;
                 fflush( stdout );
                 pid_t pid = fork();
@@ -2907,7 +2892,6 @@ int main( int argc, char** argv )
                     */
                     {
                         assert( shmctl( shmid, IPC_RMID, NULL ) == 0 );
-                        return EXIT_SUCCESS;
                     }
                 }
             }
@@ -3063,11 +3047,11 @@ int main( int argc, char** argv )
         /*
         #gethostname
 
-            copies name of current host on given string
+            Copies name of current host on given string:
 
                 int gethostname( char* hostname, int namelength );
 
-            name is truncated to namelength if too large
+            Name is truncated to namelength if too large
         */
         {
             const int namelength = 256;
@@ -3079,11 +3063,12 @@ int main( int argc, char** argv )
         /*
         #gethostbyname
 
-            give a hostname string ("localhost", "john") and get info on that host
+            Give a hostname string ("localhost", "john") and get info on that host,
+            including its IP.
 
                 struct hostent *gethostbyname(const char *name);
 
-            return value:
+            Return value:
 
                 struct hostent {
                     char *h_name;       // name of the host
@@ -3093,88 +3078,148 @@ int main( int argc, char** argv )
                     char **h_addr_list  // list of address (network order)
                 };
 
-            NULL on error
+            `NULL` on error
 
         #gethostbyaddr
 
-            same as gethostbyname but by address
+            Same as gethostbyname but by address.
         */
         {
             const int namelength = 256;
-            char hostname[namelength];
-            char** names;
-            char** addrs;
-            struct hostent* hostinfo;
+            char **names;
+            char **addrs;
+            struct hostent* hostent;
+            char hostnames[2][namelength];
 
-            gethostname( hostname, namelength );
-            hostinfo = gethostbyname( hostname );
-            if ( !hostinfo )
-            {
-                printf( "gethostbyname failed for hostname = %s\n", hostname );
+            if ( gethostname( hostnames[0], namelength ) == -1 ) {
+                perror( "gethostname" );
+                exit( EXIT_FAILURE );
             }
-            else
-            {
-                printf( "gethostbyname\n" );
-                printf( "name: %s\n", hostinfo -> h_name );
-                printf( "aliases:\n" );
-                names = hostinfo -> h_aliases;
-                while ( *names )
-                {
-                    printf( "  %s\n", *names );
-                    names++;
-                }
-                //assert that it is an inet address
-                if ( hostinfo -> h_addrtype != AF_INET )
-                {
-                    printf( "host is not AF_INET\n" );
-                    exit( EXIT_FAILURE );
-                }
 
-                //show addresses
-                printf( "IPs:\n" );
-                addrs = hostinfo -> h_addr_list;
-                while ( *addrs )
-                {
-                    /*
-                    #inet_ntoa
+            strcpy( hostnames[1], "www.google.com" );
 
-                        converts integer representation of ip (4 bytes) to a string
+            for ( int i = 0; i < 2; i++ ) {
+                hostent = gethostbyname( hostnames[i] );
+                //hostent = gethostbyname( "www.google.com" );
+                if ( hostent == NULL ) {
+                    fprintf( stderr, "gethostbyname failed for hostname = %s\n", hostnames[i] );
+                } else {
+                    printf( "gethostbyname\n" );
+                    printf( "  name: %s\n", hostent -> h_name );
+                    printf( "  aliases:\n" );
+                    names = hostent -> h_aliases;
+                    while ( *names )
+                    {
+                        printf( "    %s\n", *names );
+                        names++;
+                    }
+                    //assert that it is an inet address
+                    if ( hostent -> h_addrtype != AF_INET ) {
+                        printf( "host is not AF_INET\n" );
+                        exit( EXIT_FAILURE );
+                    }
 
-                        also corrects network byte ordering into correct representation
-                    */
-                    printf( "  %s", inet_ntoa( *(struct in_addr*)*addrs ) );
-                    addrs++;
+                    //show addresses
+                    printf( "  IPs:\n" );
+                    addrs = hostent -> h_addr_list;
+                    while ( *addrs )
+                    {
+                        /*
+                        #inet_ntoa
+
+                            Converts integer representation of ip (4 bytes) to a string.
+
+                            Takes network byte ordering into consideration.
+                        */
+                        printf( "    %s", inet_ntoa( *(struct in_addr*)*addrs ) );
+                        addrs++;
+                    }
+                    printf( "\n" );
                 }
-                printf( "\n" );
             }
         }
 
         /*
+        POSIX requires that systems must keep a database that given a protocol links:
+        service name ( strings ) to their ports and vice versa.
+
+        #servent struct
+
+            Represents a service.
+
+            Must contain at least the following fields:
+
+                char   *s_name     Official name of the service.
+                char  **s_aliases  A pointer to an array of pointers to
+                                alternative service names, terminated by
+                                a null pointer.
+                int     s_port     The port number at which the service
+                                resides, in network byte order.
+                char   *s_proto    The name of the protocol to use when
+                                contacting the service.
+
         #getservbyport
-
-            posix requires that systems must keep a database containing strings
-            that describe which service (provided by a server) is available at each port
-
-                #include <netdb.h>
 
                 struct servent *getservbyport(int port, const char *proto);
 
-            this function uses that database to get info on such a service
+            - protocol:  protocol name to look for.
 
-                struct servent {
-                    char *s_name;
-                    char **s_aliases;
-                    int s_port;
-                    char *s_proto;
-                };
+                If `NULL`, match the first service found on that port for any protocol.
 
         #getservbyname
 
-            same as getservbyport but using the service name itself
-
-                #include <netdb.h>
+            Same as getservbyport but using the service name itself
 
                 struct servent *getservbyname(const char *name, const char *proto);
+        */
+        {
+            struct servent *servent;
+            int port;
+            char proto[] = "tcp";
+            char name[] = "http";
+
+            /*
+            TODO what is a service? PING, HTTP, etc. application layer stuff?
+            How to gete those working then?
+            */
+
+            port = 80;
+            servent = getservbyport( port, proto );
+            if ( servent == NULL ) {
+                fprintf( stderr, "getservbyport( %d, %s ) failed\n", port, proto );
+            } else {
+                printf( "getservbyport\n" );
+                printf( "  s_name  = %s\n", servent->s_name );
+                printf( "  s_proto = %s\n", servent->s_proto );
+            }
+
+            servent = getservbyname( name, proto );
+            if ( servent == NULL ) {
+                fprintf( stderr, "getservbyname( %s, %s ) failed\n", name, proto );
+            } else {
+                printf( "getservbyname\n" );
+                printf( "  s_name  = %s\n", servent->s_name );
+                printf( "  s_port  = %d\n", servent->s_port );
+                printf( "  s_proto = %s\n", servent->s_proto );
+            }
+        }
+
+        /*
+        #getprotobyname
+
+            The system must implement a database that links protocol names to protocol identifier numbers.
+
+            Interface:
+
+                struct protoent *getprotobyname(const char *name);
+
+            `protoent` must contain at least the following fields:
+
+                char   *p_name     Official name of the protocol.
+                char  **p_aliases  A pointer to an array of pointers to
+                                    alternative protocol names, terminated by
+                                    a null pointer.
+                int     p_proto    The protocol number.
         */
     }
 
