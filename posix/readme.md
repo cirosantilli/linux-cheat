@@ -1,4 +1,6 @@
-general cheat on posix
+Cheat on POSIX, including the POSIX C API.
 
-some some posix info such as utilities can also be put outside of this section
-for example on thematic sections for example "internet" or "text" processing
+POSIX command line utilities shall not be discussed here.
+This decision has been made because it is better to group utilities together with other
+non-POSIX utilities which have similar functions, for exapmle discussing both `kill` (POSIX)
+and `killall` (non-POSIX) side by side.

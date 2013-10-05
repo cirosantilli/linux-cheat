@@ -1,32 +1,37 @@
 /*
-main cheat on the POSIX C API
+Cheat on the POSIX C API.
 
-#defines
+The POSIX C API is mostly an extension of the ANSI C API.
+ANSI C features shall not be discussed here.
 
-    these are headers specified by posix
+#implementations
 
-    on current ubuntu system this is implemented by the gnu c library:
-    <http://www.gnu.org/software/libc/> says that POSIX compliance
-    is a design goal of the gnu c library
+    On most Linux systems as of 2013, the POSIX C API is implemented by the GNU C library:
+    <http://www.gnu.org/software/libc/>.
 
-    list of all headers: http://en.wikipedia.org/wiki/C_POSIX_library
+    The GNU documentation states that POSIX compliance
+    is a design goal of the GNU C library.
 
-    posix defines certain things **INSIDE**
-    headers with the same name as the ansi stdlib ones
-    which are only activated if you add the defines **before
-    including those files**!!
+    #windows
 
-    gcc: if you want to access them with the `-ansi -c99` flags,
+        TODO Is there a Windows implementation for the POSIX C API? Official?
+
+#headers
+
+    List of all headers: <http://en.wikipedia.org/wiki/C_POSIX_library>
+
+    POSIX defines certain things *inside*
+    headers with the same name as the ANSI stdlib ones
+    which are only activated if you add the defines *before
+    including those files*!
+
+    GCC: if you want to access them with the `-ansi -c99` flags,
     you need to define `XXX_XOPEN_SOURCE`
 
-    TODO is there a windows implementation for those headers?
+    There are other preprocessor defines which may expose posix functions such as `_POSIX_C_SOURCE` and `POSIX_SOURCE`
+    For the GNU C library, see `man feature_test_macros` for an explanaition.
 
-    there are other headers which may expose posix functions such as `_POSIX_C_SOURCE` and `POSIX_SOURCE`
-    for `gcc`, see `man feature_test_macros` for an explanaition.
-
-    the value refers to the actual posix version
-
-    for example:
+    The actual value of the preprocessor refers to the POSIX version. For example:
 
     - 500: issue 5, 1995
     - 600: issue 6, 2004
@@ -45,9 +50,7 @@ main cheat on the POSIX C API
 //#define _POSIX_C_SOURCE 200112L
 //#define POSIX_SOURCE
 
-//#ansi headers
-
-    //only stuff that becomes available with posix defines is commented here
+//ansi headers in which POSIX places extensions
 
 #include <assert.h>
 #include <limits.h>         //NZERO
@@ -58,7 +61,7 @@ main cheat on the POSIX C API
 #include <stdlib.h>
 #include <string.h>         //strerror
 
-//#posix only headers
+//posix only headers:
 
 #include <arpa/inet.h>
 #include <dirent.h>

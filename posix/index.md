@@ -29,18 +29,23 @@ Single UNIX Specification, Version 4: http://www.unix.org/version4/
 
 #the open group
 
-major open group supporters whose major supporters include:
+Major open group supporters whose major supporters include:
 
-Fujitsu, Oracle, Hitachi, HP, IBM,
-US Department of Defense, NASA
+- Fujitsu
+- Oracle
+- Hitachi
+- HP
+- IBM,
+- US Department of Defense
+- NASA
 
-therefore some of the top users/creators of software
+Therefore some of the top users/creators of software.
 
 #examples of what posix specifies
 
 ##shell command language
 
-a shell language including almost all the basic `bash` syntax.
+A shell language including almost all the basic `bash` syntax.
 
 `bash` is copmliant with extensions
 
@@ -84,7 +89,7 @@ which also implements ANCI libc and Linux extensions.
 
 ##directory structure
 
-very small, contains:
+Very small, contains:
 
 - `/`
 - `/tmp`
@@ -125,12 +130,12 @@ The following variables don't have fixed purposes, but POSIX says that they must
 
     man 7 regex
 
-posix specifies are two types of regexes:
+POSIX specifies are two types of regexes:
 
 - basic (RE)
 - extended (ERE)
 
-basic is deprecated, so don't use it
+Basic is deprecated, so don't use it.
 
 it is useful to learn since many posix compliant shell utilities may use
 them but not perl regexes, for example `grep` or `sed`.
@@ -150,20 +155,20 @@ them but not perl regexes, for example `grep` or `sed`.
 
 ###predefined character classes
 
-is the main difference between those and perl (except for very magic perl regex options)
+Is the main difference between those and perl (except for very magic perl regex options)
 
-they enclosed in `[::]` inside a `[]`. example:
+They enclosed in `[::]` inside a `[]`. example:
 
     echo $'a\nb'    | grep -E '[[:alpha:]]'
 
-full list:
+Full list:
 
     alnum       digit       punct
     alpha       graph       space
     blank       lower       upper
     cntrl       print       xdigit
 
-in perl these are backlash escaped chars, much shorter to write...
+In Perl these are backlash escaped chars, much shorter to write...
 
 ##utility command line interface
 
