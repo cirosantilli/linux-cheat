@@ -43,8 +43,6 @@ int main( int argc, char** argv )
         exit(EXIT_FAILURE);
     }
 
-    address.sin_family = AF_INET;
-
     /*
     #inet_addr
 
@@ -56,10 +54,12 @@ int main( int argc, char** argv )
     */
         server_addr = inet_addr( server_ip );
         if ( server_addr == (in_addr_t)-1 ) {
-            fprintf( stderr, "inet_addr" );
+            fprintf( stderr, "inet_addr(\"%s\") failed\n", server_ip );
             return EXIT_FAILURE;
         }
         address.sin_addr.s_addr = server_addr;
+
+    address.sin_family = AF_INET;
 
     /*
     #htons
@@ -93,6 +93,9 @@ int main( int argc, char** argv )
         perror( "write" );
         exit(EXIT_FAILURE);
     }
+
+    /* according to wireshark, the response is received from some random port that the OS assigns to us */
+
     if ( read( sockfd, &ch, 1 ) == -1 ) {
         perror( "read" );
         exit(EXIT_FAILURE);

@@ -145,11 +145,21 @@ int main( int argc, char** argv )
             perror( "read" );
             exit(EXIT_FAILURE);
         }
+
         ch++;
+
         if ( write( client_sockfd, &ch, 1 ) == -1 ) {
             perror( "write" );
             exit(EXIT_FAILURE);
         }
+
+        /*
+        #send
+
+            Could be used instead of write for sockets.
+
+            `write` is the same as a send without flags, so send has more options.
+        */
 
         //you should close the connection on both client and server
 

@@ -110,20 +110,20 @@ ref to tag1: (@tag1)
 
 #links
 
-basic: [text](destination)
+Basic: [text](destination)
 
-automatic: <link>. You *must* use the angular brackets
+Automatic: <link>. You *must* use the angular brackets
 even if some versions of markdown allow you to ommit them such as github's.
 
-inner id: [text](#links). Also works in latex!
+Inner id: [text](#links). Also works in latex!
 
 ##label
 
-label definitions can go anywhere and it won't show:
+Label definitions can go anywhere and it won't show:
 
 [label-name]: label-dest
 
-however it is good practice to put them all at the end
+However it is good practice to put them all at the end.
 
 use **square** brackets instead of parenthesis: [text][label-name]
 

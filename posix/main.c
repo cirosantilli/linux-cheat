@@ -521,21 +521,39 @@ int main( int argc, char** argv )
         For regular files, if this becomes greater than the current file size,
         then the file size is increased as needed.
 
-        Returns number of bytes writen.
+        #return value
 
-        For regular files, the number of bytes writen is less than required only in bad cases:
+            Returns number of bytes writen.
 
-        - signal received in the middle of a write
+            For regular files, POSIX does not say much when the number of bytes writen is less than the ammount required
+            and that usually only happens in bad cases:
 
-            If it receives a signal before writing anything, returns -1.
+            - signal received in the middle of a write
 
-        - no more space in the filesystem
+                If it receives a signal before writing anything, returns -1.
 
-        - no permission to write such large files
+            - no more space in the filesystem
 
-        For pipes, this may occur in less bad scenarios. See pipe for more info.
+            - no permission to write such large files
 
-        On error, return -1 and set errno.
+            For pipes, this may occur in less bad scenarios, for example if the pipe buffer is filled,
+            the write may either:
+
+            - be partial if `nbytes > PIPE_BUF`
+
+            - block until more space is available depending on the `O_NONBLOCK` state.
+
+            On error, return -1 and set errno.
+
+            It seems that POSIX does not say if zero return values on non-zero size write requests.
+            It is unlikely that an implementation will return 0, since that would make no progress,
+            and it should return `-1` and set errno instead to report error cases.
+
+        #atomicity of simultaneous writes
+
+            Writes of less than `PIPE_BUF` bytes cannot be interleaved with other writes.
+
+            Larger writes can.
 
         TODO0 are writes to seekable files atomic? Seems not: <http://stackoverflow.com/questions/10650861/atomicity-of-write2-to-a-local-filesystem>
             for pipes we know yes for writes smaller than PIPE_BUF.
@@ -560,7 +578,7 @@ int main( int argc, char** argv )
 
         If the starting position is at or after the end-of-file, 0 shall be returned.
 
-        If the value of `nbytes` is larger than {SSIZE_MAX}, the result is implementation-defined.
+        If the value of `nbyte` is larger than {SSIZE_MAX}, the result is implementation-defined.
         In practice this is rarely the case, because `SSIZE_MAX` is the size of a `size_t` type,
         which is usually an integer, giving around 2Gb.
 
@@ -588,8 +606,11 @@ int main( int argc, char** argv )
             The value returned may be less than nbyte if:
 
             - the number of bytes left in the file is less than nbyte
+
             - the read() request was interrupted by a signal
-            - if the file is a pipe or FIFO or special file and has fewer than nbyte bytes immediately available for reading.
+
+            - if the file is a pipe or FIFO or special file and has fewer
+                than nbyte bytes immediately available for reading.
 
             Therefore on a regular file, this is how the end of file can be recognized.
 
@@ -625,10 +646,16 @@ int main( int argc, char** argv )
         int fd;
         char in[] = "abcd";
         int nbytes = strlen( in );
+        int nbytes_total, nbytes_last;
         char *out = malloc ( nbytes + 1 );
         char *fname = "open.tmp";
 
-        //write
+        /*
+        write
+
+            A robust write usage that either outputs all its bytes,
+            or gives an error.
+        */
         {
             fd = open( fname, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU );
             if ( fd == -1 )
@@ -638,10 +665,16 @@ int main( int argc, char** argv )
             }
             else
             {
-                if ( write( fd, in, nbytes ) != nbytes )
+                nbytes_total = 0;
+                while ( nbytes_total < nbytes )
                 {
-                    perror( "write" );
-                    exit( EXIT_FAILURE );
+                    nbytes_last = write( fd, in + nbytes_total, nbytes - nbytes_total );
+                    if ( nbytes_last == -1 )
+                    {
+                        perror( "write" );
+                        exit( EXIT_FAILURE );
+                    }
+                    nbytes_total += nbytes_last;
                 }
 
                 if ( close( fd ) == -1 )
@@ -662,14 +695,17 @@ int main( int argc, char** argv )
             }
             else
             {
-                if ( read( fd, out, nbytes ) != nbytes )
+                nbytes_total = 0;
+                while ( ( nbytes_last = read( fd, out, nbytes ) ) > 0 )
+                {
+                    //compare output as it comes out, even if less than nbytes comes
+                    assert( memcmp( in + nbytes_total, out, nbytes_last ) == 0 );
+                    nbytes_total += nbytes_last;
+                }
+                if ( nbytes_last == -1 )
                 {
                     perror( "read" );
                     exit( EXIT_FAILURE );
-                }
-                else
-                {
-                    assert( memcmp( in, out, nbytes ) == 0 );
                 }
 
                 if ( close( fd ) == -1 )
@@ -683,7 +719,7 @@ int main( int argc, char** argv )
 
         //BAD forget O_CREAT on non-existent file gives ENOENT
         {
-            fd = open( "i_do_not_exist.tmp", O_RDONLY, S_IRWXU );
+            fd = open( "/i/do/not/exist", O_RDONLY, S_IRWXU );
             if ( fd == -1 )
             {
                 assert( errno == ENOENT );
@@ -3121,7 +3157,7 @@ int main( int argc, char** argv )
 
                     //show addresses
                     printf( "  IPs:\n" );
-                    addrs = hostent -> h_addr_list;
+                    addrs = hostent->h_addr_list;
                     while ( *addrs )
                     {
                         /*
@@ -3131,7 +3167,7 @@ int main( int argc, char** argv )
 
                             Takes network byte ordering into consideration.
                         */
-                        printf( "    %s", inet_ntoa( *(struct in_addr*)*addrs ) );
+                        printf( "    %s", inet_ntoa(*(struct in_addr*)*addrs ) );
                         addrs++;
                     }
                     printf( "\n" );

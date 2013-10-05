@@ -1,18 +1,17 @@
-Info and cheatsheets on utils that work on linux and linux internals
+Info and cheatsheets on utils that work on Linux (and possibly other OSs too)
+and Linux internals.
 
 #Definition: utils
 
-By *utils* it is meant mean:
+By *utils* we mean:
 
 - programs
-
 - programming languages
-
 - libraries
 
-either standard to linux LSB or not
+either in the LSB or not.
 
-#Other os
+#Other OS
 
 many of those tools may be cross platform or have very similar ports for
 other OSs so the info here is also useful for other OS.

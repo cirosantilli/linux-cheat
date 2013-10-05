@@ -45,87 +45,43 @@
 
             sudo apt-get install -y aptitude
 
-        ##printer
+    ##package management
 
-            #worked for: EPSON xp-202
-
-            #type printer in dash
-
-            #the guide shows you everything
-
-        sudo aptitude install -y abcde
-        sudo aptitude install -y alarm-clock-applet
-        sudo aptitude install -y apt-rdepends
-
-        sudo aptitude install -y apt-file
-        apt-file update
-
-        sudo aptitude install -y aview
-
-    #MANUAL: search aspell dictionnaries:
-
-        #sudo aptitude search aspell-
-        sudo aptitude search aspell-fr
-        sudo aptitude search aspell-pt-br
-
-    #.arj files:
-
-        #sudo aptitude install -y arj
-
-    #microsoft cabinet format:
-
-        #sudo aptitude install -y cabextract
-
-        sudo aptitude install -y caca-utils
-
-        sudo aptitude install -y cplay
-        sudo aptitude install -y dvipng
-        #sudo aptitude install -y exactimage
-
-    #glasgow haskell compiler:
-
-        #sudo aptitude install -y ghc
-
-        sudo aptitude install -y goldendict
-        sudo aptitude install -y guvcview
-
-    #ibus input methods for qt:
-
-        sudo aptitude install -y ibus-qt4
-
-        sudo aptitude install -y id3tool
-
-        sudo aptitude install -y lame
-        sudo aptitude install -y logkeys
-
-    #nasm assembler:
-
-        sudo aptitude install -y nasm
-
-    #.lzh files used on DOS, legacy:
-
-        #sudo aptitude install -y lha
-
-    #mime messages
-
-        #sudo aptitude install -y mpack
-
-        sudo aptitude install -y ppa-purge
-        sudo aptitude install -y python-scipy
-        sudo aptitude install -y python-matplotlib
-        sudo aptitude install -y samba
-
+            sudo aptitude install -y apt-rdepends
+            sudo aptitude install -y apt-file
+            apt-file update
 
     #usefull stuff that does not come by default or Canonical would have to pay royalties:
 
         sudo aptitude install -y ubuntu-restricted-extras
 
-    #uuencode, xxencode, BASE64, quoted printable, BinHex
+    ##uncategorized
 
-        sudo aptitude install -y uudeview
+        #uuencode, xxencode, BASE64, quoted printable, BinHex
 
-        sudo aptitude install -y zip unzip
-        sudo aptitude install -y wmctrl
+            sudo aptitude install -y uudeview
+
+        #mime messages
+
+            #sudo aptitude install -y mpack
+
+    ##printer
+
+        #worked for: EPSON xp-202
+
+        #type printer in dash
+
+        #the guide shows you everything
+
+    ##desktop
+
+        sudo aptitude install -y alarm-clock-applet
+        sudo aptitude install -y logkeys
+        sudo aptitude install -y guvcview
+
+        #ibus input methods for qt:
+
+            sudo aptitude install -y ibus-qt4
 
     ##book
 
@@ -145,6 +101,10 @@
 
     ##sound
 
+        sudo aptitude install -y abcde
+        sudo aptitude install -y cplay
+        sudo aptitude install -y id3tool
+        sudo aptitude install -y lame
         sudo aptitude install -y shntool
         sudo aptitude install -y cuetools
         sudo aptitude install -y flac
@@ -152,20 +112,13 @@
 
         sudo aptitude install -y libportaudio-dev libportaudio-doc
 
-    ##ftp
-
-        #very secure ftp deamon ftp server:
-
-            #sudo aptitude install -y vsftpd
-
-        sudo aptitude install -y filezilla
-
-        #higher level ftp operations such as recursive dir addition:
-
-            sudo aptitude install -y lftp
-
     ##image
 
+
+        sudo aptitude install -y aview
+        sudo aptitude install -y caca-utils
+        sudo aptitude install -y dvipng
+        #sudo aptitude install -y exactimage
         sudo aptitude install -y imagemagick
         sudo aptitude install -y imagemagick-doc
 
@@ -180,6 +133,13 @@
         sudo aptitude install -y gimp
         sudo aptitude install -y inkscape
 
+    ##dict
+
+        sudo aptitude install -y aspell
+        sudo aptitude install -y aspell-fr
+        sudo aptitude install -y aspell-pt-br
+        sudo aptitude install -y goldendict
+
     ##sox
 
             sudo aptitude intall -y sox
@@ -191,9 +151,7 @@
 
         sudo aptitude install -y sysstat
 
-    ##video
-
-            sudo aptitude install -y vlc
+    ##ocr
 
         ##tesseract
 
@@ -215,6 +173,9 @@
 
             sudo aptitude install -y cuneiform
 
+    ##video
+
+            sudo aptitude install -y vlc
 
         #handbreak:
 
@@ -232,10 +193,11 @@
 
     ##compression
 
+            sudo aptitude install -y zip unzip
+
         #shell archives:
 
             #sudo aptitude install -y sharutils
-
             sudo aptitude install -y file-roller
 
         #7 zip:
@@ -248,6 +210,18 @@
 
             sudo aptitude install -y rar
             sudo aptitude install -y unrar
+
+        #.arj files:
+
+            #sudo aptitude install -y arj
+
+        #microsoft cabinet format:
+
+            #sudo aptitude install -y cabextract
+
+        #.lzh files used on DOS, legacy:
+
+            #sudo aptitude install -y lha
 
     ##game
 
@@ -306,6 +280,10 @@
 
     ##program
 
+        #glasgow haskell compiler:
+
+            #sudo aptitude install -y ghc
+
             sudo aptitude install -y ant
             sudo aptitude install -y automake
             sudo aptitude install -y build-essential
@@ -313,6 +291,7 @@
             sudo aptitude install -y doxygen-doc
             sudo aptitude install -y cmake
             sudo aptitude install -y exuberant-ctags
+            sudo aptitude install -y g++
             sudo aptitude install -y libtool
             #sudo aptitude install -y m4
 
@@ -332,11 +311,64 @@
 
                 sudo aptitude install -y gfortran
 
+        #nasm assembler:
+
+            sudo aptitude install -y nasm
+
         ##source control
 
-            sudo aptutide install -y git
-            sudo aptutide install -y mercurial
-            sudo aptitude install -y subversion
+                sudo aptutide install -y git
+                sudo aptutide install -y mercurial
+                sudo aptitude install -y subversion
+
+        sudo aptitude install -y puppet
+
+    ##c and c++ libraries
+
+            sudo aptitude install -y libgtk-3-dev
+            sudo aptitude install -y libgtk-3-doc
+            sudo aptitude install -y gtk2.0-examples
+
+            sudo aptitude install -y libirrlicht-dev
+            sudo aptitude install -y libirrlicht-doc
+
+            sudo aptitude install -y freeglut3-dev
+
+            sudo apt-get install -y libopencv-dev
+            sudo apt-get install -y opencv-doc
+
+            sudo apt-get install -y libplplot-dev
+            sudo apt-get install -y plplot11-driver-xwin
+
+        #boost c++
+
+            #Some subprojects have specific packages of their own.
+
+            #To find what you need:
+
+                #apt-cache search liboost
+
+            sudo apt-get install -y libboost-dbg
+            sudo apt-get install -y libboost-doc
+            sudo apt-get install -y libboost-graph-dev
+
+        #blas c / fotran and lapack fortran:
+
+            sudo apt-get install -y liblapack-dev
+
+        #lapack c via lapacke:
+
+            sudo apt-get install -y liblapacke-dev
+
+            sudo apt-get install -y libgsl0-dev
+            sudo apt-get install -y gsl-doc-info
+
+    ##python libraries
+
+        sudo aptitude install -y python-pip
+        sudo aptitude install -y ppa-purge
+        sudo aptitude install -y python-scipy
+        sudo aptitude install -y python-matplotlib
 
     ##virtualization
 
@@ -404,7 +436,7 @@
 
 			sudo aptitude install -y xbacklight
 			sudo aptitude install -y xsel
-			sudo aptitude install -y libgtk-3-dev libgtk-3-doc gtk2.0-examples
+            sudo aptitude install -y wmctrl
 			sudo aptitude install -y xdotool
 			#sudo apt-add-repository ppa:cdekter/ppa
 			#sudo aptitude install -y autokey-gtk
@@ -420,6 +452,7 @@
 		##networking
 
             sudo aptitude install -y apache2
+            sudo aptitude install -y traceroute
             sudo aptitude install -y wireshark
 
             #php:
@@ -520,6 +553,20 @@
         ##soulseek
 
             sudo aptitude install -y nicotine+
+
+        ##ftp
+
+            #very secure ftp deamon ftp server:
+
+                #sudo aptitude install -y vsftpd
+
+            sudo aptitude install -y filezilla
+
+            #higher level ftp operations such as recursive dir addition:
+
+                sudo aptitude install -y lftp
+
+        sudo aptitude install -y samba
 
     ##file manager
 

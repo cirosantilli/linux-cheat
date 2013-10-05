@@ -965,27 +965,37 @@
 
     ##cat
 
+        #POSIX 7
+
         #concatenate files to stdout
 
-        echo asdf > a
-        echo qwer > b
+            echo asdf > a
+            echo qwer > b
 
-        cat a
-            #asdf
+            [ `cat a` = asdf ] || exit 1
+            [ `cat b` = qwer ] || exit 1
 
-        cat a b
-            #asdf
-            #qwer
+            [ `cat a b` = `printf asdf\nqwer` ] || exit 1
+
+        #stdin:
+
+            [ `echo a | cat` = a ] || exit 1
 
     ##tac
 
         #cat reversed linewise
 
-            assert [ "`echo $'a\nb' | tac`" = $'b\na' ]
+        #Not POSIX.
+
+            assert [ "$(printf "a\nb\n" | tac)" = "$(printf "b\na")" ]
+
+        #Things get messy if the input does not end in newline:
+
+            assert [ "$(printf "a\nb" | tac)" = "$(printf "ba")" ]
 
     ##rev
 
-        #reverse bytewise
+        #Reverse bytewise.
 
             assert [ "`echo $'ab' | rev`" = $'ba' ]
 
@@ -995,7 +1005,7 @@
 
         #Menemonic: Duplicate Data.
 
-        #Alternate mnemonic: Data Destroyer.
+        #Alternate funny mnemonic: Data Destroyer.
         #Reason: can manipulate sda devices directly without considering file structure,
         #making operations such as disk copy very fast, but potentially very destructive
         #if for example you exchange input and output disks, compying an empty disk over
@@ -4216,7 +4226,24 @@
 
     ##rsync
 
-        #TODO powered up `cp`?
+        #Synchronize directories.
+
+        #- works over networks.
+        #- can synchronizes differentially for greater efficiency.
+        #- can compress before sending over the network
+        #- can encrypt files sent
+
+        #Useful options:
+
+        #- -r: recurse into directories
+        #- -z: compress files before transfer, decompress after.
+
+            #Useful if transfer will be done over a network,
+            #so that smaller files can be transferred.
+
+        #- -a: preserve timestamps.
+
+            #By default, sets timestamps of new files to now.
 
     ##install
 
@@ -4803,6 +4830,55 @@
 
         fdupes -rd .
             #finds dupes, and prompt which to keep for each match
+
+##puppet
+
+    #Cross platform system configuration manager.
+
+    #Allows to easily check and ensure presence of:
+
+    #- files
+    #- packages (software)
+    #- user
+    #- group
+    #- cronjobs
+    #- services
+
+    #across multiple computers.
+
+    #To do that, puppet creates an abstraction interface over all of those resources
+    #that allows to represent them on multiple different platforms.
+
+    #Next, each platform in which it is implemented must implement those resources,
+    #by implementing for example methods to check and create those resources on the system.
+
+    #For example, on all POSIX systems, puppet can implement user and group resources
+    #via `useradd` programs, while a resource such as packages has to be implemented differently
+    #on different Linux distros (apt-get on Ubuntu, yum on Fedora, etc.).
+
+    #New resources can be installed via plugins, or made available in newer versions of puppet.
+
+    #Good intro: <http://docs.puppetlabs.com/learning/index.html>
+
+    ##describe subcommand
+
+        #Get info on currently installed resources:
+
+            puppet describe -l          # List all of the resource types available on the system.
+            puppet describe -s user     # Print short information about a type, without describing every attribute
+            puppet describe user        # Print long information, similar to what appears in the type reference.
+
+    ##resource subcommand
+
+        #View or modify resources.
+
+        #View all currently prsent user resources:
+
+            puppet resource user
+
+        #View resource `user` named `root`:
+
+            puppet resource user root
 
 ##prompt user
 

@@ -1,10 +1,8 @@
 /**
 @file
 
-POSIX allows us to interact with any web server,
-and thus to implement things like web browsers, crawlers or wget like utilities.
+Minimalistic error checked program that fetches a web page and prints it to stdout.
 
-This is a simple wget that gets a webpage.
 */
 
 #define _XOPEN_SOURCE 700
@@ -13,6 +11,7 @@ This is a simple wget that gets a webpage.
 #include "stdbool.h"
 #include "stdio.h"
 #include "stdlib.h"
+#include "string.h"
 
 #include <arpa/inet.h>
 #include <netdb.h>          //getprotobyname
@@ -20,70 +19,79 @@ This is a simple wget that gets a webpage.
 #include <sys/socket.h>
 #include "unistd.h"
 
-#define BUF_SIZE 1024
-
 int main( int argc, char** argv )
 {
     char hostname[] = "www.google.com";
     unsigned short server_port = 80;
 	char protoname[] = "tcp";
 	char request[] = "GET / HTTP/1.0\n\n";
+    int request_len = strlen( request );
     in_addr_t server_addr;
     int sockfd;
     struct sockaddr_in address;
 	struct protoent *protoent;
-	char buff[BUF_SIZE];
+	char buff[BUFSIZ];
     struct hostent* hostent;
+    int nbytes_total, nbytes_last;
 
-	protoent = getprotobyname( protoname );
-	if ( protoent == NULL ) {
-        perror( "getprotobyname" );
-        exit(EXIT_FAILURE);
-	}
+    //build the socket
 
-    sockfd = socket( AF_INET, SOCK_STREAM, protoent->p_proto );
-    if ( sockfd == -1 ) {
-        perror( "socket" );
-        exit(EXIT_FAILURE);
-    }
+        protoent = getprotobyname( protoname );
+        if ( protoent == NULL ) {
+            perror( "getprotobyname" );
+            exit(EXIT_FAILURE);
+        }
 
-    address.sin_family = AF_INET;
+        sockfd = socket( AF_INET, SOCK_STREAM, protoent->p_proto );
+        if ( sockfd == -1 ) {
+            perror( "socket" );
+            exit(EXIT_FAILURE);
+        }
 
-    if ( server_addr == (in_addr_t)-1 ) {
-        fprintf( stderr, "inet_addr\n" );
-        exit( EXIT_FAILURE );
-    }
-    address.sin_addr.s_addr = server_addr;
+    //build the address
 
-    hostent = gethostbyname( hostname );
-    if ( hostent == NULL) {
-        fprintf( stderr, "gethostbyname failed for hostname = %s\n", hostname );
-        exit( EXIT_FAILURE );
-    }
+        hostent = gethostbyname( hostname );
+        if ( hostent == NULL) {
+            fprintf( stderr, "error: gethostbyname( \"%s\" )\n", hostname );
+            exit( EXIT_FAILURE );
+        }
 
-    server_addr = inet_addr( hostent->h_addr_list );
-    if ( server_addr == (in_addr_t)-1 ) {
-        fprintf( stderr, "inet_addr" );
-        exit( EXIT_FAILURE );
-    }
-
-    address.sin_port = htons( server_port );
+        server_addr = inet_addr( inet_ntoa(*(struct in_addr*)*(hostent->h_addr_list)) );
+        if ( server_addr == (in_addr_t)-1 ) {
+            fprintf( stderr, "error: inet_addr( \"%s\" )\n", *(hostent->h_addr_list) );
+            exit( EXIT_FAILURE );
+        }
+        address.sin_addr.s_addr = server_addr;
+        address.sin_family = AF_INET;
+        address.sin_port = htons( server_port );
 
     if ( connect( sockfd, ( struct sockaddr* )&address, sizeof( address ) ) == -1 ) {
         perror( "connect" );
         exit( EXIT_FAILURE );
     }
 
-    if ( write( sockfd, request, strlen(request) ) == -1 ) {
-        perror( "write" );
-        exit(EXIT_FAILURE);
+    nbytes_total = 0;
+    while ( nbytes_total < request_len )
+    {
+        nbytes_last = write( sockfd, request + nbytes_total, request_len - nbytes_total );
+        if ( nbytes_last == -1 )
+        {
+            perror( "write" );
+            exit( EXIT_FAILURE );
+        }
+        nbytes_total += nbytes_last;
     }
 
-    while ( count = read( sockfd, buff, BUF_SIZE - 1 ) > 0 ) {
-        write( STDOUT_FILENO, buff, count );
+    while ( ( nbytes_total = read( sockfd, buff, BUFSIZ ) ) > 0 )
+    {
+        write( STDOUT_FILENO, buff, nbytes_total );
+    }
+
+    if ( nbytes_total == -1 ) {
+        perror( "read" );
+        exit( EXIT_FAILURE );
     }
 
     close( sockfd );
-    assert( ch == ch_init + 1 );
     exit( EXIT_SUCCESS );
 }
