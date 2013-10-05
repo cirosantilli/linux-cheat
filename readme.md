@@ -13,7 +13,7 @@ either in the LSB or not.
 
 #Other OS
 
-many of those tools may be cross platform or have very similar ports for
+Many of those tools may be cross platform or have very similar ports for
 other OSs so the info here is also useful for other OS.
 I have not however tested anything in any os except linux.
 
