@@ -43,7 +43,7 @@
         #like apt-get, but removing  a package will also uninstall all dependencies that
         #were installed for that package:
 
-            sudo apt-get install -y aptitude
+            sudo aptitude install -y aptitude
 
     ##package management
 
@@ -189,7 +189,7 @@
             sudo aptitude update
             sudo aptitude install -y vobsub2srt
 
-        sudo aptitude install -y mkvtools
+        sudo aptitude install -y mkvtoolnix
 
     ##compression
 
@@ -334,11 +334,14 @@
 
             sudo aptitude install -y freeglut3-dev
 
-            sudo apt-get install -y libopencv-dev
-            sudo apt-get install -y opencv-doc
+            sudo aptitude install -y libopencv-dev
+            sudo aptitude install -y opencv-doc
 
-            sudo apt-get install -y libplplot-dev
-            sudo apt-get install -y plplot11-driver-xwin
+            sudo aptitude install -y libplplot-dev
+            sudo aptitude install -y plplot11-driver-xwin
+
+            sudo aptitude install -y libmysql++-dev
+            sudo aptitude install -y libmysql++-doc
 
         #boost c++
 
@@ -348,20 +351,20 @@
 
                 #apt-cache search liboost
 
-            sudo apt-get install -y libboost-dbg
-            sudo apt-get install -y libboost-doc
-            sudo apt-get install -y libboost-graph-dev
+            sudo aptitude install -y libboost-dbg
+            sudo aptitude install -y libboost-doc
+            sudo aptitude install -y libboost-graph-dev
 
         #blas c / fotran and lapack fortran:
 
-            sudo apt-get install -y liblapack-dev
+            sudo aptitude install -y liblapack-dev
 
         #lapack c via lapacke:
 
-            sudo apt-get install -y liblapacke-dev
+            sudo aptitude install -y liblapacke-dev
 
-            sudo apt-get install -y libgsl0-dev
-            sudo apt-get install -y gsl-doc-info
+            sudo aptitude install -y libgsl0-dev
+            sudo aptitude install -y gsl-doc-info
 
     ##python libraries
 
@@ -381,7 +384,7 @@
 
             #On the guest:
 
-                #sudo apt-get install virtualbox-guest-utils
+                #sudo aptitude install virtualbox-guest-utils
 
     ##language
 
@@ -451,9 +454,9 @@
 
 		##networking
 
-            sudo aptitude install -y apache2
-            sudo aptitude install -y traceroute
-            sudo aptitude install -y wireshark
+                sudo aptitude install -y apache2
+                sudo aptitude install -y traceroute
+                sudo aptitude install -y wireshark
 
             #php:
 
@@ -462,11 +465,34 @@
             #php apache module:
 
                 sudo aptitude install -y libapache2-mod-php5
+                sudo aptitude install -y mysql-server
+                #Will ask you to initialize the password for the `root` user.
 
-            sudo aptitude install -y openssh-client
-            sudo aptitude install -y openssh-server
-            sudo aptitude install -y nmap
-            sudo aptitude install -y whois
+            ##phpmyadmin
+
+                #First make sure that php and mysql are installed.
+
+                    sudo aptitude install -y libapache2-mod-auth-mysql php5-mysql phpmyadmin
+
+                    sudo vim /etc/apache2/apache2.conf
+
+                #Ensure following line is anywhere in the file:
+
+                    #Include /etc/phpmyadmin/apache.conf
+
+                    sudo service apache2 restart
+
+                #Test phpmyadmin and mysql:
+
+                    firefox http://localhost/phpmyadmin &
+
+                #Login: 'root'. password: what you entered at installation.
+
+                sudo aptitude install -y openssh-client
+                sudo aptitude install -y openssh-server
+
+                sudo aptitude install -y nmap
+                sudo aptitude install -y whois
 
             #terminal web browser:
 
@@ -548,7 +574,7 @@
 
             sudo add-apt-repository -y ppa:noobslab/initialtesting
             sudo apt-get update
-            sudo apt-get install indicator-ubuntuone
+            sudo aptitude install indicator-ubuntuone
 
         ##soulseek
 
@@ -594,7 +620,7 @@
         sudo aptitude install -y ubuntu-tweak
 
         sudo add-apt-repository -y ppa:atareao/atareao && sudo aptitude update
-        sudo apt-get install my-weather-indicator
+        sudo aptitude install my-weather-indicator
 
         sudo add-apt-repository -y ppa:flacon && sudo aptitude update
         sudo aptitude install -y flacon

@@ -10,10 +10,39 @@ use warnings;
     my $count;
     my $line;
     #my $i = 1;
-        #can only declare once
     my $s = 'string';
     my @s = (1,3,'string');
     my @i; #works but is bad practice
+
+##scope
+
+    ##my
+
+        #Confines variable to current block.
+
+        #From that point onwards, it is not possible to access an external variable with same name.
+
+            $i = 0;
+            {
+                $i = 1;
+                my $i;
+                $i = 2
+            }
+            $i == 1 || exit 1;
+
+            $i = 0;
+            { $i = 1; }
+            $i == 1 || exit 1;
+
+    ##local
+
+        #Creates a new scope valid for current function and functions that the function calls.
+
+            $x = 0;
+            sub f0 { return $x; }
+            sub f1 { local $x = 0; $x += 1; return f0(); }
+            f1() == 1 || exit 1;
+            $x == 0 || exit 1;
 
 ##stdout
 
@@ -166,7 +195,7 @@ use warnings;
             {
                     print 'Hello';
             }
-            elseif (1)
+            elsif (1)
             {
                     print 'Bye';
             }
@@ -185,12 +214,12 @@ use warnings;
         {
             print 'a'
         }
-        0 || print 'a'
-        1 || print 'b'
-        0 or print 'a'
-        1 or print 'b'
-        0 || 0 || print 'a'
-        0 or 0 or print 'a'
+        0 || print 'a';
+        1 || print 'b';
+        0 or print 'a';
+        1 or print 'b';
+        0 || 0 || print 'a';
+        0 or 0 or print 'a';
 
     ##for
 
@@ -213,16 +242,19 @@ use warnings;
             }
 
         #single line:
-            print foreach (1 .. 3)
+
+            print foreach (1 .. 3);
+
         #like if, only single command (no ``;`` allowed)
 
         #uses references:
+
             @a = (1 .. 5);
             foreach (@a)
             {
-                    $_ *= 2;
+                $_ *= 2;
             }
-            print @a[0]
+            $a[0] == 2 || exit 1;
 
     ##while
 
@@ -260,10 +292,10 @@ use warnings;
     print "m" if $mystring =~ m/WoRlD/i; #ignore case
 
     $mystring = "[2004/04/13] The date of this article.";
-    print "The first digit is $1." if $mystring =~ m/(\d)/
+    print "The first digit is $1." if $mystring =~ m/(\d)/;
 
     $mystring = "[2004/04/13] The date of this article.";
-    print "The first number is $1." if $mystring =~ m/(\d+)/
+    print "The first number is $1." if $mystring =~ m/(\d+)/;
 
     $mystring = "[2004/04/13] The date of this article.";
     while($mystring =~ m/(\d+)/g) {
@@ -284,9 +316,6 @@ use warnings;
     #\G - Matches where previous m//g left off
 
     #capture group
-
-    $r = a.
-    || assert
 
 #defalut variables
 
@@ -350,11 +379,15 @@ use warnings;
 
     ##regex
 
-        #$1..$9 #nth capturing group of last regex match
-        #$& #entire last regex match
-        #$`
-        #$'
-        #$+
+        #- $1..$9 #nth capturing group of last regex match
+
+        #- $& #entire last regex match
+
+        #- $`
+
+        #- $'
+
+        #- $+
 
     ##command line arguments
 
@@ -375,24 +408,31 @@ use warnings;
         {
             my($a,$b) = @_;
             $a+$b;
-                #return value is value of last evaluated expression
-            return $a+$b
-                #can also use return statement
+                #Return value is value of last evaluated expression.
+                #No explicit `return` required.
+            #return $a+$b
+                #If is also possible to use an explicit `return` command.
         }
 
-        print f(1,2);
-        print f 1,2;
+    #It is possible to ommit parenthesis to make the call:
+
+        print f(1, 2);
+        print f 1, 2;
+
+    #This is specially useful on interactive sessions.
 
 ##file io
 
     ##file handles
 
         #readonly:
+
             open(FH,"<path/to/file.txt")           or die "Opening: $!";
             while(<FH>){print}
             close(FH)                              or die "Closing: $!";
 
         #writeonly:
+
             open(FH,">path/to/file.txt")           or die "Opening: $!";
             print FH a, "\n"
             print FH b, "\n"
@@ -401,12 +441,15 @@ use warnings;
         ##default
 
             #STDOUT:
+
                 print STDOUT "stdout"
 
             #STDERR:
+
                 print STDERR "stderr"
 
             #STDIN:
+
                 print STDERR "stderr"
 
     ##readline
@@ -414,6 +457,7 @@ use warnings;
         #read from handle up to next line terminator char
 
         #all the same:
+
             $_ = readline(STDIN)
             $_ = readline
             $_ = <STDIN>
@@ -421,9 +465,10 @@ use warnings;
 
     ##diamond
 
-        #read from filehandle linewise
+        #Read from filehandle linewise.
 
-        #if no filehandle given:
+        #If no filehandle given:
+
         #- if ARGV not empty, treat $ARGV[i] as files and read from them
         #- else, read from STDIN filehandle.
             #As usual, if no pipe is comming in, wait for user input.
@@ -435,12 +480,14 @@ use warnings;
             }
 
             #perl -ne 'YOUR CODE HERE'
+
                 while ( <> )
                 {
                     #YOUR CODE HERE
                 }
 
             #perl -pe 'YOUR CODE HERE'
+
                 while ( <> )
                 {
                     #YOUR CODE HERE
@@ -472,6 +519,13 @@ use warnings;
         #print FH @ARRAY                     or die "Printing: $!";
         #truncate(FH,tell(FH))               or die "Truncating: $!";
 
+##exit
+
+    #Terminates the program.
+
+    #Does not necessary reflect on the exit status of the perl executable.
+    #Must use `POSIX::_exit($status)` for that.
+
 ##process call
 
     ##system
@@ -480,7 +534,7 @@ use warnings;
 
         #cannot get stdout nor return status
 
-        system("echo", "-n", "a", "b");
+            system("echo", "-n", "a", "b");
 
     ##qx
 
@@ -488,8 +542,8 @@ use warnings;
 
         #can get stdout and return status
 
-        my $a = qx(echo -n a b);
-        my $a = `echo -n a b`;
+            my $a = qx(echo -n a b);
+            my $a = `echo -n a b`;
 
     ##$?
 

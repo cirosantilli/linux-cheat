@@ -1,4 +1,4 @@
-to use a library you may need:
+To use a library you may need:
 
 - the compiled `.so` or `.a` 
 
@@ -10,38 +10,38 @@ to use a library you may need:
 
     This is not needed in languages such as fortran (down point for fortran).
 
-either those must be in you compiler find path
+Either those must be in you compiler find path
 (different for headers and compiled files)
 or you must explicitly add them to the path.
 
 #dynamic vs static
 
-dynamic libraries are compiled libraries
-kept outside of the executable and are used at run time
+Dynamic libraries are compiled libraries
+kept outside of the executable and are used at run time.
 
-they have `.so` extension on linux and `.dll` on windows
+They have `.so` extension on linux and `.dll` on windows
 
-dynamic libraries are different from static libraries (`.o` and `.a`)
-static libraries are put inside the executable at compile time
+Dynamic libraries are different from static libraries (`.o` and `.a`)
+static libraries are put inside the executable at compile time.
 
-advantages and disadvantages of dynamic libraries over static libraries
-are the usual tradeoffs of share vs embbed design choices
+Advantages and disadvantages of dynamic libraries over static libraries
+are the usual tradeoffs of share vs embbed design choices.
 
-advantages:
+Advantages:
 
 - memory saving by keeping only a single version of the library
 
-    static libraries mean one version per executable
+    Static libraries mean one version per executable
 
-    this makes it absolutelly essential to use dynamic libraries for very large libraries.
+    This makes it absolutelly essential to use dynamic libraries for very large libraries.
 
 - if the library inner working get updated to be (faster, use less memory),
 
-    but not the interface ( inputs, outputs, side effects)
+    But not the interface ( inputs, outputs, side effects)
 
-    there is no need to recompile the executable to get the updates.
+    There is no need to recompile the executable to get the updates.
 
-disadvantages:
+Disadvantages:
 
 - more complicated to use
 
@@ -49,21 +49,19 @@ disadvantages:
 
 - slight load overhead
 
-since the disadvantages are so minor, it is almost always better to use dynamic linking.
+Since the disadvantages are so minor, it is almost always better to use dynamic linking.
 
 #search path
 
-find where gcc search path for both `.a` and `.so`:
+Find where gcc search path for both `.a` and `.so`:
 
     gcc -print-search-dirs | grep '^libraries' | tr ':' $'\n'
 
 #static
 
-gets included in program
+Gets included inside the generated executable, making it larger.
 
-program gets larger
-
-you don't have to worry about dependancies
+You don't have to worry about dependancies.
 
     gcc -c a.c
     gcc -c b.c
@@ -74,38 +72,36 @@ you don't have to worry about dependancies
 
 ##loading vs linking
 
-there are two methods of using dynamic libraries in linux
+There are two methods of using dynamic libraries in Linux: linking and loading.
 
 ###linking
 
-link to lib for entire program
+Link to lib for entire program.
 
-simpler
+Simpler.
 
 ###loading
 
-explicitly load needed functions during program execution
+Explicitly load needed functions during program execution.
 
 ##create so
 
-*MUST* compile like this:
+*Must* compile like this:
 
     gcc -c -fPIC a.c
     gcc -c -fPIC b.c
     gcc -shared a.o b.o -o libab.so
 
-using `-fPIC` and `-shared`
+using `-fPIC` and `-shared`.
 
 ##version numbering
 
-standard: up to 3 numbers
+Standard: up to 3 numbers.
 
-yes, they come after the `.so`
-otherwise possible ambiguity:
+Yes, they come after the `.so` otherwise there would be ambiguity:
 `liba.1.so` is version 1 of `liba` or simply `lib.a.1`?
 
-to link to a given version:
-use full basename linking with verison number.
+To link to a given version use full basename linking with verison number.
 
 linking takes care of version defaults:
 
@@ -151,27 +147,27 @@ linking takes care of version defaults:
 
     ...
 
-rationale: if you underspecify the library you get by default the most recent
+Rationale: if you underspecify the library you get by default the most recent.
 
-convention: change in first number means possible interface break
+Convention: change in first number means possible interface break.
 
 ##compile executable that depends on an so
 
-you must tell gcc which libs to use with the `-l` flag
+You must tell gcc which libs to use with the `-l` flag.
 
-the linker will check that the library is there
-and that it contains the necessary definitions
+The linker will check that the library is there
+and that it contains the necessary definitions.
 
-also, the path information will be kept inside the executable.
+Also, the path information will be kept inside the executable.
 
-how this information is represented is a part of the `.elf` format definition.
+How this information is represented is a part of the `.elf` format definition.
 
-*remember*: when the program will run, it must be able to find that `.so`
+*Remember*: when the program will run, it must be able to find that `.so`
 again on the load path!
 
 ###what can be passed to -l
 
-the name given to -l must be EITHER:
+The name given to -l must be either:
 
 - stripped from `lib` and `.so` part
 
@@ -179,34 +175,34 @@ the name given to -l must be EITHER:
 
 - colon + `:`full basename. Ex: `-l:libm.so.1`
 
-you need to compile like this so gcc
-can tell if all your functions are definied
+You need to compile like this so gcc
+can tell if all your functions are definied.
 
 ###relative vs absolute
 
-the path to the so gets stored inside the elf so that it can be found
-when the program will load
+The path to the so gets stored inside the elf so that it can be found
+when the program will load.
 
-link to library libm.so:
+Link to library libm.so:
 
     gcc a.c -o a.out -lm
     gcc a.c -o a.out -l:libm.so
 
-relative paths to the load path get stored in the elf file.
+Relative paths to the load path get stored in the elf file.
 
 `readelf -d` shows that:
 
     readelf -d a.out
 
-store the full path in the elf file:
+Store the full path in the elf file:
 
     gcc a.c -o a.out -l:/full/path/to/libm.so
 
     readelf -d a.out
 
-it must be in the load path
+It must be in the load path.
 
-###append path to so search path
+###append path to so header search path
 
 ####-L option
 
@@ -219,22 +215,22 @@ it must be in the load path
 
 *note*: `LIBRARY_PATH` is different from `LD_LIBRARY_PATH`!
 `LIBRARY_PATH` is only used at compile time
-while `LD_LIBRARY_PATH` is only used at compile time
+while `LD_LIBRARY_PATH` is only used at compile time.
 
 ##use so at runtime
 
-after an executable has been compiled to use an so,
-the so must be found at runtime
+After an executable has been compiled to use an so,
+the so must be found at runtime.
 
-this is done by a program called the [interpreter][]
+This is done by a program called the [interpreter][].
 
-the interpreter will use the library path stored inside the elf
+The interpreter will use the library path stored inside the elf
 file that is being executed and will also search inside a search
-path called load path
+path called load path.
 
-there is no need to use the load path if an absolute path
+There is no need to use the load path if an absolute path
 was stored in the executable, but this is not recommended
-since it would not be portable
+since it would not be portable.
 
 ###best production method
 
@@ -242,20 +238,22 @@ since it would not be portable
     sudo ldconfig
     ./a.elf
 
-this suposes that when you compiled you used: `-lliba.so`
+This suposes that when you compiled you used: `-lliba.so`.
 
 ###environment variable
+
+Good:
 
     env LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/absolute/path/to/lib ./a.out
     ./a.elf
 
-BAD:
+Bad:
 
     env LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./rel/path/to/lib/from/cd ./a.out
     ./a.out
 
-this only works if you are in the right dir
-since relative path is take to current dir
+This only works if you are in the right dir
+since relative path is take to current dir.
 
 `LD_LIBRARY_PATH` has nothing to do with `LIBRARY_PATH` path variable
 which is used during compilation by gcc!
@@ -263,43 +261,43 @@ which is used during compilation by gcc!
 
 ###load path
 
-view library load path:
+View library load path:
 
     cat /etc/ld.so.conf
 
-remember: after modifying this file, you must update the load file [cache][]
-or your changes will not be taken into effect
+Remember: after modifying this file, you must update the load file [cache][]
+or your changes will not be taken into effect.
 
-may also include other files by adding a line to that file:
+May also include other files by adding a line to that file:
 
     include /etc/ld.so.conf.d/*.conf
 
-this is done by default on Ubuntu.
+This is done by default on Ubuntu.
 
-to take includes into consideration and print the actual search path, use ldconfig.
-see [view load path]
+To take includes into consideration and print the actual search path, use ldconfig.
+see [view load path].
 
-so you also need to look inside included files for the libraries:
+So you also need to look inside included files for the libraries:
 
     cat /etc/ld.so.conf.d/*.conf
 
-the following paths are hard codded in `ldconfig`:
+The following paths are hard codded in `ldconfig`:
 
 - `/lib/`
 - `/usr/lib/`
 
 ###view load path
 
-print actual search path after resolving directives like `include`:
+Print actual search path after resolving directives like `include`:
 
     ldconfig -v 2>/dev/null | grep -v $'^\t'
 
-show directories that are scanned and libraries that are found
+Show directories that are scanned and libraries that are found
 in each dir:
 
     ldconfig -v
 
-print cache stored in `/etc/ld.so.cache` and `.d` includes.
+Print cache stored in `/etc/ld.so.cache` and `.d` includes.
 does not show in which directory libraries are stored in,
 only where they link to:
 
@@ -307,21 +305,21 @@ only where they link to:
 
 ####hwcap
 
-when using commands like `ldconfig -v`, you may see outputs like:
+When using commands like `ldconfig -v`, you may see outputs like:
 
     /usr/lib/i386-linux-gnu/sse2: (hwcap: 0x0000000004000000)
 
 `hwcap` stands for `hardware capacities`
 
-if present, means that those libraries can only be used
-if you hardware has the given capacities
+If present, means that those libraries can only be used
+if you hardware has the given capacities.
 
-here for example, as shown in the directory name,
+Here for example, as shown in the directory name,
 this path is for libraries which depend on the sse2
 extensions (a set of cpu instructions, not present
-in older cpus)
+in older cpus).
 
-what the flags mean is defined by x86 and somewhat standardized across vendors:
+What the flags mean is defined by x86 and somewhat standardized across vendors:
 
 <http://en.wikipedia.org/wiki/CPUID#EAX.3D1:_Processor_Info_and_Feature_Bits>
 
@@ -329,24 +327,24 @@ TODO where ldconfig finds this info:
 
 ###cache
 
-it would be very slow to search the path every time
+It would be very slow to search the path every time.
 
-therefore the linker keeps uses a cache at:
+Therefore the linker keeps uses a cache at:
 
     cat /etc/ld.so.cache
 
-it first looks for libs there,
-and only then searches the path
+It first looks for libs there,
+and only then searches the path.
 
-you can generate `/etc/ld.so.cache` automatically
-once you have your `ld.so.conf` with `ldconfig`
+You can generate `/etc/ld.so.cache` automatically
+once you have your `ld.so.conf` with `ldconfig`.
 
-even if the linker finds the lib in the path,
+Even if the linker finds the lib in the path,
 it does not automatically add it to the cache
-so you still have to run `ldconfig`
+so you still have to run `ldconfig`.
 
-running ldconfig is a part of every package install/uninstall
-if it conatins a lib
+Running ldconfig is a part of every package install/uninstall
+if it conatins a lib.
 
 ###ldd
 
@@ -359,7 +357,7 @@ Is a convenient subset of `readelf -d`
 
     ldd a.elf
 
-possible outputs:
+Possible outputs:
 
 - `Not a dynamic executable`
 - `liba.1.so => /lib/liba.1.so`
@@ -367,34 +365,34 @@ possible outputs:
 
 #####environment
 
-you can also add to path with environment variables
+You can also add to path with environment variables.
 
-don't rely on this method for production
+Don't rely on this method for production.
 
     export LD_LIBRARY_PATH="/path/to/link"
 
 ###interpreter
 
-program that loades shared libs for other programs
+Program that loades shared libs for other programs.
 
-central part of the linux system
+central part of the linux system.
 
-this program links to no shared libs!
+This program links to no shared libs!
 
     readelf a.elf | grep "Requesting program interpreter"
 
-this gives an output such as:
+This gives an output such as:
 
     /lib/ld-linux.so.2
 
 ##override symbols in libraries
 
-symbols in `a.o` will override symbols in linked libs
+Symbols in `a.o` will override symbols in linked libs.
 
     echo "/path/to/my/a.o" | sudo tee -a /etc/ld.so.preload
 
-useful mainly for emergency or tests
+Useful mainly for emergency or tests.
 
-can also be achieved via:
+Can also be achieved via:
 
     export LD_PRELOAD=

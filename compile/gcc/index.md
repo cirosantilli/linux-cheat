@@ -1,14 +1,14 @@
-Gnu Compiler Collection: *not* c compiler
+GNU Compiler Collection: *not* C compiler.
 
-it is a large frontend to several subprograms such as `as`, `cpp`
+It is a large frontend to several subprograms such as `as`, `cpp`.
 
-it currently compiles: C, C++, Objective-C, Fortran, Java, Ada, and Go
+It currently compiles: C, C++, Objective-C, Fortran, Java, Ada, and Go.
 
 #g++ vs gcc
 
 g++: http://stackoverflow.com/questions/172587/what-is-the-difference-between-g-and-gcc
 
-most important:
+Most important:
 
 1) g++ treats both .c and .cpp files as c++, since .c is backwards compatible with c++, it works
 2) g++ links to (but does not include) stdlib automatically, gcc does not!
@@ -23,50 +23,50 @@ and more.
 
 #compilation steps
 
-it is good to understand which steps are done towards compilation
+It is good to understand which steps are done towards compilation
 
-only expanded macros with the c preprocessor:
+Only expanded macros with the c preprocessor:
 
     cpp a.c > a.i
     cpp b.c > b.i
 
-different languages have different preprocessors
+Different languages have different preprocessors
 
-generate human readable assembly code:
+Generate human readable assembly code:
 
     gcc -S a.i -o a.s
     gcc -S b.i -o b.s
 
-specify format:
+Specify format:
 
     gcc -masm=att -S a.c -o a.s
     gcc -masm=intel -S a.c -o a.s
 
-default format: `att` which is historically what has larger gcc support
+Default format: `att` which is historically what has larger gcc support
 
-make machine code from assembly code:
+Make machine code from assembly code:
 
     as -o a.o a.s
     as -o b.o b.s
 
-this transforms human readable formats into binary object files
+This transforms human readable formats into binary object files
 
-make machine code from c direcly:
+Make machine code from c direcly:
 
     gcc -c a.c -o a.o
     gcc -c b.c -o b.o
 
-all above steps in one
+All above steps in one
 
     ld -o ab.out a.o b.o
 
-link object files into single executable
+Link object files into single executable
 
     gcc a.c b.c -o ab.out
 
-does all above steps in one
+Does all above steps in one
 
-if you use make, it is faster to genterate `.o`
+If you use make, it is faster to genterate `.o`
 and keep them, since if the source does not change,
 make will not recompile the corresponding `.o`
 
@@ -80,7 +80,7 @@ Always use this for production output code if possible:
 
     gcc -std=c99 -pedantic-errors -Wall -Wextra -03 -march=native -o a a.c
 
-this will make for portable, efficient code.
+This will make for portable, efficient code.
 
 For test code, ommit the `-03`, since that will make compilation faster.
 
@@ -109,9 +109,11 @@ Enables even more useful warnings than wall.
 
 ##std
 
-std specifies version os the language to be used
+Specifies the language to be used.
 
-disables gcc extensions that conflict with c standrad
+Disables GCC extensions that conflict with ANSI C standard.
+
+Sample usage:
 
     gcc -std=c90
     gcc -std=c99
@@ -119,66 +121,66 @@ disables gcc extensions that conflict with c standrad
 
 `c11` will be the next version and is still being developed at the time of writting
 
-to allow gnu extensions:
+To allow gnu extensions:
 
     gcc -std=gnu90
 
-this is necessary on projects that rely on the extensions, such as the linux kernel
+This is necessary on projects that rely on the extensions, such as the linux kernel
 
 ##ansi
 
-don't use this, use `std` instead
+Don't use this, use `std` instead
 
     gcc -ansi
 
-implies the most recent `-std` which gnu considers is stable manner (not necessarily the latest)
+Implies the most recent `-std` which gnu considers is stable manner (not necessarily the latest)
 
-changes with time, currently equals:
+Changes with time, currently equals:
 
     gcc -std=c90
 
-it is a bit confusing not to have a fixed version of the standard to comply to,
+It is a bit confusing not to have a fixed version of the standard to comply to,
 so just use std instead.
 
 ##pedantic
 
-give warnings for code that does not comply with c1x standard:
+Give warnings for code that does not comply with c1x standard:
 
-            gcc -std=c1x -pedantic
+    gcc -std=c1x -pedantic
 
-this does not mean *FULL* complience, but greatly increases complience
+This does not mean *FULL* compliance, but greatly increases compliance.
 
-there is currently no full complience check in `gcc`
+There is currently no full compliance check in `gcc`
 
-give errors instead of warnings:
+Give errors instead of warnings:
 
-            gcc -std=c1x -pedantic-errors
+    gcc -std=c1x -pedantic-errors
 
 ##march
 
-optimizes code to given cpu (arch is for archtecture)
+Optimizes code to given cpu (arch is for archtecture)
 
-may use instructions only available to given cpu
+May use instructions only available to given cpu
 
-optimize for currrent compiling machine:
+Optimize for currrent compiling machine:
 
-                gcc -march=native
+    gcc -march=native
 
-strict 80386 instruction set. old, compatible, used on almost all desktops and laptops:
+Strict 80386 instruction set. old, compatible, used on almost all desktops and laptops:
 
-                gcc -march=i386
+    gcc -march=i386
 
 Arm v.7, used on mobiles today:
 
-                gcc -march=armv7
+    gcc -march=armv7
 
 ##optimization
 
-list possible optimizations for `-O`:
+List possible optimizations for `-O`:
 
     gcc -Q -O --help=optimizers
 
-the options:
+The options:
 
 - O0 : no speed optimization. This is the default
 - O  : basic speed optimization. Same as `-O1`.
@@ -188,11 +190,11 @@ the options:
 - Os : optimize for size
 - Ofast : optimize for speed more than O3, *even if it breaks standards*
 
-best general code optimization method:
+Best general code optimization method:
 
     gcc -O3 a.c -o a.out
 
-always use this for production code.
+Always use this for production code.
 
 ##debugging
 
@@ -205,7 +207,7 @@ Add debug information to executable on compilation:
 
     gcc -ggdb3 a.c
 
-options
+Options:
 
 - g:        generate debug info for gdb
 - ggdb :    adds more info
@@ -213,12 +215,12 @@ options
 
 ##M
 
-don't compile, but generate a list of dependencies for the given source code
+Don't compile, but generate a list of dependencies for the given source code
 in a format suitable for a makefile rule, and output it to stdout
 
-dependencies are basically the file itself and the required headers
+Dependencies are basically the file itself and the required headers
 
-for example, in `a.c`:
+For example, in `a.c`:
 
     #include <stdio.h>
     #include "a.h"
@@ -227,12 +229,12 @@ then:
 
     gcc -M a.c
 
-outputs to stdout:
+Output to stdout:
 
     a.c : /usr/include/stdio.h \
         a.h
 
-to make this even more suitable for a makefile, you should suppress the
+To make this even more suitable for a makefile, you should suppress the
 standard system files with `-MM`:
 
     gcc -MM a.c
@@ -241,7 +243,7 @@ giving:
 
     a.c : a.h
 
-you can then use those on a makefile as:
+You can then use those on a makefile as:
 
     $(shell gcc -MM a.c)
         gcc a.c
@@ -267,7 +269,7 @@ Generate assemby code:
 
     gcc -S a.c
 
-generates gas assembly code to a new file called `a.S`.
+Generates gas assembly code to a new file called `a.S`.
 
 ##-fverbose-asm
 
@@ -280,13 +282,13 @@ Sample C input:
     i = 1;
     j = i;
 
-ouptut without `-fverbose-asm`:
+Ouptut without `-fverbose-asm`:
 
     movl $1, -64(%ebp)
     movl -64(%ebp), %eax
     movl %eax, -68(%ebp)
 
-with `-fverbose-asm`:
+With `-fverbose-asm`:
 
     movl $1, -64(%ebp)   # ,i
     movl -64(%ebp), %eax #i, tmp123
@@ -294,7 +296,7 @@ with `-fverbose-asm`:
 
 ##-f options
 
-What are the -f options?
+TODO What are the -f options for in general? Give examples.
 
 ##-Wa options
 
@@ -327,12 +329,12 @@ Defines can be made from command line arguments:
 
     gcc -DDEBUG -DLINELENGTH=80 -o c c.c
 
-which is the same as adding
+which is the same as adding:
 
     #define DEBUG
     #define LINELENGTH 80
 
-to top of file.
+to the top of file.
 
 ##find include search path
 
@@ -349,15 +351,20 @@ Append to the include search path:
 
     gcc -I/new/include/location/ a.c
 
+The above will not get appended to the existing search path.
+
+For example, if `-Irel/` is used and `/usr/include/` is already on the search path,
+this does *not* mean that the file `/usr/include/rel/a.h`, can be included via `#include <a.h>`.
+
 ##view preprocessed file
 
-this is mostly useful for learing purposes only
+This is mostly useful for learing purposes only.
 
-using `cpp` directly:
+Using `cpp` directly:
 
 	cpp c.c
 
-outputs the preprocessed file to stdout
+Outputs the preprocessed file to stdout.
 
 Using gcc as a frontend:
 
@@ -365,12 +372,12 @@ Using gcc as a frontend:
 
 #cross compile
 
-cross compiling means to compile a program for a different OS
-or architecture than the one the compiler is running
+Cross compiling means to compile a program for a different OS
+or architecture than the one the compiler is running.
 
-gcc cannot cross compile for windows from linux (TODO check)
+GCC cannot cross compile for windows from linux (TODO check).
 
-this can be done with mingw (TODO how)
+This can be done with mingw (TODO how).
 
 #infamous error messages
 

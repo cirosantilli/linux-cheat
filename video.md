@@ -1,75 +1,96 @@
-video formats, viewer and manipulation tools
+Video formats, viewer and manipulation utilities.
 
 #definitions
 
-*ripping* is taking the dvd from the dvd to files in computer
+- *ripping* is taking the dvd from the dvd to files in computer
 
-*trancoding*, is encoding the dvd on some smaller format.
+- *trancoding*, is tranforming the DVD contents to another,
+    generally smaller and single file, format such as `avi`.
 
-*containers* are filetypes that turn video, audio and subtitles in a single files. Ex:
+    Transcoding may be a time consuming process, since it means
+    to do complete data format conversion usually on large files
+    and as of 2013 takes times in the 1h - 4h range.
 
-- mkv
-- avi
+- *containers* are filetypes that turn video, audio and subtitles in a single files. Popular container formats include:
+
+    - mkv
+    - avi
+
+- *title*: a DVD can contain one or many titles. Usually each title contains one entire continuous film sequnence
+    such as the main film or an extra such as an interview with the director.
 
 ##subtitles
 
-subtitles are often stored as images inside of containers in the format pair: idx + sub.
+Subtitles are often stored in DVDs as images the format pair: idx + sub.
 
-If you want srts, which is a text-only, smaller and human editable format, use a tool [vobsub2srt][]
+If you want srts, which is a text-only, smaller and human editable format on a text editor,
+first extract the vobsub pairs from the container (via mkvextract for example for mkv containers)
+and then use a tool such as vobsub2srt which will do OCR on the images.
 
-#DVD
+#dvd regions
 
-DVDs have regions
+DVDs have regions: <http://en.wikipedia.org/wiki/DVD_region_code>
 
-http://en.wikipedia.org/wiki/DVD_region_code
+This serves only to control copyright.
 
-this serves only to control copyright
+DVD readers have a limited number of region changes, sometimes around 5.
 
-dvd readers have a limited number of region changes, sometimes around 5
-
-for certain dvd readers, after this number of changes, YOU CANNOT CHANGE IT ANYMORE!!!!
+For certain dvd readers, after this number of changes, *you cannot change it anymore*!
 
 #vlc
 
-great cross plaform video player
+Great cross plaform video player
 
 #handbrake
 
-transcode
+Open source transcoder.
 
-supported containers: mkv, mpeg4
+Comes both in GUI and CLI versions.
 
-first check this for some good info: <http://msdn.microsoft.com/en-us/library/windows/desktop/dd388582%28v=vs.85%29.aspx>
+Supported containers: mkv, mpeg4.
 
-It stores audio in the AAC, MP3, or Vorbis formats. It can also pass through the Dolby Digital 5.1 (AC3) and Digital Theater Systems (DTS) surround sound formats used by DVDs.
+First check this for some good info:
+<http://msdn.microsoft.com/en-us/library/windows/desktop/dd388582%28v=vs.85%29.aspx>
+
+It stores audio in the AAC, MP3, or Vorbis formats.
+It can also pass through the Dolby Digital 5.1 (AC3)
+and Digital Theater Systems (DTS) surround sound formats used by DVDs.
 
 It supports chapters, as well as Variable Frame Rate video.
 
-It can include "soft" subtitles that can be turned on or off, instead of always being hard burned into the video frame. These can either be bitmap images of the subtitles included on a DVD (known as vobsub) or text.
+It can include "soft" subtitles that can be turned on or off,
+instead of always being hard burned into the video frame.
+These can either be bitmap images of the subtitles included on a DVD (known as vobsub) or text.
 
-it seems though that it can't produce srt
+It seems that it can't produce srt.
 
-get command line version of course
+The following parameters usually vary between invocations:
 
     i=/media/
     s=1,2
+    a=1
     t=1
 
-scans only to get info on all titles and tracks:
+Scan only and output info on titles and tracks:
 
     HandBrakeCLI -t 0 -i "$i"
 
-1000 Kbps MPEG-4 Visual video and 160 Kbps AAC-LC audio in an MP4 container:
+Useful to decide which title, audio and subtitle tracks are to be extracted.
 
-    HandBrakeCLI -B 160 -e x264 -f mkv -i "$i" -m -o 1.mkv -q 22 -s "$s" -t "$t"
+Recommended usage: 1000 Kbps MPEG-4 Visual video and 160 Kbps AAC-LC audio in an mkv container:
 
-- f container format (mkv|mp4)
-- m extract title markers
-- e x264 : video encode format x264/ffmpeg4/ffmpeg2/theora.
-- q 20 : CRF constant quality 0 .. 50. with x264: 22 for dvd, 22 for bluray.
-- B 160 : sound kbps
-- s 1,2,3 : subtitles to keep
-- t 1: title 1. A DVD can contain many titles, which are usually independent films or tracks
+    HandBrakeCLI -B 160 -a "$a" -e x264 -f mkv -i "$i" -m -o 1.mkv -q 22 -s "$s" -t "$t"
+
+- `B 160`  : sound Bitrate in kbps
+- `a 1,2,3`: Audio trakcs to keep. Default: first only.
+- `e x264` : video Encode format x264/ffmpeg4/ffmpeg2/theora.
+- `f fmt`  : container Format. Currently can only be `mkv` or `mp4`.
+- `m`      : extract title markers.
+- `q 22`   : CRF constant quality in the [0 .. 50] interval. With x264 a recommended value is 22,
+    which takes aroun 1h for 2h film producing an output file of 2Gb with almost imperceptible
+    quality loss.
+- `s 1,2,3`: subtitle tracks to keep in the container. Default: none.
+- `t <title>`: title to encode. Can only encode one title per container.
 
 In an MKV, you can store MPEG-4 video created by ffmpeg or x264, or Theora video.
 
@@ -81,82 +102,72 @@ In an MKV, you can store MPEG-4 video created by ffmpeg or x264, or Theora video
 - CRF 20 = 2141 MB
 - CRF 16 = 4503 MB
 
-my results:
-
-    HandBrakeCLI -B 160 -e x264 -f mkv -i /media/DVDVolume -m -o ~/out.mkv -q 20 -s 1,2,3
-
-- initial length: 2:16
-- conversion time: 4 hours
-- final size: 2Gb
-- quality: same as original
-
-    HandBrakeCLI -B 160 -e x264 -f mkv -i /media/DVDVolume -m -o ~/out.mkv -q 22 -s 1,2,3
-
-- initial length: 2:16
-- conversion time: 2:23
-- final size: 2Gb
-- quality: same as original
-
-to get subtitles: must extract the image subtitles with some other tool and do OCR
-
 #mkvtools
 
-see info about a:
+See info about a:
 
     mkvinfo 1.mkv
 
-extracts tracks 3 and 4:
+Extracts tracks 3 and 4:
 
-    t="3:ita 4:eng"
-    mkvextract tracks 1.mkv $t
+    mkvextract tracks 1.mkv 3:ita 4:eng
 
-save 3 to eng.$ext or str, 3 to `chi.$ext`
+Save 3 to eng.$ext or str, 3 to `chi.$ext`
 
-where ext is the extension of the contained audio
+Where ext is the extension of the contained audio
 
-we know those are subtitles from mkinfo
+We know those are subtitles from mkinfo
 
 - 3:asdf means track 3, asdf is the output name
 
-the type is that contained in the tracks, not necessarily srt,
+The type is that contained in the tracks, not necessarily srt,
 
-maybe vobsub idx + sub if you want srt from vobsub, try vobsub2srt
+The output may be an vobsub idx + sub or srt depending on what is contained in the mkv.
+If you want srt from vobsub, try vobsub2srt.
 
 #vobsub2srt
 
-uses tesseract for the ocr: this means you must install tesseract lanugages
+Uses tesseract for the ocr: this means you must install tesseract lanugages.
 
-for chinese, must symlink
+Make sure that the lang name matches that of the tesseract languages installed.
+For example, for Chinese, there was confusion between `zh` and `ch` and it may
+be necessary to do some corrective symlinking.
 
-see tesseract for installing the languages
+For a language to be recognized, you must have the tesseract language installed.
 
-    vobsub2srt --langlist 1 #view available languages inside a.sub a.idx pair
-    l=en
-    f=
-    vobsub2srt --lang "$l" "$f"
+List available languages inside `eng.sub` and `eng.idx` pair:
 
-takes `eng.sub` and `eng.idx` and makes `eng.srt` with ocr
+    vobsub2srt --langlist eng
+
+TODO: a sub idx pair can contain multiple languages? Id contains metadata indicating the language?
+
+Convert
+
+    vobsub2srt --lang en eng
+
+Takes an `eng.sub` and `eng.idx` pair and outputs `eng.srt`。
 
 `en` or `0` were taken from `--langlist`
 
-don't know what to do if two subs for the same language such as
-    simplified and traditional chinese, both of which get zh
-output goes to a.str.
+Don't know what to do if two subs for the same language such as
+simplified and traditional chinese, both of which get zh output goes to `a.str`.
 
-don't forget to rename output as as a.eng.srt before going to the next language.
+Don't forget to rename output as as a.eng.srt before going to the next language.
 
 #srtmerge
 
-merge two srt files
+Merge two srt files.
+
+Install via pip:
 
     suto pip install srtmerge
 
-subtitles that happen at the same time are put one on top of the other
+Subtitles that happen at the same time are put one on top of the other.
 
-great for language learning if you have multisubs
+Great for language learning.
 
     srtmerge a b ab
 
 #guvcview
 
-view + record video/audio with webcam
+View and record video audio from a webcam.
