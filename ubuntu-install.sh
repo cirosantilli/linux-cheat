@@ -466,7 +466,8 @@
 
                 sudo aptitude install -y libapache2-mod-php5
                 sudo aptitude install -y mysql-server
-                #Will ask you to initialize the password for the `root` user.
+                    #Will ask you to initialize the password for the `root` user.
+                sudo aptitude install -y sqlite
 
             ##phpmyadmin
 
