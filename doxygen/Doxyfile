@@ -1,4 +1,4 @@
-# This is a sample Doxyfile with the most useful options coming first.
+n# This is a sample Doxyfile with the most useful options coming first.
 
 # Files or directories to look into.
 
@@ -14,7 +14,7 @@ INPUT                  =
 
 # .dox
 
-FILE_PATTERNS          = *.cpp *.h *.dox *.md
+FILE_PATTERNS          = *.cpp *.h *.dox *.md *.weird_ext
 
 # If yes, recurse into INPUT dirs:
 
@@ -29,7 +29,8 @@ EXCLUDE                =
 OUTPUT_DIRECTORY       = _doc
 
 # Use the given markdown file as the index.html file.
-# If this option is not given TODO
+# If this option is not given, then the main page is the Doxygen processed
+# comment block which has the `\mainpage` command on it (there should be only one).
 
 USE_MDFILE_AS_MAINPAGE = mainpage.md
 

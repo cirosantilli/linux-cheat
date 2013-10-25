@@ -1,17 +1,53 @@
 This is my custom main page.
 
+Even though this is an `.md` file,
+doxygen markup will still apply to it just as if it were inside a C++ comment.
+
+# headers
+
+The markdown version is a bit fussy about spaces: be sure to put a space after the
+number sign `#` as: `# header` and *not* `#header`.
+
 # references
 
-Reference to a class: C
+Reference to a class: Main2
 
-Reference to a method: C::method
+Reference to a class in a namespace: MainNamespace::Main
 
-Escape a reference to a class: %C
+Must be in namespace to work: Main
 
-Reference to a file: cpp.cpp
+Reference to a method: Main2::method()
 
-Reference to a global function: ::f(int,int)
+Escape a reference to a class: %Main2
+
+Reference to a file: main.cpp
+
+Reference to a global function: ::main(int,char**)
 
 # math
 
 $x^2$
+
+# page
+
+`.dox` files are considered by default by Doxygen, that is,
+they are included in the default Doxyfile `FILE_PATTERNS` list.
+
+You must include at least on `\\page` in your .dox file for it to be considered by `doxygen`.
+
+# subpage
+
+Subpage does two things:
+
+- create links to other pages
+- determines that the other page will be a subpage of this one.
+
+\subpage dox_cheat_subpage
+
+\page dox_cheat_subpage Dox Cheat Subpage
+
+This will produce another Related Pages page.
+
+\page dox_cheat2 Dox Cheat 2
+
+This will produce another Related Pages page.

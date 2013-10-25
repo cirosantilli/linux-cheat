@@ -1,0 +1,7 @@
+/**
+\page weird_ext_page Weird ext page
+
+Even though this page has an unknown extension, it is still treated like a `.dox` page.
+
+Very confusing of course.
+*/

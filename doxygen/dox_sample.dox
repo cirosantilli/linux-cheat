@@ -1,0 +1,13 @@
+/**
+This will go under the first page of this file.
+
+\page dox_cheat Dox Cheat
+
+This is a sample of a `.dox` file.
+
+`.dox` files can be used if you want to add general documentation to your project
+that is not contained inside comments, for example a project main page,
+in which case it is custumary to call it `mainpage.dox` or `Mainpage.dox`.
+
+The text of a `.dox` file all goes inside a C++ like Doxygen comment.
+*/
