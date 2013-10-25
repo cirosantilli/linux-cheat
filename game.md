@@ -1,46 +1,46 @@
 #console
-#console
 
-nethack dungeon rpg
+##nethack
+
+Most famous dangeon crawler.
 
 ##fortune
 
-tells you fortune to stdout!
+Tells you fortune to stdout!
 
-    fortune
     fortune
 
 ##cowsay
 
-an ascii art cow echoes stdin
+An ASCII art cow echoes stdin:
 
     echo a | cowsay
     echo b | cowsay
 
-combo with fortune:
+Combo with fortune:
 
     fortune | cowsay
     fortune | cowsay
 
 ##moon-buggy
 
-simple, jump over obstacles
+Jump over craters and shoot forward:
 
     moon-buggy
 
 ##robotfindskitten
 
-cute!
+Cute!
 
     robotfindskitten
 
 ##bsdgames
 
-lots of console games/cute apps
+Lots of console games/cute apps.
 
-highly recommened
+Highly recommened.
 
-get a list of games:
+List games:
 
     afsh bsdgames | grep /usr/games/
 
@@ -52,143 +52,155 @@ MUD
 
 ###number
 
-convert number in numerals to number in english
+Convert number in numerals to number in English:
 
     assert [ `echo 1 | number` = "one." ]
 
 ###pom
 
-displays the phase of the moon
+Displays the phase of the moon.
 
 ###primes
 
-print primes between 1 to 100:
+Print primes between 1 to 100:
 
     primes 1 100
 
-count primes:
+Count primes:
 
     primes 1 100 | wc -l
 
 ###robots
 
-simple, fun, a bit too much luck
+Simple, fun, too much luck to generate serious interest.
 
-play:
+Play:
+
     robots
 
 play with better settings:
+
     alias robots="robots -ta`for i in {1..10000}; do echo -n n; done`"
 
 ###atc
 
-nice timing memory
+Nice timing memory.
 
 `E1 A0` means: plane E1, will land at airport 0
 
     atc
 
-list scenarios and leave:
+List scenarios and leave:
 
     atc -l
 
-play a scenario:
+Play a scenario:
 
     atc -g crossover
 
-cannot pause...
+Cannot pause...
 
 ###hack
 
-nethack predecessor
+Nethack predecessor.
 
     hack
 
 ###hunt
 
-multiplayer shooter
+Multiplayer shooter.
 
-looks *very* promissing, but multiplayer only...
+Looks *very* promising, but multiplayer only...
 
 #netreck
 
-2d spaceship battle multiplayer classic
+2D spaceship battle multiplayer classic
 
-#urban terror
+#gnome
 
-counter strike clone. best fps game on linux
+##golly
 
-#golly
+Conway's game of life simulator
 
-conways game of life simulator
-
-because the global menu does not work, deactivate it on ubuntu:
+Because the global menu does not work, deactivate it on ubuntu:
 
     env UBUNTU_MENUPROXY=0 golly
 
-minesweeper clone
+##gnomine
+
+Minesweeper clone
 
     gnomine
 
-#gnotski
+##gnotski
 
-knotski clone
+Knotski clone.
 
     gnotski
 
-#urban terror
+No, Knotski has nothing to do with KDE =)
 
-my favorite linux free fps so far
+#kde
 
-cs like, but mostly capture the flag.
+##kreversi
 
-good inertia, not too fast.
+Reversi for KDE.
 
-free but closed source
+#fps
 
-#world of padman
+##urban terror
 
-fps, very large scenarios, cool weaponsmoves
+CS like, but mostly capture the flag.
 
-but too fast for my taste.
+Good inertia, not too fast.
 
-#snes
+Free but closed source.
 
-##zsnes
+##world of padman
 
-features:
+FPS, very large scenarios, cool weapons.
+
+Too fast for my taste.
+
+#emulation
+
+##snes
+
+###zsnes
+
+Features:
 
 - fast forward
 - states
 - good rom support
 
-#nintendo 64
+##nintendo 64
 
-##mupen64plus
+###mupen64plus
 
-mupen64plus features:
+Features:
 
 - fast forward
 - states
 
-keyboard: <http://code.google.com/p/mupen64plus/wiki/KeyboardSetup>
+Keyboard: <http://code.google.com/p/mupen64plus/wiki/KeyboardSetup>
 
-usage:
+Usage:
 
     mupen64plus rom.v64
 
-fullscreen:
+Full screen:
 
     alias mupen="mupen64plus --fullscreen"
     mupen rom.v64
 
-#ps1
+##ps1
 
-##pcsxr
+###pcsxr
 
-#dosbox
+##dosbox
 
-some good games there
+Some good games there
 
     cd
     mkdir dos
@@ -196,7 +208,7 @@ some good games there
 
 there are also `.bat` and `.com` executables
 
-##inside the emulator
+Inside the emulator
 
     mount c /home/$USER/dos
     c:
@@ -205,8 +217,6 @@ there are also `.bat` and `.com` executables
     cd game
     game.exe
 
-##avoid mouting every time
-
-put under the `[autoexec]` section:
+To avoid mounting every time, put under the `[autoexec]` section:
 
     echo -e "mount c /home/$USER/dos\nc:" >> ~/.dosbox/dosbox-*.conf

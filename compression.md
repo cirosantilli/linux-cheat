@@ -11,13 +11,13 @@ The performance parameters are:
 
 #zip
 
-most widely supported format
+Most widely supported format.
 
-not so high compression
+Not so high compression rate.
 
-easy to view and extract single files
+Easy to view and extract single files.
 
-compresses dir file by file it seems
+Compresses dir file by file it seems.
 
 zip file or directory
 
@@ -29,53 +29,54 @@ zip file or directory
 
     zip -er "$F".zip "$F"
 
-you can still see filenames!! but not extract them
+You can still see filenames, but not extract them!
 
-list all files in zip file
+List all files in zip file
 
     unzip -l "$F".zip
 
-extract files from zip:
+Extract files from zip:
 
     unzip "$F".zip
 
-if has password, asks for it
+If has password, asks for it.
 
-to a dir
+To a dir:
 
     unzip "$F".zip -d out
 
     for F in *; do echo "$F"; echo "$F".zip; zip "$F".zip "$F"; done
+
 zip every file in cur dir to file.zip
 
 #tar tar.gz tgz tar.bz2 tb2
 
-tar only turns dir into file, but no compression
+tar only turns a dir into file, but does no compression
 
-this is why it is often coupled with gz and bz2: those are files compressers
+This is why it is often coupled with gz and bz2: those are files compressers
 
 gz gives similar compression to .zip
 
 gz2 gives more compression than gz (30% for roms), but MUCH slower to make, and you can't extract individual files easily.
 
-tgz == tar.gz
-txz == tar.xz
-tb2 == tbz == tar.bz2
+- tgz == tar.gz
+- txz == tar.xz
+- tb2 == tbz == tar.bz2
 
-create
+Create:
 
     tar vcf "$F".tar "$F"
     tar vczf "$F".tgz "$F"
     tar vcjf "$F".tbz "$F"
     tar vcJf "$F".txz "$F"
 
-- c: create
-- f: to file given as next arg, not to stdout
-- z: gzip
-- j: bzip2
-- v: verbose
+- `c`: create
+- `f`: to file given as next arg, not to stdout
+- `z`: gzip
+- `j`: bzip2
+- `v`: verbose
 
-extract:
+Extract:
 
     tar vxf "$F".tar
     tar vxzf "$F".tgz

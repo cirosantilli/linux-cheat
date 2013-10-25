@@ -546,9 +546,9 @@ int main( int argc, char** argv )
             /*
             #packed
 
-                Chars in structs are normally put on 32 bit lines to speed up retrival.
+                Chars in structs are normally put on 32 bit lines to speed up retrieval.
 
-                This however makes the struc larger than necessary, since a struct with
+                This however makes the struct larger than necessary, since a struct with
                 2 chars then takes 8 bytes instead of 2.
 
                 Packed prevents this and puts the chars side by side.

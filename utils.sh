@@ -620,44 +620,57 @@
             #this begs for an alias:
                 alias ack="ack-grep"
 
-        ##
+        #Recursive find grep for perl_regex in python files only, detects shebangs:
 
-        ack --py perl_regex
-            #recursive find grep for perl_regex in python files only, detects shebangs
+            ack --py perl_regex
 
-        ack -f --py --print0 | xargs -0 -I '{}' git add '{}'
-        #adds all python files git. shebang aware.
+        #Adds all python files git. shebang aware:
 
-        ack --cc '#include\s+<(.*)>' --output '$1'
-        #prints only include names in cpp files
+            ack -f --py --print0 | xargs -0 -I '{}' git add '{}'
+
+        #Print only include names in cpp files
+
+            ack --cc '#include\s+<(.*)>' --output '$1'
+
         #--sh for bash
+
+        #`-k`: search in all known filetypes.
+
+        #There seems to be no way to search into *all* files.
+        #Well, we have GNU `grep -r` for that...
 
         ##-f
 
-            #list all filenames of known types:
+            #List all filenames of known types:
 
                 ack -f
 
         ##-g
 
-            #list files of known types that match regex:
+            #List files of known types that match regex:
 
                 ack -g '\.py$'
 
-        ack --thpppt
-        #bill the cat
+        #Easter egg: bill the cat:
+
+            ack --thpppt
 
         ##combos
 
             #find lines in files:
+
                 ack -f | xargs grep 'find'
 
             #dry run replace in files with regex::
+
                 ack -f | xargs -lne 'print if s/a/A/g'
+
             #only prints modified lines
 
             #non-dry run replace in files:
+
                 ack -f | xargs perl -pie 's/z/Z/g'
+
             #prints nothing
 
     ##exuberant-ctags
@@ -5396,38 +5409,15 @@
 
     ##simple-scan
 
-        #very simple to scan! after installing the printer drivers.
+        #Very simple to scan! after installing the printer drivers.
 
-            #simple-scan
+            simple-scan
 
-        #then click scan button. The image updates as the scan is made,
+        #Then click scan button. The image updates as the scan is made,
         #and you can stop it when you are done before the scanner reached the bottom.
 
-        #make sure your scanner supports the definition preferences you set
+        #Make sure your scanner supports the definition preferences you set
         #or you will get a connexion error
-
-##graphics card
-
-    ##find your graphics card
-
-    sudo lspci | grep VGA
-        #I get:
-            #NVIDIA Corporation GF108 [Quadro NVS 5400M] (rev a1)
-            #                                 ^^^^^^^^^
-            #so my card is: `NVS 5400M`
-
-    ##nvidia
-
-        ##download driver
-
-            #<http://www.nvidia.com/Download/index.aspx?lang=en-us>
-
-            #select your card on the list
-
-        ##software prerequisites:
-
-            ./NVIDIA*.run --extract-only
-            vim NVIDIA*/README
 
 ##libs
 

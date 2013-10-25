@@ -1,5 +1,4 @@
-/*
-#feature macros
+/*#feature macros
 
     Most glibc extensions are contained inside existing POSIX headers.
 
@@ -56,12 +55,14 @@ int clone_fn( void* args )
 
 int main(int argc, char** argv)
 {
+    printf( "gnu_get_libc_version() = %s\n", gnu_get_libc_version() );
+
     /*
     #sched.h
 
-        more scheduling policies are defined
+        More scheduling policies are defined.
 
-        those constants have the same meaning as in the kernel code versions
+        Those constants have the same meaning as in the kernel code versions.
     */
     {
         printf( "SCHED_BATCH    = %d\n",  SCHED_BATCH   );
@@ -103,57 +104,57 @@ int main(int argc, char** argv)
                 printf( "\n" );
             }
         }
+    }
 
-        /*
-        #clone
+    /*
+    #clone
 
-            creates a new thread
+        creates a new thread
 
-            for the interface:
+        for the interface:
 
-                man 2 clone
+            man 2 clone
 
-            on linux, very thin wrapper to the *clone* system call
-            and like that sytem call allows for great control on
-            exactly what will be shared between the threads.
+        on linux, very thin wrapper to the *clone* system call
+        and like that sytem call allows for great control on
+        exactly what will be shared between the threads.
 
-            for larget portability, consider using POSIX threads,
-            or even better, ANSI C threading when it becomes available
-            on compilers
+        for larget portability, consider using POSIX threads,
+        or even better, ANSI C threading when it becomes available
+        on compilers
 
-            TODO where is this on glibc docs?
+        TODO where is this on glibc docs?
 
-            TODO get working
-        */
-        {
-            //int i = 0;
-            //int status;
-            //pid_t pid = clone(
-            //    clone_fn,
-            //    SIGCHLD,
-            //);
-            //if ( pid < 0 )
-            //{
-            //    perror( "clone" );
-            //    exit( EXIT_FAILURE );
-            //}
-            //if (pid == 0)
-            //{
-            //    i++;
-            //    return EXIT_SUCCESS;
-            //}
-            //wait( &status );
+        TODO get working
+    */
+    {
+        //int i = 0;
+        //int status;
+        //pid_t pid = clone(
+        //    clone_fn,
+        //    SIGCHLD,
+        //);
+        //if ( pid < 0 )
+        //{
+        //    perror( "clone" );
+        //    exit( EXIT_FAILURE );
+        //}
+        //if (pid == 0)
+        //{
+        //    i++;
+        //    return EXIT_SUCCESS;
+        //}
+        //wait( &status );
 
-            ////no more child process
-            //assert( status == EXIT_SUCCESS );
-            //assert( i == 1 );
-        }
+        ////no more child process
+        //assert( status == EXIT_SUCCESS );
+        //assert( i == 1 );
     }
 
     /*
     #sysconf
 
-        sysconf extensions
+        Sysconf extensions.
     */
     {
             /*
@@ -165,12 +166,17 @@ int main(int argc, char** argv)
 
             */
             {
-                printf( "_SC_NPROCESSORS_ONLN = %ld\n", sysconf( _SC_NPROCESSORS_ONLN ) );
-                printf( "_SC_NPROCESSORS_CONF = %ld\n", sysconf( _SC_NPROCESSORS_CONF ) );
+                printf("_SC_NPROCESSORS_ONLN = %ld\n", sysconf( _SC_NPROCESSORS_ONLN));
+                printf("_SC_NPROCESSORS_CONF = %ld\n", sysconf( _SC_NPROCESSORS_CONF));
             }
     }
 
-    printf( "gnu_get_libc_version() = %s\n", gnu_get_libc_version() );
+    /*
+    #readline
+
+        Read one line from a file:
+        <http://stackoverflow.com/questions/3501338/c-read-file-line-by-line>
+    */
 
     return EXIT_SUCCESS;
 }

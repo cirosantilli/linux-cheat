@@ -79,11 +79,11 @@
 
     ##list sources
 
-        #default sources:
+        #Default sources:
 
             cat /etc/apt/sources.list
 
-        #ppas:
+        #PPAs:
 
             ls -1 /etc/apt/sources.list.d/
 

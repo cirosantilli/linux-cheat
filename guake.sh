@@ -1,15 +1,30 @@
 #!/usr/bin/env bash
 
-#my currently preferred standalone terminal emulator:
+#Good GNOME terminal emulator.
 
-    #sudo aptitude install -y guake
+#Features:
 
-#so called *drop down*: runs on hidden window hit <F12> to toogle visibility
+#- *drop down*: runs on hidden window hit <F12> by defualt to toogle visibility.
 
-#single instance, great ipc communication
+    #This means it is very fast to open it up since it is always running!
 
-    # this means it is very fast to open new tabs on it
-    # since it is always running!
+#- IPC
+
+    #It is meant to run single instance, and has good IPC communication.
+
+    #It is possible for example to open new tabs or toogle visibility from other shells.
+
+##yakuake
+
+    #KDE alternative.
+
+    #Upsides 2013:
+
+    #- split tabs
+
+    #Downsides 2013:
+
+    #- lacks IPC
 
 function print_read_guake {
     printf "%s\n" "$*"

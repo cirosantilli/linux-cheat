@@ -19,6 +19,71 @@ Without it, global variables, functions, etc in this file would not get document
 This documents the file.
 */
 
+#include "main2.h"
+
+namespace MainNamespace {
+
+class Base0 {};
+class Base1 : Base0 {};
+class Base2 {};
+
+/**
+@brief A test class.
+
+Long description.
+*/
+class Main : Base1, Base2
+{
+    public:
+
+        /**
+        @brief A public member
+
+        Long description.
+        */
+        int publicMember;
+
+        /**
+        @brief Default constructor.
+
+        Long description.
+        */
+        Main();
+
+        /**
+        @brief Copy constructor.
+
+        Long description.
+        */
+        Main(const Main& m);
+
+        /**
+        @brief A method
+
+        Long description.
+        */
+        Main2 method(Main2& m2);
+
+        /**
+        @brief A method
+
+        Reference to another method in the same class: #method
+        */
+        void method2();
+
+        Main2 m_m2;
+        Main2 *m_m2p;
+
+    private:
+
+        /**
+        @brief A private method.
+
+        Long description.
+        */
+        void privateMethod();
+};
+
 /**
 @brief A global function
 
@@ -35,67 +100,11 @@ Not Multiline.
 @param[in]  arg3,arg4 two on the same line
 @return 0
 @throw           nothing
-@see C
+@see Main2
 */
-template<typedef T, int N, typedef TT<typedef U> typedef V>
-int f(int arg1, float *arg2, int arg3, int arg4){
+template<typename T, template <typename U> class TT, int N >
+int f(int arg1, float *arg2, int arg3, int arg4) {
     return 0;
 }
 
-/**
-@brief A test class.
-
-Long description.
-*/
-class C
-{
-    public:
-
-        /**
-        @brief A public member
-
-        Long description.
-        */
-        int publicMember;
-
-        /**
-        @brief Default constructor.
-
-        Long description.
-        */
-        C(){}
-
-        /**
-        @brief Copy constructor.
-
-        Long description.
-        */
-        C(const C& c){}
-
-        /**
-        @brief A method
-
-        Long description.
-        */
-        void method(){}
-
-        /**
-        @brief A method
-
-        Reference to another method in the same class: #method
-        */
-        void method2(){}
-
-    private:
-
-        /**
-        @brief A private method.
-
-        Long description.
-        */
-        void privateMethod(){}
-}
-
-int main(int argc, char** argv)
-{
 }

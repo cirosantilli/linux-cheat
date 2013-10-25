@@ -1,6 +1,6 @@
 #freedesktop.org
 
-aka XDG (freedesktop.org was formerly known as the X Desktop Group,
+AKA XDG (freedesktop.org was formerly known as the X Desktop Group,
 and the acronym "XDG", remains common in their work.)
 
 Large community website, de facto standard on certin areas,
@@ -35,9 +35,9 @@ Adopted by the LSB 4.1.
 <http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html>
 
 Specifies where configuration and data files should be put,
-and enviroment variables that indicate that place such as `$XDG_CONFIG_HOME`
+and environment variables that indicate that place such as `$XDG_CONFIG_HOME`
 
-All enviroment variables have a default value to be assumed in case they are not present.
+All environment variables have a default value to be assumed in case they are not present.
 
 ###XDG_CONFIG_HOME
 
@@ -51,11 +51,11 @@ Default value: `/etc/xdg`
 
 ###XDG_DATA_HOME
 
-Data instead of configs. Default: `.local`.
+Data instead of configurations. Default: `.local`.
 
 ###XDG_DATA_DIRS
 
-Data instead of configs. Default: `/usr/local/share/:/usr/share/`.
+Data instead of configurations. Default: `/usr/local/share/:/usr/share/`.
 
 #xdg-settings
 
@@ -67,18 +67,18 @@ TODO why does it show a single line only? what should this list?
 
 Real name: X Window System
 
-x11 is a `window system`
+X11 is a `window system`
 
 It is by far the most commonly used on Linux.
 
 An upcoming alternative is Wayland. It is not yet widely used,
 but plans made for use in Ubuntu.
 
-x11 is only an interface.
+X11 is only an interface.
 
 There can be different implementations:
 
-- X.org implentation currently dominates
+- X.org implementation currently dominates
 - XFree86 was the dominant prior to 2004,
     when it adopted BSD license leaving GPL, and fell into oblivion.
 
@@ -287,15 +287,13 @@ a, waits 1 ms, b:
 Wait for application to start before sending a command to it:
 
     google-chrome &
-    xdotool search --sync --onlyvisible --class "google-chrome"
+    xdotool search --sync --onlyvisible --class "google-chrome"x-terminal-emulator
 
 In this way, you can launch an app and send commands, making sure they will be received!
 
 ##wmctrl
 
-Sources:
-
-- amazing tutorial: <http://spiralofhope.com/wmctrl-examples.html>
+Very good tutorial: <http://spiralofhope.com/wmctrl-examples.html>
 
 Control windows and get info on them from sh (maximize, minimize, focus, etc.)
 
@@ -304,12 +302,41 @@ Get info:
 - `-d`: desktop info
 - `-m`: window manager info
 
-In the following, `- mozilla firefox` is a substring of the title of the window we want to act on.
-case insensitive. For concreteness, we will test with . No regex patterns are used
+###window choice
 
-Actions:
+In order to act on a window, one must first select it. The ways to do it are:
 
-Go to desktop of given window and maximize it (activate):
+- default (no special option): case insensitive title substring match.
+
+    In case of mulitple matches, the first one is chosen.
+
+    Ex:
+
+        wmctrl -a '- mozilla firefox'
+
+    Will act on a window with title:
+
+        'Google - Mozilla Firefox'
+
+- `-F`: case sensitive title substring match.
+
+    Ex:
+
+        wmctrl -Fa '- Mozilla Firefox'
+
+    Will act on a window with title:
+
+        'Google - Mozilla Firefox'
+
+    But not on a window with title:
+
+        'Google - mozilla firefox'
+
+###actions
+
+Once a window is selected, actions can be done on it.
+
+Go to desktop of given window, bring it forward and maximize it:
 
     wmctrl -a '- mozilla firefox'
 
@@ -353,6 +380,63 @@ Get current lightling level on a scale of 0 to 100:
 Set lightining to 80%:
 
     xbacklight -set 80
+
+##xrandr
+
+Acronym for X Resize, rotate AND Reflect
+
+Gets and sets screen properties such as screen resolution.
+
+    xrandr
+
+Sample output:
+
+    Screen 0: minimum 320 x 200, current 1600 x 900, maximum 32767 x 32767
+    LVDS1 connected primary 1600x900+0+0 (normal left inverted right x axis y axis) 309mm x 174mm
+       1600x900       60.0*+   40.0
+       1440x900       59.9
+       1360x768       59.8     60.0
+       1152x864       60.0
+       1024x768       60.0
+       800x600        60.3     56.2
+       640x480        59.9
+    VGA1 disconnected (normal left inverted right x axis y axis)
+    VIRTUAL1 disconnected (normal left inverted right x axis y axis)
+    LVDS-2 disconnected (normal left inverted right x axis y axis)
+    VGA-2 disconnected (normal left inverted right x axis y axis)
+    DP-1 disconnected (normal left inverted right x axis y axis)
+    DP-2 disconnected (normal left inverted right x axis y axis)
+    DP-3 disconnected (normal left inverted right x axis y axis)
+
+TODO understand everything on this output.
+
+This output lists the possible resolutions. Mine are: `1600x900` (current because of the `*`, default because of the `+`).
+
+Change resolution:
+
+    xrandr -s 1360x769
+
+the new resolution must be on the list.
+
+Now:
+
+    xrandr
+
+Outputs:
+
+    1600x900       60.0 +   40.0
+    1440x900       59.9
+    1360x768       59.8*    60.0
+    1152x864       60.0
+    1024x768       60.0
+    800x600        60.3     56.2
+    640x480        59.9
+
+so the asteristk `*` gives the new resolution.
+
+Change to default resolution (the one with the plus sign `+`):
+
+    xrandr -s 0
 
 ##xsel
 
@@ -494,7 +578,7 @@ Make a `png` screenshot:
 
 	xwd | xwdtopnm | pnmtopng > Screenshot.png
 
-#desktop enviroment
+#desktop environment
 
 Includes a many components, such as:
 
@@ -571,9 +655,11 @@ KDE spawn tree:
          |         |         `-{lightdm}
          ...
 
-##gnome 3
+##gnome
 
-Default DE for Fedora.
+GNOME 3 is the default DE for Fedora.
+
+The GNOME project maintains GTK and many desktop software components.
 
 Default window manager: `mutter`
 
@@ -608,13 +694,33 @@ An important part of Unity (basically the only distinctive feature of most DEs)
 
 Default DE for the KDE distro.
 
-Uses qt toolkit instead of gtk.
+Uses Qt toolkit instead of GTK.
+
+GNOME and KDE rivalry started when KDE chose to use QT in 1998 which
+was not GPL source for non-X11 platforms.
+
+As of Qt 4, LGPL versions of Qt exist on all platforms, but the damage has been done:
+the open source community is divided and maintain duplicate versions for many desktop software,
+thus using up resources.
+
+###kde4-config
+
+Get information on KDE configuration on current system.
+
+Installation prefix:
+
+    kde4-config --prefix
+
+The value is usually `/usr`
+
+This means for example that there will be many shared object files under `/usr/lib/kde4/`,
+and that the installed executables will go under `/usr/bin`.
 
 ##lxde
 
 Default DE for Archlinux.
 
-Very lightweight and fast.
+Very lightweight and fast. Really makes programs open, close and change tabs and subwindows faster.
 
 Follows `freedesktop.org` standards.
 
@@ -710,15 +816,21 @@ Don't edit the configuration file directly, use this instead:
 
 Options:
 
-- hide-users: don't show user list to select from.
+- allow-guest
 
-   #Prevent users from disovering the names of all users on the system.
+- `--autologin-user <username>`: autologin the given user
 
-- allow-guest:
+- `--session <session>`: which session to log into. Examples: ubuntu, LXDE, etc.
 
-- autologin-user username: autologin the given user
+    The possibilities can be found at:
+
+        ls /usr/share/xsessions
 
 - display-setup-script=[script|command]
+
+- `--hide-users <true-false>`: if false, don't show user list to select from.
+
+   This prevent users from discovering the names of all users on the system.
 
 Restart lightdm:
 
@@ -728,9 +840,6 @@ Also restarts X. Closes all your programs that have windows.
 
 Only do this on a tty, not on an xterminal probably because
 your terminal is going to die in the middle of the operation
-
-	sudo stop lightdm
-	sudo start lightdm
 
 #window manager
 
@@ -765,25 +874,21 @@ Get currently used window manager info:
 
 ##openbox
 
-Default for archlinux
+Default for LXDE.
 
-Minimalistic
+Minimalistic.
 
 Very fast.
 
-Graphical configuration tool
+Graphical configuration tool.
 
     obconf
 
-you can change themes there, but not all config options are modifiable from there.
+You can change themes there, but not all config options are modifiable from there.
 
 Configuration file:
 
-    ~/.config/openbox/lxde-rc.xml
-
-Configure keyboard shortcuts in the config file:
-
-    keyboard > keybind
+    vim ~/.config/openbox/lxde-rc.xml
 
 Possible actions are listed here: <http://openbox.org/wiki/Help:Actions>
 
@@ -816,9 +921,19 @@ An useful example is to half maximize a windows with Win + Left/Right
 For the right, the minus sight `-` indicates that the distance
 is between the right edge of the window and the right screen edge.
 
-Restart after changing config file to take changes into consideration:
+It is possible to bind keys to shell commands as follows:
+
+      <keybind key="W-F">
+          <action name="Execute">
+              <command>wmctrl -a '- mozilla firefox'</command>
+          </action>
+       </keybind>
+
+Restart after changing config file to apply the changes:
 
     openbox --restart
+
+Does not close applications.
 
 ##mutter
 
@@ -928,7 +1043,7 @@ Configuration syntax for 3.0:
 
         gtk-icon-theme-name = <icon-theme-name>
 
-        gtk-theme-name = <gtk-3-theme-name> 
+        gtk-theme-name = <gtk-3-theme-name>
 
         style "schrift"
         {
@@ -982,7 +1097,7 @@ Each dire structure is like:
     - `/usr/share/themes/theme-name/gtk-2.0`
     - `/usr/share/themes/theme-name/openbox-3.0`
 
-Todo: where are qt themes stored?
+TODO where are qt themes stored?
 
 #panels
 
@@ -991,9 +1106,7 @@ Like windows GUI item that contains the start menu.
 Typically offer:
 
 - a way to launch programs so that users can:
-
-    - type any part in the middle and click on the desired match
-    - 
+    type any part in the middle and click on the autocompleted desired match
 
 - contain a list of all windows so that users can point click to open a window
 
@@ -1008,7 +1121,7 @@ Panels are X clients.
 
 LXDE default.
 
-Config files: `.config/lxpanel/LXDE/`
+Configuration files: `.config/lxpanel/LXDE/`
 
 ##dconf gconf gsettings
 
@@ -1025,11 +1138,11 @@ Sources:
 
 ###dconf
 
-dconf is a the new backend for gsettings.
+dconf is the new backend for gsettings.
 
-It is also the name of a cli utility used to view and edit dconf settings.
+It is also the name of a CLI utility used to view and edit dconf settings.
 
-Completelly separate schema to gconf.
+Completely separate schema to gconf.
 
 It should be used on new apps instead of gconf.
 
@@ -1044,7 +1157,7 @@ View all dconf configs at once:
 
     dconf dump / | less
 
-Here you see a reverse url dot notation:
+Here you see a reverse URL dot notation:
 
     org.gnome.metacity
 
@@ -1062,7 +1175,7 @@ Config files: `~/.gconf/`
 
 CLI view / edit tool: `gconftool-2`
 
-Get all the xlm confs:
+Get all the XLM confs:
 
     gconftool --dump / | less
 
@@ -1165,9 +1278,19 @@ Seems that it was rewritten and screensaver change is not implemented as of 07/2
 
 #dbus
 
-Maintained at freedesktop.org: <http://www.freedesktop.org/wiki/Software/dbus/>
+IPC library and deamon.
 
-Used for interprocess communication.
+Specified by freedesktop.org: <http://www.freedesktop.org/wiki/Software/dbus/>
+
+Main method used for IPC in KDE 4 and GNOME.
+
+##dbus-monitor
+
+View D-Bus messages as they are sent.
+
+##libdbus
+
+Library that allows application to communicate with D-Bus.
 
 #desktop format
 
@@ -1175,7 +1298,7 @@ Files with extension `.desktop`.
 
 Data format used on many different XDG specs.
 
-The fieds it can contain are left for each spec: this only specifies syntax.
+The fields it can contain are left for each spec: this only specifies syntax.
 Analogy: this is `xml`, not `html`.
 
 Specs: <http://standards.freedesktop.org/desktop-entry-spec/latest/>

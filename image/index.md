@@ -119,7 +119,8 @@ Shortcuts:
 
 - `<c-PageDown>`: rotate selection tool
 
-- `<c-s-v>`: create new file containing only the clipboard selection (rect + control c)
+- `<c-s-v>`: create new file containing only the clipboard selection
+    (first do rectangle selection + control c)
 
 ##inkscape
 

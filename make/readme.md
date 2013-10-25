@@ -1,4 +1,4 @@
-make allows you to:
+Make allows you to:
 
 - make command line interfaces of the type:
 
@@ -10,19 +10,44 @@ make allows you to:
 
     this may save lots of time when building large projects
 
-it is the de facto standard tool for that today,
-but there is serious effort going on to replace
-it because it is yet a nother scripting language
+Make is specified by posix and implemented by GNU with extensions
+It is the de facto standard make tool for POSIX systems.
 
-make is specified by posix and implemented by GNU with extensions
+#downsides of make
 
-#sources
+The main problems of make are:
 
-- <http://www.jfranken.de/homepages/johannes/vortraege/make_inhalt.en.html>
+- low cross-platform portability
+- its Yet Another Scripting Language to learn (and not a very powerful one at that)
 
-    good first tutorial to make
+#alternatives
 
-- <http://www-cip.physik.uni-bonn.de/pool/infos/make/advanced.html>
+Because of the downsides of make, many other make systems have been devised.
+None has yet dominated on most applications, but important ones include:
+
+- cmake
+
+    Generates programs that make the project, including projects for IDEs.
+
+    For example, it can generated:
+
+    - POSIX `Makefiles` on Linux,
+    - `cmd.exe` build scripts for Windows
+    - CodeBlocks project
+
+    all from the same input file.
+
+    Makefiles are written in Yet Another Scripting Language.
+
+- rake
+
+    Similar to `make`, Ruby implemented with makefiles written in pure Ruby.
+
+- apache ant
+
+    Written in Java, mainly used for Java project.
+
+    Makefiles are written in XML, so a bit verbose to write by hand.
 
 #makefile vs Makefile
 
@@ -38,3 +63,11 @@ make is specified by posix and implemented by GNU with extensions
 `makefile` has the advantages:
 
 - sticks to the other widespread convention of naming everything lowercase
+
+#sources
+
+- <http://www.jfranken.de/homepages/johannes/vortraege/make_inhalt.en.html>
+
+    good first tutorial to make
+
+- <http://www-cip.physik.uni-bonn.de/pool/infos/make/advanced.html>

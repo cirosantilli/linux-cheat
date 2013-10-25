@@ -20,6 +20,10 @@
     #- `dpkg` for packages
     #- `upstart` for init
 
+    ##get current ubuntu version
+
+        #lsb-release -a | grep Release
+
     ##upgrade ubuntu version
 
         #sudo aptitude install -y update-manager-core
@@ -79,9 +83,11 @@
         sudo aptitude install -y logkeys
         sudo aptitude install -y guvcview
 
-        #ibus input methods for qt:
+        #ibus input methods for QT:
 
             sudo aptitude install -y ibus-qt4
+
+        #Useful for example if you want Chinese input for qt applications.
 
     ##book
 
@@ -278,6 +284,11 @@
         sudo aptitude install -y libreoffice
         sudo aptitude install -y libreoffice-base
 
+    ##terminal emulators
+
+        #sudo aptitude install -y guake
+        sudo aptitude install -y yakuake
+
     ##program
 
         #glasgow haskell compiler:
@@ -323,11 +334,29 @@
 
         sudo aptitude install -y puppet
 
+        #Many source code for examples to learn qt4.
+
+            sudo aptitude install -y qt4-demos
+
     ##c and c++ libraries
 
             sudo aptitude install -y libgtk-3-dev
             sudo aptitude install -y libgtk-3-doc
             sudo aptitude install -y gtk2.0-examples
+
+        ##KDE
+
+            #KDE core dev libs:
+
+                sudo aptitude install -y kdelibs5-dev
+
+            #KDE game development files:
+
+                sudo aptitude install -y libkdegames-dev
+
+        #build conqueror:
+
+            sudo aptitude install -y libkonq5-dev
 
             sudo aptitude install -y libirrlicht-dev
             sudo aptitude install -y libirrlicht-doc
@@ -342,6 +371,7 @@
 
             sudo aptitude install -y libmysql++-dev
             sudo aptitude install -y libmysql++-doc
+            sudo aptitude install -y libmysqlcppconn-dev
 
         #boost c++
 
@@ -514,29 +544,30 @@
 
         #gnome shell:
 
-            sudo add-apt-repository -y ppa:gnome3-team/gnome3 && sudo aptitude update
-            sudo aptitude install -y gnome-shell
+            #sudo add-apt-repository -y ppa:gnome3-team/gnome3 && sudo aptitude update
+            #sudo aptitude install -y gnome-shell
 
         #linux mint shell cinnamon:
 
-            sudo add-apt-repository -y ppa:gwendal-lebihan-dev/cinnamon-stable && sudo aptitude update
-            sudo aptitude install -y cinnamon
+            #sudo add-apt-repository -y ppa:gwendal-lebihan-dev/cinnamon-stable && sudo aptitude update
+            #sudo aptitude install -y cinnamon
 
         #kde shell plasma:
 
-            sudo aptitude install kde-plasma-desktop
+            sudo aptitude install -y kde-plasma-desktop
 
         #xubuntu shell xfce:
 
-            sudo aptitude install xfce4
+            sudo aptitude install -y xfce4
+            sudo aptitude install -y xfce4-battery-plugin
 
         #lubuntu lxde:
 
-            sudo aptitude install lxde
+            #sudo aptitude install -y lxde
 
         #for `qtconfig-qt4`:
 
-            sudo aptitude install qt4-qtconfig
+            sudo aptitude install -y qt4-qtconfig
 
     ##chat messaging voice video
 
@@ -604,6 +635,15 @@
             sudo aptitude install -y konsole            #needs to terminal emulator. (otherwise, button does nothing)
             sudo aptitude install -y khelpcenter4       #help
             sudo aptitude install -y kwalletmanager     #password manager
+
+    ##gpu
+
+        #nvidia
+
+            sudo aptitude install -y nvidia-319
+            sudo aptitude install -y nvidia-settings-319
+            sudo aptitude install -y nvidia-prime
+            sudo aptitude install -y nvidia-opencl-dev
 
 ##xinit
 

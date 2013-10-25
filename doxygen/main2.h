@@ -9,6 +9,7 @@
 
 Long description.
 */
-class C2
-{
-}
+class Main2 {
+    public:
+        void method();
+};

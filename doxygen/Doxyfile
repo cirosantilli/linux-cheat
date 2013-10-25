@@ -1,7 +1,94 @@
-# where to put generated documentation
+# This is a sample Doxyfile with the most useful options coming first.
 
-OUTPUT_DIRECTORY = _doc
+# Files or directories to look into.
 
-# use a separate markdown file as the main page
+INPUT                  =
+
+# If the value of the INPUT tag contains directories, you can use the
+# FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp
+#
+# Default:
+# *.c *.cc *.cxx *.cpp *.c++ *.d *.java *.ii *.ixx *.ipp *.i++ *.inl *.h *.hh
+# *.hxx *.hpp *.h++ *.idl *.odl *.cs *.php *.php3 *.inc *.m *.mm *.dox *.py
+# *.f90 *.f *.for *.vhd *.vhdl
+
+# .dox
+
+FILE_PATTERNS          = *.cpp *.h *.dox *.md
+
+# If yes, recurse into INPUT dirs:
+
+RECURSIVE              = YES
+
+# Files or directories to exclude. Specially useful with INPUT + FILE_PATTERNS.
+
+EXCLUDE                =
+
+# Where to put the generated documentation:
+
+OUTPUT_DIRECTORY       = _doc
+
+# Use the given markdown file as the index.html file.
+# If this option is not given TODO
 
 USE_MDFILE_AS_MAINPAGE = mainpage.md
+
+# TODO what is this
+
+#SOURCE_BROWSER         = YES
+
+# By default, generates latex. Prevent it:
+
+GENERATE_LATEX         = NO
+
+#--------------------------------------------------------
+# The following options are only recommended for
+# understaning the implementation.
+#--------------------------------------------------------
+
+# Generate docs for every thing, including:
+#
+# - files without @file
+# - private members
+# - static file members
+
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+
+# Generate a "Files" section with browsable source code for both headers and cpp files.
+# The links link to the documentation, not to the source, but the documentation contains
+# links to the source point of definition.
+
+SOURCE_BROWSER         = YES
+VERBATIM_HEADERS       = YES
+
+# For each function, list which functions it calls and which functions are called by it:
+
+REFERENCED_BY_RELATION = YES
+REFERENCES_RELATION    = YES
+
+#--------------------------------------------------------
+# The following options draw diagrams with the 3rd party `dot` tool.
+# Text is more useful in most cases as it is searchable
+# occupies less memory and is faster to generate.
+#
+# The text on the images however contains links to the referenced classes.
+
+# All the dot options only take effect if HAVE_DOT is on:
+
+HAVE_DOT               = YES
+GRAPHICAL_HIERARCHY    = NO
+CLASS_GRAPH            = YES
+
+# Produces huge class graphs that includes all classes this class depends on,
+# including hierarchy and membership / pointers.
+#
+# Does not however include classes which are inherited from this class.
+
+COLLABORATION_GRAPH    = YES
+
+GROUP_GRAPHS           = YES
+TEMPLATE_RELATIONS     = YES
+INCLUDE_GRAPH          = YES
+INCLUDED_BY_GRAPH      = YES
