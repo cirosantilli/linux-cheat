@@ -1376,15 +1376,19 @@ since icon themes can also change with DE settings. `hicolor/48x48` should conta
 This talks about how to allow users to choose their default application
 when opening certain types of file.
 
+There are many systems, and they have some degree of compatibility.
+
 ##xdg-open
 
 xdg utils package
 
-sources:
+Can open both Internet URLs and local files.
+
+Sources:
 
 - <https://wiki.archlinux.org/index.php/Default_Applications>
 
-Preferred choice for default program opening commoand since it is desktop/window manager agnostic.
+Preferred choice for default program opening command since it is desktop/window manager agnostic.
 
 See this: <https://wiki.archlinux.org/index.php/Xdg-open>
 
@@ -1410,7 +1414,7 @@ Gnome specific
 
 KDE specific
 
-##/etc/alternatives/
+##alternatives system
 
 One configuration method is to make symbolic links such as `/usr/bin/editor` to either `vi` or `ed` for example.
 
@@ -1419,4 +1423,15 @@ and then `/etc/alternatives/editor` to the desired executable (say `/usr/bin/vi`
 
 In this way, all preferences are stored under `etc` as specified by the LSB.
 
-`update-alternatives` can be used to manage that system.
+The `update-alternatives` utility can be used to manage that system.
+
+For example, to configure the default browser use:
+
+    sudo update-alternatives --config x-www-browser
+
+This will show the possibilities (TODO how does he know?) for you to choose from them.
+
+The most important alternatives include:
+
+- `editor`: text editor
+- `x-www-browser`: web browser

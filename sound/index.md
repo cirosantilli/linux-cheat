@@ -87,19 +87,29 @@ commands:
 
 ##amixer
 
-cli for sound control
+CLI for sound control.
 
-view available controls:
+View available controls:
 
     amixer scontrols
 
-set master volume to 50%:
+Set master volume to 50%:
 
     amixer sset 'Master' 50%
+
+Unmute sound:
+
+    amixer -D pulse set Master 1+ unmute
 
 ##aplay
 
 Command line tool that takes numeric input from stdin and generate sound!
+
+#pulseaudio
+
+##pacmd
+
+Command line control to pulseaudio.
 
 #rip
 

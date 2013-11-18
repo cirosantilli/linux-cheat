@@ -136,6 +136,5 @@ Can be modified with `-h`.
 
 #alternatives
 
-Also consider:
-
 - exuberant-ctags
+- cscope

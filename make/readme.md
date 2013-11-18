@@ -37,7 +37,7 @@ None has yet dominated on most applications, but important ones include:
 
     all from the same input file.
 
-    Makefiles are written in Yet Another Scripting Language.
+    Makefiles for cmake (called `CMakeLists.txt`) are written in Yet Another Scripting Language.
 
 - rake
 
@@ -63,6 +63,19 @@ None has yet dominated on most applications, but important ones include:
 `makefile` has the advantages:
 
 - sticks to the other widespread convention of naming everything lowercase
+
+#command line options
+
+- `-j5`: let make run in 5 threads.
+
+    *Be warned*: this will make standard output of all threads mix up so the stdout will be meaningless.
+
+    Also, this *may break your makefiles*, since in a rule like:
+
+        all: a b c
+
+    `a`, `b`, and `c` are run in parallel, it it might be the case that
+    `c` *must* run only after `a` and `b`.
 
 #sources
 

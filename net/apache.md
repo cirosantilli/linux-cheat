@@ -1,24 +1,24 @@
-cheat on the apache server
+Cheat on the apache server.
 
-test apache:
+Test apache:
 
     firefox http://localhost/ &
 
 #intro
 
-apache is a web server
+Apache is a web server
 
-a web server listens to a port (default 80) for strings
+A web server listens to a port (default 80) for strings
 
-theses strings are http requests
+Theses strings are http requests
 
-then it takes the http request, processes it, and then returns the request to the client
+Then it takes the http request, processes it, and then returns the request to the client
 
-part of the processing may be passed to another program: typically a <#cgi> script
+Part of the processing may be passed to another program: typically a <#cgi> script
 
 #test preparations
 
-before doing anything, make this test dir:
+Before doing anything, make this test dir:
 
     mkdir test
     cd test
@@ -45,112 +45,134 @@ before doing anything, make this test dir:
 
     cd ../..
 
-finally move our test dir to the serve root:
+Finally move our test dir to the serve root:
 
     sudo mv test /var/www/
 
-the default root for serving files is specified in the <#conf file>
+The default root for serving files is specified in the <#conf file>
 by the `DocumentRoot` directive. In current ubuntu, it is `/var/www/`
 
-the user under which the web server runs must have read access to this directory.
+The user under which the web server runs must have read access to this directory.
+*This is the default on Ubuntu*, where the apache server runs as user `www-root`!
 
-usually this user is a different user from `root` for sercurity.
+Usually this user is a different user from `root` for sercurity.
+
+#conf file
+
+Ubuntu default location for the configuration file:
+
+    sudo vim /etc/apache2/apache2.conf
+
+This file may include others, and for example in Ubuntu the default template does include:
+
+    IncludeOptional conf-enabled/*.conf
+    IncludeOptional sites-enabled/*.conf
+
+so that local configurations can be managed in separate files.
+
+Ubuntu default also creates `*-available` directories, which contain possible configuration files.
+Those should be symlinked to the `enabled` directories to enable them.
+
+Configurations only apply when you restart apache:
+
+    sudo service apache2 restart
 
 #minimum conf file
 
-the bare minimum is:
+The bare minimum conf file to get a file served is:
 
     Listen 80
     User www-data
     Group www-data
     ErrorLog /var/log/apache2/error.log
 
-this way you can really learn what is going on!
+This conf may be useful for testing server configuration.
 
 #default operation
 
-"web subdirs" map directly to local dirs
+"web subdirs" map directly to local dirs.
 
-ubuntu default is currently `/var/www/`
+Ubuntu default is currently `/var/www/`
 
-open file /var/www/test/index.html:
+Open file /var/www/test/index.html:
 
     firefox localhost/test/index.html
 
-going to a dir on the web browser opens the contained index.html file by default:
+Going to a dir on the web browser opens the contained index.html file by default:
 
     firefox localhost/test/
 
-this can be configured with the <#DirectoryIndex> directive
+This can be configured with the `DirectoryIndex` directive
 
-if no index is contained, apache generates an html index:
+If no index is contained, apache generates an html index:
 
     firefox localhost/test/noindex/
 
-#conf file
-
-configurations only apply when you restart apache:
-
-    sudo service apache2 restart
-
-move our test dir to the serve root:
-
-    sudo mv test /var/www/root
-
-ubuntu default location:
-
-    sudo vim /etc/apache2/apache2.conf
-
 ##DocumentRoot
 
-set apache serve root at given dir:
+Set Apache serve root at given dir:
 
     DocumentRoot "/var/www/root"
 
-for this ot work, make sure `DocumentRoot` is not set anywhere else.
+For this to work, make sure `DocumentRoot` is not set anywhere else.
 (by default it was included in the include files, `grep -r DocumenRoot` shows where)
 
-for security concerns, only put things you want apache to serve directly inside DocumentRoot
+For security concerns, only put things you want apache to serve directly inside DocumentRoot
 such as html, css and images.
 
-stuff that users should not see such as cgi scripts and *gasp* ssl certificates
+Stuff that users should not see such as cgi scripts and *gasp* ssl certificates
 are better to remain outside it, so that you don't serve them by mistake!
 
 ##Listen
 
-listen those ports on all interfaces (for example, first wireless card, first ethernet card, etc...):
+Listen those ports on all interfaces (for example, first wireless card, first ethernet card, etc...):
 
     Listen 80
     Listen 8000
 
-this configuration is mandatory
+This configuration is mandatory.
 
-listen those ports on given interfaces:
+Listen those ports on given interfaces:
 
     Listen 192.0.2.1:80
     Listen 192.0.2.5:8000
 
-access filename:
+##AccessFileName
+
+Name of the file which can modify access properties of a directory.
 
     AccessFileName .htaccess
 
-allow overwride:
+##AllowOverride
 
-    TODO
+Allows the `.htaccess` to override certain directives of earlier conf files.
 
-include other files or entire dirs:
+Allow to override all directives:
+
+    AllowOverride All
+
+Allow to override no directories (the ifle is ignored):
+
+    AllowOverride None
+
+##Include
+
+Copy paste Include other apache conf files or entire directories
+into the current configuration:
 
     Include file.conf
     Include conf-d
 
-deny access from host
+##Deny
+
+Deny access from given host
 
     Deny from 10.252.46.165
     Deny from host.example.com
 
 ##DirectoryIndex
 
-what to do when user acesses a directory location:
+What to do when user acesses a directory location:
 
     DirectoryIndex index.html index.php /cgi-bin/index.pl
 
@@ -208,11 +230,15 @@ use given css style:
 
     IndexStyleSheet /css/autoindex.css
 
+#VirtualHost
+
+Allows to host many DNS names on a single IP.
+
 #sections
 
-##sources
+Sections are commands which restrict the scope of application of other configurations.
 
-official manual: <http://httpd.apache.org/docs/2.2/sections.html#mergin>
+The official manual page: <http://httpd.apache.org/docs/2.2/sections.html#mergin>
 
 ##Files
 
@@ -237,63 +263,65 @@ acts on local filesystem
     Options +Indexes
     </Directory>
 
-##combine
-
-    <Directory /var/web/dir1>
-    <Files private.html>
-    Order allow,deny
-    Deny from all
-    </Files>
-    </Directory>
-
 ##Location
 
-acts on webspace
+Applies configuration to URL addresses:
 
     <LocationMatch ^/private>
-    Order Allow,Deny
-    Deny from all
+        Order Allow,Deny
+        Deny from all
     </LocationMatch>
+
+##combine sections
+
+It is possible to combine multiple section scopes:
+
+    <Directory /var/web/dir1>
+        <Files private.html>
+            Order allow,deny
+            Deny from all
+        </Files>
+    </Directory>
 
 ##IfDefine
 
     <IfDefine ClosedForNow>
-    Redirect / http://otherserver.example.com/
+        Redirect / http://otherserver.example.com/
     </IfDefine>
 
 ##IfVersion
 
     <IfVersion >= 2.1>
-    this happens only in versions greater or
-    equal 2.1.0.
+        this happens only in versions greater or
+        equal 2.1.0.
     </IfVersion>
 
 #alias
 
-you can create virtual paths to dirs and files
+Allow to create virtual paths to dirs and files.
 
 ##sources
 
-man: <http://httpd.apache.org/docs/2.2/mod/mod_alias.html>
+Man: <http://httpd.apache.org/docs/2.2/mod/mod_alias.html>
 
-create virtual directory:
+Create virtual directory:
 
     Alias /test/alias /var/www/test
 
     firefox localhost/test/alias &
 
-also works for subdirs:
+Also works for subdirs:
 
     firefox localhost/test/alias/a.html &
     firefox localhost/test/alias/a      &
 
-also works for files:
+Also works for files:
 
     Alias /testfile/ /var/www/test/index.html
 
     firefox localhost/testfile &
 
-also works outside of serve root:
+Also works outside of serve root:
 
     cd
     echo "TEST" > index.html
@@ -309,13 +337,13 @@ also works outside of serve root:
 
     firefox localhost/test/alias/  &
 
-goes to `test/index.html`
+Goes to `test/index.html`
 
     firefox localhost/test/alias/a &
 
-goes to `test/a/index.html`
+Goes to `test/a/index.html`
 
-BAD: both go to test/index.html:
+BAD: both go to `test/index.html`:
 
     Alias /test/alias   /var/www/test
     Alias /test/alias/a /var/www/test
@@ -325,41 +353,36 @@ BAD: both go to test/index.html:
 
 ##Redirect
 
-precedence over aliases
+Returns a redirect HTTP response. Takes precedence over aliases.
 
     Alias /test/redir /test
     Redirect /test/redir http://www.google.com
+
+The following goes to google:
+
     firefox localhost/test/redir &
-goes to google
 
 ##cgi
 
-###requires
-
-<#http>
-
 **cgi** is a protocol of how a server communicates with a cgi script
 
-a cgi script is simply a script/executable that outputs the part of http response
+A cgi script is simply a script/executable that outputs the part of http response
 
-this part includes some last header lines which the server delegates to it,
+This part includes some last header lines which the server delegates to it,
 notably `content type`, followed by "\n\n" followed by the entire body.
 
-the server passes information to the script through environment variables only.
+The server passes information to the script through environment variables only.
 
 ###fastcgi
 
-a faster version of cgi that does not start a new process pre request
+A faster version of cgi that does not start a new process pre request
 
-implementations: mod_fastcgi vs mod_fcgid
+Implementations: mod_fastcgi vs mod_fcgid
 <http://superuser.com/questions/228173/whats-the-difference-between-mod-fastcgi-and-mod-fcgid>
-
-install mod_fastcgi:
-    sudo aptitude install -y libapache2-mod-fastcgi
 
 ###ScriptAlias
 
-the script:
+The script:
 
     echo '#!/usr/bin/perl
     print "Content-type: text/html";
@@ -376,50 +399,50 @@ the script:
 
 ####status
 
-optional, if not given suposes `200 OK`.
+Optional, if not given suposes `200 OK`.
 
-if given as error, server will simply give the error and no data.
+If given as error, server will simply give the error and no data.
 
-uncomment the status line on the test script to see what happens.
+Uncomment the status line on the test script to see what happens.
 
 ####alias to dir
 
-cgi scripts must be in the dir specified by script alias:
+CGI scripts must be in the dir specified by script alias:
 
     ScriptAlias /mycgi /usr/lib/cgi-bin
 
-same as:
+Same as:
 
     Alias /mycgi /usr/lib/cgi-bin
     <Location /mycti >
 
-tell server that all files inside this dir are cgi scripts:
+Tell server that all files inside this dir are cgi scripts:
 
     SetHandler cgi-script
 
-tell server that all .pl and .py files in dire are cgi scripts:
+Tell server that all .pl and .py files in dire are cgi scripts:
 
     AddHandler cgi-script .cgi .pl
 
-permit cgi execution for scripts in this dir:
+Permit cgi execution for scripts in this dir:
 
     Options +ExecCGI
     </Location>
 
-run it:
+Run it:
 
     firefox localhost/mycgi/test.pl
 
-note how `ScriptAlias` created a virtual directory
+Note how `ScriptAlias` created a virtual directory
 not present in the actual filesystem.
 
-can also make individual script:
+Can also make individual script:
 
     ScriptAlias /test/cgi-file /usr/lib/cgi-bin/test.pl
 
 ####alias to script
 
-all subdirs of testpl are generated by the given test.pl:
+All subdirs of testpl are generated by the given test.pl:
 
     ScriptAlias /test/testpl /usr/lib/cgi-bin/test.pl
 
@@ -428,50 +451,66 @@ all subdirs of testpl are generated by the given test.pl:
 
 ###action
 
-run script whenever an html file is accessed:
+Run script whenever an html file is accessed:
 
     Action test /cgi-bin/test.pl
     AddHandler test .html
 
 TODO: i get `Action` directive undefined... solve this.
 
-try it:
+Try it:
 
     firefox localhost/index.html
 
-this is how php does it!
+This is how php does it!
 
 #modules
 
-apache plugins are called modules
+Apache plugins are called modules
 
-modules are compiled `.so` files
+Modules are compiled `.so` files
 
-modules may define new directives
+Modules may define new directives
 
-for modules to become effective they must be loaded in the config file
+For modules to become effective they must be loaded in the config file
 
-only do certain commands if module is exists:
+Only do certain commands if module is exists:
 
     <IfModule mod_fastcgi.c>
-    commands...
+        commands...
     </IfModule>
 
-load a module:
+Load a module:
 
     LoadModule fastcgi_module /usr/lib/apache2/modules/mod_fastcgi.so
-    1              2
+    1          2
 
 - 1: module identifier hard coded in module?
 - 2: full path to .so
 
+##a2enmodule
+
+Apache2 ENable Module.
+
+Utility that enables modules easily.
+
+Probably adds LoadModule somewhere.
+
+List options:
+
+    a2enmod
+
+Enable a module:
+
+    sudo a2enmod $MODULE_NAME
+
 #handlers
 
-part of the very default mime_module
+Part of the very default mime_module
 
-determines filetypes and sets default actions accordingly
+Determines filetypes and sets default actions accordingly
 
-example:
+Example:
 
     Action add-footer /cgi-bin/footer.pl
     AddHandler add-footer .html
@@ -479,69 +518,69 @@ example:
 - Action: defines a handler called add-footer
 - AddHandler: uses the handler called add-footer for all html files
 
-handlers can be defined in modules
+Handlers can be defined in modules
 
 #authentication
 
-you must chose *both* one <#method> and one <#provider>!
+You must chose *both* one <#method> and one <#provider>!
 
 ##methods
 
 ###prerequisites
 
-first understand http authentication.
+First understand http authentication.
 
-what algorithm is used to store the passwords more or less safely.
+What algorithm is used to store the passwords more or less safely.
 
 ###basic authentication
 
-provided by `mod_auth_basic`
+Provided by `mod_auth_basic`
 
-apache conf:
+Apache conf:
 
     LoadModule auth_basic_module /usr/lib/apache2/modules/mod_auth_basic.so
     <Directory "/var/www/test/auth/">
-    AuthType Basic
-    AuthName "private dir"
-    AuthBasicProvider file
-    AuthUserFile /var/.htpasswd
-    Require valid-user
-    AllowOverride None
+        AuthType Basic
+        AuthName "private dir"
+        AuthBasicProvider file
+        AuthUserFile /var/.htpasswd
+        Require valid-user
+        AllowOverride None
     </Directory>
 
 ###digest
 
-provided by `mod_auth_digest`
+Provided by mod_auth_digest.
 
 mod_auth_digest is better than mod_auth_basic, so use digest!
 
     LoadModule auth_digest_module /usr/lib/apache2/modules/mod_auth_digest.so
     <Directory "/var/www/test/auth/">
-    AuthType Digest
-    AuthName "private dir"
-    AuthDigestProvider file
-    AuthUserFile /var/.htpasswd
-    Require valid-user
-    AllowOverride None
+        AuthType Digest
+        AuthName "private dir"
+        AuthDigestProvider file
+        AuthUserFile /var/.htpasswd
+        Require valid-user
+        AllowOverride None
     </Directory>
 
 ##provider
 
-what type of storage is used for user password pairs
+What type of storage is used for user password pairs
 
-is specified by the `AuthBasicProvider` directive.
+Is specified by the `AuthBasicProvider` directive.
 
 ###file
 
-a plain text file
+A plain text file
 
-safer to put outside serve root
+Safer to put outside serve root
 
 ####htpasswd
 
-generates `.htpasswd` files
+Generates `.htpasswd` files
 
-generate user/pass pairs:
+Generate user/pass pairs:
 
     sudo htpasswd -bc /var/www/.htpasswd u p
 
@@ -549,53 +588,57 @@ generate user/pass pairs:
 - -b: use pass from command line. *less safe!!*
     sudo htpasswd -b /var/www/.htpasswd u2 p
 
-lets take a look at the file:
+Lets take a look at the file:
 
     sudo cat /var/www/.htpasswd
 
-note that the passwords are base64 enoded. See <#base64>
+Note that the passwords are base64 enoded. See <#base64>
 
 ###dbd
 
-sql database
+SQL database
 
 #try it out!!
 
-test:
+Test:
 
     firefox localhost/test/auth &
 
-try u and u2 pass p!
+Try u and u2 pass p!
 
 ##browser cache
 
     firefox localhost/test/auth &
     firefox localhost/test/auth &
-the second time, you may not be prompted for a password!
+The second time, you may not be prompted for a password!
 
-this is because firefox has cached your password for some time
+This is because firefox has cached your password for some time
 and resent it automatically! there is no server state.
 
-to avoid the cache use curl:
+To avoid the cache use curl:
+
     curl -I localhost/test/auth
+
 401 and WWW-Authenticate.
 
-with pass:
+With pass:
+
     curl u:p@localhost/test/auth
     curl -u u:p localhost/test/auth
+
 of course, better using the `-u` option
 which could work also for different authentication methods.
 
 #php
 
-interpreter language almost always run from a server to generate web content.
+Interpreter language almost always run from a server to generate web content.
 
-dominates web today, but faces increasing concurrence python/ruby/perl.
+Dominates web today, but faces increasing concurrence python/ruby/perl.
 
-test:
+Test:
 
     sudo service apache2 restart
     echo '<?php phpinfo(); ?>' | sudo tee /var/www/testphp.php
     firefox http://localhost/testphp.php &
 
-if you see php specs, it works!
+If you see php specs, it works!

@@ -1,3 +1,3 @@
-concepts involving multiple makefiles
+Concepts involving multiple makefiles.
 
-how to call one makefile from another is called submake on the manual
+How to call one makefile from another is called submake on the manual.

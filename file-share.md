@@ -81,3 +81,13 @@ your share and download dirs to somewhere above user so that people cannot
 see your username:
 
     sudo ln -s /home/soulseek path/to/share/folder
+
+#nfs
+
+Network FileSystem.
+
+Designed for LAN, has higher throughput than FTP.
+
+FTP preferred on WAN.
+
+#ldap

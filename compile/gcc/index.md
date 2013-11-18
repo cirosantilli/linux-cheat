@@ -25,7 +25,7 @@ and more.
 
 It is good to understand which steps are done towards compilation
 
-Only expanded macros with the c preprocessor:
+Only expanded macros with the C preprocessor:
 
     cpp a.c > a.i
     cpp b.c > b.i
@@ -51,7 +51,7 @@ Make machine code from assembly code:
 
 This transforms human readable formats into binary object files
 
-Make machine code from c direcly:
+Make machine code from C directly:
 
     gcc -c a.c -o a.o
     gcc -c b.c -o b.o
@@ -66,7 +66,7 @@ Link object files into single executable
 
 Does all above steps in one
 
-If you use make, it is faster to genterate `.o`
+If you use make, it is faster to generate `.o`
 and keep them, since if the source does not change,
 make will not recompile the corresponding `.o`
 
@@ -82,7 +82,7 @@ Always use this for production output code if possible:
 
 This will make for portable, efficient code.
 
-For test code, ommit the `-03`, since that will make compilation faster.
+For test code, omit the `-03`, since that will make compilation faster.
 
 ##o
 
@@ -119,21 +119,21 @@ Sample usage:
     gcc -std=c99
     gcc -std=1x
 
-`c11` will be the next version and is still being developed at the time of writting
+`c11` will be the next version and is still being developed at the time of writing.
 
 To allow gnu extensions:
 
     gcc -std=gnu90
 
-This is necessary on projects that rely on the extensions, such as the linux kernel
+This is necessary on projects that rely on the extensions, such as the Linux kernel.
 
 ##ansi
 
-Don't use this, use `std` instead
+Don't use this, use `std` instead:
 
     gcc -ansi
 
-Implies the most recent `-std` which gnu considers is stable manner (not necessarily the latest)
+Implies the most recent `-std` which gnu considers is stable manner (not necessarily the latest).
 
 Changes with time, currently equals:
 
@@ -150,7 +150,7 @@ Give warnings for code that does not comply with c1x standard:
 
 This does not mean *FULL* compliance, but greatly increases compliance.
 
-There is currently no full compliance check in `gcc`
+There is currently no full compliance check in `gcc`.
 
 Give errors instead of warnings:
 
@@ -158,9 +158,9 @@ Give errors instead of warnings:
 
 ##march
 
-Optimizes code to given cpu (arch is for archtecture)
+Optimizes code to given cpu (arch is for archtecture).
 
-May use instructions only available to given cpu
+May use instructions only available to given CPU.
 
 Optimize for currrent compiling machine:
 
@@ -216,9 +216,9 @@ Options:
 ##M
 
 Don't compile, but generate a list of dependencies for the given source code
-in a format suitable for a makefile rule, and output it to stdout
+in a format suitable for a makefile rule, and output it to stdout.
 
-Dependencies are basically the file itself and the required headers
+Dependencies are basically the file itself and the required headers.
 
 For example, in `a.c`:
 
@@ -273,7 +273,8 @@ Generates gas assembly code to a new file called `a.S`.
 
 ##-fverbose-asm
 
-Outputs comments on the generated assembly which say variable names are being operated on each statment:
+Outputs comments on the generated assembly which say variable names are
+being operated on each statement:
 
     gcc -fverbose-asm -S a.c
 
@@ -282,7 +283,7 @@ Sample C input:
     i = 1;
     j = i;
 
-Ouptut without `-fverbose-asm`:
+Output without `-fverbose-asm`:
 
     movl $1, -64(%ebp)
     movl -64(%ebp), %eax
@@ -296,7 +297,7 @@ With `-fverbose-asm`:
 
 ##-f options
 
-TODO What are the -f options for in general? Give examples.
+TODO What are the `-f` options for in general? Give examples.
 
 ##-Wa options
 
@@ -319,7 +320,7 @@ Example:
 
 The executable is called `cpp`.
 
-gcc uses it as a backend.
+GCC uses it as a backend.
 
 ##-D
 

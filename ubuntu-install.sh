@@ -53,6 +53,7 @@
 
             sudo aptitude install -y apt-rdepends
             sudo aptitude install -y apt-file
+            sudo aptitude install -y ppa-purge
             apt-file update
 
     #usefull stuff that does not come by default or Canonical would have to pay royalties:
@@ -354,7 +355,7 @@
 
                 sudo aptitude install -y libkdegames-dev
 
-        #build conqueror:
+        #requirements to build conqueror:
 
             sudo aptitude install -y libkonq5-dev
 
@@ -369,10 +370,6 @@
             sudo aptitude install -y libplplot-dev
             sudo aptitude install -y plplot11-driver-xwin
 
-            sudo aptitude install -y libmysql++-dev
-            sudo aptitude install -y libmysql++-doc
-            sudo aptitude install -y libmysqlcppconn-dev
-
         #boost c++
 
             #Some subprojects have specific packages of their own.
@@ -381,9 +378,9 @@
 
                 #apt-cache search liboost
 
-            sudo aptitude install -y libboost-dbg
-            sudo aptitude install -y libboost-doc
-            sudo aptitude install -y libboost-graph-dev
+                sudo aptitude install -y libboost-dbg
+                sudo aptitude install -y libboost-doc
+                sudo aptitude install -y libboost-graph-dev
 
         #blas c / fotran and lapack fortran:
 
@@ -396,12 +393,17 @@
             sudo aptitude install -y libgsl0-dev
             sudo aptitude install -y gsl-doc-info
 
-    ##python libraries
+    ##python
 
-        sudo aptitude install -y python-pip
-        sudo aptitude install -y ppa-purge
-        sudo aptitude install -y python-scipy
-        sudo aptitude install -y python-matplotlib
+            sudo aptitude install -y python-dev
+            sudo aptitude install -y python-pip
+            sudo aptitude install -y python-scipy
+            sudo aptitude install -y python-matplotlib
+            sudo aptitude install -y gunicorn
+
+    ##ruby libraries
+
+            sudo aptitude install -y ruby-dev
 
     ##virtualization
 
@@ -415,6 +417,8 @@
             #On the guest:
 
                 #sudo aptitude install virtualbox-guest-utils
+
+            sudo aptitude install -y vagrant
 
     ##language
 
@@ -485,6 +489,8 @@
 		##networking
 
                 sudo aptitude install -y apache2
+                sudo aptitude install -y libapache2-mod-fastcgi
+
                 sudo aptitude install -y traceroute
                 sudo aptitude install -y wireshark
 
@@ -495,7 +501,6 @@
             #php apache module:
 
                 sudo aptitude install -y libapache2-mod-php5
-                sudo aptitude install -y mysql-server
                     #Will ask you to initialize the password for the `root` user.
                 sudo aptitude install -y sqlite
 
@@ -529,7 +534,27 @@
 
                 sudo aptitude install -y w3m w3m-img
 
-            #sudo aptitude install -y xinetd
+            #MySQL:
+
+                sudo aptitude install -y mysql-server
+                sudo aptitude install -y libmysql++-dev
+                sudo aptitude install -y libmysql++-doc
+                sudo aptitude install -y libmysqlcppconn-dev
+
+            #PostgreSQL:
+
+                sudo aptitude install -y libpq-dev
+                sudo aptitude install -y postgresql
+                sudo aptitude install -y postgresql-client
+
+            ##mail
+
+                    sudo aptitude install -y mutt
+                    sudo aptitude install -y ssmtp
+
+                # Conflicts with ssmtp:
+
+                    #sudo aptitude install -y postfix
 
     ##disk
 

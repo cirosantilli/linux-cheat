@@ -273,7 +273,18 @@ It is also maintained by the linux foundation, and followed by the lsb.
 
 ##de facto but not mentioned in fhs
 
-- `/etc/alternatives`: see `man update-alternatives`.
+- `/etc/alternatives`
+
+    Contains symlinks that determine default programs.
+
+    For example: `editor -> /usr/bin/vim` and so on.
+
+    Can be updated via `man update-alternatives`.
+
+    Some important ones are:
+
+    - editor: text editor
+    - x-www-browser: text editor
 
 #lsb
 

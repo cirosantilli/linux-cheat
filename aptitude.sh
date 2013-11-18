@@ -190,14 +190,22 @@
 
         #info on installed packages
 
-        dpkg -l | grep $EXPRESSION
-            #lists all installed packages.and greps for foo.
-            #the first two letters mean:
-            # ii: installed
-            # rc: configuration files only (rc means config such as in bashRC)
+        #list all installed packages.and greps for foo:
 
-        dpkg -L mysql
-            #list files in installed package
+            dpkg -l | grep $EXPRESSION
+
+        #The first two letters mean:
+
+        #- ii: installed
+        #- rc: configuration files only (rc means config such as in bashRC)
+
+        #list files in installed package
+
+            dpkg -L mysql
+
+        #Install `.deb` file:
+
+            dpkg -i a.deb
 
 ##find new packages
 

@@ -312,6 +312,10 @@
 
         sudo aptitude install -y compiz compizconfig-settings-manager compiz-plugins-extra
 
+    ##update alternatives
+
+    sudo update
+
 ##desktop
 
     unity --restart
@@ -495,31 +499,86 @@
 
     ##mail
 
-        #TODO
-            #get any of this to work =)
+        ##MTA
 
-        #MTA mail transfer agent
-            #examples:
-                #sendmail
-                #postfix
+            # Mail transfer agent.
 
-        #mail
+        ##sendmail
 
-            #sudo aptitude install -y sendmail
-            #sudo aptitude install -y mailutils
+            # Comes in multiple packages such as ssmtp and postfix,
+            # so to configure it you must first determine which package provides it.
 
-            echo -e "the message\n\nend of it" | mail -s "subject" -r "from@gmail.com" "to@gmail.com"
-            mail -s "subject" -r "from@gmail.com" "to@gmail.com"
-                #you type
-                #mail ends in line with '.' only or ctrl+d
+            # May be symlink to an executable, or to the /etc/alternatives.
 
-        #mutt
+                echo "asdf" | sendmail
 
-            #mail with attachment
+        ##mail
 
-            #curses inteface
+            # On a symlink to the alternatives system.
 
-            sudo aptitude install -y mutt
+                echo -e "the message\n\nend of it" | mail -s "subject" -r "from@gmail.com" "to@gmail.com"
+                mail -s "subject" -r "from@gmail.com" "to@gmail.com"
+
+            # Mail ends in a line which contains a single dot `.` or ctrl+D.
+
+        ##mailx
+
+            # POSIX.
+
+            # Does not seem to be used a lot, maybe because it does not have many capabilities.
+
+        ##ssmtp
+
+            # Simple SMTP.
+
+            # Popular MTA. Really is simpler than Postfix to setup.
+
+            # Configuration file:
+
+                #vim /etc/ssmtp/ssmtp.conf
+
+            # Configurations to send an email from gmail:
+
+                Root=your_email@gmail.com
+                Mailhub=smtp.gmail.com:465
+                RewriteDomain=gmail.com
+                AuthUser=your_gmail_username
+                AuthPass=your_gmail_password
+                FromLineOverride=Yes
+                UseTLS=Yes
+
+            # Now you can send emails from the command line as:
+
+                printf 'Subject: sub\nBody' | ssmtp destination@mail.com
+                printf 'Subject: sub\nBody' | sendmail destination@mail.com
+
+            # The email will be sent from the email account you configured to send from.
+
+        ##postfix
+
+            # Main configuration file:
+
+                /etc/postfix/main.cf
+
+            # Postfix's `sendmail` does not show failure status immediately,
+            # it seems that it simply puts the email on a send queue.
+
+            # This is probably done so that email sending does not block the current session,
+            # allowing in particular longer retry times.
+
+            # To view the send queue, use `mailq`.
+
+            ##mailq
+
+                # Show email sending queue.
+
+                # If delivery failed, explains why.
+
+        ##mutt
+
+            # Can send mail with attachment.
+
+            # Curses inteface.
 
 ##programming
 
@@ -751,25 +810,15 @@
 
     ##cal
 
-        #cout a calendar!!!
+        # cout an ASCII art calendar:
 
-        cal
+            cal
 
     ##date
 
         #get system date:
 
             sudo date
-
-                    TODO get working
-
-                        pmidi -l
-                        vim ~/.dosbox/dosbox-*.conf
-
-                    put the port in:
-
-                        [midi]
-                        midiconfig=14:0
 
         #set system date:
 
@@ -1142,51 +1191,86 @@
 
         ##more
 
-            #worse than less
+            # Worse than less:
 
-            echo a | more
+                echo a | more
 
         ##pg
 
-            #worse than more
+            # Worse than more:
 
-            echo a | pg
+                echo a | pg
 
         ##pr
 
-            #break file into pages with a certain number of lines
-            #and print to stdout
+            # Break file into pages with a certain number of lines
+            # and print to stdout:
 
             ( for i in `seq 200`; do echo a; done ) | pr
 
+    ##nl
+
+        # POSIX 7
+
+        # CAT LInes, number non-empty ones:
+
+            nl "$f"
+
+    ##fold
+
+        # Wrap lines.
+
+        # POSIX 7
+
+            echo -e "aaaa\nbb" | fold -w 3
+                #aaa
+                #a
+                #bb
+
+        #-s: only break at spaces:
+
+            assert [ "`echo -e "12345 6" | fold -s -w 3`" = $'123\n45\n6' ]
+
+    ##fmt
+
+        # coreutils.
+
+        # Wrap lines, but don't cut words
+
+            assert [ `echo "a bcd" | fold -w 2` = $'a\nbcd' ]
+
     ##sort
 
-        #sort linewise
+        # Sort linewise.
 
-        #uses External R-Way merge
-        #this algorithm allows to sort files that are larger than memory
+        # Uses External R-Way merge.
+        # This algorithm allows to sort files that are larger than RAM memory.
 
-        sort f1 f2
-            # sort f1, f2 together linewise
-            # -r : reverse order
-            # -n : numbers
-            # -u : uniq. remove dupesls -lh | sort -k5hr
-            # -t: : set field separator to ':'
-            # -k5 : sort by field N
-                # -k 2,2n -k 4,4hr : sort by columns. from 2 to 2, numeric, then from 4 to 4, human and reverse
-            # -R : randomize
-            # -h : sort by human readable filesizes: 1k, 2M, 3G
-            # -f : ignore case. random lower/upper order
-            # -fs : ignore case and put always upper before lower
-            # -b : ignore leading blanks
-            # -uf : remove dupes, cas insensitive (A and a are dupes)
-            # -m : supposesing f1 and f2 are already sorted, making merge faster
-            # -c : check if is sorted
+        # Sort f1, f2 together linewise:
+
+            sort f1 f2
+
+        # Useful options:
+
+        # -r : reverse order
+        # -n : numbers
+        # -u : uniq. remove dupesls -lh | sort -k5hr
+        # -t: : set field separator to ':'
+        # -k5 : sort by field N
+            # -k 2,2n -k 4,4hr : sort by columns. from 2 to 2, numeric, then from 4 to 4, human and reverse
+        # -R : randomize
+        # -h : sort by human readable filesizes: 1k, 2M, 3G
+        # -f : ignore case. random lower/upper order
+        # -fs : ignore case and put always upper before lower
+        # -b : ignore leading blanks
+        # -uf : remove dupes, cas insensitive (A and a are dupes)
+        # -m : supposesing f1 and f2 are already sorted, making merge faster
+        # -c : check if is sorted
 
     ##tsort
 
-        #topological sorting
-        #<http://en.wikipedia.org/wiki/Tsort_%28Unix%29>
+        # Topological sorting:
+        # <http://en.wikipedia.org/wiki/Tsort_%28Unix%29>
 
         echo $'1 2\n2 3' | tsort
             #1
@@ -1198,17 +1282,9 @@
         echo $?
             #1
 
-    ##factor
-
-        #coreutils
-
-        #factor a number into prime constituents
-
-        assert [ "`factor 30`" = "30: 2 3 5" ]
-
     ##uniq
 
-        #POSIX 7
+        # POSIX 7
 
         #*Ajacent* dupe line operations.
 
@@ -1381,13 +1457,13 @@
 
         #if smaller, data loss
 
-        echo ab > f
-        truncate -s 1 f
-        assert [ `cat f` = a ]
+            echo ab > f
+            truncate -s 1 f
+            assert [ `cat f` = a ]
 
-        truncate -s 2 f
-        hexdump
-        assert [ `cat f` = $'a\0' ]
+            truncate -s 2 f
+            hexdump
+            assert [ `cat f` = $'a\0' ]
 
     ##split
 
@@ -1424,45 +1500,11 @@
         assert [ `cat xx01` = $'aa\n1' ]
         assert [ `cat xx02` = $'aa\n2' ]
 
-    ##nl
-
-        #number lines
-
-        #posix 7
-
-        #corutils package
-
-        nl "$f"
-            #cat lines, number non-empty ones
-
-    ##fold
-
-        #wrap lines
-
-        #posix 7
-
-        echo -e "aaaa\nbb" | fold -w 3
-            #aaa
-            #a
-            #bb
-
-        #-s: only break at spaces:
-
-            assert [ "`echo -e "12345 6" | fold -s -w 3`" = $'123\n45\n6' ]
-
-    ##fmt
-
-        #coreutils
-
-        #wrap lines, but don't cut words
-
-        assert [ `echo "a bcd" | fold -w 2` = $'a\nbcd' ]
-
     ##paste
 
         #useless
 
-        #posix 7
+        #POSIX 7
 
         echo -e "a a a a a a a a a a a a a a\na" > a
         echo -e "b b\nb b"                       > b
@@ -1474,11 +1516,9 @@
 
     ##expand
 
-        #useless
+        # POSIX 7
 
-        #posix 7
-
-        #expand tabs to spaces
+        # Expand tabs to spaces:
 
             echo -e "a\tb" | expand
 
@@ -1522,19 +1562,19 @@
 
         ##basename
 
-            basename /usr/a.txt
-                #a.txt
+                basename /usr/a.txt
+                    #a.txt
 
-            basename /usr/a.txt .txt
-                #a
+                basename /usr/a.txt .txt
+                    #a
 
         ##dirname
 
-            #get the parent dir of a path, not / terminated except for /, no error checking
-            dirname /path/to/dir/or/file
-                #/path/to/dir/or
-            dirname /
-                #outputs /
+                #get the parent dir of a path, not / terminated except for /, no error checking
+                dirname /path/to/dir/or/file
+                    #/path/to/dir/or
+                dirname /
+                    #outputs /
 
     ##strings
 
@@ -1545,8 +1585,8 @@
         #useful to extract information from non textual formats,
         #which contain some textual data
 
-        gcc c.c
-        strings a.out
+            gcc c.c
+            strings a.out
 
     ##sed
 
@@ -3364,41 +3404,56 @@
         #psmisc package
 
         #implementations commonly use the proc filesystem.
+        #There does not seem to be a POSIX way to implement this,
+        #except maybe following a process tree.
 
-        sleep 100
-        sleep 100
-        ps
-            #see processes running on current tty
-            #pid
-                #unique identifier for all process on system
-            #tty
-                #from which tty it was launched
-            #time
-                #cpu time used for process
-                #not real time
-            #cmd
-                #command that launched th process
-                #without command line args
+        #see processes running on current tty:
 
-        ps -A
-            #see all process on system
+            sleep 10 &
+            sleep 10 &
+            ps
 
-        ps -Am
-            #shows thrads of each process
+        #Output fields include:
 
-        ps -Al
-            #shows lots of extra columns in addition to the 4 default:
+        #- pid
+            #unique identifier for all process on system
 
-        ps -A --sort cmd,-time,pid,-tty
-            #sort output
-            #cmd
-            #time reversed (-)
-            #pid
-            #tty reversed (-)
+        #- tty
+            #from which tty it was launched
 
-        p=
-        ps -p $p -o ppid=
-            #get pid of parent of process with pid p
+        #- time
+            #cpu time used for process
+            #not real time
+
+        #- cmd
+            #command that launched th process
+            #without command line args
+
+        #see all process on system
+
+            ps -A
+
+        #shows therads of each process
+
+            ps -Am
+
+        #shows lots of extra info columns in addition to the 4 default:
+
+            ps -Al
+
+        #sort output by:
+
+        #- cmd
+        #- time reversed (because of the `-`)
+        #- pid
+        #- tty reversed (-)
+
+            ps -A --sort cmd,-time,pid,-tty
+
+        #get pid of parent of process with pid p
+
+            p=
+            ps -p $p -o ppid=
 
     ##jobs
 
@@ -4937,18 +4992,12 @@
 
 ##users and groups
 
-    #to play around with those in ubuntu, do ctrl+alt+f2, f3 ... f7
-
+    #To play around with those in Ubuntu, do ctrl+alt+f2, f3 ... f7.
     #and you will go into login shells
-
     #so you can log with different users at the same time
-
     #while logged on a different shell, process on the other shells continue to run? TODO
 
-    #- totem stops
-    #- simple shell scripts continue
-
-    #Show users, including special users:
+    #List users and their properties, including special users:
 
         cat /etc/passwd
 
@@ -4963,12 +5012,15 @@
         #/home/ciro: home dir
         #/bin/bash: login shell
 
-    cat /etc/group
-        #show groups
-        #format:
-            #groupname:x:5:user1,user2,user3
-            #x: encrypted pass if any
-            #5: group id. `regular` groups start at 1000
+    #List groups:
+
+        cat /etc/group
+
+    #Format:
+
+        #groupname:x:5:user1,user2,user3
+        #x: encrypted pass if any
+        #5: group id. `regular` groups start at 1000
 
         getent group "$g"
             #cat line of /etc/group for group g
@@ -4977,10 +5029,13 @@
 
     ##groups
 
+        #list groups of u
+
           groups "$u"
-              #list groups of u
-          groups
-              #list groups of cur user
+
+        #list groups of cur user
+
+            groups
 
     ##who
 
@@ -5168,6 +5223,10 @@
                 #The resaon this works is because `sudo` redirects its stdin
                 #to the stdin of the program it will call.
 
+                #-e to edit a file as sudo:
+
+                    sudo -e /etc/file.conf
+
         ##ubuntu default
 
             #sudo group allows members to sudo whatever they want as root
@@ -5269,14 +5328,15 @@
 
     ##usermod
 
-        #add/remove users to groups
+        #Add/remove users to groups
 
-        #if you are the user, you have to logout/login again for changes to take effect
+        #If you are the user, you have to logout/login again for changes to take effect.
 
-        #change primary group of user u to g:
+        #Change primary group of user u to g:
+
             usermod -g $g $u
 
-        g=1000,1001
+            g=1000,1001
 
         #Sets exactly the supplementary groups of user u.
         #Remove from non listed ones:
@@ -5580,3 +5640,11 @@
         #...
 
     yes | timeout 1 cat
+
+##factor
+
+    # coreutils
+
+    # Factor a number into prime constituents.
+
+        assert [ "`factor 30`" = "30: 2 3 5" ]

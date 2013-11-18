@@ -59,7 +59,11 @@ Xorg is getting old and the future Wayland is considering the shift towards swit
 
 Bumblebee seems to be the best bet to support NVIDIA Optimus as of 2013.
 
-#nvidia settings
+#nvidia
+
+##nvidia settings
 
 To check that the installation is working, use `nvidia-settings`,
 which monitors the GPU, and will show if the GPU is not properly installed.
+
+##nvidia settings

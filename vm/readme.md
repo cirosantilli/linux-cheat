@@ -1,11 +1,19 @@
-This is about system virtualization, that is, running another operating system while you are running another one.
+This is about system virtualization, that is,
+running another operating system while you are running another one.
 
-Typically, the new OS will show up in a window inside the host as in
-[this video](http://www.youtube.com/watch?feature=player_detailpage&v=hK-oggHEetc&t=723).
+To interface with the emulated OS virtualization support either:
+
+- a window inside the host as in [this video](http://www.youtube.com/watch?feature=player_detailpage&v=hK-oggHEetc&t=723).
+
+    This is the case for Virtualbox.
+
+- ssh. The machine redirects one port of the host to itself through which it is possible to interact over ssh.
+
+    Vagrant makes this type of usage very simple.
 
 Filesystem may be set to be a file on the host representing the filesystem.
 
-Applications:
+#applications
 
 - switch quickly between the two OS without reboot or the need to partition your disk.
 
@@ -32,7 +40,7 @@ Applications:
 
     You could for example test Linux kernel modules or kernel modifications.
 
-- control hardware contitions.
+- control hardware conditions.
 
     This allows you to test your programs on low memory conditions
     or on different architectures (supported by some VMs)
@@ -51,6 +59,19 @@ Applications:
 Downsides:
 
 - performance loss on the guest system since there are two OSs running on a single machine.
+
+Important niche of application for VMs include:
+
+- gaming, to run games from other platforms such as a Windows game on Linux.
+- web app deployment, where it is necessary to control every aspect of the system.
+
+    This is used for example by AWS.
+
+#formats
+
+[OVF](http://en.wikipedia.org/wiki/Open_Virtualization_Format)
+is one open virtual machine format that is supported across the most popular VM runners,
+including Virtualbox and VMware.
 
 #virtualbox
 
@@ -89,3 +110,5 @@ Otherwise, see [this](http://www.virtualbox.org/manual/ch04.html#idp11306688) fo
 
 If you don't have X, you may be able to switch to terminal mode via some special key combination
 (Ctrl-Alt-F2 on Ubuntu for example) install the utils via the terminal, and then reboot.
+
+#vmware

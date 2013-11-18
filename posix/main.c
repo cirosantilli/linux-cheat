@@ -329,13 +329,11 @@ int main(int argc, char** argv)
 
             is a list of strings of type `VAR=val`
         */
-        if (0) //too much distracting output
-        {
+        if (0) {
             //print entire environment
             char **env = environ;
             puts("environ:");
-            while (*env)
-            {
+            while (*env) {
                 printf("  %s\n", *env);
                 env++;
             }
@@ -386,8 +384,7 @@ int main(int argc, char** argv)
 
         There is no portable standard way of doing this.
     */
-    if (0)
-    {
+    if (0) {
         printf("sleep:\n");
         for(int i=0; i<3; i++)
         {
@@ -661,27 +658,21 @@ int main(int argc, char** argv)
         */
         {
             fd = open(fname, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
-            if (fd == -1)
-            {
+            if (fd == -1) {
                 perror("open");
                 exit(EXIT_FAILURE);
-            }
-            else
-            {
+            } else {
                 nbytes_total = 0;
-                while (nbytes_total < nbytes)
-                {
+                while (nbytes_total < nbytes) {
                     nbytes_last = write(fd, in + nbytes_total, nbytes - nbytes_total);
-                    if (nbytes_last == -1)
-                    {
+                    if (nbytes_last == -1) {
                         perror("write");
                         exit(EXIT_FAILURE);
                     }
                     nbytes_total += nbytes_last;
                 }
 
-                if (close(fd) == -1 )
-                {
+                if (close(fd) == -1 ) {
                     perror("close");
                     exit(EXIT_FAILURE);
                 }
@@ -691,28 +682,22 @@ int main(int argc, char** argv)
         //read
         {
             fd = open(fname, O_RDONLY);
-            if (fd == -1)
-            {
+            if (fd == -1) {
                 perror("open");
                 exit(EXIT_FAILURE);
-            }
-            else
-            {
+            } else {
                 nbytes_total = 0;
-                while ((nbytes_last = read(fd, out, nbytes) ) > 0 )
-                {
+                while ((nbytes_last = read(fd, out, nbytes) ) > 0 ) {
                     //compare output as it comes out, even if less than nbytes comes
                     assert(memcmp(in + nbytes_total, out, nbytes_last) == 0 );
                     nbytes_total += nbytes_last;
                 }
-                if (nbytes_last == -1)
-                {
+                if (nbytes_last == -1) {
                     perror("read");
                     exit(EXIT_FAILURE);
                 }
 
-                if (close(fd) == -1 )
-                {
+                if (close(fd) == -1 ) {
                     perror("close");
                     exit(EXIT_FAILURE);
                 }
@@ -723,12 +708,10 @@ int main(int argc, char** argv)
         //BAD forget O_CREAT on non-existent file gives ENOENT
         {
             fd = open("/i/do/not/exist", O_RDONLY, S_IRWXU);
-            if (fd == -1)
-            {
+            if (fd == -1) {
                 assert(errno == ENOENT);
             }
-            else
-            {
+            else {
                 assert(false);
             }
         }
@@ -739,39 +722,31 @@ int main(int argc, char** argv)
             char *fname = "write_rdonly.tmp";
 
             fd = open(fname, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
-            if (fd == -1)
-            {
+            if (fd == -1) {
                 perror("open");
                 exit(EXIT_FAILURE);
             }
-            else
-            {
-                if (close(fd) == -1 )
-                {
+            else {
+                if (close(fd) == -1 ) {
                     perror("close");
                     exit(EXIT_FAILURE);
                 }
             }
 
             fd = open(fname, O_RDONLY);
-            if (fd == -1)
-            {
+            if (fd == -1) {
                 perror("open");
                 exit(EXIT_FAILURE);
             }
-            else
-            {
-                if (write(fd, "a", 1) == -1 )
-                {
+            else {
+                if (write(fd, "a", 1) == -1 ) {
                     assert(errno == EBADF);
                 }
-                else
-                {
+                else {
                     assert(false);
                 }
 
-                if (close(fd) == -1 )
-                {
+                if (close(fd) == -1 ) {
                     perror("close");
                     exit(EXIT_FAILURE);
                 }
@@ -788,21 +763,15 @@ int main(int argc, char** argv)
             //set file to abc
             {
                 fd = open(fname, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
-                if (fd == -1)
-                {
+                if (fd == -1) {
                     perror("open");
                     exit(EXIT_FAILURE);
-                }
-                else
-                {
-                    if (write(fd, in, nbytes) != nbytes )
-                    {
+                } else {
+                    if (write(fd, in, nbytes) != nbytes ) {
                         perror("write");
                         exit(EXIT_FAILURE);
                     }
-
-                    if (close(fd) == -1 )
-                    {
+                    if (close(fd) == -1 ) {
                         perror("close");
                         exit(EXIT_FAILURE);
                     }
@@ -812,15 +781,12 @@ int main(int argc, char** argv)
             //open and write to it without truncating
             {
                 fd = open(fname, O_RDWR);
-                if (fd == -1)
-                {
+                if (fd == -1) {
                     perror("open");
                     exit(EXIT_FAILURE);
                 }
-                else
-                {
-                    if (write(fd, "01", 2) != 2 )
-                    {
+                else {
+                    if (write(fd, "01", 2) != 2 ) {
                         perror("write");
                         exit(EXIT_FAILURE);
                     }
@@ -829,25 +795,19 @@ int main(int argc, char** argv)
 
             //check the new result
             {
-                if (lseek(fd, 0, SEEK_SET) != 0 )
-                {
+                if (lseek(fd, 0, SEEK_SET) != 0 ) {
                     perror("lseek");
                     exit(EXIT_FAILURE);
                 }
-
-                if (read(fd, out, nbytes) != nbytes )
-                {
+                if (read(fd, out, nbytes) != nbytes ) {
                     perror("read");
                     exit(EXIT_FAILURE);
                 }
-                else
-                {
+                else {
                     //the first two bytes were overwriten
                     assert(memcmp(out, "01cd", nbytes) == 0 );
                 }
-
-                if (close(fd) == -1 )
-                {
+                if (close(fd) == -1 ) {
                     perror("close");
                     exit(EXIT_FAILURE);
                 }
@@ -863,50 +823,35 @@ int main(int argc, char** argv)
             char out[2];
 
             fd = open("lseek.tmp", O_RDWR | O_CREAT | O_TRUNC, S_IRWXU);
-            if (fd == -1)
-            {
+            if (fd == -1) {
                 perror("open");
                 exit(EXIT_FAILURE);
             }
-            else
-            {
-                if (lseek(fd, 1, SEEK_SET) != 1 )
-                {
+            else {
+                if (lseek(fd, 1, SEEK_SET) != 1 ) {
                     perror("lseek");
                     exit(EXIT_FAILURE);
                 }
-
-                if (write(fd, "a", 1) != 1 )
-                {
+                if (write(fd, "a", 1) != 1 ) {
                     perror("write");
                     exit(EXIT_FAILURE);
                 }
-
                 //read after eof, return 0 and read nothing
-                if (read(fd, out, 1) != 0 )
-                {
+                if (read(fd, out, 1) != 0 ) {
                     assert(false);
                 }
-
-                if (lseek(fd, 0, SEEK_SET) != 0 )
-                {
+                if (lseek(fd, 0, SEEK_SET) != 0 ) {
                     perror("lseek");
                     exit(EXIT_FAILURE);
                 }
-
                 //byte 0 was never writen, so reading it returns (int)0
-                if (read(fd, out, 2) != 2 )
-                {
+                if (read(fd, out, 2) != 2 ) {
                     perror("read");
                     exit(EXIT_FAILURE);
-                }
-                else
-                {
+                } else {
                     assert(memcmp(out, "\0a", 2) == 0 );
                 }
-
-                if (close(fd) == -1 )
-                {
+                if (close(fd) == -1 ) {
                     perror("close");
                     exit(EXIT_FAILURE);
                 }
@@ -966,21 +911,15 @@ int main(int argc, char** argv)
 
         //create old
         fd = open(oldpath, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
-        if (fd == -1)
-        {
+        if (fd == -1) {
             perror("open");
             exit(EXIT_FAILURE);
-        }
-        else
-        {
-            if (write(fd, in, nbytes) != nbytes )
-            {
+        } else {
+            if (write(fd, in, nbytes) != nbytes ) {
                 perror("write");
                 exit(EXIT_FAILURE);
             }
-
-            if (close(fd) == -1 )
-            {
+            if (close(fd) == -1 ) {
                 perror("close");
                 exit(EXIT_FAILURE);
             }
@@ -1268,12 +1207,9 @@ int main(int argc, char** argv)
         */
         {
             char *rp = realpath(".", NULL);
-            if (rp)
-            {
+            if (rp) {
                 printf("realpath(\".\") = %s\n", rp);
-            }
-            else
-            {
+            } else {
                 perror("realpath");
                 exit(EXIT_FAILURE);
             }
@@ -1393,12 +1329,10 @@ int main(int argc, char** argv)
             //create the file
             int fd = open(fname, O_WRONLY | O_CREAT, S_IRWXU);
             int nbytes = strlen(in);
-            if (fd != -1)
-            {
+            if (fd != -1) {
                 if (write(fd, in, nbytes) != nbytes )
                     assert(false);
-                else
-                {
+                else {
                     //assert that file exists:
                     assert(stat(fname, &s) == 0 );
 
@@ -1407,8 +1341,7 @@ int main(int argc, char** argv)
                 }
                 close(fd);
             }
-            else
-            {
+            else {
                 assert(false);
             }
         }
@@ -1476,15 +1409,11 @@ int main(int argc, char** argv)
             struct dirent* entry;
 
             dp = opendir(".");
-            if (dp == NULL)
-            {
+            if (dp == NULL) {
                 perror("opendir");
-            }
-            else
-            {
+            } else {
                 printf("opendir:\n");
-                while ((entry = readdir(dp) ) != NULL )
-                {
+                while ((entry = readdir(dp) ) != NULL ) {
                     printf("  %s\n", entry->d_name);
                 }
             }
@@ -1532,13 +1461,10 @@ int main(int argc, char** argv)
     */
     {
         struct rusage usage;
-        if (getrusage(RUSAGE_SELF, &usage) == -1 )
-        {
+        if (getrusage(RUSAGE_SELF, &usage) == -1 ) {
             perror("getrusage failed");
             exit(EXIT_FAILURE);
-        }
-        else
-        {
+        } else {
             printf(
                 "user time      = %llu s %llu micro secs\n",
                 (uintmax_t)usage.ru_utime.tv_sec,
@@ -1582,21 +1508,15 @@ int main(int argc, char** argv)
     */
     {
         struct rlimit limit;
-        if (getrlimit(RLIMIT_DATA, &limit) == -1 )
-        {
+        if (getrlimit(RLIMIT_DATA, &limit) == -1 ) {
             perror("getrlimit(RLIMIT_DATA, ...) failed" );
             exit(EXIT_FAILURE);
-        }
-        else
-        {
+        } else {
             //maximum process memory in bytes
-            if (limit.rlim_max == RLIM_INFINITY)
-            {
+            if (limit.rlim_max == RLIM_INFINITY) {
                 //RLIM_INFINITY means that no limit is imposed on the resource
                 puts("RLIMIT_DATA: no limit imposed");
-            }
-            else
-            {
+            } else {
                 printf(
                     "RLIMIT_DATA\n  soft = %llu\n  hard = %llu\n",
                     (uintmax_t)limit.rlim_cur,
@@ -1753,13 +1673,10 @@ int main(int argc, char** argv)
         {
             uid_t uid = getuid();
             struct passwd* info = getpwuid(uid);
-            if (info == NULL)
-            {
+            if (info == NULL) {
                 perror("getpwuid failed");
                 exit(EXIT_FAILURE);
-            }
-            else
-            {
+            } else {
                 puts("getpwuid");
                 printf("  pw_name        = %s\n", info->pw_name  );
                 printf("  pw_uid         = %d\n", info->pw_uid   );
@@ -1790,8 +1707,7 @@ int main(int argc, char** argv)
             struct passwd* info;
 
             info = getpwent();
-            while (info != NULL)
-            {
+            while (info != NULL) {
                 printf("  %s\n", info->pw_name  );
                 info = getpwent();
             }
@@ -1808,13 +1724,10 @@ int main(int argc, char** argv)
     */
     {
         struct utsname info;
-        if (uname(&info) == -1 )
-        {
+        if (uname(&info) == -1 ) {
             perror("uname failed");
             exit(EXIT_FAILURE);
-        }
-        else
-        {
+        } else {
             puts("uname");
             printf("  sysname   = %s\n", info.sysname   );
             printf("  nodename  = %s\n", info.nodename  );
@@ -1884,12 +1797,9 @@ int main(int argc, char** argv)
         {
             const int n = 1 << 10;
             char buf[n];
-            if (getcwd(buf, n) == NULL )
-            {
+            if (getcwd(buf, n) == NULL ) {
                 perror("getcwd");
-            }
-            else
-            {
+            } else {
                 printf("getcwd() = %s\n", buf);
             }
         }
@@ -2095,13 +2005,10 @@ int main(int argc, char** argv)
                 .sched_priority = 99
             };
 
-            if (sched_setscheduler(0, policy, &sched_param) == -1 )
-            {
+            if (sched_setscheduler(0, policy, &sched_param) == -1 ) {
                 perror("sched_setscheduler");
                 //exit(EXIT_FAILURE);
-            }
-            else
-            {
+            } else {
                 assert(sched_getscheduler(0) == policy );
             }
         }
@@ -2126,29 +2033,21 @@ int main(int argc, char** argv)
 
         I could therefore kill the parent and all children with a C-C on the starting terminal.
         */
-        if (0)
-        {
+        if (0) {
             int policy = SCHED_FIFO;
             struct sched_param sched_param = {
                 .sched_priority = sched_get_priority_max(policy)
             };
 
-            if (sched_setscheduler(0, policy, &sched_param) == -1 )
-            {
+            if (sched_setscheduler(0, policy, &sched_param) == -1 ) {
                 perror("sched_setscheduler");
-            }
-            else
-            {
-                while (1)
-                {
+            } else {
+                while (1) {
                     pid_t pid = fork();
-                    if (pid == -1)
-                    {
+                    if (pid == -1) {
                         perror("fork");
                         assert(false);
-                    }
-                    else
-                    {
+                    } else {
                         if (pid == 0)
                             break;
                     }
@@ -2253,8 +2152,7 @@ int main(int argc, char** argv)
         int ppid; /* parent pid */
 
         ppid = getpid();
-        if (ppid == -1)
-        {
+        if (ppid == -1) {
             perror("getpid");
             exit(EXIT_FAILURE);
         }
@@ -2273,18 +2171,14 @@ int main(int argc, char** argv)
         //in case of success, pid is set differently on parent and child
         //so you can distinguish between them. For the child, `pid = 0`.
         pid_t pid = fork();
-        if (pid == -1)
-        {
+        if (pid == -1) {
             perror("fork");
             assert(false);
-        }
-        else
-        {
+        } else {
             puts("fork child and parent");
 
             //happens on child only:
-            if (pid == 0)
-            {
+            if (pid == 0) {
                 /*
                 this puts is assynchonous with the process stdout
 
@@ -2296,8 +2190,7 @@ int main(int argc, char** argv)
 
                 //child has a different pid from its parent
                 int pid = getpid();
-                if (pid == -1)
-                {
+                if (pid == -1) {
                     perror("getpid");
                     exit(EXIT_FAILURE);
                 }
@@ -2339,13 +2232,10 @@ int main(int argc, char** argv)
 
     My computer bogged down and I could do nothing about it except turn off the power.
     */
-    if (0)
-    {
-        while (1)
-        {
+    if (0) {
+        while (1) {
             pid_t pid = fork();
-            if (pid == -1)
-            {
+            if (pid == -1) {
                 perror("fork");
                 assert(false);
             }
@@ -2544,13 +2434,10 @@ int main(int argc, char** argv)
                     (uintmax_t)(desired_read_cycles-1) * BUFSIZ + desired_last_char_read
                 );
                 read_fp = popen(cmd, "r");
-                if (read_fp == NULL)
-                {
+                if (read_fp == NULL) {
                     printf("popen failed\n");
                     exit(EXIT_FAILURE);
-                }
-                else
-                {
+                } else {
                     do
                     {
                         chars_read = fread(buffer, sizeof(char), BUFSIZ, read_fp );
@@ -2561,8 +2448,7 @@ int main(int argc, char** argv)
                     } while (chars_read == BUFSIZ);
 
                     exit_status = pclose(read_fp);
-                    if (exit_status == -1)
-                    {
+                    if (exit_status == -1) {
                         printf("pclose failed\n");
                         exit(EXIT_FAILURE);
                     }
@@ -2585,12 +2471,9 @@ int main(int argc, char** argv)
                 //using many sh features to make it clear that a sh interpreter is called
                 write_fp = popen("read A; printf 'popen write = '; printf $A | wc -c", "w");
 
-                if (write_fp == NULL)
-                {
+                if (write_fp == NULL) {
                     assert(false);
-                }
-                else
-                {
+                } else {
                     //TODO0 is safe to write twice BUFSIZ without a newline in the middle?
                     fwrite(buf, sizeof(char), BUFSIZ, write_fp );
                     fwrite(buf, sizeof(char), BUFSIZ, write_fp );
@@ -2638,13 +2521,10 @@ int main(int argc, char** argv)
                 char data[] = "123";
                 char buf[BUFSIZ + 1];
 
-                if (pipe(pipes) == -1 )
-                {
+                if (pipe(pipes) == -1 ) {
                     perror("pipe");
                     exit(EXIT_FAILURE);
-                }
-                else
-                {
+                } else {
                     nbytes = write(pipes[1], data, strlen(data));
                     assert(nbytes == strlen(data));
                     nbytes = read(pipes[0], buf, BUFSIZ);
@@ -2666,24 +2546,17 @@ int main(int argc, char** argv)
                 char buf[BUFSIZ + 1];
                 pid_t pid;
 
-                if (pipe(file_pipes) == -1 )
-                {
+                if (pipe(file_pipes) == -1 ) {
                     perror("pipe");
                     exit(EXIT_FAILURE);
-                }
-                else
-                {
+                } else {
                     fflush(stdout);
                     pid = fork();
-                    if (pid == -1)
-                    {
+                    if (pid == -1) {
                         perror("fork");
                         exit(EXIT_FAILURE);
-                    }
-                    else
-                    {
-                        if (pid == 0)
-                        {
+                    } else {
+                        if (pid == 0) {
                             //child only
 
                             //if read happens before write, it blocks because there is no data
@@ -2790,13 +2663,10 @@ int main(int argc, char** argv)
             int pipes[2];
 
             //unnamed pipe
-            if (pipe(pipes) == -1 )
-            {
+            if (pipe(pipes) == -1 ) {
                 perror("pipe");
                 exit(EXIT_FAILURE);
-            }
-            else
-            {
+            } else {
                 pipe_buf = fpathconf(pipes[0], _PC_PIPE_BUF);
                 printf("PIPE_BUF pipes[0] = %ld\n", pipe_buf);
                 assert(pipe_buf >= 512);
@@ -2870,7 +2740,8 @@ int main(int argc, char** argv)
                 }
                 else {
 
-                    if (pid == 0) { //child only
+                    //child only
+                    if (pid == 0) {
 
                         //child inherits attached memory
                         shmem[0]++;
@@ -3147,8 +3018,7 @@ int main(int argc, char** argv)
                     printf("  name: %s\n", hostent -> h_name);
                     printf("  aliases:\n");
                     names = hostent -> h_aliases;
-                    while (*names)
-                    {
+                    while (*names) {
                         printf("    %s\n", *names);
                         names++;
                     }
@@ -3161,8 +3031,7 @@ int main(int argc, char** argv)
                     //show addresses
                     printf("  IPs:\n");
                     addrs = hostent->h_addr_list;
-                    while (*addrs)
-                    {
+                    while (*addrs) {
                         /*
                         #inet_ntoa
 
@@ -3308,12 +3177,9 @@ int main(int argc, char** argv)
     */
     {
         char* login = getlogin();
-        if (login == NULL)
-        {
+        if (login == NULL) {
             perror("getlogin failed");
-        }
-        else
-        {
+        } else {
             printf("getlogin() = %s\n", getlogin());
         }
     }

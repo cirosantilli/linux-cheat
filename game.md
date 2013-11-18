@@ -40,13 +40,27 @@ Lots of console games/cute apps.
 
 Highly recommened.
 
-List games:
+List games on Ubuntu:
 
-    afsh bsdgames | grep /usr/games/
+    apt-file show bsdgames | grep /usr/games/
 
-###battlestar
+Review top 10: <http://techtinkering.com/2009/08/11/my-top-10-classic-text-mode-bsd-games/>
 
-MUD
+###adventure games
+
+Computer RPGs.
+
+Read the description of places and things.
+
+Type what to do and where to go.
+
+####battlestar
+
+####adventure
+
+####phantasia
+
+####battlestar
 
 ###backgammon
 
@@ -70,9 +84,11 @@ Count primes:
 
     primes 1 100 | wc -l
 
+`factor` is not included here as it is part of coreutils...
+
 ###robots
 
-Simple, fun, too much luck to generate serious interest.
+Simple, fun, but too much luck.
 
 Play:
 
@@ -112,6 +128,10 @@ Multiplayer shooter.
 
 Looks *very* promising, but multiplayer only...
 
+##gnugo
+
+CLI go.
+
 #netreck
 
 2D spaceship battle multiplayer classic
@@ -139,6 +159,12 @@ Knotski clone.
     gnotski
 
 No, Knotski has nothing to do with KDE =)
+
+##four-in-a-row
+
+Also known as connect four.
+
+Warning: this games has been solved, so the program might do perfect play =)
 
 #kde
 

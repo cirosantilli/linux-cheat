@@ -1,4 +1,4 @@
-ftp is:
+FTP is:
 
 - tcp/ip file transfer protocol
 - a command line utility with the same name which implemets the client for that protocol

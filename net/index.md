@@ -1228,6 +1228,9 @@ or:
 
     ssh -l $user $host
 
+If the server requires an username password and you don't provide an username
+connection simply fails.
+
 Choose port:
 
     p=22

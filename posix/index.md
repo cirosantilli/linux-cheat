@@ -137,10 +137,30 @@ POSIX specifies are two types of regexes:
 
 Basic is deprecated, so don't use it.
 
-it is useful to learn since many posix compliant shell utilities may use
-them but not perl regexes, for example `grep` or `sed`.
+Some POSIX utilities such as `grep` or `sed` use BREs by default (backwards compatibility)
+but can use EREs with an option.
 
-###examples
+###BRE vs ERE
+
+The main difference is that EREs add more Perl-like special characters.
+
+BREs have special:
+
+- `^` and `$` anchors
+- `[ab]` character classes, including negated `[^ab]`
+- `.` matches all
+- `*` repeats last expression: `.*`, `[ab]*`.
+
+EREs add:
+
+- `(a|b)` alternation
+- `a{1,3}` repetition count
+- `a+` at least one
+- `a?` one or zero.
+
+Unfortunately character classes are still very inconvenient in EREs `[[:upper:][:lower:]]`.
+
+Examples:
 
     echo $'a\nb'    | grep -E '(a|b)'
     echo $'a\nb'    | grep -E 'a*'

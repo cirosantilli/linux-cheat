@@ -20,7 +20,7 @@ all: mkdir $(OUTS)
 # TODO why `-std=gnu99` does not let me use gnu extensions such as nested functions?
 $(OUT_DIR)%$(OUT_EXT): %.c
 	#gcc -Wall -pedantic-errors -std=gnu99 -o "$@" "$<"
-	gcc -Wall -o "$@" "$<"
+	gcc -Wall -march=native -O2 -Wno-unused-variable -Wno-unused-but-set-variable -o "$@" "$<"
 
 clean:
 	rm -rf $(OUT_DIR)

@@ -1,16 +1,17 @@
-/*cheat on gnu c extensions both on gcc and libc (called glibc in its gnu version)
+/*
+Cheat on GNU C extensions both to gcc and libc (called glibc in its gnu version).
 
-non gnu specific  features (ex: ansi c, posix) will not be put here.
+Non gnu specific  features (ex: ansi c, posix) will not be put here.
 the latest stable version of those standards will be considered.
 
-you can disable all non gnu specific languages features with flags like `-ansi or -std=c99`
+You can disable all non gnu specific languages features with flags like `-ansi or -std=c99`
 
-this will not however stop defining certain GNU specific preprocessor macros such as `__GNUC__`
+This will not however stop defining certain GNU specific preprocessor macros such as `__GNUC__`
 
-obviously, it is always better if you avoid using those features,
-but you may encounter them in linux specific projects, such as the linux kernel itself for example.
+Obviously, it is always better if you avoid using those features,
+but you may encounter them in Linux specific projects, such as the linux kernel itself for example.
 
-gnu extensions have a large chance of being implemented
+GNU extensions have a large chance of being implemented
 in future ansi c versions (but sometimes in a modified form)
 because of the large influence of gcc.
 */
@@ -59,14 +60,14 @@ int nested()
         char not_aligned16 = 0;
         char aligned16 __attribute__ ((aligned (16))) = 0;
 
-        int sprintf_wrapper( char *s, int useless, const char *fmt, int useless2, ...)
+        int sprintf_wrapper(char *s, int useless, const char *fmt, int useless2, ...)
         {
             int ret;
             va_list args;
 
-            va_start( args, useless2 );
-            ret = vsprintf( s, fmt, args );
-            va_end( args );
+            va_start(args, useless2);
+            ret = vsprintf(s, fmt, args);
+            va_end(args);
             return ret;
         }
 
@@ -78,16 +79,16 @@ int nested()
 
             Declaration and definition *must* be separated.
             */
-            int sprintf_wrapper_attr( char *s, int useless, const char *fmt, int useless2, ... ) __attribute__((format(printf, 3, 5)));
+            int sprintf_wrapper_attr(char *s, int useless, const char *fmt, int useless2, ...) __attribute__((format(printf, 3, 5)));
 
-            int sprintf_wrapper_attr( char *s, int useless, const char *fmt, int useless2, ... )
+            int sprintf_wrapper_attr(char *s, int useless, const char *fmt, int useless2, ...)
             {
                 int ret;
                 va_list args;
 
-                va_start( args, useless2 );
-                ret = vsprintf( s, fmt, args );
-                va_end( args );
+                va_start(args, useless2);
+                ret = vsprintf(s, fmt, args);
+                va_end(args);
                 return ret;
             }
 
@@ -126,14 +127,14 @@ int nested()
 
             void exitnow()
             {
-                exit( EXIT_SUCCESS );
+                exit(EXIT_SUCCESS);
             }
 
             //warning: control reaches end of non void function
             /*
-            int noreturn_possible( int n )
+            int noreturn_possible(int n)
             {
-                if ( n > 0 )
+                if (n > 0)
                     exitnow();
                 else
                     return 0;
@@ -144,12 +145,12 @@ int nested()
 
             void exitnow_attr()
             {
-                exit( EXIT_SUCCESS );
+                exit(EXIT_SUCCESS);
             }
 
-            int noreturn_possible_attr( int n )
+            int noreturn_possible_attr(int n)
             {
-                if ( n > 0 )
+                if (n > 0)
                     exitnow_attr();
                 else
                     return 0;
@@ -158,9 +159,9 @@ int nested()
             /*
             Does not emmit a warning because the libc exit has the `noreturn` attribute.
             */
-            int noreturn_possible_exit( int n )
+            int noreturn_possible_exit(int n)
             {
-                if ( n > 0 )
+                if (n > 0)
                     exit(EXIT_SUCCESS);
                 else
                     return 0;
@@ -168,14 +169,14 @@ int nested()
 
         //const
 
-            int next( int cur )
+            int next(int cur)
             {
                 return cur + 1;
             }
 
-            int next_const( int cur ) __attribute__((const));
+            int next_const(int cur) __attribute__((const));
 
-            int next_const( int cur )
+            int next_const(int cur)
             {
                 return cur + 1;
             }
@@ -183,15 +184,19 @@ int nested()
         //always inline
 
             /* function must also be `inline` */
-            inline int incr_always_inline( int i ) __attribute__((always_inline));
+            inline int incr_always_inline(int i) __attribute__((always_inline));
 
-            inline int incr_always_inline( int i ){ return i + 1; }
+            inline int incr_always_inline(int i){ return i + 1; }
 
-            inline int incr_inline( int i ){ return i + 1; }
+            inline int incr_inline(int i){ return i + 1; }
 
-            int incr( int i ){ return i + 1; }
+            int incr(int i){ return i + 1; }
 
-    //#variabe attributes
+    /*
+    #variable attributes
+
+        Attributes that apply to individual variables.
+    */
 
         /*
         #section
@@ -229,22 +234,22 @@ void get_cache_dirty()
     int is[1024];
     for (i = 0; i < 1024; i++)
         is[i] = 1;
-    assert( is[0] == 1 );
+    assert(is[0] == 1);
 }
 
-int main( int argc, char** argv );
+int main(int argc, char** argv);
 
 void builtin_return_address_test()
 {
-    printf( "main                           = %p\n", main );
+    printf("main                           = %p\n", main);
     //0 means for current function
     //1 for the parent of current function
     //etc.
-    printf( "__builtin_return_address(0)    = %p\n", __builtin_return_address(0) );
+    printf("__builtin_return_address(0)    = %p\n", __builtin_return_address(0));
     return;
 }
 
-int main( int argc, char** argv )
+int main(int argc, char** argv)
 {
 
     /*
@@ -253,7 +258,7 @@ int main( int argc, char** argv )
         start with `0b`:
     */
     {
-        assert( 0b10000 == 16 );
+        assert(0b10000 == 16);
     }
 
     /*
@@ -264,7 +269,7 @@ int main( int argc, char** argv )
     {
         int complex z = 1 + 1*I;
         int complex z2 = 1 - 1*I;
-        assert( z + z2 == 2  );
+        assert(z + z2 == 2  );
     }
 
     /*
@@ -298,7 +303,7 @@ int main( int argc, char** argv )
             //like variable redefinitions, the nested version overrides all external version
             //which have become completelly innacessible
 
-            assert( nested() == 2 );
+            assert(nested() == 2);
         }
 
     /*
@@ -322,7 +327,7 @@ int main( int argc, char** argv )
     */
 
 #ifdef __GNUC__
-        printf( "__GUNC__ = %d\n", __GNUC__ );
+        printf("__GUNC__ = %d\n", __GNUC__);
 #endif
 
         /*
@@ -335,7 +340,7 @@ int main( int argc, char** argv )
         */
 
 #ifdef __STRICT_ANSI__
-        puts( "__STRICT_ANSI__" );
+        puts("__STRICT_ANSI__");
 #endif
 
         /*
@@ -345,7 +350,7 @@ int main( int argc, char** argv )
         */
 
 #ifdef __i386__
-        puts( "__i386__" );
+        puts("__i386__");
 #endif
 
         /*
@@ -353,7 +358,7 @@ int main( int argc, char** argv )
         */
 
 #ifdef __linux__
-        puts( "__linux__" );
+        puts("__linux__");
 #endif
 
     /*
@@ -425,11 +430,11 @@ int main( int argc, char** argv )
         */
         {
             char s[32];
-            sprintf_wrapper( s, 0, "%c", 0, 'a' );
-            assert( s[0] == 'a' );
+            sprintf_wrapper(s, 0, "%c", 0, 'a');
+            assert(s[0] == 'a');
 
-            sprintf_wrapper_attr( s, 0, "%c", 0, 'b' );
-            assert( s[0] == 'b' );
+            sprintf_wrapper_attr(s, 0, "%c", 0, 'b');
+            assert(s[0] == 'b');
 
             /*
             With `__attribute__((format,X,Y))` the compile time error checking gets done.
@@ -437,14 +442,14 @@ int main( int argc, char** argv )
             {
                 //compile error check not done
                 //could segfault at runtime
-                if ( 0 )
+                if (0)
                 {
-                    sprintf_wrapper( s, 0, "%s", 0 );
+                    sprintf_wrapper(s, 0, "%s", 0);
                 }
 
                 //compile error check is done
                 {
-                    //sprintf_wrapper_attr( s, 0, "%s", 0 );
+                    //sprintf_wrapper_attr(s, 0, "%s", 0);
                 }
             }
         }
@@ -480,7 +485,7 @@ int main( int argc, char** argv )
             //no warning
             func_not_warn_unused_result();
 
-            assert( func_warn_unused_result() == 0 );
+            assert(func_warn_unused_result() == 0);
 
             //WARNING ignored return value
 
@@ -501,10 +506,10 @@ int main( int argc, char** argv )
             Marking a function which does one of the above const will lead to serious hard to find bugs.
         */
         {
-            assert( next( 0 ) == 1 );
-            assert( next( 0 ) == 1 );
-            assert( next_const( 0 ) == 1 );
-            assert( next_const( 0 ) == 1 );
+            assert(next(0) == 1);
+            assert(next(0) == 1);
+            assert(next_const(0) == 1);
+            assert(next_const(0) == 1);
         }
 
         /*
@@ -514,15 +519,15 @@ int main( int argc, char** argv )
 
             ANSI C99 `inline` does not guarantee that, it only hints it to the compiler.
 
-            Must see generated assembly code to notice this ( except for the possible desired speedup effect ).
+            Must see generated assembly code to notice this (except for the possible desired speedup effect).
 
             On `gcc -O0 4.7`, only the `incr_always_inline` was inlined.
         */
         {
              int i = 0;
-             i = incr( i );
-             i = incr_inline( i );
-             i = incr_always_inline( i );
+             i = incr(i);
+             i = incr_inline(i);
+             i = incr_always_inline(i);
         }
 
         /*
@@ -539,8 +544,8 @@ int main( int argc, char** argv )
                 The generated gas assembly code should mark this alignment with the `.align` directive.
             */
             {
-                assert( aligned16 == 0 );
-                assert( not_aligned16 == 0 );
+                assert(aligned16 == 0);
+                assert(not_aligned16 == 0);
             }
 
             /*
@@ -559,34 +564,90 @@ int main( int argc, char** argv )
                     char c2;
                 };
                 struct not_packed not_packed = { 0, 1 };
-                assert( sizeof(not_packed) >= 2 * sizeof(char) );
+                assert(sizeof(not_packed) >= 2 * sizeof(char));
 
                 struct packed {
                     char c1;
                     char c2;
                 } __attribute__((packed));
                 struct packed packed = { 0, 1 };
-                assert( sizeof(packed) == 2 * sizeof(char) );
+                assert(sizeof(packed) == 2 * sizeof(char));
+            }
+        }
+
+        /*
+        #type attributes
+
+            Attribute that applies to all objects of a newly created user type.
+
+            Syntax is as:
+
+                struct S { int i } __attribute__((aligned (8)));
+                typedef int more_aligned_int __attribute__((aligned (8)));
+        */
+        {
+            /*
+            #vector extensions
+
+                GCC built-ins for vectorized SIMD operations.
+
+                <http://gcc.gnu.org/onlinedocs/gcc/Vector-Extensions.html>
+
+                Allowed operators: +, -, *, /, unary minus, ^, |, &, ~, %, ==, !=, <, <=, >, >=
+
+            #vector_size
+            */
+            {
+                typedef int v4si __attribute__ ((vector_size (16)));
+
+                // Create
+                {
+                    v4si v = {0, 1, 2, 3};
+                }
+
+                // Access
+                {
+                    v4si v = {0, 1, 2, 3};
+                    assert(v[0] == 0);
+                    assert(v[1] == 1);
+                }
+
+                // Operations
+                {
+                    v4si v = {0, 1, 2, 3};
+                    v4si v2 = {0, 1, 2, 3};
+                    v4si res;
+
+                    res = v + v2;
+                    assert(res[0] == 0);
+                    assert(res[1] == 2);
+                    assert(res[2] == 4);
+
+                    res = v * v2;
+                    assert(res[0] == 0);
+                    assert(res[1] == 1);
+                    assert(res[2] == 4);
+                }
             }
         }
     }
 
     /*
-    #inline assembly
+    #inline assembly #asm
 
         #sources
 
             - great intro: <http://www.ibm.com/developerworks/library/l-ia/index.html>
 
-        can be used if you really, really want to optimize at the cost of:
+        Can be used if you really, really want to optimize at the cost of:
 
         - architecture dependance
         - tying you to gcc
 
-        if you use this, do it like the linux kernel and separate different architecture
+        If you use this, do it like the linux kernel and separate different architecture
         code in different dirs.
 
-        general syntax:
+        General syntax:
 
             asm (
                 "movl %1, %%eax;"   //commands string
@@ -625,6 +686,7 @@ int main( int argc, char** argv )
 
         TODO0 #__asm__ vs asm
         TODO0 #asmlinkage
+        TODO0 #asm volatile
     */
 
         /*
@@ -635,7 +697,6 @@ int main( int argc, char** argv )
         */
 
 #ifdef __i386__
-
         /*
         #m constraint
 
@@ -647,25 +708,25 @@ int main( int argc, char** argv )
             int in = 1;
             int out = 0;
             //out = in
-            asm (
+            asm volatile (
                 "movl %1, %%eax;"
                 "movl %%eax, %0"
                 : "=m" (out)
                 : "m" (in)
                 : "%eax"      /* eax will be modified, so we have to list it in the clobber list */
             );
-            assert( out == 1 );
+            assert(out == 1);
         }
 
         //no input
         {
             int out = 0;
             //out = 1
-            asm (
+            asm volatile (
                 "movl $1, %0"
                 : "=m" (out)
             );
-            assert( out == 1 );
+            assert(out == 1);
         }
 
         /* simple exaple using floats */
@@ -673,17 +734,17 @@ int main( int argc, char** argv )
             float in = 1.0;
             float out = 0.0;
             //out = -in
-            asm (
+            asm volatile (
                 "flds %1;"
                 "fchs;"
                 "fstps %0;"
                 : "=m" (out)
                 : "m" (in)
             );
-            assert( out == -1.0 );
+            assert(out == -1.0);
         }
 
-        /* input and ouput can be the same memory location */
+        /* Input and ouput can be the same memory location. */
         {
             float x = 1.0;
             //x = -x
@@ -694,7 +755,7 @@ int main( int argc, char** argv )
                 : "=m" (x)
                 : "m" (x)
             );
-            assert( x == -1.0 );
+            assert(x == -1.0);
         }
 
         /*
@@ -715,15 +776,15 @@ int main( int argc, char** argv )
         */
 
         /*
-        r example
+        #r register constraint
 
-        gcc will automatically put the value of `in` from ram into a register for us
-        and `out` from a register into ram at the end
+            gcc will automatically put the value of `in` from ram into a register for us
+            and `out` from a register into ram at the end
 
-        note how we can do an `inc` operation directly on `%1` and `%0`
-        so they must both already be inside a registers as expected
+            note how we can do an `inc` operation directly on `%1` and `%0`
+            so they must both already be inside a registers as expected
 
-        gcc just makes sure they are written from/to memory before/after the operations
+            gcc just makes sure they are writen from/to memory before/after the operations
         */
         {
             int in = 0;
@@ -736,44 +797,44 @@ int main( int argc, char** argv )
                 : "=r" (out)
                 : "r" (in)
             );
-            assert( out == 2 );
+            assert(out == 2);
         }
 
         /*
         #matching constraint
 
-        are digits
+            Represented by digits.
 
-        specifies that an input/output has the same constraint as another one
+            Specifies that an input/output has the same constraint as another one.
 
-        often used when we want a single variable to be both input and output
-        and minimize the use of new registers
+            Often used when we want a single variable to be both input and output
+            and minimize the use of new registers.
         */
         {
-            int x = 0;
+            volatile int x = 0;
             asm (
-                    "incl %0"
-                    : "=r" (x)
-                    : "0" (x) /* x has the same constraint
-                                 as constraint 0 (`r`)*/
+                "incl %0"
+                : "=r" (x)
+                : "0" (x) /* x has the same constraint
+                                as constraint 0 (`r`)*/
             );
-            assert( x == 1 );
+            assert(x == 1);
         }
 
         /*
         #specific register constraints
 
-        if you look at the generated assembly code,
-        you will see that x was put into eax
+            If you look at the generated assembly code,
+            you will see that x was put into `eax`.
         */
         {
-            int x = 0;
+            volatile int x = 0;
             asm (
-                    "incl %0"
-                    : "=a" (x)
-                    : "0" (x)
+                "incl %0"
+                : "=a" (x)
+                : "0" (x)
             );
-            assert( x == 1 );
+            assert(x == 1);
         }
 #endif
 
@@ -783,28 +844,28 @@ int main( int argc, char** argv )
         Like C++11 decltype.
     */
     {
-        typeof( 1 + 0.5 ) j = 0.5;
-        assert( j == 0.5 );
+        typeof(1 + 0.5) j = 0.5;
+        assert(j == 0.5);
     }
 
     /*
     #range notation
     */
     {
-        /*case*/
+        /* case */
         {
             int i = 1;
-            switch ( i ) {
+            switch (i) {
                 case 0 ... 2:
-                    assert( 1 );
+                    assert(1);
                 break;
 
                 case 3 ... 5:
-                    assert( 0 );
+                    assert(0);
                 break;
 
                 default:
-                    assert( 0 );
+                    assert(0);
                 break;
             }
         }
@@ -812,7 +873,7 @@ int main( int argc, char** argv )
         /* intializations */
         {
             int is[] = { [0 ... 2] = 0, [3 ... 5 ] = 1  };
-            assert( memcmp( is, &(int[6]){ 0, 0, 0, 1, 1, 1 }, sizeof(typeof(is)) ) == 0 );
+            assert(memcmp(is, &(int[6]){ 0, 0, 0, 1, 1, 1 }, sizeof(typeof(is))) == 0);
         }
     }
 
@@ -824,8 +885,8 @@ int main( int argc, char** argv )
     {
         int is[0];
         int i;
-        printf( "&is[0] = %p\n", &is[0] );
-        printf( "&i     = %p\n", &i );
+        printf("&is[0] = %p\n", &is[0]);
+        printf("&i     = %p\n", &i);
 
     }
 
@@ -860,12 +921,12 @@ int main( int argc, char** argv )
             TODO0 what is a compile time constant? How to use this?
         */
         {
-            assert( __builtin_constant_p( 1 ) );
-            assert( __builtin_constant_p( 1 + 1 ) );
+            assert(__builtin_constant_p(1));
+            assert(__builtin_constant_p(1 + 1));
 
-            //TODO0 why does thie fail?
-            //const int i = 0;
-            //assert( ! __builtin_constant_p( i ) );
+            /*TODO0 why does thie fail?*/
+            /*const int i = 0;*/
+            /*assert(! __builtin_constant_p(i));*/
         }
 
         /*
@@ -885,9 +946,9 @@ int main( int argc, char** argv )
             int y;
             if (__builtin_expect(x, 0))
                 y = 1;
-            if ( x == 0 )
+            if (x == 0)
                 y = 1;
-            assert( y == 1 );
+            assert(y == 1);
         }
 
         /*
@@ -897,7 +958,7 @@ int main( int argc, char** argv )
 
             Signature:
 
-                void __builtin_prefetch( const void *addr, ... );
+                void __builtin_prefetch(const void *addr, ...);
 
             - addr: The address of the data
             - rw:
@@ -929,10 +990,10 @@ int main( int argc, char** argv )
 
             get_cache_dirty();
             __builtin_prefetch(&j, 0, 0);
-            assert( j == 1 );
+            assert(j == 1);
 
             get_cache_dirty();
-            assert( j == 1 );
+            assert(j == 1);
         }
     }
 
