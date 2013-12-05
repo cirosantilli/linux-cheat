@@ -5,7 +5,7 @@ To interface with the emulated OS virtualization support either:
 
 - a window inside the host as in [this video](http://www.youtube.com/watch?feature=player_detailpage&v=hK-oggHEetc&t=723).
 
-    This is the case for Virtualbox.
+    This is the case for VirtualBox.
 
 - ssh. The machine redirects one port of the host to itself through which it is possible to interact over ssh.
 
@@ -56,6 +56,9 @@ Filesystem may be set to be a file on the host representing the filesystem.
     This can be useful if you want for example to test a program on multiple systems,
     so you just share a folder over all machines.
 
+    Another advantage of sharing is that you can test on the target system,
+    but develop from the comfort of your host system.
+
 Downsides:
 
 - performance loss on the guest system since there are two OSs running on a single machine.
@@ -67,11 +70,33 @@ Important niche of application for VMs include:
 
     This is used for example by AWS.
 
+#hardware support
+
+The x86 family has hardware features that improve performance and may be even required for
+certain virtualizations.
+
+Those features can be turned on or off by the BIOS, and in many modern systems
+they come turned off by default.
+
+If you plan on using virtualization, the first thing you should do is to
+enable such features by going into the BIOS config (first screen shown at computer startup),
+and looking for a virtualization section.
+
 #formats
+
+##ovf
 
 [OVF](http://en.wikipedia.org/wiki/Open_Virtualization_Format)
 is one open virtual machine format that is supported across the most popular VM runners,
-including Virtualbox and VMware.
+including VirtualBox and VMware.
+
+##box
+
+Native VirtualBox format.
+
+##vmdk
+
+Native VMware format.
 
 #virtualbox
 
@@ -112,3 +137,9 @@ If you don't have X, you may be able to switch to terminal mode via some special
 (Ctrl-Alt-F2 on Ubuntu for example) install the utils via the terminal, and then reboot.
 
 #vmware
+
+#wine
+
+Implements the Windows API, so you can run programs just as:
+
+    wine notepad.exe

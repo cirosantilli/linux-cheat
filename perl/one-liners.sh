@@ -29,13 +29,17 @@
 	##-i
 
 		#what would get printed is put into file instead:
+
 			echo $'a\nb' > f
 			assert [ "`perl -lpi -e 's/a/A/g' f`" ]
 			assert [ "`cat f`" = $'A\nb' ]
+
 		#newlines are affected
+
 		#-i: inline
 
 		#saves old file to F.bak, original is changed:
+
 			echo $'a\nb' > f
 			assert [ "`perl -lpi.bak -e 's/a/A/g' f`" ]
 				#NO SPACE BETWEEN I AND '.bak'!!!
@@ -52,9 +56,11 @@
 			assert[ "`echo $'a b c\nd e f' | perl -nae 'print $F[0]. ":" . $F[1] . ":" . $F[2]'`" = "a:b:c:d:e:f:" ]
 
 		#multiple spaces are split:
+
 			assert[ "`echo $'a  b c' | perl -nae 'print $F[0]. ":" . $F[1] . ":" . $F[2]'`" = "a:b:c"]
 
 		#tabs are split:
+
 			assert[ "`echo $'a\0b\tc' | perl -nae 'print $F[0]. ":" . $F[1] . ":" . $F[2]'`" = "a:b:c"]
 
 	##-F
@@ -105,6 +111,7 @@
 		#import modules
 
 		#print sum of lines:
+
 			perl -MList::Util=sum -alne 'print sum @F'
 
 ##Important one liners

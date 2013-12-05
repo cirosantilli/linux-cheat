@@ -256,3 +256,14 @@ Legend:
     sudo restart apache2
 
 TODO `service restart` vs `restart`?
+
+#update-rc.d
+
+Prevent a service from starting at startup:
+
+    sudo update-rc.d apache2 disable
+
+TODO somehow determnines the start / stop levels of script:
+
+    sudo update-rc.d gitlab defaults 21
+

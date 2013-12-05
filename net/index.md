@@ -1279,25 +1279,26 @@ If you forget to let `ForwardX11 yes`, you would get errors like:
 
 #scp
 
-cp with ssh encryption
+cp via ssh.
 
 Get a file:
 
-    p= #path to file
+    p= #path to local file
     d= #destination directory
     u=
     h=
     scp $u@$h:$p $d
 
-send a file:
+Send a file to server:
 
     scp $p $u@$h:$d
 
-directories:
-    scp -r $u@$h:$p
-use -r
+Send recursively for directories:
 
-multiple files/dirs:
+    scp -r $u@$h:$p
+
+Send multiple files/dirs:
+
     scp -r $u@$h:"$p1" $u@$h:"$p2"
 
 #sftp
@@ -1381,15 +1382,25 @@ error logs:
 
 TODO get working
 
-control another computer with you computer
+Control another computer with you computer.
 
-unless the other computer says who you are,
+Unless the other computer says who you are,
 it is impossible to tell that you are not the other computer
 
-several protocols exist.
+Several protocols exist.
 
     sudo aptitude install network-manager-openvpn network-manager-openvpn-gnome
 
-servers
+Servers:
 
-    http://www.vpnbook.com/#pricing
+- <http://www.vpnbook.com/#pricing>
+
+##ssl
+
+Predecessor of TSL.
+
+##tls
+
+Transport Layer Security.
+
+Encryption methods that encrypt the transport layer traffic.

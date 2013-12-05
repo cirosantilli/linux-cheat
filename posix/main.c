@@ -77,6 +77,7 @@ ANSI C features shall not be discussed here.
 #include <sched.h>
 #include <sys/mman.h>       //mmap, munmap
 #include <sys/resource.h>   //rusage, getrusage, rlimit, getrlimit
+#include <sys/select.h>     //select, FD_ZERO, FD_SET
 #include <sys/shm.h>        //shmget, shmat, etc.
 #include <sys/socket.h>
 #include <sys/stat.h>       //S_IRUSR and family,
@@ -991,7 +992,7 @@ int main(int argc, char** argv)
     /*
     #select
 
-        Wait for one of multiple file descriptors to become availabel for some operation.
+        Wait for one of multiple file descriptors to become available for some operation.
 
         Sounds like server implementation!
     */

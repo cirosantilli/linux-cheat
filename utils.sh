@@ -505,8 +505,11 @@
 
         ##sendmail
 
-            # Comes in multiple packages such as ssmtp and postfix,
+            # Interface that comes in multiple packages such as ssmtp and postfix,
             # so to configure it you must first determine which package provides it.
+
+            # `sendmail` is an utility. Its interface is probably implemented
+            # by other packages because that utility was widely used.
 
             # May be symlink to an executable, or to the /etc/alternatives.
 
@@ -792,6 +795,8 @@
 
     ##krusader
 
+        #KDE extra gear <http://extragear.kde.org/>
+
         #Features:
 
         #- useractions
@@ -816,17 +821,21 @@
 
     ##date
 
-        #get system date:
+        # POSIX 7.
 
-            sudo date
+        # Get system date:
 
-        #set system date:
+            date
 
-            sudo date -s "1 JUN 2012 09:30:00"
+        # Format current time and output it:
 
-        #format current time and output it:
+            date "+%Y-%m-%d-%H-%M-%S"
 
-            TIMESTAMP=`date +%Y-%m-%d-%H-%M-%S`
+        ##gnu extensions
+
+            # Set system date:
+
+                sudo date -s "1 JUN 2012 09:30:00"
 
     ##hwclock
 
@@ -1632,7 +1641,7 @@
 
                         assert [ "echo 'aa' | `sed -r 's/.+/b/'`" = 'b' ]
 
-            ##replace references
+            ##capturing groups
 
                     assert [ "`echo a1 | sed -r 's/a(.)/b\1/'`" = 'b1' ]
                     assert [ "`echo a1 | sed -r 's/a(.)/b\\1/'`" = 'b\1' ]
@@ -2884,7 +2893,7 @@
 
         #you can each isolated with other opts
 
-    ##processor
+    ##processor ##cpu
 
         ##arch
 
@@ -2908,8 +2917,7 @@
 
             #coreutils
 
-            nproc
-                #4
+                nproc
 
     ##lsof
 
@@ -4997,7 +5005,7 @@
     #so you can log with different users at the same time
     #while logged on a different shell, process on the other shells continue to run? TODO
 
-    #List users and their properties, including special users:
+    #List users:
 
         cat /etc/passwd
 
@@ -5011,6 +5019,10 @@
         #ciro,,, : comment field. used by finger command.
         #/home/ciro: home dir
         #/bin/bash: login shell
+
+    # You are likely to see many users beside those which have a home directory.
+
+    # This is so because many applications create their own users.
 
     #List groups:
 
@@ -5263,61 +5275,84 @@
 
     ##useradd
 
-        u=
-        sudo useradd -c '$fullname,$office,$office2,$homephone' -g 1000 -G 1001,1002 -m -s /bin/bash $u
-            #addes user username u
-            #-m makes home dir owned by him with permissions 707
-                #without -m:
-                    #ubuntu won't be able to log in
-                    #if he logs in on tty, he goes to /
-                    #to correct this:
-                        sudo mkdir /home/$u
-                        sudo chmod 700 /home/$u $u
-                        sudo chown /home/$u $u
+        # Create a new user with username `$u`:
 
-                    #home dir files will me copied from a default template located at `/etc/skel`
-                    #to change this template use `-k /path/to/skel/`.
-                    #to create no files: `-k /dev/null`
+            u=
+            sudo useradd  -m -s /bin/bash $u
 
-            #-p $p
-                #bad because visible
-                #without -p:
-                    #user can't login
-                    #to correct this:
-                        sudo passwd $u
-                            #sets passwd for u
-            #-s sets login shell
-                #without -s:
-                    sudo chsh -s /bin/bash $u
-                        #for u
-                    sudo chsh -s /bin/bash
-                        #cur user
-            #-g: set group he belongs to
-            #-G: add to other groups too
-                #if g missing, either create a group u and add user
-                #of add to a default group specified in some config file
-            #-c: comment field of /etc/passwd
-                #this format is used for `finger` command
+        # For users that represent human end users, you will amost always want to use the following:
 
-                #chfn
-                    sudo chfn -f full_name -r room_no -w work_ph -h home_ph -o other $u
+        #- `-m` make home dir owned the user him with permissions 707.
 
-                    #changes this info
+            # Without `-m` it is possible that X11 won't work.
 
+            # A tty login starts at `/`.
 
-        sudo useradd -e 2000-00-00 -f 5 $u
-            #-e: password expires automatically at the given date.
-            #-f: account disables 5 days after password expires if pass not changed.
+            # Initial home dir files will me copied from a default template located at `/etc/skel`
+
+            # To change this template use: `-k /path/to/skel/`.
+
+            # Ro create no files: `-k /dev/null`
+
+            # If you forgot to use `-m` when you created the user this can be corrected by doing:
+
+                sudo mkdir /home/$u
+                sudo chmod 700 /home/$u $u
+                sudo chown /home/$u $u
+
+        #`-p pass`
+
+            # Set password for the user.
+
+            # It is possible to create an user without a password,
+            # but then he won't be able to login.
+
+            # This has the disadvantage that the password will be visible.
+
+            # To create a password without showing it on screen,
+            # consider using the `passwd` command.
+
+        #- `-s` sets login shell
+
+            # You should probably set this to `/bin/bash`.
+
+            # If you forgot this, consider using chsh.
+
+        #- `-g 1001`: set group the user belongs to
+
+            #If g missing, either create a group u and add user
+
+            #of add to a default group specified in some config file
+
+        #- `-G 1002, 1003`: set secondary groups
+
+        #- `-c '$fullname,$office,$office2,$homephone'`
+
+            # Comment field thatwill end up on `/etc/passwd`.
+
+            # Any string is possiblt, but this particular format is recognized by the `finger` command
+            # and should always be used.
+
+            # To change this afterwards consier the `chfn` command.
+
+        #-e: password expires automatically at the given date.
+        #-f: account disables 5 days after password expires if pass not changed.
+
+            sudo useradd -e 2000-00-00 -f 5 $u
 
     ##userdel
 
-        #remove users
-        #cannot be used on logged in users
+        # Remove users.
 
-        userdel $u
-            #delete user, keep home
-        userdel -r $u
-            #delete user and his home
+        # Cannot be used on users current logged in.
+
+        # Delete user but keep his home directory:
+
+            userdel $u
+
+        # Also remove home directory:
+
+            userdel -r $u
 
     ##groupadd
 
@@ -5360,50 +5395,72 @@
 
         #set user passws
 
-        passwd
-            #change passwd for cur user
-        sudo passwd "$u"
-            #change passwd for u
-            #if you are not u, you need sudo...
-        sudo passwd -d "$u"
-            #delete passwd for u, disabling his account
+        # Modify passwd for cur user:
+
+            passwd
+
+        # Modify passwd for u:
+
+            sudo passwd "$u"
+
+        # If you are not u, you need sudo.
+
+        # Delete passwd for u, disabling login on his account:
+
+            sudo passwd -d "$u"
+
+    ##makepasswd
+
+        # Generates random passwords that follows certain rules.
+
+        # Useful to automate program installation when a password is required,
+        # for example on development servers.
+
+        # Make a 10 character password only with alhpanum chars:
+
+            makepasswd --chars 10
 
     ##chsh
 
-        #change login shell
+        # Change the default shell of current user to `/bin/bash`:
 
-        less /etc/shells
-            #view available shells
-        chsh -s /bin/bash
-            #change your shell to bash
+            chsh -s /bin/bash
+
+        # View available shells on the system:
+
+            less /etc/shells
 
     ##ac
 
-        #connection statistics
+        # Register and view user login statistics.
 
-        sudo aptitude install -y acct
+        # Current user connection in hours, broken by days:
 
-        ac -d
-        #current user connection in hours, broken by days
+            ac -d
 
-        ac -p
-        #connection time for all users
+        # Connection time for all users
+
+            ac -p
 
     ##finger
 
-        #shows user info
-        #some data taken from /etc/passwd comment field
+        # Shows user info.
 
-        sudo aptitude install -y finger
+        # Data taken from a properly formated `/etc/passwd` comment field for the user.
 
-        finger "$u"
-            #shows info on user u
+            finger "$u"
 
-        ##pinky
+    ##pinky
 
-            #lightweight finger
+        #lightweight finger
 
-            #coreutils package
+        #coreutils package
+
+    #chfn
+
+        # Change the commend field of `/etc/passwd` for an user in a format recognized by `finger`>
+
+            sudo chfn -f full_name -r room_no -w work_ph -h home_ph -o other $u
 
     ##ldap
 

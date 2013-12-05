@@ -33,7 +33,7 @@ $x^2$
 `.dox` files are considered by default by Doxygen, that is,
 they are included in the default Doxyfile `FILE_PATTERNS` list.
 
-You must include at least on `\\page` in your .dox file for it to be considered by `doxygen`.
+You must include at least on `\\page` in your `.dox` file for it to be considered by `doxygen`.
 
 # subpage
 
@@ -42,7 +42,12 @@ Subpage does two things:
 - create links to other pages
 - determines that the other page will be a subpage of this one.
 
-\subpage dox_cheat_subpage
+The first argument is the page id set by the `\\page id name` command.
+
+Usage is:
+
+- \subpage dox_cheat_subpage
+- \subpage dox_sample "Custom text"
 
 \page dox_cheat_subpage Dox Cheat Subpage
 

@@ -14,13 +14,23 @@ Best way to start: <http://www.jmarshall.com/easy/http/#structure>
 
 #headers
 
-##content-type
+##request
 
-Specifies Internet media type
+###accept-type
+
+The MIME type that the client wants.
+
+It is possible that a single URL is able to return several types.
+
+In this case this field can be used to determine the requested type.
+
+##response
+
+###content-type
+
+Specifies Internet media type (aka MIME type).
 
 For huge list see: <http://en.wikipedia.org/wiki/Internet_media_type#Type_text>
-
-Common examples:
 
 - text/html: browsers interprets body as html and renders it
 - text/plain: browser pastes to screen, no html rendering. So you will see tags like `<h1>` on screen.

@@ -519,6 +519,14 @@ However, only the first 4 are commonly used.
 
 TODO
 
+##setxkbmap
+
+Swap esc and caps lock:
+
+    setxkbmap -option caps:escape
+
+Put this in your `~/.xinitrc`.
+
 ##simple gui apps
 
 Either for testing or usuful utilities.
@@ -702,6 +710,30 @@ was not GPL source for non-X11 platforms.
 As of Qt 4, LGPL versions of Qt exist on all platforms, but the damage has been done:
 the open source community is divided and maintain duplicate versions for many desktop software,
 thus using up resources.
+
+###applications
+
+KDE offers both basic building blocks, and full applications.
+
+The software offered is called the [KDE Software Compilation](http://www.kde.org/community/whatiskde/softwarecompilation.php).
+
+KDESC applications release at the same time as new KDE versions.
+For example, Okular ships a specific release with every new KDE base version,
+and its git tags are exactly KDE versions.
+
+There are also projects which use KDE, but which are not part of the KDESC.
+
+###libs
+
+A typical KDE application relies on the following shared libraries:
+
+    libkparts.so.4
+    libkio.so.5
+    libkdeui.so.5
+    libQtGui.so.4
+    libkdecore.so.5
+    libQtCore.so.4
+    libQtDBus.so.4
 
 ###kde4-config
 

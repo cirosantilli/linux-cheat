@@ -22,7 +22,7 @@
 
     ##get current ubuntu version
 
-        #lsb-release -a | grep Release
+        #lsb_release -a | grep Release
 
     ##upgrade ubuntu version
 
@@ -69,6 +69,12 @@
         #mime messages
 
             #sudo aptitude install -y mpack
+
+    ##sysadmin
+
+            sudo aptitude install -y finger
+            sudo aptitude install -y acct
+            sudo aptitude install -y makepasswd
 
     ##printer
 
@@ -401,11 +407,16 @@
             sudo aptitude install -y python-matplotlib
             sudo aptitude install -y gunicorn
 
-    ##ruby libraries
+    ##ruby
+
+            curl -L https://get.rvm.io | bash -s stable
+            source ~/.rvm/scripts/rvm
+            rvm requirements
+            rvm install 1.9.3
 
             sudo aptitude install -y ruby-dev
 
-    ##virtualization
+    ##virtualization ##vm
 
         ##virtualbox
 
@@ -414,11 +425,25 @@
                 #sudo aptitude update
                 #sudo aptitude install -y virtualbox-4.2
 
-            #On the guest:
+            # On the guest:
 
                 #sudo aptitude install virtualbox-guest-utils
 
+            # Don't forget to enable virtualization on your BIOS.
+
             sudo aptitude install -y vagrant
+
+        ##wine
+
+                sudo add-apt-repository ppa:ubuntu-wine/ppa
+                sudo aptitudeapt-get update
+                sudo aptitude install -y wine1.7
+                sudo aptitude install -y winetricks
+                winetricks winxp d3dx9 vcrun2005 vcrun2008 wininet corefonts
+
+        # play on linux:
+
+                sudo aptitude install -y playonlinux
 
     ##language
 
