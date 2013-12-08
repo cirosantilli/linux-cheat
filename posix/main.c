@@ -1397,6 +1397,10 @@ int main(int argc, char** argv)
         }
 
         /*
+        #ls
+
+            Opendir is the basis for `ls`.
+
         #opendir
 
             Open a directory for reading.
@@ -1404,6 +1408,10 @@ int main(int argc, char** argv)
         #readdir
 
             Get next directory entry, or NULL if over.
+
+        #dirent
+
+            <http://pubs.opengroup.org/onlinepubs/009604599/basedefs/dirent.h.html>
         */
         {
             DIR* dp;

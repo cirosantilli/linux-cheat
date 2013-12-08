@@ -259,6 +259,7 @@ use warnings;
     ##while
 
         #example:
+
             $i = 10;
             while ( $i > 0 )
             {
@@ -282,38 +283,47 @@ use warnings;
             print $count, " " while ++$count <= 10;
             print "\n";
 
-##regex
+##regexp
 
-    my $mystring;
-    my @myarray;
+  # Perl regexps were highly influential on regexes of other languages.
 
-    $mystring = "Hello world!";
-    print "m" if $mystring =~ m/World/;
-    print "m" if $mystring =~ m/WoRlD/i; #ignore case
+  # Perl regexps can do much more than the formal definition of regexps.
 
-    $mystring = "[2004/04/13] The date of this article.";
-    print "The first digit is $1." if $mystring =~ m/(\d)/;
+        my $mystring;
+        my @myarray;
 
-    $mystring = "[2004/04/13] The date of this article.";
-    print "The first number is $1." if $mystring =~ m/(\d+)/;
+        $mystring = "Hello world!";
+        print "m" if $mystring =~ m/World/;
+        print "m" if $mystring =~ m/WoRlD/i; #ignore case
 
-    $mystring = "[2004/04/13] The date of this article.";
-    while($mystring =~ m/(\d+)/g) {
-        print "Found number $1.";
-    }
+        $mystring = "[2004/04/13] The date of this article.";
+        print "The first digit is $1." if $mystring =~ m/(\d)/;
 
-    $mystring = "[2004/04/13] The date of this article.";
-    @myarray = ($mystring =~ m/(\d+)/g);
-    print join(",", @myarray);
+        $mystring = "[2004/04/13] The date of this article.";
+        print "The first number is $1." if $mystring =~ m/(\d+)/;
 
-    $mystring =~ s/world/mom/;
-    print $mystring;
-    print $mystring if $mystring =~ s/mom/world/; #returns if replaced
+        $mystring = "[2004/04/13] The date of this article.";
+        while($mystring =~ m/(\d+)/g) {
+            print "Found number $1.";
+        }
 
-    #\A - Matches only at the beginning of a string
-    #\Z - Matches only at the end of a string or before a newline
-    #\z - Matches only at the end of a string
-    #\G - Matches where previous m//g left off
+        $mystring = "[2004/04/13] The date of this article.";
+        @myarray = ($mystring =~ m/(\d+)/g);
+        print join(",", @myarray);
+
+        $mystring =~ s/world/mom/;
+        print $mystring;
+        print $mystring if $mystring =~ s/mom/world/; #returns if replaced
+
+    # Almost every backslash escape has a meaning in Perl.
+
+    #- `\A`: Matches only at the beginning of a string
+    #- `\Z`: Matches only at the end of a string or before a newline
+    #- `\z`: Matches only at the end of a string
+    #- `\G`: Matches where previous m//g left off
+
+    #- `\U`: Start replacing by uppercase until `\E` is found or end of regexp.
+    #- `\E`
 
     #capture group
 

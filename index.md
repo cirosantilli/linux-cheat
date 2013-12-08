@@ -73,13 +73,17 @@ lsb does however specifies many more tools than POSIX
 and supports almost all base tools used by user friendly applications
 found in distributions
 
-##find current distro
+##lsb_release
+
+Command required by the LSB.
 
 Get distro maintainer, name, version and version codename:
 
     lsb_release -a
 
-lsb this standas for `linux standard base`
+Extract id programatically to autodetect distro:
+
+    distro="$(lsb_release -i | sed -r 's/.*:\t(.*)/\1/')"
 
 ##install a new distro
 
