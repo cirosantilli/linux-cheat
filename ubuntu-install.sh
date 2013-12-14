@@ -264,6 +264,12 @@
         sudo aptitude install -y mupen64plus
         sudo aptitude install -y pcsxr
 
+        # super maryo chronicles:
+
+            sudo aptitude install -y smc
+
+            sudo aptitude install -y wesnoth
+
         ##dosbox
 
             sudo aptitude install -y dosbox
@@ -694,6 +700,13 @@
             sudo aptitude install -y nvidia-settings-319
             sudo aptitude install -y nvidia-prime
             sudo aptitude install -y nvidia-opencl-dev
+
+    ##vlc
+
+        # Missing development requirements to compile VLC:
+
+            sudo aptitude install -y liblua5.1-0-dev libmad0-dev liba52-0.7.4-dev \
+                libxcb-composite0-dev libxcb-xv0-dev libxcb-randr0-dev libgcrypt11-dev
 
 ##xinit
 

@@ -1,4 +1,4 @@
-gnu private guard encryption
+GNU private guard encryption.
 
 #sources
 
@@ -13,53 +13,53 @@ gnu private guard encryption
 
 #encryption without keys
 
-encryption and digital signing
+Encryption and digital signing.
 
-create a "$F".gpg password only encrypted file:
+Create a "$F".gpg password only encrypted file:
 
     gpg -c "$F"
 
-good combo with tar.gz.
+Good combo with tar.gz.
 
-create from stdin:
+Create from stdin:
 
     cat "$F" | gpg -o "$F".gpg -c
 
-decrypt to F:
+Decrypt to F:
 
     gpg "$F".gpg
 
-decrypt to stdout:
+Decrypt to stdout:
 
     gpg -d "$F".gpg
 
-decrypts to F:
+Decrypts to F:
 
     gpg -o "$F" -d "$F".gpg
 
-decrypt from stdin:
+Decrypt from stdin:
 
     cat "$F".gpg | gpg -o "$F" -d
 
 #tar combos
 
-targz encrypt "$F" to F.tgz.gpg, remove original:
+Targz encrypt `"$F"` to `F.tgz.gpg`, remove original:
 
     E=tgz.gpg
     tar cz "$F" | gpg -o "$F"."$E" -c && rm -rf "$F"
 
-targz decrypt "$F"
+targz decrypt `"$F"`
 
     gpg -d "$F" | tar xz && rm "$F"
 
 #encryption with keys
 
-you have to understand the very basics of assymetric encryption
+You have to understand the very basics of assymetric encryption
 such as RSA before reading this.
 
 ##user id
 
-uid can either be any case insensitive substring of the key name or email
+UID can either be any case insensitive substring of the key name or email
 that only one user has:
 
     U="me@mail.com"
@@ -67,11 +67,11 @@ that only one user has:
 
 ##key id
 
-is an identifier of the key:
+Is an identifier of the key:
 
     K=12345678
 
-to get it, use:
+To get it, use:
 
     gpg --list-keys
 

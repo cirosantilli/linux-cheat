@@ -188,6 +188,26 @@ FPS, very large scenarios, cool weapons.
 
 Too fast for my taste.
 
+#arcade
+
+##pingus
+
+Lemmings clone.
+
+Includes map designer.
+
+#strategy
+
+##battle for wesnoth
+
+Turn based unit control on 2d hexagonal map.
+
+Very addictive and time consuming.
+
+Open source, but could be a professionally made game: graphics, music and gameplay.
+
+Includes a map designer.
+
 #emulation
 
 ##snes

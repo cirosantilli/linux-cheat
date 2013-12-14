@@ -1,12 +1,17 @@
 #!/usr/bin/env perl
 
+use feature qw(say);
+
 use strict;
+
 use warnings;
+no warnings 'redefine';
+no warnings;
 
 ##variables
 
     my $i = 1;
-    my ($i2 = 1, $i3);
+    (my $i2 = 1, my $i3);
     my $count;
     my $line;
     #my $i = 1;
@@ -38,109 +43,118 @@ use warnings;
 
         #Creates a new scope valid for current function and functions that the function calls.
 
-            $x = 0;
-            sub f0 { return $x; }
-            sub f1 { local $x = 0; $x += 1; return f0(); }
-            f1() == 1 || exit 1;
-            $x == 0 || exit 1;
+            #my $x = 0;
+            #sub f0 { return $x; }
+            #sub f1 { local $x = 0; $x += 1; return f0(); }
+            #f1() == 1 || exit 1;
+            #$x == 0 || exit 1;
 
 ##stdout
 
     ##print
 
-        print 'string';
-        print 's1', 's2', 123;
+            print "print\n";
+            print "a", 1, "\n";
 
-##numbers
+    ##say
 
-    print 1;
-    print 4.4;
-    print 1.2e10;
+        # Automatically adds newlines.
 
-    print 1 + 2 - 3*(10/5) ** 4;
+            say 'say';
 
 ##booleans
 
-    print !0;
-    print !1 + 0;
-    print !'string that converts to 1' + 0;
-    print !'';
+        !0 == 1     or die;
+        !1 == 0     or die;
+        !-1 == 0    or die;
+        !'' == 1    or die;
+        !'a' == 0   or die;
 
-    print 1 && 'adsf';
-    print 1 && '';
+        1 && 1    or die;
+        !(1 && 0)   or die;
 
-    print 0 || 1;
-    print 0 || 0;
+        1 || 1  or die;
+        1 || 0  or die;
 
-##compairison
+##arithmetic
 
-    print 1 == 1;
-    print '11' == '11';
-    print '11' == '12';
-    print '1' == 1;
-    print 1 eq 1;
-    print 1 eq 0;
+    ##eq
 
-    #==	!= <	<= >  >=
-    #eq	ne lt	le gt ge
+        # TODO vs ==
+
+        #==	!= <	<= >  >=
+        #eq	ne lt	le gt ge
 
 ##strings
 
-    print 'as' . 'df';
-    print 'as' x 3;
-    print length 'foo';
-    print substr 'foo', 1, 2;
-    print index 'foo', 'o';
-    print rindex 'foo', 'o'; #last occurence
+    # Single quote vs double quote literals:
 
-    print "as $i df $s\n";
-    print 'as $i df $s\n';
+        my $s = "a";
+        "$s\n" == "a\n" or die;
+        '$s\n' == "\$s\\n" or die;
 
-    print "1" + 1;
-    print 1 . 2;
-    print "a" . (1+2);
+    # Operations
+
+        ('ab' . 'cd') == 'abcd' or die;
+        ('ab' x 3) == 'ababab' or die;
+        length('abc') == 3 or die;
+        substr('abcd', 2, 2) == 'cd' or die;
+        index('abb', 'b') == 1 or die;
+        rindex('abb', 'b') == 2 or die;
+
+    # Weakly typed insanity:
+
+        1 + "1" == 2 or die;
+        "1" + 1 == 2 or die;
+        2 . 2 == "22" or die;
 
     ##chomp
 
-        $s = "chomp\n\n";
+        $s = "a\n\rb\n\r\r";
         chomp $s;
-        print $s; #remove trailling \n
+        $s == "a\n\r" or die;
 
     ##join
 
-        print join (',',(1,2,3));
-
-##lists
-
-    print (1, 2, 'asdf', (1,2) );
-    print (1 .. 5);
+        join(',', (1, 2)) == "1,2" or die;
 
 ##array
 
-    my @array = (1, 2, 3);
-    #array = ();
+        my @a = (0, 'a', 1);
+        #array = ();
 
-    print $array[2];
-    print $#array; #last index
+        $a[2] == 1 or die;
 
-    push @array, 4; #put at ent
-    print @array;
+    # Last element
 
-    pop @array; #remove
-    print @array;
+        #$#a == 2 or die;
 
-    shift @array; #left shift
-    print @array;
+        my @a = (0, 1);
+        #push(@a, 2) == (0, 1, 2) or die;
 
-    unshift @array, 0;
-    print @array;
+        pop @a;
+        print @a;
 
-    #context magic
-        my @array2 = @array; # list context
-        print @array2;
+        shift @a;
+        print @a;
 
-        my $length = @array; # scalar context
-        print $length;
+        unshift @a, 0;
+        print @a;
+
+    # scalar context magic:
+
+        #my $l = @a;
+        #$l == length(@a) or die;
+
+##list
+
+        (1, 2, 'asdf', (1,2) );
+
+    # Range:
+
+        (0 .. 2) == (0, 1) or die;
+
+    # TODO vs list: <http://stackoverflow.com/questions/6023821/perl-array-vs-list>
 
 ##hash map
 
@@ -191,16 +205,13 @@ use warnings;
 
         ##multiline
 
-            if (1)
-            {
+            if (1) {
                     print 'Hello';
             }
-            elsif (1)
-            {
+            elsif (1) {
                     print 'Bye';
             }
-            else
-            {
+            else {
                     print 'Neither';
             }
 
@@ -210,8 +221,7 @@ use warnings;
         #``if``, ``||`` and ``or`` but negated.
 
         print 'a' unless 0;
-        unless(0)
-        {
+        unless(0) {
             print 'a'
         }
         0 || print 'a';
@@ -230,14 +240,13 @@ use warnings;
     ##foreach
 
         #example:
-            foreach my $e (1 .. 3)
-            {
+            foreach my $e (1 .. 3) {
                     print $e;
             }
 
         #default argument:
-            foreach (1..3)
-            {
+
+            foreach (1..3) {
                     print;
             }
 
@@ -249,9 +258,8 @@ use warnings;
 
         #uses references:
 
-            @a = (1 .. 5);
-            foreach (@a)
-            {
+            my @a = (1 .. 5);
+            foreach (@a) {
                 $_ *= 2;
             }
             $a[0] == 2 || exit 1;
@@ -261,8 +269,7 @@ use warnings;
         #example:
 
             $i = 10;
-            while ( $i > 0 )
-            {
+            while ($i > 0) {
                 print $i;
                 $i = $i - 1;
             }
@@ -270,11 +277,10 @@ use warnings;
         ##last = break
 
             $i = 0;
-            while ( $i < 100 )
-            {
-                    last if $i == 10;
-                    print $i;
-                    $i = $i + 1;
+            while ($i < 100) {
+                last if $i == 10;
+                print $i;
+                $i = $i + 1;
             }
 
         ##single line
@@ -285,35 +291,36 @@ use warnings;
 
 ##regexp
 
-  # Perl regexps were highly influential on regexes of other languages.
+    # Perl regexps were highly influential on regexes of other languages.
 
-  # Perl regexps can do much more than the formal definition of regexps.
+    # Perl regexps can do much more than the formal definition of regexps.
 
-        my $mystring;
-        my @myarray;
+        "ab" =~ /a./ or die;
+        "ab" =~ /b/ or die;
 
-        $mystring = "Hello world!";
-        print "m" if $mystring =~ m/World/;
-        print "m" if $mystring =~ m/WoRlD/i; #ignore case
+    # Ignore case:
 
-        $mystring = "[2004/04/13] The date of this article.";
-        print "The first digit is $1." if $mystring =~ m/(\d)/;
+        "A" =~ /a/i or die;
+        "A" =~ /A/i or die;
 
-        $mystring = "[2004/04/13] The date of this article.";
-        print "The first number is $1." if $mystring =~ m/(\d+)/;
+    # Capturing groups:
 
-        $mystring = "[2004/04/13] The date of this article.";
-        while($mystring =~ m/(\d+)/g) {
-            print "Found number $1.";
-        }
+        "a0b1" =~ /a(.)b(.)/;
+        $1 == "0" or die;
+        $2 == "1" or die;
 
-        $mystring = "[2004/04/13] The date of this article.";
-        @myarray = ($mystring =~ m/(\d+)/g);
-        print join(",", @myarray);
+    # Multiple matches with g:
 
-        $mystring =~ s/world/mom/;
-        print $mystring;
-        print $mystring if $mystring =~ s/mom/world/; #returns if replaced
+        ("a0b1" =~ /(\d)/g) == "01" or die;
+
+        my @a = ("a0b1" =~ m/(\d)/g);
+        #@a == ["0", "1"] or die;
+
+    # Loop multiple matches:
+
+        my $s = "a0";
+        $s =~ s/a(.)/b$1/ or die;
+        #$s == "b0" or die;
 
     # Almost every backslash escape has a meaning in Perl.
 
@@ -324,8 +331,6 @@ use warnings;
 
     #- `\U`: Start replacing by uppercase until `\E` is found or end of regexp.
     #- `\E`
-
-    #capture group
 
 #defalut variables
 
@@ -360,15 +365,18 @@ use warnings;
 
         $\ = "a"; #output record separator for print
 
-        print ''
+        print '';
             #a
 
     ##$,
 
         #output field separator for print when printing lists
 
-        $, = ", ";
-        print 1..3
+            $, = ", ";
+            print 1..3;
+
+        # Output:
+
             #1, 2, 3
 
     ##$#
@@ -387,6 +395,10 @@ use warnings;
 
             print $0;
 
+    ##command line arguments
+
+            #say $ARGV[0];
+
     ##regex
 
         #- $1..$9 #nth capturing group of last regex match
@@ -399,35 +411,31 @@ use warnings;
 
         #- $+
 
-    ##command line arguments
-
-            print $ARGV[0];
-
     ##environment
 
-            foreach $key (keys %ENV)
-            {
-                print "$key --> $ENV{$key}\n";
+            say "ENV";
+            foreach my $key (keys %ENV) {
+                say "  $key = $ENV{$key}";
             }
 
-##functions
+##functions ##sub
 
-    #called **subprocess**
+    # Called subprocess;
 
-        sub f
-        {
-            my($a,$b) = @_;
-            $a+$b;
-                #Return value is value of last evaluated expression.
-                #No explicit `return` required.
+        sub f {
+            my($a, $b) = @_;
+            $a + $b;
             #return $a+$b
-                #If is also possible to use an explicit `return` command.
+                # Return value is value of last evaluated expression.
+                # No explicit `return` required.
+                # If is also possible to use an explicit `return` command
+                # to exit in the middle of a function.
         }
 
     #It is possible to ommit parenthesis to make the call:
 
-        print f(1, 2);
-        print f 1, 2;
+        f(1, 2) == 3 or die;
+        f 1, 2 == 3 or die;
 
     #This is specially useful on interactive sessions.
 
@@ -437,30 +445,28 @@ use warnings;
 
         #readonly:
 
-            open(FH,"<path/to/file.txt")           or die "Opening: $!";
-            while(<FH>){print}
-            close(FH)                              or die "Closing: $!";
+            #open(FH,"<path/to/file.txt")           or die "Opening: $!";
+            #while(<FH>){print}
+            #close(FH)                              or die "Closing: $!";
 
         #writeonly:
 
-            open(FH,">path/to/file.txt")           or die "Opening: $!";
-            print FH a, "\n"
-            print FH b, "\n"
-            close(FH)                              or die "Closing: $!";
+            #open(FH,">path/to/file.txt")           or die "Opening: $!";
+            #print FH a, "\n"
+            #print FH b, "\n"
+            #close(FH)                              or die "Closing: $!";
 
         ##default
 
             #STDOUT:
 
-                print STDOUT "stdout"
+                say STDOUT "stdout";
 
             #STDERR:
 
-                print STDERR "stderr"
+                say STDERR "stderr";
 
             #STDIN:
-
-                print STDERR "stderr"
 
     ##readline
 
@@ -468,10 +474,10 @@ use warnings;
 
         #all the same:
 
-            $_ = readline(STDIN)
-            $_ = readline
-            $_ = <STDIN>
-            $_ = <>
+            #$_ = readline(STDIN)
+            #$_ = readline
+            #$_ = <STDIN>
+            #$_ = <>
 
     ##diamond
 
@@ -480,43 +486,41 @@ use warnings;
         #If no filehandle given:
 
         #- if ARGV not empty, treat $ARGV[i] as files and read from them
+
         #- else, read from STDIN filehandle.
-            #As usual, if no pipe is comming in, wait for user input.
 
-            @ARGV = ("file1.txt", "file2.txt");
-            while(<>)
-            {
-                    print;
-            }
+        #As usual, if no pipe is comming in, wait for user input.
 
-            #perl -ne 'YOUR CODE HERE'
+        #@ARGV = ("file1.txt", "file2.txt");
+        #while(<>) {
+                #print;
+        #}
 
-                while ( <> )
-                {
-                    #YOUR CODE HERE
-                }
+        #perl -ne 'YOUR CODE HERE'
 
-            #perl -pe 'YOUR CODE HERE'
+            #while (<>) {
+                ##YOUR CODE HERE
+            #}
 
-                while ( <> )
-                {
-                    #YOUR CODE HERE
-                    print;
-                }
+        #perl -pe 'YOUR CODE HERE'
 
-        ##skip a line:
+            #while (<>) {
+                ##YOUR CODE HERE
+                #print;
+            #}
 
-                while ( <> )
-                {
-                    /a/ && continue;
-                }
+        #skip a line:
+
+            #while (<>) {
+                #/a/ && continue;
+            #}
 
     ##get all lines from file to an array of lines:
 
-        open(FH,"<a.txt")           or die "Opening: $!";
-        @ARRAY = <FH>;
-            #works beause of context
-        close(FH)                   or die "Closing: $!";
+        #open(FH,"<a.txt")           or die "Opening: $!";
+        #my @ARRAY = <FH>;
+            ##works beause of context
+        #close(FH)                   or die "Closing: $!";
 
     ##modify file inline
 
@@ -552,8 +556,8 @@ use warnings;
 
         #can get stdout and return status
 
-            my $a = qx(echo -n a b);
-            my $a = `echo -n a b`;
+            $a = qx(echo -n a b);
+            $a = `echo -n a b`;
 
     ##$?
 

@@ -26,6 +26,13 @@ File.open("/tmp/cookbook0_default.tmp", 'w') do |f|
         #action :create   # create is the default action
       end
 
+    # Double create overwrites the files:
+
+      file "/tmp/cookbook0_default_file.tmp" do
+        content "second time: " + Time.now.to_s
+        mode "0666"
+      end
+
   ##platform detection
 
     # `node[:platform]` the following contains a string which identifies the current platform.
@@ -39,6 +46,10 @@ File.open("/tmp/cookbook0_default.tmp", 'w') do |f|
     # - "windows"
 
       f.puts("node[:platform] = " + node[:platform])
+
+  # A save place to write temporary files to.
+
+    f.puts("Chef::Config[:file_cache_path] = " + Chef::Config[:file_cache_path])
 
   ##directory
 
@@ -67,6 +78,9 @@ File.open("/tmp/cookbook0_default.tmp", 'w') do |f|
         #action :install  # default action
       end
 
+      # TODO why fails
+      #package "vim"
+
   ##group
 
     # Manage user groups.
@@ -80,9 +94,9 @@ File.open("/tmp/cookbook0_default.tmp", 'w') do |f|
 
       user "newuser" do
         supports :manage_home => true  # Creates home directory if that is supported.
-                                    # On Windows for example, home is only created after the first user login.
+                                       # On Windows for example, home is only created after the first user login.
         gid "newuser"     # Must already exist before creating the user!
-        password "a"
+        #password "a"     # TODO. Fails if done twice only is password given?
         #action :create   # Default action.
                           # On Linux does `useradd`.
                           # Will fail if done twice.
@@ -90,4 +104,33 @@ File.open("/tmp/cookbook0_default.tmp", 'w') do |f|
 
   ##git
 
+    # Common combo: decide version from an attribute:
+
+      #if node.chef_environment == "QA"
+        #ref = "1.2"
+      #else
+        #ref = "master"
+      #end
+
+    # The path the clone will be cloned to:
+
+      path = File.join(Chef::Config[:file_cache_path], "git")
+
+    # If relative, relative to `/`.
+
+      git path do
+        repository "https://github.com/cirosantilli/linux.git"
+        #reference ref # Specify a version, such as a branch head or hash.
+        #action :sync  # Clone, or pull.
+                       # Overwrites local commited changes, so this is not a good choice for development.
+                       # Creates a branch called `deploy` TODO why and how to avoid it?
+        #notifies :run, "bash[compile_libvpx]"  # Often used to do something after clone.
+      end
+
+      git File.join(Chef::Config[:file_cache_path], "git-checkout") do
+        repository "https://github.com/cirosantilli/linux.git"
+        reference 'master'
+        action :checkout  # If checkout is possible do nothing.
+                          # Therefore, if the checkout is a branch, you don't lose local changes.
+      end
 end

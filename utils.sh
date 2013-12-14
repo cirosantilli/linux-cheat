@@ -5012,40 +5012,42 @@
     #Sample output:
 
         #ciro:x:1000:1000:ciro,,,:/home/ciro:/bin/bash
-        #ciro: user name
-        #x: password is encrypted and stored in /etc/shadow
-        #1000: user id. 0: root. 1-99: predefined. 100-999: reserved by system. 1000: first `normal` user
-        #1000: primary user group
-        #ciro,,, : comment field. used by finger command.
-        #/home/ciro: home dir
-        #/bin/bash: login shell
+
+    #- `ciro`: user name
+    #- `x`: password is encrypted and stored in /etc/shadow
+    #- `1000`: user id. 0: root. 1-99: predefined. 100-999: reserved by system. 1000: first `normal` user
+    #- `1000`: primary user group
+    #- `ciro,,,` : comment field. Used by finger command.
+    #- `/home/ciro`: home dir
+    #- `/bin/bash`: login shell
 
     # You are likely to see many users beside those which have a home directory.
 
     # This is so because many applications create their own users.
 
-    #List groups:
+    # List groups:
 
         cat /etc/group
 
-    #Format:
+    # Format:
 
         #groupname:x:5:user1,user2,user3
         #x: encrypted pass if any
         #5: group id. `regular` groups start at 1000
 
+    # Cat line of /etc/group for group g
+
         getent group "$g"
-            #cat line of /etc/group for group g
 
     cat /etc/default/useradd
 
     ##groups
 
-        #list groups of u
+        # List groups of user `"$u"`:
 
-          groups "$u"
+            groups "$u"
 
-        #list groups of cur user
+        # List groups of the current user:
 
             groups
 
@@ -5278,7 +5280,7 @@
         # Create a new user with username `$u`:
 
             u=
-            sudo useradd  -m -s /bin/bash $u
+            sudo useradd  -ms /bin/bash $u
 
         # For users that represent human end users, you will amost always want to use the following:
 
@@ -5393,13 +5395,15 @@
 
     ##passwd
 
-        #set user passws
+        # Manage user passwords.
+
+        # Passwords are normally stored hashed in the `/etc/shadow` file.
 
         # Modify passwd for cur user:
 
             passwd
 
-        # Modify passwd for u:
+        # Modify passwd for user u:
 
             sudo passwd "$u"
 
@@ -5408,6 +5412,35 @@
         # Delete passwd for u, disabling login on his account:
 
             sudo passwd -d "$u"
+
+        # Delete passwd for u, disabling login on his account
+        # until a new passwd is created.
+
+        # Lock account of user:
+
+            sudo passwd -d "$u"
+
+        # he cannot login anymore, until unlocked.
+
+        # It is still however possible to execute commands as the user via `sudo` and `su`:
+        # it is login shells that are disabled.
+
+        # On the `/etc/passwd` file, an exclamation mark was added
+        # before hash of the password:
+
+            sudo cat /etc/passwd
+
+        # Before:
+
+            a:$6$hV0fIGJX$DHzAx0UJOJv9QFn5jW9dwIViqd3uuG86svgwy4JGh0tQz4oZwxoXpYw9sF1LGxePYHMI0nhxh.m3yIb8fy1p3/:16052:0:99999:7:::
+
+        # After:
+
+            a:!$6$hV0fIGJX$DHzAx0UJOJv9QFn5jW9dwIViqd3uuG86svgwy4JGh0tQz4oZwxoXpYw9sF1LGxePYHMI0nhxh.m3yIb8fy1p3/:16052:0:99999:7:::
+
+        # Unlock account:
+
+            sudo passwd -u "$u"
 
     ##makepasswd
 
@@ -5704,4 +5737,4 @@
 
     # Factor a number into prime constituents.
 
-        assert [ "`factor 30`" = "30: 2 3 5" ]
+        assert [ "`factr 30`" = "30: 2 3 5" ]
