@@ -134,7 +134,7 @@ CLI go.
 
 #netreck
 
-2D spaceship battle multiplayer classic
+2D non terminal spaceship mouse clicking online multiplayer classic.
 
 #gnome
 
@@ -188,13 +188,25 @@ FPS, very large scenarios, cool weapons.
 
 Too fast for my taste.
 
-#arcade
+#clones
 
 ##pingus
 
-Lemmings clone.
+Great lemmings clone.
 
 Includes map designer.
+
+##hedgewars
+
+Great worms clone, has same feeling. Includes map builder.
+
+##super maryo chronicles
+
+Super mario bros clone.
+
+##Tux Kart
+
+Mario Kart 64 clone.
 
 #strategy
 

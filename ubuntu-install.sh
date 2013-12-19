@@ -254,25 +254,27 @@
         sudo aptitude install -y robotfindskitten
         sudo aptitude install -y bsdgames
         sudo aptitude install -y greed
-        sudo aptitude install -y ninvaders
+        #sudo aptitude install -y ninvaders
         sudo aptitude install -y netrek-client-cow
-        sudo aptitude install -y urban-terror
-        sudo aptitude install -y golly
-        sudo aptitude install -y gnotski
+        #sudo aptitude install -y urban-terror
+        #sudo aptitude install -y golly
+        #sudo aptitude install -y gnotski
 
-        sudo aptitude install -y zsnes
-        sudo aptitude install -y mupen64plus
-        sudo aptitude install -y pcsxr
+        #sudo aptitude install -y zsnes
+        #sudo aptitude install -y mupen64plus
+        #sudo aptitude install -y pcsxr
 
         # super maryo chronicles:
 
-            sudo aptitude install -y smc
+            #sudo aptitude install -y smc
 
-            sudo aptitude install -y wesnoth
+            #sudo aptitude install -y wesnoth
+
+            #sudo aptitude install -y supertuxkart
 
         ##dosbox
 
-            sudo aptitude install -y dosbox
+                #sudo aptitude install -y dosbox
 
             ## MANUAL: get the sound working
 

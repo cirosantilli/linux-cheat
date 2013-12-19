@@ -126,3 +126,8 @@ Add the following to your config file:
 
 Now requests on the host `192.168.3.4:3000` will be redirected to the guest at `192.168.3.4:3000`.
 This way you can run a server on the guest, and test it on your browser from the host!
+
+Vagrant forwards by default the host's `localhost:2222` to the guest's `localhost:22`, and 
+`8080` to `80`. This way, from any directory in the host is is possible to connect to the guest
+via ssh by doing `ssh -p 2222 vagrant@localhost` and then entering the password for user
+`vagrant` which is `vagrant by default`.

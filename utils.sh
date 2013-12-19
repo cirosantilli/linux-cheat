@@ -1056,7 +1056,7 @@
 
         #cat reversed linewise
 
-        #Not POSIX.
+        #Coreutils, not posix.
 
             assert [ "$(printf "a\nb\n" | tac)" = "$(printf "b\na")" ]
 
@@ -1248,6 +1248,15 @@
 
             assert [ `echo "a bcd" | fold -w 2` = $'a\nbcd' ]
 
+    ##column
+
+        # bsdmainutils
+
+        # If the input would be larger than the current terminal column count,
+        # format it into newspaper like columns.
+
+            seq 100 | column
+
     ##sort
 
         # Sort linewise.
@@ -1401,7 +1410,7 @@
 
         #Column range from first to third:
 
-        echo $'a:b:c:d\ne:f:g:h' | cut -d: -f1-3
+            echo $'a:b:c:d\ne:f:g:h' | cut -d: -f1-3
             #$'a:b:c\ne:f:g'
 
     ##wc
@@ -2631,13 +2640,13 @@
 
     ##device files
 
-        #each like hard disk    has a corresponding device files
+        # Each hard disk has a corresponding device files.
 
-        #each partition         has a corresponding block device file
+        # Each partition has a corresponding block device file.
 
             ls -l /dev | grep -E ' (sd|hd)..?$'
 
-        #sample output:
+        # Sample output:
 
             hda
             hda1
@@ -2649,31 +2658,31 @@
             sdb3
             hdc
 
-        #format:
+        # Format:
 
             hdc1
             ^^^^
             1 23
 
-        #1. partition type. hd: IDE (older). sb: SCSI (newer)
-        #2. hard disk identifier.
-        #3. parition number inside hard disk.
+        # 1. partition type. hd: IDE (older). sb: SCSI (newer)
+        # 2. hard disk identifier.
+        # 3. parition number inside hard disk.
 
-        #so on the example output given:
+        # So on the example output given:
 
-        #- 3 hds: had, sdb and hdc
-        #- 1 and 3 are hd, 2 is sd
-        #- 1 has 3 partitions
+        # - 3 hds: had, sdb and hdc
+        # - 1 and 3 are hd, 2 is sd
+        # - 1 has 3 partitions
 
     ##uuid
 
-        #Unique identifier for a partition. Field exists in ext and NTFS concept.
+        # Unique identifier for a partition. Field exists in ext and NTFS concept.
 
-        #Given when you create of format a partition.
+        # Given when you create of format a partition.
 
-        #Can be found with tools such as lsblk, blkid or gparted.
+        # Can be found with tools such as lsblk, blkid or gparted.
 
-        #Get UUID of a device:
+        # Get UUID of a device:
 
             sudo lsblk -no UUID /dev/sda1
 
@@ -3175,34 +3184,6 @@
             a=b
             eval "$a=c"
             assert [ $b = c ]
-
-##exec
-
-    #POSIX 7.
-
-    #Interface similar to an exec system call:
-    #ends current shell and runs given command instead
-
-    #destroys the calling bash!
-
-        assert [ $SHLVL = 1 ]
-        exec bash
-        assert [ $SHLVL = 1 ]
-
-    #exec bash
-
-        #ls then exits bash!
-        #you don't see anything
-
-    ##application
-
-        #start a new bash with a custom environment
-
-        #and discard the old one
-
-            exec env -i a=b c=d bash --norc --noprofile
-            env
-            exit
 
 ##read
 

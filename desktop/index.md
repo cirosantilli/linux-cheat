@@ -293,9 +293,11 @@ In this way, you can launch an app and send commands, making sure they will be r
 
 ##wmctrl
 
-Very good tutorial: <http://spiralofhope.com/wmctrl-examples.html>
-
 Control windows and get info on them from sh (maximize, minimize, focus, etc.)
+
+Depends on the presence of a window manager.
+
+Very good tutorial: <http://spiralofhope.com/wmctrl-examples.html>
 
 Get info:
 

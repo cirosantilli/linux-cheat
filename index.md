@@ -1,13 +1,13 @@
-linux in informal terms can be either a computer system that:
+Linux in informal terms can be either a computer system that:
 
 - a computer system which complies to the [linux standar base (lsb)](lsb)
     which is the main standard maintained by the [linux foundation][]
 
 - uses the linux kernel. TODO is this specified by the lsb? where?
 
-the lsb specifies the minimum intefaces every linux system must offer.
+The lsb specifies the minimum intefaces every linux system must offer.
 
-the central component of the linux operating system is the linux kernel,
+The central component of the linux operating system is the linux kernel,
 released in 1991 by Linus Trovalds, however much of its core user space
 software comes from the gnu project. For this reason linux systems
 may also be called gnu/linux.
@@ -16,9 +16,9 @@ may also be called gnu/linux.
 
 - `git clone http://git.kernel.org/pub/scm/docs/man-pages/man-pages`
 
-    the linux man pages, documenting the kernel and C interfaces to it.
+    The Linux man pages, documenting the kernel and C interfaces to it.
 
-    in special, look under
+    In special, look under
 
     - `Documentation/` for docs
     - `include/linux` for stuff you may use from modules
@@ -66,10 +66,10 @@ out of the box for a large variety of non programmer users.
 This work is left for third party enterprises of community projects such as Ubuntu
 or Fedora which are maintained by Canonical and Red Had enterprises respectively.
 
-lsb is meant to contain all the core tools that allow compliant applications
+LSB is meant to contain all the core tools that allow compliant applications
 to be portable across any compliant distribution.
 
-lsb does however specifies many more tools than POSIX
+LSB does however specifies many more tools than POSIX
 and supports almost all base tools used by user friendly applications
 found in distributions
 
@@ -180,7 +180,7 @@ Where:
     Some distros like Ubuntu's Live CD already mount all possible systems,
     so you might not need to mount it.
 
-    If that is the case, you can check where you partitio is mounted with `sudo mount -l`,
+    If that is the case, you can check where you partition is mounted with `sudo mount -l`,
     and then looking into partitions that have the correct type and listing the files inside candidates
     to make sure that it is the correct partition.
 
@@ -189,7 +189,7 @@ Where:
     Device file for the Hard disk you want to install GRUB on.
 
     Remember that GRUB bootloader is installed at the very start of the entire HD, and not of some partition,
-    so it makes no sense to give a parition device such as `/dev/sda1` or `/dev/sda2`.
+    so it makes no sense to give a partition device such as `/dev/sda1` or `/dev/sda2`.
 
 Source: <http://askubuntu.com/questions/59359/unable-to-boot-into-ubuntu-after-ubuntu-fedora-dual-boot/59376#59376>
 
@@ -298,8 +298,8 @@ It is also maintained by the linux foundation, and followed by the lsb.
 - rpm is the default packaging format! The package is not specified
 - users and groups
 - system initialization
-- libc: c standard libraries shared object
-- libm: c math library shared object
+- libc: C standard libraries shared object
+- libm: C math library shared object
 - libncurses: for command line interfaces
 
 ##c++
