@@ -989,176 +989,199 @@
 
     ##printf
 
-        #posix 7
+        # POSIX 7.
 
-        #goes around echo's quicks
+        # Goes around echo's quicks.
 
-        #anlogous to C printf.
+        # Anlogous to C printf.
 
-        #does not automatically append newline:
+        # Does not automatically append newline:
 
             assert [ "`printf "a"`" == "a" ]
 
-        #automatically interprets backslash escapes like C printf:
+        # Automatically interprets backslash escapes like C printf:
 
             printf "a\nb"
 
-        #automatically interprets backslash escapes like C printf:
+        # Automatically interprets backslash escapes like C printf:
 
-        #print the `-n` string:
+        # Print the `-n` string:
 
             assert [ "`printf "%s" "-n"`" == "-n" ]
 
-        #supports C format strings:
+        # Supports C format strings:
 
             assert [ "`printf "%1.2d" 1`"       == "01" ]
             assert [ "`printf "%1.2f" 1.23`"    == "1.23" ]
 
-        #print the `-n` string:
+        # Print the `-n` string:
 
             assert [ "`printf "%s" "-n"`" == "-n" ]
 
-        #print a string ignoring all escape sequences (always appends terminates in a single newline):
+        # Print a string ignoring all escape sequences (always appends terminates in a single newline):
 
             printf "%s\n" "\n\r"
 
-        #never terminate in a newline:
+        # Never terminate in a newline:
 
             printf "%s" "\n\r"
 
-        #include trailling newlines:
+        # Include trailling newlines:
 
             TODO
 
-        #do interpret the escapes:
+        # Do interpret the escapes:
 
             printf "%ba" "\n"
 
+    ##yes
+
+        # coreutils
+
+        # Repeat an output forever!
+
+            yes
+                #y
+                #y
+                #y
+                #...
+
+            yes a b c
+                #a b c
+                #a b c
+                #a b c
+                #...
+
+        # Good for programs that keep asking for keyboard confirmations
+        # and which have no command line way of given them at invocation time:
+
+            yes | timeout 1 cat
+
     ##cat
 
-        #POSIX 7
+        # POSIX 7
 
-        #concatenate files to stdout
+        # concatenate files to stdout
 
-            echo asdf > a
-            echo qwer > b
+             echo asdf > a
+             echo qwer > b
 
-            [ `cat a` = asdf ] || exit 1
-            [ `cat b` = qwer ] || exit 1
+             [ `cat a` = asdf ] || exit 1
+             [ `cat b` = qwer ] || exit 1
 
-            [ `cat a b` = `printf asdf\nqwer` ] || exit 1
+             [ `cat a b` = `printf asdf\nqwer` ] || exit 1
 
-        #stdin:
+        # stdin:
 
-            [ `echo a | cat` = a ] || exit 1
+             [ `echo a | cat` = a ] || exit 1
 
     ##tac
 
-        #cat reversed linewise
+        # cat reversed linewise
 
-        #Coreutils, not posix.
+        # Coreutils, not posix.
 
             assert [ "$(printf "a\nb\n" | tac)" = "$(printf "b\na")" ]
 
-        #Things get messy if the input does not end in newline:
+        # Things get messy if the input does not end in newline:
 
             assert [ "$(printf "a\nb" | tac)" = "$(printf "ba")" ]
 
     ##rev
 
-        #Reverse bytewise.
+        # Reverse bytewise.
 
             assert [ "`echo $'ab' | rev`" = $'ba' ]
 
     ##dd
 
-        #POSIX
+        # POSIX
 
-        #Menemonic: Duplicate Data.
+        # Menemonic: Duplicate Data.
 
-        #Alternate funny mnemonic: Data Destroyer.
-        #Reason: can manipulate sda devices directly without considering file structure,
-        #making operations such as disk copy very fast, but potentially very destructive
-        #if for example you exchange input and output disks, compying an empty disk over
-        #useful data.
+        # Alternate funny mnemonic: Data Destroyer.
+        # Reason: can manipulate sda devices directly without considering file structure,
+        # making operations such as disk copy very fast, but potentially very destructive
+        # if for example you exchange input and output disks, compying an empty disk over
+        # useful data.
 
         ##if of
 
-            #if = input file. If not given, stdin.
+            # if = input file. If not given, stdin.
 
-            #of = output file. If not given, stdout.
+            # of = output file. If not given, stdout.
 
-            #echo a | cat:
+            # echo a | cat:
 
-                echo a | dd
+                 echo a | dd
 
-            #cat a:
+            # cat a:
 
-                echo a > a
-                dd if=a
+                 echo a > a
+                 dd if=a
 
-            #cp a b:
+            # cp a b:
 
                 dd if=a of=b
 
         ##status
 
-            #stop printing status lines:
+            # stop printing status lines:
 
                 echo a | dd status=none
 
         ##bs
 
-            #How many input and output bytes to read/write at once.
+            # How many input and output bytes to read/write at once.
 
-            #Also defines the block size for count, skip and seek.
+            # Also defines the block size for count, skip and seek.
 
-            #Obs and ibs for output and input seprately.
+            # Obs and ibs for output and input seprately.
 
-            #Default values: 512 B.
+            # Default values: 512 B.
 
         ##count
 
-            #copy up to count blocks (defined by bs):
+            # copy up to count blocks (defined by bs):
 
                 assert [ `echo -n 1234 | dd status=none bs=2 count=1` = 12 ]
                 assert [ `echo -n 1234 | dd status=none bs=1 count=3` = 123 ]
 
         ##size suffixes
 
-            #-c: 1 (char)
-            #-w: 2 (word)
-            #-kB: 1000
-            #-K: 1024
-            #-MB: 1000*1000
-            #-M: 1024*1024
+            # -`c`: 1 (char)
+            # -`w`: 2 (word)
+            # -`kB`: 1000
+            # -`K`: 1024
+            # -`MB`: 1000*1000
+            # -`M`: 1024*1024
 
-            #and so on for G, T, P, E, Z and Y!
+            # and so on for G, T, P, E, Z and Y!
 
                 assert [ `echo -n 123 | dd status=none bs=1c count=1` = 1 ]
                 assert [ `echo -n 123 | dd status=none bs=1w count=1` = 12 ]
 
-            #The larger the chunck size, the potentially faster file transfers will be.
+            # The larger the chunck size, the potentially faster file transfers will be.
 
-            #Nowdays, `4M` is a good value for large file transfers.
+            # Nowdays, `4M` is a good value for large file transfers.
 
         ##skip
 
-            #skip first n input blocks (defined by bs or ibs):
+            # Skip first n input blocks (defined by bs or ibs):
 
                 assert [ `echo -n 123 | dd status=none bs=1 skip=1` = 23 ]
 
         ##seek
 
-            #skip first n output blocks (defined by bs or obs):
+            # Skip first n output blocks (defined by bs or obs):
 
-            #TODO minimal exmaple
+            # TODO minimal exmaple
 
         ##conv
 
-            #do serveral data conversions on copy
+            # Do serveral data conversions on copy
 
-            #ucase: uppercase
+            # ucase: uppercase
 
                 assert [ `echo -n abc | dd status=none conv=ucase` = ABC ]
 
@@ -1168,35 +1191,35 @@
 
         ##applications
 
-            #Zero an entire block device located at `/dev/sdb` (CAUTION!!!! VERY DANGEROUS!!!!):
+            # Zero an entire block device located at `/dev/sdb` (CAUTION!!!! VERY DANGEROUS!!!!):
 
-                #sudo dd bs=4M if=/dev/zero of=/dev/sdb
+                 #sudo dd bs=4M if=/dev/zero of=/dev/sdb
 
-            #As of 2013 with mainstream system specs,
-            #this took around 6 minutes on a 2Gb flahs device (around 5.0 MB/s).
+            # As of 2013 with mainstream system specs,
+            # this took around 6 minutes on a 2Gb flahs device (around 5.0 MB/s).
 
-            #If you are really serious about permanently deleting files,
-            #use a program for that with a potentially more advanced algorithm.
+            # If you are really serious about permanently deleting files,
+            # use a program for that with a potentially more advanced algorithm.
 
     ##pagers
 
         ##less
 
-            #file pager (viewer)
-            #loads faster than vim
-            #vimlike commands
+            # File pager (viewer).
+            # Loads faster than vim.
+            # Some vimlike commands
 
-            #/ : search forward
-            #n : repeat last search
-            #d : down one page
-            #u : up one page
-            #g : top of document
-            #G : bottom of document
-            #g : top of document
-            #<ENTER> : down one line
+            # - `/`: search forward
+            # - `n`: repeat last search
+            # - `d`: down one page
+            # - `u`: up one page
+            # - `g`: top of document
+            # - `G`: bottom of document
+            # - `g`: top of document
+            # <ENTER> : down one line
 
-            less "$f"
-            echo $'ab\ncd' | less
+                less "$f"
+                echo $'ab\ncd' | less
 
         ##more
 
@@ -1215,7 +1238,7 @@
             # Break file into pages with a certain number of lines
             # and print to stdout:
 
-            ( for i in `seq 200`; do echo a; done ) | pr
+                ( for i in `seq 200`; do echo a; done ) | pr
 
     ##nl
 
@@ -1290,15 +1313,15 @@
         # Topological sorting:
         # <http://en.wikipedia.org/wiki/Tsort_%28Unix%29>
 
-        echo $'1 2\n2 3' | tsort
-            #1
-            #2
-            #3
+            echo $'1 2\n2 3' | tsort
+                #1
+                #2
+                #3
 
-        echo $'1 2\n2 1' | tsort
-            #contains loop
-        echo $?
-            #1
+            echo $'1 2\n2 1' | tsort
+                #contains loop
+            echo $?
+                #1
 
     ##uniq
 
@@ -1327,153 +1350,167 @@
 
     ##tee
 
-        #POSIX 7
+        # POSIX 7
 
-        ls | tee file
-            #ls to stdout and file
+        # echoes stdin to multiple files ant to stdout.
 
-        ls | tee file 1>&2
-            #ls to file and stderr
+        # echo to stdout and file:
 
-        ls -l | tee file | sort
-            #ls to file and sort
+            echo a | tee file
 
-        ls | tee –a file
-            #ls append to file
+        # echo to file and stderr:
 
-        ls | tee f1 f2 f3
-            #ls to multple files
+            echo a | tee file 1>&2
 
-        #tee to multiple processes:
+        # echo to file and sort
+
+            echo a | tee file | sort
+
+        # echo append to file:
+
+            echo a | tee –a file
+
+        # echo to multple files
+
+            echo a | tee f1 f2 f3
+
+        # tee to multiple processes:
 
             echo a | tee >(seqn 2) tee >(seqn 2) | tr a b
 
-        #note how process are run in parallel and output order is variable.
+        # note how process are run in parallel and output order is variable.
 
     ##tr
 
-        #POSIX 7
+        # POSIX 7
 
-        #charwise text operations
+        # Charwise text operations.
 
-        #replaces a by A and b by B and c by C:
+        # Replaces a by A and b by B and c by C:
 
             assert [ `echo -n cab | tr abc ABC` =  CAB ]
 
-        #ranges are understood. Convert to uppercase:
+        # Ranges are understood. Convert to uppercase:
 
             assert [ `echo -n cab | tr a-z A-Z` =  CAB ]
 
-        #posix character classes are understood. Remove non alphtnum chras:
+        # POSIX character classes are understood. Remove non alphtnum chras:
 
             assert [ `echo -n 'ab_@' | tr -cd "[:alpha:]"` = ab ]
 
-        #-c : complement and replace. replaces all non abc chars by d
+        # - `c`: complement and replace. replaces all non abc chars by d
 
-            assert [ `echo -n dcba | tr -c abc 0` =  0cba ]
+                assert [ `echo -n dcba | tr -c abc 0` =  0cba ]
 
-        #-d: deletes abc chars:
+        # - `d`: deletes abc chars:
 
-            assert [ `echo -n dcba | tr -d abc` =  d ]
+                assert [ `echo -n dcba | tr -d abc` =  d ]
 
-        #-s: replaces multiple consecutive 'a's and 'b's by isngle a
+        # - `s`: replaces multiple consecutive 'a's and 'b's by isngle a
 
-            assert [ `echo -n aabbaac | tr -s ab` =  abac ]
+                assert [ `echo -n aabbaac | tr -s ab` =  abac ]
 
     ##cut
 
-        #POSIX 7
+        # POSIX 7
 
-        #Select columns from text tables.
+        # Select columns from text tables.
 
-        #For more complex operation such as selecting a line from a certain field, consider `awk`.
+        # For more complex operation such as selecting a line from a certain field, consider `awk`.
 
-        #`-f`: field. what column to print.
+        # `-f`: field. what column to print.
 
-            echo $'a\tb\nc\td' | cut -f1
-            #$'a\nc'
+             echo $'a\tb\nc\td' | cut -f1
+                #$'a\nc'
 
-        #`-d`: delimier
+        # `-d`: delimier
 
-            echo $'a:b\nc:d' | cut -d: -f1
-            #$'a\nc'
+             echo $'a:b\nc:d' | cut -d: -f1
+                #$'a\nc'
 
-        #Gets last if delimier too large:
+        # Gets last if delimier too large:
 
-            echo $'a' | cut -d: -f2
-            #$'a'
+             echo $'a' | cut -d: -f2
+                #$'a'
 
-        #Multiple columns, first and third:
+        # Multiple columns, first and third:
 
-            echo $'a:b:c\nd:e:f' | cut -d: -f1,3
-            #$'a:c\nd:f'
+             echo $'a:b:c\nd:e:f' | cut -d: -f1,3
+                #$'a:c\nd:f'
 
-        #Column range from first to third:
+        # Column range from first to third:
 
             echo $'a:b:c:d\ne:f:g:h' | cut -d: -f1-3
-            #$'a:b:c\ne:f:g'
+                #$'a:b:c\ne:f:g'
 
     ##wc
 
-        #POSIX 7
+        # POSIX 7
 
-        #count things
+        # Does word, line, character and other similar counts.
 
-        #mnemonic: Word Count.
+        # Mnemonic: Word Count.
 
             echo -n $'a\nb c' | wc
-            #1 3 5
-            #^ ^ ^
+                #1 3 5
+                #^ ^ ^
+                #a b c
 
-        #newline, word, byte
+        # Legend:
 
-            #-c bytes only
-            #-m chars only
-            #-l newlines only
-            #-L max line lenght only
-            #-w words only
+        # - `a`: newline
+        # - `b`: word
+        # - `c`: byte
+
+        # Options:
+
+        # - `c` bytes only
+        # - `m` chars only
+        # - `l` newlines only
+        # - `L` max line lenght only
+        # - `w` words only
 
     ##head
 
-        #POSIX 7
+        # POSIX 7
 
-        #filter 10 first lines:
+        # Filter 10 first lines:
 
             seq 20 | head
 
-        #filter 3 first lines:
+        # Filter 3 first lines:
 
             seq 20 | head -n3
 
-        #2 first bytes:
+        # 2 first bytes:
 
             assert [ "`echo -en 'abc' | head -c 2`" = "ab" ]
 
         ##gnu coreutils
 
-            #remove last two bytes:
+            # Remove last two bytes:
 
                 assert [ "`echo -en 'abc' | head -c -2`" = "a" ]
 
     ##tail
 
-        #POSIX 7
+        # POSIX 7
 
-        #show last 10 lines of f:
+        # Show last 10 lines of f:
 
             tail "$f"
 
-        #show last 3 lines of f:
+        # Show last 3 lines of f:
 
             tail -n3 "$f"
 
     ##truncate
 
-        #sets file to given size
+        # Sets file to given size.
 
-        #if greater, pads with 0s
+        # If greater, pads with 0s.
 
-        #if smaller, data loss
+        # If smaller, data loss.
 
             echo ab > f
             truncate -s 1 f
@@ -1485,9 +1522,9 @@
 
     ##split
 
-        #corutils package
+        # corutils.
 
-        #split files into new smaller files of same size
+        # Split files into new smaller files of same size
 
             echo -n abc > f
 
@@ -1498,39 +1535,44 @@
             assert [ `cat p01` = b ]
             assert [ `cat p02` = c ]
 
-        #existing files are overwritten:
+        # Existing files are overwritten:
 
-        #-d: uses number suffixes, otherwise, uses letters aa, ab, ac, ...
-        #-b: bytes per file
-        #-n: number of files
+        # Options:
+
+        # - `d`: uses number suffixes, otherwise, uses letters aa, ab, ac, ...
+        # - `b`: bytes per file
+        # - `n`: number of files
 
     ##csplit
 
-        #corutils package
+        #corutils.
 
-        #split files into new smaller files at lines that match given EREs
+        # Split files into new smaller files at lines that match given EREs.
 
-        #matching lines are kept
+        # Matching lines are kept.
 
-        echo $'0\naa\n1\naa\n2' > f
-        csplit f '/^a/' '{*}'
-        assert [ `cat xx00` = 0 ]
-        assert [ `cat xx01` = $'aa\n1' ]
-        assert [ `cat xx02` = $'aa\n2' ]
+            echo $'0\naa\n1\naa\n2' > f
+            csplit f '/^a/' '{*}'
+            assert [ `cat xx00` = 0 ]
+            assert [ `cat xx01` = $'aa\n1' ]
+            assert [ `cat xx02` = $'aa\n2' ]
 
     ##paste
 
-        #useless
+        # POSIX 7.
 
-        #POSIX 7
+        # Useless
 
-        echo -e "a a a a a a a a a a a a a a\na" > a
-        echo -e "b b\nb b"                       > b
-        echo -e "c c\nc c\nc"                    > c
-        paste a b c
-            #shows files side by side line by line
-            #default separator: tab
-            #long lines will make this unreadable
+        # Shows files side by side line by line.
+
+        # Default separator: tab.
+
+        # Long lines will make this unreadable.
+
+            echo -e "a a a a a a a a a a a a a a\na" > a
+            echo -e "b b\nb b"                       > b
+            echo -e "c c\nc c\nc"                    > c
+            paste a b c
 
     ##expand
 
@@ -1546,35 +1588,39 @@
 
     ##seq
 
-        seq 1
-        seq 1 3
-            #1
-            #2
-            #3
+        # Counts to stdout.
 
-        seq 1 2 5
-            #1
-            #3
-            #5
+            seq 1
+            seq 1 3
+                #1
+                #2
+                #3
 
-        #-s : separator
-        #-w : equal width
+            seq 1 2 5
+                #1
+                #3
+                #5
+
+        # Options:
+
+        # - `s`: separator
+        # - `w`: equal width
 
         ##non-application
 
-            #you could use this for loops:
+            # You could use this for loops:
 
                 for i in `seq 10`; do echo $i; done
 
-            #but don't
+            # But don't
 
-            #use brace expansion instead which is a bash built-in,
-            #and thus potentially faster (possibly no new process spawned):
+            # Use brace expansion instead which is a bash built-in,
+            # and thus potentially faster (possibly no new process spawned):
 
                 for i in {1..10}; do echo $i; done
 
-            #use this only if you really need to control
-            #the output with the options
+            # Use this only if you really need to control
+            # the output with the options.
 
     ##path operations
 
@@ -1596,47 +1642,47 @@
 
     ##strings
 
-        #search for printable strings in file
+        # Search for printable strings in file.
 
-        #prints sequences of at least 4 printable chars by default
+        # Prints sequences of at least 4 printable chars by default.
 
-        #useful to extract information from non textual formats,
-        #which contain some textual data
+        # Useful to extract information from non textual formats,
+        # which contain some textual data
 
             gcc c.c
             strings a.out
 
     ##sed
 
-        #POSIX 7
+        # POSIX 7
 
-        #Stream EDitor
+        # Stream EDitor
 
-        #Modifies files non-interactively.
+        # Modifies files non-interactively.
 
-        #beginner to pro tutorial: <http://www.grymoire.com/Unix/Sed.html>
+        # Beginner to pro tutorial: <http://www.grymoire.com/Unix/Sed.html>
 
         ##alternatives
 
-            #Consider using perl instead of this
+            # Consider using Python instead of this, or Perl if your are insane and really want to golf.
 
-            #sed has only slightly better golfing than perl.
+            # sed has only slightly better golfing than Perl.
 
-            #The only real advantage of sed over perl is being POSIX, while perl is only LSB.
+            # The only real advantage of sed over Perl is that Sed is POSIX, while perl is only LSB.
 
         ##s command
 
-            #substitute:
+            # Substitute:
 
                 assert [ "`echo $'aba\ncd' | sed 's/a/b/'`" = $'bba\ncd' ]
 
-            #patter is a BRE
+            # pattern is a BRE
 
-            #g modifier:
+            # g modifier:
 
                 assert [ "`echo 'aba' | sed 's/a/b/g'`" = $'bbb' ]
 
-            #replaces multiple non overalpping times on each line
+            # Replaces multiple non overalpping times on each line.
 
             ##patterns are BREs
 
@@ -1867,32 +1913,32 @@
 
                 #-n: don't print all lines (default)
 
-                sed -n 's/find/repl/gp'
-                    #/p: print if match
-                    #prints only lines that match find
-                    #does not change f
+                    sed -n 's/find/repl/gp'
+                        #/p: print if match
+                        #prints only lines that match find
+                        #does not change f
 
-                sed -n '/find/p'
-                    #same as grep
+                    sed -n '/find/p'
+                        #same as grep
 
             ##-i
 
-                f=f
-                echo $'a\nb' > "$f"
-                sed -i 's/a/A/' "$f"
-                assert [ "`cat "$f"`" = $'A\nb' ]
+                    f=f
+                    echo $'a\nb' > "$f"
+                    sed -i 's/a/A/' "$f"
+                    assert [ "`cat "$f"`" = $'A\nb' ]
 
-                sed -i.bak 's/A/a/' "$f"
-                    #baks up old file with .bak suffix
-                assert [ "`cat "$f"`" = $'a\nb' ]
-                assert [ "`cat "$f".bak`" = $'A\nb' ]
-                assert [ `ls | wc -l` = 2 ]
+                    sed -i.bak 's/A/a/' "$f"
+                        #baks up old file with .bak suffix
+                    assert [ "`cat "$f"`" = $'a\nb' ]
+                    assert [ "`cat "$f".bak`" = $'A\nb' ]
+                    assert [ `ls | wc -l` = 2 ]
 
-                    #-i: in place
+                #-i: in place
 
-                    #whatever it would print to stdout, writes to the input file instead
+                #whatever it would print to stdout, writes to the input file instead
 
-                    #cannot be used with stdin input!
+                #cannot be used with stdin input!
 
             ##-e
 
@@ -4394,44 +4440,63 @@
 
     ##chmod
 
-        #POSIX
+        # POSIX
 
-        #change file permissions
+        # Change file permissions
 
-        #chomod [ugoa][+-=][rwxXst]+
+        # Syntax:
+
+            # chomod [ugoa][+-=][rwxXst]+
+
+        # Make f executable for all (owner, group and other);
+
             chmod a+x "$f"
-                #makes f executable for all (owner, group and other)
+
+        # Makes f readable for all:
+
             chmod a+r "$f"
-                #makes f readable for all
-            #a vs nothing: umask
-                umask 002
-                chmod +w "$f"
-                stat -c "%a" "$f"
-                    #220
-                chmod a=w "$f"
-                stat -c "%a" "$f"
-                    #222
-                chmod o=w "$f"
-                stat -c "%a" "$f"
-                    #002
-            chmod -x "$f"
-                #makes f not executable for all
-            chmod =r "$f"
-                #makes file readable by all
-                #makes file not executable and not writeble by all
-            chmod u+x "$f"
-                #makes f executable for owner
-            chmod go+x "$f"
-                #makes f executable for group and other
-            chmod +rw "$f"
-                #makes f readable and writible for all
+
+        # The difference between using `a` and nothing is that when using
+        # nothing `umask` comes into play.
+
+            umask 002
             chmod +w "$f"
-        chmod 777 "$f"
-            #chmod =rwx
+            stat -c "%a" "$f"
+                #220
+            chmod a=w "$f"
+            stat -c "%a" "$f"
+                #222
+            chmod o=w "$f"
+            stat -c "%a" "$f"
+                #002
 
-        #sticky bit, suid sgid bits
+        # Make f not executable for all:
 
-            #sticky
+            chmod -x "$f"
+
+        # Make file not executable and not writeble by all:
+
+            chmod =r "$f"
+
+        # Make f executable for owner:
+
+            chmod u+x "$f"
+
+        # Makes f executable for group and other:
+
+            chmod go+x "$f"
+
+        # Makes f readable and writible for all:
+
+            chmod +rw "$f"
+
+        # Same as `chmod =rwx`:
+
+            chmod 777 "$f"
+
+        ##sticky bit, suid sgid bits
+
+            # Sticky bit:
 
                 chmod 1000 "$f"
                 chmod o=t "$f"
@@ -4443,15 +4508,17 @@
                 chmod g=t "$f"
                 stat -c "%A" "$f"
                     #---------T
-            chmod =s "$f"
-            chmod 6000
-                #set suid and sgid
-            chmod u=s "$f"
-            chmod 4000
-                #set suid and sgid
-            chmod g=s "$f"
-            chmod 2000
-            #can't clear them on numeric mode! only symbolic!
+                chmod =s "$f"
+                chmod 6000
+                    #set suid and sgid
+                chmod u=s "$f"
+                chmod 4000
+                    #set suid and sgid
+                chmod g=s "$f"
+                chmod 2000
+
+            # Can't clear them on numeric mode, only symbolic:
+
                 chmod 7777 f
                 stat -c "%A" "$f"
                     #-rwsrwsrws
@@ -4462,8 +4529,8 @@
                 stat -c "%A" "$f"
                     #----------
 
-        #can only change permissions for files you own
-        #even if you have all the permissions on the file:
+        # Can only change permissions for files you own
+        # even if you do not have all the permissions on the file:
 
             su a
             touch a
@@ -4473,47 +4540,51 @@
 
     ##umask
 
-        #shows/sets permissions that will be *removed*
-        #this is system implemented, and interacts with certain system calls such as `open`
-        #this also has direct effect on commands such as `chmod` and `touch`
+        # Shows/sets permissions that will be *removed*.
 
-        touch a
-        ls -l a
-            #rw-rw-r--
-        umask
-            #002
-            #ok the other w was removed
-            #the x are not set by touch by default
-        umask 0
-        touch b
-            #rw-rw-rw-
-        umask 777
-        touch c
-            #---------
+        # This is system call implemented, not shell implemented,
+        # and interacts with certain system calls such as `open`.
+
+        # Has direct effect on commands such as `chmod` and `touch`.
+
+            touch a
+            ls -l a
+                #rw-rw-r--
+            umask
+                #002
+                #ok the other w was removed
+                #the x are not set by touch by default
+            umask 0
+            touch b
+                #rw-rw-rw-
+            umask 777
+            touch c
+                #---------
 
     ##stat
 
-        #POSIX
+        # POSIX
 
-        #cli for sys_stat
+        # CLI for sys_stat.
 
-        #get file/dir info such as:
+        # Get file/dir info such as:
 
-        #- size
-        #- owner
-        #- group
-        #- permissions
-        #- last access date
-        #- create date
-        #- modify date
+        # - size
+        # - owner
+        # - group
+        # - permissions
+        # - last access date
+        # - create date
+        # - modify date
+
+        # Example:
 
             touch f
             stat f
-                #lots of info
 
         ##-c
 
-            #format string
+            # Format string:
 
                 chmod 1234 f
                 assert [ `stat -c "%a" f` = "234" ]
@@ -4521,7 +4592,7 @@
                 chmod a=rt f
                 assert [ "`stat -c "%A" f`" = "-r--r--r-T" ]
 
-            #inode:
+            # Inode:
 
                 touch a
                 ln a b
@@ -4529,7 +4600,7 @@
 
         ##--print
 
-            #like `-c` but interprets escapes like `\n`
+            # Like `-c` but interprets escapes like `\n`:
 
                 touch a
                 echo "`stat --print "%a\n%a\n" a`"
@@ -4539,48 +4610,48 @@
 
         ##ln
 
-            #make hardlinks and symlinks
+            # Make hardlinks and symlinks
 
-            #this can also be done with `cp`
+            # This can also be done with `cp`
 
-            #hardlink:
+            # Hardlink:
 
                 ln dest name
 
-            #symlink files only:
+            # Symlink files only:
 
                 ln -s dest name
 
-            #symlink dir:
+            # Symlink dir:
 
                 ln -ds dest name
 
-            #the link will be created even if the destination does not exist:
+            # The link will be created even if the destination does not exist:
 
                 ln -s idontexist name
 
-            #if the name is in another dir, the destination is not changed by default:
+            # If the name is in another dir, the destination is not changed by default:
 
                 mkdir d
                 ln -s a d/a
                 [ `readlink d/a` = a ] || exit 1
 
-            #to create relative to dest use `-r`:
+            # To create relative to dest use `-r`:
 
                 mkdir d
                 ln -rs a d/a
                 [ `readlink d/a` = ../a ] || exit 1
 
-            #if the name is in another dir, the destination is not changed by default:
+            # If the name is in another dir, the destination is not changed by default:
 
-            #absolute link:
+            # Absolute link:
 
                 ln /full/path/to/dest name
                 [ `readlink name` = "/full/path/to/dest" ] || exit 1
 
         ##readlink
 
-            #get target of symlink
+            # Get target of symlink
 
                 touch a
                 ln -s a b
@@ -4589,15 +4660,15 @@
                 assert [ "`readlink c`" = $'b' ]
                 assert [ "`readlink b`" = $'a' ]
 
-            #recursive:
+            # Recursive:
 
                 assert [ "`readlink -f c`" = $'a' ]
 
         ##realpath
 
-            #resolve all symbolic links and '.' and '..' entries of a path recursivelly
+            # Resolve all symbolic links and '.' and '..' entries of a path recursivelly
 
-            #prefer readlink which is more widespread by default in distros
+            # Prefer readlink which is more widespread by default in distros
 
                 mkdir a
                 ln -s a b
@@ -4607,36 +4678,36 @@
                 cd ..
                 realpath ./b/b
 
-            #Output:
+            # Output:
 
                 = "`pwd`/a/a"
 
-            #readlink -f
+            # readlink -f
 
-                #same:
+                # Same as:
 
                     readlink ./b/b
 
-                #and is part of coreutils, so more widespread default.
+                # and is part of coreutils, so more widespread default.
 
     ##cmp
 
-        #compares F and G byte by byte, until first difference is found.
+        # Compares F and G byte by byte, until first difference is found.
 
             cmp "$F" "$G"
 
-        #if equal, print nothing.
+        # If equal, print nothing.
 
-        #else, print location of first difference.
+        # Else, print location of first difference.
 
         ##-s
 
-            #silent
+            # Silent
 
-            #return status 0 if equal
-            #!= 0 otherwise
+            # Return status 0 if equal
+            # != 0 otherwise.
 
-            #print nothing.
+            # Prints nothing.
 
                 cmp -s "$F" "$G"
                 if [ $? -eq 1 ]; then
@@ -4647,23 +4718,24 @@
 
     ##xargs
 
-        #posix 7
+        # POSIX 7
 
-        #do some command on lots of files.
+        # Do a command that takes each line of stdin as an argument.
 
-        #great for combo with find.
+        # Great for combo with find to do a command on many files.
 
         ##alternatives
 
-            #downsides of xargs:
+            # Downsides of xargs:
 
             #- max number of arguments
             #- escaping madness for multiple commands
 
-            #upsides of xargs:
+            # Upsides of xargs:
+
             #- golfing!
 
-            #in scripts, always use the more versatile (and slightly verbose) read while techinque:
+            # In scripts, always use the more versatile (and slightly more verbose) read while techinque:
 
                 while read f; do
                     echo "$f";
@@ -4677,158 +4749,168 @@
 
         ##basic operation
 
-            #read line from stdin, append as argument to the given command
+            # Read line from stdin, append as argument to the given command
 
-            #does not automatically quote!
+            # Does not automatically quote!
 
-            #the default command is echo, which is basically useless
+            # The default command is echo, which is basically useless
 
                 echo $'a\nb' | xargs
                 echo $'a\nb' | xargs echo
                 echo $'a\nb c' | xargs echo
 
-            #empty lines are ignored:
+            # Empty lines are ignored:
 
                 echo $'a\n\nb' | xargs
 
         ##-0
 
-            #read up to nul char instead of newline char
+            # Read up to nul char instead of newline char.
 
-            #allows for files with spaces, and even newlines!
+            # Allows for files with spaces, and even newlines!
 
                 echo -en 'a\0b' | xargs -0
 
-            #combo with `find -print0`:
+            # Combo with `find -print0`:
 
                 find . -print0 | xargs -0
 
         ##-I
 
-            #allows you to put the argument anywhere and to quote it
+            # Allows you to put the argument anywhere and to quote it
 
                     echo $'a\nb' | xargs -I '{}' echo '{}'
 
         ##multiple commands
 
-            #must use bash
+            # Must use the `xargs bash` technique.
 
-            #only use this for very simple commands, or you are in for an escaping hell!
+            # Only use this for very simple commands, or you are in for an escaping hell!
 
-            #if you have to do this, use the read while technique instead
+            # If you have to do this, use the read while technique instead.
 
                     echo $'a\nb' | xargs -I '{}' bash -c "echo 1: '{}'; echo 2: '{}'"
 
         ##applications
 
-            #find and replace in files found with perl regex:
+            # Find and replace in files found with perl regex:
 
                 find . -type f | xargs perl -pie 's/a/A/g'
 
             ##find files whose path differ from other files only by case
 
-                #useful when copying from linux to a system that does not accept
-                #files that differ only by case (the case for MacOS and Windows)
+                # Useful when copying from linux to a system that does not accept
+                # files that differ only by case (the case for MacOS and Windows)
 
                     find . | sort -f | uniq -di
 
-                #remove them:
+                # Remove them:
 
                     find . | sort -f | uniq -di | xargs -I'{}' rm '{}'
 
     ##locate
 
-        #searchs for files in entire computer
+        # Searchs for files in entire computer.
 
-        #prints all matches
+        # Prints all matches.
 
-        #this uses a database, which must be updated with updatedb before your new file is found
+        # This uses a database, which must be updated with updatedb before your new file is found.
 
-        #commonly, `updatedb` is a cronjob
+        # Commonly, `updatedb` is a cronjob.
 
-        #match any substring in entire path:
+        # Match any substring in entire path:
 
             locate a
             locate /a
 
-        #to force update of file cache, use updatedb
+        # To force update of file cache, use updatedb.
 
     ##updatedb
 
-        #updates file cache for locate
+        # Update file cache for locate:
 
             sudo updatedb
 
     ##file
 
-        #determine file type
+        # POSIX 7
 
-        #posix 7
+        # Attempts to determine file type and retreive metadata.
 
-        #this is in general impossible,
-        #but program makes good guesses
+        # This is in general impossible,
+        # but program makes good guesses.
 
             echo a > a
             file a
 
-        #Output:
+        # Output:
 
             a: ASCII text
 
         ##-L
 
-            #follow links
+            # Follow links
 
-            echo a > a
-            ln -s a b
-            file b
-                #b: symbolic link to `a'
-            file -L b
-                #b: ASCII text
+                echo a > a
+                ln -s a b
+                file b
+                    #b: symbolic link to `a'
+                file -L b
+                    #b: ASCII text
 
     ##fuser
 
         #psmisc package
 
-        #determines which process are using a file or directory
+        # Determines which process are using a file or directory.
 
-        #optionally sends signals to those processes
+        # Can send signals to those processes.
 
-        fuser .
-            #shows pids followed by a prostfix:
-                #c      current directory
-                #e      executable being run
-                #f      open file. f is omitted in default display mode
-                #F      open file for writing. F is omitted in default display mode
-                #r      root directory
-                #m      mmap’ed file or shared library
+            fuser .
 
-            #you will have at least one process here: your bash
+        # Shows pids followed by a suffix:
 
-        fuser -v .
-            #shows program and user also
+        # -`c`: current directory
+        # -`e`: executable being run
+        # -`f`: open file. f is omitted in default display mode
+        # -`F`: open file for writing. F is omitted in default display mode
+        # -`r`: root directory
+        # -`m`: mmap’ed file or shared library
 
-        fuser -v -n tcp 5000
-            #check process using tcp/udp ports
+        # You will have at least one process here: your bash
+
+        # Also Show program and user:
+
+            fuser -v .
+
+        # Check process using tcp/udp ports:
+
+            fuser -v -n tcp 5000
 
     ##which
 
-        #prints full path of executable in path
+        # Prints full path of executable in path.
 
-        #very useful to understand where things are located
+        # Does not necessarily reflect the actual program that will actually be used
+        # since this is not a bash built-in so it does not know:
 
-        #If you give it a sh builtin like `cd`, outputs nothing,
-        #so this is a convenient test is something is a `sh` builtin or not.
+        # - the state of the bash path cache
+        # - does not see built-ins
 
-        #Examples:
+        # If you give it a command that only exists as a builtin such as `cd`, outputs nothing.
+
+        # Note however that there are commands which exist both as shell built-ins and
+        # as separate executales such as `echo`.
+
+        # Examples:
 
             which ls
 
-        #Sample output:
+        # Sample output:
 
             /bin/ls
 
-        #The following print nothing:
+        # The following print nothing:
 
             which im-not-in-path
 
@@ -4838,169 +4920,94 @@
 
         ##application
 
-            #quick and dirty install if not installed:
+            # Quick and dirty install if not installed:
 
                 if [ -z "`which zenity`" ]; then
                         sudo aptitude install zenity
                 fi
 
-            #could also be done bashonly with `type -P`.
+            # Could also be done bashonly with `type -P`.
 
     ##mktemp
 
-        #create temporary directories and files in currend directory
+        # Create temporary files in the temporary directory.
 
-        #creates a temporary file in `/tmp/`:
+        # Creates a temporary file in `/tmp/`:
 
             f="$(mktemp)"
             echo "$f"
             assert test -f "$f"
             rm "$f"
 
-        #directory:
+        # Directory:
 
             d="$(mktemp -d)"
             echo "$f"
             assert test -d "$d"
             rm -r "$d"
 
-        #custom name template:
+        # Custom name template:
 
             f="$(mktemp --tmpdir abcXXXdef)"
             assert echo "$f" | grep -E 'abc...def'
             assert test -f "$f"
             rm "$f"
 
-        #must use `--tmpdir` with template or else file is created in current dir
+        # Must use `--tmpdir` with template or else file is created in current dir
 
     ##pathchk
 
-        #check if path is portable across posix systems
+        # Check if path is portable across POSIX systems:
 
             pathchk -p 'a'
             pathchk -p '\'
 
     ##fdupes
 
-        #fine command line tool for eliminating byte by byte duplicates
-        #you can either
-            #pick one by one
-            #tell fdupes to pick the first one without asking (seem to pick one of the dirs first always)
+        # Fine command line tool for eliminating byte by byte duplicates
+        # you can either:
 
-        sudo aptitude install -y fdupes
+        #- pick one by one
+        #- tell fdupes to pick the first one without asking (seem to pick one of the dirs first always)
 
-        fdupes -r .
-            #finds and prints dupes
+        # Finds and prints dupes:
 
-        fdupes -rd .
-            #finds dupes, and prompt which to keep for each match
+            fdupes -r .
 
-##puppet
+        # Finds dupes, and prompt which to keep for each match
 
-    #Cross platform system configuration manager.
-
-    #Allows to easily check and ensure presence of:
-
-    #- files
-    #- packages (software)
-    #- user
-    #- group
-    #- cronjobs
-    #- services
-
-    #across multiple computers.
-
-    #To do that, puppet creates an abstraction interface over all of those resources
-    #that allows to represent them on multiple different platforms.
-
-    #Next, each platform in which it is implemented must implement those resources,
-    #by implementing for example methods to check and create those resources on the system.
-
-    #For example, on all POSIX systems, puppet can implement user and group resources
-    #via `useradd` programs, while a resource such as packages has to be implemented differently
-    #on different Linux distros (apt-get on Ubuntu, yum on Fedora, etc.).
-
-    #New resources can be installed via plugins, or made available in newer versions of puppet.
-
-    #Good intro: <http://docs.puppetlabs.com/learning/index.html>
-
-    ##describe subcommand
-
-        #Get info on currently installed resources:
-
-            puppet describe -l          # List all of the resource types available on the system.
-            puppet describe -s user     # Print short information about a type, without describing every attribute
-            puppet describe user        # Print long information, similar to what appears in the type reference.
-
-    ##resource subcommand
-
-        #View or modify resources.
-
-        #View all currently prsent user resources:
-
-            puppet resource user
-
-        #View resource `user` named `root`:
-
-            puppet resource user root
-
-##prompt user
-
-    ##while read case
-
-        #ask for user input, break into cases
-        #if none of the cases is met, print error message and ask again.
-        while true; do
-                read -p "Which case do you want? case a [a], case b [b], case c [c])" c
-                case "$c" in
-                    "a" ) echo "Action for case a"; break;;
-                    "b" ) echo "Action for case b"; break;;
-                    "c" ) echo "Action for case c"; break;;
-                    * ) echo "Does not match any of the possible cases. Try again."
-                esac
-        done
-
-        #same as above, but for the ultra common case of yes [Y] no [n] case
-        while true; do
-                read -p "Yes or no? [Y/n]" yn
-                case "$yn" in
-                        Y ) ; break;;
-                        n ) ; break;;
-                        * ) echo "Please enter either 'Y' or 'n'.";;
-                esac
-        done
+            fdupes -rd .
 
 ##setterm
 
-    #outputs stdout that changes terminal properties
+    # Outputs stdout that changes terminal properties.
 
-    #turns the cursor on/off:
+    # Turns the cursor on/off:
 
         setterm -cursor off
         setterm -cursor on
 
 ##users and groups
 
-    #To play around with those in Ubuntu, do ctrl+alt+f2, f3 ... f7.
-    #and you will go into login shells
-    #so you can log with different users at the same time
-    #while logged on a different shell, process on the other shells continue to run? TODO
+    # To play around with those in Ubuntu, do ctrl+alt+f2, f3 ... f7
+    # and you will go into login shells
+    # so you can log with different users at the same time.
 
-    #List users:
+    # List users:
 
         cat /etc/passwd
 
-    #Sample output:
+    # Sample output:
 
         #ciro:x:1000:1000:ciro,,,:/home/ciro:/bin/bash
 
-    #- `ciro`: user name
-    #- `x`: password is encrypted and stored in /etc/shadow
-    #- `1000`: user id. 0: root. 1-99: predefined. 100-999: reserved by system. 1000: first `normal` user
-    #- `1000`: primary user group
-    #- `ciro,,,` : comment field. Used by finger command.
-    #- `/home/ciro`: home dir
-    #- `/bin/bash`: login shell
+    # - `ciro`: user name
+    # - `x`: password is encrypted and stored in /etc/shadow
+    # - `1000`: user id. 0: root. 1-99: predefined. 100-999: reserved by system. 1000: first `normal` user
+    # - `1000`: primary user group
+    # - `ciro,,,` : comment field. Used by finger command.
+    # - `/home/ciro`: home dir
+    # - `/bin/bash`: login shell
 
     # You are likely to see many users beside those which have a home directory.
 
@@ -5020,7 +5027,7 @@
 
         getent group "$g"
 
-    cat /etc/default/useradd
+        cat /etc/default/useradd
 
     ##groups
 
@@ -5265,7 +5272,7 @@
 
         # For users that represent human end users, you will amost always want to use the following:
 
-        #- `-m` make home dir owned the user him with permissions 707.
+        # - `-m` make home dir owned the user him with permissions 707.
 
             # Without `-m` it is possible that X11 won't work.
 
@@ -5283,7 +5290,7 @@
                 sudo chmod 700 /home/$u $u
                 sudo chown /home/$u $u
 
-        #`-p pass`
+        # - `-p pass`
 
             # Set password for the user.
 
@@ -5295,21 +5302,20 @@
             # To create a password without showing it on screen,
             # consider using the `passwd` command.
 
-        #- `-s` sets login shell
+        # - `-s` sets login shell
 
             # You should probably set this to `/bin/bash`.
 
             # If you forgot this, consider using chsh.
 
-        #- `-g 1001`: set group the user belongs to
+        # - `-g 1001`: set group the user belongs to
 
-            #If g missing, either create a group u and add user
+            # If g missing, either create a group u and add user
+            # to a default group specified in some config file
 
-            #of add to a default group specified in some config file
+        # - `-G 1002, 1003`: set secondary groups
 
-        #- `-G 1002, 1003`: set secondary groups
-
-        #- `-c '$fullname,$office,$office2,$homephone'`
+        # - `-c '$fullname,$office,$office2,$homephone'`
 
             # Comment field thatwill end up on `/etc/passwd`.
 
@@ -5318,10 +5324,11 @@
 
             # To change this afterwards consier the `chfn` command.
 
-        #-e: password expires automatically at the given date.
-        #-f: account disables 5 days after password expires if pass not changed.
+        # - `e`: password expires automatically at the given date.
 
-            sudo useradd -e 2000-00-00 -f 5 $u
+        # - `f`: account disables 5 days after password expires if pass not changed.
+
+                sudo useradd -e 2000-00-00 -f 5 $u
 
     ##userdel
 
@@ -5339,38 +5346,38 @@
 
     ##groupadd
 
-        #create new groups
+        # Create new groups
 
             g=
             sudo groupadd $g
 
     ##usermod
 
-        #Add/remove users to groups
+        # Add/remove users to groups
 
-        #If you are the user, you have to logout/login again for changes to take effect.
+        # If you are the user, you have to logout/login again for changes to take effect.
 
-        #Change primary group of user u to g:
+        # Change primary group of user u to g:
 
             usermod -g $g $u
 
             g=1000,1001
 
-        #Sets exactly the supplementary groups of user u.
-        #Remove from non listed ones:
+        # Sets exactly the supplementary groups of user u.
+        # Remove from non listed ones:
 
-            usermod -G $g $u
+             usermod -G $g $u
 
-        #Append (-a) groups g to supplementary groups of user u:
+        # Append (-a) groups g to supplementary groups of user u:
 
-            usermod -aG $g $u
+             usermod -aG $g $u
 
-        #Change home dir of user u to d.
-        #The old contents are not moved:
+        # Change home dir of user u to d.
+        # The old contents are not moved:
 
-            usermod -d $d $u
+             usermod -d $d $u
 
-        #Also move his current dir contents to new dir
+        # Also move his current dir contents to new dir:
 
             usermod -md $d $u
 
@@ -5399,17 +5406,16 @@
 
         # Lock account of user:
 
-            sudo passwd -d "$u"
+            sudo passwd -l "$u"
 
-        # he cannot login anymore, until unlocked.
+        # He cannot login anymore.
+        # `sudo su` and ssh public key based logins still work since they don't use the user's password.
+        # `sudo -u $u` also works.
 
-        # It is still however possible to execute commands as the user via `sudo` and `su`:
-        # it is login shells that are disabled.
-
-        # On the `/etc/passwd` file, an exclamation mark was added
+        # On the `/etc/shadow` file, an exclamation mark was added
         # before hash of the password:
 
-            sudo cat /etc/passwd
+            sudo cat /etc/shadow
 
         # Before:
 
@@ -5452,7 +5458,7 @@
 
             ac -d
 
-        # Connection time for all users
+        # Connection time for all users:
 
             ac -p
 
@@ -5466,9 +5472,9 @@
 
     ##pinky
 
-        #lightweight finger
+        # coreutils
 
-        #coreutils package
+        # Lightweight finger.
 
     #chfn
 
@@ -5478,61 +5484,56 @@
 
     ##ldap
 
-        #filesystem, printer, etc server over network
+        # Filesystem, printer, etc server over network
 
     ##radius
 
-        #login server
+        # Login server.
 
-        #freeradius major implementation
+        # freeradius is the major implementation.
 
 ##languages
 
+    # This contains cheat for languages for which there is too little information
+    # to put them on their own files or repositories.
+
     ##bc
 
-        #simple interpreted language, calulator focus
+        # POSIX
 
-        #c-like syntax
+        # Simple interpreted language, calulator focus.
 
-        #features: variable definition, function definition, arrays, strings
+        # Cute toy language that only exists because it is POSIX =),
+        # but is completelly superseeded by any modern interpreted language
+        # (it only golfs very slightly better than Python).
 
-        #non features: string concatenation
+        # C like syntax.
 
-        #posix 7
+        # Features: variable definition, function definition, arrays, strings
+
+        # Non features: string concatenation:
 
             assert [ `echo '1+1' | bc` = 2 ]
 
-    ##ruby
-
-        #perl python concurrent
-
-        ##gem
-
-            #ruby package manager
-
-            #install a package:
-
-                sudo gem install pkg
-
     ##haskell
 
-        #glasgow compiler is the main compiler implementation
+        # Glasgow compiler is the main compiler implementation.
 
-        #compile:
+        # Compile:
 
             echo 'main = putStrLn "a"' > a.hs
             ghc a.hs
             [ `./a` = a ] || exit 1
 
-        #standard REPL interpreter that comes with the glasgow compiler:
+        # Standard REPL interpreter that comes with the glasgow compiler:
 
             ghci
 
 ##setleds
 
-    #set/get capslock, numlock and scrolllock led state
+    # Set/get capslock, numlock and scrolllock led state;
 
-    #only works from tty (ctrl+alt+F[1-6] on ubuntu)
+    # Only works from tty (ctrl+alt+F[1-6] on ubuntu);
 
         setleds
 
@@ -5540,15 +5541,17 @@
 
     ##simple-scan
 
-        #Very simple to scan! after installing the printer drivers.
+        # GUI.
+
+        # Very simple to scan (once you manage to install the scanner driver...)
 
             simple-scan
 
-        #Then click scan button. The image updates as the scan is made,
-        #and you can stop it when you are done before the scanner reached the bottom.
+        # Then click scan button. The image updates as the scan is made,
+        # and you can stop it when you are done before the scanner reached the bottom.
 
-        #Make sure your scanner supports the definition preferences you set
-        #or you will get a connexion error
+        # Make sure your scanner supports the definition preferences you set
+        # or you will get a connexion error.
 
 ##libs
 
@@ -5685,32 +5688,12 @@
 
 ##dbus-send
 
-    #suspend computer:
+    # Suspend computer:
 
         dbus-send --system --print-reply \
             --dest="org.freedesktop.UPower" \
             /org/freedesktop/UPower \
             org.freedesktop.UPower.Suspend
-
-##yes
-
-    #coreutils
-
-    #repeat an output forever!
-
-    yes
-        #y
-        #y
-        #y
-        #...
-
-    yes a b c
-        #a b c
-        #a b c
-        #a b c
-        #...
-
-    yes | timeout 1 cat
 
 ##factor
 

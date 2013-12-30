@@ -1,12 +1,10 @@
 #concept
 
-says which users can do what with each file
+Determines which users can do what with each file.
 
-so that people can own ther files for security and privacy reasons
+Specified by POSIX.
 
-specified by POSIX
-
-three types of people:
+Three types of people:
 
 - owner. applies the person who created the file.
 
@@ -26,82 +24,86 @@ applies to all people who are in that group.
 
 #notations
 
-two standard types, symbolic and numeric.
+Two standard notation types (POSIX): symbolic and numeric.
 
 ##numeric
 
 12 bits, logically grouped into 4 groups of three
-thus use of octal (3 bits per digit)
+thus use of octal, since octal can represent 3 bits per digit)
 
-meanings:
+Meanings:
 
-- 4000: suid
-- 2000: sgid
-- 1000: sticky bit
-- 0400: owner read
-- 0200:       write
-- 0100:       exec
-- 0040: group read
-- 0020:       write
-- 0010:       exec
-- 0004: other read
-- 0002:       write
-- 0001:       exec
+- `4000`: suid
+- `2000`: sgid
+- `1000`: sticky bit
+- `0400`: owner read
+- `0200`:       write
+- `0100`:       exec
+- `0040`: group read
+- `0020`:       write
+- `0010`:       exec
+- `0004`: other read
+- `0002`:       write
+- `0001`:       exec
 
 ##symbolic
 
-sample
+Sample:
 
     drwxrwxr-x
     ^^^^^^^^^^
     123456789A
 
-###1
+Meaning of each:
 
-- -: regular file
-- d: dir
-- l: symlink (not for hardlink)
-- p: named pipe (fifo)
-- s: unix socket
-- c: character file
-- d: block device file
+- `1`
 
-###2
+    - `-`: regular file
+    - `d`: dir
+    - `l`: symlink (not for hardlink)
+    - `p`: named pipe (fifo)
+    - `s`: unix socket
+    - `c`: character file
+    - `d`: block device file
 
-- r: owner can read
-- -: owner cannot read
+- `2`
 
-###3
+    - `r`: owner can read
+    - `-`: owner cannot read
 
-- w: owner can write
-- -: owner cannot write
+- `3`
 
-###4:
+    - `w`: owner can write
+    - `-`: owner cannot write
 
-- x: owner can    execute. suid off
-- s:       can           .      on
-- S:       cannot        . suid on
+- `4`
 
-###567
+    - `x`: owner can    execute. suid off
+    - `s`:       can           .      on
+    - `S`:       cannot        . suid on
 
-same as 234, with 7 as 4 but for sgid
+- `567`
 
-###89
+    Same as `234`, with `7` as `4` but for sgid.
 
-same as 23 and 56, but for others
+- `8`, `9`
 
-A:
+    Same as `23` and `56`, but for others
 
-same as 4 and 7, but replace `suid` by `sticky bit`,
-`s` by `t` and `S` by `T`.
+- `A`:
+
+    Same as `4` and `7`, but replace `suid` by `sticky bit`,
+    `s` by `t` and `S` by `T`.
 
 #directories
 
+This explains the permissions for directories.
+
 ##read
 
-you can view the files it contain
+It is possible to list directory.
 
-only works if you have read permission to *all* of the parent directories!
+Only works if you have read permission to *all* of the parent directories!
 
     su a
     mkdir -m 700 d
@@ -117,28 +119,24 @@ only works if you have read permission to *all* of the parent directories!
 
     cat d/b
         #permission denied,
-        #permission denied,
-        #even if b owns the file!
         #even if b owns the file!
     assert [ ! "$?" = 0 ]
 
     ls d/b
         #permission denied,
-        #permission denied,
-        #even if b owns the directory!
         #even if b owns the directory!
 
     assert [ ! "$?" = 0 ]
 
 ##write
 
-you can change the list of contents in the dir:
-add, remove and rename
+You can change the list of contents in the dir:
+add, remove and rename.
 
-only works if * x bit for is also on*!
-it makes no sense to have `w` without `x` on dirs!!
+*Only* works if you also have execute permission.
+`w` without `x` on dirs has no effect.
 
-works even if `r` is off.
+Works even if `r` is off.
 
     mkdir -m 444 r
     mkdir r/d
@@ -149,21 +147,21 @@ works even if `r` is off.
 
 ##execute
 
-programs can cd into dir (every process has current dir informatio associated to it)
+If you also have execute permissions to all of the parent dirs then you can:
 
-can access items in dir if their permissions let also you (read write exec)
+- cd into dir (every process has current dir informatio associated to it)
 
-can modify item list (add rename remove) *if w bit is also on*
+- access items in dir if their permissions let also you, for example modify file data.
 
-all of that can be done *even if `r` is off*!
+- modify item list (add rename remove) *if w bit is also on*
 
-all only works if you have execute permissions to all of the parent dirs!
+The above can be done even if `r` is off.
 
 ##sticky bit
 
-if users cannot delete/move files in dir that don't belong to them
+If users cannot delete/move files in dir that don't belong to them
 
-they can however create files.
+They can however create files.
 
     su a
     mkdir -m 1777 a
@@ -187,9 +185,9 @@ they can however create files.
 
 ##sgid
 
-files created under sgid dir get the same group as the parent dir.
+Files created under sgid dir get the same group as the parent dir.
 
-dirs created under sgid also have sgid set!
+Dirs created under sgid also have sgid set!
 
     a=
     b=
@@ -198,7 +196,7 @@ dirs created under sgid also have sgid set!
     gb=`id -gn "$b"`
     su "$a"
 
-without sgid:
+Without sgid:
 
     mkdir not-sgid
     chmod 777 not-sgid
@@ -214,7 +212,7 @@ without sgid:
     test -g not-sgid/d && echo g
 
 
-with sgid
+With sgid
 
     mkdir sgid
     chmod 2777 sgid
@@ -222,35 +220,32 @@ with sgid
     chmod o-t sgid
     sudo -u "$b" touch sgid/f
     stat -c "%G" sgid/f
-
-"$ga"
-inherits the group of parent dir!
-
+        #"$ga" inherits the group of parent dir!
     test -g sgid/f && echo g
     sudo -u "$b" mkdir sgid/d
     stat -c "%G" sgid/d
-        #>>> "$ga"
+        #"$ga"
     test -g sgid/d && echo g
-g
-subdirs also get sgid!
+        #g
+        #subdirs also get sgid!
 
 ###application
 
-you want many users to colaborate under a single dir.
+You want many users to colaborate under a single dir.
 
-you:
+You:
 
 1) create a group for collaboration
 2) create the dir with sticky bit
 3) add every user to the group
 4) make everyone give rwx on files they create
 
-this way, only the group can work under the dir,
+This way, only the group can work under the dir,
 and they all can access each other's files
 
-##files
+#files
 
-###suid and sgid
+##suid and sgid
 
 Does not work properly on scripts: you *must* have an executable:
 

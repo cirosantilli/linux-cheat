@@ -337,8 +337,6 @@
 
                 sudo aptitude install -y gfortran
 
-        #nasm assembler:
-
             sudo aptitude install -y nasm
 
         ##source control
@@ -346,6 +344,7 @@
                 sudo aptutide install -y git
                 sudo aptutide install -y mercurial
                 sudo aptitude install -y subversion
+                sudo aptitude install -y cvs
 
         sudo aptitude install -y puppet
 
@@ -693,6 +692,8 @@
             sudo aptitude install -y konsole            #needs to terminal emulator. (otherwise, button does nothing)
             sudo aptitude install -y khelpcenter4       #help
             sudo aptitude install -y kwalletmanager     #password manager
+
+            sudo aptitude install -y fdupes
 
     ##gpu
 

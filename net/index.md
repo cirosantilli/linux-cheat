@@ -893,33 +893,33 @@ send it to a given interface.
 
 0.0.0.0 is the default if no other is found
 
-routers have two interfaes each: inside and outside
+Routers have two interfaes each: inside and outside
 
 #ifconfig
 
-network InterFace configuration
+Network InterFace configuration
 
-includes stuff like IPs, subnet masks, MAC, etc
+Includes stuff like IPs, subnet masks, MAC, etc
 
-good source: <http://www.thegeekstuff.com/2009/03/ifconfig-7-examples-to-configure-network-interface/>
+Good source: <http://www.thegeekstuff.com/2009/03/ifconfig-7-examples-to-configure-network-interface/>
 
     ifconfig
 
-sample interfaces on a modern laptop:
+Sample interfaces on a modern laptop:
 
 - eth0  wired network 0
 - wlan0 wifi card 0
 - lo    loopback (local host)
 
-get local ips (behind router)
+Get local ips (behind router)
 
     ifconfig | grep -B1 "inet addr" | awk '{ if ( $1 == "inet" ) { print $2 } else if ( $2 == "Link" ) { printf "%s:" ,$1 } }' | awk -F: '{ print $1 ": " $3 }'
 
-remember, wlan0 and eth0 are two different interfaces!
+wlan0 and eth0 are two different interfaces!
 
 #iwconfig
 
-wireless network configuration
+Wireless network configuration
 
 #arp
 
@@ -949,17 +949,17 @@ so first ping that computer:
 
 #route
 
-view kernel routing table
+View kernel routing table:
 
     route
 
-numeric instead of names
+Numeric instead of names:
 
     route -n
 
 #whois
 
-check info about ip (country and ISP included)
+Check info about ip (country and ISP included):
 
     whois 201.81.160.156
 
@@ -977,12 +977,12 @@ TODO
 
 ###set static ip
 
-on a home network that you control,
+On a home network that you control,
 it is better to use intuitive hostnames
 and let the addresses be dynamic,
 unless some app really requires you
 to enter ips.
-see hostname for how.
+See hostname for how.
 
     sudo vim /etc/network/interfaces
 
@@ -994,13 +994,13 @@ see hostname for how.
     broadcast 192.168.1.255
     gateway 192.168.1.1
 
-- auto if1 if2
+- auto if1 if2.
 
-    automatically create interfaces if1 and if2 on `ifup -a`
+    Automatically create interfaces if1 and if2 on `ifup -a`.
 
 - iface if1
 
-    from now on, define properties of if1
+    From now on, define properties of if1.
 
 #mtu
 
@@ -1057,7 +1057,7 @@ Most useful options:
 
     Don't resolve IPs into hostnames.
 
-    Gretly speeds up the output generation.
+    Greatly speeds up the output generation.
 
 - `-a`
 
@@ -1069,11 +1069,11 @@ Most useful options:
 
 - `-t`
 
-    Show only tcp
+    Show only TCP
 
 - `-u`
 
-    Show only udp
+    Show only UDP
 
 - `-x`
 
@@ -1089,7 +1089,7 @@ Most useful options:
 
 - `-s`
 
-    Show statistics on serveral protocols.
+    Show statistics on several protocols.
 
 Sample output for internet section:
 
@@ -1098,7 +1098,7 @@ Sample output for internet section:
 
 #telnet
 
-protocol for comunicating between servers and name of command line tool that uses it
+Protocol for comunicating between servers and name of command line tool that uses it
 
 no encryption, therefore *DONT'T SEND PASSWORDS ON UNTRUSTED NETWORK WITH THIS*!!
 
@@ -1206,14 +1206,20 @@ Get the version of your ssh client:
 
     ssh -V
 
-Connect to hostname with your current username:
-
-    ssh $host
-
 For local tests, use localhost and the current user:
 
     host=localhost
     user=`id -un`
+
+Connect to hostname with your current username:
+
+    ssh $host
+
+Get debug level information if things don't work:
+
+    ssh -v $host
+    ssh -vv $host
+    ssh -vvv $host
 
 For this to work you need:
 
@@ -1266,7 +1272,7 @@ typically to restrict what the session can do, for example:
     from="ok.com",no-port-forwarding,no-X11-forwarding,
     no-agent-forwarding,no-pty ssh-rsa <key> <comment>
 
-Non opvious options above include:
+Non obvious options above include:
 
 - only connections coming from `ok.com` will be accepted
 - 
@@ -1280,7 +1286,7 @@ Security is useless if someone is impersonating the message reciever.
 If the server's public identity is not in the known hosts file, ssh will ask
 is you want to add it.
 
-##ssh-keygen
+##ssh-keygen asdf a
 
 Generates public and private key pairs for use with ssh.
 
