@@ -4,9 +4,9 @@ sound and music players, editors and generators
 
 ##cplay
 
-cli
+CLI
 
-has a file browser
+Has a file browser.
 
     cplay
 
@@ -14,15 +14,15 @@ has a file browser
 
 ##lame
 
-encode, decode and modify mp3
+Encode, decode and modify mp3.
 
-increases volume 5x:
+Increases volume 5x:
 
     lame --scale 5 a.mp3
 
 ##id3tool
 
-get id3 tags info (for mp3 for example)
+Get id3 tags info (for mp3 for example):
 
     TITLE="`id3tool "$1" | grep '^Song Title:' | awk '{ for (i=3;i<=NF;i++) { printf $i; printf " " } }'`"
     ARTIST="`id3tool "$1" | grep '^Artist:' | awk '{ for (i=2;i<=NF;i++) { printf $i; printf " " } }'`"
@@ -36,41 +36,44 @@ get id3 tags info (for mp3 for example)
 
 ###flacon
 
-has gui
+GUI.
 
 ###shntool
 
-single ape and cue in dir, flac output, formatted as number, author, track
+Single APE and CUE in dir, FLAC output, formatted as number, author, track
 
     shntool split -f *.cue -o flac *.ape -t '%n - %p - %t'
 
 ##sox
 
-record, play and modify files cli
+Set of utilities record, play and modify files via CLI.
 
-interactive front end for libSoX
+Interactive front end for libSoX.
 
-must install available formats separatelly
+Must install available formats separatelly.
 
-record from microphone into `a.wav` file:
+Record from microphone into `a.wav` file:
 
     rec a.wav
 
-`ctrl+c` : stop recording
+`ctrl+c` to stop recording.
 
-plays `a.wav` file:
+Plays `a.wav` file:
 
     play a.wav
 
-terminates when over
+Terminates when over. Good option to play an alarm signal after a very long command:
+
+    sleep 5 && play long-sound.wav
 
 #alsa
 
-Advanced Linus Sound API.
+Advanced Linux Sound API.
 
-Replaced OSS in 2008 when it when proprietary. OSS came back to open source, but it lost much momentume back to open source, but it lost much momentum.
+Replaced OSS in 2008 when OSS when went proprietary.
+OSS came back to open source, but it lost much momentum.
 
-The kernel soud subsystem is called ALSA.
+The kernel sound subsystem is called ALSA.
 
 There are a few tools that interact with it.
 
@@ -80,7 +83,7 @@ ncurses interface to view/control sound parameters
 
     alsamixer
 
-commands:
+Commands:
 
 - left/right : change active parameter
 - up/down    : change active parameter value
@@ -103,7 +106,7 @@ Unmute sound:
 
 ##aplay
 
-Command line tool that takes numeric input from stdin and generate sound!
+Command line tool that takes numeric input from stdin and generate sound.
 
 #pulseaudio
 
@@ -117,10 +120,10 @@ Command line control to pulseaudio.
 
 ###cli
 
-rip:
+Rip from dvd:
 
     abcde
 
-automatically starts ripping correctly on most systems!!
+Automatically finds right configurations on most systems.
 
-creates dir in cur dir and saves rip out as `.ogg` in it
+Creates dir in cur dir and saves rip out as `.ogg` in it.

@@ -2825,26 +2825,29 @@
         #3. type
         #4. flags
 
+        ##bind
+
+            # Make one dir a copy of the other, much like a hardlink does to files.
+
+            # Requires `sudo` like mount because it uses kernel internals to do it.
+            # For an userspace solution consider `bindfs`.
+
+                mkdir a
+                mkdir b
+                sudo mount --bind a b
+                touch a/a
+                touch b/b
+                assert [ `ls a` = $'a\nb' ]
+                assert [ `ls b` = $'a\nb' ]
+                sudo umount b
+                assert [ `ls a` = $'a\nb' ]
+                assert [ -z `ls b` ]
+
     ##umount
 
         #unmount what is on this dir
 
             sudo umount /media/win/
-
-    ##bind
-
-        #make one dir a copy of the other
-
-            mkdir a
-            mkdir b
-            sudo mount --bind a b
-            touch a/a
-            touch b/b
-            assert [ `ls a` = $'a\nb' ]
-            assert [ `ls b` = $'a\nb' ]
-            sudo umount b
-            assert [ `ls a` = $'a\nb' ]
-            assert [ -z `ls b` ]
 
     ##fstab
 
@@ -4150,30 +4153,39 @@
 
     ##cp
 
-        #POSIX
+        # POSIX
 
-        #copy files and dirs
+        # Copy files and dirs.
 
         ##file
 
-            #if dest does not exist, create it:
+            # If dest does not exist, create it:
 
                 echo a > a
-                copy a b
+                cp a b
                 assert [ "`cat b`" = $'a' ]
 
-            #if dest exists and is dir, copy into dir:
+            # If dest exists and is dir, copy into dir:
 
                 mkdir d
-                copy a d
+                cp a d
                 assert [ "`cat d/a`" = $'d/a' ]
 
-            #if dest exists and is file, overwrite without asking!
+            # If dest exists and is file, overwrite without asking!
 
                 echo a > a
                 echo b > b
                 cp a b
                 assert [ "`cat b`" = $'a' ]
+
+        ##gnu extensions
+
+            # The following GNU extensions are very useful and did not fit into any other category:
+
+            # - `-v`: be verbose and print a message saying what cp is doing.
+
+                # Useful when copying a lot of files in an interactive session
+                # to check if that progress is going on.
 
         ##dir
 
@@ -4198,41 +4210,43 @@
                     rm -r a d d2 d3
                 }
 
-            #must use recursive `-r`, even if dir is empty
+            # Must use recursive `-R`, even if dir is empty
 
                 setup_test
                 if cp d e; then assert false; fi
                 teardown_test
 
                 setup_test
-                cp -r d d2
+                cp -R d d2
                 assert [ -d d2 ]
                 teardown_test
 
-            #unlike move, can copy into dir recursively overwritting by default:
+            # `-r` on GNU is the same as `-R`, but is a GNU extensionto POSIX 7.
+
+            # Unlike move, can copy into dir recursively overwritting by default:
 
                 setup_test
-                cp -r d d2
+                cp -R d d2
                 assert [ "`ls d2/d`"    = 'a b' ]
                 assert [ "`cat d2/d/a`"  = 'A' ]
                 assert [ "`cat d2/d/b`"  = 'b' ]
                 teardown_test
 
-            #if fails however if you try to overwrite a file with a dir:
+            # If fails however if you try to overwrite a file with a dir:
 
                 setup_test
-                if cp -r d a; then assert false; fi
+                if cp -R d a; then assert false; fi
                 teardown_test
 
-            #it also fails if you try to overwrite a link to a dir with a dir:
+            # It also fails if you try to overwrite a link to a dir with a dir:
 
                 setup_test
-                if cp -r d d3; then assert false; fi
+                if cp -R d d3; then assert false; fi
                 teardown_test
 
         ##symlink
 
-            #by default, for files copies content of symlinks to new files/dirs:
+            # By default, for files copies content of symlinks to new files/dirs:
 
                 echo a > a
                 ln -s a b
@@ -4242,31 +4256,28 @@
                 assert [ -f d ]
                 assert [ "`cat a`" = $'a' ]
 
-            #with `-d` copies symlink to files into new symlinks (mnemonic: no-Dereference):
+            # With the `-d` GNU extension, copies symlink to files into new symlinks (mnemonic: no-Dereference):
 
                 cp -d c e
                 assert [ -L d ]
 
-            #for dirs by default copies symlink into a new symlink:
+            # For dirs by default copies symlink into a new symlink:
 
                 mkdir d
                 ln -s d dln
                 cp dln e
                 assert [ -L e ]
 
-            #to dereference symlinks to directories, use `-L`:
+            # To dereference symlinks to directories, use `-L`:
 
                 mkdir d
                 ln -s d dln
                 cp -L dln e
                 assert [ -d e ]
 
-            #does not work with `-r`. Probable rationale:
-
-                #the only thing this could do is to copy dirs
-                #and symlink files
-
-                #but then why not do this with hardlinks?
+            # Does not work with `-r`. Probable rationale:
+            # the only thing this could do is to copy dirs
+            # and symlink files. But then why not do this with hardlinks?
 
         ##hardlink
 
@@ -4275,7 +4286,7 @@
                 ln -l a b
                 assert [ "`stat -c '%i' a`" = "`stat -c '%i' b `" ]
 
-            #with `-r`, makes dirs, and hardlinks files:
+            # With `-r`, makes dirs, and hardlinks files:
 
                 mkdir d
                 touch d/a
@@ -4284,46 +4295,74 @@
                 assert [ "`stat -c '%i' d/a`" = "`stat -c '%i' e/a `" ]
                 assert [ "`stat -c '%i' d/b`" = "`stat -c '%i' e/b `" ]
 
-            #if `-l` is used, does not overwrite file:
+            # If `-l` is used, does not overwrite file:
 
                 echo a > a
                 echo b > b
                 if cp -l a b; then assert false; fi
 
-            #but can overwrite if `-f` is given:
+            # But can overwrite if `-f` is given:
 
                 cp -fl a b
+
+        ##applications
+
+            # Copy all files from a directory into another existing directory (including hidden):
+
+                cp -dR from/. to
+
+    ##rsync
+
+        # Synchronize directories.
+
+        # - works over networks.
+        # - can synchronizes differentially for greater efficiency.
+        # - can compress before sending over the network
+        # - can encrypt files sent
+
+        # Useful options:
+
+        # - `-r`: recurse into directories
+        # - `-z`: compress files before transfer, decompress after.
+
+            # Useful if transfer will be done over a network,
+            # so that smaller files can be transferred.
+
+        # - `-a`: preserve timestamps.
+
+            # By default, sets timestamps of new files to now.
+
     ##rm
 
-        #Remove files and dirs.
+        # Remove files and dirs.
 
-        #-r: recursive. Mandatory for directories. Potentially dangerous.
+        # -r: recursive. Mandatory for directories. Potentially dangerous.
 
     ##recover data removed with rm like tools
 
-        #`rm` only removes files from filesystem indexes, but the data remains in place
-        #until the event that another file is writen on it, which may take severl minutes or hours.
+        # `rm` only removes files from filesystem indexes, but the data remains in place
+        # until the event that another file is writen on it, which may take severl minutes or hours.
 
-        #Even after the file data overwritten few times, it is still possible to recover
-        #the data using expensive forensic methods (only viable for organizations).
+        # Even after the file data overwritten few times, it is still possible to recover
+        # the data using expensive forensic methods (only viable for organizations).
 
-        #To permanently remove data from hard disk, you must use a tool like shred,
-        #which writes certain sequences to the hard disk, making it impossible to
-        #recover the data even with forensic methods.
+        # To permanently remove data from hard disk, you must use a tool like shred,
+        # which writes certain sequences to the hard disk, making it impossible to
+        # recover the data even with forensic methods.
 
-        #Such operations take a very long time, and are not viable on entire hard disks,
-        #so if you serious about clearing a hard disk, mechanical desctruction is a better option
-        #(open the hard disk case and destroy the disk).
+        # Such operations take a very long time, and are not viable on entire hard disks,
+        # so if you serious about clearing a hard disk, mechanical desctruction is a better option
+        # (open the hard disk case and destroy the disk).
 
     ##rename
 
-        #Mass file regex renaming.
+        # Mass file regex renaming.
 
-        #Dry run:
+        # Dry run:
 
             rename -n 's/^([0-9]) /0$1 /g' *.mp3
 
-        #Act:
+        # Act:
 
             rename 's/^([0-9]) /0$1 /g' *.mp3
 
@@ -4332,34 +4371,13 @@
         #TODO
 
         find . ! -iname '* - *' -type f -print | cpio -pvdumB './no author'
-        #cfind selected files to destination, building and keeping their relative directory structure
-
-    ##rsync
-
-        #Synchronize directories.
-
-        #- works over networks.
-        #- can synchronizes differentially for greater efficiency.
-        #- can compress before sending over the network
-        #- can encrypt files sent
-
-        #Useful options:
-
-        #- -r: recurse into directories
-        #- -z: compress files before transfer, decompress after.
-
-            #Useful if transfer will be done over a network,
-            #so that smaller files can be transferred.
-
-        #- -a: preserve timestamps.
-
-            #By default, sets timestamps of new files to now.
+        #find selected files to destination, building and keeping their relative directory structure
 
     ##install
 
-        #move and set: mode, ownership and groups
+        # Move and set: mode, ownership and groups.
 
-        #make all components of path:
+        # Make all components of path:
 
             install -d a/b/c
             assert [ -d a ]
@@ -4368,47 +4386,47 @@
 
     ##mkfifo
 
-        #POSIX 7
+        # POSIX 7
 
-        #make a fifo (named pipe)
+        # Make a fifo (named pipe).
 
-        #Example:
+        # Example:
 
             mkfifo f
             echo a > f &
 
-        #`echo` writes to the pipe with a write system call.
+        # `echo` writes to the pipe with a write system call.
 
-        #The pipe has not been opened to read
-        #therefore the echo write system call blocks.
+        # The pipe has not been opened to read
+        # therefore the echo write system call blocks.
 
             cat f
 
-        #Outputs `a`. Both `echo` and `cat` finish.
+        # Outputs `a`. Both `echo` and `cat` finish.
 
-        #- `cat` reads the pipe to read
-        #- `echo` puts its data on the pipe
-        #- `echo` terminates
-        #- `cat` reads the data from the pipe and terminates
+        # - `cat` reads the pipe to read
+        # - `echo` puts its data on the pipe
+        # - `echo` terminates
+        # - `cat` reads the data from the pipe and terminates
 
     ##mknod
 
-        #Create character, block or FIFO (named pipe) files.
+        # Create character, block or FIFO (named pipe) files.
 
-        #Make a char file with major number 12 and minor number 2:
+        # Make a char file with major number 12 and minor number 2:
 
             sudo mknod /dev/coffee c 12 2
 
     ##chown
 
-        #POSIX 7
+        # POSIX 7
 
-        #change owner and group of files
+        # Change owner and group of files.
 
-        #you must use sudo to do this, because otherwise users would be able to:
+        # You must use sudo to do this, because otherwise users would be able to:
 
-        #- steal ownership of files
-        #- git ownership to users who do not want to own the files
+        # - steal ownership of files
+        # - git ownership to users who do not want to own the files
 
             su a
             mkdir d
@@ -4419,7 +4437,7 @@
             assert [ `stat -c '%G' d` = newgroup ]
             assert [ `stat -c '%U' d/f` = a ]
 
-        #`-R` for recursive operation:
+        # `-R` for recursive operation:
 
             su a
             mkdir d
@@ -4430,11 +4448,11 @@
             assert [ `stat -c '%U' d/f` = newuser ]
             assert [ `stat -c '%G' d/f` = newgroup ]
 
-        #to change only user:
+        # To change only user:
 
             sudo chown newuser
 
-        #to change only group:
+        # To change only group:
 
             sudo chown :newgroup
 
@@ -5269,6 +5287,7 @@
 
             u=
             sudo useradd  -ms /bin/bash $u
+            sudo passwd "$u"
 
         # For users that represent human end users, you will amost always want to use the following:
 

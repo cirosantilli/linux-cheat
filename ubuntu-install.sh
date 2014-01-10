@@ -503,20 +503,25 @@
 
 		##desktop
 
-			sudo aptitude install -y xbacklight
-			sudo aptitude install -y xsel
-            sudo aptitude install -y wmctrl
-			sudo aptitude install -y xdotool
-			#sudo apt-add-repository ppa:cdekter/ppa
-			#sudo aptitude install -y autokey-gtk
+                sudo aptitude install -y xbacklight
+                sudo aptitude install -y xsel
+                sudo aptitude install -y wmctrl
+                sudo aptitude install -y xdotool
+                #sudo apt-add-repository ppa:cdekter/ppa
+                #sudo aptitude install -y autokey-gtk
 
             #gtk themes:
 
-                    sudo add-apt-repository -y ppa:webupd8team/themes
-                    sudo aptitude update
-                    sudo aptitude install -y gnomishdark-theme
+                sudo add-apt-repository -y ppa:webupd8team/themes
+                sudo aptitude update
+                sudo aptitude install -y gnomishdark-theme
 
-            sudo aptitude install -y compizconfig-settings-manager
+                sudo aptitude install -y compizconfig-settings-manager
+
+            #sudo aptitude install zenity
+
+            #sudo add-apt-repository ppa:webupd8team/y-ppa-manager && sudo aptitude update
+            #sudo aptitude install -y yad
 
 		##networking
 
@@ -578,6 +583,10 @@
                 sudo aptitude install -y libpq-dev
                 sudo aptitude install -y postgresql
                 sudo aptitude install -y postgresql-client
+
+            # Redis server and cli client:
+
+                #sudo aptitude install -y redis-server
 
             ##mail
 

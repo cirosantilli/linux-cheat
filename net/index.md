@@ -1193,6 +1193,11 @@ and to check its status:
 
     sudo service ssh status
 
+The default log file for the server is: `/var/log/auth.log`, which is shared by other
+utilities such as `sudo`.
+If things fail, this is where you should look!
+Try `sudo grep sshd /var/log/auth.log` for the relevant log lines.
+
 ##client
 
 The client connects to a server to give shell access on the server.

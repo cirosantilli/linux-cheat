@@ -1,5 +1,4 @@
-File.open("/tmp/cookbook0_default.tmp", 'w') do |f|
-
+File.open(File.join(Dir.tmpdir, "cookbook0_default.tmp"), 'w') do |f|
 
   node[:cookbook0][:a] == "b" or raise
   node[:cookbook0][:override] == "d" or raise
@@ -18,7 +17,7 @@ File.open("/tmp/cookbook0_default.tmp", 'w') do |f|
 
   ##file
 
-      file "/tmp/cookbook0_default_file.tmp" do
+      file File.join(Dir.tmpdir, "cookbook0_default_file.tmp") do
         content Time.now.to_s
         #owner "root"     # root is the default user
         #group "root"
@@ -28,9 +27,20 @@ File.open("/tmp/cookbook0_default.tmp", 'w') do |f|
 
     # Double create overwrites the files:
 
-      file "/tmp/cookbook0_default_file.tmp" do
+      file File.join(Dir.tmpdir, "cookbook0_default_file.tmp") do
         content "second time: " + Time.now.to_s
         mode "0666"
+      end
+
+  ##template
+
+    # Generates a file from an erb template located under `templates/default`.
+
+    # Typically used for config files which vary from installation to isntallation.
+
+      template File.join(Dir.tmpdir, "cookbook0_template.tmp") do
+        source "cookbook0_template.tmp.erb"
+        variables({:a=> '0', :b=> '1'})
       end
 
   ##platform detection

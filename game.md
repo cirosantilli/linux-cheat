@@ -4,6 +4,10 @@
 
 Most famous dangeon crawler.
 
+Save is only pause: no return from death.
+
+Many things kill you for totally unpredictable reasons.
+
 ##fortune
 
 Tells you fortune to stdout!
@@ -88,13 +92,13 @@ Count primes:
 
 ###robots
 
-Simple, fun, but too much luck.
+Very simple, fun, but too much luck.
 
 Play:
 
     robots
 
-play with better settings:
+Play with better settings:
 
     alias robots="robots -ta`for i in {1..10000}; do echo -n n; done`"
 
@@ -126,7 +130,7 @@ Nethack predecessor.
 
 Multiplayer shooter.
 
-Looks *very* promising, but multiplayer only...
+Looks *very* promising, but multiplayer only, and no online mode.
 
 ##gnugo
 

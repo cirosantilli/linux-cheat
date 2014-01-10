@@ -1,15 +1,15 @@
 Linux in informal terms can be either a computer system that:
 
-- a computer system which complies to the [linux standar base (lsb)](lsb)
-    which is the main standard maintained by the [linux foundation][]
+- a computer system which complies to the [linux standar base (LSB)](lsb)
+    which is the main standard maintained by the [Linux foundation][]
 
-- uses the linux kernel. TODO is this specified by the lsb? where?
+- uses the Linux kernel. TODO is this specified by the LSB? where?
 
-The lsb specifies the minimum intefaces every linux system must offer.
+The LSB specifies the minimum intefaces every linux system must offer.
 
 The central component of the linux operating system is the linux kernel,
 released in 1991 by Linus Trovalds, however much of its core user space
-software comes from the gnu project. For this reason linux systems
+software comes from the GNU project. For this reason linux systems
 may also be called gnu/linux.
 
 #sources
@@ -104,7 +104,7 @@ so it makes no sense to save a file to the CD.
 
 You could however mount your hard disk, and write to it after you booted from the CD.
 
-You will need a free partition for the installation. Mo
+You will need a free partition for the installation.
 
 ###usb install
 
@@ -114,28 +114,28 @@ Some installers even allow you to reserve space on the USB for permanent storage
 so that you can use your OS from the USB just as if it were an small and fast HD.
 
 If however you are already on Linux, you will probably have to destroy all USB information,
-because the ISO image has to be the very first thing on your usb, therfore erasing essential
-filesystem structures such as the main boot record partition table.
+because the ISO image has to be the very first thing on your USB, therefore erasing essential
+filesystem structures such as the main boot record partition table of the USB.
 
 Of course, you can always recreate a filesystem in your USB and use it
-as a storage device once you are done with the USB.
+as a storage device once you are done with it.
 
 To install images on a USB you can do:
 
-    dd bs=4M if=/path/to/iso.iso of=/dev/sdX
+    sudo dd bs=4M if=/path/to/iso.iso of=/dev/sdX
 
 Where `/dev/sdX` is the mount point of the USB.
 
 This will erase all data on the USB!
 
-- `/dev/sdX` is the block device for the USB, and it can be found with:
+`/dev/sdX` is the block device for the USB, and it can be found with:
 
-        sudo lsblk -f
+    sudo lsblk -f
 
-    The usb must not be mounted (`lsblk` shows no mountpoint).
+The USB must not be mounted (`lsblk` shows no mountpoint).
 
-    *Don't* write to the first partition `/dev/sdX1`, since what we want is to write
-    to the start of the device, not to the start of its first partition!
+*Don't* write to the first partition `/dev/sdX1`, since what we want is to write
+to the start of the device, not to the start of its first partition!
 
 ###bootloader problems
 
@@ -228,45 +228,48 @@ notable certified systems include:
 
 - Red Hat Enterprise Linux 6.0
 
-#linux and gnu
+#gnu
 
-[linux and gnu][]
-
-the user space programs of linux are mostly inherited from the *gnu project*
+The user space programs of most Linux distributions are mostly inherited from the *GNU project*
 which was created in 1983 by Richard Stallman.
 
-for example, the following central components originate from gnu:
+For example, the following central components originate from GNU:
 
 - gcc
 - glibc
 - bash
 
-it seems that the gnu project is not officially called like that anymore,
-and has transformed into the *free software foundation* (fsf) also founded by Stallman
+It seems that the GNU project is not officially called like that anymore,
+and has transformed into the *free software foundation* (FSF) also founded by Stallman.
 TODO check
 
-amongst the projects of the fsf is the *gnu operating system*.
-they are also active in legal causes and activism for free software
+Amongst the projects of the fsf is the *gnu operating system*.
+they are also active in legal causes and activism for free software.
 
-the gnu operating system is developping its own kernel called *HUD*,
+The GNU operating system is developping its own kernel called *HUD*,
 but the own project states that it is not yet ready for broad usage
 
-the fsf insists on caling what most people call linux as GNU/linux,
+The fsf insists on caling what most people call linux as GNU/linux,
 which sounds quite reasonable considering they developed a great part of
-the userspace core
+the userspace core.
 
-the gnu software foundation is the creator and current maintainer
+The GNU software foundation is the creator and current maintainer
 of the GPL licence, and mostly uses that licence for its software and
-is the main enforcer of its infringements
+is the main enforcer of its infringements.
 
-#lsb and posix
+##gnu alternatives
 
-lsb is already highly posix compliant, and it states that it is on of its
-long term goals meant to become fully posix compatible
+Some notable alternatives to the GNU tools:
 
-incompatibility are being listed for future resolution
+#POSIX
 
-there some posix requirements that the linux kernel simply does not
+LSB is already highly POSIX compliant, and it states that it is on of its
+long term goals meant to become fully POSIX compatible
+
+Incompatibilities are being listed for future resolution.
+
+There a few POSIX requirements that the Linux kernel explicitly does not implement
+because it considers them impossible to implement efficiently.
 
 #fhs
 

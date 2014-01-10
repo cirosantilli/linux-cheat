@@ -84,19 +84,17 @@ useful if you only want the exit status
 
 ##application
 
-append line to file
-if it is not there already
+Append line to file only if it is not there already:
 
     f=""
     l=""
     grep -q "^$l$" "$f" || echo "$l" >> "$f"
 
-very useful for files that have unordered
-sets of things separated by newlines
+Very useful for files that have unordered sets of things separated by newlines.
 
 #-c
 
-count how many lines match
+Count how many lines match
 
     echo $'a\na' | grep -c a
 

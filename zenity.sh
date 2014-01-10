@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
-# one-liner gui prompts from bash!
+# One-liner GUI prompts from bash!
 
-if [ -z "`which zenity`" ]; then
-  sudo aptitude install zenity
-fi
+# More powerful fork: `YAD` (as of 2014 needs an extra PPA).
+
+# Create ncurses dialogs: dialog. Pretty useless since only allows for a single input,
+# so stdin is more useful.
 
 # yes/no question
 if zenity --question --text="abc"; then
@@ -23,7 +24,7 @@ zenity --error --text "1"
 zenity --info --text "Join us at irc.freenode.net #lbe."
 
 # text input prompt
-a="$(zenity --entry --text "1" --entry-text "2")"
+a="$(zenity --entry --text "1" --entry-text "2" --entry --text "3" --entry-text "4" )"
 echo "$a"
 
 # multiple fields table text input
