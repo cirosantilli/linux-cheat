@@ -682,9 +682,74 @@ the host pair says from which computer user is trying to access his account.
 
 #hostname
 
-An alias for your desired IP on a local network.
+An alias for an IP, local or remote.
 
 Must be converted into an IP via DNS.
+
+When outside the local network, the hostname is added before the domain name, e.g. in:
+
+    www.google.com
+
+- hostname: `www`
+- domain name: `google.com`
+
+It is not a good idea to have a dot `.` in your domain name, since then how could its last part be distinguished from the domain name?
+
+TODO is the hostname `www.google.com` or just `google.com`? Contradictory answers: http://superuser.com/questions/59093/difference-between-host-name-and-domain-name  
+
+##www
+
+`www.google.com` and `google.com` can lead to different IPs.
+
+What sane companies do is choose one and redirect the other, *be consistent*.
+
+But beware: I have seen companies that use `www` for a different website than without, and it is possible that no redirection happens.
+
+Beware that browsers can store different cookies for both, so you can be logged in at `www.a.com` but not at `a.com`.
+
+It is more recommended today not to use the `www` because it is what the huge majority of users wants on a website: <http://stackoverflow.com/questions/1109356/www-or-not-www-what-to-choose-as-primary-site-name>. `www` implies that we are using `HTTP`, but we already have the http part of the URL.
+
+In the case of FTP, `ftp://ftp.a.com` URLs which are common, and perhaps in that case it is better to keep the `ftp` and redirect HTTP requests to `ftp.a.com` to `ftp://ftp.a.com` since FTP is less used than HTTP, allowing users to type simply `ftp.a.com` instead of `ftp://a.com`.
+
+`www` was more used in the past, so older companies may continue to use them because they are stuck with it.
+
+As of early 2014:
+
+- `facebook.com` redirects to `www.facebook.com`
+- `google.com` redirects to `www.google.com`
+
+#domain name
+
+E.g.: `google.com`, `stackoverflow.com` are commonly called domain names.
+
+A more precise way of speaking is saying that `google` is a subdomain of `com`, and `www` is a subdomain of `google.com`.
+
+They identify a network owned by Google. But in order to get an actual IP, you still need to add the a hostname such as `www`.
+
+Domain names may contain more than one `.`: `bbc.co.uk`.
+
+##subdomain
+
+The subdomain can include a period (.) but not as the first or last character. Consecutive periods (...) are not allowed. A subdomain cannot exceed 25 characters.
+
+#top level domain
+
+`.com`, `.net`, `.io`, `.fr` are examples.
+
+Every name must be under one of those.
+
+They are controlled by IANA, and there are not that many out there except for the country ones: <http://en.wikipedia.org/wiki/List_of_Internet_top-level_domains>
+
+To get a country TLD, it seems that you must have some link with the country.
+
+Some TLDs are reserved for certain uses and registrars must check that you / your organization are eligible: `.gov` for governments, `.mit` for US military.
+
+Some interesting ones:
+
+- `.sexy` and `.xxx`. Guess what.
+- `.guru`. No suggested use. Funny.
+
+Some country ones have become generic: `.io` is a notable example, popular amongst startups as of 2014-03. Short, sounds good, reminds of IO input output.
 
 #dhcp
 
@@ -713,11 +778,11 @@ Takes precedence over DNS.
 
 Big downside: you have to have one of this file on every PC.
 
-therfore, use a dns server instead
+Therefore, use a DNS server instead
 
     cat /etc/hosts
 
-Redirect wikipiedia to localhost:
+Redirect Wikipiedia to localhost:
 
     echo "127.0.0.1 www.wikipedia.org" | sudo -a /etc/hosts
 
@@ -725,9 +790,9 @@ Now:
 
     firefox www.wikipedia.org &
 
-will go to localhost, and you will see your apache page if you are running apache.
+will go to localhost, and you will see your Apache page if you are running apache.
 
-Undo that:
+Undo that, its silly:
 
     sudo sed -i "$ d" /etc/hosts
 
@@ -741,11 +806,11 @@ The file is:
 
 Domain name system.
 
-Part of the application layer of the IPS.
+Part of the application layer of the IPs.
 
 Standard IANA port: 53/udp
 
-Protocol that convert strings into ips, for example:
+Protocol that convert strings into IPs, for example:
 
     http://www.google.com -> 173.194.34.34
 
@@ -847,6 +912,42 @@ Protocol that transforms an IP into a hostname.
 
 Not always supported on all DNS servers.
 
+##dig
+
+Shows complete path of domain to IP resolution, as it passes through multiple CNAMEs.
+
+TODO
+
+##zone file
+
+When you register for a domain of your own, you will start thinking about this: it is the main setting on your registrar interface.
+
+http://en.wikipedia.org/wiki/Zone_file
+
+###apex domain
+
+`@` in the zone file means the domain you own without any subdomain.
+
+E.g., if you own `cirosantilli.com`, `@` means `cirosantilli.com` itself, while `www` means `www.cirosantilli.com`.
+
+Apex domains are more restrictive than subdomains, and certain hosting services advise against it, such as GitHub Pages.
+
+The main problem is that in services such as GitHub pages you don't get an actual IP, so you can't point the Apex to an IP (which is simple), and the `CNAME` "workaround" is not good enough in that case.
+
+###naked domain
+
+The apex domain is sometimes called naked domain, since it has no subdomain.
+
+##CNAME record
+
+TODO File that tells DNS to redirect to another domain name, creating an alias.
+
+http://en.wikipedia.org/wiki/CNAME_record
+
+##A
+
+Points a domain to an IP. The final part of the resolution.
+
 #port
 
 Once you have determined a host (computer),
@@ -854,8 +955,15 @@ you still have to talk to one of the specific programs running on that computer.
 
 Each program listens on an specific port which is set by convention.
 
-Ports from 1 - 1000 all have reserved or standardized functions by an organization called IANA:
-<http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers>
+Ports from 1 - 1023 are also known as "well-known ports" or "priviledged ports".
+On UNIX-like systems, only priviledged users (`root`) can bind to those ports.
+All have reserved or standardized functions by an organization called IANA:
+<http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers>.
+
+The ports form 1024 to 49151 are the so called "registered ports".
+Projects can make a request to IANA to register one of thoe posts as used
+in order to avoid port clashes. On most systems, it is possible to bind to those ports
+without sudo.
 
 There are 2 ports number 10: 10/tcp and 10/udp, each for a different protocol.
 
@@ -1291,6 +1399,14 @@ Security is useless if someone is impersonating the message reciever.
 If the server's public identity is not in the known hosts file, ssh will ask
 is you want to add it.
 
+SSH is by defaulf very fussy about the permissions of this file which shoudl be:
+
+    chmod 700 ~/.ssh
+    chmod 600 ~/.ssh/authorized_keys
+
+and not more permissive. If you really want that, you can do configure SSH
+to be less safe via `StrictModes no`.
+
 ##ssh-keygen asdf a
 
 Generates public and private key pairs for use with ssh.
@@ -1400,34 +1516,33 @@ Send multiple files/dirs:
 
 #sftp
 
-ftp with ssh encryption
+FTP with ssh encryption
 
 #samba
 
-open source linux implementation of the SMB/CIFS networking protocol
-used by default on windows
+Open source Linux implementation of the SMB/CIFS networking protocol used by default on Windows.
 
-it allows for file, printer and driver sharing on a network
+It allows for file, printer and driver sharing on a network.
 
-best option for cross platform file transfers
+Best option for cross platform file transfers.
 
 #browser
 
 ##firefox
 
-comes by default
+Search with default engine:
 
-search with default engine:
     firefox -search asdf
 
-starts with disabled extensions in case they are causing a crash:
+Starts with disabled extensions in case they are causing a crash:
+
     firefox -safe-mode
 
 ##w3m
 
-ncurses web broser!
+ncurses web browser!
 
-might save you if x goes down
+Might save you if X goes down or if you can't have it.
 
 #files
 
@@ -1443,37 +1558,35 @@ TODO
 
 ##zymic
 
-free php
+Free PHP
 
 did not work well with wordpress, probably some php restrictions.
 
 ##000
 
-worked for wordpress
+Worked for WordPress.
 
 ##openshift
 
-open source
+Open source.
 
-operated as service by redhad
+Operated as service by Red Hat.
 
-ssh access
+SSH access.
 
-languages: python, java, ruby
+Languages: Python, Java, Ruby.
 
-lots of startups including wordpress
+Lots of templates, including wordpress.
 
-number of apps quite limited: 3 per account
+Number of apps quite limited: 3 per account.
 
-console local client:
-
-    sudo gem install rhc
-
-start app (apps are stopped by default):
+Console local client:
 
     sudo gem install rhc
 
-error logs:
+Start app (apps are stopped by default):
+
+    sudo gem install rhc
 
 #vpn
 
@@ -1501,3 +1614,15 @@ Predecessor of TSL.
 Transport Layer Security.
 
 Encryption methods that encrypt the transport layer traffic.
+
+#web server vs app server
+
+It is hard to distinguish them.
+
+Generally, web server only speaks HTTP and serves static pages.
+
+An app server, reads the HTTP, and then decides to pass the request on to a programming language like Ruby or Python if it cannot deal with it himself through an interface such as CGI.
+
+In most production environments, the server knows which files it can serve directly without going through a script, making thing faster.
+
+Applications like Apache and Nginx.

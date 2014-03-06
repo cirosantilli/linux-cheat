@@ -169,7 +169,23 @@ Get xserver version
 
 ##xhost
 
-TODO
+View and edit on which users may connect to an X server.
+
+When you start with most desktop environments, they start the host as you.
+
+If you `su another-user`, by default he cannot connect.
+
+View current status:
+
+    xhost
+
+Let any user connect:
+
+    xhost +
+
+Let a single user connect:
+
+    xhost + another-user
 
 ##startx
 
@@ -570,6 +586,16 @@ Opens test window and prints x events description to stdout:
 
 Try clicking on the windows, or using your keboard to see the outputs.
 
+#screenshots
+
+##gnome screenshot
+
+Ubuntu 12.04 default on PrtSc key.
+
+Change directory where images are saved:
+
+    gsettings set "org.gnome.gnome-screenshot" "auto-save-directory" "file:///home/$USER/screenshot"
+
 ##xwd
 
 Take screenshots.
@@ -852,7 +878,9 @@ Options:
 
 - allow-guest
 
-- `--autologin-user <username>`: autologin the given user
+- `--autologin-user <username>`: autologin the given user at startup without asking for password.
+
+        sudo /usr/lib/lightdm/lightdm-set-defaults --autologin "$USER"
 
 - `--session <session>`: which session to log into. Examples: ubuntu, LXDE, etc.
 
@@ -1180,7 +1208,7 @@ Completely separate schema to gconf.
 
 It should be used on new apps instead of gconf.
 
-It is binary. This implies that:
+Uses a binary data format instead of XML, which implies that:
 
 - fast to parse. Specially important as startup.
 - not human readable.
@@ -1195,7 +1223,9 @@ Here you see a reverse URL dot notation:
 
     org.gnome.metacity
 
-GUI editor: `dconf-editor`
+GUI editor: `dconf-editor`.
+
+    dconf write org/gnome/gnome-screenshot/auto-save-directory "/home/ciro"
 
 ###gconf
 
@@ -1217,12 +1247,15 @@ GUI editor: `gconf-editor`
 
 ##gsettings
 
-gsettings is a frontend for both dconf on Linux,
-and possibly other backends on other systems such as the Windows registry (binary).
+gsettings is a frontend for both dconf on Linux, and possibly other backends on other systems such as the Windows registry (binary).
 
-Therefore, applications should only use it, and not dconf to have greater portability.
+Therefore, applications should only use it directly, and not dconf, to achieve greater portability.
 
-On current gnome based desktops it is not a frontend for gconf.
+On current GNOME based desktops, it does not support gconf.
+
+Set the value of a key:
+
+    gsettings set "org.gnome.gnome-screenshot" "auto-save-directory" "file:///home/$USER/screenshot"
 
 #power
 
@@ -1416,7 +1449,12 @@ There are many systems, and they have some degree of compatibility.
 
 xdg utils package
 
-Can open both Internet URLs and local files.
+Can open both Internet URLs and local files:
+
+    echo a > a.html
+    xdg-open a.html
+
+    xgd-open http://google.com
 
 Sources:
 

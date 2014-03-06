@@ -1,0 +1,34 @@
+# Generated LaTeX files
+*.aux
+*.log
+*.toc
+*.out
+*.tmp.*
+tmp/
+generated_polytex/
+
+# Generated style, frontmatter, and cache files
+pygments.sty
+softcover.sty
+pygments.css
+softcover.css
+frontmatter.tex
+.highlight_cache
+.softcover-book
+
+# Generated HTML files
+html/*.html
+
+# Generated EPUB/MOBI files
+epub/
+
+# Generated ebooks
+ebooks/
+
+# Screencasts (likely to be huge)
+screencasts/
+
+# Other miscellaneous files
+log/
+*.bak
+.DS_Store

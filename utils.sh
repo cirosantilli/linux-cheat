@@ -2,11 +2,11 @@
 
 ##about
 
-    #this file is being cut up into smaller files
+    # This file is being cut up into smaller files.
 
-    #distribution specific installation procedures are put outside of this section
+    # Distribution specific installation procedures are put outside of this section.
 
-    #for a summary of up to level 2 header: `grep -E '^[[:space:]]{0,4}##' %`
+    # For a summary of up to level 2 header: `grep -E '^[[:space:]]{0,4}##' %`.
 
 ##sources
 
@@ -497,92 +497,6 @@
 
             #ncurses
 
-    ##mail
-
-        ##MTA
-
-            # Mail transfer agent.
-
-        ##sendmail
-
-            # Interface that comes in multiple packages such as ssmtp and postfix,
-            # so to configure it you must first determine which package provides it.
-
-            # `sendmail` is an utility. Its interface is probably implemented
-            # by other packages because that utility was widely used.
-
-            # May be symlink to an executable, or to the /etc/alternatives.
-
-                echo "asdf" | sendmail
-
-        ##mail
-
-            # On a symlink to the alternatives system.
-
-                echo -e "the message\n\nend of it" | mail -s "subject" -r "from@gmail.com" "to@gmail.com"
-                mail -s "subject" -r "from@gmail.com" "to@gmail.com"
-
-            # Mail ends in a line which contains a single dot `.` or ctrl+D.
-
-        ##mailx
-
-            # POSIX.
-
-            # Does not seem to be used a lot, maybe because it does not have many capabilities.
-
-        ##ssmtp
-
-            # Simple SMTP.
-
-            # Popular MTA. Really is simpler than Postfix to setup.
-
-            # Configuration file:
-
-                #vim /etc/ssmtp/ssmtp.conf
-
-            # Configurations to send an email from gmail:
-
-                Root=your_email@gmail.com
-                Mailhub=smtp.gmail.com:465
-                RewriteDomain=gmail.com
-                AuthUser=your_gmail_username
-                AuthPass=your_gmail_password
-                FromLineOverride=Yes
-                UseTLS=Yes
-
-            # Now you can send emails from the command line as:
-
-                printf 'Subject: sub\nBody' | ssmtp destination@mail.com
-                printf 'Subject: sub\nBody' | sendmail destination@mail.com
-
-            # The email will be sent from the email account you configured to send from.
-
-        ##postfix
-
-            # Main configuration file:
-
-                /etc/postfix/main.cf
-
-            # Postfix's `sendmail` does not show failure status immediately,
-            # it seems that it simply puts the email on a send queue.
-
-            # This is probably done so that email sending does not block the current session,
-            # allowing in particular longer retry times.
-
-            # To view the send queue, use `mailq`.
-
-            ##mailq
-
-                # Show email sending queue.
-
-                # If delivery failed, explains why.
-
-        ##mutt
-
-            # Can send mail with attachment.
-
-            # Curses inteface.
-
 ##programming
 
     ##pkg-config
@@ -956,11 +870,11 @@
 
         #print to stdout:
 
-            assert [ "`echo a`" = a ]
+            [ "`echo a`" = a ] || exit 1
 
         #multiple arguments are space separated:
 
-            assert [ "`echo a b c`" = "a b c" ]
+            [ "`echo a b c`" = "a b c" ] || exit 1
 
         ##gnu implementation
 
@@ -976,12 +890,12 @@
 
             #Does not interpret `\` escaped chars by default:
 
-                assert [ "`echo 'a\nb'`" = $'a\\nb' ]
+                [ "`echo 'a\nb'`" = $'a\\nb' ] || exit 1
 
             #-e: interprets \ escaped chars:
 
-                assert [ "`echo -e 'a\nb'`" = $'a\nb' ]
-                assert [ "`echo -e '\x61'`" = $'a' ]
+                [ "`echo -e 'a\nb'`" = $'a\nb' ] || exit 1
+                [ "`echo -e '\x61'`" = $'a' ] || exit 1
 
             #Print the `-n` string:
             #IMPOSSIBLE! not even gnu echo supports `--` since POSIX says that this should be supported.
@@ -997,7 +911,7 @@
 
         # Does not automatically append newline:
 
-            assert [ "`printf "a"`" == "a" ]
+            [ "`printf "a"`" == "a" ] || exit 1
 
         # Automatically interprets backslash escapes like C printf:
 
@@ -1007,16 +921,16 @@
 
         # Print the `-n` string:
 
-            assert [ "`printf "%s" "-n"`" == "-n" ]
+            [ "`printf "%s" "-n"`" == "-n" ] || exit 1
 
         # Supports C format strings:
 
-            assert [ "`printf "%1.2d" 1`"       == "01" ]
-            assert [ "`printf "%1.2f" 1.23`"    == "1.23" ]
+            [ "`printf "%1.2d" 1`"       == "01" ] || exit 1
+            [ "`printf "%1.2f" 1.23`"    == "1.23" ] || exit 1
 
         # Print the `-n` string:
 
-            assert [ "`printf "%s" "-n"`" == "-n" ]
+            [ "`printf "%s" "-n"`" == "-n" ] || exit 1
 
         # Print a string ignoring all escape sequences (always appends terminates in a single newline):
 
@@ -1081,17 +995,17 @@
 
         # Coreutils, not posix.
 
-            assert [ "$(printf "a\nb\n" | tac)" = "$(printf "b\na")" ]
+            [ "$(printf "a\nb\n" | tac)" = "$(printf "b\na")" ] || exit 1
 
         # Things get messy if the input does not end in newline:
 
-            assert [ "$(printf "a\nb" | tac)" = "$(printf "ba")" ]
+            [ "$(printf "a\nb" | tac)" = "$(printf "ba")" ] || exit 1
 
     ##rev
 
         # Reverse bytewise.
 
-            assert [ "`echo $'ab' | rev`" = $'ba' ]
+            [ "`echo $'ab' | rev`" = $'ba' ] || exit 1
 
     ##dd
 
@@ -1144,8 +1058,8 @@
 
             # copy up to count blocks (defined by bs):
 
-                assert [ `echo -n 1234 | dd status=none bs=2 count=1` = 12 ]
-                assert [ `echo -n 1234 | dd status=none bs=1 count=3` = 123 ]
+                [ `echo -n 1234 | dd status=none bs=2 count=1` = 12 ] || exit 1
+                [ `echo -n 1234 | dd status=none bs=1 count=3` = 123 ] || exit 1
 
         ##size suffixes
 
@@ -1158,8 +1072,8 @@
 
             # and so on for G, T, P, E, Z and Y!
 
-                assert [ `echo -n 123 | dd status=none bs=1c count=1` = 1 ]
-                assert [ `echo -n 123 | dd status=none bs=1w count=1` = 12 ]
+                [ `echo -n 123 | dd status=none bs=1c count=1` = 1 ] || exit 1
+                [ `echo -n 123 | dd status=none bs=1w count=1` = 12 ] || exit 1
 
             # The larger the chunck size, the potentially faster file transfers will be.
 
@@ -1169,7 +1083,7 @@
 
             # Skip first n input blocks (defined by bs or ibs):
 
-                assert [ `echo -n 123 | dd status=none bs=1 skip=1` = 23 ]
+                [ `echo -n 123 | dd status=none bs=1 skip=1` = 23 ] || exit 1
 
         ##seek
 
@@ -1183,7 +1097,7 @@
 
             # ucase: uppercase
 
-                assert [ `echo -n abc | dd status=none conv=ucase` = ABC ]
+                [ `echo -n abc | dd status=none conv=ucase` = ABC ] || exit 1
 
         ##iflag oflag
 
@@ -1216,7 +1130,8 @@
             # - `g`: top of document
             # - `G`: bottom of document
             # - `g`: top of document
-            # <ENTER> : down one line
+            # - `<ENTER>`: down one line
+            # - `-S` : toogle line wrapping
 
                 less "$f"
                 echo $'ab\ncd' | less
@@ -1261,7 +1176,7 @@
 
         #-s: only break at spaces:
 
-            assert [ "`echo -e "12345 6" | fold -s -w 3`" = $'123\n45\n6' ]
+            [ "`echo -e "12345 6" | fold -s -w 3`" = $'123\n45\n6' ] || exit 1
 
     ##fmt
 
@@ -1269,7 +1184,7 @@
 
         # Wrap lines, but don't cut words
 
-            assert [ `echo "a bcd" | fold -w 2` = $'a\nbcd' ]
+            [ `echo "a bcd" | fold -w 2` = $'a\nbcd' ] || exit 1
 
     ##column
 
@@ -1307,6 +1222,12 @@
         # -uf : remove dupes, cas insensitive (A and a are dupes)
         # -m : supposesing f1 and f2 are already sorted, making merge faster
         # -c : check if is sorted
+
+        ##GNU extensions
+
+            # Sort dot versions number:
+
+                git tag | sort -V
 
     ##tsort
 
@@ -1388,27 +1309,27 @@
 
         # Replaces a by A and b by B and c by C:
 
-            assert [ `echo -n cab | tr abc ABC` =  CAB ]
+            [ `echo -n cab | tr abc ABC` =  CAB ] || exit 1
 
         # Ranges are understood. Convert to uppercase:
 
-            assert [ `echo -n cab | tr a-z A-Z` =  CAB ]
+            [ `echo -n cab | tr a-z A-Z` =  CAB ] || exit 1
 
         # POSIX character classes are understood. Remove non alphtnum chras:
 
-            assert [ `echo -n 'ab_@' | tr -cd "[:alpha:]"` = ab ]
+            [ `echo -n 'ab_@' | tr -cd "[:alpha:]"` = ab ] || exit 1
 
         # - `c`: complement and replace. replaces all non abc chars by d
 
-                assert [ `echo -n dcba | tr -c abc 0` =  0cba ]
+                [ `echo -n dcba | tr -c abc 0` =  0cba ] || exit 1
 
         # - `d`: deletes abc chars:
 
-                assert [ `echo -n dcba | tr -d abc` =  d ]
+                [ `echo -n dcba | tr -d abc` =  d ] || exit 1
 
         # - `s`: replaces multiple consecutive 'a's and 'b's by isngle a
 
-                assert [ `echo -n aabbaac | tr -s ab` =  abac ]
+                [ `echo -n aabbaac | tr -s ab` =  abac ] || exit 1
 
     ##cut
 
@@ -1416,26 +1337,28 @@
 
         # Select columns from text tables.
 
+        # The delimier can only be a single character, so quite limited.
+
         # For more complex operation such as selecting a line from a certain field, consider `awk`.
 
         # `-f`: field. what column to print.
 
-             echo $'a\tb\nc\td' | cut -f1
-                #$'a\nc'
+            echo $'a\tb\nc\td' | cut -f1
+            #$'a\nc'
 
         # `-d`: delimier
 
-             echo $'a:b\nc:d' | cut -d: -f1
+            echo $'a:b\nc:d' | cut -d: -f1
                 #$'a\nc'
 
         # Gets last if delimier too large:
 
-             echo $'a' | cut -d: -f2
+            echo $'a' | cut -d: -f2
                 #$'a'
 
         # Multiple columns, first and third:
 
-             echo $'a:b:c\nd:e:f' | cut -d: -f1,3
+            echo $'a:b:c\nd:e:f' | cut -d: -f1,3
                 #$'a:c\nd:f'
 
         # Column range from first to third:
@@ -1484,13 +1407,13 @@
 
         # 2 first bytes:
 
-            assert [ "`echo -en 'abc' | head -c 2`" = "ab" ]
+            [ "`echo -en 'abc' | head -c 2`" = "ab" ] || exit 1
 
         ##gnu coreutils
 
             # Remove last two bytes:
 
-                assert [ "`echo -en 'abc' | head -c -2`" = "a" ]
+                [ "`echo -en 'abc' | head -c -2`" = "a" ] || exit 1
 
     ##tail
 
@@ -1506,19 +1429,31 @@
 
     ##truncate
 
+        # GNU corutils.
+
         # Sets file to given size.
 
         # If greater, pads with 0s.
 
         # If smaller, data loss.
 
+        # Operates inline without mercy, only works on files.
+
             echo ab > f
             truncate -s 1 f
-            assert [ `cat f` = a ]
+            [ `cat f` = a ] || exit 1
 
             truncate -s 2 f
             hexdump
-            assert [ `cat f` = $'a\0' ]
+            [ `cat f` = $'a\0' ] || exit 1
+
+        # Negative values truncate up to from the end:
+
+            echo abc > f
+            truncate -s -1 f
+            [ `cat f` = ab ] || exit 1
+
+        # *Must* have a space: `-s -1`, *not* `-s-1`.
 
     ##split
 
@@ -1531,9 +1466,9 @@
             split -db1 f p
             split -dn3 f p
 
-            assert [ `cat p00` = a ]
-            assert [ `cat p01` = b ]
-            assert [ `cat p02` = c ]
+            [ `cat p00` = a ] || exit 1
+            [ `cat p01` = b ] || exit 1
+            [ `cat p02` = c ] || exit 1
 
         # Existing files are overwritten:
 
@@ -1553,9 +1488,9 @@
 
             echo $'0\naa\n1\naa\n2' > f
             csplit f '/^a/' '{*}'
-            assert [ `cat xx00` = 0 ]
-            assert [ `cat xx01` = $'aa\n1' ]
-            assert [ `cat xx02` = $'aa\n2' ]
+            [ `cat xx00` = 0 ] || exit 1
+            [ `cat xx01` = $'aa\n1' ] || exit 1
+            [ `cat xx02` = $'aa\n2' ] || exit 1
 
     ##paste
 
@@ -1674,35 +1609,35 @@
 
             # Substitute:
 
-                assert [ "`echo $'aba\ncd' | sed 's/a/b/'`" = $'bba\ncd' ]
+                [ "`echo $'aba\ncd' | sed 's/a/b/'`" = $'bba\ncd' ] || exit 1
 
             # pattern is a BRE
 
             # g modifier:
 
-                assert [ "`echo 'aba' | sed 's/a/b/g'`" = $'bbb' ]
+                [ "`echo 'aba' | sed 's/a/b/g'`" = $'bbb' ] || exit 1
 
             # Replaces multiple non overalpping times on each line.
 
             ##patterns are BREs
 
-                assert [ "`echo 'aa' | sed 's/[[:alpha:]]/b/'`" = 'ba' ]
-                assert [ "`echo 'aa' | sed 's/.+/b/'`" = 'ab' ]
+                [ "`echo 'aa' | sed 's/[[:alpha:]]/b/'`" = 'ba' ] || exit 1
+                [ "`echo 'aa' | sed 's/.+/b/'`" = 'ab' ] || exit 1
                     #+ is ordinary, thus BRE, and no match
 
                 ##EREs with -r
 
                     #therefore always use -r for regexes
 
-                        assert [ "echo 'aa' | `sed -r 's/.+/b/'`" = 'b' ]
+                        [ "echo 'aa' | `sed -r 's/.+/b/'`" = 'b' ] || exit 1
 
             ##capturing groups
 
-                    assert [ "`echo a1 | sed -r 's/a(.)/b\1/'`" = 'b1' ]
-                    assert [ "`echo a1 | sed -r 's/a(.)/b\\1/'`" = 'b\1' ]
-                    assert [ "`echo a1 | sed -r 's/a(.)/\0&/'`" = 'a1a1' ]
+                    [ "`echo a1 | sed -r 's/a(.)/b\1/'`" = 'b1' ] || exit 1
+                    [ "`echo a1 | sed -r 's/a(.)/b\\1/'`" = 'b\1' ] || exit 1
+                    [ "`echo a1 | sed -r 's/a(.)/\0&/'`" = 'a1a1' ] || exit 1
                         #\0 and & both refer to the entire match
-                    assert [ "`echo a1 | sed -r 's/a(.)/\&/'`" = '&' ]
+                    [ "`echo a1 | sed -r 's/a(.)/\&/'`" = '&' ] || exit 1
 
                     #no non-greedy *? operator. use [^]* combo instead
 
@@ -1721,47 +1656,47 @@
                     #write lines to file:
 
                         echo $'a\nb\na' | sed -n 's/a/A/w f'
-                        assert [ "`cat a`" = $'A\nA' ]
+                        [ "`cat a`" = $'A\nA' ] || exit 1
 
         ##/
 
             #only exec next command if match
 
-                assert [ "`echo $'a\nb' | sed -n '/a/p'`" = $'a' ]
+                [ "`echo $'a\nb' | sed -n '/a/p'`" = $'a' ] || exit 1
 
         ##restrict lines
 
             #line number:
 
-                assert [ "`echo $'a\nb' | sed -n '1 p'`" = $'a' ]
+                [ "`echo $'a\nb' | sed -n '1 p'`" = $'a' ] || exit 1
 
             #last line:
 
-                assert [ "`echo $'a\nb' | sed -n '$ p'`" = $'b' ]
+                [ "`echo $'a\nb' | sed -n '$ p'`" = $'b' ] || exit 1
 
             #before last line:
 
-                assert [ "`echo $'a\nb' | sed -n '$-1 p'`" = $'a' ]
+                [ "`echo $'a\nb' | sed -n '$-1 p'`" = $'a' ] || exit 1
 
             #line matches pattern:
 
-                assert [ "`echo $'a\nb' | sed '/a/ s/./c/'`" = $'c\nb' ]
+                [ "`echo $'a\nb' | sed '/a/ s/./c/'`" = $'c\nb' ] || exit 1
 
             #line range:
 
-                assert [ "`echo $'a\nb\nc\nd' | sed '1,3 s/./e/'`" = $'e\ne\ne\nd' ]
+                [ "`echo $'a\nb\nc\nd' | sed '1,3 s/./e/'`" = $'e\ne\ne\nd' ] || exit 1
 
             ##pattern range
 
-                    assert [ "`echo $'a\nb\nc\nd' | sed '/a/,/c/ s/./0/'`" = $'0\n0\n0\nd' ]
+                    [ "`echo $'a\nb\nc\nd' | sed '/a/,/c/ s/./0/'`" = $'0\n0\n0\nd' ] || exit 1
 
                 #non-greedy:
 
-                    assert [ "`echo $'a\nb\n0\n0\na\nb' | sed '/a/,/b/ s/./A/'`" = $'A\nA\n0\n0\nA\nA' ]
+                    [ "`echo $'a\nb\n0\n0\na\nb' | sed '/a/,/b/ s/./A/'`" = $'A\nA\n0\n0\nA\nA' ] || exit 1
 
             ##multiple commands per restriction
 
-                assert [ "`echo $'a\nb' | sed '1 {s/./c/; s/c/d/}'`" = $'d\nb' ]
+                [ "`echo $'a\nb' | sed '1 {s/./c/; s/c/d/}'`" = $'d\nb' ] || exit 1
 
             ##!
 
@@ -1769,51 +1704,51 @@
 
                 #act on non matching
 
-                    assert [ "`echo $'a\nb' | sed -n '1! p'`" = $'b' ]
-                    assert [ "`echo $'a\nb' | sed -n '/a/! p'`" = $'b' ]
+                    [ "`echo $'a\nb' | sed -n '1! p'`" = $'b' ] || exit 1
+                    [ "`echo $'a\nb' | sed -n '/a/! p'`" = $'b' ] || exit 1
 
         ##multiple commands
 
             #concatenate with ; or newlines
 
-                assert [ "`echo $'a\nb' | sed '/a/ s/./B/; /B/ {s/B/C/; s/C/D/}'`" = $'D\nb' ]
+                [ "`echo $'a\nb' | sed '/a/ s/./B/; /B/ {s/B/C/; s/C/D/}'`" = $'D\nb' ] || exit 1
 
         ##q
 
             #quit
 
-                assert [ "`echo $'a\nb' | sed 's/./c/; q'`" = $'c' ]
+                [ "`echo $'a\nb' | sed 's/./c/; q'`" = $'c' ] || exit 1
 
         ##d
 
             #delete
 
-                assert [ "`echo $'a\nb' | sed '/a/ d'`" = $'b' ]
+                [ "`echo $'a\nb' | sed '/a/ d'`" = $'b' ] || exit 1
 
         ##a, i, c
 
             #append (after), insert (before), change
 
-                assert [ "`echo $'a\nb' | sed '1 i 0'`" = $'a\n0\nb' ]
-                assert [ "`echo $'a\nb' | sed '1 i 0'`" = $'0\na\nb' ]
-                assert [ "`echo $'a\nb' | sed '1 c 0'`" = $'0\nb' ]
+                [ "`echo $'a\nb' | sed '1 i 0'`" = $'a\n0\nb' ] || exit 1
+                [ "`echo $'a\nb' | sed '1 i 0'`" = $'0\na\nb' ] || exit 1
+                [ "`echo $'a\nb' | sed '1 c 0'`" = $'0\nb' ] || exit 1
 
             ##newlines and spaces
 
-                assert [ "`echo $'a\nb' | sed '1 c 0 1\n2 3'`" = $'0 1\n2 3\nb' ]
+                [ "`echo $'a\nb' | sed '1 c 0 1\n2 3'`" = $'0 1\n2 3\nb' ] || exit 1
 
         ##line number
 
             #=
 
-                assert [ "`echo $'a\nb\na' | sed -n '/a/ ='`" = $'1\n3' ]
+                [ "`echo $'a\nb\na' | sed -n '/a/ ='`" = $'1\n3' ] || exit 1
 
         ##replace chars
 
             #y
 
-                assert [ "`echo $'a\nb' | sed -n 'y/ab/01'`" = $'0\n1' ]
-                assert [ "`echo $'a\nb' | sed -n 'y/ab/AB'`" = $'A\nB' ]
+                [ "`echo $'a\nb' | sed -n 'y/ab/01'`" = $'0\n1' ] || exit 1
+                [ "`echo $'a\nb' | sed -n 'y/ab/AB'`" = $'A\nB' ] || exit 1
 
         ##multiline
 
@@ -1825,22 +1760,22 @@
 
                 #print first line after matching `/a/`:
 
-                    assert [ "`echo $'a\nb' | sed -n '/a/ {n;p}'`" = $'b' ]
+                    [ "`echo $'a\nb' | sed -n '/a/ {n;p}'`" = $'b' ] || exit 1
 
                 #print second line after matching `/a/`:
 
-                    assert [ "`echo $'a\nb\nc' | sed -n '/a/ {n;n;p}'`" = $'c' ]
+                    [ "`echo $'a\nb\nc' | sed -n '/a/ {n;n;p}'`" = $'c' ] || exit 1
 
             #- N: append next line to pattern space. Next line is not read again.
 
-                    assert [ "`echo $'a\nb' | sed -n '/a/ {N;p};'`" = $'a\nb' ]
-                    assert [ "`echo $'a\nb' | sed -n '/b/ p; /a/ {N;p};'`" = $'a\nb' ]
+                    [ "`echo $'a\nb' | sed -n '/a/ {N;p};'`" = $'a\nb' ] || exit 1
+                    [ "`echo $'a\nb' | sed -n '/b/ p; /a/ {N;p};'`" = $'a\nb' ] || exit 1
 
             #- p: print entire pattern space. default action at end if no `-n`.
 
             #- P: print up to first newline.
 
-                    assert [ "`echo $'a\nb' | sed -n '/a/ N'`" = $'b' ]
+                    [ "`echo $'a\nb' | sed -n '/a/ N'`" = $'b' ] || exit 1
 
             #- d: delete pattern space. go to next line. *Is a loop continue*
 
@@ -1862,23 +1797,23 @@
 
                 #print old/new newline pairs after substitution
 
-                    assert [ "`echo $'a\nb' | sed -n 'h; /a/ {s/a/c/; s/$/\n/; x;p;x;p}'`" = $'a\nc\n' ]
+                    [ "`echo $'a\nb' | sed -n 'h; /a/ {s/a/c/; s/$/\n/; x;p;x;p}'`" = $'a\nc\n' ] || exit 1
 
                 #print first line before matching `/b/`:
 
-                    assert [ "`echo $'a\nb' | sed -n '/b/ {x;p;d}; h'`" = $'a' ]
+                    [ "`echo $'a\nb' | sed -n '/b/ {x;p;d}; h'`" = $'a' ] || exit 1
 
             ##g
 
                 #pattern space = hold space
 
-                    assert [ "`echo $'a\nb' | sed -n 'h; /a/ {s/a/c/;x;p;g;p}'`" = $'a\nc' ]
+                    [ "`echo $'a\nb' | sed -n 'h; /a/ {s/a/c/;x;p;g;p}'`" = $'a\nc' ] || exit 1
 
             ##G
 
                 #pattern space += hold space
 
-                    assert [ "`echo $'a\nb' | sed -n 'h; /a/ {s/a/c/;x;G;p}'`" = $'a\nc' ]
+                    [ "`echo $'a\nb' | sed -n 'h; /a/ {s/a/c/;x;G;p}'`" = $'a\nc' ] || exit 1
 
         ##goto
 
@@ -1892,8 +1827,8 @@
 
                 #unconditional
 
-                    assert [ "`echo $'a\nb' | sed '/a/ b c; s/./c/; :c'`" = $'a\nc' ]
-                    assert [ "`echo $'a\nb' | sed '/a/ b c; s/./c/; :c s/c/d'`" = $'a\nd' ]
+                    [ "`echo $'a\nb' | sed '/a/ b c; s/./c/; :c'`" = $'a\nc' ] || exit 1
+                    [ "`echo $'a\nb' | sed '/a/ b c; s/./c/; :c s/c/d'`" = $'a\nd' ] || exit 1
 
             ##t
 
@@ -1901,11 +1836,11 @@
 
                 #remove spaces after a:
 
-                    assert [ "`echo $'a  b  c' | sed ':a s/a /a/; t a'`" = $'ab  c' ]
+                    [ "`echo $'a  b  c' | sed ':a s/a /a/; t a'`" = $'ab  c' ] || exit 1
 
                 #remove everything between a and c
 
-                    assert [ "`echo $'a  b  c' | sed ':a s/a[^c]/a/; t a'`" = $'ac' ]
+                    [ "`echo $'a  b  c' | sed ':a s/a[^c]/a/; t a'`" = $'ac' ] || exit 1
 
         ##command line arguments
 
@@ -1926,13 +1861,13 @@
                     f=f
                     echo $'a\nb' > "$f"
                     sed -i 's/a/A/' "$f"
-                    assert [ "`cat "$f"`" = $'A\nb' ]
+                    [ "`cat "$f"`" = $'A\nb' ] || exit 1
 
                     sed -i.bak 's/A/a/' "$f"
                         #baks up old file with .bak suffix
-                    assert [ "`cat "$f"`" = $'a\nb' ]
-                    assert [ "`cat "$f".bak`" = $'A\nb' ]
-                    assert [ `ls | wc -l` = 2 ]
+                    [ "`cat "$f"`" = $'a\nb' ] || exit 1
+                    [ "`cat "$f".bak`" = $'A\nb' ] || exit 1
+                    [ `ls | wc -l` = 2 ] || exit 1
 
                 #-i: in place
 
@@ -1950,7 +1885,7 @@
 
                 #same as ; concatenating commands
 
-                assert [ "`echo $'a\nb' | sed -e 's/a/b/' -e 's/b/c/'`" = $'c\nc' ]
+                [ "`echo $'a\nb' | sed -e 's/a/b/' -e 's/b/c/'`" = $'c\nc' ] || exit 1
 
             ##-f
 
@@ -1989,21 +1924,21 @@
                 #a
                 #c
 
-            assert [ "`echo $'a\nb\na\nb' | sed -n 'h; s/a/c/; t p; d; :p {=;x;G;s/$/\n/;p}'`" = $'1\na\nc\n\n3\na\nc\n' ]
+            [ "`echo $'a\nb\na\nb' | sed -n 'h; s/a/c/; t p; d; :p {=;x;G;s/$/\n/;p}'`" = $'1\na\nc\n\n3\na\nc\n' ] || exit 1
 
     ##awk
 
-        #POSIX 7.
+        # POSIX 7.
 
-        #Use only for text table field manipulation
+        # Use only for text table field manipulation
 
-        #awk only gets slightly better golfing on a very limited problem set
+        # awk only gets slightly better golfing on a very limited problem set
 
-        #The only real advantage of awk over perl is the fact that it is in POSIX,
-        #while perl is only in LSB. awk only has slighty better golfing.
-        #Therefore: don't rely on awk GNU extensions, or you lose the only major advantage of awk!
+        # The only real advantage of awk over perl is the fact that it is in POSIX,
+        # while perl is only in LSB. awk only has slighty better golfing.
+        # Therefore: don't rely on awk GNU extensions, or you lose the only major advantage of awk!
 
-        #For more even more sanity, use python.
+        # For even more sanity, use python.
 
         ##variables
 
@@ -2098,12 +2033,12 @@
         #fails:
 
             grep 0 a | cat > a
-            assert [ "`cat a`" = '' ]
+            [ "`cat a`" = '' ] || exit 1
 
         #works:
 
             grep 0 a | sponge a
-            assert [ "`cat a`" = '0' ]
+            [ "`cat a`" = '0' ] || exit 1
 
     ##vipe
 
@@ -2129,165 +2064,185 @@
 
     ##chinese
 
-        #- Guobiao is mainly used in Mainland China and Singapore. Named as `GB\d+`
-        #- Big5, used in Taiwan, Hong Kong and Macau
+        # - Guobiao is mainly used in Mainland China and Singapore. Named as `GB\d+`
+        # - Big5, used in Taiwan, Hong Kong and Macau
 
-        #`file` does not work properly for chinese
+        # `file` does not work properly for chinese
 
     ##dos2unix
 
-        #CR LF to CR
+        # CR LF to CR
 
-        #in place:
+        # In place:
 
             echo -e 'a\r\nb\r\n' > a.txt
             dos2unix a.txt
-            assert [ "`cat a.txt`" = $'a\nb\n' ]
+            [ "`cat a.txt`" = $'a\nb\n' ] || exit 1
 
     ##enca
 
-        #detect and convert international encodings
+        # Detect and convert international encodings.
 
-        #guess encoding:
+        # Guess encoding:
 
             enca a.txt
 
-        #this may not work if you don't give the expected language as input.
+        # This may not work if you don't give the expected language as input.
 
-        #view available languages:
+        # View available languages:
 
             enca --list languages
 
-        #tell enca that the file is in chinese:
+        # Tell enca that the file is in chinese:
 
             enca -L zh a.txt
 
-        #you give languages as locales
-        #(i think as 2 letter iso 639-1 codes <http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes> since only `zh` worked for chinese)
+        # You give languages as locales
+        # (i think as 2 letter iso 639-1 codes <http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes> since only `zh` worked for chinese)
 
     ##iconv
 
-        #convet character encodings
+        # Convert character encodings.
 
-        #major encodings
-            #ASCII
-            #UTF-8
-            #UTF-16
-            #chinese only:
-                #GB18030: Guobiao Mainland China and Singapore. prefixed by GB, latest version GB18030
-                #BIG-5: Taiwan, Hong Kong and Macau, is a one or two byte encoding.
+        # Major encodings:
+        # - ASCII
+        # - UTF-8
+        # - UTF-16
+        # - Chinese
+            # - GB18030: Guobiao Mainland China and Singapore. prefixed by GB, latest version GB18030
+            # - BIG-5: Taiwan, Hong Kong and Macau, is a one or two byte encoding.
 
-        iconv -l
-            #list available encodings
+        # List available encodings:
 
-        iconv -f BIG-FIVE -t UTF-8 "$F"
-            #convert contents of F from BIG-FIVE to UTF-8
-            #no changes made: only outputs to stdout
+            iconv -l
+
+        # Convert contents of F from BIG-FIVE to UTF-8:
+
+            iconv -f BIG-FIVE -t UTF-8 "$F"
+
+        # No changes made to file: only outputs to stdout.
 
     ##convmv
 
-        #mv converting encodings
-
-            sudo aptitude install convmv
+        # mv converting encodings
 
 ##cron
 
-    #Tell the computer to do things at specified times automatially.
+    # Tell the computer to do things at specified times automatially.
 
     ##crontab
 
-        #POSIX 7
+        # POSIX 7.
 
-        #Utility to manage crobjobs.
+        # Utility to manage crobjobs.
 
-        #It is basically a frontend for the `/etc/crontab` file which an be edited directly.
+        # It is basically a frontend for the `/etc/crontab` file which an be edited directly.
 
-        #It is not possible launch graphical applications via cron!
+        # It is not possible launch graphical applications via cron!
 
-        #Edit user cron jobs in vim
+        # Edit user cron jobs in vim
 
             crontab -e
 
-        #Sample line:
+        # Sample line:
 
             1 2 3 4 5 /path/to/cmd.sh arg1 arg2 >/dev/null 2>&1
 
-        #Fields:
+        # Fields:
 
-        #- 1: Minute (0-59)
-        #- 2: Hours (0-23)
-        #- 3: Day (0-31)
-        #- 4: Month (0-12 [12 == December])
-        #- 5: Day of the week(0-7 [7 or 0 == sunday])
-        #- /path/to/command - Script or command name to schedule#
+        # - 1: Minute (0-59)
+        # - 2: Hours (0-23)
+        # - 3: Day (0-31)
+        # - 4: Month (0-12 [12 == December])
+        # - 5: Day of the week(0-7 [7 or 0 == sunday])
+        # - /path/to/command - Script or command name to schedule#
 
-        #Special notations:
+        # Special notations:
 
-        #- * : every
-        #- */5 : every five
-        #- 1,3,6 : several
-        #- 1-5 : ranges
+        # - * : every
+        # - */5 : every five
+        # - 1,3,6 : several
+        # - 1-5 : ranges
 
-        #Convenient altenatives to the fields:
+        # Convenient altenatives to the fields:
 
-        #- @reboot	Run once, at startup.
-        #- @yearly	Run once a year, "0 0 1 1 *".
-        #- @annually	(same as @yearly)
-        #- @monthly	Run once a month, "0 0 1 * *".
-        #- @weekly	Run once a week, "0 0 * * 0".
-        #- @daily	Run once a day, "0 0 * * *".
-        #- @midnight	(same as @daily)
-        #- @hourly	Run once an hour, "0 * * * *".
+        # - @reboot	Run once, at startup.
+        # - @yearly	Run once a year, "0 0 1 1 *".
+        # - @annually	(same as @yearly)
+        # - @monthly	Run once a month, "0 0 1 * *".
+        # - @weekly	Run once a week, "0 0 * * 0".
+        # - @daily	Run once a day, "0 0 * * *".
+        # - @midnight	(same as @daily)
+        # - @hourly	Run once an hour, "0 * * * *".
 
-        #Example:
+        # Example:
 
             @daily /path/to/cmd.sh arg1 arg2 >/dev/null 2>&1
 
-        #`>/dev/null 2>&1` prevents cron from sending notification emails.
+        # `>/dev/null 2>&1` prevents cron from sending notification emails.
 
-        #Otherwise if you want them add:
+        # Otherwise if you want them add:
 
             #MAILTO="vivek@nixcraft.in"
 
-        #to the config file.
+        # to the config file.
 
-        #List all cronjobs:
+        # List all cronjobs:
 
             crontab -l
 
-        #List all cronjobs for a given user:
+        # List all cronjobs for a given user:
 
             crontab -u user -l
 
-        #Erase all cronjobs:
+        # Erase all cronjobs:
 
             crontab -r
 
-        #Erase all cronjobs for a given user only
+        # Erase all cronjobs for a given user only
 
             crontab -r -u username
 
+    ##batch
+
+        # POSIX 7
+
+        # Superset of `at`.
+
+        # Execute only when system load average goes below 1.5,
+        # starting from now!
+
+            cd "`mktemp -d`"
+            echo "touch a" | batch
+
+        # Same, but with at you can change to any time:
+
+            echo "touch a" | at -q b now
+
     ##at
 
-        #schedule job at a single specified time
+        # Schedule job at a single specified time.
 
-        #not for a periodic job!
+        # Not for a periodic jobs.
 
-        cd "`mktemp -d`"
-        echo "touch a" | at now + 1 minutes
-            #in one minute `test -f a`
-        echo "echo a" | at now + 1 minutes
-            #nothing happens!
-            #of course, job does not run in current shell
-        echo "xeyes" | at now + 1 minutes
-            #nothing happens
+            cd "`mktemp -d`"
+            echo "touch a" | at now + 1 minutes
+                #in one minute `test -f a`
+            echo "echo a" | at now + 1 minutes
+                #nothing happens!
+                #of course, job does not run in current shell
+            echo "xeyes" | at now + 1 minutes
+                #nothing happens
 
-        atq
-            #list jobs
+        # List jobs:
 
-        atrm 1
-            #remove job with id 1
-            #id can be found on atq output
+            atq
+
+        # Remove job with id 1:
+
+            atrm 1
+
+        # Id can be found on atq output.
 
         #inner workings
 
@@ -2303,52 +2258,36 @@
                 #if allow exists, this is ignored!
                 #if not, denies only to listed users
 
-    ##batch
-
-        #posix 7
-
-        #superset of `at`
-
-        #execute only when system load average goes below 1.5
-        #starting from now!
-
-            cd "`mktemp -d`"
-            echo "touch a" | batch
-
-        #same, but with at you can change to any time
-
-            echo "touch a" | at -q b now
-
 ##disk
 
-    #This section is about: hard disks, mounting, partitions, filesystem, block devices.
+    # This talks about concepts such as: hard disks, mounting, partitions, filesystem, block devices.
 
     ##du
 
-        #POSIX 7
+        # POSIX 7
 
-        #Mnemonic: Disk Usage.
+        # Mnemonic: Disk Usage.
 
-        #get disk usage per file/dir:
+        # Get disk usage per file/dir:
 
             du -sh * | sort -hr
 
-        #- s: summarize: only for dirs in *, not subdirs
-        #- h: human readable: G, M, b
+        # - `-s`: summarize: only for dirs in *, not subdirs
+        # - `-h`: human readable: G, M, b
 
     ##df
 
-        #POSIX 7
+        # POSIX 7
 
-        #Mnemonic: Disk Fill.
+        # Mnemonic: Disk Fill.
 
-        #List mounted filesystems:
+        # List mounted filesystems:
 
             df -h
 
-        #`-h` for human readable.
+        # `-h` for human readable.
 
-        #Sample output:
+        # Sample output:
 
             Filesystem      Size  Used Avail Use% Mounted on
             /dev/sda5       333G  155G  162G  49% /
@@ -2361,11 +2300,11 @@
             /dev/sda2        94G   64G   30G  69% /media/win7
             /dev/sda7        16G  7.9G  6.6G  55% /media/ciro/375e62f3-b738-4670-8018-5e
 
-        #Sort by total size:
+        # Sort by total size:
 
             df -h | sort -hrk2
 
-        #Sample output:
+        # Sample output:
 
             /dev/sda5       333G  155G  162G  49% /
             /dev/sda2        94G   64G   30G  69% /media/win7
@@ -2378,77 +2317,77 @@
             none            4.0K     0  4.0K   0% /sys/fs/cgroup
             Filesystem      Size  Used Avail Use% Mounted on
 
-        #Also show partition filesystems type:
+        # Also show partition filesystems type:
 
             df -T
 
         ##-i
 
-            #Get percentage of inodes free / used:
+            # Get percentage of inodes free / used:
 
                 df -i
 
-            #Sample output:
+            # Sample output:
 
                 Filesystem       Inodes  IUsed    IFree IUse% Mounted on
                 /dev/sda5      22167552 832797 21334755    4% /
                 /dev/sda2      30541336 189746 30351590    1% /media/win7
 
-            #This is interesting because the number of inodes is a limitation of filesystems
-            #in addition to the ammount of data stored.
+            # This is interesting because the number of inodes is a limitation of filesystems
+            # in addition to the ammount of data stored.
 
-            #This limits the ammount of files you can have on a system in case you have lots of small files.
+            # This limits the ammount of files you can have on a system in case you have lots of small files.
 
     ##partitions
 
-        #There are 2 main types of partitions: MBR or GPT
+        # There are 2 main types of partitions: MBR or GPT
 
         ##MBR
 
-            #You can only have 4 primary partitions.
+            # You can only have 4 primary partitions.
 
-            #Each one can be either divided into logical any number of logical partitions partitions.
+            # Each one can be either divided into logical any number of logical partitions partitions.
 
-            #A primary parition that is split into logical paritions is called an extended partition.
+            # A primary parition that is split into logical paritions is called an extended partition.
 
-            #Primary partitions get numbers from 1 to 4.
+            # Primary partitions get numbers from 1 to 4.
 
-            #Logical partitions get numbers starting from 5.
+            # Logical partitions get numbers starting from 5.
 
-            #You can visualise which partition is insde which disk with `sudo lsblk -l`.
+            # You can visualise which partition is insde which disk with `sudo lsblk -l`.
 
-            #TODO more common?
+            # TODO more common?
 
         ##GPT
 
-            #Arbitrary ammount of primary partitions.
+            # Arbitrary ammount of primary partitions.
 
-            #No logical partitions.
+            # No logical partitions.
 
-        #You should unmount partitions before making change to them.
+        # You should unmount partitions before making change to them.
 
-        #To get info on partitions, start/end, filesystem type and flags,
-        #consider: `parted`, `df -f`
+        # To get info on partitions, start/end, filesystem type and flags,
+        # consider: `parted`, `df -f`
 
     ##format disks
 
-        #To format a disk is to prepare it for initial utilization, often destroying all data it contains.
+        # To format a disk is to prepare it for initial utilization, often destroying all data it contains.
 
-        #Disk formatation consists mainly of two steps:
+        # Disk formatation consists mainly of two steps:
 
-        #- create a partition table. This can be done with a tool such as `fdisk`.
-        #- create a filesystem. This can be done with a tool from the mkfs.XXX family.
+        # - create a partition table. This can be done with a tool such as `fdisk`.
+        # - create a filesystem. This can be done with a tool from the mkfs.XXX family.
 
-        #GUI tools such as gparted exist to make both those steps conveniently.
+        # GUI tools such as gparted exist to make both those steps conveniently.
 
     ##lsblk
 
-        #List block devices (such as partitions, hard disks or DVD devices),
-        #including those which are not mounted.
+        # List block devices (such as partitions, hard disks or DVD devices),
+        # including those which are not mounted.
 
             sudo lsblk
 
-        #Sample output:
+        # Sample output:
 
             NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
             sda      8:0    0 465.8G  0 disk
@@ -2462,11 +2401,11 @@
             sdb      8:16   0 931.5G  0 disk
             `-sdb1   8:17   0 931.5G  0 part /media/ciro/DC74FA7274FA4EB0
 
-        #-f: show mostly information on filesystems:
+        # `-f`: show mostly information on filesystems:
 
             sudo lsblk -f
 
-        #Sample output:
+        # Sample output:
 
             NAME   FSTYPE LABEL           MOUNTPOINT
             sda
@@ -2482,25 +2421,25 @@
 
     ##fdisk
 
-        #View and edit partition tables and disk parameters
+        # View and edit partition tables and disk parameters.
 
-        #REPL interface.
+        # REPL interface.
 
-        #Does not create filesystems. For that see: `mke2fs` for ext systems..
+        # Does not create filesystems. For that see: `mke2fs` for ext systems.
 
-        #Mnemonic: Format disk.
+        # Mnemonic: Format disk.
 
-        #Better use gparted for simple operations if you have X11
+        # Better use gparted for simple operations if you have X11
 
-        #To view/edit partitions with interactive cli prompt interface.
+        # To view/edit partitions with interactive cli prompt interface.
 
         ##-l
 
-            #Show lots of partition and disk data on all disks:
+            # Show lots of partition and disk data on all disks:
 
                 sudo fdisk -l
 
-            #Sample output for each disk:
+            # Sample output for each disk:
 
                 Disk /dev/sda: 500.1 GB, 500107862016 bytes
                 255 heads, 63 sectors/track, 60801 cylinders, total 976773168 sectors
@@ -2521,71 +2460,71 @@
 
         ##REPL
 
-            #Edit partitions for sdb on REPL interface:
+            # Edit partitions for sdb on REPL interface:
 
                 sudo fdisk /dev/sdb
 
-            #Operation: make a list of changes to be made, then write them all to disk and exit with `w` (write).
+            # Operation: make a list of changes to be made, then write them all to disk and exit with `w` (write).
 
-            #Most useful commands:
+            # Most useful commands:
 
-            #- m: list options
-            #- p: print info on partition, same as using `-l` option.
-            #- o: create new DOS partition table.
-            #- n: create new partition.
-            #- d: delete a partition.
-            #- w: write enqueued changes and exit.
+            # - `-m`: list options
+            # - `-p`: print info on partition, same as using `-l` option.
+            # - `-o`: create new DOS partition table.
+            # - `-n`: create new partition.
+            # - `-d`: delete a partition.
+            # - `-w`: write enqueued changes and exit.
 
     ##hard disks
 
-        #Hard disks are represented by the system as block devices.
+        # Hard disks are represented by the system as block devices.
 
-        #However, they have physical peculiarities which make their performance characteristics
-        #different from block devices such as USB sticks.
+        # However, they have physical peculiarities which make their performance characteristics
+        # different from block devices such as USB sticks.
 
-        #The following parameters are relevant only to hard disks:
+        # The following parameters are relevant only to hard disks:
 
-        #- sectors: smalles adressable memory in hd. you must get the whole sector at once.
-        #- tracks
-        #- cylinders
-        #- heads
+        # - sectors: smalles adressable memory in hd. you must get the whole sector at once.
+        # - tracks
+        # - cylinders
+        # - heads
 
-        #To understand those concepts, you must visualise the hard disk's physical arrangement:
+        # To understand those concepts, you must visualise the hard disk's physical arrangement:
 
-        #- <http://osr507doc.sco.com/en/HANDBOOK/hdi_dkinit.html>
-        #- <http://en.wikipedia.org/wiki/Track_%28disk_drive%29>
+        # - <http://osr507doc.sco.com/en/HANDBOOK/hdi_dkinit.html>
+        # - <http://en.wikipedia.org/wiki/Track_%28disk_drive%29>
 
-        #Those parameters can be gotten with commands such as `sudo fdisk -l`.
+        # Those parameters can be gotten with commands such as `sudo fdisk -l`.
 
     ##filesystem
 
-        #determines how data will get stored in the hard disk
+        # Determines how data will get stored in the hard disk
 
-        #ext2, ext3 and ext4 are the ones mainly used in linux today.
+        # ext2, ext3 and ext4 are the ones mainly used in linux today.
 
-        #on ext4, only one dir is created at the root: lost+found
+        # On ext4, only one dir is created at the root: lost+found
 
-        #other important filesystems:
+        # Other important filesystems:
 
-        #- ntfs: windows today
-        #- nfat: dos
-        #- mfs: Machintosh FileSystem. Mac OS X today.
+        # - ntfs: windows today
+        # - nfat: dos
+        # - mfs: Machintosh FileSystem. Mac OS X today.
 
-        #to find out types see blkid or lsblk
+        # To find out types see blkid or lsblk
 
-        #each partition can have a different filesystem.
+        # Each partition can have a different filesystem.
 
-        #When creating partitions for external storage devices such as USB stick nowdays,
-        #the best option is NTFS since Linux can read write to it out of the box, and it can be used on
-        #the 95% of computers because they use Windows (which does not read / write to ext out of the box.)
+        # When creating partitions for external storage devices such as USB stick nowdays,
+        # the best option is NTFS since Linux can read write to it out of the box, and it can be used on
+        # the 95% of computers because they use Windows (which does not read / write to ext out of the box.)
 
     ##create filesystems
 
-        #Find all commands to make filesystems:
+        # Find all commands to make filesystems:
 
             ls -l /sbin | grep mk
 
-        #Sample output:
+        # Sample output:
 
             -rwxr-xr-x 1 root root     26712 Feb 18 18:17 mkdosfs
             -rwxr-xr-x 1 root root     88184 Jan  2  2013 mke2fs
@@ -2604,76 +2543,86 @@
             -rwxr-xr-x 1 root root     87484 Feb 25 14:54 mkntfs
             -rwxr-xr-x 1 root root     22152 Feb  4 21:49 mkswap
 
-        #Where:
+        # Where:
 
-        #- mkfs.XXX are uniformly named frontends for filesystem creation
-        #- mkfs is a frontend for all filesystem types.
+        # - mkfs.XXX are uniformly named frontends for filesystem creation
+        # - mkfs is a frontend for all filesystem types.
 
-        #You should only use on partition devices (ex: `sda1`), not on the entire devices (ex: `sda`).
+        # You should only use on partition devices (ex: `sda1`), not on the entire devices (ex: `sda`).
 
-        #If you want to edit the partition table,
-        first use a tool like `fdisk`.
+        # If you want to edit the partition table,
+        # first use a tool like `fdisk`.
 
     ##mke2fs
 
-        #Make ext[234] partitions.
+        # Make ext[234] partitions.
 
-        #Consider using gparted if you have X11.
+        # Consider using gparted if you have X11.
 
-        #- -t: type: ext2, ext3, ext4
-        #- -L: label
-        #- -i: inodes per group (power of 2)
-        #- -j: use ext3 journaling. TODO for -t ext3/4, is it created by default?
+        # - `-t`: type: ext2, ext3, ext4
+        # - `-L`: label
+        # - `-i`: inodes per group (power of 2)
+        # - `-j`: use ext3 journaling. TODO for -t ext3/4, is it created by default?
 
     ##tune2fs
 
-        #Get and set parameters of ext filesystems that can be tuned after creation.
+        # Get and set parameters of ext filesystems that can be tuned after creation.
 
-        #List all parameters:
+        # List all parameters:
 
             sudo tune2fs -l /dev/sda5
 
-    ##swap
+    ##swap partition ##mkswap
 
-        #used by OS to store RAM that is not being used at the moment to make room for more RAM.
+        # The swap partition is used by OS to store RAM that is not being used at the moment to make room for more RAM.
 
-        #should be as large as your RAM more or less, or twice it.
+        # Should be as large as your RAM more or less, or twice it.
 
-        #can be shared by multiple OS, since only one os can run at a time.
+        # Can be shared by multiple OS, since only one OS can run at a time.
 
-        #turn swap on on partition /dev/sda7:
+        # Make swap partition on a file in local filesystem:
+
+            sudo dd if=/dev/zero of=/swapfile bs=1024 count=1024k
+            sudo mkswap /swapfile
+            sudo swapon /swapfile
+
+        # For that to work every time:
+
+            sudo bash -c 'echo "/swapfile       none    swap    sw      0       0" >> /etc/fstab'
+
+        # Turn swap on on partition /dev/sda7:
 
             sudo swapon /dev/sda7
 
-        #find the currently used swap partition:
+        # Find the currently used swap partition:
 
             swapon -s
 
-        #disable swapping:
+        # Disable swapping:
 
             sudo swapoff
 
-        #make a swap partition on partition with random uuid
+        # Make a swap partition on partition with random uuid.
 
             sudo mkswap -U random /dev/sda7
 
-        #swap must be off
+        # Swap must be off.
 
     ##gparted
 
-        #gui to fdisk + mke2fs
+        # GUI to fdisk + mke2fs.
 
-        #very powerful and simple to use
+        # Very powerful and simple to use.
 
     ##parted
 
-        #get information on all partitions
+        # Get information on all partitions
 
-        #very useful output form:
+        # Very useful output form:
 
             sudo parted -l
 
-        #sample output:
+        # Sample output:
 
             Number  Start   End     Size    Type      File system     Flags
              1      1049kB  1574MB  1573MB  primary   ntfs            boot
@@ -2722,11 +2671,11 @@
 
     ##uuid
 
-        # Unique identifier for a partition. Field exists in ext and NTFS concept.
+        # Unique identifier for a partition. Field exists in ext and NTFS.
 
         # Given when you create of format a partition.
 
-        # Can be found with tools such as lsblk, blkid or gparted.
+        # Can be found with tools such as blkid, lsblk (`-o` option) or gparted.
 
         # Get UUID of a device:
 
@@ -2783,47 +2732,47 @@
 
     ##mount
 
-        #Mounting is the operation of making a block device available for operations such as open, read and write.
+        # Mounting is the operation of making a block device available for operations such as open, read and write.
 
-        #This is what you must do before you can use devices such as USB.
+        # This is what you must do before you can use devices such as USB.
 
-        #Many modern distributions mount such devices automatically.
+        # Many modern distributions mount such devices automatically.
 
-        #Linux has system calls dedicated to this operation.
+        # Linux has system calls dedicated to this operation.
 
-        #The block device will be mounted on a directory in the filesystem,
-        #and from then on shall be essentially indistinguishable from normal directories.
-        #This directory is known as mount point.
+        # The block device will be mounted on a directory in the filesystem,
+        # and from then on shall be essentially indistinguishable from normal directories.
+        # This directory is known as mount point.
 
-        #If the directory was not empty, old contents will be hidden.
+        # If the directory was not empty, old contents will be hidden.
 
-        #You can mount several times on the same point,
-        #the last operation hiding the old mounted system
-        #until the latest mounted system is unmounted.
+        # You can mount several times on the same point,
+        # the last operation hiding the old mounted system
+        # until the latest mounted system is unmounted.
 
-        #You can mount with the mount utility, and unmount with the umount utility.
+        # You can mount with the mount utility, and unmount with the umount utility.
 
     ##mount util
 
-        #Mount block device file on filesystem:
+        # Mount block device file on filesystem:
 
             sudo mount /dev/sda1 /media/win/
 
-        #List all mount points:
+        # List all mount points:
 
             sudo mount -l
 
-        #Sample output:
+        # Sample output:
 
             /dev/sda5 on / type ext4 (rw,errors=remount-ro)
             1            2      3     4
 
-        #Shows:
+        # Shows:
 
-        #1. device if any
-        #2. mountpoint
-        #3. type
-        #4. flags
+        # - device if any
+        # - mountpoint
+        # - type
+        # - flags
 
         ##bind
 
@@ -2837,11 +2786,31 @@
                 sudo mount --bind a b
                 touch a/a
                 touch b/b
-                assert [ `ls a` = $'a\nb' ]
-                assert [ `ls b` = $'a\nb' ]
+                [ `ls a` = $'a\nb' ] || exit 1
+                [ `ls b` = $'a\nb' ] || exit 1
                 sudo umount b
-                assert [ `ls a` = $'a\nb' ]
-                assert [ -z `ls b` ]
+                [ `ls a` = $'a\nb' ] || exit 1
+                [ -z `ls b` ] || exit 1
+
+        ##bindfs
+
+            # Like bind, but allows you to mess with ownership and permissions.
+
+            # Useful command:
+
+                sudo bindfs -u a -g a --create-for-user=b --create-for-group=b from to
+
+            # Mounts `from/` on `to/`.
+
+            # `b` must exist.
+
+            # `-u a -g a`: everything seen on `to` is owned by `a:a`
+
+            # Everything created / saved on b, is created on `a` with owner `b:b`.
+
+            # Unmount:
+
+                fusermount -u /home/johnc/ISO-images
 
     ##umount
 
@@ -2851,105 +2820,115 @@
 
     ##fstab
 
-        #This is about he file located at `/etc/fstab`.
+        # This is about the config file located at `/etc/fstab`.
 
-        #Options for fsck
+        # Mount partitions at startup.
 
-        #Basic usage: mount partitions at startup
+        # Good sources:
 
-        #Source
+            man fstab
+            man mount
 
-            #<http://www.tuxfiles.org/linuxhelp/fstab.html>
-            #<https://wiki.archlinux.org/index.php/Fstab>
+        #  - <http://www.tuxfiles.org/linuxhelp/fstab.html>
+        #  - <https://wiki.archlinux.org/index.php/Fstab>
 
-                man fstab
-                man mount
-
-            #options are here
-
-        #list partitions that should mount up at startup
-        #and where to mount them
+        # List partitions that should mount up at startup
+        # and where to mount them
 
             sudo cp /etc/fstab /etc/fstab.bak
             sudo vim /etc/fstab
             sudo mount -a
 
-        #apply changes
-        #only mounts `auto` option set.
+        # Apply changes
+        # only mounts `auto` option set.
 
-        #syntax:
+        # Syntax:
 
             <file system> <mount point>   <type>  <options>       <dump>  <pass>
             1             2               3       4               5       6
 
-        #1. identifier to the file system.
+        # 1. identifier to the file system.
 
-            #Ex:
+            # Ex:
 
-            #- /dev/sda1
-            #- UUID=ABCD1234ABCD1234
-            #- LABEL=mylabel
+            # - `/dev/sda1`
+            # - `UUID=ABCD1234ABCD1234`
+            # - `LABEL=mylabel`
 
-        #2. where it will get mounted.
+        # 2. where it will get mounted.
 
-            #The most standard option is to make a subdir of `/media` like `/media/windows`.
+            # The most standard option is to make a subdir of `/media` like `/media/windows`.
 
-            #This dir must exist before mount
-            #and preferably be used only for mounting a single filesystem.
+            # This dir must exist before mount
+            # and preferably be used only for mounting a single filesystem.
 
-            #It seems that fstab can auto create/remove the missing dirs.
+            # It seems that fstab can auto create/remove the missing dirs.
 
-        #3. Type. ext[234], ntfs, etc.
+        # 3. Type. ext[234], ntfs, etc.
 
-        #see sources for others.
+        # 4. Options.
 
-        ##auto mount windwos filesystems
+            # - `defaults`. Use default options for the current filesystem type.
 
-            #To mount windows filesystems such as NTFS or DOS use:
+        # 5. Dump. Used by the dump utility to make backups. If `0`, don't make backups. If `1`, make them.
+
+        # 6. Pass. Used by `fsck`. If `0` the fs is ignored by `fsck`, `1` it is checked with
+            # highest priority, `2` checked with smaller priority.
+
+            # Use 1 for the primary partition, `2` for the others.
+
+        ##auto mount windows filesystems
+
+            # To mount Windows filesystems such as NTFS or DOS use:
 
                 umask=111,dmask=000
 
-            #This way, dirs will be 000 and files 666 (not executable)
+            # This way, dirs will be 000 and files 666 (not executable).
 
         ##dvd
 
-            #Mounting dvds/usbs is similar to mounting partitions:
+            # Mounting dvds/usbs is similar to mounting partitions:
 
                 /dev/cdrom 	/media/dvd 	noauto 	ro 0 0
 
-            #However if you use auto, you always get errors when the dvd is empty.
+            # However if you use auto, you always get errors when the dvd is empty.
 
-            #It is best to use auto, because dvd can be of several formats.
+            # It is best to use auto, because dvd can be of several formats.
+
+        ##mountall
+
+            # Mountall is on Ubuntu 12.04 the utility that reads fstab and mounts all the
+            # filesystems listed there.
 
     ##fuser
 
-        #View which processes are using a device:
+        # View which processes are using a device:
 
             fuser -m /dev/sdb1
 
-        #Useful if you want to unmont a filesystem, and you have to find out who is still using it.
+        # Useful if you want to unmont a filesystem, and you have to find out who is still using it.
 
     ##fsck
 
-        #File System Check
+        # File System Check.
 
-        #Check and repair linux filesystems.
+        # Check and repair Linux filesystems.
 
 ##system info
 
     ##uname
 
-        #gets information on host computer
+        #POSIX 7.
 
-        #POSIX 7
+        # Gets information on host computer.
 
-        #print all info uname has to give:
+        # Print all info uname has to give:
 
             uname -a
 
-        #this includes kernel version, user, ...
+        # This includes kernel version, user, ...
 
-        #you can each isolated with other opts
+        # You can each isolated with other opts.
 
     ##processor ##cpu
 
@@ -3044,12 +3023,20 @@
 
         ##free
 
-            #show RAM and swap memory in Megabytes
+            # Print RAM and swap memory in Megabytes once.
 
-            #-t totals at bottom
-            #-sN : repeat every N seconds
+                free
 
-                free -m
+            # Sample output:
+
+                #             total       used       free     shared    buffers     cached
+                #Mem:        604340     597484       6856          0      17548      86520
+                #-/+ buffers/cache:     493416     110924
+                #Swap:            0          0          0
+
+            # - `-m`: megabyte unit
+            # - `-t`: totals at bottom
+            # - `-s1`, `-s0.01`: repeat every N seconds. ms resolution.
 
         ##vmstat
 
@@ -3220,11 +3207,11 @@
     #exec string in current bash
 
         eval "a=b"
-        assert [ $a = b ]
+        [ $a = b ] || exit 1
 
     #concatenates arguments, space separated:
 
-        assert [ `eval echo a` = a ]
+        [ `eval echo a` = a ] || exit 1
 
     ##applications
 
@@ -3232,7 +3219,7 @@
 
             a=b
             eval "$a=c"
-            assert [ $b = c ]
+            [ $b = c ] || exit 1
 
 ##read
 
@@ -3321,12 +3308,12 @@
 
         #always use `-eq` family, never `=` family:
 
-            assert [ 1 -eq 1 ]
-            assert [ 1 -eq 01 ]
-            assert [ 1 -lt 2 ]
-            assert [ 2 -gt 2 ]
-            assert [ 1 -le 2 ]
-            assert [ 2 -ge 2 ]
+            [ 1 -eq 1 ] || exit 1
+            [ 1 -eq 01 ] || exit 1
+            [ 1 -lt 2 ] || exit 1
+            [ 2 -gt 2 ] || exit 1
+            [ 1 -le 2 ] || exit 1
+            [ 2 -ge 2 ] || exit 1
 
     ##file ops
 
@@ -3425,114 +3412,144 @@
             sleep 2
             true
             wait $!
-            assert [ "`echo $?`" = 1 ]
+            [ "`echo $?`" = 1 ] || exit 1
 
             true &
             sleep 2
             false
             wait $!
-            assert [ "`echo $?`" = 0 ]
+            [ "`echo $?`" = 0 ] || exit 1
 
     ##ps
 
-        #POSIX 7
+        # POSIX 7
 
-        #list current executing processes and their info
+        # List current executing processes and their info.
 
-        #psmisc package
+        # On Ubuntu 12.04, implemented by the psmisc package.
 
-        #implementations commonly use the proc filesystem.
-        #There does not seem to be a POSIX way to implement this,
-        #except maybe following a process tree.
+        # Implementations commonly use the proc filesystem.
+        # There does not seem to be a POSIX way to implement this,
+        # except maybe following a process tree.
 
-        #see processes running on current tty:
+        # Good short summary:
+
+            ps --help
+
+        # ps interface is ugly: some options have dash GNU style, others simply don't, and have no dash equivalent.
+        # Live with it.
+
+        # Best command to see all processes on the system:
+
+            ps aux
+
+        # See processes running on current tty:
 
             sleep 10 &
             sleep 10 &
             ps
 
-        #Output fields include:
+        # Output fields include:
 
-        #- pid
-            #unique identifier for all process on system
+        # - pid
+            # unique identifier for all process on system
 
-        #- tty
-            #from which tty it was launched
+        # - tty
+            # from which tty it was launched
 
-        #- time
-            #cpu time used for process
-            #not real time
+        # - time
+            # cpu time used for process
+            # not real time
 
-        #- cmd
-            #command that launched th process
-            #without command line args
+        # - cmd
+            # command that launched th process
+            # without command line args
 
-        #see all process on system
+        # See all process on system (TODO for some reason less than `aux`):
 
             ps -A
 
-        #shows therads of each process
+        # Shows threads of each process:
 
             ps -Am
 
-        #shows lots of extra info columns in addition to the 4 default:
+        #  Shows lots of extra info columns in addition to the 4 default:
 
             ps -Al
 
-        #sort output by:
+        # Sort output by:
 
-        #- cmd
-        #- time reversed (because of the `-`)
-        #- pid
-        #- tty reversed (-)
+        # - cmd
+        # - time reversed (because of the `-`)
+        # - pid
+        # - tty reversed (-)
 
             ps -A --sort cmd,-time,pid,-tty
 
-        #get pid of parent of process with pid p
+        # Get pid of parent of process with pid p
 
             p=
             ps -p $p -o ppid=
 
+        ##GNU extensions
+
+            # Show process tree:
+
+                ps -A --forest
+
+            # Sample output:
+
+                1258 ?        00:00:00 lightdm
+                1279 tty7     00:17:31  \_ Xorg
+                1479 ?        00:00:00  \_ lightdm
+                1750 ?        00:00:01      \_ gnome-session
+                1868 ?        00:00:00          \_ lightdm-session <defunct>
+                1913 ?        00:00:00          \_ ssh-agent
+                1950 ?        00:00:31          \_ gnome-settings-
+                2363 ?        00:12:19          \_ compiz
+                3503 ?        00:00:00          |   \_ sh
+                3504 ?        00:00:22          |       \_ gtk-window-deco
+
     ##jobs
 
-        #Shows:
+        # Shows:
 
-        #- jobspec      : a local job id.
-        #- status       : runnning, stopped, done
-        #- invocation   : exact program call, including command line args. Ex: `ls ~`
+        # - jobspec      : a local job id.
+        # - status       : runnning, stopped, done
+        # - invocation   : exact program call, including command line args. Ex: `ls ~`
 
             jobs
 
-        #show pids of background jobs:
+        # Show pids of background jobs:
 
             jobs -p
 
         ##jobspecs
 
-            #local job id, found by using <#jobs>
+            # Local job id, found by using <#jobs>
 
-            #certain commands such as ``kill``, ``fg`` them in addition to pids
+            # Certain commands such as `kill`, `fg` them in addition to pids.
 
-            #they are:
+            # They are:
 
-            #- %N	Job number [N]
-            #- %S	Invocation (command line) of job begins with string S
-                #if several matches, ambiguous, and does nothing
-            #- ?S	Invocation (command line) of job contains within it string S
-            #- %%	"current" job (last job stopped in foreground or started in background)
-            #- %+	"current" job (last job stopped in foreground or started in background)
-            #- %-	last job
+            # - %N	Job number [N]
+            # - %S	Invocation (command line) of job begins with string S
+            #    If several matches, ambiguous, and does nothing.
+            # - ?S	Invocation (command line) of job contains within it string S
+            # - %%	"current" job (last job stopped in foreground or started in background)
+            # - %+	"current" job (last job stopped in foreground or started in background)
+            # - %-	last job
 
-        #It is possible to use jobspecs directly with certain bash built-ins that could also take PID.
-        #For example, to kill process by jobspec `%1`:
+        # It is possible to use jobspecs directly with certain bash built-ins that could also take PID.
+        # For example, to kill process by jobspec `%1`:
 
             #kill %1
 
-        #Note that `kill` also usually exists as an external executable, and that the external executable
-        #cannot kill by jobspec since this information is only known by bash itself.
+        # Note that `kill` also usually exists as an external executable, and that the external executable
+        # cannot kill by jobspec since this information is only known by bash itself.
 
-        #`help kill` states that one of the reasons why `kill` is implemented as a bash built-in is to be
-        #able to write `kill %1`.
+        # `help kill` states that one of the reasons why `kill` is implemented as a bash built-in is to be
+        # able to write `kill %1`.
 
         #ls &
         #sleep 100 &
@@ -3682,7 +3699,7 @@
 
             #exec in a clean environment:
 
-                assert [ "`env -i a=b env`" = "a=b" ]
+                [ "`env -i a=b env`" = "a=b" ] || exit 1
 
             ##start a subshell in the cleanest env possible
 
@@ -3753,8 +3770,8 @@
 
         #coreutils
 
-            assert [ `timeout 3 bash -c 'for i in {1..2}; do echo $i; sleep 1; done'` = $'1\n2\n' ]
-            assert [ `timeout 1 bash -c 'for i in {1..2}; do echo $i; sleep 1; done'` = $'1\n' ]
+            [ `timeout 3 bash -c 'for i in {1..2}; do echo $i; sleep 1; done'` = $'1\n2\n' ] || exit 1
+            [ `timeout 1 bash -c 'for i in {1..2}; do echo $i; sleep 1; done'` = $'1\n' ] || exit 1
 
     ##nice
 
@@ -3920,13 +3937,13 @@
         #ls a file:
 
             touch a
-            assert [ "$(ls a)" = "a" ]
+            [ "$(ls a)" = "a" ] || exit 1
 
         #ls a dir:
 
             mkdir d
             touch d/a d/b
-            assert [ "$(ls d)" = "$(echo $'a\nb')" ]
+            [ "$(ls d)" = "$(echo $'a\nb')" ] || exit 1
 
         #ls many dirs:
 
@@ -3943,31 +3960,31 @@
             touch d/a d/b
             mkdir e
             touch e/a e/b
-            assert [ "$(ls -d d e)" = "$(echo $'d\ne')" ]
+            [ "$(ls -d d e)" = "$(echo $'d\ne')" ] || exit 1
 
         #-lL : when showing symlinks, shows info to what is linked to
 
         ##sort
 
-            #modification time (newest first):
+            # Modification time (newest first):
 
                 ls -t
 
-            #inode change:
+            # Inode change:
 
                 ls -tc
 
-            #file access:
+            # File access:
 
                 ls -tu
 
-            #reverse sort order:
+            # Reverse sort order:
 
                 ls -tr
 
         ##dircolors
 
-            #config ls colors
+            # Config ls colors
 
         ##gnu extensions
 
@@ -4071,7 +4088,7 @@
         #-m: set mode of new dir (permissions)
 
             mkdir -m 1777 d
-            assert [ `stat -c "%A" d` = 'drwxrwxrwt' ]
+            [ `stat -c "%A" d` = 'drwxrwxrwt' ] || exit 1
 
     ##mv
 
@@ -4087,16 +4104,16 @@
                 touch d/a
                 mkdir d2
                 mv d/a d2/b
-                assert [ "`ls d`" = '' ]
-                assert [ "`ls d2`" = 'b' ]
+                [ "`ls d`" = '' ] || exit 1
+                [ "`ls d2`" = 'b' ] || exit 1
 
             #if dest exists and is a file, overwrite by default:
 
                 echo a > a
                 echo b > b
                 mv a b
-                assert [ "`ls`" = "b" ]
-                assert [ "`cat b`" = "a" ]
+                [ "`ls`" = "b" ] || exit 1
+                [ "`cat b`" = "a" ] || exit 1
 
             #if dest exists and is a dir, move into dir:
 
@@ -4113,8 +4130,8 @@
                 mkdir d2/d
                 mv d d2
                     #d2/d was overwritten:
-                assert [ "`ls`"     = "d2" ]
-                assert [ "`ls d2`"  = "d" ]
+                [ "`ls`"     = "d2" ] || exit 1
+                [ "`ls d2`"  = "d" ] || exit 1
                 mkdir d
                 touch d2/d/a
                 mv d d2
@@ -4132,24 +4149,24 @@
             #backup ~a is made:
 
                 mv -b b a
-                assert [ -f a ]
-                assert [ -f a~ ]
-                assert [ `ls | wc -l` = 2 ]
+                [ -f a ] || exit 1
+                [ -f a~ ] || exit 1
+                [ `ls | wc -l` = 2 ] || exit 1
 
             #backup is only made if destination exists:
 
                 mv -b a b
-                assert [ -f a~ ]
-                assert [ -f b ]
-                assert [ `ls | wc -l` = 2 ]
+                [ -f a~ ] || exit 1
+                [ -f b ] || exit 1
+                [ `ls | wc -l` = 2 ] || exit 1
 
             #if backup exists, it gets overwritten:
 
                 touch a
                 mv -b a b
-                assert [ -f a ]
-                assert [ -f a~ ]
-                assert [ `ls | wc -l` = 2 ]
+                [ -f a ] || exit 1
+                [ -f a~ ] || exit 1
+                [ `ls | wc -l` = 2 ] || exit 1
 
     ##cp
 
@@ -4163,20 +4180,20 @@
 
                 echo a > a
                 cp a b
-                assert [ "`cat b`" = $'a' ]
+                [ "`cat b`" = $'a' ] || exit 1
 
             # If dest exists and is dir, copy into dir:
 
                 mkdir d
                 cp a d
-                assert [ "`cat d/a`" = $'d/a' ]
+                [ "`cat d/a`" = $'d/a' ] || exit 1
 
             # If dest exists and is file, overwrite without asking!
 
                 echo a > a
                 echo b > b
                 cp a b
-                assert [ "`cat b`" = $'a' ]
+                [ "`cat b`" = $'a' ] || exit 1
 
         ##gnu extensions
 
@@ -4218,7 +4235,7 @@
 
                 setup_test
                 cp -R d d2
-                assert [ -d d2 ]
+                [ -d d2 ] || exit 1
                 teardown_test
 
             # `-r` on GNU is the same as `-R`, but is a GNU extensionto POSIX 7.
@@ -4227,9 +4244,9 @@
 
                 setup_test
                 cp -R d d2
-                assert [ "`ls d2/d`"    = 'a b' ]
-                assert [ "`cat d2/d/a`"  = 'A' ]
-                assert [ "`cat d2/d/b`"  = 'b' ]
+                [ "`ls d2/d`"    = 'a b' ] || exit 1
+                [ "`cat d2/d/a`"  = 'A' ] || exit 1
+                [ "`cat d2/d/b`"  = 'b' ] || exit 1
                 teardown_test
 
             # If fails however if you try to overwrite a file with a dir:
@@ -4253,27 +4270,27 @@
                 ln -s b c
 
                 cp c d
-                assert [ -f d ]
-                assert [ "`cat a`" = $'a' ]
+                [ -f d ] || exit 1
+                [ "`cat a`" = $'a' ] || exit 1
 
             # With the `-d` GNU extension, copies symlink to files into new symlinks (mnemonic: no-Dereference):
 
                 cp -d c e
-                assert [ -L d ]
+                [ -L d ] || exit 1
 
             # For dirs by default copies symlink into a new symlink:
 
                 mkdir d
                 ln -s d dln
                 cp dln e
-                assert [ -L e ]
+                [ -L e ] || exit 1
 
             # To dereference symlinks to directories, use `-L`:
 
                 mkdir d
                 ln -s d dln
                 cp -L dln e
-                assert [ -d e ]
+                [ -d e ] || exit 1
 
             # Does not work with `-r`. Probable rationale:
             # the only thing this could do is to copy dirs
@@ -4284,7 +4301,7 @@
                 echo a > a
                 cp -l a b
                 ln -l a b
-                assert [ "`stat -c '%i' a`" = "`stat -c '%i' b `" ]
+                [ "`stat -c '%i' a`" = "`stat -c '%i' b `" ] || exit 1
 
             # With `-r`, makes dirs, and hardlinks files:
 
@@ -4292,8 +4309,8 @@
                 touch d/a
                 touch d/b
                 cp -lr d e
-                assert [ "`stat -c '%i' d/a`" = "`stat -c '%i' e/a `" ]
-                assert [ "`stat -c '%i' d/b`" = "`stat -c '%i' e/b `" ]
+                [ "`stat -c '%i' d/a`" = "`stat -c '%i' e/a `" ] || exit 1
+                [ "`stat -c '%i' d/b`" = "`stat -c '%i' e/b `" ] || exit 1
 
             # If `-l` is used, does not overwrite file:
 
@@ -4380,9 +4397,9 @@
         # Make all components of path:
 
             install -d a/b/c
-            assert [ -d a ]
-            assert [ -d a/b ]
-            assert [ -d a/b/c ]
+            [ -d a ] || exit 1
+            [ -d a/b ] || exit 1
+            [ -d a/b/c ] || exit 1
 
     ##mkfifo
 
@@ -4433,9 +4450,9 @@
             touch d/f
             sudo chown newuser:newgroup d
                 #must use sudo to chown
-            assert [ `stat -c '%U' d` = newuser ]
-            assert [ `stat -c '%G' d` = newgroup ]
-            assert [ `stat -c '%U' d/f` = a ]
+            [ `stat -c '%U' d` = newuser ] || exit 1
+            [ `stat -c '%G' d` = newgroup ] || exit 1
+            [ `stat -c '%U' d/f` = a ] || exit 1
 
         # `-R` for recursive operation:
 
@@ -4443,10 +4460,10 @@
             mkdir d
             touch d/f
             sudo chown b d
-            assert [ `stat -c '%U' d` = newuser ]
-            assert [ `stat -c '%G' d` = newgroup ]
-            assert [ `stat -c '%U' d/f` = newuser ]
-            assert [ `stat -c '%G' d/f` = newgroup ]
+            [ `stat -c '%U' d` = newuser ] || exit 1
+            [ `stat -c '%G' d` = newgroup ] || exit 1
+            [ `stat -c '%U' d/f` = newuser ] || exit 1
+            [ `stat -c '%G' d/f` = newgroup ] || exit 1
 
         # To change only user:
 
@@ -4605,16 +4622,16 @@
             # Format string:
 
                 chmod 1234 f
-                assert [ `stat -c "%a" f` = "234" ]
+                [ `stat -c "%a" f` = "234" ] || exit 1
 
                 chmod a=rt f
-                assert [ "`stat -c "%A" f`" = "-r--r--r-T" ]
+                [ "`stat -c "%A" f`" = "-r--r--r-T" ] || exit 1
 
             # Inode:
 
                 touch a
                 ln a b
-                assert [ "`stat -c "%i" a`" = "`stat -c '%i' b`" ]
+                [ "`stat -c "%i" a`" = "`stat -c '%i' b`" ] || exit 1
 
         ##--print
 
@@ -4622,7 +4639,7 @@
 
                 touch a
                 echo "`stat --print "%a\n%a\n" a`"
-                assert [ "`stat --print "\n" a`" = $'\n' ]
+                [ "`stat --print "\n" a`" = $'\n' ] || exit 1
 
     ##links
 
@@ -4675,12 +4692,12 @@
                 ln -s a b
                 ln -s b c
 
-                assert [ "`readlink c`" = $'b' ]
-                assert [ "`readlink b`" = $'a' ]
+                [ "`readlink c`" = $'b' ] || exit 1
+                [ "`readlink b`" = $'a' ] || exit 1
 
             # Recursive:
 
-                assert [ "`readlink -f c`" = $'a' ]
+                [ "`readlink -f c`" = $'a' ] || exit 1
 
         ##realpath
 
@@ -5164,92 +5181,107 @@
 
     ##sudo
 
-        #Do next single command as another user or super user
+        # Do next single command as another user or super user.
 
-        #Safer than becoming root with su
+        # Safer than becoming root with su.
 
-        #In order to see who can sudo what as who and with what pass
+        # Configuration file:
 
-                sudo cat /etc/sudoers
+            sudo vim /etc/sudoers
 
-            #syntax:
+        # Also accessible with:
 
-                #Defaults:ALL timestamp_timeout=0
-                    #passwords for all users timeout 0
-                #Defaults:ALL timestamp_timeout=15
-                    #BAD
-                    #after any user enters a pass, he can sudo without pass for 15 mins
-                #main lines:
-                    #user   hostip=(runas)NOPASSWD ALL
-                    #%group hostip=(runas)        :/bin/ls,/bin/cat
-                        #user: who will get sudo premissions
-                            #add '%' for group: ex: %group ...
-                            #can be ALL
-                        #runas: who can he sudo as
-                        #NOPASSWD: if present, must enter target user's password
-                        #/bin/ls,/bin/cat: list of comma separated bins he can run, or ALL
-                #aliases:
-                    #user
-                        #User_Alias FUSE_USERS = andy,ellz,matt,jamie
-                        #FUSE_USERS ALL=(root):/usr/bin/the-application
-                    #host:
-                        #Host_Alias HOST = jaunty
-                        #%admin HOST=(ALL)
-                    #runas
-                        #Runas_Alias USERS = root,andy,ellz,matt,jamie
-                        #%admin  ALL=(USERS) ALL
-                    #command
-                        #Cmnd_Alias APT     = /usr/bin/apt-get update,/usr/bin/apt-get upgrade
-                        #Cmnd_Alias USBDEV  = /usr/bin/unetbootin,/usr/bin/gnome-format
-                        #ALL_PROGS = APT,USBDEV
-                        #%admin  ALL=(ALL) ALL
+            sudo visudo
 
-            ##redirection
+        # Syntax:
 
-                #sudo passes its stdin to the called program:
+            #Defaults:ALL timestamp_timeout=0
+                #passwords for all users timeout 0
+            #Defaults:ALL timestamp_timeout=15
+                #BAD
+                #after any user enters a pass, he can sudo without pass for 15 mins
+            #main lines:
+                #user   hostip=(runas)NOPASSWD ALL
+                #%group hostip=(runas)        :/bin/ls,/bin/cat
+                    #user: who will get sudo premissions
+                        #add '%' for group: ex: %group ...
+                        #can be ALL
+                    #runas: who can he sudo as
+                    #NOPASSWD: if present, must enter target user's password
+                    #/bin/ls,/bin/cat: list of comma separated bins he can run, or ALL
+            #aliases:
+                #user
+                    #User_Alias FUSE_USERS = andy,ellz,matt,jamie
+                    #FUSE_USERS ALL=(root):/usr/bin/the-application
+                #host:
+                    #Host_Alias HOST = jaunty
+                    #%admin HOST=(ALL)
+                #runas
+                    #Runas_Alias USERS = root,andy,ellz,matt,jamie
+                    #%admin  ALL=(USERS) ALL
+                #command
+                    #Cmnd_Alias APT     = /usr/bin/apt-get update,/usr/bin/apt-get upgrade
+                    #Cmnd_Alias USBDEV  = /usr/bin/unetbootin,/usr/bin/gnome-format
+                    #ALL_PROGS = APT,USBDEV
+                    #%admin  ALL=(ALL) ALL
 
-                    echo a | sudo cat
-                        #a
+        # Common combos:
 
-                #Cannot "echo to a file" directly without permission
+        # Allow given user to sudo without password:
 
-                    su a
-                    mkdir b
-                    chown b b
-                    #fails:
-                    sudo echo a > b/a
+            #username ALL=(ALL) NOPASSWD: ALL
 
-                #The reason why this fails is that bash gives sudo two arguments: `echo` and `a`.
+        ##redirection
 
-                #sudo does `echo a`, produces `a`, and then *bash* attempts the redirection by writing
-                #`a` to `b/a`, which of course fails because bash does not the necessary permissions.
+            # sudo passes its stdin to the called program:
 
-                #Workarounds for that include:
+                echo a | sudo cat
+                    #a
 
-                #Put everything inside a single bash command:
+            # Cannot "echo to a file" directly without permission
 
-                    sudo bash -c 'echo a > b/a'
+                su a
+                mkdir b
+                chown b b
+                #fails:
+                sudo echo a > b/a
 
-                #This works, but may lead to quoting hell.
+            # The reason why this fails is that bash gives sudo two arguments: `echo` and `a`.
 
-                #Sudo a tee and let it do the work:
+            # sudo does `echo a`, produces `a`, and then *bash* attempts the redirection by writing
+            # `a` to `b/a`, which of course fails because bash does not the necessary permissions.
 
-                    echo a | sudo tee b/a
+            # Workarounds for that include:
 
-                #And if we want to append to the file instead:
+            # Put everything inside a single bash command:
 
-                    echo a | sudo tee -a b/a
+                sudo bash -c 'echo a > b/a'
 
-                #The resaon this works is because `sudo` redirects its stdin
-                #to the stdin of the program it will call.
+            # This works, but may lead to quoting hell.
 
-                #-e to edit a file as sudo:
+            # sudo a tee and let it do the work:
 
-                    sudo -e /etc/file.conf
+                echo a | sudo tee b/a
 
-        ##ubuntu default
+            # And if we want to append to the file instead:
 
-            #sudo group allows members to sudo whatever they want as root
+                echo a | sudo tee -a b/a
+
+            # The resaon this works is because `sudo` redirects its stdin
+            # to the stdin of the program it will call.
+
+            # `-e` to edit a file as sudo:
+
+                sudo -e /etc/file.conf
+
+            # EOF:
+
+                sudo tee /some/path <<EOF
+EOF
+
+        ##ubuntu default sudo config
+
+            # In Ubuntu, sudo group allows members to sudo whatever they want as root
 
                 groups
                     #sudo is in my groups!
@@ -5271,15 +5303,17 @@
 
     ##logout
 
-        #logs out
+        # Logs out.
 
-        #can only be used on the login shell
+        # Can only be used on the login shell.
 
             logout
 
     ##faillog
 
-        faillog -a
+        # See log of failed login attempts (3 in a row):
+
+            faillog -a
 
     ##useradd
 
@@ -5532,7 +5566,7 @@
 
         # Non features: string concatenation:
 
-            assert [ `echo '1+1' | bc` = 2 ]
+            [ `echo '1+1' | bc` = 2 ] || exit 1
 
     ##haskell
 
@@ -5586,19 +5620,13 @@
 
     ##c
 
-        sudo aptitude install -y linux-source linux-headers
-
         ##check
 
-            #c unit testing
-
-            sudo aptitude install -y check
+            # C unit testing.
 
         ##ncurses
 
-            #command line interactive interfaces
-
-                sudo aptitude install -y libncurses5-dev
+            # Command line interactive interfaces.
 
         ##expat
 
@@ -5608,34 +5636,32 @@
 
             ##PCRE
 
-                #perl regexes. c11 has regexes.
+                # perl regexes. c11 has regexes.
 
             ##popt
 
-                #parse command line options
+                # Parse command line options.
 
     ##c++
 
         ##boost
 
-            #cross platform utilities
+            # Cross platform utilities.
 
-            #very popular, largely influences c++ future
+            # Very popular, largely influences c++ future.
 
     ##glx
 
-        #interface between opengl and x server
+        # Interface between opengl and x server
 
-        #allows x windows to use opengl acceleration
+        # Allows x windows to use opengl acceleration
 
-        #must also support a given opengl version
+        # Must also support a given opengl version
 
-        sudo aptitude install -y mesa-utils
-
-        glxinfo | less
-            #lots of opengl info
-        glxgears
-            #demo
+            glxinfo | less
+                #lots of opengl info
+            glxgears
+                #demo
 
 ##scientific
 
@@ -5651,11 +5677,11 @@
 
     ##acts collection
 
-        #<http://acts.nersc.gov/tools.html>
+        #< Http://acts.nersc.gov/tools.html>
 
-        #collection of good numerical libraries.
+        # Collection of good numerical libraries.
 
-        #industry usage.
+        # Industry usage.
 
     ##opengl glut
         #native:   c++
@@ -5720,4 +5746,4 @@
 
     # Factor a number into prime constituents.
 
-        assert [ "`factr 30`" = "30: 2 3 5" ]
+        [ "`factor 30`" = "30: 2 3 5" ] || exit 1

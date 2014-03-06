@@ -1,0 +1,14 @@
+---
+chapter:
+  word: Chapter
+  order: standard     # Use 'reverse' to change 'Chapter 1' to '1 Chapter'
+section: Section
+table: Table
+figure: Figure
+fig: Fig
+aside: Box
+listing: Listing
+equation: Equation
+eq: Eq
+frontmatter: Frontmatter
+contents: Contents

@@ -1,22 +1,21 @@
-Find files recursively under given dirs.
+Find files recursively under given directories.
 
 Very powerful.
 
-POSIX 7, however breaks almost all of of posix and gnu command line interface standards:
+POSIX 7, however breaks almost all of of POSIX and GNU command line interface standards:
 
-- multichar options starting with single hyphen: `-iname` and without short version
+- multi character options starting with single hyphen: `-iname` and without short version
 - file list *before* options: `find . -iname .`
 
 Consider `locate` if you are going to look in the entire file system.
 
-#general syntax
+#General syntax
 
 There are 3 parts to a find:
 
     find <search-roots> <criteria> <actions>
 
-This is actually only a simplified version because of multiple actions that can be used with or `-o`,
-but is a good model to start with
+This is actually only a simplified version because of multiple actions that can be used with or `-o`, but is a good model to start with
 
 For example, to find all files named `sh` under either current dir or `/bin` and print their names to stdout do:
 
@@ -31,8 +30,7 @@ So in the example:
     - `-type f` says that we want only Files, not directories
     - `-name 'a.txt'` says that we want only files with basename `a.txt`
 
-- `-print` is the action, it tells find what to do with the files found,
-    in the case of print, it prints files found to stdout
+- `-print` is the action, it tells find what to do with the files found, in the case of print, it prints files found to stdout
 
 Both the criteria and the actions have default values:
 
@@ -53,17 +51,17 @@ Say *what* find should find
 
 ##name
 
-Match **entire** basenames posix RE:
+Match **entire** basenames POSIX RE:
 
     find . -name 'README'
 
 Finds files named **exactly** `README`. does *not* match `README.txt`
 
-It is a posix RE:
+It is a POSIX BRE:
 
     find . -name '*.mp?'
 
-therefore the previous finds both `mp3` and `mp4` files (and `mp5` if that exists):
+Therefore the previous finds both `mp3` and `mp4` files (and `mp5` if that exists):
 
 ##iname
 
@@ -71,9 +69,9 @@ Same as -name but case insensitive:
 
 ##path
 
-Looks at *entire* file path posix RE
+Looks at *entire* file path filtering by POSIX BRE.
 
-Find anything under current dir:
+Find anything under current directory:
 
     find . - path './*'
 
@@ -83,21 +81,21 @@ Finds only paths are either hidden or have a hidden parent.
 
     find . -path '*/.*'
 
-also consider [prune][] for this.
+Also consider [prune][] for this.
+
+Finds anything under `./.vim` folder. Same as `find ./vim`:
 
     find . -path './.vim/*'
 
-finds anything under ./.vim folder. same as find ./vim
-
 ##type
+
+Files only:
 
     find . -type f
 
-files only
+Directories only:
 
     find . -type d
-
-directories only
 
 ##perm
 
@@ -108,15 +106,15 @@ Exact match:
     find . -perm 444
     find . -perm u+4,g+4,o+4
 
-finds only files that have permission exactly `444`.
+Finds only files that have permission exactly `444`.
 
 Either match:
 
     find . -perm +111
 
-finds files that are readable by either u, g or o.
+Finds files that are readable by either u, g or o.
 
-###applications
+Applications:
 
 Give `g+x` to all files that have `u+x`:
 
@@ -124,36 +122,25 @@ Give `g+x` to all files that have `u+x`:
 
 ##prune
 
-do not search into directories that match what comes before prune.
+Do not search into directories that match what comes before prune.
 
-this is more efficient than using path to cut out directories.
+This is more efficient than using path to cut out directories.
 
-do not the -o 'or' operator after each prune.
+Do not forget the `-o` operator after each prune.
 
-    find . -path '*/.*' -prune -o -type f -iname '*.txt'
+Find all files that are neither hidden themselves, nor children of a hidden parent:
 
-finds files that end in '.txt'
-does not go into directories whose -path '*/.*' is true (hidden dirs)
-INCLUDES hidden directories and hidden files themselfves which are not inside hidden directories!!! check next example for the correct method to avoid hiden files
-
-    find . '*/.*' -prune -o ! -name '.*'
-
-finds all files that are neither hidden themselves, nor are a child of a hidden parent. =)
-
-    find . '*/.*' -prune -o ! -name '.*'
-
-prunes with multiple criteria
+    find . -path '*/.*' -prune -o ! -name '.' -print
 
 ##depth
 
-entries of the directory are acted upon before the directory
+Entries of the directory are acted upon before the directory.
 
-the default is first the directory
+The default is first the directory.
 
-useful if you want to rename both the containing directory and the files inside it,
-in which case you must first rename the files and later the directory
+Useful if you want to rename both the containing directory and the files inside it, in which case you must first rename the files and later the directory.
 
-this nullifies `prune`
+This nullifies `prune`.
 
 ##xdev
 
@@ -163,31 +150,31 @@ Do not go into other devices:
 
 #multiple criteria
 
-you can combine criteria with boolean operations to make your search finer
+You can combine criteria with boolean operations to make your search finer.
 
 ##and
 
-`-a` all conditions must be satisfied
+`-a` all conditions must be satisfied.
 
-implicit when no criteria is specified
+Implicit when no criteria is specified.
 
-find paths which are pdf and which are files. the and is implicit
+Find paths which are PDF and which are files:
 
     find . -type f -iname '*.pdf'
 
-same as above with explicit and:
+Same as above with explicit and:
 
     find . -type f -a -iname '*.pdf'
 
 ##not
 
-find all paths which are not files:
+Find all paths which are not files:
 
     find . ! -type f
 
 ##or
 
-paths with either pdf or djvu extension
+Paths with either PDF or DjVu extension:
 
     find . -iname '*.pdf' -o -iname '*.djvu'
 
@@ -195,7 +182,7 @@ or has higher precedence over and, therefore:
 
     find . -type f -iname '*.pdf' -o -iname '*.djvu'
 
-which is the same as
+which is the same as:
 
     find . -type f -a -iname '*.pdf' -o -iname '*.djvu'
 
@@ -203,12 +190,12 @@ is also the same as:
 
     find . -type f -a \( -iname '*.pdf' -o -iname '*.djvu' \)
 
-and finds pdf or djvu files only
+and finds PDF or DjVu files only.
 
-but there is a big gotcha: if the first part of an `or` fails, the second is not executed,
+But there is a big gotcha: if the first part of an `or` fails, the second is not executed,
 including its action!
 
-for example, you could print all pdf files, and delete all djvu files with:
+For example, you could print all PDF files, and delete all djvu files with:
 
     find . -type f -iname '*.pdf' -print -o -iname '*.djvu' -delete
 
@@ -218,31 +205,45 @@ and if you do:
 
 **only the djvu files will get printed**, and pdf files will have no associated action!
 
-to explicitly print both, you must to:
+To explicitly print both, you must to:
 
     find . -type f \( -iname '*.pdf' -o -iname '*.djvu' \) -print
 
-which is the same as the original:
+Which is the same as the original:
 
     find . -type f -iname '*.pdf' -o -iname '*.djvu'
 
 ##parenthesis
 
-you can change logical operation precedence with parenthesis.
+You can change logical operation precedence with parenthesis.
 
-do not forget to escape your parenthesis!
+Do not forget to escape your parenthesis!
 
     find . \( -type f -iname '*.pdf' \) -o -iname '*.djvu'
 
-either files with extension pdf of paths (includes dirs) with extension djvu. Parenthesis are used to change precendence order.
+Either files with extension pdf of paths (includes dirs) with extension djvu. Parenthesis are used to change precendence order.
 
 #actions
 
 You can do things with the files you find.
 
+##print
+
 The default action is to print found files to stdout.
 
 Find also offers a few other actions
+
+Remove the trailing `./`: <stackoverflow.com/questions/2596462/how-to-strip-leading-in-unix-find>
+
+As of POSIX 7, no clear way to do it.
+
+Best GNU option:
+
+    find -type f -printf '%P\n'
+
+Best POSIX 7 option:
+
+    find . | sed "s|^\./||"
 
 ##delete
 
@@ -273,30 +274,30 @@ Same with a read while loop:
 
 Consider using a read while loop if you are going to do more than on command.
 
-TODO understand better {} + vs ; ending.
+TODO understand better `{}` + vs `;` ending.
 
-NOTE: i don't know why exaclty, but the following fails:
+TODO: why does the following fail:
 
     find . | xargs echo `basename {}`
 
-This is probably because `basename {}` gets evaluated before {} is replaced by the find result
-basename {} returns {}, and AFTER THAT {} gets expanded to the find result ( not just the basename therefore )
-if you want to do stuff like that, a better solution is:
+This is probably because `basename {}` gets evaluated before `{}` is replaced by the find result basename `{}` returns `{}`, and AFTER THAT `{}` gets expanded to the find result ( not just the basename therefore )
+
+If you want to do stuff like that, a better solution is:
 
     find . -print0 | while read -d '' FILE;
         do echo "$FILE";
         echo asdf;
     done
 
-this is a *much* more flexible way of doing lots of operations in bash I could find
+This is a *much* more flexible way of doing lots of operations in bash I could find.
 
 #combos
 
-remove all `Thubs.db` files (aka good bye Windows Media Player):
+Remove all `Thubs.db` files (aka good bye Windows Media Player):
 
     find . -name 'Thumbs.db' -delete
 
-find all files with one of the given extensions:
+Find all files with one of the given extensions:
 
     find . -type f -iname '*.pdf' -o -iname '*.djvu'
 
@@ -320,7 +321,7 @@ Same as find but no `.`:
 
     find . -mindepth 1
 
-[it seems that](http://stackoverflow.com/questions/13525004/how-to-exclude-this-current-dot-folder-from-find-type-d/17389439#17389439) the best way to do that in posix is currently:
+[it seems that](http://stackoverflow.com/questions/13525004/how-to-exclude-this-current-dot-folder-from-find-type-d/17389439#17389439) the best way to do that in POSIX is currently:
 
     find . ! -path .
 
@@ -354,9 +355,7 @@ The match must be for the *entire* path, and not just any substring.
 
 Relative paths *must* start with `./`.
 
-Can specify regex type with `-regextype`. Default is **EMACS** regex!!! ...
-(remember that this is a GNU extension and EMACS is the gnu pet editor)
-but posix ere is also available.
+Can specify regex type with `-regextype`. Default is **EMACS** regex!!! ... (remember that this is a GNU extension and EMACS is the gnu pet editor) but POSIX ere is also available.
 
 Finds paths under `/home`, that end in .txt:
 

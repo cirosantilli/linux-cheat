@@ -223,6 +223,8 @@ Generates `a-N.png` images.
 
 ###resize
 
+Resize to 50% or original size:
+
 	convert large.png -resize 50% small.png
 
 This:
@@ -234,6 +236,10 @@ Therefore, the image file size will be just a bit more than 1/4 of the original 
 
 - 1/2 x 1/2 = 1/4 of the number of pixels
 - the png metadata size is unchanged, so this is not divided by 4.
+
+Resize to fixed width of 100 px, height maintains original proportion:
+
+	convert large.png -resize 100x small.png
 
 ###crop
 

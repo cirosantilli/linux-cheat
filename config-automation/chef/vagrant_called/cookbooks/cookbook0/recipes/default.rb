@@ -1,10 +1,27 @@
 File.open(File.join(Dir.tmpdir, "cookbook0_default.tmp"), 'w') do |f|
 
-  node[:cookbook0][:a] == "b" or raise
-  node[:cookbook0][:override] == "d" or raise
-  node[:anything][:a]  == "c" or raise
+  ##output ##log
 
-  f.puts(Time.now.to_s)
+    # Log is the best way of givint output:
+
+      log "log ========================================"
+      log "debug log" do
+        level :debug
+      end
+
+    # How stdout looks:
+
+      puts "STDOUT ========================================"
+
+    # To make things less messy we will be outputting to a file:
+
+      f.puts(Time.now.to_s)
+
+  ##attributes
+
+      node[:cookbook0][:a] == "b" or raise
+      node[:cookbook0][:override] == "d" or raise
+      node[:anything][:a]  == "c" or raise
 
   ##user and relative paths
 
@@ -40,6 +57,7 @@ File.open(File.join(Dir.tmpdir, "cookbook0_default.tmp"), 'w') do |f|
 
       template File.join(Dir.tmpdir, "cookbook0_template.tmp") do
         source "cookbook0_template.tmp.erb"
+        # Do not use `a:` as chef may still be running on Ruby 1.8.
         variables({:a=> '0', :b=> '1'})
       end
 
@@ -57,7 +75,8 @@ File.open(File.join(Dir.tmpdir, "cookbook0_default.tmp"), 'w') do |f|
 
       f.puts("node[:platform] = " + node[:platform])
 
-  # A save place to write temporary files to.
+  # A safe place to write temporary files to.
+  # On Chef 1.4.3 on Ubuntu 12.04 this equals `/var/chef/cache`.
 
     f.puts("Chef::Config[:file_cache_path] = " + Chef::Config[:file_cache_path])
 
@@ -114,9 +133,15 @@ File.open(File.join(Dir.tmpdir, "cookbook0_default.tmp"), 'w') do |f|
 
   ##git
 
+    # Do git clone to get new directories, and git pull to get new versions.
+
+    # Seems to operate on current branch.
+
+    # At clone automatically creates a branch named `deploy`.
+
     # Common combo: decide version from an attribute:
 
-      #if node.chef_environment == "QA"
+      #if node.chef_environment == "production"
         #ref = "1.2"
       #else
         #ref = "master"
@@ -129,8 +154,9 @@ File.open(File.join(Dir.tmpdir, "cookbook0_default.tmp"), 'w') do |f|
     # If relative, relative to `/`.
 
       git path do
-        repository "https://github.com/cirosantilli/linux.git"
-        #reference ref # Specify a version, such as a branch head or hash.
+        repository "https://github.com/cirosantilli/small.git"
+        reference 'master' # Specify a version, such as a branch head or hash.
+                           # Default is master.
         #action :sync  # Clone, or pull.
                        # Overwrites local commited changes, so this is not a good choice for development.
                        # Creates a branch called `deploy` TODO why and how to avoid it?
@@ -138,9 +164,8 @@ File.open(File.join(Dir.tmpdir, "cookbook0_default.tmp"), 'w') do |f|
       end
 
       git File.join(Chef::Config[:file_cache_path], "git-checkout") do
-        repository "https://github.com/cirosantilli/linux.git"
-        reference 'master'
-        action :checkout  # If checkout is possible do nothing.
+        repository "https://github.com/cirosantilli/small.git"
+        action :checkout  # If checkout is possible, checkout and do nothing else.
                           # Therefore, if the checkout is a branch, you don't lose local changes.
       end
 end

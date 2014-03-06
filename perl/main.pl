@@ -87,11 +87,14 @@ no warnings;
 
 ##strings
 
-    # Single quote vs double quote literals:
+    ##single quote vs double quote literals
 
         my $s = "a";
         "$s\n" == "a\n" or die;
-        '$s\n' == "\$s\\n" or die;
+
+        # Single quote does not interpret backslash escapes:
+
+            '$s\n' == "\$s\\n" or die;
 
     # Operations
 
@@ -188,9 +191,11 @@ no warnings;
             ##concatenate
 
                 #ERROR:
+
                     #print 'a' if 1 if 1;
 
                 #both conditions must be true
+
                     1 && 1 && print 'a';
                     1 and 1 and print 'a';
 
@@ -340,33 +345,33 @@ no warnings;
 
     ##$_
 
-        #default arg to functions:
+        # Default arg to functions:
 
             $_ = 'Hello';
             print;
                 #prints hello
 
-        #gets modified by functions:
+        # Gets modified by functions:
 
     ##$.
 
-        #line numeber of last handle read
+        # Line numeber of last handle read
 
     ##input record reparator
 
-        #char at which perl stops reading from handle
+        # Char at which perl stops reading from handle
 
-        $/ = ':';
-        print $/;
+            $/ = ':';
+            print $/;
 
     ##output record reparator
 
-        #what goes after print
+        # What goes after print
 
-        $\ = "a"; #output record separator for print
+            $\ = "a"; #output record separator for print
 
-        print '';
-            #a
+            print '';
+                #a
 
     ##$,
 
@@ -396,6 +401,8 @@ no warnings;
             print $0;
 
     ##command line arguments
+
+        # TODO
 
             #say $ARGV[0];
 

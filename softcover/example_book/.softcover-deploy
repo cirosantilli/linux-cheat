@@ -1,0 +1,6 @@
+# Edit this file to customize your deployment steps with custom command options
+# or additional commands.
+#
+# softcover build:all
+# softcover build:preview
+# softcover publish

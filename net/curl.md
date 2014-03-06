@@ -1,57 +1,56 @@
-does several web protocols
+CLI utility that does several web protocols.
+More powerful than `wget`: only use `wget` for recursive mirroring
 
-only use wget for recursive mirroring
+Ubuntu install:
 
     sudo aptitude install -y curl
 
-make GET request, reponse body to stdout:
+Make GET request, response body to stdout:
 
     curl amazon.com
 
 #-d
 
-makes POST request
+Make POST request:
 
     curl -Ld "q=asdf" $URL
     curl -L "google.com?q=asdf" $URL
 
 ##--data-urlencode
 
-encodes spaces and other signs for you:
+Encode spaces and other signs for you:
 
     curl -d               "name=I%20am%20Ciro" $URL
     curl --data-urlencode "name=I am Ciro"     $URL
 
-resume download from where it stopped
+Resume download from where it stopped:
 
     curl -C - -O http://www.gnu.org/software/gettext/manual/gettext.html
 
 #a-z range
 
-example:
-
     curl ftp://ftp.uk.debian.org/debian/pool/main/[a-z]/
 
 #protocols
 
-##ftp
+##FTP
 
-download:
+Download:
 
     curl -u ftpuser:ftppass -O ftp://ftp_server/public_html/xss.php
 
-upload:
+Upload:
 
     curl -u ftpuser:ftppass -T myfile.txt ftp://ftp.testserver.com
     curl -u ftpuser:ftppass -T "{file1,file2}" ftp://ftp.testserver.com
 
 ##mail
 
-send mail:
+Send mail:
 
     echo $'sent by curl!\n.' | curl --mail-from user@gmail.com --mail-rcpt user@gmail.com smtp://gmail.com
 
-body ends with a single dot '.' on a line
+Body ends with a single dot '.' on a line.
 
 ##dict
 
@@ -59,52 +58,47 @@ body ends with a single dot '.' on a line
     curl dict://dict.org/d:bash #general
     curl dict://dict.org/d:bash:foldoc #computing
 
--v , --trace $FILE, --trace-ascii $FILE: increasing levels of output showing
+`-v` , `--trace $FILE`, `--trace-ascii $FILE`: increasing levels of log verbosity:
 
     curl -Lv google.com
 
 #-L
 
-follows redirects
+Follows redirects.
 
-ommits redirect page if any:
+Omits redirect page if any:
 
     curl google.pn
     curl -L google.pn
 
-good example if you are not one of the 100 people who live in Pitcairn island.
-google redirects you to your country domain.
+Good example if you are not one of the 100 people who live in Pitcairn island =). Google redirects you to your countries domain.
 
-with `-v` you can see the full transaction:
+With `-v` you can see the full transaction:
 
     curl -vL google.pn
 
 #-u user:pass
 
-does <#basic authentication>
+Does Basic authentication.
 
 `--digest` and `--ntlm` can be used together
 
-if no `:pass`, will ask for pass on command line.
+If no `:pass`, will ask for pass on command line.
 
-examples:
+Examples:
 
     curl          -u user:pass site.with.basic.auth.com
     curl --digest -u user:pass site.with.digest.auth.com
 
 #-x
 
-specifies proxy server
-
-example:
+Specify proxy server:
 
     curl -x proxysever.test.com:3128
 
 #-z
 
-download iff it is modified after given date time (sounds like crawlers!)
-
-example:
+Download iff the file was modified after given date time (sounds like crawlers!):
 
     curl -z 01-Jan-00 google.com
 
@@ -112,26 +106,22 @@ I assure you, it has changed since then =).
 
 #-i
 
-show received http header received. see: <#http>
+Show received HTTP header received.
 
-example:
+Example:
 
     curl -i google.com
 
 #-I
 
-make http HEAD request. see: <#http>
-
-implies `-i` of course
-
-example:
+Make HTTP HEAD request:
 
     curl -I google.com
 
+Implies `-i` of course.
+
 #-X
 
-make custom request
-
-example:
+Make custom request:
 
     curl -X $'GET / HTTP/1.1\n\n' google.com

@@ -207,7 +207,7 @@
 
             dpkg -i a.deb
 
-##find new packages
+##find new packages ##apt-cache
 
     # Searches package name and descriptions on the web:
 

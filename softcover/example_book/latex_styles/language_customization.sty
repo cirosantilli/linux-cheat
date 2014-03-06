@@ -1,0 +1,9 @@
+% Aside box label
+\renewcommand{\boxlabel}{Box}
+
+% Codelisting captions
+\usepackage[hypcap=false]{caption}
+\DeclareCaptionFormat{listing}{\hspace{-0.2em}\colorbox[gray]{.85}{\hspace{0.1em}\parbox{0.997\textwidth}{#1#2#3}}\vspace{-1.3\baselineskip}}
+\captionsetup[listing]{format=listing,labelfont=bf,skip=16pt,font={rm,normalsize}}
+\DeclareCaptionType{listing}
+\newcommand{\codecaption}[1]{\captionof{listing}{#1}}

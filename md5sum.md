@@ -1,4 +1,4 @@
-generates/checks md5 checksums
+Generates / checks MD5 checksums.
 
     echo a > a
     echo b > b
@@ -9,14 +9,13 @@ generates/checks md5 checksums
     3b5d5c3712955042212316173ccf37be  b
     md5sum -c f
 
-a: OK
-b: OK
+Sample output:
 
-checks checksums on current dir
+    a: OK
+    b: OK
 
 #application
 
-have I downloaded the right file?
+Have I downloaded the right file?
 
-it is *very* difficult to make another file
-with the same checksum
+It is *very* difficult to make another file with the same checksum.

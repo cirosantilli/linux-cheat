@@ -1,9 +1,8 @@
-posix 7
+POSIX 7
 
-select lines from stdin or files
+Select lines from stdin or files.
 
-dont use egrep and fgrep variations,
-which are useless and deprecated
+Don't use `egrep` and `fgrep` GNU variants, which are useless (can be easily achieved with `grep`) and deprecated.
 
     echo $'a\nb' | grep a
     echo $'a\nb' > f
@@ -13,17 +12,18 @@ Output:
 
     a
 
-#pattern
+#Pattern
 
-grep can use POSIX BRE and POSIX ERE
+grep can use POSIX BRE (default) and POSIX ERE via `-E`.
 
-don't forget: BRE is deprecated
+Don't forget: BRE is deprecated.
 
-perl regexp is not specified in POSIX
+Perl regexp is not specified in POSIX, but the GNU implementation offers the option,
+but states in the man that it is highly experimental (from which we deduce they are not relying on Perl itself).
 
-#-i
+#i
 
-case insensitive:
+Case insensitive:
 
     echo $'A\nB' | grep -i a
 
@@ -31,7 +31,7 @@ Output:
 
     A
 
-##-E
+##E
 
 Find with ERE:
 
@@ -39,7 +39,7 @@ Find with ERE:
 
 Much saner and more powerful than BREs.
 
-##-F
+##F
 
 Fixed, that is, literal non BRE search:
 
@@ -49,9 +49,9 @@ Output:
 
     *
 
-#-v
+#v
 
-invert. print lines that don't match.
+Invert. print lines that don't match.
 
     echo $'ab\ncd' | grep -v a
 
@@ -59,9 +59,9 @@ Output:
 
     cd
 
-##application
+Application:
 
-remove line from file
+Remove line from file:
 
     f=
     l="^$"
@@ -69,20 +69,20 @@ remove line from file
     grep -v "$l" "$f" > "$tmp"
     mv "$tmp" "$f"
 
-#exit status
+#Exit status
 
 0 if at least one match, 1 otherwise.
 
     echo a | grep -q b && assert false
     echo a | grep -q a || assert false
 
-#-q
+#q
 
-quiet, suppress stdout
+Quiet, suppress stdout.
 
-useful if you only want the exit status
+Useful if you only want the exit status to decide if match exists or not.
 
-##application
+Application:
 
 Append line to file only if it is not there already:
 
@@ -92,7 +92,13 @@ Append line to file only if it is not there already:
 
 Very useful for files that have unordered sets of things separated by newlines.
 
-#-c
+#l
+
+Show only matching filenames.
+
+Specially useful with `-r`.
+
+#c
 
 Count how many lines match
 
@@ -102,36 +108,36 @@ Output:
 
     2
 
-#-e
+#e
 
 -e: multiple criteria ORed. Mnemonic: Either.
 
-all patters are BRE:
+All patters are BRE:
 
     echo $'a\nb' | grep -e 'a' -e 'b'
 
-all patters are ERE:
+All patters are ERE:
 
     echo $'a\nb' | grep -E -e 'a' -e 'b'
 
-#-n
+#n
 
-show matching line Numbers
+Show matching line Numbers
 
-#gnu extensions
+#GNU extensions
 
-##-r
+##r
 
 Recurse, print filenames before batches.
 
 *Very* useful to search for definitions in source code on interactive sessions
 where portability does not matter.
 
-No more `find . -type f | xargs` !!
+No more `find . -type f | xargs` !
 
-    grep -r 'a'
+    grep -r 'a' .
 
-##-A
+##A
 
 also print n lines following the match
 
@@ -143,8 +149,16 @@ get the nth line after matching line:
 
     assert [ "`echo $'a\nb' | grep -A1 a | tail -n1`" = $'b' ]
 
-##-B
+##B
 
 Before. Contrary of `-A`.
 
     assert [ "`echo $'a\nb' | grep -B1 b`" = $'a\nb' ]
+
+##color
+
+Colors matching parts of strings.
+
+Accept all and highlight pattern:
+
+    grep --color -E "pattern|$" file

@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
 
-##sources
-
-	#famous perl one liners: <http://www.catonmat.net/blog/perl-one-liners-explained-part-six/>
-
-#wait a ctrl-d and then execute everything:
-
-	perl
+# Cheat on the perl command line interface, including very useful one liner combos.
 
 ##command line options
 
-	##-e "$s"
+    # Official man:
+
+        #perldoc perlrun
+
+    # Not part of LSB, so you may need to install perldoc.
+
+	##e "$s"
 
 		#execute given string instead of file program
 
-	##-n:
+	##n:
 
 		#use `while (<>) { ... }` loop aroud given program
 		#this makes perl act linewise
@@ -22,11 +22,11 @@
 		#therfore to print the current line, you instead of `print($_)` can simply write `print`
 		#the endline `"\n"` is part of the string
 
-	##-p
+	##p
 
 		#same as `-n`, with `print` at end
 
-	##-i
+	##i
 
 		#what would get printed is put into file instead:
 
@@ -46,67 +46,72 @@
 			assert [ "`cat f`" = $'A\nb' ]
 			assert [ "`cat f.bak`" = $'a\nb' ]
 
-	##-a
+	##a
 
-		#autosplit
+		# Autosplit
 
-		#adds `@F = split(/ /);` to top of loop.
-		#requires `-n` or `-p`.
+		# Adds `@F = split(/ /);` to top of loop.
+
+		# Requires `-n` or `-p`.
 
 			assert[ "`echo $'a b c\nd e f' | perl -nae 'print $F[0]. ":" . $F[1] . ":" . $F[2]'`" = "a:b:c:d:e:f:" ]
 
-		#multiple spaces are split:
+		# Multiple spaces are split:
 
 			assert[ "`echo $'a  b c' | perl -nae 'print $F[0]. ":" . $F[1] . ":" . $F[2]'`" = "a:b:c"]
 
-		#tabs are split:
+		# Tabs are split:
 
 			assert[ "`echo $'a\0b\tc' | perl -nae 'print $F[0]. ":" . $F[1] . ":" . $F[2]'`" = "a:b:c"]
 
-	##-F
+	##F
 
-		#`-F: '/pattern/'`: set field separator for `-a`
+		# `-F: '/pattern/'`: set field separator for `-a`
 
-		#must be used with `-a`
+		# Must be used with `-a`
 
-		#change
+		# Literal:
 
-            assert[ "`echo $'a:b:c' | perl -naF':' -e 'print $F[0]. " " . $F[1] . " " . $F[2]'`" = "a b c"]
+            [ "$(echo $'a:b:c' | perl -F':' -lane 'print $F[0] . " " . $F[1] . " " . $F[2]')" = "a b c"] || exit 1
 
-	##-0
+		# regex separator:
 
-		#`-000` sets `$/` (IRS) to a given octal value
+            [ "$(echo 'a:%b:]c' | perl -F'/:./' -lane 'print $F[0] . " " . $F[1] . " " . $F[2]')" = "a b c" ] || exit 1
 
-		#default: "\n"
+	##0
+
+		#`- 000` sets `$/` (IRS) to a given octal value
+
+		# Default: "\n"
 
 		##special values
 
 			##0777
 
-				#slurp mode. read everything at once.
+				# Slurp mode. read everything at once.
 
 			##00
 
-				#paragraph mode. read up to "\n\n"
+				# Paragraph mode. read up to "\n\n".
 
-	##-l
+	##l
 
-		#adds chomp to loops
+		# Adds chomp to loops.
 
-		#no arg: sets `$\ = $/` (ORS = IRS)
+		# No arg: sets `$\ = $/` (ORS = IRS)
 
-		#with arg: sets `$\ = $/` (ORS = IRS)
+		# With arg: sets `$\ = $/` (ORS = IRS)
 
-		#default `$\`: ''
+		# Default `$\`: ''
 
 		##application
 
-			#add newline to prints if `-0` is not set
-			#(and thus equals newline)
+			# Add newline to prints if `-0` is not set
+			# (and thus equals newline)
 
-			#remove the annoying end newline which may match your `\s`!!
+			# Remove the annoying end newline which may match your `\s`!
 
-	##-M
+	##M
 
 		#import modules
 
@@ -114,58 +119,79 @@
 
 			perl -MList::Util=sum -alne 'print sum @F'
 
-##Important one liners
+##combos
 
-    #Find files with matching names and print only new modified lines to stdout:
+    # Find files with matching names and print only new modified lines to stdout:
 
-        find . -iname "*.tex" | xargs perl -lane 'print if s/a/A/g'
+        find . -iname "*.tex" | xargs perl -lne 'print if s/a/A/g'
 
-    #Useful before you do mass refactoring
+    # Useful before you do mass refactoring
 
-    #Make the modifications on files with matching names, print nothing to stdout
+    # Make the modifications on files with matching names, print nothing to stdout
 
         find . -iname "*.tex" | xargs perl -lapi -e 's/a/A/g'
 
-    #Useful to do mass regex refactoring.
-    #*Very dangerous*, so make a backup of the current direcotyr before proceeding!
+    # For multiline operations:
 
-    #Print only modified lines, old and new, with line numbers:
+        find . -iname "*.tex" | xargs perl -0777 -ne 'print if s/a/A/g'
+        find . -iname "*.tex" | xargs perl -0777 -pi -e 's/a/A/g'
 
-        echo $'a\nb\nc\nb' | perl -lane '$o = $_; if (s/b/B/g) { print $. . "  " . $o . "\n" . $. . "  " . $_ . "\n" }'
+    # For the love of God, do not use `-l` with this unless you know what you are doing.
 
-    #Not linewise
+    # **Whatch out for the trailing newline!**. `.` will match any character now.
+
+    # Useful to do mass regex refactoring.
+
+    # **Very dangerous!!!!**, so make a backup of the current directory before proceeding.
+
+    # Print only modified lines, old and new, with line numbers and file names
+
+        find . -type f | xargs -L 1 perl -lane '$o = $_; if (s/'"$1"') { print $ARGV . ":" . $. . "\n" . $o . "\n" . $_ . "\n" }'
+
+    # Sample output:
+
+        #./a:1
+        #a
+        #c
+        #
+        #./b:1
+        #b
+        #c
+
+    # Not linewise
 
         perl -0777 -lape 's/\n\n+/\n/\ng' F
 
-    #print file with line numbers, tab separated by 2 spaces from text:
+    # print file with line numbers, tab separated by 2 spaces from text:
 
         perl -ne 'print $., "  ", $_' F
 
-	echo $'a\nb\nc\nda\nb\nc' | perl -ne 'print if /a/ .. /c/'
-		#$'a\nb\nc\na\nb\nc'
-		#print between regexes inclusive non greedy
+    # Print between regexes inclusive non greedy
 
-	echo $'a\nb\nc' | perl -ne 'BEGIN{ $a = 0 }; $a = 0 if /c/; print if $a; $a = 1 if /a/;'
+        echo $'a\nb\nc\nda\nb\nc' | perl -ne 'print if /a/ .. /c/'
+        #$'a\nb\nc\na\nb\nc'
+
+    # Print between regexes exclusive non greedy
+
+        echo $'a\nb\nc' | perl -ne 'BEGIN{ $a = 0 }; $a = 0 if /c/; print if $a; $a = 1 if /a/;'
+        #b
+
+    # Print fron line 15 to 17:
+
+        perl -ne 'print if 15 .. 17' F
+
+    # Substitute (find and replace) "foo" with "bar" on lines that match "baz".:
+
+        perl -pe '/baz/ && s/foo/bar/'
+
+    # Print backreference only on matching lines:
+
+        ifconfig | perl -ne '/HWaddr (\S*)/ && print $1 . "\n"'
+
+    # Act only on begin and end:
+
+        echo $'a\nb' | perl -ne 'BEGIN{ $a = "b" } END{ print $a }'
 		#b
-		#print between regexes exclusive non greedy
 
-	perl -ne 'print if 15 .. 17' F
-		#print fron line 15 to 17
-
-	perl -pe '/baz/ && s/foo/bar/'
-		#substitute (find and replace) "foo" with "bar" on lines that match "baz".
-
-	ifconfig | perl -ne '/HWaddr (\S*)/ && print $1 . "\n"'
-		#print backreference only on matching lines
-
-	echo $'a\nb' | perl -ne 'BEGIN{ $a = "b" } END{ print $a }'
-		#b
-		#act only on begin and end
-
-	echo $'a\nab' | perl -ne 'print length, "\n"'
+        echo $'a\nab' | perl -ne 'print length, "\n"'
 		#$'2\n3'
-
-	##ack combo
-
-		#regex refactoring:
-		ack -f | xargs perl 's/a/b/'

@@ -1,24 +1,24 @@
 #!/usr/bin/env bash
 
-#ubuntu info, and in special ubuntu specific program installation procedures
+# Ubuntu info, and in special ubuntu specific program installation procedures
 
-#running this file should do all automatable steps to install useful stuff we find useful.
+# Running this file should do all automatable steps to install useful stuff we find useful.
 
-#non automatable steps shall be labelled as:
+# Non automatable steps shall be labelled as:
 
     #MANUAL: edit that file and click some buttons
 
 ##ubuntu genearl info
 
-    #a debian based distribution
+    # A debian based distribution
 
-    #unlike debian maintained by the cannonical company
-    #which gets money by offering maintaincance (debian is managed by the community)
+    # Unlike debian maintained by the cannonical company
+    # which gets money by offering maintaincance (debian is managed by the community)
 
-    #important implications: many key programs are the same:
+    # Important implications: many key programs are the same:
 
-    #- `dpkg` for packages
-    #- `upstart` for init
+    # - `dpkg` for packages
+    # - `upstart` for init
 
     ##get current ubuntu version
 
@@ -30,13 +30,13 @@
         #sudo do-release-upgrade
         #sudo aptitude update && sudo aptitude upgrade
 
-    #open app without global menu
+    # Open app without global menu:
 
         #env UBUNTU_MENUPROXY=0 golly
 
-    #ubuntu-tweak
+    ##ubuntu-tweak
 
-        #configure ubuntu
+        # Configure ubuntu
 
 ##installation procedures
 
@@ -44,10 +44,10 @@
 
             sudo apt-get update
 
-        #like apt-get, but removing  a package will also uninstall all dependencies that
-        #were installed for that package:
+        # Like apt-get, but removing  a package will also uninstall all dependencies that
+        # were installed for that package:
 
-            sudo aptitude install -y aptitude
+            sudo apt-get install -y aptitude
 
     ##package management
 
@@ -56,17 +56,17 @@
             sudo aptitude install -y ppa-purge
             apt-file update
 
-    #usefull stuff that does not come by default or Canonical would have to pay royalties:
+    # Usefull stuff that does not come by default or Canonical would have to pay royalties:
 
         sudo aptitude install -y ubuntu-restricted-extras
 
     ##uncategorized
 
-        #uuencode, xxencode, BASE64, quoted printable, BinHex
+        # uuencode, xxencode, BASE64, quoted printable, BinHex
 
             sudo aptitude install -y uudeview
 
-        #mime messages
+        # mime messages
 
             #sudo aptitude install -y mpack
 
@@ -78,11 +78,11 @@
 
     ##printer
 
-        #worked for: EPSON xp-202
+        # Worked for: EPSON xp-202.
 
-        #type printer in dash
+        # Type printer in dash.
 
-        #the guide shows you everything
+        # The guide shows you everything.
 
     ##desktop
 
@@ -90,11 +90,11 @@
         sudo aptitude install -y logkeys
         sudo aptitude install -y guvcview
 
-        #ibus input methods for QT:
+        # ibus input methods for QT:
 
             sudo aptitude install -y ibus-qt4
 
-        #Useful for example if you want Chinese input for qt applications.
+        # Useful for example if you want Chinese input for qt applications.
 
     ##book
 
@@ -111,6 +111,30 @@
             sudo aptitude install -y chm2pdf
             sudo aptitude install -y archmage
             #sudo aptitude install -y kchmreader
+
+        # Texlive 2009 full:
+
+            #sudo aptitude install -y texlive-full
+
+        # Texlive 2013 full:
+
+            #cd /tmp
+            #wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
+            #tar xjf install-tl-unx.tar.gz
+            #cd install-tl-*
+            ## This will take a while
+            #echo i | sudo ./install-tl
+            #echo '
+            ## Texlive
+            #export PATH=$PATH:/usr/local/texlive/2013/bin/i386-linux
+            #export MANPATH=$MANPATH:/usr/local/texlive/2013/texmf-dist/doc/man
+            #export INFOPATH=$INFOPATH:/usr/local/texlive/2013/texmf-dist/doc/info
+            #' >> ~/.profile
+            #cd ..
+            #sudo rm -rf install-tl-*
+
+        sudo aptitude install -y blahtexml
+        sudo aptitude install -y pandoc
 
     ##sound
 
@@ -243,7 +267,8 @@
             #non launchapd ppa with lots of good games.
 
                 wget -q -O - http://archive.getdeb.net/getdeb-archive.key | sudo apt-key add -
-                sudo sh -c 'echo "deb http://archive.getdeb.net/ubuntu quantal-getdeb games" > /etc/apt/sources.list.d/getdeb.list'
+                # REPLACE precise with the codename for your distro!
+                sudo sh -c 'echo "deb http://archive.getdeb.net/ubuntu precise-getdeb games" > /etc/apt/sources.list.d/getdeb.list'
                 sudo aptitude update
                 sudo aptitude install urbanterror
                 #sudo aptitude install worldofpadman
@@ -325,15 +350,15 @@
 
                 sudo aptitude install -y gcc-doc
 
-            #located at: `/usr/share/doc/gcc-doc`
+            # Located at: `/usr/share/doc/gcc-doc`
 
         ##fortran
 
-            #gnu fortran 77:
+            # Gnu fortran 77:
 
                 sudo aptitude install -y g77
 
-            #gnu fortran 95:
+            # Gnu fortran 95:
 
                 sudo aptitude install -y gfortran
 
@@ -342,15 +367,23 @@
         ##source control
 
                 sudo aptutide install -y git
+                #sudo aptutide install -y tig
                 sudo aptutide install -y mercurial
                 sudo aptitude install -y subversion
                 sudo aptitude install -y cvs
 
         sudo aptitude install -y puppet
 
-        #Many source code for examples to learn qt4.
+        # Many source code for examples to learn qt4.
 
             sudo aptitude install -y qt4-demos
+
+        ##vlc
+
+            # Missing development requirements to compile VLC:
+
+                sudo aptitude install -y liblua5.1-0-dev libmad0-dev liba52-0.7.4-dev \
+                    libxcb-composite0-dev libxcb-xv0-dev libxcb-randr0-dev libgcrypt11-dev
 
     ##c and c++ libraries
 
@@ -360,15 +393,15 @@
 
         ##KDE
 
-            #KDE core dev libs:
+            # KDE core dev libs:
 
                 sudo aptitude install -y kdelibs5-dev
 
-            #KDE game development files:
+            # KDE game development files:
 
                 sudo aptitude install -y libkdegames-dev
 
-        #requirements to build conqueror:
+        # Requirements to build conqueror:
 
             sudo aptitude install -y libkonq5-dev
 
@@ -383,7 +416,11 @@
             sudo aptitude install -y libplplot-dev
             sudo aptitude install -y plplot11-driver-xwin
 
-        #boost c++
+            sudo aptitude install -y linux-source linux-headers
+            #sudo aptitude install -y check
+            sudo aptitude install -y libncurses5-dev
+
+        # Boost c++
 
             #Some subprojects have specific packages of their own.
 
@@ -395,16 +432,20 @@
                 sudo aptitude install -y libboost-doc
                 sudo aptitude install -y libboost-graph-dev
 
-        #blas c / fotran and lapack fortran:
+        # Blas C / Fotran and lapack fortran:
 
             sudo aptitude install -y liblapack-dev
 
-        #lapack c via lapacke:
+        # Lapack C via lapacke:
 
             sudo aptitude install -y liblapacke-dev
 
             sudo aptitude install -y libgsl0-dev
             sudo aptitude install -y gsl-doc-info
+
+        # glx utils:
+
+            sudo aptitude install -y mesa-utils
 
     ##python
 
@@ -423,7 +464,14 @@
 
             sudo aptitude install -y ruby-dev
 
+        sudo aptitude install -y nodejs
+        sudo aptitude install -y npm
+        npm config set registry http://registry.npmjs.org/
+
     ##virtualization ##vm
+
+        # Don't forget to enable virtualization on your BIOS when using virtualization tools.
+        # Some features may only be available with it enabled.
 
         ##virtualbox
 
@@ -436,9 +484,15 @@
 
                 #sudo aptitude install virtualbox-guest-utils
 
-            # Don't forget to enable virtualization on your BIOS.
+            ##vagrant
 
-            sudo aptitude install -y vagrant
+                # Manual download:
+
+                    #firefox http://www.vagrantup.com/downloads.html
+
+                # Aptitude install failed on Ubuntu 12.04.
+
+                    #sudo aptitude install -y vagrant
 
         ##wine
 
@@ -460,40 +514,37 @@
 
         ##Java
 
-            #Java is a pain to make work sometimes
+            # Java is a pain to make work sometimes.
 
-            #If things don't work, do the standard procedure:
-            #uninstall everything related to java, and try to install again.
+            # Make sure you get the latest version, or things may not work.
 
-            #Make sure you get the latest version, or things may not work.
+            # If things don't work, do the standard procedure: uninstall everything related to java, and try again.
 
-            #You should find all packages of type:
+            # To clear everything, first find all realted packages via:
 
-                #dpkg -l | grep java | grep -iv javascript
-                #dpkg -l | grep openjdk
-                #dpkg -l | grep icedtea
+                dpkg -l | grep -E '(java|openjdk|icedtea)' | grep -iv javascript | perl -F'/\s+/' -lane 'print $F[1]'
 
-            #and then do:
+            # and then do:
 
                 #sudo aptitude purge $PKG
 
-            #Oracle version:
+            # Then install Oracle version (some thing only work with it):
 
                 sudo add-apt-repository ppa:webupd8team/java
                 sudo aptitude update
                 sudo aptitude install -y oracle-java8-installer
 
-            #This already comes with the browser plugin
+            # This already comes with the browser plugin.
 
-            #Openjdk version:
+            # Openjdk version:
 
                 #sudo aptitude install openjdk-7-jre
 
-            #Firefox java plugin:
+            # Firefox java plugin:
 
                 #sudo aptitude install icedtea-7-plugin
 
-            #Whichever don't forget to enable the plugin on firefox ( <c-s-a> to open plugins menu )
+            # Whichever you do, don't forget to enable the plugin on firefox ( <c-s-a> to open plugins menu )
 
         ##flash
 
@@ -512,8 +563,8 @@
 
             #gtk themes:
 
-                sudo add-apt-repository -y ppa:webupd8team/themes
-                sudo aptitude update
+                sudo add-apt-repository -y ppa:webupd8team/themes && \
+                sudo aptitude update && \
                 sudo aptitude install -y gnomishdark-theme
 
                 sudo aptitude install -y compizconfig-settings-manager
@@ -567,9 +618,21 @@
                 sudo aptitude install -y nmap
                 sudo aptitude install -y whois
 
-            #terminal web browser:
+        ##browser
+
+                sudo aptitude install -y chromium-browser
+
+            # Terminal web browser:
 
                 sudo aptitude install -y w3m w3m-img
+
+            # Tor:
+
+                sudo add-apt-repository ppa:webupd8team/tor-browser
+                sudo apt-get update
+                sudo apt-get install tor-browser
+
+        ##db
 
             #MySQL:
 
@@ -586,16 +649,20 @@
 
             # Redis server and cli client:
 
-                #sudo aptitude install -y redis-server
+                sudo aptitude install -y redis-server
 
-            ##mail
+            # MongoDB server and cli client:
 
-                    sudo aptitude install -y mutt
-                    sudo aptitude install -y ssmtp
+                sudo aptitude install -y mongodb
 
-                # Conflicts with ssmtp:
+        ##mail
 
-                    #sudo aptitude install -y postfix
+                sudo aptitude install -y mutt
+                sudo aptitude install -y ssmtp
+
+            # Conflicts with ssmtp:
+
+                #sudo aptitude install -y postfix
 
     ##disk
 
@@ -713,12 +780,13 @@
             sudo aptitude install -y nvidia-prime
             sudo aptitude install -y nvidia-opencl-dev
 
-    ##vlc
+    ##encoding
 
-        # Missing development requirements to compile VLC:
+            sudo aptitude install convmv
 
-            sudo aptitude install -y liblua5.1-0-dev libmad0-dev liba52-0.7.4-dev \
-                libxcb-composite0-dev libxcb-xv0-dev libxcb-randr0-dev libgcrypt11-dev
+    ##init
+
+            sudo aptitude install -y chkconfig
 
 ##xinit
 

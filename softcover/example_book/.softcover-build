@@ -1,0 +1,6 @@
+# Edit this file to customize your build steps with custom command options
+# or additional commands.
+#
+# softcover build:pdf
+# softcover build:mobi
+# softcover build:preview
