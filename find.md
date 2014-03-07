@@ -387,7 +387,7 @@ Example:
 
 - `-print0` prints files null (\0) terminated. this avoids problems since filenames that can contain newlines, but not null chars.
 - `-0` tells xargs that the input is null separated
-- `-I '{}'` tells xargs that {} should be substituted by each arg one at a time
+- `-I '{}'` tells xargs that `{}` should be substituted by each arg one at a time
 
 POSIX 7 mentions that this is included in several implementations,
 but was not adopted since it requires every utility that takes it as input to add a new `-0` option.

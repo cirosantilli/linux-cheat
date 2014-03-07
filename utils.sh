@@ -3681,16 +3681,24 @@
 
     ##env
 
-        #POSIX 7
+        # POSIX 7
 
-        #shows all environment variables and their values:
+        # Shows all environment variables and their values:
 
             env
 
-        #change environment for a single command:
+        # Change environment for a single command:
 
             a=b
             env a=c echo $a
+            #c
+            echo $a
+            #b
+
+        # In bash it is also possible to do (not sure about portability):
+
+            a=b
+            a=c echo $a
             #c
             echo $a
             #b
@@ -4751,98 +4759,6 @@
                         echo eq
                 fi
 
-    ##xargs
-
-        # POSIX 7
-
-        # Do a command that takes each line of stdin as an argument.
-
-        # Great for combo with find to do a command on many files.
-
-        ##alternatives
-
-            # Downsides of xargs:
-
-            #- max number of arguments
-            #- escaping madness for multiple commands
-
-            # Upsides of xargs:
-
-            #- golfing!
-
-            # In scripts, always use the more versatile (and slightly more verbose) read while techinque:
-
-                while read f; do
-                    echo "$f";
-                done < <(find .)
-
-        ##test preparations
-
-                function f {
-                    echo $1
-                }
-
-        ##basic operation
-
-            # Read line from stdin, append as argument to the given command
-
-            # Does not automatically quote!
-
-            # The default command is echo, which is basically useless
-
-                echo $'a\nb' | xargs
-                echo $'a\nb' | xargs echo
-                echo $'a\nb c' | xargs echo
-
-            # Empty lines are ignored:
-
-                echo $'a\n\nb' | xargs
-
-        ##-0
-
-            # Read up to nul char instead of newline char.
-
-            # Allows for files with spaces, and even newlines!
-
-                echo -en 'a\0b' | xargs -0
-
-            # Combo with `find -print0`:
-
-                find . -print0 | xargs -0
-
-        ##-I
-
-            # Allows you to put the argument anywhere and to quote it
-
-                    echo $'a\nb' | xargs -I '{}' echo '{}'
-
-        ##multiple commands
-
-            # Must use the `xargs bash` technique.
-
-            # Only use this for very simple commands, or you are in for an escaping hell!
-
-            # If you have to do this, use the read while technique instead.
-
-                    echo $'a\nb' | xargs -I '{}' bash -c "echo 1: '{}'; echo 2: '{}'"
-
-        ##applications
-
-            # Find and replace in files found with perl regex:
-
-                find . -type f | xargs perl -pie 's/a/A/g'
-
-            ##find files whose path differ from other files only by case
-
-                # Useful when copying from linux to a system that does not accept
-                # files that differ only by case (the case for MacOS and Windows)
-
-                    find . | sort -f | uniq -di
-
-                # Remove them:
-
-                    find . | sort -f | uniq -di | xargs -I'{}' rm '{}'
-
     ##locate
 
         # Searchs for files in entire computer.
@@ -5069,6 +4985,10 @@
         # List groups of user `"$u"`:
 
             groups "$u"
+
+        # Sample output:
+
+            username : group0 group1 group2
 
         # List groups of the current user:
 

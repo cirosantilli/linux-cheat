@@ -22,6 +22,12 @@ See System V init system.
 
 See System V init system.
 
+#init.d
+
+`/etc/init.d` holds System V scripts, which are then symlinked to `/etc/rcX/[SK]XXname` files.
+
+`/etc/init` is Upstart specific.
+
 #System V init system
 
 Ubuntu currently uses both System V init and the newer (backwards compatible) Upstart alternative.
@@ -36,11 +42,9 @@ In addition, every distro has a "normal" runlevel for mos of its operation which
 
 Each runlevel is a directory under `/etc` of the form `/etc/rcX.d` containing symlinks to bash scripts with an specific format, all of which should be under `/etc/init.d/`.
 
-TODO: must all scripts have filenames of type: `[SK]NN`? What does it mean?
+Those files are kept under `init`, because all of those scrips are run by the `init` process by forking. This can be observed through commands like `pstree`.
 
-Get current runlevel (POSIX 7):
-
-    who -r
+TODO: must all scripts have filenames of type: `[SK]NN`? I have seen that `S` scripts are run before `K`, and then within `SK`, scripts are run by increasing `NN`.
 
 Therefore this is a POSIX 7 supported concept.
 
@@ -53,6 +57,10 @@ The LSB goes further and specifies:
 - 4: Not used/User-definable: For special purposes.
 - 5: Start the system normally with appropriate display manager. ( with GUI ): Same as runlevel 3 + display manager.
 - 6: Reboot: Reboots the system.
+
+Get current runlevel (POSIX 7):
+
+    who -r
 
 ##init command
 
@@ -98,6 +106,10 @@ List active startup services:
 ##ubuntu specific
 
 `/etc/defaults/name` are shell scripts that contain environment variables which can be used by the corresponding init script. Rationale: scripts can be updated without destroying parameters. File in `defaults` are never changed by the package manager.
+
+#init directory
+
+`/etc/init` is Upstart specific. It contains scripts that correspond to Upstart services.
 
 #upstart
 
