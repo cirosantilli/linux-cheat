@@ -140,6 +140,16 @@ Only use this for very simple commands, or you are in for an escaping hell!
 
 If you feel the need to do this, it is likely that you should consider a "read while" technique instead or a Python script.
 
+#interactive commands
+
+`xargs` takes its arguments from stdin, so it does not allow you to run commands that require stdin interaction such as `aspell`. The following fails:
+
+    find . -iname '*.md' | xargs -I'{}' aspell -c '{}'
+
+One workaround is to open a new terminal for each command:
+
+    find . -iname '*.md' | xargs -I'{}' xterm -e aspell -c '{}'
+
 #applications
 
 Find and replace in files found with perl regex:

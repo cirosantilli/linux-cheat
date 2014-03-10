@@ -1,5 +1,6 @@
-CLI utility that does several web protocols.
-More powerful than `wget`: only use `wget` for recursive mirroring
+CLI utility that does several web protocols. More powerful than `wget`: only use `wget` for recursive mirroring
+
+Not POSIX, and there is no POSIX 7 alternative: <http://stackoverflow.com/questions/9490872/is-wget-or-similar-programs-always-available-on-posix-systems>
 
 Ubuntu install:
 

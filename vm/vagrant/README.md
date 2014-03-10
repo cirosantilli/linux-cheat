@@ -2,8 +2,7 @@ Vagrant makes it really fast to create new virtual machines.
 
 It relies on other Virtual machines to do most of the work.
 
-By default, it relies on virtualbox, so you should get it working before
-using vagrant.
+By default, it relies on VirtualBox, so you should get it working before using Vagrant.
 
 First create a working directory:
 
@@ -14,11 +13,11 @@ View available local boxes:
 
     vagrant box list
 
-Addd a box:
+Add a box:
 
     vagrant box add name url
 
-where name can be anyhting you wish, for example:
+where name can be anything you wish, for example:
 
     vagrant box add precise32 http://files.vagrantup.com/precise32.box
 
@@ -28,7 +27,7 @@ Create an init file for a vagrant project with an existing box:
 
     vagrant init precise32
 
-The config file will contain:
+The Vagrantfile file will contain:
 
     config.vm.box = "precise32"
 
@@ -38,13 +37,12 @@ Also specify the URL, and download box if it is not present:
 
     vagrant init precise32 http://files.vagrantup.com/precise32.box
 
-The config file will contain:
+The Vagrantfile file will contain:
 
     config.vm.box = "precise32"
     config.vm.box_url = "http://files.vagrantup.com/precise32.box"
 
-so that if anyone else uses this Vagrantfile,
-`vagrant up` will automatically download the box from the URL.
+so that if anyone else uses this Vagrantfile, `vagrant up` will automatically download the box from the URL.
 
 For this reason you should always specify the URL in your Vagrantfile.
 
@@ -58,13 +56,12 @@ Access the box configured in current dir via ssh:
 
     vagrant ssh
 
-You are now in a virtual shell inside the virtual machine.
-To exit it do a `Ctrl+D`.
+You are now in a virtual shell inside the virtual machine. To exit it do a `Ctrl+D`.
 
 The new machine will have:
 
 - a regular user named vagrant, who can `sudo` without password
-- a `/vagrant` directory which is a shared directory with the directory containing the Vagrantfile.
+- a `/vagrant` directory which is the host's directory containing the Vagrantfile mounted.
 
 Stop the machine from running to save CPU:
 
@@ -82,7 +79,7 @@ Shutdown the virtual machine:
 
 The machine's persistent state such as hard disk remains.
 
-Same as `halt` + `up`:
+`halt` + `up`:
 
     vagrant reload
 
@@ -98,14 +95,13 @@ Does not remove the vagrant configuration files in current directory.
 
 #provision
 
-Provisioning is automatically running commands on the box when it is first upped,
-typically to install programs.
+Provisioning is automatically running commands on the box when it is first upped, typically to install programs.
 
 To provision with a sh file use:
 
     config.vm.provision :shell, :path => "bootstrap.sh"
 
-where the path is realtive to the directory containing the Vagrantfile.
+where the path is relative to the directory containing the Vagrantfile.
 
 Use script from a string:
 
@@ -115,7 +111,7 @@ Use script from a string:
 
 Vagrant also supports specialized provisioners such as Ansible, Chef and Puppet.
 
-Provision runing box:
+Provision running box:
 
     vagrant provision
 
@@ -125,18 +121,14 @@ Up without provisioning:
 
 #port forwarding
 
-Add the following to your config file:
+Add the following to your configuration file:
 
     config.vm.network :private_network, ip: "192.168.3.4"
     config.vm.network :forwarded_port, guest: 3000, host: 3000
 
-Now requests on the host `192.168.3.4:3000` will be redirected to the guest at `192.168.3.4:3000`.
-This way you can run a server on the guest, and test it on your browser from the host!
+Now requests on the host `192.168.3.4:3000` will be redirected to the guest at `192.168.3.4:3000`. This way you can run a server on the guest, and test it on your browser from the host!
 
-Vagrant forwards by default the host's `localhost:2222` to the guest's `localhost:22`, and 
-`8080` to `80`. This way, from any directory in the host is is possible to connect to the guest
-via ssh by doing `ssh -p 2222 vagrant@localhost` and then entering the password for user
-`vagrant` which is `vagrant by default`.
+Vagrant forwards by default the host's `localhost:2222` to the guest's `localhost:22`, and `8080` to `80`. This way, from any directory in the host is is possible to connect to the guest via SSH by doing `ssh -p 2222 vagrant@localhost` and then entering the password for user `vagrant` which is `vagrant by default`.
 
 #plugins
 
@@ -145,3 +137,17 @@ Plugins are installed on the host and give extra capabilities to Vagrant.
 List installed plugins:
 
     vagrant plugin list
+
+#shared folders
+
+See synced folders.
+
+#synced folders
+
+Synced folders are simply mounted from host to guest:
+
+    config.vm.synced_folder "shared_home", "/dir"
+
+The directory must exist on the host, but is automatically created if it does not exist on the guest.
+
+If you share the vagrant home or its parents, you cannot ssh into the machine anymore because the `.ssh` will disappear.

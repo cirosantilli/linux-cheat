@@ -5067,18 +5067,44 @@
 
     ##su
 
-        #Become another user, such as root:
+        # Become another user, such as root:
 
             su otheruser
                 #enter otheruser pass
             whoami
                 #otheruser
 
-        #Start a login shell as user a:
+        # Start a login shell as user a:
 
             su - a
 
-        #without this starts a non-login shell
+        # Without this starts a non-login shell.
+
+        ##don't use from script
+
+            # You probably don't want to use this on a script, only on interactive sessions.
+
+            # Doing:
+
+                printf 'echo a\nsu a\necho b' | bash -x
+
+            # Gives:
+
+                su: must be run from a terminal
+
+            # Doing:
+
+                echo 'echo a
+                su git
+                echo b
+                ' > a.sh
+                bash a.sh -x
+
+            # Stops the script and puts you on an interactive session.
+
+            # Workarounds for scripts: <http://stackoverflow.com/questions/1988249/how-do-i-use-su-to-execute-the-rest-of-the-bash-script-as-that-user>
+
+            # TODO understand behaviour precisely.
 
         ##become root
 
@@ -5107,11 +5133,13 @@
 
         # Configuration file:
 
-            sudo vim /etc/sudoers
+            sudo cat /etc/sudoers
 
-        # Also accessible with:
+        ##visudo
 
-            sudo visudo
+          # Should only be edited with visudo, analogous to vipw.
+
+              sudo visudo
 
         # Syntax:
 
@@ -5356,9 +5384,9 @@ EOF
 
     ##passwd
 
-        # Manage user passwords.
+        # Holds usernames and key account options.
 
-        # Passwords are normally stored hashed in the `/etc/shadow` file.
+        # Actual passwords are normally stored hashed in the `/etc/shadow` file.
 
         # Modify passwd for cur user:
 
@@ -5401,6 +5429,12 @@ EOF
         # Unlock account:
 
             sudo passwd -u "$u"
+
+        ##vipw
+
+          # To directly edit the `/etc/passwd` file, use `vipw`,
+          # which is vi in a mode that checks the file syntax before saving,
+          # since syntax errors could lead to serious security faults.
 
     ##makepasswd
 

@@ -1,42 +1,10 @@
 #!/usr/bin/env bash
 
-# Ubuntu info, and in special ubuntu specific program installation procedures
-
 # Running this file should do all automatable steps to install useful stuff we find useful.
 
 # Non automatable steps shall be labelled as:
 
     #MANUAL: edit that file and click some buttons
-
-##ubuntu genearl info
-
-    # A debian based distribution
-
-    # Unlike debian maintained by the cannonical company
-    # which gets money by offering maintaincance (debian is managed by the community)
-
-    # Important implications: many key programs are the same:
-
-    # - `dpkg` for packages
-    # - `upstart` for init
-
-    ##get current ubuntu version
-
-        #lsb_release -a | grep Release
-
-    ##upgrade ubuntu version
-
-        #sudo aptitude install -y update-manager-core
-        #sudo do-release-upgrade
-        #sudo aptitude update && sudo aptitude upgrade
-
-    # Open app without global menu:
-
-        #env UBUNTU_MENUPROXY=0 golly
-
-    ##ubuntu-tweak
-
-        # Configure ubuntu
 
 ##installation procedures
 
@@ -112,26 +80,17 @@
             sudo aptitude install -y archmage
             #sudo aptitude install -y kchmreader
 
-        # Texlive 2009 full:
+        # Texlive 2009:
+
+            #sudo aptitude install -y texlive
+
+        # Texlive 2009 full: latex
 
             #sudo aptitude install -y texlive-full
 
         # Texlive 2013 full:
 
-            #cd /tmp
-            #wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
-            #tar xjf install-tl-unx.tar.gz
-            #cd install-tl-*
-            ## This will take a while
-            #echo i | sudo ./install-tl
-            #echo '
-            ## Texlive
-            #export PATH=$PATH:/usr/local/texlive/2013/bin/i386-linux
-            #export MANPATH=$MANPATH:/usr/local/texlive/2013/texmf-dist/doc/man
-            #export INFOPATH=$INFOPATH:/usr/local/texlive/2013/texmf-dist/doc/info
-            #' >> ~/.profile
-            #cd ..
-            #sudo rm -rf install-tl-*
+            curl https://raw.github.com/cirosantilli/latex-cheat/master/install-texlive2013-ubuntu12.04.sh | bash
 
         sudo aptitude install -y blahtexml
         sudo aptitude install -y pandoc
@@ -326,8 +285,8 @@
 
     ##terminal emulators
 
-        #sudo aptitude install -y guake
-        sudo aptitude install -y yakuake
+        sudo aptitude install -y guake
+        #sudo aptitude install -y yakuake
 
     ##program
 
@@ -459,14 +418,33 @@
 
             curl -L https://get.rvm.io | bash -s stable
             source ~/.rvm/scripts/rvm
-            rvm requirements
             rvm install 1.9.3
 
             sudo aptitude install -y ruby-dev
 
-        sudo aptitude install -y nodejs
-        sudo aptitude install -y npm
-        npm config set registry http://registry.npmjs.org/
+    ##node
+
+        # NVM install:
+
+            VERSION=0.10.26
+            curl https://raw.github.com/creationix/nvm/master/install.sh | sh
+            source ~/.nvm/nvm.sh
+            echo "source ~/.nvm/nvm.sh
+            nvm use "$VERSION" &>/dev/null
+            " >> ~/.bashrc
+            nvm install "$VERSION"
+
+        # Package node: old. Use NVM.
+
+            #sudo aptitude install -y nodejs
+
+        # NPM: comes with later nodes.
+
+            #sudo aptitude install -y npm
+
+        #
+
+            npm config set registry http://registry.npmjs.org/
 
     ##virtualization ##vm
 
@@ -528,7 +506,7 @@
 
                 #sudo aptitude purge $PKG
 
-            # Then install Oracle version (some thing only work with it):
+            # Then install Oracle version (some things only work with it):
 
                 sudo add-apt-repository ppa:webupd8team/java
                 sudo aptitude update
@@ -536,15 +514,12 @@
 
             # This already comes with the browser plugin.
 
-            # Openjdk version:
+            # Openjdk version + firefox plugin:
 
                 #sudo aptitude install openjdk-7-jre
-
-            # Firefox java plugin:
-
                 #sudo aptitude install icedtea-7-plugin
 
-            # Whichever you do, don't forget to enable the plugin on firefox ( <c-s-a> to open plugins menu )
+            sudo aptitude install -y maven
 
         ##flash
 
@@ -764,10 +739,12 @@
         #krusader and highly recommended tools
 
             sudo aptitude install -y krusader
-            sudo aptitude install -y konqueror          #needs to manage bookmarks. (otherwise, button does nothing)
-            sudo aptitude install -y konsole            #needs to terminal emulator. (otherwise, button does nothing)
-            sudo aptitude install -y khelpcenter4       #help
-            sudo aptitude install -y kwalletmanager     #password manager
+            sudo aptitude install -y krusader
+            sudo aptitude install -y kde-baseapps-bin   # needs to manage bookmarks. (otherwise, button does nothing): https://bugs.launchpad.net/ubuntu/+source/krusader/+bug/999695
+            #sudo aptitude install -y konqueror
+            sudo aptitude install -y konsole            # needs to terminal emulator. (otherwise, button does nothing)
+            #sudo aptitude install -y khelpcenter4       # help
+            sudo aptitude install -y kwalletmanager     # password manager
 
             sudo aptitude install -y fdupes
 

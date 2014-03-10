@@ -30,9 +30,9 @@ The MBR is the first 512 sector of the device found. It contains:
 
 It takes the first MBR it finds.
 
-The MBR can only be at the start of a physical partion, not of a logical partion.
+The MBR can only be at the start of a physical partition, not of a logical partition.
 
-This is why on bootloader configurations you give /dev/sda, instead of /dev/sda1-4 (TODO check)
+This is why on bootloader configurations you give `/dev/sda`, instead of `/dev/sda1-4` (TODO check)
 
 The search order is deterministic and configurable.
 
@@ -60,12 +60,12 @@ The MBR is too small for all the features that GRUB developers wanted, so they u
 
 ##versions
 
-Grub has 2 versions
+GRUB has 2 versions
 
 - 0.97, usually known just as GRUB, or Legacy GRUB.
 - Grub >= 2, which is backwards incompatible, and has more features.
 
-    grub 2 is still beta.
+    GRUB 2 is still beta.
 
 Some distros like Ubuntu have already adopted GRUB 2, while others are still using GRUB for stability concerns.
 
@@ -82,7 +82,7 @@ Input files:
 -  `/etc/grub.d`
 - `/etc/default/grub`
 
-Generated files and data:
+Generated files and data after `sudo update-grub`:
 
 - `/boot/grub/grub.cfg`
 - MBR bootstrap code
@@ -97,9 +97,18 @@ Generated files and data:
 
 - `GRUB_TIMEOUT` : time before auto OS choice in seconds
 
+- `GRUB_CMDLINE_LINUX_DEFAULT`: space separated list of Kernel boot parameters.
+
+	Most important to know:
+
+	- `quiet`:
+	- `splash`:
+
+	Those parameters can also be edited from the boot menu for single session by selecting the partition and clicking `e`.
+
 ###/etc/grub.d/
 
-Conatains executables.
+Contains executables.
 
 Each one is called in alphabetical order, and its stdout is used by GRUB.
 

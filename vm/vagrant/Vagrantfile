@@ -31,7 +31,7 @@ Vagrant.configure("2") do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  # config.vm.synced_folder "../data", "/vagrant_data"
+  #config.vm.synced_folder "shared_home", "/home"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -109,20 +109,57 @@ Vagrant.configure("2") do |config|
   #
   #   chef.validation_client_name = "ORGNAME-validator"
 
-  ##END OF TEMPLATE -------------------------------------------------------
+  ##-- END OF TEMPLATE -------------------------------------------------------
 
   config.vm.box = "precise32"
   config.vm.box_url = "http://files.vagrantup.com/precise32.box"
 
   ##provision
 
-    # Multiple methods can be specified. All are run.
+    ##shell
 
-      config.vm.provision :shell, :inline => "date > /tmp/provision0"
-      config.vm.provision :shell, :inline => "date > /tmp/provision1"
-      config.vm.provision :shell, :inline => <<EOF
-        date > /tmp/provision_multiline
+      # Run shell script as root. If you want to run as the vagrant user, use `privileged: false`.
+
+      # Remember from your shell lessons that doint `sudo su user` does not work inside a script:
+      # http://stackoverflow.com/questions/16768777/can-i-switch-user-in-vagrant-bootstrap-shell-script
+
+      # Multiple methods can be specified. All are run.
+
+        config.vm.provision :shell, :inline => "date > /tmp/provision0"
+        config.vm.provision :shell, :inline => "date > /tmp/provision1"
+        config.vm.provision :shell, :inline => <<EOF
+          date > /tmp/provision_multiline
 EOF
+
+      # From script;
+
+        #config.vm.provision :shell, :path => 'script.sh'
+
+      # We recommend that you start your script with `set -v`, which will print the commands before executing them,
+      # so you can understand what is being installed at each point.
+
+  ##cores ##memory
+
+    # Provider dependant options.
+
+      #MEMORY = '1536'
+      #CORES = '2'
+
+      #config.vm.provider :virtualbox do |v|
+        ## Use VBoxManage to customize the VM. For example to change memory:
+        #v.customize ["modifyvm", :id, "--memory", MEMORY.to_i]
+        #v.customize ["modifyvm", :id, "--cpus", CORES.to_i]
+
+        #if CORES.to_i > 1
+          #v.customize ["modifyvm", :id, "--ioapic", "on"]
+        #end
+      #end
+
+      #config.vm.provider :vmware_fusion do |v, override|
+        #override.vm.box_url = "http://files.vagrantup.com/precise64_vmware.box"
+        #v.vmx["memsize"] = MEMORY
+        #v.vmx["numvcpus"] = CORES
+      #end
 
   ##bindfs plugin
 
@@ -130,12 +167,12 @@ EOF
       #mkdir /bindfs
 #EOF
 
-    # Use nfs because it is faster, but also change permissions which NFS does not normally allow.
+    # Use NFS because it is faster, but also change permissions which NFS does not normally allow.
 
     # Must have a hostonly network address for this to work.
     #config.vm.network :hostonly, "192.168.50.4"
 
-    # Disable mapping from . to /vagrant:
+    # Disable default mapping from . to /vagrant:
     #config.vm.synced_folder ".", "/vagrant", :disabled => true
 
     # Create a fast NFS share directory

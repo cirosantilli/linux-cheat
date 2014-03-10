@@ -657,14 +657,12 @@ So notice a few interesting facts:
 
 - `lightdm` comes first and spanws `Xorg` and `lxsession`
 
-- `lxsession` spawns all the other desktop components,
-    such as:
+- `lxsession` spawns all the other desktop components, such as:
 
     - the `openbox` window manager
     - the `xcreensaver` window manager
 
-- `firefox` is a direct child of init. Therefore `lxpanel` must have reparented it to `init`,
-    so that it can keep running even if `lxpanel` is killed or restarted.
+- `firefox` is a direct child of init. Therefore `lxpanel` must have reparented it to `init`, so that it can keep running even if `lxpanel` is killed or restarted.
 
 Gnome 3 spawn tree (xterm launched via the dash) looks like:
 
@@ -900,8 +898,7 @@ Restart lightdm:
 
 Also restarts X. Closes all your programs that have windows.
 
-Only do this on a tty, not on an xterminal probably because
-your terminal is going to die in the middle of the operation
+Only do this on a tty, not on an xterminal probably because your terminal is going to die in the middle of the operation
 
 #window manager
 
@@ -980,8 +977,7 @@ An useful example is to half maximize a windows with Win + Left/Right
         </action>
     </keybind>
 
-For the right, the minus sight `-` indicates that the distance
-is between the right edge of the window and the right screen edge.
+For the right, the minus sight `-` indicates that the distance is between the right edge of the window and the right screen edge.
 
 It is possible to bind keys to shell commands as follows:
 

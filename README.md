@@ -3,7 +3,7 @@ Info and cheatsheets on utils that work on Linux (and possibly other OSs too) an
 Most useful files:
 
 - [utils.sh](utils.sh): main dump for utils that fit in no other category such as POSIX utilities.
-- [ubuntu-install.sh](ubuntu-install.sh): software selection and install methods for Ubuntu. No tutorials.
+- [ubuntu/install.sh](ubuntu/install.sh): software selection and install methods for Ubuntu. No tutorials.
 
 #Definition: utils
 
