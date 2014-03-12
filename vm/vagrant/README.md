@@ -1,8 +1,6 @@
-Vagrant makes it really fast to create new virtual machines.
+Vagrant makes it really fast to create new virtual machines for SSH usage.
 
-It relies on other Virtual machines to do most of the work.
-
-By default, it relies on VirtualBox, so you should get it working before using Vagrant.
+Vagrant is a frontend to *providers* like VirtualBox (default) or VMware, so you should get those working before using Vagrant.
 
 First create a working directory:
 
@@ -151,3 +149,9 @@ Synced folders are simply mounted from host to guest:
 The directory must exist on the host, but is automatically created if it does not exist on the guest.
 
 If you share the vagrant home or its parents, you cannot ssh into the machine anymore because the `.ssh` will disappear.
+
+#box location
+
+The base boxes (added via `add`) are stored under `~/.vagrant.d/boxes`. These are not the actual state machines, whose directory depends on which provider you use.
+
+To actually get the box state, it seems that the only way is to do provider specific things.

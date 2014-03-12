@@ -119,15 +119,9 @@ Good sources:
 
     Good intro, but few options commented.
 
-Some systems such as Ubuntu use upstart, newer replacement to the `system v` init system
+- <http://upstart.ubuntu.com/cookbook/>
 
-- `/etc/init`: upstart configuration files
-
-	Named services that can be used with `sudo service` correspond to files in this directory.
-
-- `/etc/init.d`: compatibility only System V rc dirs
-
-	Links to programs that get run on each runlevel at `/etc/rc\n.d/`
+    Very good manual.
 
 ##service
 
@@ -156,3 +150,43 @@ Examples:
 
     sudo service apache2 restart
     sudo restart apache2
+
+##script location
+
+Some systems such as Ubuntu use upstart, newer replacement to the `system v` init system
+
+- `/etc/init`: upstart configuration files
+
+	Named services that can be used via:
+
+	    sudo service XXX start
+
+	correspond to:
+
+	    /etc/init/XXX.conf
+
+	files in this directory.
+
+- `/etc/init.d`: classic System V rc dirs
+
+	Upstart is backwards compatible and can also understand:
+
+	    /etc/init.d/XXX
+
+	as service:
+
+	    sudo service XXX start
+
+##start on
+
+Determines event when the startup script will start.
+
+Required to start script automatically at startup: if missing it won't start.
+
+The service must start only once all of its requirements have already done so.
+
+To start after the very basic facilities are set up (e.g. filesystems and networking) the manual recommends either:
+
+    start on runlevel [2345]
+
+    start on (local-filesystems and net-device-up IFACE!=lo)

@@ -99,12 +99,15 @@ Generated files and data after `sudo update-grub`:
 
 - `GRUB_CMDLINE_LINUX_DEFAULT`: space separated list of Kernel boot parameters.
 
+	Those parameters can also be edited from the boot menu for single session by selecting the partition and clicking `e`.
+
 	Most important to know:
 
-	- `quiet`:
-	- `splash`:
+	- useless options on by default on Ubuntu 12.04 which you should really remove
+	    because they hide kernel state and potentially useful debug information:
 
-	Those parameters can also be edited from the boot menu for single session by selecting the partition and clicking `e`.
+        - `quiet`: suppress kernel messages.
+        - `splash`: shows nice and useless image while the kernel is booting. On by default on Ubuntu 12.04. Remove this useless option,
 
 ###/etc/grub.d/
 
