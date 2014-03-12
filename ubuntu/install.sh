@@ -456,6 +456,7 @@
         #sudo sh -c 'echo "deb http://download.virtualbox.org/virtualbox/debian raring contrib" >> /etc/apt/sources.list.d/virtualbox.list'
         #sudo aptitude update
         #sudo aptitude install -y virtualbox-4.2
+        #MANUAL https://www.virtualbox.org/wiki/Download_Old_Builds_4_2
 
       # On the guest:
 

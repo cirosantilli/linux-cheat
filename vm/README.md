@@ -1,8 +1,8 @@
-This is about system virtualization, that is, running another operating system while you are running another one.
+This is about system virtualization, that is, running an operating system inside another one without rebooting.
 
 In this context, the main system is called the *host*, and the one running inside the *guest*.
 
-To interface with the emulated OS virtualization support either:
+To interface with the guest from the host, you can either either use:
 
 - a window inside the host as in [this video](http://www.youtube.com/watch?feature=player_detailpage&v=hK-oggHEetc&t=723).
 

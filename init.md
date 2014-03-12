@@ -190,3 +190,7 @@ To start after the very basic facilities are set up (e.g. filesystems and networ
     start on runlevel [2345]
 
     start on (local-filesystems and net-device-up IFACE!=lo)
+
+To start after `/etc/fstab` mountings have been done on Ubuntu 12.04, use:
+
+    start on stopped mountall
