@@ -22,8 +22,7 @@ The main problems of make are:
 
 #alternatives
 
-Because of the downsides of make, many other make systems have been devised.
-None has yet dominated on most applications, but important ones include:
+Because of the downsides of make, many other make systems have been devised. None has yet dominated on most applications, but important ones include:
 
 - cmake
 

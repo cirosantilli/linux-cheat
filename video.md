@@ -1,33 +1,30 @@
 Video formats, viewer and manipulation utilities.
 
-#definitions
+#Definitions
 
-- *ripping* is taking the dvd from the dvd to files in computer
+- *ripping* is taking the DVD from the DVD to files in computer.
 
-- *trancoding*, is tranforming the DVD contents to another,
-    generally smaller and single file, format such as `avi`.
+- *trancoding*, is transforming the DVD contents to another, generally smaller and single file, format such as `avi`.
 
-    Transcoding may be a time consuming process, since it means
-    to do complete data format conversion usually on large files
-    and as of 2013 takes times in the 1h - 4h range.
+    Transcoding may be a time consuming process, since it means to do complete data format conversion usually on large files and as of 2013 takes times in the 1h - 4h range.
 
-- *containers* are filetypes that turn video, audio and subtitles in a single files. Popular container formats include:
+- *containers* are file types that turn video, audio and subtitles in a single files. Popular container formats include:
 
     - mkv
     - avi
+    - ogv
 
-- *title*: a DVD can contain one or many titles. Usually each title contains one entire continuous film sequnence
-    such as the main film or an extra such as an interview with the director.
+    Each of those container supports a different set of video, audio and subtitle encodings.
 
-##subtitles
+- *title*: a DVD can contain one or many titles. Usually each title contains one entire continuous film sequence such as the main film or an extra such as an interview with the director.
+
+##Subtitles
 
 Subtitles are often stored in DVDs as images the format pair: idx + sub.
 
-If you want srts, which is a text-only, smaller and human editable format on a text editor,
-first extract the vobsub pairs from the container (via mkvextract for example for mkv containers)
-and then use a tool such as vobsub2srt which will do OCR on the images.
+If you want srts, which is a text-only, smaller and human editable format on a text editor, first extract the VobSub pairs from the container (via mkvextract for example for mkv containers) and then use a tool such as `vobsub2srt` which will do OCR on the images.
 
-#dvd regions
+#DVD regions
 
 DVDs have regions: <http://en.wikipedia.org/wiki/DVD_region_code>
 
@@ -35,13 +32,13 @@ This serves only to control copyright.
 
 DVD readers have a limited number of region changes, sometimes around 5.
 
-For certain dvd readers, after this number of changes, *you cannot change it anymore*!
+For certain DVD readers, after this number of changes, *you cannot change it anymore*!
 
-#vlc
+#VLC
 
-Great cross plaform video player
+Great cross platform video player
 
-#handbrake
+#HandBrake
 
 Open source transcoder.
 
@@ -49,18 +46,13 @@ Comes both in GUI and CLI versions.
 
 Supported containers: mkv, mpeg4.
 
-First check this for some good info:
-<http://msdn.microsoft.com/en-us/library/windows/desktop/dd388582%28v=vs.85%29.aspx>
+First check this for some good info: <http://msdn.microsoft.com/en-us/library/windows/desktop/dd388582%28v=vs.85%29.aspx>
 
-It stores audio in the AAC, MP3, or Vorbis formats.
-It can also pass through the Dolby Digital 5.1 (AC3)
-and Digital Theater Systems (DTS) surround sound formats used by DVDs.
+It stores audio in the AAC, MP3, or Vorbis formats. It can also pass through the Dolby Digital 5.1 (AC3) and Digital Theater Systems (DTS) surround sound formats used by DVDs.
 
 It supports chapters, as well as Variable Frame Rate video.
 
-It can include "soft" subtitles that can be turned on or off,
-instead of always being hard burned into the video frame.
-These can either be bitmap images of the subtitles included on a DVD (known as vobsub) or text.
+It can include "soft" subtitles that can be turned on or off, instead of always being hard burned into the video frame. These can either be bitmap images of the subtitles included on a DVD (known as vobsub) or text.
 
 It seems that it can't produce srt.
 
@@ -77,22 +69,20 @@ Scan only and output info on titles and tracks:
 
 Useful to decide which title, audio and subtitle tracks are to be extracted.
 
-Recommended usage: 1000 Kbps MPEG-4 Visual video and 160 Kbps AAC-LC audio in an mkv container:
+Recommended usage: 1000 kbps MPEG-4 Visual video and 160 kbps AAC-LC audio in an mkv container:
 
     HandBrakeCLI -B 160 -a "$a" -e x264 -f mkv -i "$i" -m -o 1.mkv -q 22 -s "$s" -t "$t"
 
-- `B 160`  : sound Bitrate in kbps
-- `a 1,2,3`: Audio trakcs to keep. Default: first only.
+- `B 160`  : sound bit rate in kbps
+- `a 1,2,3`: Audio tracks to keep. Default: first only.
 - `e x264` : video Encode format x264/ffmpeg4/ffmpeg2/theora.
 - `f fmt`  : container Format. Currently can only be `mkv` or `mp4`.
 - `m`      : extract title markers.
-- `q 22`   : CRF constant quality in the [0 .. 50] interval. With x264 a recommended value is 22,
-    which takes aroun 1h for 2h film producing an output file of 2Gb with almost imperceptible
-    quality loss.
+- `q 22`   : CRF constant quality in the [0 .. 50] interval. With x264 a recommended value is 22, which takes around 1h for 2h film producing an output file of 2Gb with almost imperceptible quality loss.
 - `s 1,2,3`: subtitle tracks to keep in the container. Default: none.
 - `t <title>`: title to encode. Can only encode one title per container.
 
-In an MKV, you can store MPEG-4 video created by ffmpeg or x264, or Theora video.
+In an mkv, you can store MPEG-4 video created by ffmpeg or x264, or Theora video.
 
 - CRF ~2hrs film:
 - CRF off = 1214 MB
@@ -112,28 +102,37 @@ Extracts tracks 3 and 4:
 
     mkvextract tracks 1.mkv 3:ita 4:eng
 
-Save 3 to eng.$ext or str, 3 to `chi.$ext`
+Save 3 to `eng.$ext` or str, 3 to `chi.$ext`
 
 Where ext is the extension of the contained audio
 
-We know those are subtitles from mkinfo
+We know those are subtitles from `mkinfo`.
 
-- 3:asdf means track 3, asdf is the output name
+- `3:asdf` means track 3, `asdf` is the output name
 
 The type is that contained in the tracks, not necessarily srt,
 
-The output may be an vobsub idx + sub or srt depending on what is contained in the mkv.
-If you want srt from vobsub, try vobsub2srt.
+The output may be an VobSub idx + sub or srt depending on what is contained in the mkv. If you want srt from VobSub, try vobsub2srt.
+
+#Ogg Video Tools
+
+Tools for ogg manipulation.
+
+Ubuntu package name: `oggvideotools`
+
+Concatenate ogv containers:
+
+    oggCat output.ogv a.ogv b.ogv
+
+Broken on Ubuntu 12.04, claims to have been corrected on 12.10: <https://bugs.launchpad.net/ubuntu/+source/oggvideotools/+bug/944444>
 
 #vobsub2srt
 
-Uses tesseract for the ocr: this means you must install tesseract lanugages.
+Uses Tesseract for the OCR: this means you must install Tesseract languages.
 
-Make sure that the lang name matches that of the tesseract languages installed.
-For example, for Chinese, there was confusion between `zh` and `ch` and it may
-be necessary to do some corrective symlinking.
+Make sure that the `lang` name matches that of the Tesseract languages installed. For example, for Chinese, there was confusion between `zh` and `ch` and it may be necessary to do some corrective symlinking.
 
-For a language to be recognized, you must have the tesseract language installed.
+For a language to be recognized, you must have the Tesseract language installed.
 
 List available languages inside `eng.sub` and `eng.idx` pair:
 
@@ -141,16 +140,13 @@ List available languages inside `eng.sub` and `eng.idx` pair:
 
 TODO: a sub idx pair can contain multiple languages? Id contains metadata indicating the language?
 
-Convert
+Convert an `eng.sub` and `eng.idx` to `eng.srt`:
 
     vobsub2srt --lang en eng
 
-Takes an `eng.sub` and `eng.idx` pair and outputs `eng.srt`。
-
 `en` or `0` were taken from `--langlist`
 
-Don't know what to do if two subs for the same language such as
-simplified and traditional chinese, both of which get zh output goes to `a.str`.
+Don't know what to do if two subs for the same language such as simplified and traditional Chinese, both of which get `zh` output goes to `a.str`.
 
 Don't forget to rename output as as a.eng.srt before going to the next language.
 

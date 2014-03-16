@@ -6,8 +6,9 @@
 # WARNING: if you use more than one CPU on the guest
 # enable hardware virtualization from your BIOS
 cpus = '1'
-hostname = 'softcover'
 memory = '512'
+
+hostname = 'softcover'
 
 Vagrant.configure("2") do |config|
   # WARNING: if you are going to run a 64 bit guest inside a 32 bit host

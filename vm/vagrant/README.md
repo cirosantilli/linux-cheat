@@ -7,9 +7,11 @@ First create a working directory:
     mkdir vagrant
     cd vagrant
 
-View available local boxes:
+View available local base boxes:
 
     vagrant box list
+
+This does not list boxes which you have modified the state. There seems to be no interface way of doing that, except going into `.vagrant` and hacking IDs of config files based on IDs you see on your provider's interface.
 
 Add a box:
 
@@ -50,7 +52,7 @@ Boot the box configured in current dir:
 
 The machine is running on the background.
 
-Access the box configured in current dir via ssh:
+Access the box configured in current dir via SSH:
 
     vagrant ssh
 
@@ -155,3 +157,47 @@ If you share the vagrant home or its parents, you cannot ssh into the machine an
 The base boxes (added via `add`) are stored under `~/.vagrant.d/boxes`. These are not the actual state machines, whose directory depends on which provider you use.
 
 To actually get the box state, it seems that the only way is to do provider specific things.
+
+#package
+
+Create new box
+
+##From another box
+
+The typical workflow is to:
+
+- start with the officially supported `precise32` box
+- create a script / Chef Recipe / Puppet Recipe that installs everything that needs to be installed
+- once satisfied, package the box because
+
+    - other people can download it faster because it is a single file rather than multiple GET requests to different servers
+    - installations may fail, for example due to Internet failures.
+
+To package the box, simply do:
+
+    vagrant package --base name --output path/to/output.box
+
+where name is:
+
+- optionally set with:
+
+        config.vm.provider "virtualbox" do |v|
+        v.customize [
+            'modifyvm', :id,
+            '--name', name
+          ]
+        end
+
+    It is a good idea to always use that.
+
+- found under the box GUI as shown at: http://abhishek-tiwari.com/hacking/creating-a-new-vagrant-base-box-from-an-existing-vm
+
+And we are done!
+
+A good place to store open source boxes for download as of 2014-03 is Source Forge, which allows fast unlimited downloads, soft 5Gb disk space, and does not mind if your source is hosted on GitHub: <http://sourceforge.net/blog/github-projects-downloads-are-welcome>. For large files such as VMs, you will need to use a `scp` upload: <https://sourceforge.net/apps/trac/sourceforge/wiki/SCP>, and it takes around 20 hours to complete.
+
+##From scratch
+
+Will be much harder, as it requires you to install necessary dependencies to Vagrant.
+
+Only do this if you really have no alternative.

@@ -4,13 +4,11 @@ Select lines from stdin or files.
 
 Don't use `egrep` and `fgrep` GNU variants, which are useless (can be easily achieved with `grep`) and deprecated.
 
-    echo $'a\nb' | grep a
-    echo $'a\nb' > f
-    grep a f
+Basic usage:
 
-Output:
-
-    a
+    [ "$(printf 'ab\ncd\n' | grep a)" = "ab" ] || exit 1
+    printf 'a\nb\n' > f
+    [ "$(grep a f)" = "ab" ] || exit 1
 
 #Pattern
 
@@ -18,14 +16,13 @@ grep can use POSIX BRE (default) and POSIX ERE via `-E`.
 
 Don't forget: BRE is deprecated.
 
-Perl regexp is not specified in POSIX, but the GNU implementation offers the option,
-but states in the man that it is highly experimental (from which we deduce they are not relying on Perl itself).
+Perl regex is not specified in POSIX, but the GNU implementation offers the option, but states in the man that it is highly experimental (from which we deduce they are not relying on Perl itself).
 
 #i
 
 Case insensitive:
 
-    echo $'A\nB' | grep -i a
+    printf 'A\nB\n' | grep -i a
 
 Output:
 
@@ -35,15 +32,27 @@ Output:
 
 Find with ERE:
 
-    echo $'a\nb' | grep -E '(a|b)'
+    printf 'a\nb\n' | grep -E '(a|b)'
 
 Much saner and more powerful than BREs.
+
+###Application: filter lines by length
+
+`N` characters or more:
+
+    [ "$(printf 'a\naa\n' | grep -E '.{2,}')" = "aa" ] || exit 1
+
+Less than `N` characters:
+
+    [ "$(printf 'a\naa\n' | grep -Ev '.{2,}')" = a ] || exit 1
+
+Not very fast, but best golfer I have seen so far. `sed` for inline.
 
 ##F
 
 Fixed, that is, literal non BRE search:
 
-    echo $'*' | grep -F '*'
+    printf '*\n' | grep -F '*'
 
 Output:
 
@@ -51,13 +60,9 @@ Output:
 
 #v
 
-Invert. print lines that don't match.
+Invert: print lines that don't match:
 
-    echo $'ab\ncd' | grep -v a
-
-Output:
-
-    cd
+    [ "$(printf 'ab\ncd\n' | grep -v a)" = "cd" ] || exit 1
 
 Application:
 
@@ -102,7 +107,7 @@ Specially useful with `-r`.
 
 Count how many lines match
 
-    echo $'a\na' | grep -c a
+    printf 'a\na\n' | grep -c a
 
 Output:
 
@@ -110,15 +115,15 @@ Output:
 
 #e
 
--e: multiple criteria ORed. Mnemonic: Either.
+Multiple criteria OR. Mnemonic: Either.
 
-All patters are BRE:
+All patterns are BRE:
 
-    echo $'a\nb' | grep -e 'a' -e 'b'
+    printf 'a\nb\n' | grep -e 'a' -e 'b'
 
-All patters are ERE:
+All patterns are ERE:
 
-    echo $'a\nb' | grep -E -e 'a' -e 'b'
+    printf 'a\nb\n' | grep -E -e 'a' -e 'b'
 
 #n
 
@@ -139,21 +144,21 @@ No more `find . -type f | xargs` !
 
 ##A
 
-also print n lines following the match
+Also print `n` lines following the match:
 
-    assert [ "`echo $'a\nb' | grep -A1 a`" = $'a\nb' ]
+    assert [ "`printf 'a\nb\n' | grep -A1 a`" = $'a\nb' ]
 
 ###application
 
-get the nth line after matching line:
+Get the nth line after matching line:
 
-    assert [ "`echo $'a\nb' | grep -A1 a | tail -n1`" = $'b' ]
+    assert [ "`printf 'a\nb\n' | grep -A1 a | tail -n1`" = $'b' ]
 
 ##B
 
 Before. Contrary of `-A`.
 
-    assert [ "`echo $'a\nb' | grep -B1 b`" = $'a\nb' ]
+    assert [ "`printf 'a\nb\n' | grep -B1 b`" = $'a\nb' ]
 
 ##color
 

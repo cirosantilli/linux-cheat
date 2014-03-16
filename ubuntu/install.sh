@@ -55,20 +55,22 @@
   ##desktop
 
     sudo aptitude install -y alarm-clock-applet
-    sudo aptitude install -y logkeys
+    #sudo aptitude install -y logkeys
+    sudo aptitude install -y recordmydesktop
+    #sudo aptitude install -y gtk-recordmydesktop
     sudo aptitude install -y guvcview
 
     # ibus input methods for QT:
 
       sudo aptitude install -y ibus-qt4
 
-    # Useful for example if you want Chinese input for qt applications.
+    # Useful for example if you want Chinese input for Qt applications.
 
   ##book
 
     sudo aptitude install -y okular okular-extra-backends
-    sudo aptitude install -y fbreader
-    sudo aptitude install -y calibre
+    #sudo aptitude install -y fbreader
+    #sudo aptitude install -y calibre
 
     sudo aptitude install -y pdftk
     sudo aptitude install -y djvulibre-bin
@@ -118,13 +120,13 @@
     sudo aptitude install -y imagemagick
     sudo aptitude install -y imagemagick-doc
 
-    #graph uml gui:
+    # Graph UML GUI:
 
-      sudo aptitude install -y dia
+      #sudo aptitude install -y dia
 
-    #batch graph draw cli:
+    # Batch graph draw CLI:
 
-      sudo aptitude install -y dot
+      #sudo aptitude install -y dot
 
     sudo aptitude install -y gimp
     sudo aptitude install -y inkscape
@@ -141,7 +143,7 @@
       sudo aptitude intall -y sox
       sudo aptitude intall -y libsox-fmt-mp3
 
-    #now search for formats and install those you want:
+    # Now search for formats and install those you want:
 
       #apt-cache search libsox-fmt-
 
@@ -153,11 +155,11 @@
 
         sudo aptitude install -y tesseract-ocr
 
-        #MANUAL: find available languages
+        # MANUAL: find available languages
 
           #apt-cache search tesseract-ocr-
 
-        #english
+        # English
 
           sudo aptitude install -y tesseract-ocr-eng
 
@@ -173,28 +175,24 @@
 
       sudo aptitude install -y vlc
 
-    #handbreak:
+    # handbreak
 
       sudo add-apt-repository -y ppa:stebbins/handbrake-releases
       sudo aptitude install -y handbrake-cli
       #sudo aptitude install -y handbrake-gtk
 
-    #vobsub2srt:
+    # vobsub2srt
 
       sudo add-apt-repository -y ppa:ruediger-c-plusplus/vobsub2srt
       sudo aptitude update
       sudo aptitude install -y vobsub2srt
 
     sudo aptitude install -y mkvtoolnix
+    sudo aptitude install -y oggvideotools
 
   ##compression
 
       sudo aptitude install -y zip unzip
-
-    #shell archives:
-
-      #sudo aptitude install -y sharutils
-      sudo aptitude install -y file-roller
 
     #7 zip:
 
@@ -207,23 +205,29 @@
       sudo aptitude install -y rar
       sudo aptitude install -y unrar
 
-    #.arj files:
+    # Shell archives:
+
+      #sudo aptitude install -y sharutils
+
+    # .arj files:
 
       #sudo aptitude install -y arj
 
-    #microsoft cabinet format:
+    # Microsoft cabinet format:
 
       #sudo aptitude install -y cabextract
 
-    #.lzh files used on DOS, legacy:
+    # .lzh files used on DOS, legacy:
 
       #sudo aptitude install -y lha
+
+      sudo aptitude install -y file-roller
 
   ##game
 
     ##getdeb
 
-      #non launchapd ppa with lots of good games.
+      # Non Launchapd ppa with lots of good games.
 
         wget -q -O - http://archive.getdeb.net/getdeb-archive.key | sudo apt-key add -
         # REPLACE precise with the codename for your distro!
@@ -417,7 +421,7 @@
   ##ruby
 
       curl -L https://get.rvm.io | bash -s stable
-      source ~/.rvm/scripts/rvm
+      . ~/.rvm/scripts/rvm
       rvm install 2.1.1
       # Logout, login, and works for all shells.
 
@@ -427,8 +431,8 @@
 
       VERSION=0.10.26
       curl https://raw.github.com/creationix/nvm/master/install.sh | sh
-      source ~/.nvm/nvm.sh
-      echo "source ~/.nvm/nvm.sh
+      . ~/.nvm/nvm.sh
+      echo ". ~/.nvm/nvm.sh
       nvm use "$VERSION" &>/dev/null
       " >> ~/.bashrc
       nvm install "$VERSION"
@@ -535,6 +539,7 @@
         sudo aptitude install -y xsel
         sudo aptitude install -y wmctrl
         sudo aptitude install -y xdotool
+
         #sudo apt-add-repository ppa:cdekter/ppa
         #sudo aptitude install -y autokey-gtk
 

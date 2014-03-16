@@ -10,16 +10,20 @@ Vagrant.configure("2") do |config|
 
   # Will appear on most shells as: vagrant@hostname depending on the PS1 line.
   # Good way to determine in which machine you are.
-  config.vm.hostname = hostname
+  config.vm.hostname = 'HOSTNAME'
 
   ##provision
 
     ##shell
 
-      # Run shell script as root. If you want to run as the vagrant user, use `privileged: false`.
+      ##priviledged
 
-      # Remember from your shell lessons that doint `sudo su user` does not work inside a script:
-      # http://stackoverflow.com/questions/16768777/can-i-switch-user-in-vagrant-bootstrap-shell-script
+        # Run shell script as root. If you want to run as the vagrant user, use `privileged: false`,
+
+        # Remember from your shell lessons that doint `sudo su user` does not work inside a script:
+        # http://stackoverflow.com/questions/16768777/can-i-switch-user-in-vagrant-bootstrap-shell-script
+
+        # Cleanest solution without privileged: make a separate sh file, and sudo -c ``
 
       # Multiple methods can be specified. All are run.
 
@@ -35,6 +39,10 @@ EOF
 
       # We recommend that you start your script with `set -v`, which will print the commands before executing them,
       # so you can understand what is being installed at each point.
+
+      # **IMPORTANT**: copy pasting commands in SSH does not mean they will work from a non interactive terminal,
+      # which will run a non interactive shell. In particular, beware of any sourcing of files like `~/.bashrc`
+      # or `~/.rvm/scripts/rvm`.
 
   ##cores ##memory
 

@@ -21,3 +21,8 @@ wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-ke
 sudo sh -c 'echo "deb http://dl.google.com/linux/talkplugin/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
 sudo aptitude update
 sudo aptitude install -y google-talkplugin
+
+sudo aptitude install -y xsel
+sudo aptitude install -y wmctrl
+
+sudo aptitude install -y okular okular-extra-backends

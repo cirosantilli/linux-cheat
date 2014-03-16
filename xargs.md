@@ -25,9 +25,9 @@ Or do yourself a favor and use Python.
 
 #-I
 
-What you will want to use 99% of the time are commands of the form:
+What you will want to use 95% of the time are commands of the form:
 
-    printf 'a\nb' | xargs -I'{}' echo '{}'
+    printf 'a\nb\n' | xargs -I'{}' echo '{}'
 
 which will expand to:
 
@@ -38,7 +38,10 @@ This is so common that you should:
 
     alias xar xargs -I'{}'
 
-`{}` could be anything, but it is standard practice to use `{}`, and a good one too as it is very unlikely to conflict with anything.
+`{}` could be anything, but it is standard practice to use `{}` because it is:
+
+- very unlikely to conflict with anything
+- the same as the default syntax for `find -exec echo '{}'`
 
 You should always to use `-I` because:
 
@@ -66,17 +69,29 @@ You should always to use `-I` because:
 
         printf 'a\nb\n' | xargs -I'{}' echo '{}'
 
+**This will still fail for filenames with quotes**! Must use `-0` in that case.
+
+    echo "'" | xargs
+
+Gives an error
+
+    xargs: unmatched single quote; by default quotes are special to xargs unless you use the -0 option
+
 #-0
 
 Read up to NUL char instead of newline char.
 
-Allows for files with spaces, and even newlines!
+Allows for files with spaces, newlines and quotes.
 
-    printf 'a\nb\0c\n' | xargs -0
+The only reason we do not recommend you *always* use it is that the utility producing the list of files might not be able to use NUL termination.
 
-Combo with `find -print0`:
+    printf 'a\nb\0c\n' | xargs -0I'{}' echo '{}'
 
-    find . -print0 | xargs -0
+Classic combo with `find -print0`:
+
+    find . -print0 | xargs -0I'{}' echo '{}'
+
+Using `-0` is the most robust form.
 
 #detailed operation
 

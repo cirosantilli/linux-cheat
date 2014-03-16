@@ -1,20 +1,67 @@
-sound and music players, editors and generators
+Info on audio players, editors, generation, capture and formats.
 
-#players
+#directories
+
+On most systems, sound will be kept under:
+
+    /usr/share/sounds
+
+They are put under `share` because that is where arch independent files used by applications should be put.
+
+You can also create `~/share/sounds` for you favorite sounds.
+
+A good technique is to define an alias as:
+
+    alias playa='paplay ~/share/sounds/alert.ogg' # play Alert
+
+so you can play it after commands end:
+
+    sleep 2 && playa
+
+If you want to have some real good fun try:
+
+    find /usr/share/sounds -type f -iname '*.ogg' | sort | xargs -I'{}' play '{}'
+
+#Players
+
+##paplay
+
+Pulse Audio play.
+
+Comes by default on Ubuntu 12.04.
+
+Play file once and exit:
+
+    play a.wav
+
+Terminates when over. Good option to play an alarm signal after a very long command:
+
+
+    sleep 5 && play ~/share/sounds/alert.*
+
+##aplay
+
+ALSA player.
+
+Comes with Ubuntu 12.04, but did not work very well.
+
+##play
+
+SoX package. Similar to `paplay`.
 
 ##cplay
 
-CLI
+ncurses CLI.
 
 Has a file browser.
 
     cplay
 
-#manipulation
+#Manipulation
 
 ##lame
 
-Encode, decode and modify mp3.
+Encode, decode and modify MP3.
 
 Increases volume 5x:
 
@@ -32,7 +79,7 @@ Get id3 tags info (for mp3 for example):
 
     install -D "$1" /music/mp3/"$ARTIST-$ALBUM-$YEAR"/"$TRACKNUM-$ARTIST-$TITLE".mp3
 
-##cut up flac cue into multiple files
+##Cut up FLAC CUE into multiple files
 
 ###flacon
 
@@ -44,7 +91,7 @@ Single APE and CUE in dir, FLAC output, formatted as number, author, track
 
     shntool split -f *.cue -o flac *.ape -t '%n - %p - %t'
 
-##sox
+##SoX
 
 Set of utilities record, play and modify files via CLI.
 
@@ -58,20 +105,11 @@ Record from microphone into `a.wav` file:
 
 `ctrl+c` to stop recording.
 
-Plays `a.wav` file:
-
-    play a.wav
-
-Terminates when over. Good option to play an alarm signal after a very long command:
-
-    sleep 5 && play long-sound.wav
-
-#alsa
+#ALSA
 
 Advanced Linux Sound API.
 
-Replaced OSS in 2008 when OSS when went proprietary.
-OSS came back to open source, but it lost much momentum.
+Replaced OSS in 2008 when OSS when went proprietary. OSS came back to open source, but it lost much momentum.
 
 The kernel sound subsystem is called ALSA.
 

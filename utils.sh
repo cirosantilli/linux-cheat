@@ -14,141 +14,141 @@
 
     #linux man pages
 
-    #also contains dive into python and advanced bash scripting,
-    #so is a major site
+    # Also contains dive into python and advanced bash scripting,
+    # so is a major site.
 
-  #almost official pages:
+  # Almost official pages:
 
-    #- http://www.kernel.org/
+    # - http://www.kernel.org/
 
-    #- http://git.kernel.org/
+    # - http://git.kernel.org/
 
-  #- http://www.tldp.org/
+  # - http://www.tldp.org/
 
-    #many tutorials
+    # Many tutorials.
 
-  #- the geek stuff
+  # - the geek stuff
 
-    #http://www.thegeekstuff.com
+    # http://www.thegeekstuff.com
 
-    #short tutorials with lots of examples
+    # Short tutorials with lots of examples.
 
-  #- tuxfiles
+  # - tuxfiles
 
-    #<http://www.tuxfiles.org/linuxhelp/fstab.html>
+    # <http://www.tuxfiles.org/linuxhelp/fstab.html>
 
-    #some good tuts
+    # Some good tuts
 
-  #- man pages
+  # - man pages
 
-    #Not many examples, but full function list, and you often can guess what they mean!
+    # Not many examples, but full function list, and you often can guess what they mean!
 
   #- info pages
 
-    #GNU project substitude for man.
+    # GNU project substitude for man.
 
-    #Usually much longer explanations and examples.
+    # Usually much longer explanations and examples.
 
-    #Better nodewise navigation.
+    # Better nodewise navigation.
 
-  #- linux from scratch
+  # - Linux from scratch
 
-    #teaches how to build a minimal linux distro
+    # Teaches how to build a minimal Linux distro
 
 ##man
 
-  #The manuals.
+  # The manuals.
 
-  #POSIX 7 specifies only the option `-k` and nothing about pages,
-  #those are linux concepts.
+  # POSIX 7 specifies only the option `-k` and nothing about pages,
+  # those are Linux concepts.
 
   ##pages
 
-    #The manual is organized into 7 pages.
+    # The manual is organized into 7 pages.
 
-    #When you install a new page, the developers decide where to put the documentation.
+    # When you install a new page, the developers decide where to put the documentation.
 
-    #Every page has an intro section which says what it is about:
+    # Every page has an intro section which says what it is about:
 
       man 2 intro
       man 3 intro
 
-    #As in the case of the intro, you can distinguish ambiguities by giving the page number.
+    # As in the case of the intro, you can distinguish ambiguities by giving the page number.
 
-    #`write` system call:
+    # `write` system call:
 
       man 2 write
 
-    #`write` shell command:
+    # `write` shell command:
 
       man 1 write
 
-    #List all entries of a page:
+    # List all entries of a page:
 
       man -k . | grep '(8)'
 
-    #- 1: user commands (executables in path)
+    # - 1: user commands (executables in path)
 
-      #This is normally the largest section.
+      # This is normally the largest section.
 
         man 1 passwd
 
-    #- 2: system calls (c interface)
+    # - 2: system calls (c interface)
 
-      #Those are *not* actual system calls, but portable low level system interfaces.
+      # Those are *not* actual system calls, but portable low level system interfaces.
 
-      #Most of the POSIX C library is here.
+      # Most of the POSIX C library is here.
 
-      #POSIX write function:
+      #  POSIX write function:
 
         man 2 write
 
-    #- 3: library. system call wrappers.
+    # - 3: library. system call wrappers.
 
-      #Higher level than 2.
+      # Higher level than 2.
 
-      #Distinction from `man 2` is hard to tell.
+      # Distinction from `man 2` is hard to tell.
 
-      #Contains for example:
+      # Contains for example:
 
-      #- some POSIX apis like pthreads
-      #- X11 APIs
+      # - some POSIX apis like pthreads
+      # - X11 APIs
 
-    #- 4: special files such as device files
+    # - 4: special files such as device files
 
         man 4 zero
         man 4 random
         man 4 mouse
 
-    #- 5: file formats specifications.
+    # - 5: file formats specifications.
 
-      #Examples:
+      # Examples:
 
-      #/etc/passwd file syntax:
+      # `/etc/passwd` file syntax:
 
         man 5 passwd
 
-      #elf executable format:
+      # elf executable format:
 
         man 5 elf
 
-    #- 6: games
+    # - 6: games
 
-    #- 7: standards.
+    # - 7: standards.
 
-      #Contains standards summaries such as:
+      # Contains standards summaries such as:
 
         man unicode
         man url
         man X
 
-    #- 8: system administration
+    # - 8: system administration
 
-      #Commands that mostly only root can do.
+      # Commands that mostly only root can do.
 
-      #Their binaries are typically under `/usr/sbin/`.
+      # Their binaries are typically under `/usr/sbin/`.
 
-      #Examples:
+      # Examples:
 
         man 8 adduser
         man 8 grub-install
@@ -156,114 +156,124 @@
 
   ##GNU command line options
 
-    #exact search on title. Shows only first page found match:
+    # Exact search on title. Shows only first page found match:
 
       man intro
 
-    man -a intro
-      #shows each match in succession
-      #asks if you want to continue on each quit
+    # shows each match in succession and asks if you want to continue on each quit:
 
-    man -k password
-      #search for commands with password word on summary
+      man -a intro
 
-    man -K password
-      #search on all of manual pages
-      #may take some time
+    # Search for commands with password word on summary:
+
+      man -k password
+
+    # Search on all of manual pages, may take some time:
+
+      man -K password
 
     ##--regex
 
-      #whatever you were searching
-      #search with ERE now
+      # Whatever you were searching search with ERE now.
 
-      man --regex 'a.c'
-        #regex on title
+      # Regex on title:
 
-      man --regex -K 'a.c'
-        #regex on entire manual
+        man --regex 'a.c'
 
-    apropos password
-      #same
+      # Regex on entire manual:
 
-    man -k .
-      #list all manual pages
-      #pages whose summaries match '.' regex: anychar)
+        man --regex -K 'a.c'
+
+      # Same
+
+        apropos password
+
+    # List all manual pages pages whose summaries match '.' regex: anychar)
+
+      man -k .
 
   ##linux man-pages project
 
-    #<https://www.kernel.org/doc/man-pages/>
+    # <https://www.kernel.org/doc/man-pages/>
 
-    #Project that maintains many Linux related manpages and also some non Linux specific entries.
+    # Project that maintains many Linux related manpages and also some non Linux specific entries.
 
-    #Most distros to come with those manpages installed.
+    # Most distros to come with those manpages installed.
 
-    #It is not a part of the kernel tree, and does not seem to be mentioned in the LSB.
+    # It is not a part of the kernel tree, and does not seem to be mentioned in the LSB.
 
   ##whatis
 
-    #non posix
+    # Non POSIX
 
-    whatis ls
-      #show short description of ls
+    # Show man short description of ls
+
+      whatis ls
 
   ##manpath
 
-    #man search path
+    # Man search path
 
-    #non posix
+    # Non-POSIX
 
-    manpath
+      manpath
+
+    # Sample output:
+
       #/usr/local/man:/usr/local/share/man:/usr/share/man
-    ls /usr/share/man
-      #languages
-      #man\d
-    ls /usr/share/man/man1 | less
-      #section 1 pages in english
+
+    # Languages man:
+
+      ls /usr/share/man
+
+    # Section 1 pages in English:
+
+      ls /usr/share/man/man1 | less
 
 ##info
 
-  #gnu, not posix
+  # GNU specific.
 
-  #each page contains lots of info, more than man pages
-  #may even contain, *gasp*, examples!
+  # Each page contains lots of info, more than man pages
+  # may even contain, *gasp*, examples!
 
-  #the keybindings are very tree/node based. To get started:
+  # The keybindings are very tree/node based. To get started:
 
-    #?: help
-    #x: close help
+    # - ?: help
+    # - x: close help
 
     ##page
 
-      #<space>:  down one page. May change nodes.
-      #<backspace>: up one page. May change nodes.
-      #b, e: beginning/end of current node.
-      #s, /: search string
-      #{, }: repeat search back/forward
+      # - <space>:  down one page. May change nodes.
+      # - <backspace>: up one page. May change nodes.
+      # - b, e: beginning/end of current node.
+      # - s, /: search string
+      # - {, }: repeat search back/forward
 
     ##menu
 
-      #<arrows>: move cursor
-      #<enter>: go to link under cursor
-      #<tab>: go to next link
-      #1-9: go to menu item nb.
-      #m: select menu item in current page by name.
-        #can tab complete.
-        #even without tab complete, goes to first match on enter.
+      # - <arrows>: move cursor
+      # - <enter>: go to link under cursor
+      # - <tab>: go to next link
+      # - 1-9: go to menu item nb.
+      # - m: select menu item in current page by name.
+      #     can tab complete.
+      #     even without tab complete, goes to first match on enter.
 
     ##node
 
-      #u: parent node
-      #t: top node
-      #[, ]: next previous node. May   change node level.
-      #n, p:             not
-      #l: go to last viewed node. can be used several times.
-      #g: like m, but search all nodes
+      # - u: parent node
+      # - t: top node
+      # - [, ]: next previous node. May   change node level.
+      # - n, p:             not
+      # - l: go to last viewed node. can be used several times.
+      # - g: like m, but search all nodes
 
     ##search
 
-      #/: regex
-      #{: next   match of previous search
-      #}: previous
+      # - /: regex
+      # - {: next   match of previous search
+      # - }: previous
 
   info
   info rm
@@ -315,46 +325,6 @@
   ##update alternatives
 
   sudo update
-
-##desktop
-
-  unity --restart
-    #restarts the unity shell only
-    #less effective and drastic than restarting lightdm
-
-  #gnome shell
-
-  #desktop/windows control
-
-    #opens with the deafult application. works in Ubuntu Unity 12.04
-
-      gnome-open "$FILE"
-
-  #logkeys
-
-    #Writes all keypresses to a file.
-
-    #Great way to steal people's passwords if they use your computer.
-
-    #Start logging:
-
-      sudo logkeys -s
-
-    #End logging:
-
-      sudo logkeys -k
-
-  #ibus input methods
-
-    #for chinese, japanes, etc input
-
-    #how have I looked for this, but no one told me: ibus for qt apps!!!!
-
-  ##alarm clock applet
-
-    #notifies you with sounds when a certain time passed
-
-  ##weather indicator
 
 ##chat messaging voice video
 
@@ -517,9 +487,9 @@
 
     ##diff
 
-      #compare files *and* directory contents
+      # Compare files *and* directory contents
 
-      #files:
+      # Files:
 
         echo -e "0\na\n1\n2\n3\n4\n5" > a
         echo -e "0\n1\n2\nb\n3\n5" > b
@@ -531,7 +501,7 @@
         diff -u a b
         #gitlike diff (unified format)
 
-      #directories:
+      # Directories:
 
         mkdir a
         touch a/a
@@ -543,11 +513,11 @@
 
     ##comm
 
-      #ultra simple diff
+      # Ultra simple diff.
 
-      #useless
+      # Useless.
 
-      #posix 7
+      # POSIX 7.
 
       cd "`mktemp -d`"
       echo -e "a\nc" > a
@@ -569,11 +539,11 @@
 
     ##wdiff
 
-      #word oriented diff
+      # Word oriented diff.
 
-      sudo aptitude install -y wdiff
+        wdiff a b
 
-      wdiff a b
+      # Not needed if you have 
 
     #kiff3
       #kde diff tool
@@ -2628,14 +2598,14 @@
 
 ##test
 
-  #Compare values and check files, answer on exit status.
+  # Compare values and check files, answer on exit status.
 
-  #Equivalent convenient shorthand form via squre brackets: `[ ]`
+  # Equivalent convenient shorthand form via squre brackets: `[ ]`
 
-  #Can do tons of different tests.
+  # Can do tons of different tests.
 
-  #May also exist as a separate binary implementation on certain systems,
-  #but the built-in has precedence:
+  # May also exist as a separate binary implementation on certain systems,
+  # but the built-in has precedence:
 
     which test
 
@@ -2648,7 +2618,7 @@
 
   ##integer compare
 
-    #always use `-eq` family, never `=` family:
+    # Always use `-eq` family, never `=` family:
 
       [ 1 -eq 1 ] || exit 1
       [ 1 -eq 01 ] || exit 1
@@ -2659,23 +2629,23 @@
 
   ##file ops
 
-    ##-f
+    ##f
 
-      #exists and is regular file (not a symlink or directory)
+      # Exists and is regular file (not a symlink or directory)
 
         init_test
         touch a
         assert test -f a
         cleanup_test
 
-    ##-r
+    ##r
 
-      #File or directory exists and has read permission.
+      # File or directory exists and has read permission.
 
-      #Useful in conjunction with `-f` before taking input from a file,
-      #since just checking its exsitence is not enough to read from it.
+      # Useful in conjunction with `-f` before taking input from a file,
+      # since just checking its exsitence is not enough to read from it.
 
-    ##-e
+    ##e
 
       #file exists
 
@@ -2683,7 +2653,7 @@
 
       #useful to avoid overwriting useful files
 
-    ##-s
+    ##s
 
       #exists and has size > 0
 
@@ -2709,47 +2679,53 @@
 
   ##pwd
 
-    #print working directory of process
+    # Print working directory of process.
 
-    #each program has a working directory set by the os
+    # Each program has a working directory set by the OS.
 
-    #processes inherit working directory of calling process
+    # Processes inherit working directory of calling process
 
-    mkdir a
-    chmod 777 a
-    echo pwd > a/a
-    chmod 777 a/a
-    ./a/a
-      #`pwd`
-      #outside /a, the working directory of the caller (bash cwd)
+      mkdir a
+      chmod 777 a
+      echo pwd > a/a
+      chmod 777 a/a
+      ./a/a
+
+    #`pwd`
+    #outside /a, the working directory of the caller (bash cwd)
 
   ##pwdx
 
-    #print current working directory of given process
+    # Print current working directory of given process:
 
       pwdx $pid
 
   ##sleep
 
-    #POSIX 7
+    # POSIX 7
 
-    sleep 2
-      #do nothing for 2 seconds
+    # Do nothing for 2 seconds:
+
+      sleep 2
 
   ##wait
 
-    #POSIX 7
+    # POSIX 7
 
-    #wait for process with given pid to terminate
+    # Wait for process with given pid to terminate.
 
-    #sets $! to the pid of the waited process
+    ##$!
 
-    #sleep 2 seconds and echo done:
+      # The PID of the last background process is stored in `$!`.
+
+    # Sleep 2 seconds and echo done:
+
       sleep 3 &
       wait $!
       echo $?
 
-    #gets `$?` right even if process over already:
+    # Gets `$?` right even if process over already:
+
       false &
       sleep 2
       true
@@ -2761,6 +2737,14 @@
       false
       wait $!
       [ "`echo $?`" = 0 ] || exit 1
+
+  ##trap
+
+    # Capture signals.
+
+      trap "echo a" SIGINT SIGTERM
+
+    # Now Ctrl-C away and notice `a` get printed.
 
   ##ps
 
@@ -2940,86 +2924,85 @@
 
   ##kill
 
-    #POSIX 7
+    # POSIX 7
 
-    #Kill exists as a bash built-in.
-    #One of the reasons for this is to allow users to `kill` by jobspec for example as `sleep 1- &; kill %1`,
-    #which an external executable could not do. Killin gby PID is required by POSIX 7.
+    # Kill exists as a bash built-in.
+    # One of the reasons for this is to allow users to `kill` by jobspec for example as `sleep 1- &; kill %1`,
+    # Which an external executable could not do. Killin gby PID is required by POSIX 7.
 
-    #Send signals to a process. Signals are an ANSI C concept, with POSIX and Linux extensions.
+    # Send signals to a process. Signals are an ANSI C concept, with POSIX and Linux extensions.
 
-    #Does not necessarily send SIGKILL, nor is SIGKILL the default signal sent!
-    #The default signal it sends is SIGTERM.
+    # Does not necessarily send SIGKILL, nor is SIGKILL the default signal sent!
+    # The default signal it sends is SIGTERM.
 
-    #It is unfortunatelly named kill because most signals end up killing process,
-    #or also because the most used signal is SIGTERM generated by a C-C on the terminal.
-    #which has the usual effect of killing a process.
+    # It is unfortunatelly named kill because most signals end up killing process,
+    # or also because the most used signal is SIGTERM generated by a C-C on the terminal.
+    # which has the usual effect of killing a process.
 
-    #List all signals available on the system:
+    # List all signals available on the system:
 
       kill -l
 
-    #lists numbers and descriptions.
+    # Lists numbers and descriptions.
 
-    #Send SIGTERM signal to process:
+    # Send SIGTERM signal to process:
 
       ps -A
       ID=
       kill $ID
 
-    #SIGTERM is the default signal sent by `kill`.
+    # SIGTERM is the default signal sent by `kill`.
 
-    #Select by pid, found on ps for example.
+    # Select by pid, found on ps for example.
 
-    #Select by job-id found on jobs:
+    # Select by job-id found on jobs:
 
       sleep 10 &
       jobs
       kill %1
 
-    #POSIX specifies this.
+    # POSIX specifies this.
 
-    #Send stop signal to process:
+    # Send stop signal to process:
 
       kill -s SIGSTOP $ID
       kill -s sigstop $ID
       kill -s STOP $ID
       kill -s stop $ID
 
-    #All of the above are specified by POSIX.
+    # All of the above are specified by POSIX.
 
-    #where `SIGSTOP` is the standard signal name.
+    # Where `SIGSTOP` is the standard signal name.
 
-    #Also possible with the XSI extension:
+    # Also possible with the XSI extension:
 
       kill -SIGSTOP $ID
       kill -sigstop $ID
       kill -STOP $ID
       kill -stop $ID
 
-    #but not recommended because it is less uniform parameter passing,
-    #and not guaranteed to be on all implementations.
+    # But not recommended because it is less uniform parameter passing,
+    # and not guaranteed to be on all implementations.
 
   ##killall
 
-    #Send signals to all process by name
+    # Send signals to all process by name
 
-    #psmisc package
+    # psmisc package
 
-    #Application: firefox/skype hanged. `ps -A | grep -i firef',
-    #confirm that the name is firefox and that it is the only one with that name,
-    #and then:
+    # Application: firefox/skype hanged. `ps -A | grep -i firef',
+    # confirm that the name is firefox and that it is the only one with that name, and then:
 
       killall firefox
 
-    #this sengs SIGTERM, which programs may be programmed to handle,
-    #so the progrma may still hang ( and in theory be trying to finish nicelly, although in practice this never happens... )
+    # This sengs SIGTERM, which programs may be programmed to handle,
+    # so the progrma may still hang ( and in theory be trying to finish nicelly, although in practice this never happens... )
 
-    #to kill it without mercy:
+    # Kill it without mercy:
 
       killall -s 2
 
-    #which sends SIGINT, which processes cannot handle, so they die
+    # which sends SIGINT, which processes cannot handle, so they die.
 
   ##env
 
@@ -3063,136 +3046,136 @@
 
   ##nohup
 
-    #POSIX 7
+    # POSIX 7
 
     ##application
 
-      #make a process that continues to run if calling bash dies:
+      # Make a process that continues to run if calling bash dies:
 
         nohup firefox >/dev/null &
         exit
 
-      #firefox still lives! it would be killed if it were not for nohup
+      # Firefox still lives! it would be killed if it were not for nohup.
 
     ##explanation
 
-      #program ignores HUP (hangup) signal (signal is a linux os concept)
+      # Program ignores HUP (hangup) signal (signal is a linux os concept)
 
-      #this signal is sent when the calling shell of a program is killed
+      # This signal is sent when the calling shell of a program is killed
 
-      #most signals if uncaught (the case of most programs), kill the program
+      # Most signals if uncaught (the case of most programs), kill the program
 
-      #consequense: killing calling bash kills the program
+      # Consequense: killing calling bash kills the program
 
-      #*unless*, you use nohup
+      #* Unless*, you use nohup
 
-      #consequences of `nohup`:
+      # Consequences of `nohup`:
 
-      #- if stdin came from terminal (not pipe for example),
-        #sdtin comes from `/dev/null` (you have no stdin!) instead
+      # - if stdin came from terminal (not pipe for example),
+      #     sdtin comes from `/dev/null` (you have no stdin!) instead
+      #
+      # - if stdout would go to terminal (not pipe for example)
+      #     it is *appended to* `./nohup.out`, and if not possible from `$HOME/nohup.out`
+      #     instead
+      #
+      #     If no stdout is generated, `nohup.out` is not created
+      #
+      #     you can also redirect stdout to any file you want via `nohup cmd > file`
+      #     for example `nohup cmd > /dev/null` to ignore output
+      # - the program is still visible in `jobs`, and may be killed with `kill %+`
+      # - if you don't use `&`, it runs on foreground, preventing you from using bash
 
-      #- if stdout would go to terminal (not pipe for example)
-        #it is *appended to* `./nohup.out`, and if not possible from `$HOME/nohup.out`
-        #instead
-        #
-        #if no stdout is generated, `nohup.out` is not created
-        #
-        #you can also redirect stdout to any file you want via `nohup cmd > file`
-        #for example `nohup cmd > /dev/null` to ignore output
-      #- the program is still visible in `jobs`, and may be killed with `kill %+`
-      #- if you don't use `&`, it runs on foreground, preventing you from using bash
-
-      #how to test all this:
+      # How to test all this:
 
         nohup bash -c 'for i in {1..10}; do echo $i; sleep 1; done'
 
-      #try:
+      # Try:
 
-      #append `> f` to command
-      #append `&`  to command
+        #append `> f` to command
+        #append `&`  to command
 
         jobs
         cat nohup.out
 
   ##timeout
 
-    #run command for at most n seconds, and kill it if it does not finish in time
+    # Run command for at most n seconds, and kill it if it does not finish in time
 
-    #coreutils
+    # coreutils
 
       [ `timeout 3 bash -c 'for i in {1..2}; do echo $i; sleep 1; done'` = $'1\n2\n' ] || exit 1
       [ `timeout 1 bash -c 'for i in {1..2}; do echo $i; sleep 1; done'` = $'1\n' ] || exit 1
 
   ##nice
 
-    #- -20: highest priority
-    #- 20: lowest priority
+    # - -20: highest priority
+    # - 20: lowest priority
 
-    #mnemonic: the nicest you are, the more you let others run!
+    # Mnemonic: the nicest you are, the more you let others run!
 
-    #POSIX 7
+    # POSIX 7
 
-    #therefore the concept of niceness is included in POSIX
+    # Therefore the concept of niceness is included in POSIX.
 
-    #view nice of all processes:
+    # View nice of all processes:
 
       ps axl
 
-    #run program with a nice of 10:
+    # Run program with a nice of 10:
 
       nice -10 ./cmd
 
-    #-10:
+    #- 10:
 
       sudo nice --10 ./cmd
 
-    #you need sudo to decrease nice
+    # You need sudo to decrease nice
 
-    #change priority of process by PID:
+    # Change priority of process by PID:
 
       renice 16 -p 13245
 
   ##flock
 
-    #puts an advisory file lock on given file while a command executes
+    # Puts an advisory file lock on given file while a command executes:
 
       touch a
       flock a sleep 5 &
 
   ##pstree
 
-    #psmisc package, not POSIX
+    # psmisc package, not POSIX
 
-    #shows tree of which process invocates which
+    # Shows tree of which process invocates which
 
       pstree
 
-    #this works because in POSIX new processes are created exclusively
-    #by forking from other processes, and parent information is stored
-    #on each process, which dies if the parent dies
+    # This works because in POSIX new processes are created exclusively
+    # by forking from other processes, and parent information is stored
+    # on each process, which dies if the parent dies
 
-    #this is a very insightfull program to understand what happened after
-    #the `init` process, first process on the system and common ancestor of all, started
+    # this is a very insightfull program to understand what happened after
+    # the `init` process, first process on the system and common ancestor of all, started
 
-    #particularaly interesting if you are on a graphical interface,
-    #to understand where each process comes from
+    # Particularaly interesting if you are on a graphical interface,
+    # to understand where each process comes from
 
-    #quotint `man pstree`, multiple processes with same name and parent are wrttin in short notation:
+    # Quotint `man pstree`, multiple processes with same name and parent are wrttin in short notation:
 
       #init-+-getty
       #   |-getty
       #   |-getty
       #   `-getty
 
-    #becomes:
+    # Becomes:
 
       #init---4*[getty]
 
-    #threads (run parallel, but on same data, and cannot fork) are indicated by brackets:
+    # Threads (run parallel, but on same data, and cannot fork) are indicated by brackets:
 
       #icecast2---13*[{icecast2}]
 
-    #means that `icecast2` has 13 threads.
+    # Means that `icecast2` has 13 threads.
 
   ##prtstat
 
@@ -3204,40 +3187,40 @@
 
   ##ipcs
 
-    #list info on inter process communication facilities:
+    # List info on inter process communication facilities:
 
       ipcs
 
-    #shows:
+    # Shows:
 
-    #- shared mem
-    #- semaphores
-    #- message queues
+    # - shared mem
+    # - semaphores
+    # - message queues
 
     ##ipcrm
 
-      #remove ipc facility
+      # Remove IPC facility.
 
   ##chroot
 
-    #Execute single command with new root.
+    # Execute single command with new root.
 
-    #The root of a process is a Linux concept: every process descriptor has a root field,
-    #and system calls issued from that process only look from under the root (known as `/` to that process).
+    # The root of a process is a Linux concept: every process descriptor has a root field,
+    # and system calls issued from that process only look from under the root (known as `/` to that process).
 
     ##application
 
-      #You have a partition that contains a linux system,
-      #but for some reason you are unable to run it.
+      # You have a partition that contains a linux system,
+      # but for some reason you are unable to run it.
 
-      #You can use that partition with bash by using chroot into it,
-      #and you might then try to fix it from there.
+      # You can use that partition with bash by using chroot into it,
+      # and you might then try to fix it from there.
 
-      #Example:
+      # Example:
 
         sudo chroot /media/other_linux/
 
-      #More advanced example, if you want to start from a completelly clean bash environment:
+      # More advanced example, if you want to start from a completelly clean bash environment:
 
         sudo chroot /media/other_linux /bin/env -i \
             HOME=/root         \
@@ -3246,56 +3229,56 @@
             PATH=/bin:/usr/bin:/sbin:/usr/sbin \
             /bin/bash --login
 
-      #This will in addition clear enviroment variables, and read login scripts found on the chroot.
+      # This will in addition clear enviroment variables, and read login scripts found on the chroot.
 
 ##files
 
   ##ls
 
-    #POSIX 7
+    # POSIX 7
 
-    #list files in dirs
+    # List files in dirs
 
     ##-l
 
-    #show lots of information:
+      # Show lots of information:
 
-      ls -l
+        ls -l
 
-    #sample output:
+      # Sample output:
 
-      #-rw-rw-r-- 1 ciro ciro  4 Feb 25 11:53 a
-      #1     2 3  4    5 6      7
+        #-rw-rw-r-- 1 ciro ciro  4 Feb 25 11:53 a
+        #1     2 3  4    5 6      7
 
-    #1) file permissions. See permissions
-    #2) for files, number of hardlinks. For dirs number of subdirs + parent + self (min is 2 therefore)
-    #3) owner
-    #4) group
-    #5) size in bytes
-    #6) last modified
-    #7) filename
+      #1) file permissions. See permissions
+      #2) for files, number of hardlinks. For dirs number of subdirs + parent + self (min is 2 therefore)
+      #3) owner
+      #4) group
+      #5) size in bytes
+      #6) last modified
+      #7) filename
 
-    #ls is aware if its ouput goes to a pipe or not.
-    #if yes, automatically newline separates it:
+    # ls is aware if its ouput goes to a pipe or not.
+    # if yes, automatically newline separates it:
 
       ls | cat
 
-    #one per line:
+    # One per line:
 
       ls -1
 
-    #ls a file:
+    # ls a file:
 
       touch a
       [ "$(ls a)" = "a" ] || exit 1
 
-    #ls a dir:
+    # ls a dir:
 
       mkdir d
       touch d/a d/b
       [ "$(ls d)" = "$(echo $'a\nb')" ] || exit 1
 
-    #ls many dirs:
+    # ls many dirs:
 
       mkdir d
       touch d/a d/b
@@ -3304,7 +3287,7 @@
       ls d e
         #nice listing of both
 
-    #-d: list dirnames only:
+    # -d: list dirnames only:
 
       mkdir d
       touch d/a d/b
@@ -3312,7 +3295,7 @@
       touch e/a e/b
       [ "$(ls -d d e)" = "$(echo $'d\ne')" ] || exit 1
 
-    #-lL : when showing symlinks, shows info to what is linked to
+    # -lL : when showing symlinks, shows info to what is linked to
 
     ##sort
 
@@ -3336,9 +3319,9 @@
 
       # Config ls colors
 
-    ##gnu extensions
+    ##GNU extensions
 
-      #-R: recursive
+      # -R: recursive
 
         ls -R
 
@@ -3442,13 +3425,13 @@
 
   ##mv
 
-    #POSIX
+    # POSIX
 
-    #move or rename files and dirs
+    # Move or rename files and dirs.
 
     ##files
 
-      #if dest does not exist, move the file to it:
+      # If dest does not exist, move the file to it:
 
         mkdir d
         touch d/a
@@ -3457,7 +3440,7 @@
         [ "`ls d`" = '' ] || exit 1
         [ "`ls d2`" = 'b' ] || exit 1
 
-      #if dest exists and is a file, overwrite by default:
+      # If dest exists and is a file, overwrite by default:
 
         echo a > a
         echo b > b
@@ -3465,7 +3448,7 @@
         [ "`ls`" = "b" ] || exit 1
         [ "`cat b`" = "a" ] || exit 1
 
-      #if dest exists and is a dir, move into dir:
+      # If dest exists and is a dir, move into dir:
 
         touch a
         mkdir d
@@ -3473,7 +3456,7 @@
 
     ##dirs
 
-      #same as files except does not overwrite non empty dirs:
+      # Same as files except does not overwrite non empty dirs:
 
         mkdir d
         mkdir d2
@@ -3487,36 +3470,45 @@
         mv d d2
           #cannot mv: dir not empty
 
-    ##-b
+    ##GNU extensions
 
-      #make backup if dest exits
+      ##b ##s
 
-      #if backupt exists, it is lost:
+        # Make backup if dest exits
 
-        touch a
-        touch b
+        #if backupt exists, it is lost:
 
-      #backup ~a is made:
+          touch a
+          touch b
 
-        mv -b b a
-        [ -f a ] || exit 1
-        [ -f a~ ] || exit 1
-        [ `ls | wc -l` = 2 ] || exit 1
+        # Backup `a~` is made:
 
-      #backup is only made if destination exists:
+          mv -b b a
+          [ -f a ] || exit 1
+          [ -f a~ ] || exit 1
+          [ `ls | wc -l` = 2 ] || exit 1
 
-        mv -b a b
-        [ -f a~ ] || exit 1
-        [ -f b ] || exit 1
-        [ `ls | wc -l` = 2 ] || exit 1
+        # Backup is only made if destination exists:
 
-      #if backup exists, it gets overwritten:
+          mv -b a b
+          [ -f a~ ] || exit 1
+          [ -f b ] || exit 1
+          [ `ls | wc -l` = 2 ] || exit 1
 
-        touch a
-        mv -b a b
-        [ -f a ] || exit 1
-        [ -f a~ ] || exit 1
-        [ `ls | wc -l` = 2 ] || exit 1
+        # If backup exists, it gets overwritten:
+
+          touch a
+          mv -b a b
+          [ -f a ] || exit 1
+          [ -f a~ ] || exit 1
+          [ `ls | wc -l` = 2 ] || exit 1
+
+        # Custom backup suffix:
+
+          touch a b
+          mv -bS ".bak" b a
+          [ -f a ] || exit 1
+          [ -f a.bak ] || exit 1
 
   ##cp
 

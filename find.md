@@ -255,10 +255,9 @@ Deletes matching files.
 
 Executes shell command on each found file.
 
-`'{}'` gets expanded to the found path by `-exec`,
-and the commands ends when a trailling '+' is found
+`'{}'` gets expanded to the found path by `-exec`, and the commands ends when a trailing '+' is found.
 
-Ex: compile all tex under current dir:
+Ex: compile all TeX files under current dir:
 
     find . -iname '*.tex' -exec pdflatex '{}' +
 

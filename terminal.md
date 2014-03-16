@@ -1,30 +1,20 @@
 Cheat on terminal emulators.
 
-Terminal emulators are called *emulators*, because they *emulate* machines of the past
-called terminals which allowed to interface with computers.
+Terminal emulators are called *emulators*, because they *emulate* machines of the past called terminals which allowed to interface with computers.
 
-Those machines are now extinct, but their human machine interface legacy lives on
-through the software incarnations of those machines which we call terminal emulators.
+Those machines are now extinct, but their human machine interface legacy lives on through the software incarnations of those machines which we call terminal emulators.
 
-The exact operation of terminal emulators is not standardized by POSIX (TODO0 check)
-but rather a de facto standard inherited from an influential terminal (a machine)
-that was very popular in the past called the VT100.
-We shall therefore describe here VT100 like terminal emulators.
+The exact operation of terminal emulators is not standardized by POSIX (TODO0 check) but rather a de facto standard inherited from an influential terminal (a machine) that was very popular in the past called the VT100. We shall therefore describe here VT100 like terminal emulators.
 
 #control characters
 
-When most keypresses are entered on the terminal,
-they simply get printed to the screen, for example `a`, `?` etc.
+When most key presses are entered on the terminal, they simply get printed to the screen, for example `a`, `?` etc.
 
-Furthermore, those key presses only take effect fater the <enter> key is pressed.
+Furthermore, those key presses only take effect after the <enter> key is pressed.
 
-However, some input bytes lead the terminal immediate effect on a terminal,
-even before `<enter>` is pressed to send characters.
+However, some input bytes lead the terminal immediate effect on a terminal, even before `<enter>` is pressed to send characters.
 
-For many of those bytes, the terminal to send certain signals to applications.
-Signals are a well defined ANSI C and POSIX concept,
-and part of what follows will be clearer if you know about them.
-Signals shall not be discussed here in detail.
+For many of those bytes, the terminal to send certain signals to applications. Signals are a well defined ANSI C and POSIX concept, and part of what follows will be clearer if you know about them. Signals shall not be discussed here in detail.
 
 To test the process control jobs, use the helper script:
 
@@ -44,17 +34,15 @@ and then do `<C-C>` while it runs.
 
 This kills sleep, since it is not programmed to handle `SIGTERM`.
 
-This is very useful when you want the current application to stop running,
-because it is taking too long and you don't care about losing its data.
+This is very useful when you want the current application to stop running, because it is taking too long and you don't care about losing its data.
 
-Note however that applications can handle `SIGTERM`, and some pesky applications
-won't terminated on `<C-C>` (some may at least ask you if you want to terminate, or tell you how to do so).
+Note however that applications can handle `SIGTERM`, and some pesky applications won't terminated on `<C-C>` (some may at least ask you if you want to terminate, or tell you how to do so).
 
 ##c-z
 
 Send a `SIGSTOP` to foreground process, and put it on background.
 
-As one may expcet, `SIGSTOP` has the effect of stopping the process.
+As one may expect, `SIGSTOP` has the effect of stopping the process.
 
 Run:
 
@@ -80,8 +68,7 @@ Another possibility is:
 
 which does the same as `kill -cont %%` but puts the process on the foreground.
 
-`<C-Z>` + `bg` is a very useful combo to recover when you launched a GUI application without `&`
-and you want to use the terminal again. For example, if you enter:
+`<C-Z>` + `bg` is a very useful combo to recover when you launched a GUI application without `&` and you want to use the terminal again. For example, if you enter:
 
     firefox
 
@@ -128,7 +115,7 @@ Then:
 
     sleep 10
 
-and finaly `<C-\>`.
+and finally `<C-\>`.
 
 Now a core dump file named `core` should have been genarated in the current dir:
 
@@ -148,14 +135,13 @@ Send EOF to pipe.
 
 Often stdin input ends at the first newline.
 
-But if you want to be able to give newlines,
-you have to enter a `<C-D>` to end the input.
+But if you want to be able to give newlines, you have to enter a `<C-D>` to end the input.
 
 TODO add an example, maybe with `cat`.
 
 ##c-?
 
-clear line
+Clear line.
 
 ##c-h
 
@@ -173,43 +159,35 @@ Literal with `<c-v><enter>`.
 
 ##c-[
 
-Same as esc. try <c-v><esc>
+Same as ESC. Try `<c-v><esc>`.
 
-Type asdf. type c-h. terminal removes the `f`.
+Type `asdf`. Type `c-h`. terminal removes the `f`.
 
 ##c-v c-X
 
-Input a literal control char c-x, bypassing any special meaning
+Input a literal control char `c-x`, bypassing any special meaning.
 
-to input some literal control charas that have special no meaning
-you can just type them directly. Ex: c-a
+To input some literal control charas that have special no meaning you can just type them directly. Ex: c-a.
 
-to input any literal control chars including those do that have special meaning
-like `c-c` use `<c-v>` before them, so for example: `<c-v><c-c>`
+To input any literal control chars including those do that have special meaning like `c-c` use `<c-v>` before them, so for example: `<c-v><c-c>`.
 
-control chars c-x are represented as `^X` on the terminal
+Control chars <c-x> are represented as `^X` on the terminal.
 
-note however that while visually indistinguishable from a literal `^X`,
-it is only a single char, since backspacing remove the `^X` at once.
+Note however that while visually indistinguishable from a literal `^X`, it is only a single char, since backspacing remove the `^X` at once.
 
-to view the ascii value of a sequence:
+To view the ASCII value of a sequence:
 
-echo -n <c-v>SEQ | hedump -C
+    echo -n <c-v>SEQ | hedump -C
 
-when you press a key, x tells the terminal about the key press,
-and the terminal decides what to do with it.
+When you press a key, X tells the terminal about the key press, and the terminal decides what to do with it.
 
-the typical thing that happens is that some program is reading
-from the terminal (bash shell, sh shell, python shell, etc)
+The typical thing that happens is that some program is reading from the terminal (bash shell, sh shell, python shell, etc)
 
-what the terminal does on keypresses is not officially standardized
-but the VT100 behaviour became the de facto standard <http://en.wikipedia.org/wiki/VT100>
-so this is what computer terminal programs emulate. VT100 uses ascii values only (0-127)
-with contro+keys to reach the non alphanumerical values.
+What the terminal does on keypresses is not officially standardized but the VT100 behaviour became the de facto standard <http://en.wikipedia.org/wiki/VT100> so this is what computer terminal programs emulate. VT100 uses ascii values only (0-127) with Ctrl + keys to reach the non alphanumerical values.
 
 #ansi escape codes
 
-The VT100 can also stuff that have no ascii value like:
+The VT100 can also stuff that have no ASCII value like:
 
 - arrow keys
 - fn keys
@@ -226,9 +204,7 @@ It is however better ot understand the low level ANSI escape codes before moving
 
 ANSI codes allow one to control text attributes such as color and font.
 
-The ammount of available attributes is very restricted if compared with modern toolkits
-such as GTK (there are only 8 colors and very few fonts), but is has proven to be enough
-even for complex curses GUIs such as VIM.
+The amount of available attributes is very restricted if compared with modern toolkits such as GTK (there are only 8 colors and very few fonts), but is has proved to be enough even for complex curses GUIs such as VIM.
 
 The following example prints:
 
@@ -236,7 +212,7 @@ The following example prints:
 - a red and bold       `b` character
 - a `c` character with default attributes:
 
-    printf '\033[4;31ma\033[1;24mb\033[0mc\n'
+        printf '\033[4;31ma\033[1;24mb\033[0mc\n'
 
 Which can be broken up as:
 
@@ -278,8 +254,7 @@ How it works:
 
 - Now that the terminal saw a CSI, it starts interpreting attributes.
 
-    The `m` at `4;31m` says that `4;31` are Select Graphical Rendition parameters (SGR)
-    which as the name indicates control how the text is rendered to screen.
+    The `m` at `4;31m` says that `4;31` are Select Graphical Rendition parameters (SGR) which as the name indicates control how the text is rendered to screen.
 
     Finally `4;31` means that there are two SGR parameters:
 
@@ -298,12 +273,11 @@ How it works:
 
     In this way, the red attribute goes for both `a` and `b`, until it is turned off for `c`.
 
+    The list of all possible SGR parameters and can also be at [this wiki page](wiki-ansi-escape).
+
+    Besides `m`, there are many other possible characters, which have different effects. The list of all characters can be found at [wiki-ansi-escape]: <http://en.wikipedia.org/wiki/ANSI_escape_code>.
+
 [wiki-ansi-escape]: http://en.wikipedia.org/wiki/ANSI_escape_code
-
-    The list of all possible SGR parameters and can also be at [wiki-ansi-escape][].
-
-    Besides `m`, there are many other possible characters, which have different effects.
-    The list of all characters can be found at [wiki-ansi-escape]: <http://en.wikipedia.org/wiki/ANSI_escape_code>.
 
 ##cursor position
 

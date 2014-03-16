@@ -6,7 +6,7 @@ POSIX is means: Portable Operating System Interface for uniX.
 
 POSIX is also known as: Single Unix specification (SUS)
 
-#sources
+#Sources
 
 - Matthew; Stones - Beginning Linux Programming <http://www.amazon.com/Beginning-Linux-Programming-Neil-Matthew/dp/0470147628>
 
@@ -14,22 +14,21 @@ POSIX is also known as: Single Unix specification (SUS)
 
     very interesting examples and topics
 
-#intro
+#Introduction
 
-An operating system standardization by both IEEE and `the open group`
-(merger of the `Open software foundation` with `X/Open`)
+An operating system standardization by both IEEE and `the open group` (merger of the `Open software foundation` with `X/Open`)
 
-Currently, gnu/linux and mac systems are largely posix compliant but not certified, windows is not largely compliant.
+Currently, GNU/Linux and mac systems are largely POSIX compliant but not certified, windows is not largely compliant.
 
 The specification if free to view.
 
 Has several versions. The last at the time of writting was made in 2008
 
-POSIX issue 7: IEEE formal name: `IEEE Std 1003.1-2008` highly recommended link: http://pubs.opengroup.org/onlinepubs/9699919799/
+POSIX issue 7: IEEE formal name: `IEEE Std 1003.1-2008` highly recommended link: <http://pubs.opengroup.org/onlinepubs/9699919799/>
 
-Single UNIX Specification, Version 4: http://www.unix.org/version4/
+Single UNIX Specification, Version 4: <http://www.unix.org/version4/>
 
-#the open group
+#The Open Group
 
 Major open group supporters whose major supporters include:
 
@@ -43,29 +42,29 @@ Major open group supporters whose major supporters include:
 
 Therefore some of the top users/creators of software.
 
-#examples of what posix specifies
+#Examples of what POSIX specifies
 
-##shell command language
+##Shell command language
 
 A shell language including almost all the basic `bash` syntax.
 
-`bash` is copmliant with extensions
+`bash` is compliant with extensions
 
-##shell utilities
+##Utilities
 
 Utilities that should be available to the shell (either as programs in path or shell builtins, this is not specified).
 
 Examples:
 
-- cd
-- ls
-- cat
-- mkdir
-- c99 and fortr77: compiler interfaces for C99 and fortran77!
+- `cd`
+- `ls`
+- `cat`
+- `mkdir`
+- `c99` and `fortr77`: compiler interfaces for C99 and Fortran77!
 
 and tons of others which most people never heard of
 
-##system interface
+##System interfaces
 
 Standard C interfaces to the system.
 
@@ -84,7 +83,7 @@ However many of the Linux system calls resemble those closely because of the com
 
 In most Linux, the POSIX C interface is implemented as part of `glibc`, which also implements ANSI libc and Linux extensions.
 
-##directory structure
+##Directory structure
 
 Very small, contains:
 
@@ -92,18 +91,15 @@ Very small, contains:
 - `/tmp`
 - `/dev/null`
 
-##envinronment variables
+##Environment variables
 
 In POSIX 7, those are defined in: Base Definitions > Enviroment Variables.
 
 POSIX specifies:
 
-- a few envioment variables and their functions
+- a few environment variables and their functions
 
-- many enviromnt variables which it is *unwise* (quote) to override because
-    they are frequently used in implementations, but does not specify their exact function.
-
-###fixed functions
+- many environment variables which it is *unwise* (quote) to override because they are frequently used in implementations, but does not specify their exact function.
 
 The following variables have fixed purposes in POSIX 7:
 
@@ -115,27 +111,24 @@ The following variables have fixed purposes in POSIX 7:
 - `SHELL`: this is *not* the current shell! it conatains the path of the defualt shell
 - `TERM`: analogous to shell
 
-###use with caution
-
 The following variables don't have fixed purposes, but POSIX says that they must be used with caution:
 
 - `EDITOR`: default text editor
 - `PAGER`: default pager program ( `more`, `less`, etc. )
 - `PPID`: PID of parent process
 
-##regexp
+##Regular expressions
 
     man 7 regex
 
-POSIX specifies are two types of regexes:
+POSIX specifies are two types of regular expressions:
 
 - basic (RE)
 - extended (ERE)
 
 Basic is deprecated, so don't use it.
 
-Some POSIX utilities such as `grep` or `sed` use BREs by default (backwards compatibility)
-but can use EREs with an option.
+Some POSIX utilities such as `grep` or `sed` use BREs by default (backwards compatibility) but can use EREs with an option.
 
 ###BRE vs ERE
 
@@ -170,7 +163,7 @@ Examples:
     echo $'a\nb'    | grep -E '[[:alpha:]]'
     echo $'a\nA'    | grep -E '[[:upper:][:lower:]]'`" = $'a\nA' ]
 
-###predefined character classes
+###Predefined character classes
 
 Is the main difference between those and perl (except for very magic perl regex options)
 
@@ -187,7 +180,7 @@ Full list:
 
 In Perl these are backlash escaped chars, much shorter to write...
 
-##utility command line interface
+##Utility command line interface
 
 Suggests the following format for documenting CLIs:
 
@@ -209,6 +202,24 @@ A few of the most interesting suggests for argument and utility name syntax:
 - `--` marks the last of the options
 - `-` means stdin/stdout when the utility expects a filename as argument
 - `-W` is reserved for vendor options
+
+##Exit status
+
+[POSIX specifies that](http://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_08):
+
+- 0 is for success, all others for errors.
+
+    It may seem counter intuitive to call 0 success since it is associated with false in C, but it is like that because there is only one type of success, and the other values indicate the exact cause of failure.
+
+- 127 is for command not found. Try:
+
+        asdfqwer
+        echo $?
+
+- 126 is for command found but not executable
+- values greater than 128 indicate that a process was terminated by a signal.
+
+    GNU goes further and [specifies that](http://www.gnu.org/software/bash/manual/bashref.html#Exit-Status) when terminated by a signal, the exit status shall be 128 + the normal error status.
 
 #TODO
 

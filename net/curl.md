@@ -10,14 +10,14 @@ Make GET request, response body to stdout:
 
     curl amazon.com
 
-#-d
+#d
 
 Make POST request:
 
     curl -Ld "q=asdf" $URL
     curl -L "google.com?q=asdf" $URL
 
-##--data-urlencode
+##data-urlencode
 
 Encode spaces and other signs for you:
 
@@ -63,7 +63,7 @@ Body ends with a single dot '.' on a line.
 
     curl -Lv google.com
 
-#-L
+#L
 
 Follows redirects.
 
@@ -78,7 +78,7 @@ With `-v` you can see the full transaction:
 
     curl -vL google.pn
 
-#-u user:pass
+#u user:pass
 
 Does Basic authentication.
 
@@ -91,13 +91,13 @@ Examples:
     curl          -u user:pass site.with.basic.auth.com
     curl --digest -u user:pass site.with.digest.auth.com
 
-#-x
+#x
 
 Specify proxy server:
 
     curl -x proxysever.test.com:3128
 
-#-z
+#z
 
 Download iff the file was modified after given date time (sounds like crawlers!):
 
@@ -105,7 +105,7 @@ Download iff the file was modified after given date time (sounds like crawlers!)
 
 I assure you, it has changed since then =).
 
-#-i
+#i
 
 Show received HTTP header received.
 
@@ -113,7 +113,7 @@ Example:
 
     curl -i google.com
 
-#-I
+#I
 
 Make HTTP HEAD request:
 
@@ -121,7 +121,7 @@ Make HTTP HEAD request:
 
 Implies `-i` of course.
 
-#-X
+#X
 
 Make custom request:
 

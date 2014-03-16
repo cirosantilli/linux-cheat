@@ -23,9 +23,9 @@ no warnings;
 
     ##my
 
-        #Confines variable to current block.
+        # Confines variable to current block.
 
-        #From that point onwards, it is not possible to access an external variable with same name.
+        # From that point onwards, it is not possible to access an external variable with same name.
 
             $i = 0;
             {
@@ -41,7 +41,7 @@ no warnings;
 
     ##local
 
-        #Creates a new scope valid for current function and functions that the function calls.
+        # Creates a new scope valid for current function and functions that the function calls.
 
             #my $x = 0;
             #sub f0 { return $x; }
