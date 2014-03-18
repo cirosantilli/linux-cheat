@@ -43,7 +43,7 @@ IPS is simpler to remember where each protocol goes since it has less layers.
 
 <http://en.wikipedia.org/wiki/Internet_protocol_suite>
 
-##protocols in layers
+##Protocols in layers
 
 Each layer contains many protocols, each of which helps the layer achieve its functions
 
@@ -53,8 +53,7 @@ Some of the most common protocols in each layer are and the function of the laye
 
     Whatever protocol any application uses.
 
-    Many protocols are standardized by large organizations, and have a specific port
-    reserved for them on each computer.
+    Many protocols are standardized by large organizations, and have a specific port reserved for them on each computer.
 
 - transport: TCP and UDP are by far the most common
 
@@ -64,17 +63,17 @@ Some of the most common protocols in each layer are and the function of the laye
 
     - guarantees that each chunk arrived, and if not asks for it again.
 
-- internet: IP is the most common
+- Internet: IP is the most common
 
     Finds the path between any two computers even if they are not on the same network.
 
-- link: ethernet, ARP
+- link: Ethernet, ARP
 
     Finds the path between two computers that are on the same network.
 
 To get a feeling for what each layer does, learn some of the most popular protocols of each of those layers.
 
-##layer data structure
+##Layer data structure
 
 Each layer adds a header to the layer below containing its information:
 
@@ -95,7 +94,7 @@ Each layer adds a header to the layer below containing its information:
     - the Internet data
     - the Internet header
 
-##example: browser fetches page
+##Example: browser fetches page
 
 A browser wants to make a typical HTTP request to a remove server to get a web page.
 
@@ -189,7 +188,7 @@ Fields by increasing interest / ease to understand ratio:
 
     Used for IP fragmentation.
 
-##ip fragmentation
+##IP fragmentation
 
 If a router will forward this packet to another interface, it may be that the MTU of the other interface be smaller than the previous one, and the package cannot be transmitted hole.
 
@@ -341,35 +340,34 @@ Computers in the network only talk to the router.
 
 The server on the router is called **proxy server**.
 
-###subnet mask
+###Subnet mask
 
-####get mask for an interface:
+####Get mask for an interface:
 
     ifconfig wlan0 | sed -nr 's/.*Mask:([^ ]*)/\1/p'
 
-internal ips have two parts: network and computer
+Internal IPs have two parts: network and computer.
 
-the length of the network part may vary between networks
+The length of the network part may vary between networks.
 
-the length is given by the **subnet mask**, ex:
+The length is given by the **subnet mask**, e.g.:
 
-255.255.255.0
-1111.1111.1111.0000
+    255.255.255.0
+    1111.1111.1111.0000
 
-means that 12 first bits are network
+means that 12 first bits are network.
 
-255.255.0.0
+    255.255.0.0
 
 means that 8 first bits are network
 
-all computers in the same network must have the same subnet mask and the same
-network part, but different computer parts.
+All computers in the same network must have the same subnet mask and the same network part, but different computer parts.
 
-each network (formally **network segment**) is run by a single router #TODO confirm
+Each network (formally **network segment**) is run by a single router #TODO confirm
 
-###special adresses
+###Special addresses
 
-####zero host address
+####Zero host address
 
 <http://serverfault.com/questions/135267/what-is-the-network-address-x-x-x-0-used-for>
 
@@ -377,58 +375,57 @@ If the entire host part is zero, then the address is used to refer to the networ
 
 It is used when several networks, one one a different router must speak to each other.
 
-###default gateway
+###Default gateway
 
-0.0.0.0 network address in the routing table.
+`0.0.0.0` network address in the routing table.
 
 If no network matches request, sends to this network.
 
-Address you get automatically redirected to by reuter if the address you gave cannot be found on the local network.
+Address you get automatically redirected to by router if the address you gave cannot be found on the local network.
 
 Find default gateway:
 
     route -n
 
-or for programatic usage:
+or for programmatic usage:
 
     route -n | awk '{ if( $1 ~ "0.0.0.0" ) print $2 }'
 
-###broadcast address
+###Broadcast address
 
 The host address is entirely composed of 1s.
 
-The broadcast address means talking to all computers on a given network at once
-instead of a single computer
+The broadcast address means talking to all computers on a given network at once instead of a single computer
 
-####examples
+####Examples
 
-#####class c network
+#####Class C network
 
-- network part: 192.168.3
+- network part: `192.168.3`
 
-broadcast is: 192.168.3.255
+    Broadcast is: `192.168.3.255`
 
-- network part: 192.168.234
+- network part: `192.168.234`
 
-broadcast is: 192.168.3.255
+    Broadcast is: `192.168.3.255`
 
-#####class a network
+#####Class A network
 
-- network part: 10
+- network part: `10`
 
-broadcast is: 10.255.255.255
+    Broadcast is: `10.255.255.255`
 
 ###.1 addresses
 
-.1 is not special, but in home networks is often already taken by the router's inner interface
+The `.1` address is not special, but in home networks is often already taken by the router's inner interface
 
-this is why your addresses may start at .2
+This is why your addresses may start at `.2`.
 
 ##NIC
 
 Network Interface Cards
 
-Hardware that does netowrk communication.
+Hardware that does network communication.
 
 Come mostly built-in the motherboard today.
 
@@ -440,58 +437,53 @@ Each router has at least 2 NICs: one external and one internal.
 
 ##MAC
 
-aka:
+AKA:
 
 - physical address
 - hardware address
 - media access control address
 - BIA: burnt in address
 
-unchangeable address of each NIC
+Unchangeable address of each NIC.
 
-unique across and within vendors
+Unique across and within vendors.
 
 6 bytes: first 3 identify vendor, last 3 product
 
-colon separated notation. Ex: `0C:21:B8:47:5F:96`
+Colon separated notation. Ex: `0C:21:B8:47:5F:96`.
 
-aka:
-
-- physical address
-- hardware address
-- media access control address
-- BIA: burnt in address
-
-get MAC addresses of my computer:
+Get MAC addresses of my computer:
 
     ifconfig
 
-or for programmatic usage:
+Or for programmatic usage:
 
     ifconfig | sed -nr 's/([^ ]*) .*HWaddr (.*)/\1 \2/p'
 
-get MAC addresses of computers i have already talked to in the lan:
+Get MAC addresses of computers I have already talked to in the LAN:
 
     timeout 3 ping 192.168.1.3
     arp -a | sed -nr 's/([^ ]*) .*at (.*)/\1 \2/p'
 
-#tcp vs udp
+#TCP vs UDP
 
 Different protocols
 
 TCP guarantees that information packages arrive, UDP does not.
 
-For that, tcp has to maintain a connection,
-while udp simply sends the packages and hopes for the bes
+For that, TCP has to maintain a connection, while UDP simply sends the packages and hopes for the best.
 
-For this reason, udp has less overhead, but is only used when the transaction
-will limit itself to a single request/answer.
+For this reason, UDP has less overhead, but is only used when the transaction will limit itself to a single request/answer.
 
-Some protocols include both a TCP and a UDP version, which may vary slightly
-while others only have either a TCP or an UDP version
-see <http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers> for a listcounting acknowledge packages
+Some protocols include both a TCP and a UDP version, which may vary slightly while others only have either a TCP or an UDP version see <http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers> for a listcounting acknowledge packages.
 
-##icmp
+##TCP
+
+Learn the TCP header:
+
+<http://en.wikipedia.org/wiki/Transmission_Control_Protocol#TCP_segment_structure>
+
+##ICMP
 
 Internet control message protocol.
 
@@ -499,7 +491,7 @@ Protocol that is part of the IP protocol.
 
 Contains several types of information for routers about the IP traffic.
 
-Lives in the internet layer, but is encapsulated inside an IP datagram just like TCP and UDP:
+Lives in the Internet layer, but is encapsulated inside an IP datagram just like TCP and UDP:
 
     | ICMP data |
     | IP data   | IP header |
@@ -513,7 +505,7 @@ Structure of the ICMP header
     - Checksum 2B
     - Variable part 4B
 
-ICMP can also constain an optional extra data section after the vairable part.
+ICMP can also contain an optional extra data section after the variable part.
 
 Examples of what ICMP can do:
 
@@ -521,15 +513,15 @@ Examples of what ICMP can do:
 
     The server responds with another echo request with the same data.
 
-    Used to testing the netowork.
+    Used to testing the network.
 
     Used by the ping utility.
 
 - destination unreachable
 
-    Datagram cannot be tranmited futher by a router.
+    Datagram cannot be transmitted further by a router.
 
-    TODO when does this happens? This is not the TTL = 0 since that is covered by Time Exceeded
+    TODO when does this happens? This is not the `TTL = 0` since that is covered by Time Exceeded
 
 - source quench
 
@@ -537,8 +529,7 @@ Examples of what ICMP can do:
 
 - redirect
 
-    Router tells source to not make that request again, since there is an obvious better choice
-    of router to make the request to.
+    Router tells source to not make that request again, since there is an obvious better choice of router to make the request to.
 
     Typically happens on a LAN with 2 routers, if a host sends a request to a bad router.
 
@@ -563,19 +554,18 @@ Examples of what ICMP can do:
 
 - packet too big (BTP)
 
-    Sent by router to source if it receives a packet that is larger than the MTU
-    and the IP header has `DF = 1`.
+    Sent by router to source if it receives a packet that is larger than the MTU and the IP header has `DF = 1`.
 
-##igmp
+##IGMP
 
-Internet group message protocol
+Internet Group Message Protocol.
 
 Similar to ICMP in some senses:
 
 - wrapped inside IP
 - IP control purposes
 
-however IGMP is used to control multicasts only.
+However IGMP is used to control multicasts only.
 
 IP protocol number: 2.
 
@@ -583,12 +573,11 @@ IP protocol number: 2.
 
 CLI utility that sends ICMP echo requests to a server that accepts them.
 
-It measures the time it takes for the answer to come back, which is a measure of connectivity
-between the two computers.
+It measures the time it takes for the answer to come back, which is a measure of connectivity between the two computers.
 
 It is often used in online games.
 
-The default IANA port for ping requests is port 7/tcp or 7/udp.
+The default IANA port for ping requests is port 7/TCP or 7/UDP.
 
 Send an echo every second to monitor connectivity:
 
@@ -598,22 +587,11 @@ Send an echo every second to monitor connectivity:
 
 Linux utility that shows each step an IP package takes to reach a destination.
 
-Operation is simple: the program sends the request with TTL = 1, TTL = 2, TTL = 3, and so on,
-and gets the address at which it stopped via ICMP time exceeded router responses.
+Operation is simple: the program sends the request with TTL = 1, TTL = 2, TTL = 3, and so on, and gets the address at which it stopped via ICMP time exceeded router responses.
 
-Exapmle:
+Example:
 
     traceroute www.google.com
-
-#tcp
-
-Learn the tcp header:
-
-<http://en.wikipedia.org/wiki/Transmission_Control_Protocol#TCP_segment_structure>
-
-Interesting notes:
-
-- tcp determines the ports
 
 #tcpdump
 
@@ -621,15 +599,15 @@ CLI utility that allows to visualize tcp packets sent and received.
 
 Good intro tutorial: <http://danielmiessler.com/study/tcpdump/>
 
-Also consider wireshark, whose output is generally easier to interpret
+Also consider Wireshark, whose output is generally easier to interpret
 (but unfortunately is a X GUI instead of CLI).
 
 Most useful options:
 
-- `-X` show ascii and hex side by side:
-- `-n` don't resolve hostnames, show numeric IPs
-- `-S` don't resolve hostnames, show numeric IPs
-- `-vvv` maximum verbosity level
+- `-X`: show ASCII and hex side by side:
+- `-n`: don't resolve hostnames, show numeric IPs
+- `-S`: don't resolve hostnames, show numeric IPs
+- `-vvv`: maximum verbosity level
 
     Interprets standard data types and prints them, making output easier to understand.
 
@@ -637,29 +615,25 @@ Example:
 
     sudo tcpdump -SXn
 
-#wireshark
+#Wireshark
 
 Set of utilities that that capture TCP IP packages similarly to tcpdump.
 
-Analyses packages if possible, and presents them on a human readable way.
-For this reason this is an amazing tool to really understand everything
-that goes on your computer's network interfaces.
+Analyzes packages if possible, and presents them on a human readable way. For this reason this is an amazing tool to really understand everything that goes on your computer's network interfaces.
 
 Open source and cross platform (Linux and Windows).
 
 #netrc
 
-`$HOME/.netrc` is a config file that automates net logins
-(TODO: which type exactly of login?)
+`$HOME/.netrc` is a config file that automates net logins (TODO: which type exactly of login?)
 
-ex:
+E.g.:
 
     machine code.google.com login <login> password <pass>
 
 #host
 
-A host is anything able to send and receive packages over a network:
-this includes workstations (computers) and routers.
+A host is anything able to send and receive packages over a network: this includes workstations (computers) and routers.
 
 Can be specified by either
 
@@ -672,8 +646,7 @@ A user may access a (system) computer from another computer using for example ss
 
 To do so, he must be registered in the target computer.
 
-This is why user/host pairs are common:
-the host pair says from which computer user is trying to access his account.
+This is why user/host pairs are common: the host pair says from which computer user is trying to access his account.
 
 #hostname
 
@@ -702,7 +675,7 @@ But beware: I have seen companies that use `www` for a different website than wi
 
 Beware that browsers can store different cookies for both, so you can be logged in at `www.a.com` but not at `a.com`.
 
-It is more recommended today not to use the `www` because it is what the huge majority of users wants on a website: <http://stackoverflow.com/questions/1109356/www-or-not-www-what-to-choose-as-primary-site-name>. `www` implies that we are using `HTTP`, but we already have the http part of the URL.
+It is more recommended today not to use the `www` because it is what the huge majority of users wants on a website: <http://stackoverflow.com/questions/1109356/www-or-not-www-what-to-choose-as-primary-site-name>. `www` implies that we are using `HTTP`, but we already have the HTTP part of the URL.
 
 In the case of FTP, `ftp://ftp.a.com` URLs which are common, and perhaps in that case it is better to keep the `ftp` and redirect HTTP requests to `ftp.a.com` to `ftp://ftp.a.com` since FTP is less used than HTTP, allowing users to type simply `ftp.a.com` instead of `ftp://a.com`.
 
@@ -713,7 +686,7 @@ As of early 2014:
 - `facebook.com` redirects to `www.facebook.com`
 - `google.com` redirects to `www.google.com`
 
-#domain name
+#Domain name
 
 E.g.: `google.com`, `stackoverflow.com` are commonly called domain names.
 
@@ -723,11 +696,11 @@ They identify a network owned by Google. But in order to get an actual IP, you s
 
 Domain names may contain more than one `.`: `bbc.co.uk`.
 
-##subdomain
+##Subdomain
 
 The subdomain can include a period (.) but not as the first or last character. Consecutive periods (...) are not allowed. A subdomain cannot exceed 25 characters.
 
-#top level domain
+#Top level domain
 
 `.com`, `.net`, `.io`, `.fr` are examples.
 
@@ -746,14 +719,13 @@ Some interesting ones:
 
 Some country ones have become generic: `.io` is a notable example, popular amongst startups as of 2014-03. Short, sounds good, reminds of IO input output.
 
-#dhcp
+#DHCP
 
 Dynamic host configuration protocol.
 
 <http://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol>
 
-Application layer protocol that automatically assigns configurations to the hosts on a network,
-such as their IP.
+Application layer protocol that automatically assigns configurations to the hosts on a network, such as their IP.
 
 Default IANA ports: udp 67 and 68 (same as its less advanced and less common predecessor `BOOTP`)
 
@@ -797,7 +769,7 @@ The file is:
 
     C:\Windows\System32\Drivers\Etc\hosts
 
-#dns
+#DNS
 
 Domain name system.
 
@@ -809,36 +781,33 @@ Protocol that convert strings into IPs, for example:
 
     http://www.google.com -> 173.194.34.34
 
-Before before using an address such as `www.google.com`, any program such as a browser
-must first resolve the hostname `www.google.com` into an IP.
-by asking that from a server.
+Before before using an address such as `www.google.com`, any program such as a browser must first resolve the hostname `www.google.com` into an IP by asking that from a server.
 
-Linux systems usually offer `man resolver` C library interface, which any program can use to resolve
-DNS names. The resolver library may cache results across applications that have already been resolved.
+Linux systems usually offer `man resolver` C library interface, which any program can use to resolve DNS names. The resolver library may cache results across applications that have already been resolved.
 
-###dns on wan
+###DNS on wan
 
-On the internet, hostnames are resolved to IPs by DNS servers.
+On the Internet, hostnames are resolved to IPs by DNS servers.
 
 You must pay to reserve hostnames so they can be resolved to the IP of your choice.
 
 TODO how to DNS servers find out all the hostnames in the world?
 
-##dns on lan
+##DNS on LAN
 
 DNS can also be done for local networks:
 
     computer2 -> 192.168.0.3
 
-in which case the DNS server normally resides on the router.
+In which case the DNS server normally resides on the router.
 
 Clients computers on the network are informed that it is a DNS server via DHCP.
 
-On your lan, people can use the host name to communicate between computers
+On your LAN, people can use the host name to communicate between computers
 
 For example, John is running an apache server on the usual port 80. He has hostname `john`.
 
-Mary is on the same netowk. Therefore, she can refer to john simply as john. For example:
+Mary is on the same network. Therefore, she can refer to `john` simply as `john`. For example:
 
     ping john
     firefox john
@@ -847,7 +816,7 @@ TODO if many people set up the same hostname, then what?
 
 ##host utility
 
-Get ip for a given hostname:
+Get IP for a given hostname:
 
     host www.google.com
 
@@ -869,9 +838,9 @@ Weirdly, mine contains:
 
     nameserver 127.0.1.1
 
-which is localhost. TODO understand why? It seems that the DHPC deamon set that.
+which is localhost. TODO understand why? It seems that the DHPC daemon set that.
 
-The actual nameserver can be found with the `dig | grep SERVER` command.
+The actual name server can be found with the `dig | grep SERVER` command.
 
 ##hostname utility
 
@@ -890,18 +859,18 @@ Change hostname for cur session:
 
 prompt `PS1` is not changed immediatelly.
 
-##change hostname permanently
+##Change hostname permanently
 
     h=
     echo "$h" | sudo tee /etc/hostname
 
-###windows
+###Windows
 
-host is reffered to as "computer name". good name choice.
+host is referred to as "computer name". good name choice.
 
     wmic computersystem where name="%COMPUTERNAME%" call rename name="NEW-NAME"
 
-##reverse dns
+##Reverse DNS
 
 Protocol that transforms an IP into a hostname.
 
@@ -909,15 +878,15 @@ Not always supported on all DNS servers.
 
 ##dig
 
-Shows complete path of domain to IP resolution, as it passes through multiple CNAMEs.
+CLI utility that shows complete path of domain to IP resolution, as it passes through multiple CNAMEs.
 
 TODO
 
-##zone file
+##Zone file
 
 When you register for a domain of your own, you will start thinking about this: it is the main setting on your registrar interface.
 
-http://en.wikipedia.org/wiki/Zone_file
+<http://en.wikipedia.org/wiki/Zone_file>
 
 ###apex domain
 
@@ -943,40 +912,33 @@ http://en.wikipedia.org/wiki/CNAME_record
 
 Points a domain to an IP. The final part of the resolution.
 
-#port
+#Port
 
-Once you have determined a host (computer),
-you still have to talk to one of the specific programs running on that computer.
+Once you have determined a host (computer), you still have to talk to one of the specific programs running on that computer.
 
 Each program listens on an specific port which is set by convention.
 
-Ports from 1 - 1023 are also known as "well-known ports" or "priviledged ports".
-On UNIX-like systems, only priviledged users (`root`) can bind to those ports.
-All have reserved or standardized functions by an organization called IANA:
-<http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers>.
+Ports from 1 - 1023 are also known as "well-known ports" or "priviledged ports". On UNIX-like systems, only priviledged users (`root`) can bind to those ports. All have reserved or standardized functions by an organization called IANA: <http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers>.
 
-The ports form 1024 to 49151 are the so called "registered ports".
-Projects can make a request to IANA to register one of thoe posts as used
-in order to avoid port clashes. On most systems, it is possible to bind to those ports
-without sudo.
+The ports form 1024 to 49151 are the so called "registered ports". Projects can make a request to IANA to register one of thoe posts as used in order to avoid port clashes. On most systems, it is possible to bind to those ports without `sudo`.
 
-There are 2 ports number 10: 10/tcp and 10/udp, each for a different protocol.
+There are 2 ports number 10: `10/tcp` and `10/udp`, each for a different protocol.
 
 On POSIX systems, ports are typically implemented via sockets.
 
-##read and write to a port from the command line
+##Read and write to a port from the command line
 
 You can write to a port in many ways using the command line.
 
-#router
+#Router
 
 Routers send packages from one place to another.
 
 Most routers will have at least two network interfaces, one on each network.
 
-##configure you router
+##Configure you router
 
-If you wanto to play around with routers, you should get your hands dirty and do some router configuring.
+If you want to play around with routers, you should get your hands dirty and do some router configuring.
 
 Routers are generally configured through a browser.
 
@@ -984,25 +946,23 @@ First you must make a wired connection to the router.
 
 You must enter the IP address of your router. This is fixed and supplied by the router manufacturer.
 
-You must then enter a username and a password. A default will be supplied by the manufacturer,
-such as `admin` `admin`, or `admin` `password`. This can be changed once you logged in.
+You must then enter a username and a password. A default will be supplied by the manufacturer, such as `admin` `admin`, or `admin` `password`. This can be changed once you logged in.
 
-##routing table
+##Routing table
 
-Great lan routing example: <http://en.wikipedia.org/wiki/Default_gateway>
+Great LAN routing example: <http://en.wikipedia.org/wiki/Default_gateway>
 
-Routing tables say: if the request should go to a given network,
-send it to a given interface.
+Routing tables say: if the request should go to a given network, send it to a given interface.
 
-0.0.0.0 is the default if no other is found
+`0.0.0.0` is the default if no other is found.
 
-Routers have two interfaes each: inside and outside
+Routers have two interfaces each: inside and outside.
 
 #ifconfig
 
-Network InterFace configuration
+Network InterFace configuration tool.
 
-Includes stuff like IPs, subnet masks, MAC, etc
+Includes stuff like IPs, subnet masks, MAC, etc.
 
 Good source: <http://www.thegeekstuff.com/2009/03/ifconfig-7-examples-to-configure-network-interface/>
 
@@ -1010,32 +970,31 @@ Good source: <http://www.thegeekstuff.com/2009/03/ifconfig-7-examples-to-configu
 
 Sample interfaces on a modern laptop:
 
-- eth0  wired network 0
-- wlan0 wifi card 0
-- lo    loopback (local host)
+- `eth0`:  wired network 0
+- `wlan0`: Wifi card 0
+- `lo`:    loopback (local host)
 
-Get local ips (behind router)
+Get local IPs (behind router):
 
     ifconfig | grep -B1 "inet addr" | awk '{ if ( $1 == "inet" ) { print $2 } else if ( $2 == "Link" ) { printf "%s:" ,$1 } }' | awk -F: '{ print $1 ": " $3 }'
 
-wlan0 and eth0 are two different interfaces!
+`wlan0` and `eth0` are two different interfaces!
 
 #iwconfig
 
 Wireless network configuration
 
-#arp
+#ARP
 
-Adress resolution protocol.
+Address Resolution Protocol.
 
 Only used when the sender detects that the searched IP is on the same network as itself.
 
-In that case, it can simply get the destination MAC address and send the packages over the LAN directly
-to the destination without passing through the router.
+In that case, it can simply get the destination MAC address and send the packages over the LAN directly to the destination without passing through the router.
 
 ARP is a protocol that does just that: it finds the MAC address from an IP on a LAN.
 
-##arp table
+##ARP table
 
 Cache that caches previously resolved IP to MAC addresses so that ARP requests don't need to be made every time.
 
@@ -1045,12 +1004,11 @@ Also known as: ARP cache, MAC cache.
 
 CLI utility that shows the ARP table.
 
-To see a computer on the table, remember that you first must have tried to contact it somehow,
-so first ping that computer:
+To see a computer on the table, remember that you first must have tried to contact it somehow, so first ping that computer:
 
     timeout 3 ping 192.168.1.3; arp -a
 
-#route
+#route utility
 
 View kernel routing table:
 
@@ -1080,12 +1038,7 @@ TODO
 
 ###set static ip
 
-On a home network that you control,
-it is better to use intuitive hostnames
-and let the addresses be dynamic,
-unless some app really requires you
-to enter ips.
-See hostname for how.
+On a home network that you control, it is better to use intuitive hostnames and let the addresses be dynamic, unless some app really requires you to enter IPs. See hostname for how.
 
     sudo vim /etc/network/interfaces
 
@@ -1097,13 +1050,13 @@ See hostname for how.
     broadcast 192.168.1.255
     gateway 192.168.1.1
 
-- auto if1 if2.
+- `auto if1 if2`.
 
-    Automatically create interfaces if1 and if2 on `ifup -a`.
+    Automatically create interfaces `if1` and `if2` on `ifup -a`.
 
-- iface if1
+- `iface if1`
 
-    From now on, define properties of if1.
+    From now on, define properties of `if1`.
 
 #mtu
 
@@ -1111,21 +1064,20 @@ See hostname for how.
 
 Maximum transmission unit.
 
-Maximum packet size that can be tranmitted over a physical link.
+Maximum packet size that can be transmitted over a physical link.
 
 Varies across different link technologies.
 
 #nmap
 
-show open ports, state and service name associated to the port
+Show open ports, state and service name associated to the port
 
 TCP services:
 
     nmap google.com
     nmap localhost
 
-you are gonna get at least 80 on google for their http server
-and on localhost too if you are running an http server such as apache.
+You are gonna get at least 80 on Google for their HTTP server and on localhost too if you are running an HTTP server such as apache.
 
 sample output excerpt:
 
@@ -1134,7 +1086,7 @@ sample output excerpt:
 
 TODO understand STATE and where SERVICE comes from
 
-view UDP ports:
+View UDP ports:
 
     sudo nmap -sU localhost
 
@@ -1142,15 +1094,13 @@ view UDP ports:
 
 Shows lots of POSIX sockets info.
 
-Get list pid and program name of programs using ports:
+Get list PID and program name of programs using ports.
 
-Shows both tcp/udp internet connections and UNIX domain sockets
+Shows both TCP/UDP Internet connections and UNIX domain sockets.
 
-In short: Internet connections are done via sockets whose address is given by
-an ip and a port number, and can communicate across computers
+In short: Internet connections are done via sockets whose address is given by an IP and a port number, and can communicate across computers
 
-UNIX domain sockets are only for local communication.
-They are put into the filesystem and identified by a path on the filesystem
+UNIX domain sockets are only for local communication. They are put into the filesystem and identified by a path on the filesystem
 
 When a program uses a socket, it binds to it, and other programs cannot use it.
 
@@ -1194,59 +1144,61 @@ Most useful options:
 
     Show statistics on several protocols.
 
-Sample output for internet section:
+Sample output for Internet section:
 
     Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
     tcp        0      0 localhost:32842         localhost:48553         ESTABLISHED 3497/GoogleTalkPlug
 
-#telnet
+#Telnet
 
-Protocol for comunicating between servers and name of command line tool that uses it
+Protocol for communicating between servers and name of command line tool that uses it.
 
-no encryption, therefore *DONT'T SEND PASSWORDS ON UNTRUSTED NETWORK WITH THIS*!!
+No encryption, therefore *DONT'T SEND PASSWORDS ON UNTRUSTED NETWORK WITH THIS*!
 
-always use ssh which is encrypted for anything even remotelly Pserious
+Always use ssh which is encrypted for anything even remotely serious.
 
-the other computer must be running a telnet server
+The other computer must be running a telnet server.
 
-fun MUD games!
+Fun MUD games!.
 
-make http requests by hand for learning purposes:
+Make HTTP requests by hand for learning purposes:
 
     telnet google.com 80
 
-type:
+Type:
 
     GET / HTTP/1.0 <enter><enter>
 
-you've made a get request by hand!
+You've made a get request by hand!
 
-TODO won't work, why? how to programatically write characters on a request?
+TODO won't work, why? How to programmatically write characters on a request?
 
     echo $'GET / HTTP/1.0\n\n' | telnet www.google.com 80
 
 also consider:
 
-- nc
-- socat
+- `nc`
+- `socat`
+
+#netcat
+
+See `nc`.
 
 #nc
 
-aka netcat
+Open, listen, send and receive TCP/UDP packages and sockets
 
-open, listen, send and receive tcp/udp packages and sockets
-
-make an http get request manually to google.com:
+Make an HTTP get request manually to `google.com`:
 
     echo 'GET / HTTP/1.0' | nc google.com 80
 
-if you have apache working on your computer, you can also do it on localhost to test:
+If you have apache working on your computer, you can also do it on localhost to test:
 
     echo 'GET / HTTP/1.0' | nc localhost 80
 
-in both cases you should get the HTTP re
+In both cases you should get the HTTP re
 
-`-u`: udp requests
+`-u`: UDP requests
 
 #samba
 
@@ -1256,9 +1208,9 @@ It allows for file, printer and driver sharing on a network.
 
 Best option for cross platform file transfers.
 
-#browser
+#Browser
 
-##firefox
+##Firefox
 
 Search with default engine:
 
@@ -1274,7 +1226,7 @@ ncurses web browser!
 
 Might save you if X goes down or if you can't have it.
 
-#files
+#Files
 
 TODO
 
@@ -1284,19 +1236,19 @@ TODO
 
 ##/etc/udev/rules.d/70-persistent-net.rules
 
-#deployment
+#Deployment
 
-##zymic
+##Zymic
 
-Free PHP
+Free PHP.
 
-did not work well with wordpress, probably some php restrictions.
+Did not work well with WordPress, probably some PHP restrictions.
 
 ##000
 
 Worked for WordPress.
 
-##openshift
+##OpenShift
 
 Open source.
 
@@ -1318,7 +1270,7 @@ Start app (apps are stopped by default):
 
     sudo gem install rhc
 
-#vpn
+#VPN
 
 TODO get working
 
@@ -1335,17 +1287,17 @@ Servers:
 
 - <http://www.vpnbook.com/#pricing>
 
-##ssl
-
-Predecessor of TSL.
-
-##tls
+#TLS
 
 Transport Layer Security.
 
 Encryption methods that encrypt the transport layer traffic.
 
-#web server vs app server
+#SSL
+
+Predecessor of TLS.
+
+#Web server vs app server
 
 It is hard to distinguish them.
 

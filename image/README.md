@@ -88,9 +88,10 @@ To view the minimalistic examples in this repo, open them with an image editor a
 
 Lossless or lossy, in practice lossless applications only.
 
-#get info on image
+#Get info on image
 
-- `file`: type, and for certain formats size other major parameters such as depth.
+- `file $f`: type, and for certain formats size other major parameters such as depth.
+- ImageMagick `identify -format $f`
 
 #Editors
 
