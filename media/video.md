@@ -1,5 +1,3 @@
-Video formats, viewer and manipulation utilities.
-
 #Definitions
 
 - *ripping* is taking the DVD from the DVD to files in computer.

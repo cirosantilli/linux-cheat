@@ -1,5 +1,3 @@
-Info on image formats, editors and capture.
-
 #Formats
 
 ##GIF
@@ -59,6 +57,8 @@ Specified by Microsoft.
 - PBM: black and white (1 or 0!)
 - PGM: gray scale
 - PPM: color
+
+Those three formats are also collectively knows as PNM, Portable aNymap Format.
 
 Mainly used in Linux.
 

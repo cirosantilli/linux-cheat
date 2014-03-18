@@ -1,6 +1,4 @@
-Info on audio players, editors, generation, capture and formats.
-
-#directories
+#Directories
 
 On most systems, sound will be kept under:
 
