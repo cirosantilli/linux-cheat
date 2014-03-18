@@ -1,27 +1,21 @@
-This discusses system calls from a userland point of view.
-Kernel internals of system calls are not discussed here.
+This discusses system calls from an userland point of view. Kernel internals of system calls are not discussed here.
 
 Tell your OS to do things which user space program can't do directly such as:
 
 - write to stdout, stderr, files
 - exit a program
 - reboot your computer
-- file io
+- file IO
 - access devices
 - process / threading threading management
 
-All of those operations are ultra OS dependant,
-so when possible one should use portable wrappers
-libracies like ansi libc or the posix headers
+All of those operations are ultra OS dependent, so when possible one should use portable wrappers libraries like ANSI libc or the POSIX headers
 
-It is highly recommended that you also understand
-how to make system calls directly from assembler
-to really understand them since they have a primary
-assembly interface.
+It is highly recommended that you also understand how to make system calls directly from assembler to really understand them since they have a primary assembly interface.
 
-It is also possible to call them from c code via certain macros.
+It is also possible to call them from C code via certain macros.
 
-System call inerfaces have to be very stable
+System call interfaces have to be very stable
 
 #sources
 
@@ -39,17 +33,15 @@ System call inerfaces have to be very stable
 
     contains actual binary values of constants so you can make he calls from assembler
 
-#linux
+#Linux
 
 System calls available on one architechture may differ from those available on another architechture.
 
 Most of the more commonly used ones are available on all architectures.
 
-There are a bit more than 350 system calls available on all architecture, although individual
-architectures can have many more. For example `alpha` has 505 syscalls as of 3.10-rc5.
+There are a bit more than 350 system calls available on all architecture, although individual architectures can have many more. For example `alpha` has 505 syscalls as of 3.10-rc5.
 
-Each system call gets a number in order of addition to the kernel:
-this is called *syscall number*
+Each system call gets a number in order of addition to the kernel: this is called *syscall number*
 
 This number can never be changed, but system calls may be declared deprecated.
 
@@ -59,42 +51,35 @@ To make any of the system calls, one must use the instruction `int $0x80`
 
 `%ebx`, `%ecx`, `%edx`, `%esx`, `%edi` are the params
 
-#return value
+#Return value
 
-The return value of the system call is put into eax when the system call is finished.
+The return value of the system call is put into `eax` when the system call is finished.
 
-That is the only way for the sytem call to communiate directly with the calling process:
-errno is TODO.
+That is the only way for the system call to communicate directly with the calling process: `errno` is TODO.
 
-##errors
+##Errors
 
-System calls can fail for much more reasons than is the case with userspace function,
-since the kernel has to be careful and prevent processes from messing up the system.
+System calls can fail for much more reasons than is the case with userspace function, since the kernel has to be careful and prevent processes from messing up the system.
 
-In case of failure the program does not crash and no messages are printed:
-it is up to the programmer to check that the syscall succeeded via its return value
+In case of failure the program does not crash and no messages are printed: it is up to the programmer to check that the syscall succeeded via its return value.
 
 By convention:
 
-- most sytem calls return 0 on sucess, -1 on failure.
+- most system calls return 0 on success, -1 on failure.
 
-    In those cases, the main goal is not getting the actual return of the sytem call,
-    but doing some side effect with it.
+    In those cases, the main goal is not getting the actual return of the system call, but doing some side effect with it.
 
-- some system calls can return positive integers in case of success,
-    and -1 means failure.
+- some system calls can return positive integers in case of success, and -1 means failure.
 
-    For example `write` returns the number of bytes writen if successful.
+    For example `write` returns the number of bytes written if successful.
 
     Since this can never be negative, `-1` is used for errors.
 
-- some system calls are always sucessful.
+- some system calls are always successful.
 
-    This is the case for `getpid`, since all processes must have a PID,
-    and any process has the prigiledge to view its own PID.
+    This is the case for `getpid`, since all processes must have a PID, and any process has the privilege to view its own PID.
 
-- getpriority is a special case, since for historical reasons the nice or a process
-    is represented between -20 and 19.
+- `getpriority` is a special case, since for historical reasons the nice or a process is represented between -20 and 19.
 
     The solution is that the system call is simply shifted from 0 to 39.
 
@@ -104,18 +89,18 @@ By convention:
 
 - a few system alls can return truly any positive or negative integers.
 
-    This is the case for ptrace.
+    This is the case for `ptrace`.
 
-    In those cases, the sytem call returns the value via a pointer to a data.
+    In those cases, the system call returns the value via a pointer to a data.
 
     Then, on a higher level, glibc does:
 
-            res = sys_ptrace(request, pid, addr, &data);
-            if (res >= 0) {
-                    errno = 0;
-                    res = data;
-            }
-            return res;
+        res = sys_ptrace(request, pid, addr, &data);
+        if (res >= 0) {
+            errno = 0;
+            res = data;
+        }
+        return res;
 
     so that a user program has to do:
 
@@ -128,42 +113,33 @@ By convention:
 
 errno is an ANSI C and POSIX library level concept that does not exist on the system call level,
 
-Itattempts to expose a simpler interface to user programs,
-always returning `-1` on errors and using `errno` to identify the error.
+It attempts to expose a simpler interface to user programs, always returning `-1` on errors and using `errno` to identify the error.
 
-System calls return only a single register value, and it is up to the syscall wrappers to tranform
-that value into a proper return value and set `errno`.
+System calls return only a single register value, and it is up to the syscall wrappers to transform that value into a proper return value and set `errno`.
 
-Beaware that the `syscall` macro, while very low level syscall wrapper,
-still does return value and errno setting manipulations just in a similar way to the POSIX error handling.
+Beware that the `syscall` macro, while very low level syscall wrapper, still does return value and errno setting manipulations just in a similar way to the POSIX error handling.
 
-#get info on linux system calls
+#Get info on Linux system calls
 
 This describes methods on how to get information on system calls without reading through the actual source code.
 
-Note however that all of those methods have certain limits, and there might be no actual alternative to
-getting your hands dirty and reading the source.
+Note however that all of those methods have certain limits, and there might be no actual alternative to getting your hands dirty and reading the source.
 
-Details on how to search the kernel source code for information on system calls shall not be described
-here but inside a kernel internals cheat, since such a discussion overlaps too much with how system calls work internally.
+Details on how to search the kernel source code for information on system calls shall not be described here but inside a kernel internals cheat, since such a discussion overlaps too much with how system calls work internally.
 
-TODO where are the descriptions of what a system call does in official docs (in the kernel tree for ideally?)
-    Bad / missing docs as for the rest of the API? Is man-pages official?
+TODO where are the descriptions of what a system call does in official docs (in the kernel tree for ideally?) Bad / missing docs as for the rest of the API? Is man-pages official?
 
 TODO how to get a list of syscalls available on all architectures without grepping/processing kernel code?
 
-##posix
+##POSIX
 
-Linux is highly POSIX compatible, which means that many of its system calls exist to
-implement POSIX C library functions.
+Linux is highly POSIX compatible, which means that many of its system calls exist to implement POSIX C library functions.
 
-Often those functions have very similar names and arguments, and the POSIX descriptions are really good,
-which makes this a good way to learn what syscalls do.
+Often those functions have very similar names and arguments, and the POSIX descriptions are really good, which makes this a good way to learn what syscalls do.
 
 POSIX is portable so in learning it you also learn an interface which works on many other systems.
 
-POSIX functions are more basic than those which are not in POSIX but on the Linux API,
-so it is a good idea to start with them.
+POSIX functions are more basic than those which are not in POSIX but on the Linux API, so it is a good idea to start with them.
 
 ##man pages
 
@@ -171,9 +147,7 @@ TODO is the `man-pages` project official?
 
 The man pages project documents portable glibc C interfaces to system calls.
 
-This inclues many POSIX C library functions, plus LInux extensions
-which glibc makes available via feature test macros such as `_BSD_SOURCE` which must be defined
-before the headers are included.
+This includes many POSIX C library functions, plus Linux extensions which glibc makes available via feature test macros such as `_BSD_SOURCE` which must be defined before the headers are included.
 
 For example, to enable the BSD extensions, one would need to do:
 
@@ -193,8 +167,7 @@ and that all feature test macros are defined under:
 
     man feature_test_macros
 
-While not bare system calls, most of those wrappers have the same names and interfaces as the actual system calls,
-and do very little processing of their own.
+While not bare system calls, most of those wrappers have the same names and interfaces as the actual system calls, and do very little processing of their own.
 
 Also almost all portable system calls have a glibc wrapper.
 
@@ -224,27 +197,27 @@ Includes calls that load program.
     gcc a.c
     strace ./a.out
 
-#examples syscalls
+#Examples syscalls
 
-this section shows system calls and what they do
+This section shows system calls and what they do
 
-required concepts needed to understand the sytem calls are also discussed here
+Required concepts needed to understand the sytem calls are also discussed here
 
-##file descriptors
+##File descriptors
 
-file descriptors contain know the position you are in the stream
+File descriptors contain know the position you are in the stream
 
-file descriptors allow you to get/give data from anything outside ram:
+File descriptors allow you to get/give data from anything outside ram:
 
 - files
 - devices (such as you mouse, keyboard, etc)
 
-elated system calls are:
+Related system calls are:
 
-- open
-- close
-- write
-- read
+- `open`
+- `close`
+- `write`
+- `read`
 
 - get data to ram
 - return no of bytes read if no error
@@ -253,34 +226,38 @@ elated system calls are:
 
 ###lseek
 
-reposition read/write
+Reposition read/write
 
-cannot be done on pipes or sockets
+Cannot be done on pipes or sockets
 
-- dup
-- dup2
-- dup3
-- fcntl
+- `dup`
+- `dup2`
+- `dup3`
+- `fcntl`
 
-##files and dirs
+##Files and dirs
 
-- getcwdprocesses have working info associated
-- chdir
-- fchdirusing a file descriptor instead of string
-- chrootuse new root (default `/` ) for paths starting with `/`
-- creatcreate file or device. TODO: what is a device
-- mknodcreate a directory or special or ordinary file
-- linkcreate new name for file
+- `getcwd`: processes have working info associated
+- `chdir`
+- `fchdirusing` a file descriptor instead of string
+- `chrootuse` new root (default `/` ) for paths starting with `/`
+- `creatcreate` file or device. TODO: what is a device
+- `mknodcreate` a directory or special or ordinary file
+- `linkcreate` new name for file
 - unlinkdelete hardlink to file. If it is the last, deletes the file from system.
-- mkdir
-- rmdir
-- rename
-- accesscheck real user's permissions for a file
-- chmod
+- `mkdir`
+- `rmdir`
+- `rename`
+- `accesscheck` real user's permissions for a file
+- `chmod`
 
-- chown
-- fhownby file descriptor
-- lchownno sym links
+- `chown`
+- `fhownby` file descriptor
+- `lchownno` sym links
+
+#TODO
+
+The following needs some formatting.
 
 ##sethostnameprocess have associated hostname info
 
