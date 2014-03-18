@@ -33,6 +33,29 @@ Media (audio, video, games, etc.) file types, viewers and editors:
 
 - [media/](media)
 
+#How to search for stuff
+
+If you know what you are searching for, use the following methods to search by keyword.
+
+For filenames:
+
+    find . -iname '*something*'
+
+And for stuff inside files:
+
+    git grep '#something'
+    git grep '##something'
+
+`#` (`##` for files in which `#` indicates a comment) are consistently used as a keyword identifiers. E.g., in bash scripts, sections are labeled:
+
+    ##concept
+
+and not just:
+
+    #concept
+
+since those could be regular commented out code.
+
 #Definition: utils
 
 By *utils* we mean:
@@ -52,16 +75,3 @@ Many of those tools may be cross platform or have very similar ports for other O
 Those utils are kept in this repo because they don't deserve a repo of their own because there is not enough info written on them.
 
 The choice of Linux and not other OS is because and because Linux is the best open source OS today.
-
-#How to search for stuff
-
-For filenames:
-
-    find . -iname '*something*'
-
-And for stuff inside files:
-
-    git grep '#something'
-    git grep '##something'
-
-`#` (`##` for files in which `#` indicates a comment) are consistently used as a keyword identifiers.
