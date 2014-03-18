@@ -1,6 +1,6 @@
 Linux in informal terms can be either a computer system that:
 
-- complies to the [linux standard base (LSB)](lsb) which is the main standard maintained by the [Linux foundation][]
+- complies to the [Linux Standard Base (LSB)](lsb) which is the main standard maintained by the [Linux foundation][]
 
 - uses the Linux kernel. TODO is this specified by the LSB? where? <http://unix.stackexchange.com/questions/75611/what-does-the-linux-standard-base-specify-about-the-kernel> 
 
@@ -18,18 +18,15 @@ Notable certified systems include:
 
 - Ubuntu 9.4
 
-    However not later versions up to time of writting
+    However not later versions up to time of writing
 
-    [It seems that](http://askubuntu.com/questions/89125/does-ubuntu-follow-the-linux-standard-base-lsb)
-    Ubuntu does not intend to fully comply
-    on certain specific points, but only be highly compliant
+    [It seems that](http://askubuntu.com/questions/89125/does-ubuntu-follow-the-linux-standard-base-lsb) Ubuntu does not intend to fully comply on certain specific points, but only be highly compliant.
 
 - Red Hat Enterprise Linux 6.0
 
 #GNU
 
-The user space programs of most Linux distributions are mostly inherited from the *GNU project*
-which was created in 1983 by Richard Stallman.
+The user space programs of most Linux distributions are mostly inherited from the *GNU project* which was created in 1983 by Richard Stallman.
 
 For example, the following central components originate from GNU:
 
@@ -184,7 +181,7 @@ Extract id programmatically to autodetect distro:
 
     Usually much longer explanations and examples.
 
-    Better nodewise navigation.
+    Better node wise navigation.
 
 - the geek stuff
 

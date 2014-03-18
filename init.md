@@ -12,7 +12,7 @@ Determines runlevel.
 
 A great way to understand what happens after `init` is to use `pstree`.
 
-This is distribution dependant.
+This is distribution dependent.
 
 #rc.local
 

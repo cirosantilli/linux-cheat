@@ -1,1 +1,1 @@
-stuff that is not yet good enough
+Stuff that is not yet good enough.

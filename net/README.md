@@ -2,6 +2,8 @@ Networking protocols and applications. E.g.: TCP/IP, email, Firefox, netstat, et
 
 Almost all OS specifics currently only discuss for Linux, but additions of other OSs are welcome.
 
+If information here gets good enough, this will get split into a separate directory and include non Linux utilities, since much of what is discussed here is cross platform.
+
 #Sources
 
 ##Free

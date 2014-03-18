@@ -1,9 +1,37 @@
 Info and cheatsheets on utils that work on Linux (and possibly other OSs too) and Linux internals.
 
-Most useful files:
+#Featured
 
-- [utils.sh](utils.sh): main dump for utils that fit in no other category such as POSIX utilities.
 - [ubuntu/install.sh](ubuntu/install.sh): software selection and install methods for Ubuntu. No tutorials.
+- [utils.sh](utils.sh): main dump for utils that fit in no other category or are not large enough to get their own file, such as POSIX utilities.
+
+Base standards:
+
+- [linux.md](linux.md)
+- [posix/](posix/)
+
+Kernel related:
+
+- [kernel/](kernel/)
+- [system-call/](system-call/)
+
+Initialization:
+
+- [install-os.md](install-os.md)
+- [boot.md](boot.md)
+- [init.md](init.md)
+
+Base topics:
+
+- [desktop/](desktop/): X, XDG, GNOME, KDE and related utilities.
+- [terminal.md](terminal.md)
+- [compile/](compile/): compilation tools and file formats.
+- [fs.sh](fs.sh): filesystem
+- [net/](net/): networking
+
+Media (audio, video, games, etc.) file types, viewers and editors:
+
+- [media/](media)
 
 #Definition: utils
 
