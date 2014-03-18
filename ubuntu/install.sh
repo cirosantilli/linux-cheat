@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Running this file should do all automatable steps to install useful stuff we find useful.
+# Running this file should do all automatable steps to install useful stuff in Ubuntu 12.04 (UNTESTED).
 
 # Non automatable steps shall be labelled as:
 
@@ -128,8 +128,16 @@
 
       #sudo aptitude install -y dot
 
-    sudo aptitude install -y gimp
-    sudo aptitude install -y inkscape
+    # GIMP 2.6: no single window mode.
+
+      #sudo aptitude install -y gimp
+
+    # GIMP 2.8: single window mode.
+
+      sudo apt-add-repository -y ppa:otto-kesselgulasch/gimp && sudo aptitude update
+      sudo aptitude install -y gimp
+
+      sudo aptitude install -y inkscape
 
   ##dict
 
@@ -620,14 +628,30 @@
 
     ##db
 
-      #MySQL:
+      # MySQL:
 
         sudo aptitude install -y mysql-server
+
+      ##remove mysql
+
+        # Sometimes, misterious forces will prevent you mysql server from starting
+        # and you will fell like erasing everything and restarting.
+        # purging mysql-server may not be enough.
+        # A hardcore solution that causes dataloss that worked for me once use:
+
+          #sudo aptitude purge -y mysql-server
+          #sudo aptitude purge -y mysql-common
+          #sudo rm -rf /var/log/mysql
+          #sudo rm -rf /var/log/mysql.*
+          #sudo rm -rf /var/lib/mysql
+          #sudo rm -rf /etc/mysql
+          #sudo aptitude install -y mysql-server
+
         sudo aptitude install -y libmysql++-dev
         sudo aptitude install -y libmysql++-doc
         sudo aptitude install -y libmysqlcppconn-dev
 
-      #PostgreSQL:
+      # PostgreSQL:
 
         sudo aptitude install -y libpq-dev
         sudo aptitude install -y postgresql
