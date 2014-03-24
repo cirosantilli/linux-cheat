@@ -1,8 +1,6 @@
 Utilities similar to `od` that can be used to view binary data.
 
-Very useful for viewing binary data which contains values which
-cannot be interpreted as some character set (ASCII, UTF-8)
-that can be printed to terminal screen.
+Very useful for viewing binary data which contains values which cannot be interpreted as some character set (ASCII, UTF-8) that can be printed to terminal screen.
 
 You have some fun exploring things such as:
 
@@ -24,10 +22,12 @@ Sanest usage: view bytes in hexadecimal:
 
     echo -n ab | od -Ax -tx1
 
-For interactive uses, you should either use another utility such as hd (non POSIX) which has saner defaults
-or have an alias for this since it is much saner than the octal defaults:
+For interactive uses, you should either:
 
-    alias ods='od -Ax -tx1'
+- use another utility such as `hd` (non-POSIX) which has saner defaults
+- have an alias which sets sane flags:
+
+        alias ods='od -Ax -tx1'
 
 Which stands for `od` Sane.
 
@@ -38,10 +38,11 @@ Output:
     ^       ^   ^
     1       2   3
 
+Meaning of output:
+
 1. Number of the first byte in the line in.
 
-Here the first byte in line 1 is byte 0 of the file.
-The first byte of line 2, if it existed, would be byte 2.
+Here the first byte in line 1 is byte 0 of the file. The first byte of line 2, if it existed, would be byte 2.
 
 2. First byte of each line.
 
@@ -51,11 +52,11 @@ The first byte of line 2, if it existed, would be byte 2.
 
 `62` in hex is 98 in decimal, which is the ASCII for `b`.
 
-#-t
+#t
 
 formaT specifier.
 
-##-tx
+##tx
 
 x means hexadecimal
 
@@ -81,7 +82,7 @@ Output:
 
 Note how the bytes are inverted in each block.
 
-##-to
+##to
 
 Octal.
 
@@ -96,25 +97,21 @@ Output:
     0000000 141 142
     0000002
 
-Note how this is less convenient that hexadeimal since each byte needs 3 characters
-instead of 2 to be represented.
+Note how this is less convenient that hexadecimal since each byte needs 3 characters instead of 2 to be represented.
 
-Another downside of using ocatl: 3 octal character makes 9 bits (3 per charcter) and not 8 as in a byte,
-so it is not possible to have for example `444`.
+Another downside of using octal: 3 octal character makes 9 bits (3 per charcter) and not 8 as in a byte, so it is not possible to have for example `444`.
 
-##-tc
+##tc
 
 Show bytes that can be represented as ASCII characters as ASCII characters.
 
-Useful when the input should contain mostly ASCII characters,
-for example when trying to find some weird byte in a file such as source code
-that should not contain such characters.
+Useful when the input should contain mostly ASCII characters, for example when trying to find some weird byte in a file such as source code that should not contain such characters.
 
 More precisely, there are the following cases:
 
-- if the byte has a corresponding non whitespace ascii character or space, print that character.
+- if the byte has a corresponding non whitespace ASCII character or space, print that character.
 
-- else if the character has a corresponding backslash `\` C escape squence,
+- else if the character has a corresponding backslash `\\` C escape sequence,
     print that sequence. Ex: 0 is `\0`.
 
 - else print the octal value of the byte as in `-to1`.
@@ -130,16 +127,14 @@ Output:
 
 Here
 
-- `0x61` has an ascii representation as `a`.
+- `0x61` has an ASCII representation as `a`.
 - `0x0A` is an ASCII newline.
 
-Since it would be ugly to represent it as a lie break,
-and since it has a C backslash representation as `\n`,
-that is used.
+Since it would be ugly to represent it as a lie break, and since it has a C backslash representation as `\n`, that is used.
 
 - `0x01` falls in neither of the above cases, so it is represented in octal as `001`.
 
-#-w
+#w
 
 Line width.
 
@@ -182,9 +177,9 @@ Note how the last line is always present and empty.
 
 It always gives the total number of bytes.
 
-#duplicate lines
+#Duplicate lines
 
-od automatically hides one or more duplicate lines and represents them with an asterisk `*`.
+`od` automatically hides one or more duplicate lines and represents them with an asterisk `*`.
 
 Example:
 
@@ -197,7 +192,7 @@ Output:
     0000006 30
     0000007
 
-If there was no line hidding, it would have looked like this:
+If there was no line hiding, it would have looked like this:
 
     0000000 30 31
     0000002 30 31
@@ -211,9 +206,9 @@ This is a very good behaviour since it lest you focus on the differences only.
 
 Radix of the line numbers.
 
-- o: octal
-- d: decimal
-- x: hexadecimal
+- `o`: octal
+- `d`: decimal
+- `x`: hexadecimal
 
 Default value: `o`
 
@@ -229,10 +224,9 @@ Output:
     000030 79 20 7a 0a
     000034
 
-Note how the adresses are given in hexdecimal,
+Note how the addresses are given in hexadecimal.
 
-Since there are 16 bytes per line, the second line starts at
-byte 16, so the address is `000010`.
+Since there are 16 bytes per line, the second line starts at byte 16, so the address is `000010`.
 
 In decimal:
 
@@ -254,13 +248,13 @@ Maximum number of bytes to read.
 
 Very similar to od.
 
-Uses saner hexacedimal defaults and shows ascii side by side.
+Uses saner hexadecimal defaults and shows ASCII side by side.
 
 Not POSIX 7.
 
 Saner than hexdump.
 
-Very close to hexdump, but also shows ASCII visualisation on the side of hexa visualisation.
+Very close to hexdump, but also shows ASCII visualization on the side of hexa visualization.
 
 Example:
 
@@ -274,8 +268,7 @@ Output:
     00000030  79 20 7a 20 0a 20 01                              |y z . .|
     00000037
 
-Non ASCII and whitespace chars or control chars such as newline or `\x01`
-are represented as dots on the ASCII side notation.
+Non ASCII and whitespace chars or control chars such as newline or `\x01` are represented as dots on the ASCII side notation.
 
 Offsets are in hexadecimal: 00, 10, 20.
 
@@ -283,7 +276,7 @@ Offsets are in hexadecimal: 00, 10, 20.
 
 Very similar to od, but not POSIX 7.
 
-Uses saner hexacedimal defaults.
+Uses saner hexadecimal defaults.
 
 `hd` has even saner defaults.
 
@@ -293,8 +286,8 @@ View bytes in hexadecimal.
 
 Options:
 
-- -C : see bytes in hexadecimal
-- -n32 : only 32 bytes
-- -s32 : start at byte 32
-- -v: show duplicate lines
-- -e '1/1 " %02X"': format string
+- `-C` : see bytes in hexadecimal
+- `-n32` : only 32 bytes
+- `-s32` : start at byte 32
+- `-v`: show duplicate lines
+- `-e '1/1 " %02X"'`: format string
