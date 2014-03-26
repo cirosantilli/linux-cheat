@@ -18,14 +18,30 @@ Octal dump.
 
 View byte values byte by byte in octal and other bases.
 
-Sanest usage: view bytes in hexadecimal:
+The most useful command for inputs which are mostly ASCII is:
 
-    echo -n ab | od -Ax -tx1
+    printf "ab\n\x10" | od -c
 
-For interactive uses, you should either:
+Which interprets all ASCII chars or those that have standard backslash escapes, and prints the others as numbers:
 
-- use another utility such as `hd` (non-POSIX) which has saner defaults
-- have an alias which sets sane flags:
+    0000000   a   b  \n 020
+    0000004
+
+Note however how octal notation is used for the numbers TODO can this be converted to HEX or DEC?
+
+The best option for files which are not mostly ASCII is:
+
+    printf "ab\n\x10" | od -Ax -tx1
+
+Which outputs:
+
+    000000 61 62 0a 10
+    000004
+
+For interactive uses, consider either:
+
+- using another utility such as `hd` (non-POSIX) which has saner defaults
+- having an alias which sets sane flags:
 
         alias ods='od -Ax -tx1'
 
@@ -51,6 +67,10 @@ Here the first byte in line 1 is byte 0 of the file. The first byte of line 2, i
 3. Second byte of each line.
 
 `62` in hex is 98 in decimal, which is the ASCII for `b`.
+
+Best command for computational use:
+
+    printf "ab" | od -Ax -tx1
 
 #t
 

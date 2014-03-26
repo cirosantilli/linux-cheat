@@ -1090,8 +1090,14 @@
     ##less
 
       # File pager (viewer).
-      # Loads faster than vim.
-      # Some vimlike commands
+
+      # Advantages over Vim:
+
+      # - loads faster
+
+      # Disadvantages over Vim:
+
+      # - much less powerful
 
       # - `/`: search forward
       # - `n`: repeat last search
@@ -1104,7 +1110,17 @@
       # - `-S` : toogle line wrapping
 
         less "$f"
-        echo $'ab\ncd' | less
+        printf 'ab\ncd\n' | less
+
+      # - `-R` : interpret ANSI color codes
+
+        # Rubbish:
+
+          ls --color | less
+
+        # Colors!:
+
+          ls --color | less -R
 
     ##more
 
@@ -1529,21 +1545,17 @@
 
   ##path operations
 
-    ##basename
+    ##basename ##dirname
 
-        basename /usr/a.txt
-          #a.txt
+      # POSIX 7
 
-        basename /usr/a.txt .txt
-          #a
+        [ "$(dirname  "/path/to/dir/or/file")" = "/path/to/dir/or" ] || exit 1
+        [ "$(basename "/path/to/dir/or/file")" = "file"            ] || exit 1
 
-    ##dirname
+        [ "$(dirname  "/")" = "/" ] || exit 1
+        [ "$(basename "/")" = "/" ] || exit 1
 
-        #get the parent dir of a path, not / terminated except for /, no error checking
-        dirname /path/to/dir/or/file
-          #/path/to/dir/or
-        dirname /
-          #outputs /
+      # Extensions can be extracted naively with variable expansion, but it is not trivial to make it work for dot files.
 
   ##strings
 
@@ -2672,7 +2684,7 @@
 
 ##process
 
-  #get cur pid in bash:
+  # Get cur pid in bash:
 
     echo $$
     echo $pid
@@ -4172,47 +4184,6 @@
 
       fuser -v -n tcp 5000
 
-  ##which
-
-    # Prints full path of executable in path.
-
-    # Does not necessarily reflect the actual program that will actually be used
-    # since this is not a bash built-in so it does not know:
-
-    # - the state of the bash path cache
-    # - does not see built-ins
-
-    # If you give it a command that only exists as a builtin such as `cd`, outputs nothing.
-
-    # Note however that there are commands which exist both as shell built-ins and
-    # as separate executales such as `echo`.
-
-    # Examples:
-
-      which ls
-
-    # Sample output:
-
-      /bin/ls
-
-    # The following print nothing:
-
-      which im-not-in-path
-
-      which im-not-executable
-
-      which cd
-
-    ##application
-
-      # Quick and dirty install if not installed:
-
-        if [ -z "`which zenity`" ]; then
-            sudo aptitude install zenity
-        fi
-
-      # Could also be done bashonly with `type -P`.
-
   ##mktemp
 
     # Create temporary files in the temporary directory.
@@ -4280,7 +4251,7 @@
 
   # List users:
 
-    cat /etc/passwd
+    cat /etc/passwd | sort
 
   # Sample output:
 

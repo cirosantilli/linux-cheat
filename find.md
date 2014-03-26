@@ -45,7 +45,7 @@ Therefore, the minimal find command is:
 
 which finds all files and directories under the current dir
 
-#criteria
+#Criteria
 
 Say *what* find should find
 
@@ -213,7 +213,7 @@ Which is the same as the original:
 
     find . -type f -iname '*.pdf' -o -iname '*.djvu'
 
-##parenthesis
+##Parenthesis
 
 You can change logical operation precedence with parenthesis.
 
@@ -223,7 +223,7 @@ Do not forget to escape your parenthesis!
 
 Either files with extension pdf of paths (includes dirs) with extension djvu. Parenthesis are used to change precendence order.
 
-#actions
+#Actions
 
 You can do things with the files you find.
 
@@ -281,16 +281,7 @@ TODO: why does the following fail:
 
 This is probably because `basename {}` gets evaluated before `{}` is replaced by the find result basename `{}` returns `{}`, and AFTER THAT `{}` gets expanded to the find result ( not just the basename therefore )
 
-If you want to do stuff like that, a better solution is:
-
-    find . -print0 | while read -d '' FILE;
-        do echo "$FILE";
-        echo asdf;
-    done
-
-This is a *much* more flexible way of doing lots of operations in bash I could find.
-
-#combos
+#Combos
 
 Remove all `Thubs.db` files (aka good bye Windows Media Player):
 
@@ -308,11 +299,27 @@ With GNU you get the better:
 
     find . -depth -empty -type d -exec rmdir {} \; 2>/dev/null
 
-which avoids calling rmdir on non empty directories.
+which avoids calling `rmdir` on non empty directories.
 
-#gnu extensions
+##Multiple actions
 
-##criteria gnu extensions
+If you want to take multiple actions, the sanest way is to use the POSIX:
+
+    find . | while read FILE; do
+      echo "$FILE"
+      echo
+    done
+
+Or the newline immune GNU:
+
+    find . -print0 | while read -d '' FILE; do
+      echo "$FILE"
+      echo
+    done
+
+#GNU extensions
+
+##Criteria GNU extensions
 
 ###mindepth
 
@@ -388,8 +395,11 @@ Example:
 - `-0` tells xargs that the input is null separated
 - `-I '{}'` tells xargs that `{}` should be substituted by each arg one at a time
 
-POSIX 7 mentions that this is included in several implementations,
-but was not adopted since it requires every utility that takes it as input to add a new `-0` option.
+POSIX 7 mentions that this is included in several implementations, but was not adopted since it requires every utility that takes it as input to add a new `-0` option.
+
+GNU utils which support NUL termination:
+
+    sort -z
 
 ###printf
 

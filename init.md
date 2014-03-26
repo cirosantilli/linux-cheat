@@ -76,9 +76,13 @@ Prevent a service from starting at startup (remove the symlink):
 
     sudo update-rc.d apache2 disable
 
+Enable a service:
+
+    sudo update-rc.d apache2 defaults
+
 Set the `<start><stop>` levels of the script script:
 
-    sudo update-rc.d gitlab defaults 21
+    sudo update-rc.d apache2 defaults 21
 
 The above sets start to `2` and stop to `1`.
 
@@ -88,22 +92,28 @@ Ubuntu install:
 
     sudo aptitude install -y chkconfig
 
-Show table with configured start / stop status of each service:
+Show table containing status of each service based on the runlevel:
 
     chkconfig --list
+
+Allows you to see is a service automatically starts at startup or not.
 
 Sample output:
 
     acpi-support              0:off  1:off  2:on   3:on   4:on   5:on   6:off
     acpid                     0:off  1:off  2:off  3:off  4:off  5:off  6:off
 
+Show only for a single service:
+
+    chkconfig --list apache2
+
 ##initctl
 
-List active startup services:
+Same as `sudo service --status-all`:
 
     initctl list
 
-##ubuntu specific
+##Ubuntu specific
 
 `/etc/defaults/name` are shell scripts that contain environment variables which can be used by the corresponding init script. Rationale: scripts can be updated without destroying parameters. File in `defaults` are never changed by the package manager.
 

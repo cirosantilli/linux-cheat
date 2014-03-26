@@ -1,4 +1,8 @@
-This is about system virtualization, that is, running an operating system inside another one without rebooting.
+Virtualization tools such as VirtualBox, Vagrant or Docker.
+
+#Introduction
+
+Virtualization is running an operating system inside another one without rebooting.
 
 In this context, the main system is called the *host*, and the one running inside the *guest*.
 
@@ -66,7 +70,7 @@ Important niche of application for VMs include:
 
     This is used for example by AWS.
 
-#Alternatives
+#Alternatives to virtual machines
 
 - wine.
 
@@ -79,16 +83,6 @@ Important niche of application for VMs include:
     Windows only.
 
 - Docker: <https://github.com/dotcloud/docker>
-
-    Mentioned in many places, huge amount of GitHub stars.
-
-    Relies on Linux Kernel namespaces (!) to solve dependency hell.
-
-    Therefore, works natively only on Linux.
-
-    Written in Go (!)
-
-    Faster than VM since no emulation.
 
 #Hardware support
 

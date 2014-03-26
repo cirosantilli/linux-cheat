@@ -6,7 +6,7 @@ Those machines are now extinct, but their human machine interface legacy lives o
 
 The exact operation of terminal emulators is not standardized by POSIX (TODO0 check) but rather a de facto standard inherited from an influential terminal (a machine) that was very popular in the past called the VT100. We shall therefore describe here VT100 like terminal emulators.
 
-#control characters
+#Control characters
 
 When most key presses are entered on the terminal, they simply get printed to the screen, for example `a`, `?` etc.
 
@@ -104,8 +104,7 @@ Useful after a `<C-S>`.
 
 Send a `SIGQUIT` to foreground process.
 
-To view the coredump which is the main difference in between this and `SIGTERM`,
-first do:
+To view the coredump which is the main difference in between this and `SIGTERM`, first do:
 
     ulimit -c unlimited
 
@@ -117,14 +116,13 @@ Then:
 
 and finally `<C-\>`.
 
-Now a core dump file named `core` should have been genarated in the current dir:
+Now a core dump file named `core` should have been generated in the current dir:
 
     less core
 
 This generated a file of 300K for me, so we can understand why they are disabled by default.
 
-The core file is binary. To interpret it you must have compiled the program with debugging information
-and then use gdb on the core file and the executable as:
+The core file is binary. To interpret it you must have compiled the program with debugging information and then use GDB on the core file and the executable as:
 
     gcc -g -o myfile myfile.c
     gdb myfile core
@@ -151,11 +149,21 @@ Destructive backspace.
 
 Newline `\n` char.
 
+##Carriage return
+
 ##c-m
 
-Carriage return `\r`.
+Carriage return.
+
+printf backslash escape: `\r`.
 
 Literal with `<c-v><enter>`.
+
+Try it out:
+
+    printf '0123\r45\n'
+
+You should see on your terminal exactly `4523`, as the `01` got overwritten.
 
 ##c-[
 
@@ -167,7 +175,7 @@ Type `asdf`. Type `c-h`. terminal removes the `f`.
 
 Input a literal control char `c-x`, bypassing any special meaning.
 
-To input some literal control charas that have special no meaning you can just type them directly. Ex: c-a.
+To input some literal control chars that have special no meaning you can just type them directly. Ex: c-a.
 
 To input any literal control chars including those do that have special meaning like `c-c` use `<c-v>` before them, so for example: `<c-v><c-c>`.
 
@@ -183,14 +191,14 @@ When you press a key, X tells the terminal about the key press, and the terminal
 
 The typical thing that happens is that some program is reading from the terminal (bash shell, sh shell, python shell, etc)
 
-What the terminal does on keypresses is not officially standardized but the VT100 behaviour became the de facto standard <http://en.wikipedia.org/wiki/VT100> so this is what computer terminal programs emulate. VT100 uses ascii values only (0-127) with Ctrl + keys to reach the non alphanumerical values.
+What the terminal does on key presses is not officially standardized but the VT100 behavior became the de facto standard <http://en.wikipedia.org/wiki/VT100> so this is what computer terminal programs emulate. VT100 uses ASCII values only (0-127) with Ctrl + keys to reach the non alphanumerical values.
 
 #ansi escape codes
 
 The VT100 can also stuff that have no ASCII value like:
 
 - arrow keys
-- fn keys
+- Fn keys
 - setting colors and other text attributes
 - setting cursor position
 
@@ -275,112 +283,89 @@ How it works:
 
     The list of all possible SGR parameters and can also be at [this wiki page](wiki-ansi-escape).
 
-    Besides `m`, there are many other possible characters, which have different effects. The list of all characters can be found at [wiki-ansi-escape]: <http://en.wikipedia.org/wiki/ANSI_escape_code>.
+    Besides `m`, there are many other possible characters, which have different effects. The list of all characters can be found at [wiki-ansi-escape].
 
 [wiki-ansi-escape]: http://en.wikipedia.org/wiki/ANSI_escape_code
 
-##cursor position
+##Cursor position
 
-you can also set cursor position by outputting special control strings to stdout
+You can also set cursor position by outputting special control strings to stdout.
 
-move cursor to position 2,3 on terminal:
+Move cursor to position 2,3 on terminal:
 
     echo -e '\033[2;3H'
 
 H is the command to position the cursor called `CUP`, 2;3 is the position.
 
-move the cursor back one position (same as left arrow):
+Move the cursor back one position (same as left arrow):
 
     echo -e 'a\033[1Db'
 
 which shows `b` on the terminal, since a was overwritten by b!
 
-move cursor up four times:
+Move cursor up four times:
 
     echo -e '000\033[4A111'
 
-things will get reall ugly as you start to rewrite previous PS1, PS2 and stdout =)
+Things will get really; ugly as you start to rewrite previous `PS1`, `PS2` and stdout.
 
-note that this should rarelly be piped to other programs, only given to terminals
-otherwise all those ugly chars will go to the pipe! programs that color stuff should
-always test if output is going to a pipe or not.
+This should rarely be piped to other programs, only given to terminals otherwise all those ugly chars will go to the pipe! Programs that color stuff should always test if output is going to a pipe or not.
 
-#cannonical vs non cannonical
+#Canonical vs non canonical
 
-Cannonical waits for newline to make data available to program,
-non cannonical does not.
+Canonical waits for newline to make data available to program, non canonical does not.
 
 <http://stackoverflow.com/questions/358342/canonical-vs-non-canonical-terminal-input>
 
-#general operation
+#General operation
 
 The terminal is a GUI between the user and the system.
 
-##terminals work with bytes
+##Terminals work with bytes
 
-VT100 works only with ASCII values as input and outputs (in range 0 - 127)
-with control + keys to reach the non alphanumerical values
-as shown at: <http://en.wikipedia.org/wiki/ASCII>.
-This allows all the 0 - 127 range to be reached.
+VT100 works only with ASCII values as input and outputs (in range 0 - 127) with control + keys to reach the non alphanumerical values as shown at: <http://en.wikipedia.org/wiki/ASCII>. This allows all the 0 - 127 range to be reached.
 
-Certain keypresses cannot be translated into single bytes, for example a left arrow,
-but may be translated into ANSI escape codes, which are multibyte sequences that the terminal
-can interpret correctly to do what it meant to, in this case move the cursor to the left.
+Certain key presses cannot be translated into single bytes, for example a left arrow, but may be translated into ANSI escape codes, which are multibyte sequences that the terminal can interpret correctly to do what it meant to, in this case move the cursor to the left.
 
-Current terminal emulators may however accept any bytes as input, and even display those bytes
-correctly supposing a given encoding (usually UTF-8).
+Current terminal emulators may however accept any bytes as input, and even display those bytes correctly supposing a given encoding (usually UTF-8).
 
-##input
+##Input
 
 As any GUI, the terminal takes user input, takes actions, and gives the user output.
 
-On original terminals, pressing certain keys would generate electric signals which corresponded
-directly to certain predefined bytes.
+On original terminals, pressing certain keys would generate electric signals which corresponded directly to certain predefined bytes.
 
-On terminal emulators, when the user enters a key,
-the X window system passes the key presses to the terminal emulator,
-which in turn converts those keypresses into bytes
-in a way that ressembles the operation of the original terminals.
+On terminal emulators, when the user enters a key, the X window system passes the key presses to the terminal emulator, which in turn converts those key presses into bytes in a way that resembles the operation of the original terminals.
 
-For example, is the user presses `a`, X tells this to the emulator,
-which in turn interprets this as the ASCII byte with value 97.
+For example, is the user presses `a`, X tells this to the emulator, which in turn interprets this as the ASCII byte with value 97.
 
-There are two basic types of actions that the terminal emulator can make when
-it receives a byte:
+There are two basic types of actions that the terminal emulator can make when it receives a byte:
 
 - most bytes such as alphanumeric are accumulated in a buffer and printed to the screen.
 
-- when certain special bytes are received, known as controle bytes, the terminal takes more complex actions.
+- when certain special bytes are received, known as control bytes, the terminal takes more complex actions.
 
-    The most basic and by far important control character is the carriage return or the newline,
-    both of which can be generated via an `<enter>` keypress.
+    The most basic and by far important control character is the carriage return or the newline, both of which can be generated via an `<enter>` keypress.
 
-    The action to take in thoes cases is to add a newline to the end of the buffer,
-    and make the accumulated bytes available a shell interpreter such as `sh`.
+    The action to take in these cases is to add a newline to the end of the buffer, and make the accumulated bytes available a shell interpreter such as `sh`.
 
-    To do so, it puts those bytes on the write side of a pipe,
-    which the interpreter reads from the read side.
+    To do so, it puts those bytes on the write side of a pipe, which the interpreter reads from the read side.
 
-    When the interpreter is done, it reads again from the pipe,
-    which is now empty, so it blocks until data becomes available.
+    When the interpreter is done, it reads again from the pipe, which is now empty, so it blocks until data becomes available.
 
-The above actions also depend if the terminal is on cannonical or non cannonical mode.
+The above actions also depend if the terminal is on canonical or non canonical mode.
 
-##output
+##Output
 
 The terminal must also decide what to do with the stdout generated by the interpreter.
 
-The most common action os to print every byte to the screen as the corresponding ASCII char,
-but there are a few exceptions:
+The most common action is to print every byte to the screen as the corresponding ASCII char, but there are a few exceptions:
 
 - control characters.
 
-    Some of them have visual representations, such as `\t` which prints a tab of `\n`,
-    but others do not.
+    Some of them have visual representations, such as `\t` which prints a tab of `\n`, but others do not.
 
-    `^A` is a very special case. It is called beep char, and if configured to do so,
-    terminals may emmit a beep when they see this at stdout.
-    try (you must do <c-v><c-a>, not copy paste...):
+    `^A` is a very special case. It is called beep char, and if configured to do so, terminals may emit a beep when they see this at stdout. try (you must do <c-v><c-a>, not copy paste...):
 
         echo ^A
 
@@ -402,34 +387,29 @@ but there are a few exceptions:
 
         echo a?!*b
 
-- ansi escape codes
+- ANSI escape codes
 
     Must be interpreted to do all sorts of special things, such as move the cursor or cange colors.
 
-#terminal emulator vs sh interpreter
-
-Don't get terminal emulators and sh interpreters mixed up!
+#Terminal emulator vs sh interpreter
 
 sh interpreters take raw text and do certain actions.
 
-This raw text could come either from text files (scripts) or pipes,
-but in any case it is just raw text.
+This raw text could come either from text files (scripts) or pipes, but in any case it is just raw text.
 
 Terminal emulators are GUIs that interface with users in more complex ways.
 
-It is easy to get the two mixed up because most of the time
-terminal emulators simply accumulate input chars,
-wait for an `<enter>` keypress, and then send strings to the sh interpreter.
+It is easy to get the two mixed up because most of the time terminal emulators simply accumulate input chars, wait for an `<enter>` keypress, and then send strings to the sh interpreter.
 
 #/dev/tty
 
-Special file, reading and writting to it is the same as reading and writting to current terminal.
+Special file, reading and writing to it is the same as reading and writing to current terminal.
 
 Ex:
 
     echo a > /dev/tty
 
-outputs:
+Output:
 
     a
 

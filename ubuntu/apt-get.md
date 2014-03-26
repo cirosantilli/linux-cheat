@@ -4,9 +4,7 @@ Information about `apt-get`, `dpkg`, `aptitude`, Ubuntu official repositories, P
 
 Summary: **always** use `aptitude` instead of `apt-get`!
 
-Reason: on remove aptitude removes all dependencies which were not installed explicitly But apt-get does not. Example: you installed package a, with 50 dependencies d1, d2, etc. which were not installed. If you do `apt-get unsinstall a`, the deps stay, and you have to do
-`apt-get uninstall d1, d2, ...`, but if you installed with `aptitude`, and you do `aptitude unistall`,
-D1 .. d50 are all removed.
+Reason: on remove aptitude removes all dependencies which were not installed explicitly But apt-get does not. Example: you installed package a, with 50 dependencies d1, d2, etc. which were not installed. If you do `apt-get unsinstall a`, the deps stay, and you have to do `apt-get uninstall d1, d2, ...`, but if you installed with `aptitude`, and you do `aptitude unistall`, D1 .. d50 are all removed.
 
 *it seems that* apt-get aptitude, and synaptic are front-ends for dpkg. Therefore they should be compatible.
 
@@ -236,10 +234,6 @@ List package dependencies
 
     apt-cache depends $PKG
 
-TODO? what is the difference between this and depends
-
-    sudo apt-get build-dep $PKG
-
 Find who depends on $PKG (reverse dependencies):
 
     sudo apt-rdepends -r $PKG
@@ -285,6 +279,14 @@ Add line:
 Looks for possible updgrades on known sources, but does not install them:
 
 	sudo aptitude update
+
+Meaning of output: TODO
+
+    Hit http://fr.archive.ubuntu.com precise Release.gpg
+    Hit http://fr.archive.ubuntu.com precise-updates Release.gpg
+    Hit http://fr.archive.ubuntu.com precise-backports Release.gpg
+    Hit http://security.ubuntu.com precise-security Release.gpg
+    Ign http://archive.canonical.com precise/partner TranslationIndex
 
 ##install
 
@@ -343,9 +345,7 @@ Remove package and configuration files:
     sudo apt-get purge $PKG
     sudo aptitude purge $PKG
 
-Removes dependencies which you did not install explicitly (didn't write on the command line yourself)
-And that are no longer necessary. Always follows remove or purge.
-`dpkg` then must contain information about what you installed yourself or not.
+Removes dependencies which you did not install explicitly (didn't write on the command line yourself) and that are no longer necessary. Always follows remove or purge. `dpkg` then must contain information about what you installed yourself or not.
 
     sudo apt-get autoremove
 
@@ -356,6 +356,14 @@ TODO:
     sudo apt-get autoclean
 
     sudo apt-get clean
+
+##build-dep
+
+Install all build dependencies for a package.
+
+Great when you are going to compile it from source to get the latest version.
+
+    sudo apt-get build-dep $PKG
 
 #combos
 

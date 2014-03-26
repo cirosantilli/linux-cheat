@@ -198,6 +198,35 @@
     sudo aptitude install -y mkvtoolnix
     sudo aptitude install -y oggvideotools
 
+    # ffmpeg:
+
+      sudo aptitude install -y libav-tools
+
+    ##editors
+
+      # Cinelerra:
+
+        #sudo apt-add-repository ppa:cinelerra-ppa/ppa
+        #sudo apt-get update
+        #sudo apt-get install cinelerra-cv
+
+      ##pitivi
+
+        # A bit too old, missing key features like multi selection on video line:
+
+          #sudo aptitude install -y libav-tools
+
+        # From source:
+
+          sudo aptitude build-deps -y pitivi
+          sudo aptitude install -y libcairo-dev python-cairo-dev itstool
+          cd /tmp
+          wget -O- http://ftp.gnome.org/pub/GNOME/sources/pitivi/0.93/pitivi-0.93.tar.xz | tar xvz
+          cd pitivi-0.93
+          ./configure
+          make
+          sudo make install
+
   ##compression
 
       sudo aptitude install -y zip unzip
@@ -302,7 +331,20 @@
 
   ##program
 
-    #glasgow haskell compiler:
+    #gcc docs:
+
+        sudo aptitude install -y gcc-doc
+
+      # Located at: `/usr/share/doc/gcc-doc`
+
+      # gcc 4.8. Default on Ubuntu 12.04 is 4.6.
+
+        sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+        sudo aptitude install -y update
+        sudo aptitude install gcc-4.8
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 50
+
+    # Glasgow haskell compiler:
 
       #sudo aptitude install -y ghc
 
@@ -316,12 +358,6 @@
       sudo aptitude install -y g++
       sudo aptitude install -y libtool
       #sudo aptitude install -y m4
-
-    #gcc docs:
-
-        sudo aptitude install -y gcc-doc
-
-      # Located at: `/usr/share/doc/gcc-doc`
 
     ##fortran
 
@@ -486,6 +522,17 @@
 
           #sudo aptitude install -y vagrant
 
+    ##docker
+
+      # Only exists for 64bit, not 32.
+      # http://docs.docker.io/en/latest/installation/ubuntulinux/
+
+        #sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
+        #sudo sh -c "echo deb http://get.docker.io/ubuntu docker main\
+        #> /etc/apt/sources.list.d/docker.list"
+        #sudo aptitude update
+        #sudo aptitude install -y lxc-docker
+
     ##wine
 
         sudo add-apt-repository ppa:ubuntu-wine/ppa
@@ -647,6 +694,8 @@
           #sudo rm -rf /etc/mysql
           #sudo aptitude install -y mysql-server
 
+        sudo aptitude install -y libmysqld-dev
+        sudo aptitude install -y libmysqlclient-dev
         sudo aptitude install -y libmysql++-dev
         sudo aptitude install -y libmysql++-doc
         sudo aptitude install -y libmysqlcppconn-dev

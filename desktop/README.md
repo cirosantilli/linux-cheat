@@ -633,16 +633,16 @@ Comes in both command line, and GUI versions. The GUI does not add much, so stic
 
 Most useful command:
 
-    alias rmd='sleep2 && paplay ~/share/sounds/alert.ogg && recordmydesktop --stop-shortcut Shift+F10'
+    alias rmd='sleep2 && paplay ~/share/sounds/alert.ogg && recordmydesktop --stop-shortcut Control+Mod1+z'
 
 - start recording in 2 seconds
 - play a sound before it starts
-- stop on `Ctrl + C` on terminal or `Shift + F10` from any window
+- stop on `Ctrl + C` on terminal or `Control + Alt + Z` from any window. Rationale: easy to press with a single hand.
 - save output to `out.ogv`, `out-1.ogv`, ...
 
 Use if from a dropdown terminal like Guake so in the 2 seconds you can make it disappear.
 
-#desktop environment
+#Desktop environment
 
 Includes a many components, such as:
 
@@ -1512,6 +1512,8 @@ The standard way is to first link `/usr/bin/editor` to `/etc/alternatives/editor
 
 In this way, all preferences are stored under `etc` as specified by the LSB.
 
+##update-alternatives
+
 The `update-alternatives` utility can be used to manage that system.
 
 For example, to configure the default browser use:
@@ -1525,6 +1527,11 @@ The most important alternatives include:
 - `editor`: text editor
 - `x-www-browser`: web browser
 
+TODO: understand the following command:
+
+    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 50
+
+I used this to link `gcc` to `gcc-4.8` instead of `4.6`.
 
 #logkeys
 
