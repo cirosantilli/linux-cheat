@@ -1,5 +1,60 @@
 Information about `apt-get`, `dpkg`, `aptitude`, Ubuntu official repositories, PPAs and related concepts.
 
+#Ubuntu package model
+
+TODO. Which packages and versions of packages are available on each version?
+
+#Source types
+
+Types of packages:
+
+|             | Free software | Non-free software |
+|-------------|---------------|-------------------|
+| Supported   | Main          | Restricted        |
+| Unsupported | Universe      | Multiverse        |
+
+The list of all packages can be found at: <http://packages.ubuntu.com/>
+
+TODO PPAs vs Universe? Guess: universe passes some selection, PPAs no?
+
+##Pre-installed
+
+List of pre-installed packages perversion: <http://askubuntu.com/questions/50077/how-to-get-a-list-of-preinstalled-packages>
+
+Current 12.04.4 was at <http://releases.ubuntu.com/precise/ubuntu-12.04.4-desktop-i386.manifest> but may be removed once a new one comes.
+
+##Main
+
+Officially supported software. Full list for 12.04 + their recommendations + the files they provide. Not possible to see the file contents: <http://packages.ubuntu.com/precise/allpackagesx>
+
+Not all of those packages come pre-installed.
+
+#Software version
+
+TODO how do Ubuntu versions affect software versions that can be installed? It fixes versions it seems, and the only way around are PPAs.
+
+##Security
+
+Hot-fixes that must be updated quickly
+
+##Updates
+
+Simply updates, not yet in another version.
+
+Enabled by default.
+
+##Proposed
+
+Proposed for updates, but not yet tested.
+
+Disabled by default.
+
+##Backports
+
+Updates that come from a new release and were enabled to older systems.
+
+Enabled by default.
+
 #apt-get vs aptitude vs synaptic
 
 Summary: **always** use `aptitude` instead of `apt-get`!
@@ -38,29 +93,9 @@ Of just with the `-dev` suffix:
 
 	nvidia-cuda-dev
 
-#Source types
-
-##Main
-
-Officially supported software. Full list for 12.04 + their recommendations + the files they provide. Not possible to see the file contents: <http://packages.ubuntu.com/precise/allpackagesx>
-
-##Restricted
-
-Supported software that is not available under a completely open source free license, but that can be used for free by individuals.
-
-##Universe
-
-Community maintained software, i.e. not officially supported software.
-
-##Multiverse
-
-Software that is not free.
-
 #PPA
 
-PPAs are sources of software
-
-They may or not be officially supported by Ubuntu.
+PPAs are sources of software.
 
 To add a new source you must do two things:
 
@@ -133,11 +168,11 @@ You could remove them manually, but there it is better to do that with `ppa-purg
     sudo aptitude install ppa-purge
     sudo ppa-purge ppa:matthaeus123/mrw-gimp-svn
 
-Not sure what is the wieth of:
+Not sure what is the weight of:
 
     sudo add-apt-repository --remote
 
-##ppas outside launchpad
+##PPAs outside launchpad
 
 The best I could find for now to add was the GetDeb way:
 
@@ -170,16 +205,16 @@ And it will be appended to the `sources.list` directly, which is worse than usin
 
 #dpkg
 
-Info on installed packages
+Info on installed packages.
 
-List all installed packages.and greps for foo:
+List all installed packages and greps for `foo`:
 
 	dpkg -l | grep $EXPRESSION
 
 The first two letters mean:
 
-- ii: installed
-- rc: configuration files only (rc means config such as in bashRC)
+- `ii`: installed
+- `rc`: configuration files only (`rc` means config such as in `bashRC`)
 
 List files in installed package
 
@@ -221,14 +256,14 @@ Combo: search for an executable called `a2x`:
 
     apt-file search bin/a2x
 
-##show
+##Show
 
 Shows files in package `p`:
 
     p=
     apt-file show "$p"
 
-##get info on packages before installing them
+##Get info on packages before installing them
 
 List package dependencies
 

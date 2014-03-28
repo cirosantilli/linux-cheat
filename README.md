@@ -1,4 +1,6 @@
-Info and cheatsheets on utils that work on Linux (and possibly other OSs too) and Linux internals.
+Linux information and cheatsheets.
+
+Includes utils that work on Linux, and possibly other OSs too, as well as Linux internals.
 
 #Featured
 

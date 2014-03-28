@@ -28,7 +28,7 @@ Output:
 
     A
 
-##E
+#E
 
 Find with ERE:
 
@@ -36,7 +36,7 @@ Find with ERE:
 
 Much saner and more powerful than BREs.
 
-###Application: filter lines by length
+##Application: filter lines by length
 
 `N` characters or more:
 
@@ -48,7 +48,7 @@ Less than `N` characters:
 
 Not very fast, but best golfer I have seen so far. `sed` for inline.
 
-##F
+#F
 
 Fixed, that is, literal non BRE search:
 
@@ -128,6 +128,13 @@ All patterns are ERE:
 #n
 
 Show matching line Numbers
+
+#f
+
+Grep for either of lines of an input file.
+
+	printf "ab\ncd\n" > f
+	[ "$(printf "0ab\n1ef\n2cd" | grep -f f)" = "$(printf "0ab\n2cd\n")" ] || exit 1
 
 #GNU extensions
 

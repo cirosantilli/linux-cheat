@@ -8,21 +8,16 @@
 
 ##installation procedures
 
-  ##before anything
+  # Fundamental utils:
 
-      sudo apt-get update
-
-    # Like apt-get, but removing a package will also uninstall all dependencies that
-    # were installed for that package:
-
-      sudo apt-get install -y aptitude
+    ./install-min
 
   ##package management
 
       sudo aptitude install -y apt-rdepends
       sudo aptitude install -y apt-file
-      sudo aptitude install -y ppa-purge
       apt-file update
+      sudo aptitude install -y ppa-purge
 
   # Usefull stuff that does not come by default or Canonical would have to pay royalties:
 
@@ -319,6 +314,14 @@
 
     sudo aptitude install -y vim
     sudo aptitude install -y vim-gtk
+    # Vundle
+    # Install your dotfiles:
+    git clone https://github.com/cirosantilli/dotfiles
+    cd dotfiles
+    ./here-ln-home.sh
+    git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+    vim +PluginInstall +qall
+
     #sudo aptitude install -y eclipse
 
     sudo aptitude install -y libreoffice
@@ -333,16 +336,21 @@
 
     #gcc docs:
 
-        sudo aptitude install -y gcc-doc
+        #sudo aptitude install -y gcc-doc
 
       # Located at: `/usr/share/doc/gcc-doc`
 
-      # gcc 4.8. Default on Ubuntu 12.04 is 4.6.
+      # gcc and c++ 4.8. Default on Ubuntu 12.04 is 4.6.
 
-        sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-        sudo aptitude install -y update
-        sudo aptitude install gcc-4.8
+        sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+        sudo aptitude -y update
+        # GCC
+        sudo aptitude install -y gcc-4.8
+        sudo aptitude install -y gcc-4.8-doc
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 50
+        # G++
+        sudo aptitude install -y g++-4.8
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 50
 
     # Glasgow haskell compiler:
 
@@ -361,19 +369,18 @@
 
     ##fortran
 
-      # Gnu fortran 77:
+      # GNU fortran 77:
 
         sudo aptitude install -y g77
 
-      # Gnu fortran 95:
+      # GNU fortran 95:
 
         sudo aptitude install -y gfortran
 
       sudo aptitude install -y nasm
 
-    ##source control
+    ##version control
 
-        sudo aptutide install -y git
         #sudo aptutide install -y tig
         sudo aptutide install -y mercurial
         sudo aptitude install -y subversion
@@ -429,23 +436,32 @@
 
     # Boost c++
 
-      #Some subprojects have specific packages of their own.
+      # Install all packages:
 
-      #To find what you need:
+        #sudo aptitude install -y libboost-all-dev
+
+      # For G++ 4.8:
+
+        sudo aptitude install -y libboost1.48-all-dev
+
+      # Some subprojects have specific packages of their own,
+      # but we recommend that you install all at once as it is not that large.
+
+        #sudo aptitude install -y libboost-dbg
+        #sudo aptitude install -y libboost-doc
+        #sudo aptitude install -y libboost-graph-dev
+
+      # To find what you need:
 
         #apt-cache search liboost
-
-        sudo aptitude install -y libboost-dbg
-        sudo aptitude install -y libboost-doc
-        sudo aptitude install -y libboost-graph-dev
 
     # Blas C / Fotran and lapack fortran:
 
       sudo aptitude install -y liblapack-dev
 
-    # Lapack C via lapacke:
+    # Lapack C via LAPACKE:
 
-      sudo aptitude install -y liblapacke-dev
+      #sudo aptitude install -y liblapacke-dev
 
       sudo aptitude install -y libgsl0-dev
       sudo aptitude install -y gsl-doc-info
@@ -456,10 +472,6 @@
 
   ##python
 
-      sudo aptitude install -y python-dev
-      sudo aptitude install -y python-pip
-      sudo aptitude install -y python-scipy
-      sudo aptitude install -y python-matplotlib
       sudo aptitude install -y gunicorn
 
   ##ruby
@@ -588,7 +600,7 @@
         sudo aptitude update
         sudo aptitude install -y flashplugin-installer
 
-	##desktop
+  ##desktop
 
         sudo aptitude install -y xbacklight
         sudo aptitude install -y xsel
@@ -611,11 +623,11 @@
       #sudo add-apt-repository ppa:webupd8team/y-ppa-manager && sudo aptitude update
       #sudo aptitude install -y yad
 
-	##fs
+  ##fs
 
-	    sudo aptitude install -y inotify-tools
+      sudo aptitude install -y inotify-tools
 
-	##net
+  ##net
 
         sudo aptitude install -y apache2
         sudo aptitude install -y libapache2-mod-fastcgi
@@ -635,23 +647,23 @@
 
       ##phpmyadmin
 
-        #First make sure that php and mysql are installed.
+        # First make sure that php and mysql are installed.
 
           sudo aptitude install -y libapache2-mod-auth-mysql php5-mysql phpmyadmin
 
           sudo vim /etc/apache2/apache2.conf
 
-        #Ensure following line is anywhere in the file:
+        # Ensure following line is anywhere in the file:
 
           #Include /etc/phpmyadmin/apache.conf
 
           sudo service apache2 restart
 
-        #Test phpmyadmin and mysql:
+        # Test phpmyadmin and mysql:
 
           firefox http://localhost/phpmyadmin &
 
-        #Login: 'root'. password: what you entered at installation.
+        # Login: 'root'. password: what you entered at installation.
 
         sudo aptitude install -y openssh-client
         sudo aptitude install -y openssh-server
@@ -729,54 +741,54 @@
 
   ##desktop environments
 
-    #Install all of the following. If a bug relates to graphical stuff,
-    #change desktops to test.
+    # Install all of the following. If a bug relates to graphical stuff,
+    # change desktops to test.
 
       sudo aptitude install -y gnome-tweak-tool
 
-    #gnome shell:
+    # Gnome shell:
 
       #sudo add-apt-repository -y ppa:gnome3-team/gnome3 && sudo aptitude update
       #sudo aptitude install -y gnome-shell
 
-    #linux mint shell cinnamon:
+    # Linux mint shell cinnamon:
 
       #sudo add-apt-repository -y ppa:gwendal-lebihan-dev/cinnamon-stable && sudo aptitude update
       #sudo aptitude install -y cinnamon
 
-    #kde shell plasma:
+    # KDE shell plasma:
 
       sudo aptitude install -y kde-plasma-desktop
 
-    #xubuntu shell xfce:
+    # Xubuntu shell xfce:
 
       sudo aptitude install -y xfce4
       sudo aptitude install -y xfce4-battery-plugin
 
-    #lubuntu lxde:
+    # Lubuntu lxde:
 
       #sudo aptitude install -y lxde
 
-    #for `qtconfig-qt4`:
+    #  For `qtconfig-qt4`:
 
       sudo aptitude install -y qt4-qtconfig
 
   ##chat messaging voice video
 
-    #skype
+    # Skype
 
       sudo add-apt-repository -y "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
       sudo aptitude update
       sudo aptitude install -y skype
 
-    #google talk
+    # Google talk
 
       wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
       sudo sh -c 'echo "deb http://dl.google.com/linux/talkplugin/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
       sudo aptitude update
       sudo aptitude install -y google-talkplugin
 
-    #pidgin
+    # Pidgin
 
       sudo aptitude install -y pidgin
 
@@ -848,6 +860,14 @@
   ##init
 
       sudo aptitude install -y chkconfig
+
+  ##paas
+
+    ##Google
+
+      # Google Compute Engine gcutil
+
+        #curl https://dl.google.com/dl/cloudsdk/release/install_google_cloud_sdk.bash | bash
 
 ##xinit
 

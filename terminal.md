@@ -193,7 +193,7 @@ The typical thing that happens is that some program is reading from the terminal
 
 What the terminal does on key presses is not officially standardized but the VT100 behavior became the de facto standard <http://en.wikipedia.org/wiki/VT100> so this is what computer terminal programs emulate. VT100 uses ASCII values only (0-127) with Ctrl + keys to reach the non alphanumerical values.
 
-#ansi escape codes
+#ANSI escape codes
 
 The VT100 can also stuff that have no ASCII value like:
 
@@ -206,9 +206,9 @@ To achieve those goals it uses standardized ANSI escape codes <http://en.wikiped
 which are also based on ASCII.
 
 To use ANSI escape seriously and in a more portable and clear way, use `tput` instead of raw ANSI escape codes.
-It is however better ot understand the low level ANSI escape codes before moving to the higher level `tput`.
+It is however better to understand the low level ANSI escape codes before moving to the higher level `tput`.
 
-##text attributes
+##Text attributes
 
 ANSI codes allow one to control text attributes such as color and font.
 

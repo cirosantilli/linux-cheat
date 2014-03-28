@@ -6,7 +6,7 @@ Ubuntu is likely to be one of the most used distros as of 2014-03:
 
 Ubuntu is maintained by the company Canonical which gets money by offering maintenance,
 
-# Releases
+#Releases
 
 Ubuntu is releases happen at approximately 6 month intervals.
 
@@ -45,11 +45,11 @@ Important implications:
 	sudo do-release-upgrade
 	sudo aptitude update && sudo aptitude upgrade
 
-# Open app without global menu
+#Open app without global menu
 
 	env UBUNTU_MENUPROXY=0 golly
 
-#utilities
+#Utilities
 
 ##ubuntu-tweak
 
