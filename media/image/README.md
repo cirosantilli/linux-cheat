@@ -12,6 +12,8 @@ Associated with the web: huge browser support.
 
 Can contain multiple images to make very short videos.
 
+To create a GIF from multiple images or vice versa use ImageMagick `convert`.
+
 ##PNG
 
 Lossless compression, alpha layer, wide software support.
@@ -23,6 +25,12 @@ Interlacing: if yes, the image is streamed in random order with added pixel posi
 This is useful for slow data channels like the Internet, so that when the browser loads it, pixels load all over, and not from top to bottom.
 
 This increases the size of the image, since it is then necessary to keep bit position information.
+
+##APNG
+
+Animated PNG! Works on Firefox. Goobye GIF.
+
+Sample: <http://people.mozilla.org/~dolske/apng/demo.html>
 
 ##JPG
 
@@ -292,13 +300,25 @@ Does not do:
 
 - DJVU
 
-####convert gif
+####GIF operations
 
 GIF to several images:
 
     convert a.gif a.png
 
 Generates `a-N.png` images.
+
+Several images to GIF loop forever:
+
+    convert -delay 100 img*.png img.gif
+
+or:
+
+    convert -delay 100 -loop 0 img*.png img.gif
+
+Loop once and stop
+
+    convert -delay 100 -loop 1 img*.png img.gif
 
 ####resize
 
@@ -365,6 +385,14 @@ bottom 50 percent:
 - `-level`: linear transform on color space:
 
         convert -level -100,100 a.jpg b.jpg
+
+###animate
+
+Animate multiple images interactively:
+
+    animate -delay 100 img*.png
+
+Not meant to generate a GIF from the command line, but good choice to preview a GIF before creating one.
 
 ##ExactImage
 

@@ -152,18 +152,6 @@ LSB is meant to contain all the core tools that allow compliant applications to 
 
 LSB does however specifies many more tools than POSIX and supports almost all base tools used by user friendly applications found in distributions.
 
-##lsb_release
-
-Command required by the LSB.
-
-Get distro maintainer, name, version and version codename:
-
-    lsb_release -a
-
-Extract id programmatically to autodetect distro:
-
-    distro="$(lsb_release -i | sed -r 's/.*:\t(.*)/\1/')"
-
 #Sources
 
 - `git clone http://git.kernel.org/pub/scm/docs/man-pages/man-pages`

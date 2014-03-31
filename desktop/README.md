@@ -640,7 +640,7 @@ Most useful command:
 - stop on `Ctrl + C` on terminal or `Control + Alt + Z` from any window. Rationale: easy to press with a single hand.
 - save output to `out.ogv`, `out-1.ogv`, ...
 
-Use if from a dropdown terminal like Guake so in the 2 seconds you can make it disappear.
+Use if from a drop-down terminal like Guake so in the 2 seconds you can make it disappear.
 
 #Desktop environment
 
@@ -688,7 +688,7 @@ So notice a few interesting facts:
     - the `openbox` window manager
     - the `xcreensaver` window manager
 
-- `firefox` is a direct child of init. Therefore `lxpanel` must have reparented it to `init`, so that it can keep running even if `lxpanel` is killed or restarted.
+- `firefox` is a direct child of init. Therefore `lxpanel` must have re-parented it to `init`, so that it can keep running even if `lxpanel` is killed or restarted.
 
 Gnome 3 spawn tree (xterm launched via the dash) looks like:
 
@@ -725,9 +725,11 @@ Default window manager: `mutter`
 
 Default session manager: `gnome-session`
 
-Integrated control panel: `gnome-control-center`.
+Integrated control panel frontend: `gnome-control-center`.
 
 Acts as a large frontend for several things such as printers, screen, etc., much like Window > Start > System.
+
+Good way to manage GTK themes and other GNOME things: `gnome-tweak-tool`.
 
 ##Unity
 
@@ -749,15 +751,15 @@ Named: unity-panel-service.
 
 An important part of Unity (basically the only distinctive feature of most DEs)
 
-###unity utility
+###Unity utility
 
 Restart the unity shell only, less effective and drastic than restarting LightDM:
 
     unity --restart
 
-###applets
+###Applets
 
-####alarm clock applet
+####Alarm clock applet
 
 Notifies you with sounds when a certain time passed.
 
@@ -807,7 +809,7 @@ The value is usually `/usr`
 
 This means for example that there will be many shared object files under `/usr/lib/kde4/`, and that the installed executables will go under `/usr/bin`.
 
-##lxde
+##LXDE
 
 Default DE for Archlinux.
 
@@ -821,11 +823,11 @@ For keyboard shortcuts, see info on openbox.
 
 Configuration files:
 
-Choose gtk themes with:
+Choose GTK themes with:
 
     lxappearance
 
-Choose qt themes with:
+Choose Qt themes with:
 
     qtconfig-qt4
 
@@ -1079,7 +1081,7 @@ TODO who executable implements it? which DEs adopt it?
 Although there is a X11 c interface, consider using higher level,
 more portable and more convenient interfaces such as:
 
-##qt
+##Qt
 
 Used mainly by KDE.
 
@@ -1110,7 +1112,7 @@ which produces output like:
     KDE Development Platform: 4.10.4
     Krusader: 2.4.0-beta1 "Migration
 
-##gtk
+##GTK
 
 3 versions: 1, 2 and 3.
 
@@ -1150,7 +1152,7 @@ Very nice demo of lots of 2.0 features with easy to see source code side by side
 
     gtk-demo
 
-##TODO how to find if an application uses gtk and which version
+##TODO how to find if an application uses GTK and which version
 
 It is not generally possible to do so.
 
@@ -1170,7 +1172,7 @@ You can install new gtk themes by placing their files under TODO.
 Note however that it is more recommended that you get themes from packages,
 so that those can get automatically updated.
 
-#themes
+#Themes
 
 Control how the system looks.
 
@@ -1186,16 +1188,16 @@ Each dire structure is like:
     - `/usr/share/themes/theme-name/gtk-2.0`
     - `/usr/share/themes/theme-name/openbox-3.0`
 
-TODO where are qt themes stored?
+TODO where are Qt themes stored?
 
-#panels
+#Panels
 
 Like windows GUI item that contains the start menu.
 
 Typically offer:
 
 - a way to launch programs so that users can:
-    type any part in the middle and click on the autocompleted desired match
+    type any part in the middle and click on the auto completed desired match
 
 - contain a list of all windows so that users can point click to open a window
 
@@ -1205,13 +1207,13 @@ Typically offer:
 
 Panels are X clients.
 
-##lxpanel
+##LXPanel
 
 LXDE default.
 
 Configuration files: `.config/lxpanel/LXDE/`
 
-##dconf gconf gsettings
+##dconf vs gconf vs gsettings
 
 Applications can them to manage user preferences. in key/value manner, where keys are put in a `/` separated tree.
 
@@ -1351,7 +1353,7 @@ You can execute screensavers under `TryExec` of the desktop entries to see how t
 
 ##xdg-screensaver
 
-xdg utils package
+XDG utils package
 
 Lock screen and activate screensaver:
 
@@ -1367,7 +1369,7 @@ Seems to fail is another screensaver such as gnome-screensaver can run.
 
 Seems that it was rewritten and screensaver change is not implemented as of 07/2013: <http://askubuntu.com/questions/64086/how-can-i-change-or-install-screensavers>
 
-#dbus
+#D-Bus
 
 IPC library and daemon.
 
@@ -1383,7 +1385,7 @@ View D-Bus messages as they are sent.
 
 Library that allows application to communicate with D-Bus.
 
-#desktop format
+#Desktop file format
 
 Files with extension `.desktop`.
 
@@ -1393,7 +1395,7 @@ The fields it can contain are left for each spec: this only specifies syntax. An
 
 Specs: <http://standards.freedesktop.org/desktop-entry-spec/latest/>
 
-#applications desktop files
+#Applications desktop files
 
 This discusses the desktop files under `$XDG_DATA_DIRS/applications` such as `$XDG_DATA_DIRS/applications/firefox.desktop`.
 
@@ -1401,8 +1403,7 @@ Sources:
 
 - <https://developer.gnome.org/integration-guide/stable/desktop-files.html.en>
 
-    GNOME tutorial. Claims to follow freedesktop.org specs:
-    <http://standards.freedesktop.org/menu-spec/latest/index.html>
+    GNOME tutorial. Claims to follow freedesktop.org specs: <http://standards.freedesktop.org/menu-spec/latest/index.html>
 
 Those files contain metadata about programs, which can be used by the DE to improve user experience.
 
@@ -1447,7 +1448,7 @@ How this file could be used by the DE:
 
 - when a file with unknown type is going to be opened, if there are no associations to it, the DE could use the `MimeType` field to make suggestions, of possible suitable alternatives.
 
-##icon
+##Icon
 
 Icons are needed at several places to help identify the application:
 
@@ -1459,7 +1460,7 @@ The icon is identified by the `Icon` field, which corresponds to a file under `X
 That directory may contain multiple versions of each icon, at various resolutions, color depths and styles,
 since icon themes can also change with DE settings. `hicolor/48x48` should contains lots of standard icons.
 
-#default application
+#Default applications
 
 This talks about how to allow users to choose their default application when opening certain types of file.
 
@@ -1467,7 +1468,7 @@ There are many systems, and they have some degree of compatibility.
 
 ##xdg-open
 
-xdg utils package
+XDG utils package, part of the LSB.
 
 Can open both Internet URLs and local files:
 
@@ -1498,11 +1499,11 @@ shared-mime-info package.
 
 ##gnome-open
 
-Gnome specific
+Gnome specific. Use `xdg-open` instead..
 
 ##kde-open
 
-KDE specific
+KDE specific. Use `xdg-open` instead..
 
 ##alternatives system
 
@@ -1535,7 +1536,7 @@ I used this to link `gcc` to `gcc-4.8` instead of `4.6`.
 
 #logkeys
 
-Writes all keypresses to a file.
+Writes all key presses to a file.
 
 Great way to steal people's passwords if they use your computer.
 
@@ -1547,7 +1548,7 @@ End logging:
 
     sudo logkeys -k
 
-#ibus input methods
+#IBus input methods
 
 Daemon for Chinese, Japanese, etc. input.
 

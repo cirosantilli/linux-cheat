@@ -6,11 +6,14 @@ Perl is part of the LSB, and should come with any Linux distro.
 
 The following contains lots of man pages and HTML docs:
 
+	man perlrun
 	man perldoc
 	man perlcheat
 
-You may have to install the man pages separately from Perl in some distros (such as Ubuntu).
+In Ubuntu install docs with:
 
-#cpan
+    sudo aptitude install -y perl-doc
+
+#CPAN
 
 Name of the major package repository for Perl modules, and of the command line tool used to install them.

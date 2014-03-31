@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+n#!/usr/bin/env bash
 
 # GUI utils survival kit. Terminal only in `install-min-ssh`.
 

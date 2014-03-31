@@ -312,20 +312,15 @@
 
   ##editors
 
-    sudo aptitude install -y vim
-    sudo aptitude install -y vim-gtk
-    # Vundle
-    # Install your dotfiles:
-    git clone https://github.com/cirosantilli/dotfiles
-    cd dotfiles
-    ./here-ln-home.sh
-    git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-    vim +PluginInstall +qall
+      #sudo aptitude install -y eclipse
 
-    #sudo aptitude install -y eclipse
+    ##Libreoffice
 
-    sudo aptitude install -y libreoffice
-    sudo aptitude install -y libreoffice-base
+        sudo aptitude install -y libreoffice
+
+      # Database editor:
+
+        #sudo aptitude install -y libreoffice-base
 
   ##terminal emulators
 
@@ -356,9 +351,10 @@
 
       #sudo aptitude install -y ghc
 
+      sudo aptitude install -y build-essential
+
       sudo aptitude install -y ant
       sudo aptitude install -y automake
-      sudo aptitude install -y build-essential
       sudo aptitude install -y doxygen
       sudo aptitude install -y doxygen-doc
       sudo aptitude install -y cmake
@@ -739,7 +735,7 @@
 
       sudo aptitude install -y gparted
 
-  ##desktop environments
+  ##desktop
 
     # Install all of the following. If a bug relates to graphical stuff,
     # change desktops to test.
@@ -751,7 +747,7 @@
       #sudo add-apt-repository -y ppa:gnome3-team/gnome3 && sudo aptitude update
       #sudo aptitude install -y gnome-shell
 
-    # Linux mint shell cinnamon:
+    # Linux Mint shell cinnamon:
 
       #sudo add-apt-repository -y ppa:gwendal-lebihan-dev/cinnamon-stable && sudo aptitude update
       #sudo aptitude install -y cinnamon

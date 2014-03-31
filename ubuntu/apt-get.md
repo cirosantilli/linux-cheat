@@ -15,7 +15,7 @@ Types of packages:
 
 The list of all packages can be found at: <http://packages.ubuntu.com/>
 
-TODO PPAs vs Universe? Guess: universe passes some selection, PPAs no?
+PPAs vs Universe: universe passes some selection form Canonical, PPAs don't.
 
 ##Pre-installed
 
@@ -31,7 +31,9 @@ Not all of those packages come pre-installed.
 
 #Software version
 
-TODO how do Ubuntu versions affect software versions that can be installed? It fixes versions it seems, and the only way around are PPAs.
+For stability and QA, there is only a fixed version of each software per Ubuntu version
+
+The only way around are PPAs.
 
 ##Security
 
@@ -147,7 +149,11 @@ add keys:
 
     wget -q -O - http://archive.getdeb.net/getdeb-archive.key | sudo apt-key add -
 
-##add key to PPAs in Launchpad
+##add-apt-repository
+
+Add key to PPAs in Launchpad.
+
+`python-software-properties` package.
 
 Launchpad is maintained by Canonical, and it is easy to Install/remove packages from them with `add-apt-repository`.
 
@@ -192,16 +198,6 @@ And to remove:
 Keep a list of all PPAs added like this somewhere.
 
 If you want to uninstall, you will remember the filename to remove.
-
-##add-apt-repository
-
-Bad: avoid using it.
-
-You can also add just the source but not the key with:
-
-	sudo add-apt-repository -y "deb http://archive.ubuntugames.org ubuntugames main"
-
-And it will be appended to the `sources.list` directly, which is worse than using a file that is easier to remove!
 
 #dpkg
 
@@ -299,7 +295,7 @@ Before you do anything else, do:
     sudo apt-get update
     sudo apt-get install aptitude
 
-##Proxy
+###Proxy
 
 Setup connexion through a proxy via:
 
@@ -350,6 +346,12 @@ Install specific version of a package:
     sudo apt-get install apache2=2.2.20-1ubuntu1
 
 Very likely to clash with other installed versions of the package.
+
+##build-deps
+
+Install build dependencies for a package.
+
+    sudo aptitude build-deps $PKG
 
 ##upgrade installed packages
 
