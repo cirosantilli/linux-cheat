@@ -745,64 +745,20 @@
 
   ##vim
 
-    #Move very fast with your keyboard without using a mouse.
+    # Move very fast with your keyboard without using a mouse.
 
-    #Works inside terminals therefore no need for X display manager
+    # Works inside terminals therefore no need for X display manager
 
     #gvim, runs in gtk outside command line
     #and thus gets around many command line limitations such as reserved shortcuts
 
       gvim
 
-  ##eclipse
-
-    #programming IDE.
-
-    #Extensible, lots of good existing plugins, coded in Java and therefore sane.
-
-    #Whatever you want to do you must click 50 menu items, no good config textual interface.
-
-    ##install plugins
-
-      #must be root for those operations so
-
-        gksudo eclipse
-
-      #can only be done sanely manually from the GUI like everything else.
-
-      #Help > Install new software > Availabe software sources > Check every single case there!
-      #Help > Install new software > New sources
-
-    #add vim like editing to eclipse: http://vrapper.sourceforge.net/update-site/stable
-
-    ##color themes
-
-      #http://eclipse-color-theme.github.com/update
-
-      #mine: http://www.eclipsecolorthemes.org/?view=theme&id=7915
-
-      #to install: File > Import > Preferences > Select *.epf (Eclipse menus are SO unintuitive...)
-
-    #c and c++: #http://download.eclipse.org/tools/cdt/releases/indigo/
-
-    #python: http://pydev.org/updates
-
-    #html, javascript, php: http://download.eclipse.org/webtools/repository/indigo/
-
-    ##latex
-
-      #http://texlipse.sourceforge.net
-      #forward search to okular:
-      #
-      #inverse search from okular: Settings > Configure Okular > Editor
-      # Editor: custom text editor,
-      # Command: gvim --remote +%l %f
-
   ##libreoffice
 
-    #Project contains wysiwyg text editor, tables, image editor, database management.
+    # Project contains wysiwyg text editor, tables, image editor, database management.
 
-    #How to add new spellchecking language:<http://askubuntu.com/questions/72099/how-to-install-a-libreoffice-dictionary-spelling-check-thesaurus>
+    # How to add new spellchecking language:<http://askubuntu.com/questions/72099/how-to-install-a-libreoffice-dictionary-spelling-check-thesaurus>
 
 ##text
 
@@ -1233,9 +1189,9 @@
 
     ##GNU extensions
 
-      # Sort dot versions number:
+      # Sort dot separated versions numbers:
 
-        git tag | sort -V
+        [ "$(printf '10.0\n9.10\n9.9\n' | sort -V)" = "$(printf '9.9\n9.10\n10.0\n')" ] || exit 1
 
   ##tsort
 
@@ -1617,7 +1573,7 @@
 
   ##vipe
 
-    #use editor (aka vim =)) in the middle of a pipe
+    # Use editor (aka vim =)) in the middle of a pipe:
 
       EDITOR=vim
       seq 10 | vipe | less
@@ -1625,17 +1581,16 @@
       a="`seq 10 | vipe`"
       echo "$a"
 
-    #uses editor environment variable to determine editor
+    # Uses editor environment variable to determine editor.
 
-    #in ubuntu, this is set by default to vim in bashrc.
+    # In Ubuntu, this is set by default to vim in bashrc.
 
-    #this is my preferred way to get user
-    #input that might be large (git commit messages...)
+    # This is a good way to get user input that might be large, e.g. git commit messages.
 
       a="`echo -e "\n#lines starting with '#' will be ignored" | vipe | grep -Ev '^#' `"
       echo "$a"
 
-##character encodings
+##character encoding
 
   ##chinese
 
@@ -1646,13 +1601,15 @@
 
   ##dos2unix
 
-    # CR LF to CR
+    # CR LF to CR.
 
     # In place:
 
       echo -e 'a\r\nb\r\n' > a.txt
       dos2unix a.txt
       [ "`cat a.txt`" = $'a\nb\n' ] || exit 1
+
+    # Does some smart heuristic things like skipping binary files and FIFOs, so better than `sed`.
 
   ##enca
 
@@ -1859,7 +1816,8 @@
 
     # Extract id programmatically to autodetect distro:
 
-        distro="$(lsb_release -i | sed -r 's/.*:\t(.*)/\1/')"
+        distro_id="$(lsb_release -i | sed -r 's/.*:\t(.*)/\1/')"
+        distro_version="$(lsb_release -r | sed -r 's/.*:\t(.*)/\1/')"
 
   ##processor ##cpu
 
@@ -2060,41 +2018,31 @@
 
       ##usb
 
-        #new: usb 3.0
-        #old still existing: usb 2.0
+        # New: usb 3.0
+        # Old still existing: usb 2.0
 
-        #current uses: mouse, keyboard, external hard disks, external cd, flash storage devices
+        # Current uses: mouse, keyboard, external hard disks, external cd, flash storage devices.
 
-        #several device classes
+        # Several device classes.
 
-        #several connector types: Standard-A, Standard-B, Micro-B, Mini-B
-        #<http://en.wikipedia.org/wiki/File:Usb_connectors.JPG>
+        # Several connector types: Standard-A, Standard-B, Micro-B, Mini-B
+        # <http://en.wikipedia.org/wiki/File:Usb_connectors.JPG>
 
         #3.0:
 
-          #full duplex
-          #8 pins
-          #voltage: 5 V
-          #power: max 0.9 A (5V)
-          #signaling rate: 5 Gbit/s (Super Speed mode)
-          #maximal cable length: 5 meters
+          # - full duplex
+          # - 8 pins
+          # - voltage: 5 V
+          # - power: max 0.9 A (5V)
+          # - signaling rate: 5 Gbit/s (Super Speed mode)
+          # - maximal cable length: 5 meters
 
           ##differentiate from usb 2.0
 
-            #3.0 tipically blue while 2.0 black
-
-            #3.0 has 8 pins instead of 4
-
-            #ss for super spped may be written
-
-            #<http://www.usb3.com/usb3-info.html>
-
-        ##libusb
-
-          #control usbs
-
-          sudo aptitude install -y libusb-dev
-          sudo aptitude install -y libusb++-dev
+            # - 3.0 tipically blue while 2.0 black
+            # - 3.0 has 8 pins instead of 4
+            # - ss for super spped may be written
+            # - <http://www.usb3.com/usb3-info.html>
 
       ##firewire
 
@@ -2129,30 +2077,9 @@
 
       ulimit -a
 
-##eval
-
-  #POSIX 7.
-
-  #exec string in current bash
-
-    eval "a=b"
-    [ $a = b ] || exit 1
-
-  #concatenates arguments, space separated:
-
-    [ `eval echo a` = a ] || exit 1
-
-  ##applications
-
-    #make varname from var
-
-      a=b
-      eval "$a=c"
-      [ $b = c ] || exit 1
-
 ##read
 
-  #Reads from stdin and stores in shell variables.
+  # Read from stdin and stores in shell variables.
 
   #Therefore, this *must* be a shell BUILTIN, since it modifies shell variables directly
 
@@ -2285,7 +2212,6 @@
       test a = a -a a = b && assert false
       test a = a -o a = b && assert false
       test a = b -o a = b && assert false
-
 
 ##process
 
@@ -2848,6 +2774,27 @@
 
       # This will in addition clear enviroment variables, and read login scripts found on the chroot.
 
+  ##eval
+
+    # POSIX 7.
+
+    # Exec string in current bash
+
+      eval "a=b"
+      [ $a = b ] || exit 1
+
+    # Concatenates arguments, space separated:
+
+      [ `eval echo a` = a ] || exit 1
+
+    ##applications
+
+      # Make varname from var>
+
+        a=b
+        eval "$a=c"
+        [ $b = c ] || exit 1
+
 ##files
 
   ##ls
@@ -2914,7 +2861,7 @@
 
     # -lL : when showing symlinks, shows info to what is linked to
 
-    ##sort
+    # Sort:
 
       # Modification time (newest first):
 
@@ -3828,8 +3775,8 @@
     # Fine command line tool for eliminating byte by byte duplicates
     # you can either:
 
-    #- pick one by one
-    #- tell fdupes to pick the first one without asking (seem to pick one of the dirs first always)
+    # - pick one by one
+    # - tell fdupes to pick the first one without asking (seem to pick one of the dirs first always)
 
     # Finds and prints dupes:
 
@@ -4294,7 +4241,8 @@ EOF
 
   ##passwd
 
-    # Holds usernames and key account options.
+    # File that holds usernames and key account options,
+    # and command line utility to edit that file.
 
     # Actual passwords are normally stored hashed in the `/etc/shadow` file.
 
@@ -4469,140 +4417,6 @@ EOF
 
     # Make sure your scanner supports the definition preferences you set
     # or you will get a connexion error.
-
-##libs
-
-  #this is just a quick list, installation and cheats may go better
-  #in other files/dirs since libs are usually large to understand
-
-  ##performance note
-
-    #to get the most out of applications, you have to
-    #compile it on your own computer so that the compiler will
-    #be able to make all the possible optimizations for your given
-    #architecture.
-
-  ##c
-
-    ##check
-
-      # C unit testing.
-
-    ##ncurses
-
-      # Command line interactive interfaces.
-
-    ##expat
-
-      #xml parsing
-
-    ##to evaluate
-
-      ##PCRE
-
-        # perl regexes. c11 has regexes.
-
-      ##popt
-
-        # Parse command line options.
-
-  ##c++
-
-    ##boost
-
-      # Cross platform utilities.
-
-      # Very popular, largely influences c++ future.
-
-  ##glx
-
-    # Interface between opengl and x server
-
-    # Allows x windows to use opengl acceleration
-
-    # Must also support a given opengl version
-
-      glxinfo | less
-        #lots of opengl info
-      glxgears
-        #demo
-
-##scientific
-
-  ##netlib
-
-    #lots of good scientific libs from there
-
-    ##blas lapack
-      #fortran: native
-      #clang:  bindings
-
-      #linear algebra. very widely standard.
-
-  ##acts collection
-
-    #< Http://acts.nersc.gov/tools.html>
-
-    # Collection of good numerical libraries.
-
-    # Industry usage.
-
-  ##opengl glut
-    #native:  c++
-    #bindings: python
-
-    #adsf
-
-    #3d rendering
-
-    #de facto open source standard.
-
-  ##opencv
-
-    #langs: c++(native), python
-
-    #computer vision
-
-  ##gsl
-    #c
-    #c++
-
-    #tons of scientific functions
-
-  ##freefem
-
-    #2d and 3d fem
-
-    #TODO
-
-  ##r
-
-    #statistics
-
-  ##it++
-
-    #signal processing
-
-  ##ode
-
-    #rigid body physics engine
-
-  ##plplot
-    #c
-    #cross platform
-
-    #graph plotting
-
-    #quite good at first sight
-
-##dbus-send
-
-  # Suspend computer:
-
-    dbus-send --system --print-reply \
-      --dest="org.freedesktop.UPower" \
-      /org/freedesktop/UPower \
-      org.freedesktop.UPower.Suspend
 
 ##factor
 

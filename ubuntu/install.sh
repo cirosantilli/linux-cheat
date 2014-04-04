@@ -1,16 +1,68 @@
 #!/usr/bin/env bash
 
-# Running this file should do all automatable steps to install useful stuff in Ubuntu 12.04 (UNTESTED).
+# Running this file should do all automatable steps to install useful stuff in Ubuntu 12.04.
 
-# Non automatable steps shall be labelled as:
+# To install the SSH survival kit use:
 
-  #MANUAL: edit that file and click some buttons
+  #wget -O- https://raw.githubusercontent.com/cirosantilli/linux/master/ubuntu/install.sh | bash -s min-ssh
+
+# To install GUI survival kit use:
+
+  #wget -O- https://raw.githubusercontent.com/cirosantilli/linux/master/ubuntu/install.sh | bash -s min
+
+# Non-automatable steps shall be labelled with: `MANUAL`
 
 ##installation procedures
 
-  # Fundamental utils:
+  # SSH survival kit.
 
-    ./install-min
+    # Package manager
+      sudo apt-get update
+      sudo apt-get install -y aptitude
+
+    # Dotfiles:
+      sudo aptitude install -y git
+      git clone https://github.com/cirosantilli/dotfiles
+      cd dotfiles
+      ./install.sh
+
+    # Editor
+      sudo aptitude install -y vim
+      git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+      #vim +PluginInstall +qall
+
+  if [ "$1" = "min-ssh" ]; then exit 0; fi
+
+  # GUI survival kit.
+
+    # Terminal
+      sudo aptitude install -y guake
+
+    # Editor
+      sudo aptitude install -y vim-gtk
+
+    # File manager
+      sudo aptitude install -y krusader
+      sudo aptitude install -y konsole
+      sudo aptitude install -y kwalletmanager
+
+    # PDF
+      sudo aptitude install -y okular okular-extra-backends
+
+    # Communication
+      sudo aptitude install -y pidgin
+      sudo aptitude install -y skype
+      # Google Talk
+      wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+      sudo sh -c 'echo "deb http://dl.google.com/linux/talkplugin/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+      sudo aptitude update
+      sudo aptitude install -y google-talkplugin
+
+    #X
+      sudo aptitude install -y xsel
+      sudo aptitude install -y wmctrl
+
+  if [ "$1" = "min" ]; then exit 0; fi
 
   ##package management
 
@@ -32,6 +84,10 @@
     # mime messages
 
       #sudo aptitude install -y mpack
+
+  ##text
+
+      sudo aptitude install -y dos2unix
 
   ##sysadmin
 
@@ -106,7 +162,6 @@
     sudo aptitude install -y libportaudio-dev libportaudio-doc
 
   ##image
-
 
     sudo aptitude install -y aview
     sudo aptitude install -y caca-utils
@@ -384,180 +439,183 @@
 
     sudo aptitude install -y puppet
 
-    # Many source code for examples to learn qt4.
+    ##c and c++ libraries
 
-      sudo aptitude install -y qt4-demos
+      # Requirements to build conqueror:
 
-    ##vlc
+        sudo aptitude install -y libkonq5-dev
 
-      # Missing development requirements to compile VLC:
+        sudo aptitude install -y libirrlicht-dev
+        sudo aptitude install -y libirrlicht-doc
 
-        sudo aptitude install -y liblua5.1-0-dev libmad0-dev liba52-0.7.4-dev \
-          libxcb-composite0-dev libxcb-xv0-dev libxcb-randr0-dev libgcrypt11-dev
+        sudo aptitude install -y freeglut3-dev
 
-  ##c and c++ libraries
+        sudo aptitude install -y libopencv-dev
+        sudo aptitude install -y opencv-doc
 
-      sudo aptitude install -y libgtk-3-dev
-      sudo aptitude install -y libgtk-3-doc
-      sudo aptitude install -y gtk2.0-examples
+        sudo aptitude install -y libplplot-dev
+        sudo aptitude install -y plplot11-driver-xwin
 
-    ##KDE
+        sudo aptitude install -y linux-source linux-headers
+        #sudo aptitude install -y check
+        sudo aptitude install -y libncurses5-dev
 
-      # KDE core dev libs:
+      # Boost c++
 
-        sudo aptitude install -y kdelibs5-dev
+        # Install all packages:
 
-      # KDE game development files:
+          #sudo aptitude install -y libboost-all-dev
 
-        sudo aptitude install -y libkdegames-dev
+        # For G++ 4.8:
 
-    # Requirements to build conqueror:
+          sudo aptitude install -y libboost1.48-all-dev
 
-      sudo aptitude install -y libkonq5-dev
+        # Some subprojects have specific packages of their own,
+        # but we recommend that you install all at once as it is not that large.
 
-      sudo aptitude install -y libirrlicht-dev
-      sudo aptitude install -y libirrlicht-doc
+          #sudo aptitude install -y libboost-dbg
+          #sudo aptitude install -y libboost-doc
+          #sudo aptitude install -y libboost-graph-dev
 
-      sudo aptitude install -y freeglut3-dev
+        # To find what you need:
 
-      sudo aptitude install -y libopencv-dev
-      sudo aptitude install -y opencv-doc
+          #apt-cache search liboost
 
-      sudo aptitude install -y libplplot-dev
-      sudo aptitude install -y plplot11-driver-xwin
+      # Blas C / Fotran and lapack fortran:
 
-      sudo aptitude install -y linux-source linux-headers
-      #sudo aptitude install -y check
-      sudo aptitude install -y libncurses5-dev
+        sudo aptitude install -y liblapack-dev
 
-    # Boost c++
+      # Lapack C via LAPACKE:
 
-      # Install all packages:
+        #sudo aptitude install -y liblapacke-dev
 
-        #sudo aptitude install -y libboost-all-dev
+        sudo aptitude install -y libgsl0-dev
+        sudo aptitude install -y gsl-doc-info
 
-      # For G++ 4.8:
+      # glx utils:
 
-        sudo aptitude install -y libboost1.48-all-dev
+        sudo aptitude install -y mesa-utils
 
-      # Some subprojects have specific packages of their own,
-      # but we recommend that you install all at once as it is not that large.
+      # Many source code for examples to learn qt4.
 
-        #sudo aptitude install -y libboost-dbg
-        #sudo aptitude install -y libboost-doc
-        #sudo aptitude install -y libboost-graph-dev
+        sudo aptitude install -y libqt4-dev
+        sudo aptitude install -y qt4-demos
 
-      # To find what you need:
+      ##gtk
 
-        #apt-cache search liboost
+          sudo aptitude install -y libgtk-3-dev
+          sudo aptitude install -y libgtk-3-doc
+          sudo aptitude install -y gtk2.0-examples
 
-    # Blas C / Fotran and lapack fortran:
+      ##KDE
 
-      sudo aptitude install -y liblapack-dev
+        # KDE core dev libs:
 
-    # Lapack C via LAPACKE:
+          sudo aptitude install -y kdelibs5-dev
 
-      #sudo aptitude install -y liblapacke-dev
+        # KDE game development files:
 
-      sudo aptitude install -y libgsl0-dev
-      sudo aptitude install -y gsl-doc-info
+          sudo aptitude install -y libkdegames-dev
 
-    # glx utils:
+      ##vlc
 
-      sudo aptitude install -y mesa-utils
+        # Missing development requirements to compile VLC:
 
-  ##python
+          sudo aptitude install -y liblua5.1-0-dev libmad0-dev liba52-0.7.4-dev \
+            libxcb-composite0-dev libxcb-xv0-dev libxcb-randr0-dev libgcrypt11-dev
 
-      sudo aptitude install -y gunicorn
+    ##python
 
-  ##ruby
+        sudo aptitude install -y gunicorn
 
-      curl -L https://get.rvm.io | bash -s stable
-      . ~/.rvm/scripts/rvm
-      rvm install 2.1.1
-      # Logout, login, and works for all shells.
+    ##ruby
 
-  ##node
+        curl -L https://get.rvm.io | bash -s stable
+        . ~/.rvm/scripts/rvm
+        rvm install 2.1.1
+        # Logout, login, and works for all shells.
 
-    # NVM install:
+    ##node
 
-      VERSION=0.10.26
-      curl https://raw.github.com/creationix/nvm/master/install.sh | sh
-      . ~/.nvm/nvm.sh
-      echo ". ~/.nvm/nvm.sh
-      nvm use "$VERSION" &>/dev/null
-      " >> ~/.bashrc
-      nvm install "$VERSION"
+      # NVM install:
 
-    # Package node: old. Use NVM.
+        VERSION=0.10.26
+        curl https://raw.github.com/creationix/nvm/master/install.sh | sh
+        . ~/.nvm/nvm.sh
+        echo ". ~/.nvm/nvm.sh
+        nvm use "$VERSION" &>/dev/null
+        " >> ~/.bashrc
+        nvm install "$VERSION"
 
-      #sudo aptitude install -y nodejs
+      # Package node: old. Use NVM.
 
-    # NPM: comes with later nodes.
+        #sudo aptitude install -y nodejs
 
-      #sudo aptitude install -y npm
+      # NPM: comes with later nodes.
 
-    #
+        #sudo aptitude install -y npm
 
-      npm config set registry http://registry.npmjs.org/
+      #
 
-  ##virtualization ##vm
+        npm config set registry http://registry.npmjs.org/
 
-    # Don't forget to enable virtualization on your BIOS when using virtualization tools.
-    # Some features may only be available with it enabled.
+    ##virtualization ##vm
 
-    ##virtualbox
+      # Don't forget to enable virtualization on your BIOS when using virtualization tools.
+      # Some features may only be available with it enabled.
 
-        #wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add -
-        #sudo sh -c 'echo "deb http://download.virtualbox.org/virtualbox/debian raring contrib" >> /etc/apt/sources.list.d/virtualbox.list'
-        #sudo aptitude update
-        #sudo aptitude install -y virtualbox-4.2
-        #MANUAL https://www.virtualbox.org/wiki/Download_Old_Builds_4_2
+      ##virtualbox
 
-      # On the guest:
+          #wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add -
+          #sudo sh -c 'echo "deb http://download.virtualbox.org/virtualbox/debian raring contrib" >> /etc/apt/sources.list.d/virtualbox.list'
+          #sudo aptitude update
+          #sudo aptitude install -y virtualbox-4.2
+          #MANUAL https://www.virtualbox.org/wiki/Download_Old_Builds_4_2
 
-        #sudo aptitude install virtualbox-guest-utils
+        # On the guest:
 
-      ##vagrant
+          #sudo aptitude install virtualbox-guest-utils
 
-        # MANUAL download:
+        ##vagrant
 
-          #firefox http://www.vagrantup.com/downloads.html
-          #cd download_dir
-          #sudo dpkg -i vagrant*.deb
+          # MANUAL download:
 
-        # Aptitude install failed on Ubuntu 12.04.
+            #firefox http://www.vagrantup.com/downloads.html
+            #cd download_dir
+            #sudo dpkg -i vagrant*.deb
 
-          #sudo aptitude install -y vagrant
+          # Aptitude install failed on Ubuntu 12.04.
 
-    ##docker
+            #sudo aptitude install -y vagrant
 
-      # Only exists for 64bit, not 32.
-      # http://docs.docker.io/en/latest/installation/ubuntulinux/
+      ##docker
 
-        #sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
-        #sudo sh -c "echo deb http://get.docker.io/ubuntu docker main\
-        #> /etc/apt/sources.list.d/docker.list"
-        #sudo aptitude update
-        #sudo aptitude install -y lxc-docker
+        # Only exists for 64bit, not 32.
+        # http://docs.docker.io/en/latest/installation/ubuntulinux/
 
-    ##wine
+          #sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
+          #sudo sh -c "echo deb http://get.docker.io/ubuntu docker main\
+          #> /etc/apt/sources.list.d/docker.list"
+          #sudo aptitude update
+          #sudo aptitude install -y lxc-docker
 
-        sudo add-apt-repository ppa:ubuntu-wine/ppa
-        sudo aptitudeapt-get update
-        sudo aptitude install -y wine1.7
-        sudo aptitude install -y winetricks
-        winetricks winxp d3dx9 vcrun2005 vcrun2008 wininet corefonts
+      ##wine
 
-    # play on linux:
+          sudo add-apt-repository ppa:ubuntu-wine/ppa
+          sudo aptitudeapt-get update
+          sudo aptitude install -y wine1.7
+          sudo aptitude install -y winetricks
+          winetricks winxp d3dx9 vcrun2005 vcrun2008 wininet corefonts
 
-        sudo aptitude install -y playonlinux
+      # play on linux:
 
-  ##language
+          sudo aptitude install -y playonlinux
 
-    #interpreters and related libs
+    ##perl
 
-      sudo aptitude install -y perl-doc
+      # Interpreters and related libs.
+
+        sudo aptitude install -y perl-doc
 
     ##Java
 
@@ -577,7 +635,7 @@
 
       # Then install Oracle version (some things only work with it):
 
-        sudo add-apt-repository ppa:webupd8team/java
+        sudo add-apt-repository -y ppa:webupd8team/java
         sudo aptitude update
         sudo aptitude install -y oracle-java8-installer
 

@@ -1,20 +1,19 @@
+Transforms binary data which may contain non printable bytes like ASCII 0 into data that contain only printable bytes non space chars.
+
+This makes it easier for humans to view and input the data.
+
+Downside: data gets larger.
+
+To understand see Wikipedia: <http://en.wikipedia.org/wiki/base64#examples>
+
 `-d` to decode:
 
     assert [ "`echo abc | base64 | base64 -d`" = abc ]
 
-to understand see wiki: <http://en.wikipedia.org/wiki/Base64#Examples>
+# Why 64?
 
-#application
+There are at least 64 printable chars, but not 128.
 
-transforms binary data which may contain non printable bytes like 0
-into data that contain only printed bytes.
+# Why not use hexadecimal?
 
-this makes it easier for humans input the data
-
-tradeoff: data gets larger
-
-##why 64?
-
-there are 64 printable chars, but not 128.
-
-possible alternative: use base 16. Much easier for humans, but data would get much larger.
+Even simpler for humans, but data gets much larger Ks the base is smaller.

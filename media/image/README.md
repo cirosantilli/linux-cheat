@@ -28,7 +28,7 @@ This increases the size of the image, since it is then necessary to keep bit pos
 
 ##APNG
 
-Animated PNG! Works on Firefox. Goobye GIF.
+Animated PNG! Works on Firefox. Goodbye GIF.
 
 Sample: <http://people.mozilla.org/~dolske/apng/demo.html>
 
@@ -164,6 +164,8 @@ Shortcuts:
 
 - `Shift + B`: bucket fill.
 
+- `Ctrl + D`: duplicate current image.
+
 - `Shift + E`: eraser
 
     To get hard edges, there is a checkbox on the tool option.
@@ -224,6 +226,14 @@ GNOME diagram editor
 ##DOT
 
 Graph format and name of an editor utility.
+
+Graphviz is the most important front and back-end implementation.
+
+Convert DOT file to image formats:
+
+    dot -Tpng -o outfile.png input.dot
+    dot -Tpdf -o outfile.pdf input.dot
+    dot -Tsvg -o outfile.svg input.dot
 
 #Viewers
 

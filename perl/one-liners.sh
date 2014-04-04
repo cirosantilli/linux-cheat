@@ -28,13 +28,16 @@
 
 	##i
 
-		# What would get printed is put into file instead:
+		# Edit In-line, modifying files.
+		# What would get printed is put into file instead
+
+		# WARNING: symlinks are overwritten with files. TODO how to avoid this? Possible on GNU sed with --follow-symlinks.
 
 			printf 'a\nb\n' > f
 			assert [ "`perl -lpi -e 's/a/A/g' f`" ]
 			assert [ "`cat f`" = $'A\nb' ]
 
-		#newlines are affected
+		# Newlines are affected.
 
 		#-i: inline
 
@@ -96,9 +99,10 @@
 
 	##l
 
-		# Adds chomp to loops.
+    # Does two things:
 
-		# No arg: sets `$\ = $/` (ORS = IRS)
+		# - add chomp to top of loops
+		# - set `$\ = $/` (ORS = IRS), so that `print` will include newlines.
 
 		# With arg: sets `$\ = $/` (ORS = IRS)
 
@@ -110,6 +114,8 @@
 			# (and thus equals newline)
 
 			# Remove the annoying end newline which may match your `\s`!
+
+			# Downside: not possible to remove lines with it.
 
 	##M
 

@@ -1303,7 +1303,7 @@ Sources:
 - <https://help.ubuntu.com/community/PowerManagement/Overview>
 - <http://askubuntu.com/questions/1792/how-can-i-suspend-hibernate-from-command-line>
 
-Both can be done with pmi, pm-utils or dbus-send
+Both can be done with `pmi`, `pm-utils` or `dbus-send`
 
 ###suspend
 
@@ -1380,6 +1380,15 @@ Main method used for IPC in KDE 4 and GNOME.
 ##dbus-monitor
 
 View D-Bus messages as they are sent.
+
+##dbus-send
+
+Suspend computer:
+
+    dbus-send --system --print-reply \
+        --dest="org.freedesktop.UPower" \
+        /org/freedesktop/UPower \
+        org.freedesktop.UPower.Suspend
 
 ##libdbus
 
@@ -1531,6 +1540,8 @@ The most important alternatives include:
 TODO: understand the following command:
 
     sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 50
+
+- `50`: priority of the alternative. Metadata associated by `update-alternatives`. Alternative with greatest priority wins.
 
 I used this to link `gcc` to `gcc-4.8` instead of `4.6`.
 

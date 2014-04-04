@@ -1,5 +1,12 @@
 Ubuntu specific info.
 
+Most useful files:
+
+- [install.sh](install.sh): installation procedures for tons of programs.
+- [apt-get.md](apt-get.md): information on Ubuntu's package system.
+
+#Introduction
+
 Ubuntu is likely to be one of the most used distros as of 2014-03:
 
 	http://distrowatch.com/dwres.php?resource=popularity
