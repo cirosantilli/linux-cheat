@@ -23,9 +23,9 @@ zip file or directory
 
     zip -r "$F".zip "$F"
 
--r : add dir recursivelly. otherwise, adds only the top dir!
+`-r`: add dir recursively. Otherwise, adds only the top dir!
 
--e : encrypt:
+`-e`: encrypt:
 
     zip -er "$F".zip "$F"
 

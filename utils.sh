@@ -931,7 +931,7 @@
 
     # Reverse bytewise.
 
-      [ "`echo $'ab' | rev`" = $'ba' ] || exit 1
+      [ "`printf 'ab\n' | rev`" = $'ba' ] || exit 1
 
   ##dd
 
@@ -1198,12 +1198,12 @@
     # Topological sorting:
     # <http://en.wikipedia.org/wiki/Tsort_%28Unix%29>
 
-      echo $'1 2\n2 3' | tsort
+      printf '1 2\n2 3\n' | tsort
         #1
         #2
         #3
 
-      echo $'1 2\n2 1' | tsort
+      printf '1 2\n2 1\n' | tsort
         #contains loop
       echo $?
         #1
@@ -1216,16 +1216,16 @@
 
     #Remove adjacent dupes lines:
 
-      [ "$(echo $'a\nb' | uniq )" = $'a\nb' ] || exit 1
-      [ "$(echo $'a\na' | uniq )" = $'a' ]  || exit 1
+      [ "$(printf 'a\nb\n' | uniq )" = $'a\nb' ] || exit 1
+      [ "$(printf 'a\na\n' | uniq )" = $'a' ]  || exit 1
 
     #Non adjacent dupes are not removed:
 
-      [ "$(echo $'a\nb\na\na' | uniq )" = $'a\nb\na' ] || exit 1
+      [ "$(printf 'a\nb\na\na\n' | uniq )" = $'a\nb\na' ] || exit 1
 
     #Thus the sort combo:
 
-      [ "$(echo $'a\nb\na\na' | sort | uniq )" = $'a\nb' ] || exit 1
+      [ "$(printf 'a\nb\na\na\n' | sort | uniq )" = $'a\nb' ] || exit 1
 
     #Other options:
 
@@ -1305,30 +1305,25 @@
 
     # For more complex operation such as selecting a line from a certain field, consider `awk`.
 
-    # `-f`: field. what column to print.
+    # `-f`: field. what column to print:
 
-      echo $'a\tb\nc\td' | cut -f1
-      #$'a\nc'
+      [ "$(printf 'a\tb\nc\td\n' | cut -f1)" = "$(printf "a\nc")" ] || exit 1
 
-    # `-d`: delimier
+    # `-d`: delimier:
 
-      echo $'a:b\nc:d' | cut -d: -f1
-        #$'a\nc'
+      [ "$(printf 'a:b\nc:d\n' | cut -d: -f1)" = "$(printf "a\nc")" ] || exit 1
 
     # Gets last if delimier too large:
 
-      echo $'a' | cut -d: -f2
-        #$'a'
+      [ "$(printf 'a\n' | cut -d: -f2)" = "a" ] || exit 1
 
     # Multiple columns, first and third:
 
-      echo $'a:b:c\nd:e:f' | cut -d: -f1,3
-        #$'a:c\nd:f'
+      [ "$(printf 'a:b:c\nd:e:f\n' | cut -d: -f1,3)" = "$(printf "a:c\nd:f")" ] || exit 1
 
     # Column range from first to third:
 
-      echo $'a:b:c:d\ne:f:g:h' | cut -d: -f1-3
-        #$'a:b:c\ne:f:g'
+      [ "$(printf 'a:b:c\nd:e:f\n' | cut -d: -f1-3)" = "$(printf "a:b:c\nd:e:f")" ] || exit 1
 
   ##wc
 
@@ -1338,7 +1333,7 @@
 
     # Mnemonic: Word Count.
 
-      echo -n $'a\nb c' | wc
+      printf 'a\nb c\n' | wc
         #1 3 5
         #^ ^ ^
         #a b c
@@ -1371,13 +1366,13 @@
 
     # 2 first bytes:
 
-      [ "`echo -en 'abc' | head -c 2`" = "ab" ] || exit 1
+      [ "$(echo -en 'abc' | head -c 2)" = "ab" ] || exit 1
 
-    ##gnu coreutils
+    ##GNU coreutils
 
       # Remove last two bytes:
 
-        [ "`echo -en 'abc' | head -c -2`" = "a" ] || exit 1
+        [ "$(echo -en 'abc' | head -c -2)" = "a" ] || exit 1
 
   ##tail
 
@@ -1450,7 +1445,7 @@
 
     # Matching lines are kept.
 
-      echo $'0\naa\n1\naa\n2' > f
+      printf '0\naa\n1\naa\n2\n' > f
       csplit f '/^a/' '{*}'
       [ `cat xx00` = 0 ] || exit 1
       [ `cat xx01` = $'aa\n1' ] || exit 1
@@ -1559,7 +1554,7 @@
 
     #setup:
 
-      echo $'0\n1' > a
+      printf '0\n1\n' > a
 
     #fails:
 
@@ -2840,7 +2835,7 @@
 
       mkdir d
       touch d/a d/b
-      [ "$(ls d)" = "$(echo $'a\nb')" ] || exit 1
+      [ "$(ls d)" = "$(printf 'a\nb\n')" ] || exit 1
 
     # ls many dirs:
 
@@ -2857,7 +2852,7 @@
       touch d/a d/b
       mkdir e
       touch e/a e/b
-      [ "$(ls -d d e)" = "$(echo $'d\ne')" ] || exit 1
+      [ "$(ls -d d e)" = "$(printf 'd\ne\n')" ] || exit 1
 
     # -lL : when showing symlinks, shows info to what is linked to
 

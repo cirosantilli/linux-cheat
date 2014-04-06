@@ -29,6 +29,7 @@
     # Editor
       sudo aptitude install -y vim
       git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+      # TODO fails from bash pipe becuase not TTY.
       #vim +PluginInstall +qall
 
   if [ "$1" = "min-ssh" ]; then exit 0; fi
