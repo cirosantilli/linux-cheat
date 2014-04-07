@@ -1356,13 +1356,13 @@
 
     # POSIX 7
 
-    # Filter 10 first lines:
+    # Keep only 10 first lines:
 
       seq 20 | head
 
-    # Filter 3 first lines:
+    # Keep only 2 first lines:
 
-      seq 20 | head -n3
+      [ "$(printf "1\n2\n3\n4\n" | head -n2)" = "$(printf "1\n2\n")" ] || exit 1
 
     # 2 first bytes:
 
@@ -1378,13 +1378,24 @@
 
     # POSIX 7
 
+    # Opposite of head.
+
     # Show last 10 lines of f:
 
-      tail "$f"
+      seq 20 | tail
 
-    # Show last 3 lines of f:
+    # Keep only 2 last lines:
+
+      [ "$(printf "1\n2\n3\n4\n" | tail -n2)" = "$(printf "3\n4\n")" ] || exit 1
 
       tail -n3 "$f"
+
+    ##GNU coreutils
+
+      # Keep only lines from the Nth onwards:
+
+        [ "$(printf "1\n2\n3\n4\n" | tail -n +2)" = "$(printf "2\n3\n4\n")" ] || exit 1
+        [ "$(printf "1\n2\n3\n4\n" | tail -n +3)" = "$(printf "3\n4\n")" ] || exit 1
 
   ##truncate
 

@@ -11,7 +11,7 @@ It is possible to do tests using `localhost` on a single machine.
 
 Per user configurations for both the server and the client are contained under `~/.ssh`
 
-#server
+#Server
 
 Known as `sshd`, which standas for ssh deamon.
 
@@ -240,6 +240,12 @@ Send recursively for directories:
 Send multiple files or directories:
 
     scp -r $u@$h:"$p1" $u@$h:"$p2"
+
+You cannot do a direct SSH, e.g. on Google Cloud you need to use `gcutil` as front-end, you can just do:
+
+    echo 'cp /remove/path/to/file' | gcutil parameters > out
+
+And then remove trash lines.
 
 #sftp
 
