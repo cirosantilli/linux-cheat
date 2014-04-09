@@ -48,14 +48,12 @@
 
 #include <gnu/libc-version.h>   //gnu_get_libc_version
 
-int clone_fn( void* args )
-{
+int clone_fn(void* args) {
     return 0;
 }
 
-int main(int argc, char** argv)
-{
-    printf( "gnu_get_libc_version() = %s\n", gnu_get_libc_version() );
+int main(int argc, char** argv) {
+    printf("gnu_get_libc_version() = %s\n", gnu_get_libc_version());
 
     /*
     #sched.h
@@ -65,12 +63,12 @@ int main(int argc, char** argv)
         Those constants have the same meaning as in the kernel code versions.
     */
     {
-        printf( "SCHED_BATCH    = %d\n",  SCHED_BATCH   );
-        printf( "SCHED_IDLE     = %d\n",  SCHED_IDLE    );
+        printf("SCHED_BATCH    = %d\n",  SCHED_BATCH);
+        printf("SCHED_IDLE     = %d\n",  SCHED_IDLE );
 
         //called SCHED_NORMAL in the kernel:
 
-            printf( "SCHED_OTHER = %d\n", SCHED_OTHER );
+            printf("SCHED_OTHER = %d\n", SCHED_OTHER);
 
         /*
         #sched_getaffinity
@@ -89,19 +87,15 @@ int main(int argc, char** argv)
         */
         {
             cpu_set_t mask;
-            if ( sched_getaffinity( 0, sizeof( cpu_set_t ), &mask ) == -1 )
-            {
-                perror( "sched_getaffinity" );
-                exit( EXIT_FAILURE );
-            }
-            else
-            {
-                printf( "sched_getaffinity = " );
-                for ( int i = 0; i < sizeof( cpu_set_t ); i++ )
-                {
-                    printf( "%d", CPU_ISSET( 0, &mask ) );
+            if (sched_getaffinity(0, sizeof(cpu_set_t), &mask) == -1) {
+                perror("sched_getaffinity");
+                exit(EXIT_FAILURE);
+            } else {
+                printf("sched_getaffinity = ");
+                for (int i = 0; i < sizeof(cpu_set_t); i++) {
+                    printf("%d", CPU_ISSET(0, &mask));
                 }
-                printf( "\n" );
+                printf("\n");
             }
         }
     }
@@ -134,21 +128,21 @@ int main(int argc, char** argv)
         //    clone_fn,
         //    SIGCHLD,
         //);
-        //if ( pid < 0 )
+        //if (pid < 0)
         //{
-        //    perror( "clone" );
-        //    exit( EXIT_FAILURE );
+        //    perror("clone");
+        //    exit(EXIT_FAILURE);
         //}
         //if (pid == 0)
         //{
         //    i++;
         //    return EXIT_SUCCESS;
         //}
-        //wait( &status );
+        //wait(&status);
 
         ////no more child process
-        //assert( status == EXIT_SUCCESS );
-        //assert( i == 1 );
+        //assert(status == EXIT_SUCCESS);
+        //assert(i == 1);
     }
 
     /*
@@ -166,8 +160,8 @@ int main(int argc, char** argv)
 
             */
             {
-                printf("_SC_NPROCESSORS_ONLN = %ld\n", sysconf( _SC_NPROCESSORS_ONLN));
-                printf("_SC_NPROCESSORS_CONF = %ld\n", sysconf( _SC_NPROCESSORS_CONF));
+                printf("_SC_NPROCESSORS_ONLN = %ld\n", sysconf(_SC_NPROCESSORS_ONLN));
+                printf("_SC_NPROCESSORS_CONF = %ld\n", sysconf(_SC_NPROCESSORS_CONF));
             }
     }
 

@@ -23,7 +23,7 @@ $(OUT_DIR)%$(OUT_EXT): %.c
 	gcc -Wall -march=native -O2 -Wno-unused-variable -Wno-unused-but-set-variable -o "$@" "$<"
 
 clean:
-	rm -rf $(OUT_DIR)
+	rm -rf $(OUT_DIR) main.o
 
 asm:
 	gcc -O0 -g -c -fverbose-asm -Wa,-adhln "$(RUN)$(IN_EXTS)" \

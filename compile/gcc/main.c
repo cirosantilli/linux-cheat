@@ -1,10 +1,9 @@
 /*
-Cheat on GNU C extensions both to gcc and libc (called glibc in its gnu version).
+Cheat on GNU C extensions both to gcc and libc (called glibc in its GNU version).
 
-Non gnu specific  features (ex: ansi c, posix) will not be put here.
-the latest stable version of those standards will be considered.
+Non GNU specific  features (ex: ANSI C, POSIX) will not be put here.
 
-You can disable all non gnu specific languages features with flags like `-ansi or -std=c99`
+You can disable all non gnu specific languages features with flags like `-ansi or -std=c99`.
 
 This will not however stop defining certain GNU specific preprocessor macros such as `__GNUC__`
 
@@ -387,6 +386,17 @@ int main(int argc, char** argv)
 
             - const
             - hot
+
+        C++11 specifies a standard syntax for attributes:
+
+            int [[attr1]] i [[attr2, attr3]];
+
+            [[attr4(arg1, arg2)]] if (cond)
+            {
+                [[vendor::attr5]] return i;
+            }
+
+        and two attributes; noreturn and carries_dependency.
 
     #multiple attributes
 

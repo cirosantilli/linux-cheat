@@ -382,6 +382,7 @@
 
     sudo aptitude install -y guake
     #sudo aptitude install -y yakuake
+    sudo aptitutde install -y tmux
 
   ##program
 
