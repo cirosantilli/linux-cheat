@@ -78,7 +78,7 @@
 
   ##uncategorized
 
-    # uuencode, xxencode, BASE64, quoted printable, BinHex
+    # xxencode, BASE64, quoted printable, BinHex
 
       sudo aptitude install -y uudeview
 

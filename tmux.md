@@ -124,3 +124,13 @@ Mode in which history can be browsed, edited and copied to be later pasted on an
 Configuration file: `~/.tmux.conf`
 
 Options shall not be discussed here: they will be commented directly on my `.tmux.conf`.
+
+#Interactive
+
+tmux starts a login shell by default.
+
+Therefore, `.bashrc` will get sourced.
+
+[This SO thread](http://unix.stackexchange.com/questions/38402/aliases-and-tmux) recommends to work arond this by adding to `~/.bash_profile`:
+
+    case $- in *i*) . ~/.bashrc;; esac
