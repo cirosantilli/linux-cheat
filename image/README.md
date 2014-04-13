@@ -156,7 +156,7 @@ To transform it into an actual layer, select it on the layer dialog and push "Cr
 
 ###Tools
 
-Resize image:
+Resize entire image:
 
     Menu > Image > Scale Image
 

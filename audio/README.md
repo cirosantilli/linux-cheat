@@ -148,18 +148,36 @@ Command line tool that takes numeric input from stdin and generate sound.
 
 ##pacmd
 
-Command line control to pulseaudio.
+Command line control to PulseAudio.
 
 #rip
 
 ##abcde
 
-###cli
+###CLI
 
-Rip from dvd:
+Rip from DVD:
 
     abcde
 
 Automatically finds right configurations on most systems.
 
 Creates dir in cur dir and saves rip out as `.ogg` in it.
+
+#Synthesis
+
+##pico2wave
+
+Text to speech.
+
+    sudo aptitude install libttspico-utils
+
+Say "hello world":
+
+    pico2wave -w a.wav "hello world"
+
+`"hello world"` is **not** a filename! It is the actual input! There seems to be no way to get input from files or stdin.
+
+##Virtual Midi Piano Keyboard
+
+##vmpk

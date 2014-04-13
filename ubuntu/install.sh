@@ -149,18 +149,19 @@
     sudo aptitude install -y blahtexml
     sudo aptitude install -y pandoc
 
-  ##sound
+  ##audiou
 
     sudo aptitude install -y abcde
     sudo aptitude install -y cplay
+    sudo aptitude install -y cuetools
+    sudo aptitude install -y flac
     sudo aptitude install -y id3tool
     sudo aptitude install -y lame
     sudo aptitude install -y shntool
-    sudo aptitude install -y cuetools
-    sudo aptitude install -y flac
-    sudo aptitude install -y wavpack
-
     sudo aptitude install -y libportaudio-dev libportaudio-doc
+    # pico2wave
+    sudo aptitude install -y libttspico-utils
+    sudo aptitude install -y wavpack
 
   ##image
 
