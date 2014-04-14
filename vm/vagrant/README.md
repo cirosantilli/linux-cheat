@@ -1,6 +1,6 @@
 Vagrant makes it really fast to create new virtual machines for SSH usage.
 
-For a Vagrant template see: 
+For a Vagrant template see: <https://github.com/cirosantilli/vagrant-template>
 
 Vagrant is a frontend to *providers* like VirtualBox (default) or VMware, so you should get those working before using Vagrant.
 
