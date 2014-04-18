@@ -1,25 +1,30 @@
-GNU private guard encryption.
+GNU Private Guard encryption.
 
-#sources
+Encrypt data and verify identities through algorithms sch as RSA.
 
-- good tut: <http://www.spywarewarrior.com/uiuc/gpg/gpg-com-4.htm>
-- good tut: <http://www.madboa.com/geek/gpg-quickstart/>
+Interface based on the 1991 commercial Pretty Good Privacy (PGP). The interface has been open sourced as `OpenPGP`.
+
+#Sources
+
+- <https://alexcabal.com/creating-the-perfect-gpg-keypair/>
+- <http://www.spywarewarrior.com/uiuc/gpg/gpg-com-4.htm>
+- <http://www.madboa.com/geek/gpg-quickstart/>
 - <https://help.ubuntu.com/community/GnuPrivacyGuardHowto>
 
-#test preparation
+#Test preparation
 
     F=a
     echo a > "$F"
 
-#encryption without keys
+#Encryption without keys
 
 Encryption and digital signing.
 
-Create a "$F".gpg password only encrypted file:
+Create a `"$F".gpg` password only encrypted file:
 
     gpg -c "$F"
 
-Good combo with tar.gz.
+Good combo with `tar.gz`.
 
 Create from stdin:
 
@@ -43,29 +48,35 @@ Decrypt from stdin:
 
 #tar combos
 
-Targz encrypt `"$F"` to `F.tgz.gpg`, remove original:
+`tar.gz` encrypt `"$F"` to `F.tgz.gpg`, remove original:
 
     E=tgz.gpg
     tar cz "$F" | gpg -o "$F"."$E" -c && rm -rf "$F"
 
-targz decrypt `"$F"`
+`tar.gz` decrypt `"$F"`
 
     gpg -d "$F" | tar xz && rm "$F"
 
-#encryption with keys
+#Encryption with keys
 
-You have to understand the very basics of assymetric encryption
-such as RSA before reading this.
+You have to understand the very basics of asymmetric encryption such as RSA before reading this.
 
-##user id
+Generate pub/private pair:
 
-UID can either be any case insensitive substring of the key name or email
-that only one user has:
+    gpg --gen-key
 
-    U="me@mail.com"
+You will be prompted for the key configuration.
+
+##User id
+
+UID can either be any case insensitive substring of the key name or email that only one user has:
+
     U="me"
+    U="me@mail.com"
 
-##key id
+If you enter your name and email at key creation time, your email servers as UID.
+
+##Key id
 
 Is an identifier of the key:
 
@@ -77,116 +88,199 @@ To get it, use:
 
 TODO: how is it calculated this id?
 
-##files
+##Files
 
-private keys is kept under `~/.gnupg/secring.gpg`. **NEVER SHARE THIS FILE**
+Stored under `~/gnupg/`:
 
-public  keys that you trust are kept under `~/.gnupg/secring.gpg`.
+- `secring.gpg`: private keys. **NEVER SHARE THIS FILE**.
+- `pubring.gpg`: public keys. This is what you will share with others.
+- `trustdb.gpg`: keys that you trust.
 
-the keys here are called keyring
+`.asc` extension is used for ASCII key files.
 
-`.asc` extension is used for ascii key files
+Each key file (`.asc` or `.gpg`) may contain many keys.
 
-each key file (`.asc` or `.gpg` may contain many keys)
+##list-keys
 
-##genarate pub/private pair
-
-    gpg --gen-key
-
-##manage keys
-
-list pub keys which you trust
+List pub keys which you trust:
 
     gpg --list-keys
 
-sample output:
+Sample output:
 
+
+    gpg: checking the trustdb
+    gpg: 3 marginal(s) needed, 1 complete(s) needed, PGP trust model
+    gpg: depth: 0  valid:   1  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 1u
+    /home/you/.gnupg/pubring.gpg
+    -----------------------------
     pub   1234R/12345678 2000-01-01
-    uid                  user <mail>
+    uid                  Your Name <you@mail.com>
     sub   1234R/87654321 2000-01-01
 
-pub: public key
-sub: corresponding private pair
-`12345678`: key id
-`1234R`: ???
+Meaning of fields: TODO
 
-add pubkey ot the trust list:
+- `pub`: public key.
+- `sub`: subkey for corresponding public key.
+- `12345678`: key id, `name` in the manual
+- `1234R`: TODO
+
+##edit-key
+
+Add extra information to keys:
+
+    gpg --edit-key you@mail.com
+
+This opens up a REPL interface.
+
+Add a picture to your key:
+
+    addphoto
+
+Should be a very small (32x32) JPEG.
+
+Now `--list-keys` says:
+
+    pub   1234R/12345678 2000-01-01
+    uid                  Your Name <you@mail.com>
+    uid                  [jpeg image of size 783]
+    sub   1234R/87654321 2000-01-01
+
+
+---
+
+Add pubkey to the trust list:
 
     gpg --import
 
-##publicate you pubkey
+Remove public key:
 
-- so that they can encrypt stuff so that you can read it.
-- so that they can verify you are the creator of files.
+    gpg --delete-key $K
 
-as binary:
+If you have they corresponding private key, GPG will require you to delete the private first:
+
+    gpg --delete-secret-keys $K
+
+
+##fingerprint
+
+Same as `list-keys`, but also show key fingerprints.
+
+Fingerprints are hashes of keys, used to identify them uniquely.
+
+Sample output:
+
+    /home/you/.gnupg/pubring.gpg
+    -----------------------------
+    pub   1234R/12345678 2000-01-01
+        Key fingerprint = AAAA AAAA AAAA AAAA AAAA  AAAA AAAA AAAA AAAA AAAA
+    uid                  user <email>
+    sub   1234R/87654321 2000-01-01
+
+##subkey
+
+There can be multiple subkeys per pub key.
+
+Application: <http://blog.dest-unreach.be/wp-content/uploads/2009/04/pgp-subkeys.html>
+
+TODO
+
+##Encrypt and decrypt
+
+Create a `"$F".gpg` pubkey encrypted file:
+
+    gpg -r "$U" -e "$F"
+
+Only the person who knows the corresponding private key will be able to decrypt it.
+
+Decrypt file for which you own the private key:
+
+    gpg -o "$F".out -e "$F"
+
+##Verify file
+
+Create a `"$F"` verification file:
+
+    gpg -ab "$F"
+
+Verify file with its verification file:
+
+    gpg --verify "$F".asc "$F"
+
+Only works of course if the key is in you keyring.
+
+##clearsign
+
+Analogous to signing a document, scanning and uploading it:
+
+- you assert that you have read it and agree to its terms
+- anyone can see the document
+
+Usage:
+
+    gpg --clearsign UbuntuCodeofConduct-2.0.txt
+    cat UbuntuCodeofConduct-2.0.txt.asc
+
+Sample output:
+
+
+    -----BEGIN PGP SIGNED MESSAGE-----
+    Hash: SHA1
+
+    <THE MESSAGE>
+    -----BEGIN PGP SIGNATURE-----
+    Version: GnuPG v1.4.11 (GNU/Linux)
+
+    <BASE64 signature data>
+    -----END PGP SIGNATURE-----
+
+#Publish you pubkey
+
+So that others can:
+
+- encrypt stuff so that you can read it.
+- verify you are the creator of files.
+
+As binary:
 
     gpg -o a.gpg --export "$U"
 
-this could be sent on an email attachment.
+This could be sent on an email attachment.
 
-as ascii:
+As ASCII:
 
     gpg -a -o a.gpg --export "$U"
 
-this could be sent on an email body or as an attachment.
+This could be sent on an email body or as an attachment.
 
-view keys in a key file (`.asc` or `.gpg`):
+View keys in a key file (`.asc` or `.gpg`):
 
     gpg a.gpg
 
-###keyserver
+##keyserver
 
-this is the best method, people only have to know your keyserver,
-and they can look for your key themselves.
+The best method to publish your pubkey. People only have to know your keyserver, and they can look for your key themselves.
 
-of course, nothing prevents you from signing as `Bill Gates`,
-and then you need some way to prove that that is your real identigy..
+Of course, nothing prevents you from signing as `Bill Gates`, and then you need some way to prove that that is your real identity.
 
-well known servers:
+Well known servers:
 
     S="http://pgp.mit.edu/"
     S="https://keyserver.pgp.com/"
+    S="hkp://keyserver.ubuntu.com"
 
-you don't even need to create an account there to add your key:
+You don't even need to create an account there to add your key:
 
-    gpg --send-keys "$K" --keyserver "$S"
+    gpg  --keyserver "$S" --send-keys "$K"
 
-note that you need to use the key id, not the user id!
-since one user can have many keys.
+You need to use the key id, not the user id, since one user can have many keys.
 
-search for someone's key on a server:
+Search for someone's key on a server:
 
     gpg --search-keys "$U" --keyserver "$S"
 
 TODO not working
 
-##encrypt decrypt
+#hkp protocol
 
-finnally!
-
-create a "$F".gpg pubkey encrypted file:
-
-    gpg -r "$U" -e "$F"
-
-only the person who knows the corresponding private key
-will be able to decrypt it.
-
-decrypt file for which you own the private key:
-
-    gpg -o "$F".out -e "$F"
-
-##verify file
-
-prove that a file comes from who he claims to:
-
-create a "$F" verification file:
-
-    gpg -a -b "$F"
-
-verify file with its verification file:
-
-    gpg --verify "$F".asc "$F"
-
-only works of course if the key is in you keyring.
-
+HTTP Keyserver Protocol (HKP), used for example to publish keys.

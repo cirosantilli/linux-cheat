@@ -414,3 +414,17 @@ Output:
     a
 
 so `a` was written to the current terminal.
+
+#Good terminal emulators
+
+Drop-down capability is a huge advantage: hit a key, and the terminal appears. Options:
+
+- `guake`: GNOME
+- `yakuake`: KDE
+
+`finalterm` <https://github.com/p-e-w/finalterm> integrates with the interpreter it is running, offering features like:
+
+- drop-down list auto-completion
+- mouse click on ls items to `cd` into them
+
+Terminator <https://launchpad.net/terminator> is a window splitter master, but `tmux` does everything it does and better.

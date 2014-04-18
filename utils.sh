@@ -10,9 +10,9 @@
 
 ##sources
 
-  #- http://linux.die.net/
+  # - http://linux.die.net/
 
-    #linux man pages
+    # Linux man pages.
 
     # Also contains dive into python and advanced bash scripting,
     # so is a major site.
@@ -326,15 +326,16 @@
 
   sudo update
 
-##chat messaging voice video
+##chat ##messaging
 
   ##mseg write wall
 
-    #write messages to other users on the system
+    # Write messages to other users on the system.
 
     ##mseg
 
-      #enable/disable messages
+      # Enable/disable messages:
+
         mseg n
         mseg
           #n
@@ -367,7 +368,8 @@
         sudo wall
           #sends to all even if disabled
 
-    #play with it:
+    # Play with it:
+
       #go to tty3. on ubuntu: ctrl+alt+f3
       #login as user u
       mesg y
@@ -545,11 +547,15 @@
 
       # Not needed if you have 
 
-    #kiff3
-      #kde diff tool
-      sudo aptitude install -y kdiff3
+    ##kiff3
 
-      kdiff3 f1 f2 -o fout
+      # KDE 3 way merge tool.
+
+      # Works with `git mergetool`.
+
+        sudo aptitude install -y kdiff3
+
+        kdiff3 f1 f2 -o fout
 
   ##ack
 

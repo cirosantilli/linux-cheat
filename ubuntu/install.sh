@@ -146,6 +146,7 @@
 
       curl https://raw.github.com/cirosantilli/latex-cheat/master/install-texlive2013-ubuntu12.04.sh | bash
 
+    sudo aptitude install -y asciidoc
     sudo aptitude install -y blahtexml
     sudo aptitude install -y pandoc
 
@@ -381,9 +382,13 @@
 
   ##terminal emulators
 
-    sudo aptitude install -y guake
+    #sudo aptitude install -y guake
     #sudo aptitude install -y yakuake
     sudo aptitutde install -y tmux
+
+    sudo add-apt-repository -y ppa:finalterm/daily
+    sudo aptitude update
+    sudo aptitude install -y finalterm
 
   ##program
 
@@ -435,12 +440,14 @@
 
     ##version control
 
+        # Very outdated:
         #sudo aptutide install -y tig
+        sudo aptitude install -y cvs
+        sudo aptitude install -y bzr
         sudo aptutide install -y mercurial
         sudo aptitude install -y subversion
-        sudo aptitude install -y cvs
 
-    sudo aptitude install -y puppet
+    #sudo aptitude install -y puppet
 
     ##c and c++ libraries
 

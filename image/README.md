@@ -209,6 +209,10 @@ Shortcuts:
 
     To deactivate a rectangle selection, select the tool, and click once without dragging anywhere outside the selection.
 
+    Select a square: start selection, then hold `Shift`.
+
+    Maintain aspect ration of last selection when resizing: start drag, then hold `Shift`.
+
     - `Ctrl + A + drag`: move the selection elsewhere
 
     - `Ctrl + Shift + V`: open selection as new image
