@@ -17,16 +17,22 @@
   # SSH survival kit.
 
     # Package manager
+
       sudo apt-get update
       sudo apt-get install -y aptitude
 
-    # Dotfiles:
+    # git
+
       sudo aptitude install -y git
+
+    # Dotfiles:
+
       git clone https://github.com/cirosantilli/dotfiles
       cd dotfiles
       ./install.sh
 
     # Editor
+
       sudo aptitude install -y vim
       git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
       # TODO fails from bash pipe becuase not TTY.
@@ -37,20 +43,25 @@
   # GUI survival kit.
 
     # Terminal
+
       sudo aptitude install -y guake
 
     # Editor
+
       sudo aptitude install -y vim-gtk
 
     # File manager
+
       sudo aptitude install -y krusader
       sudo aptitude install -y konsole
       sudo aptitude install -y kwalletmanager
 
     # PDF
+
       sudo aptitude install -y okular okular-extra-backends
 
     # Communication
+
       sudo aptitude install -y pidgin
       sudo aptitude install -y skype
       # Google Talk
@@ -59,7 +70,8 @@
       sudo aptitude update
       sudo aptitude install -y google-talkplugin
 
-    #X
+    # X
+
       sudo aptitude install -y xsel
       sudo aptitude install -y wmctrl
 
@@ -98,24 +110,26 @@
 
   ##printer
 
-    # Worked for: EPSON xp-202.
+    # MANUAL
 
-    # Type printer in dash.
+    # Tested for: EPSON xp-202.
+
+    # Type `printer` in dash.
 
     # The guide shows you everything.
 
   ##desktop
 
     sudo aptitude install -y alarm-clock-applet
+    # GNOME tweak tool:
+    sudo aptitude install -y gconf-editor
     #sudo aptitude install -y logkeys
     sudo aptitude install -y recordmydesktop
     #sudo aptitude install -y gtk-recordmydesktop
     sudo aptitude install -y guvcview
 
     # ibus input methods for QT:
-
-      sudo aptitude install -y ibus-qt4
-
+    sudo aptitude install -y ibus-qt4
     # Useful for example if you want Chinese input for Qt applications.
 
   ##book
@@ -442,8 +456,8 @@
 
         # Very outdated:
         #sudo aptutide install -y tig
-        sudo aptitude install -y cvs
         sudo aptitude install -y bzr
+        sudo aptitude install -y cvs
         sudo aptutide install -y mercurial
         sudo aptitude install -y subversion
 
@@ -565,7 +579,7 @@
 
         #sudo aptitude install -y npm
 
-      #
+      # After install, configure with:
 
         npm config set registry http://registry.npmjs.org/
 

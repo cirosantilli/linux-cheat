@@ -1284,6 +1284,18 @@ Set the value of a key:
 
     gsettings set "org.gnome.gnome-screenshot" "auto-save-directory" "file:///home/$USER/screenshot"
 
+Normal not hidden scroll bars:
+
+    gsettings set com.canonical.desktop.interface scrollbar-mode normal
+
+Show username on panel:
+
+    gsettings set com.canonical.indicator.session show-real-name-on-panel true
+
+Return key to its default value:
+
+    gsettings reset com.canonical.desktop.interface scrollbar-mode
+
 #power
 
 ##shutdown

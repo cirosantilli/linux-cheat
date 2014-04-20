@@ -280,51 +280,23 @@
 
 ##configuration
 
-  ##ubuntu
+  ##Ubuntu
 
     #TODO: explain or remove
 
       #sudo aptitude install -y myunity
 
-    #additional drivers : non free vendors
+    #jockey
 
-      jockey-text --list
-      #list
+      # Additional drivers : non free vendors
 
-      jockey-text --enable=$DRIVER
-      #enable from list. ex: xorg:fglrx_updates
+      # List:
 
-  #TODO explain or remove:
+        jockey-text --list
 
-    sudo aptitude install -y dconf-tools
+      # Enable from list. ex: xorg:fglrx_updates:
 
-  ##gnome tweak tool
-
-    #gui to configure lots of desktop things.
-
-  sudo aptitude install -y gconf-editor
-
-  ##gsettings
-
-    #set vaules
-
-      #applies instantly
-      gsettings set com.canonical.desktop.interface scrollbar-mode normal
-        #normal not hidden scroll bars
-
-      gsettings set com.canonical.indicator.session show-real-name-on-panel true
-        #show username on panel
-
-      gsettings reset com.canonical.desktop.interface scrollbar-mode
-        #return to default value
-
-  #TODO explain or remove:
-
-    sudo aptitude install -y compiz compizconfig-settings-manager compiz-plugins-extra
-
-  ##update alternatives
-
-  sudo update
+        jockey-text --enable=$DRIVER
 
 ##chat ##messaging
 
@@ -345,39 +317,43 @@
 
     ##write
 
-      #write to a user in a tty
+      # Write to a user in a TTY:
 
         u=
         write $u tty3
-          #type you message
-          #type enter, and it is sent
-          #ctrl+d ends
+
+      # Now:
+
+      # - type you message
+      # - type enter, and it is sent
+      # - hit Ctrl + D and its over
 
         u=
         h=
         sudo write $h@$u tty2
-          #with sudo, you can write even is mseg n
 
     ##wall
 
-      #write to all
+      # Write to all:
 
         wall
-          #type you message
-          #message is only sent after you ctrl+d
+
+      # Type you message. It is only sent after you ctrl+d
+
+      # Sends to all even if disabled:
+
         sudo wall
-          #sends to all even if disabled
 
-    # Play with it:
+      # Play with it:
 
-      #go to tty3. on ubuntu: ctrl+alt+f3
-      #login as user u
-      mesg y
-      #go to tty7 (xserver). on ubuntu: ctrl+alt+f7
-      sudo write u tty3
-      #write
-      #go to tty3
-      #your message is there!
+        #go to tty3. on ubuntu: ctrl+alt+f3
+        #login as user u
+        mesg y
+        #go to tty7 (xserver). on ubuntu: ctrl+alt+f7
+        sudo write u tty3
+        #write
+        #go to tty3
+        #your message is there!
 
   ##talk
 
