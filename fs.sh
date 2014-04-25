@@ -25,22 +25,22 @@
 
   # List mounted filesystems:
 
-    df -h
+    df -hT
 
-  # `-h` for human readable.
+  # - `-h`: human readable sizes in powers of 1024.
+  # - `-T`: also show partition type (GNU extension)
 
   # Sample output:
 
-    Filesystem   Size Used Avail Use% Mounted on
-    /dev/sda5    333G 155G 162G 49% /
-    none      4.0K   0 4.0K  0% /sys/fs/cgroup
-    udev      1.8G 4.0K 1.8G  1% /dev
-    tmpfs      376M 1.1M 375M  1% /run
-    none      5.0M   0 5.0M  0% /run/lock
-    none      1.9G 928K 1.9G  1% /run/shm
-    none      100M  28K 100M  1% /run/user
-    /dev/sda2    94G  64G  30G 69% /media/win7
-    /dev/sda7    16G 7.9G 6.6G 55% /media/ciro/375e62f3-b738-4670-8018-5e
+    Filesystem     Type         Size  Used Avail Use% Mounted on
+    /dev/sda7      ext4          29G   15G   13G  55% /
+    udev           devtmpfs     1.9G   12K  1.9G   1% /dev
+    tmpfs          tmpfs        376M  988K  375M   1% /run
+    none           tmpfs        5.0M     0  5.0M   0% /run/lock
+    none           tmpfs        1.9G  428K  1.9G   1% /run/shm
+    /dev/sda5      ext4         320G  168G  136G  56% /home/ciro
+    bindfs         fuse.bindfs   29G   15G   13G  55% /home/ciro/gitlab
+    /dev/sdb1      fuseblk      932G  704G  228G  76% /media/DC74FA7274FA4EB0
 
   # Sort by total size:
 
@@ -48,16 +48,15 @@
 
   # Sample output:
 
-    /dev/sda5    333G 155G 162G 49% /
-    /dev/sda2    94G  64G  30G 69% /media/win7
-    /dev/sda7    16G 7.9G 6.6G 55% /media/ciro/375e62f3-b738-4670-8018-5ea1cb546cdf
-    none      1.9G 928K 1.9G  1% /run/shm
-    udev      1.8G 4.0K 1.8G  1% /dev
-    tmpfs      376M 1.1M 375M  1% /run
-    none      100M  28K 100M  1% /run/user
-    none      5.0M   0 5.0M  0% /run/lock
-    none      4.0K   0 4.0K  0% /sys/fs/cgroup
-    Filesystem   Size Used Avail Use% Mounted on
+    Filesystem  Size  Used Avail Use% Mounted on
+    /dev/sdb1   932G  704G  228G  76% /media/DC74FA7274FA4EB0
+    /dev/sda5   320G  168G  136G  56% /home/ciro
+    /dev/sda7    29G   15G   13G  55% /
+    bindfs       29G   15G   13G  55% /home/ciro/gitlab
+    none        1.9G  428K  1.9G   1% /run/shm
+    udev        1.9G   12K  1.9G   1% /dev
+    tmpfs       376M  988K  375M   1% /run
+    none        5.0M     0  5.0M   0% /run/lock
 
   # Also show partition filesystems type:
 
@@ -127,6 +126,11 @@
     # - for every new system you must do a bit of fstab work.
 
     # We believe that the upsides are worth the downsides if you have basic sysadmin knowledge.
+
+
+##fuseblk
+
+# TODO. NTFS partitions as such.
 
 ##format disks
 
@@ -524,7 +528,6 @@
   # Sample output:
 
     /dev/sda5 on / type ext4 (rw,errors=remount-ro)
-    1      2   3   4
 
   # Shows:
 
@@ -604,7 +607,7 @@
   # Syntax:
 
     <file system> <mount point>  <type> <options>    <dump> <pass>
-    1       2        3    4        5    6
+    1             2              3      4            5      6
 
   # 1. identifier to the file system.
 

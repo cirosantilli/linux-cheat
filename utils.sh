@@ -3231,22 +3231,33 @@
 
     # - `-a`: "archive mode".
 
-      # Sets many other options: `z`
+      # Sets : `-Dgloprt`
 
-      # Does what people usually you want when backing up.
+      # Does what you want it to do, even before you know you need it:
 
-    # - `-r`: recurse into directories
-    # - `-v`: verbose
+      # - `-D`: preserve special and device files. Requires sudo.
+      # - `-g`: preserve group. Requires `sudo`.
+      # - `-l`: copy symlinks as symlinks.
+      # - `-o`: perserve owner. Requires `sudo`.
+      # - `-p`: preserve permissions.
+      # - `-r`: recurse into directories.
+      # - `-t`: preserve modification times.
+
     # - `--exclude=`: Exclude directories.
-
-      # Back up everything except `/media` (where the backup will go to), and `/home`:
-
-        #rsync -arv --exclude=home --exclude=media / /media/SOMETHING/bak
-
+    # - `-v`: verbose
     # - `-z`: compress files before transfer, decompress after.
 
       # Useful if transfer will be done over a network,
       # so that smaller files can be transferred.
+
+    # Combos:
+
+      # Back up everything except `/media` (where the backup will go to), and `/home`.
+
+        #sudo rsync -av --exclude=home --exclude=media / /media/SOMETHING/bak
+
+      # WARNING: your disk must be ext4, not NTFS, or permissions are impossible.
+      # In that case: http://unix.stackexchange.com/questions/11757/is-ntfs-under-linux-able-to-save-a-linux-file-with-its-chown-and-chmod-settings
 
   ##rm
 

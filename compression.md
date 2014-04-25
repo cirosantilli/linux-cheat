@@ -51,19 +51,39 @@ zip every file in cur dir to file.zip
 
 #tar tar.gz tgz tar.bz2 tb2
 
-tar only turns a dir into file, but does no compression
+Name origin: tape archive.
 
-This is why it is often coupled with gz and bz2: those are files compressers
+The tar *format* is specified by POSIX 7 together with the `pax` utility: <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/pax.html#tag_20_92>
 
-gz gives similar compression to .zip
+The `tar` is a GNU implementation, and is not specified by POSIX.
 
-gz2 gives more compression than gz (30% for roms), but MUCH slower to make, and you can't extract individual files easily.
+tar only turns a dir into file, but does no compression.
 
-- tgz == tar.gz
-- txz == tar.xz
-- tb2 == tbz == tar.bz2
+It is a popular option to transform directories in to files in Nix systems, as the format natively stores and preserves ext filesystem metadata such as:
 
-Create:
+- ownership
+- permissions
+- symlinks
+- timestamps
+
+Since tar offers no compression, it is often coupled with `gz` and `bz2`: those are files compressors.
+
+`.gz` gives similar compression ration as `.zip`
+
+`.gz2` gives more compression than `.gz` (30% for ROMs), but is much slower to make, and you can't extract individual files easily.
+
+tar end compressions are used so commonly together that shorthand extensions exist for them:
+
+- `tgz` == `tar.gz`
+- `txz` == `tar.xz`
+- `tb2` == `tbz` == `tar.bz2`
+
+General GNU interface:
+
+- single char options don't start with hyphen
+- every single letter option has a corresponding double hyphen multi char version
+
+Create tar:
 
     tar vcf "$F".tar "$F"
     tar vczf "$F".tgz "$F"
@@ -71,10 +91,20 @@ Create:
     tar vcJf "$F".txz "$F"
 
 - `c`: create
-- `f`: to file given as next arg, not to stdout
-- `z`: gzip
-- `j`: bzip2
+- `f`: set output file to next argument. If not given, outputs to stdout.
+- `z`: `gzip`
+- `j`: `bzip2`
 - `v`: verbose
+
+If the output file exists, it is overwritten.
+
+Create from tar with multiple files:
+
+    tar vcf a.tar f1 f2
+
+`r`: append file to existing tar, or create new tar:
+
+    tar rcf a.tar f
 
 Extract:
 
