@@ -17,3 +17,9 @@ In Ubuntu install docs with:
 #CPAN
 
 Name of the major package repository for Perl modules, and of the command line tool used to install them.
+
+Install the original markdown:
+
+    cpan Text::Markdown
+
+TODO does not install it as an executable. TODO how to do it?

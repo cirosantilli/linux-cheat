@@ -294,7 +294,7 @@
 
         jockey-text --list
 
-      # Enable from list. ex: xorg:fglrx_updates:
+      # Enable from list. E.g.: xorg:fglrx_updates:
 
         jockey-text --enable=$DRIVER
 
@@ -3217,24 +3217,36 @@
 
   ##rsync
 
-    # Synchronize directories.
+    # Very powerful and flexible file copy tool.
 
-    # - works over networks.
-    # - can synchronizes differentially for greater efficiency.
-    # - can compress before sending over the network
-    # - can encrypt files sent
+    # Can:
+    # - works over networks. Both machines must have it installed.
+    #
+    #     Capable of compressing before sending over the network, and decrompressing on the other side.
+    #
+    # - synchronize differentially
+    # - encrypt files sent
 
     # Useful options:
 
+    # - `-a`: "archive mode".
+
+      # Sets many other options: `z`
+
+      # Does what people usually you want when backing up.
+
     # - `-r`: recurse into directories
+    # - `-v`: verbose
+    # - `--exclude=`: Exclude directories.
+
+      # Back up everything except `/media` (where the backup will go to), and `/home`:
+
+        #rsync -arv --exclude=home --exclude=media / /media/SOMETHING/bak
+
     # - `-z`: compress files before transfer, decompress after.
 
       # Useful if transfer will be done over a network,
       # so that smaller files can be transferred.
-
-    # - `-a`: preserve timestamps.
-
-      # By default, sets timestamps of new files to now.
 
   ##rm
 

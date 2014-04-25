@@ -882,7 +882,9 @@
 
     #dropbox
 
-      sudo aptitude install -y nautilus-dropbox
+      # Also installs dropbox, not just nautilus extension.
+
+        sudo aptitude install -y nautilus-dropbox
 
     #ubuntuone taskbar indicator
 
