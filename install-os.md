@@ -18,11 +18,33 @@ You will need a free partition for the installation.
 
 ##USB install
 
-Some distros offer a Windows method of USB installation which does not destroy USB data completely.
+The main parameters to watch for each method are:
 
-Some installers even allow you to reserve space on the USB for permanent storage, so that you can use your OS from the USB just as if it were an small and fast HD.
+- works for whith distribution?
+- can be done from which system?
+- destroys existing data in USB?
+- allows persistent storage?
 
-If however you are already on Linux, you will probably have to destroy all USB information, because the ISO image has to be the very first thing on your USB, therefore erasing essential filesystem structures such as the main boot record partition table of the USB.
+###From Windows
+
+Pendrive Linux <http://www.pendrivelinux.com> is a very good tool that:
+
+- works for multiple distributions
+- can create persistent storate.
+
+From Windows, therea method of USB installation which does not destroy USB data completely.
+
+Some installers even allow you to reserve space on the USB for persistent storage, so that you can use your OS from the USB just as if it were an small and fast HD.
+
+###dd method
+
+Works for any distribution.
+
+Destroys all datat in USB.
+
+No persistent storate.
+
+Inner workings: put the ISO image asbe the very first thing on the USB, therefore erasing essential filesystem structures such as the main boot record partition table of the USB.
 
 Of course, you can always recreate a filesystem in your USB and use it as a storage device once you are done with it.
 
@@ -43,6 +65,14 @@ Where `/dev/sdX` is the mount point of the USB.
 This will erase all data on the USB!
 
 *Don't* write to the first partition `/dev/sdX1`, since what we want is to write to the start of the device, not to the start of its first partition!
+
+###usb-creator-gtk
+
+Ubuntu specific.
+
+Allows easy creation of persistent storage USB of up to 4Gb, and more with hacks.
+
+    gksudo usb-creator-gtk
 
 ##Bootloader problems
 
