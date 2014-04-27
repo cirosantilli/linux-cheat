@@ -104,7 +104,7 @@ You should unmount partitions before making change to them.
 
 To get info on partitions, start/end, filesystem type and flags, consider: `parted`, `df -f`
 
-###Home partition
+##Home partition
 
 If you are a developer, create a separate partition and put your home on the root `/` of that partition.
 
