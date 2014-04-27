@@ -2,7 +2,16 @@ Information about `apt-get`, `dpkg`, `aptitude`, Ubuntu official repositories, P
 
 #Source types
 
-Types of packages:
+The following are the major sources of software:
+
+- Main
+- Restricted
+- Universe
+- Multiverse
+- Partner
+- PPAs
+
+The difference between Main, Universe, Restricted and Multiverse can be visualized as:
 
 |             | Free software | Non-free software |
 |-------------|---------------|-------------------|
@@ -34,6 +43,10 @@ Current 12.04.4 was at <http://releases.ubuntu.com/precise/ubuntu-12.04.4-deskto
 Officially supported software. Full list for 12.04 + their recommendations + the files they provide. Not possible to see the file contents: <http://packages.ubuntu.com/precise/allpackagesx>
 
 Not all of those packages come pre-installed, they can be installed directly with `apt-get` since their source is already enabled by default.
+
+##Partner
+
+TODO: <http://askubuntu.com/questions/456345/what-is-the-difference-between-multiverse-and-partner-sources>
 
 #Software version
 

@@ -1054,6 +1054,8 @@
     # - `-f`: write even if destination exists already. Required to copy device files to other device files.
     # - `-v`: print the transfer status while it is going on.
 
+    # TODO: what is trimming and splitting? Why do they take so long at the end? Splitting can be prevented with: `-n`.
+
   ##pagers
 
     ##less
