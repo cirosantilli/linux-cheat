@@ -921,11 +921,11 @@
 
     # Menemonic: Duplicate Data.
 
-    # Alternate funny mnemonic: Data Destroyer.
-    # Reason: can manipulate sda devices directly without considering file structure,
-    # making operations such as disk copy very fast, but potentially very destructive
-    # if for example you exchange input and output disks, compying an empty disk over
-    # useful data.
+    # Funny mnemonic: Data Destroyer.
+
+    # Reason: the main use case for `dd` is to manipulate block devices like hard disks at a low level
+    # without considering file structure. This makes operations such as disk copy very fast,
+    # but can make a wipe a disk by changing two characters of a command.
 
     ##if of
 
@@ -1001,27 +1001,40 @@
 
     ##conv
 
-      # Do serveral data conversions on copy
+      # Comma separted list of options.
 
-      # ucase: uppercase
+      # Most useful ones:
 
-        [ `echo -n abc | dd status=none conv=ucase` = ABC ] || exit 1
+        # ucase: convert to uppercase:
+
+          [ `echo -n abc | dd status=none conv=ucase` = ABC ] || exit 1
+
+        # noerror: ignore read errors, which would otherwise stop the transfer.
+        #
+        # Prefer a specialized tool like gddrescue to this method.
+        #
+        # Application: part of your hard disk is broken,
+        # but you are willing to risk a faulty full transfer anyways.
 
     ##iflag oflag
 
       #TODO
 
-    ##applications
+    ##Applications
 
-      # Zero an entire block device located at `/dev/sdb` (CAUTION!!!! VERY DANGEROUS!!!!):
+      # Copy one hard disk to another:
+
+         #sudo dd bs=4M if=/dev/sda of=/dev/sdb
+
+      # Zero an entire block device located at `/dev/sdb`:
 
          #sudo dd bs=4M if=/dev/zero of=/dev/sdb
 
       # As of 2013 with mainstream system specs,
-      # this took around 6 minutes on a 2Gb flahs device (around 5.0 MB/s).
+      # this took around 6 minutes on a 2GiB flash device (5.0 MiB/s).
 
-      # If you are really serious about permanently deleting files,
-      # use a program for that with a potentially more advanced algorithm.
+      # If you are really serious about preventing forensic data recovery,
+      # use a program for with a more advanced algorithm, or just destroy the hard disk.
 
   ##pagers
 

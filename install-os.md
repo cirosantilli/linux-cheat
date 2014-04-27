@@ -20,7 +20,7 @@ You will need a free partition for the installation.
 
 The main parameters to watch for each method are:
 
-- works for whith distribution?
+- works for with distribution?
 - can be done from which system?
 - destroys existing data in USB?
 - allows persistent storage?
@@ -30,9 +30,9 @@ The main parameters to watch for each method are:
 Pendrive Linux <http://www.pendrivelinux.com> is a very good tool that:
 
 - works for multiple distributions
-- can create persistent storate.
+- can create persistent storage.
 
-From Windows, therea method of USB installation which does not destroy USB data completely.
+From Windows, there are methods of USB installation which does not destroy USB data completely.
 
 Some installers even allow you to reserve space on the USB for persistent storage, so that you can use your OS from the USB just as if it were an small and fast HD.
 
@@ -40,11 +40,11 @@ Some installers even allow you to reserve space on the USB for persistent storag
 
 Works for any distribution.
 
-Destroys all datat in USB.
+Destroys all data in USB.
 
-No persistent storate.
+No persistent storage.
 
-Inner workings: put the ISO image asbe the very first thing on the USB, therefore erasing essential filesystem structures such as the main boot record partition table of the USB.
+Inner workings: put the ISO image as the very first thing on the USB, therefore erasing essential filesystem structures such as the main boot record partition table of the USB.
 
 Of course, you can always recreate a filesystem in your USB and use it as a storage device once you are done with it.
 
@@ -70,7 +70,9 @@ This will erase all data on the USB!
 
 Ubuntu specific.
 
-Allows easy creation of persistent storage USB of up to 4Gb, and more with hacks.
+Did not work for me: USB did not boot correctly.
+
+Allows easy creation of persistent storage USB of up to 4GiB, and more with hacks.
 
     gksudo usb-creator-gtk
 
@@ -88,7 +90,7 @@ Therefore, if you have the choice, the best option in this case would be to firs
 
 This can be corrected in 2 ways: from a live boot, or from an existing partition with GRUB 2.
 
-###live boot
+###Live boot
 
 If you can Live boot in the distro that uses GRUB 2 things are easy.
 
@@ -118,7 +120,7 @@ Where:
 
 Source: <http://askubuntu.com/questions/59359/unable-to-boot-into-ubuntu-after-ubuntu-fedora-dual-boot/59376#59376>
 
-###existing GRUB 2 partitions
+###Existing GRUB 2 partitions
 
 If you do not have access to a Live CD, you can mount the GRUB 2 partition,
 and `chroot` into it, and then reinstall GRUB 2.

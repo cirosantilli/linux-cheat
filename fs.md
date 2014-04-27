@@ -74,7 +74,7 @@ This is interesting because the number of inodes is a limitation of filesystems 
 
 This limits the amount of files you can have on a system in case you have lots of small files.
 
-#partitions
+#Partitions
 
 There are 2 main types of partitions: MBR or GPT
 
@@ -149,7 +149,7 @@ Better use gparted for simple operations if you have X11
 
 To view/edit partitions with interactive CLI prompt interface.
 
-##-l
+##l
 
 Show lots of partition and disk data on all disks:
 
@@ -286,7 +286,7 @@ List all parameters:
 
 #mkswap
 
-#swap partition
+#Swap partition
 
 The swap partition is used by OS to store RAM that is not being used at the moment to make room for more RAM.
 
@@ -353,7 +353,7 @@ Sample output:
 
 #hda
 
-#device files
+#Device files
 
 Each hard disk and partition corresponds to device file.
 
@@ -384,7 +384,7 @@ The standard naming scheme is:
 - `sda1` is the primary partition of `sda`, `sda2` the second, etc.
 - `sda5` is the first *logical* partition of `sda`. It starts at 5 because there can only be 4 primary partitions.
 
-###lsblk
+##lsblk
 
 List block devices (such as partitions, hard disks or DVD devices), including those which are not mounted.
 
@@ -440,7 +440,7 @@ Get UUID, label and filesystem type for all partitions
 
     sudo blkid
 
-#label
+#Label
 
 An ext partitions concept.
 
@@ -448,7 +448,7 @@ Determines the mount name for the partition.
 
 Should be unique, but not sure this is enforced. TODO
 
-#e2label
+##e2label
 
 Get / set ext[234] label info
 
@@ -482,7 +482,7 @@ Example:
 
     ls -l by-id
 
-#mount
+#Mount
 
 Mounting is the operation of making a block device available for operations such as open, read and write.
 
@@ -500,7 +500,7 @@ You can mount several times on the same point, the last operation hiding the old
 
 You can mount with the mount utility, and unmount with the umount utility.
 
-#mount utility
+##mount utility
 
 Mount block device file on filesystem:
 
@@ -521,7 +521,7 @@ Shows:
 - type
 - flags
 
-###bind
+##bind
 
 Make one dir a copy of the other, much like a hardlink does to files.
 
@@ -538,7 +538,7 @@ Requires `sudo` like mount because it uses kernel internals to do it. For an use
     [ `ls a` = $'a\nb' ] || exit 1
     [ -z `ls b` ] || exit 1
 
-###bindfs
+##bindfs
 
 Like bind, but allows you to mess with ownership and permissions.
 
@@ -558,13 +558,13 @@ Unmount:
 
     fusermount -u /home/johnc/ISO-images
 
-#umount
+##umount
 
 Unmount what is on this dir.
 
     sudo umount /media/win/
 
-#fstab
+##fstab
 
 This is about the config file located at `/etc/fstab`.
 
@@ -619,7 +619,31 @@ Ex:
 
 Use 1 for the primary partition, `2` for the others.
 
-###auto mount windows filesystems
+##mtab
+
+Explained in:
+
+    man mount
+
+`/etc/mtab` contains information about currently mounted filesystems.
+
+Mount without arguments cats it:
+
+    mount
+
+This file is only intended to be read, as it is modified by `mount` automatically.
+
+Its format is compatible with `fstab`, although copying lines directly is not very useful as it refers to block devices by device file, which can change arbitrarily.
+
+Sample lines of the file:
+
+    /dev/sda7 / ext4 rw,errors=remount-ro 0 0
+    proc /proc proc rw,noexec,nosuid,nodev 0 0
+    sysfs /sys sysfs rw,noexec,nosuid,nodev 0 0
+    none /sys/fs/fuse/connections fusectl rw 0 0
+    /dev/sdb1 /media/SYSTEM_DRV fuseblk rw,nosuid,nodev,allow_other,default_permissions,blksize=4096 0 0
+
+##Auto mount Windows filesystems
 
 To mount Windows filesystems such as NTFS or DOS use:
 
@@ -627,7 +651,7 @@ To mount Windows filesystems such as NTFS or DOS use:
 
 This way, dirs will be 000 and files 666 (not executable).
 
-###DVD
+##DVD
 
 Mounting DVDs / USBs is similar to mounting partitions:
 
@@ -637,7 +661,7 @@ However if you use auto, you always get errors when the DVD is empty.
 
 It is best to use auto, because DVD can be of several formats.
 
-###mountall
+##mountall
 
 mountall is on Ubuntu 12.04 the utility that reads fstab and mounts all the filesystems listed there.
 
@@ -657,7 +681,7 @@ Check and repair Linux filesystems.
 
 #inotify
 
-Take action whenever file changes: http://superuser.com/questions/181517/how-to-execute-a-command-whenever-a-file-changes
+Take action whenever file changes: <http://superuser.com/questions/181517/how-to-execute-a-command-whenever-a-file-changes>
 
 Portability: Linux only.
 

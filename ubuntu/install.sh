@@ -104,8 +104,9 @@
 
   ##sysadmin
 
-      sudo aptitude install -y finger
       sudo aptitude install -y acct
+      sudo aptitude install -y finger
+      sudo aptitude install -y gddrescue
       sudo aptitude install -y makepasswd
 
   ##printer
