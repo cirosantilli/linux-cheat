@@ -1862,24 +1862,6 @@
 
 		hwinfo | less
 
-  ##lsof
-
-    #list all open files and pipes
-
-    #COMMAND process name.
-    #PID process ID
-    #USER Username
-    #FD file descriptor
-    #TYPE node type of the file
-    #DEVICE device number
-    #SIZE file size
-    #NODE node number
-    #NAME full path of the file name.
-    #
-    #-u user : by given user
-
-      lsof | less
-
   ##performance
 
     ##top

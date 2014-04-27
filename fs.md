@@ -558,6 +558,8 @@ Unmount:
 
     fusermount -u /home/johnc/ISO-images
 
+##Unmount
+
 ##umount
 
 Unmount what is mounted on given directory:
@@ -567,6 +569,8 @@ Unmount what is mounted on given directory:
 Unmount block device from all directories it is mounted:
 
     sudo umount /dev/sdb1
+
+`umount` can only be used if the device is not in use. To determine which processes are using a device, use `lsof` or `fuser`.
 
 ##fstab
 
@@ -676,6 +680,24 @@ View which processes are using a device:
     fuser -m /dev/sdb1
 
 Useful if you want to unmount a filesystem, and you have to find out who is still using it.
+
+#lsof
+
+List all open files and pipes.
+
+- `COMMAND`: process name.
+- `PID`:     process ID
+- `USER`:    username
+- `FD`:      file descriptor
+- `TYPE`:    node type of the file
+- `DEVICE`:  device number
+- `SIZE`:    file size
+- `NODE`:    node number
+- `NAME`:    full path of the file name.
+
+Usage:
+
+    lsof
 
 #fsck
 
