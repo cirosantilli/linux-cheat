@@ -560,9 +560,13 @@ Unmount:
 
 ##umount
 
-Unmount what is on this dir.
+Unmount what is mounted on given directory:
 
     sudo umount /media/win/
+
+Unmount block device from all directories it is mounted:
+
+    sudo umount /dev/sdb1
 
 ##fstab
 
