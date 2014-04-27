@@ -1036,6 +1036,24 @@
       # If you are really serious about preventing forensic data recovery,
       # use a program for with a more advanced algorithm, or just destroy the hard disk.
 
+  ##ddrescue
+
+    # Like dd, but behaves smartly for disk errors.
+
+    # There are two versions of ddrescue with incompatible interfaces:
+
+    # - GNU. Executable name: `ddrescue`. Ubuntu package: `gddrescue`.
+    # - Kurt Garloff's. Executable name: `dd_rescue`. Ubuntu package: `ddrescue`.
+
+    # We recommend sticking to the GNU version, as it is maintained by an organization rather than an individual.
+
+    # Basic usage:
+
+      dd -fv /dev/from /dev/to ddrescue.log
+
+    # - `-f`: write even if destination exists already. Required to copy device files to other device files.
+    # - `-v`: print the transfer status while it is going on.
+
   ##pagers
 
     ##less
