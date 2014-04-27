@@ -1,9 +1,5 @@
 Information about `apt-get`, `dpkg`, `aptitude`, Ubuntu official repositories, PPAs and related concepts.
 
-#Ubuntu package model
-
-TODO. Which packages and versions of packages are available on each version?
-
 #Source types
 
 Types of packages:
@@ -12,6 +8,16 @@ Types of packages:
 |-------------|---------------|-------------------|
 | Supported   | Main          | Restricted        |
 | Unsupported | Universe      | Multiverse        |
+
+On new installs, Main and Restricted sources are enabled by default.
+
+By default, only Main sources are enabled. Enable Universe with:
+
+      sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) universe" 
+
+Enable everything with:
+
+      sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe restricted multiverse" 
 
 The list of all packages can be found at: <http://packages.ubuntu.com/>
 
@@ -27,17 +33,23 @@ Current 12.04.4 was at <http://releases.ubuntu.com/precise/ubuntu-12.04.4-deskto
 
 Officially supported software. Full list for 12.04 + their recommendations + the files they provide. Not possible to see the file contents: <http://packages.ubuntu.com/precise/allpackagesx>
 
-Not all of those packages come pre-installed.
+Not all of those packages come pre-installed, they can be installed directly with `apt-get` since their source is already enabled by default.
 
 #Software version
 
-For stability and QA, there is only a fixed version of each software per Ubuntu version
+For stability and QA, there is only a fixed version of each software per Ubuntu version, except for occasional:
 
-The only way around are PPAs.
+- updates
+- security
+- backports
+
+updates. Those updates normally only touch critical components, and even after an update it is still possible that a more recent version of Ubuntu will have a more recent version of the software.
+
+Therefore, the most flexible way of getting updated version of software are PPAs.
 
 ##Security
 
-Hot-fixes that must be updated quickly
+Hot-fixes that must be updated quickly.
 
 ##Updates
 

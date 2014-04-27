@@ -79,6 +79,8 @@
 
   ##package management
 
+      sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe restricted multiverse" 
+      sudo aptitude update
       sudo aptitude install -y apt-rdepends
       sudo aptitude install -y apt-file
       apt-file update
@@ -106,6 +108,7 @@
 
       sudo aptitude install -y acct
       sudo aptitude install -y finger
+      # Multiverse.
       sudo aptitude install -y gddrescue
       sudo aptitude install -y makepasswd
 
