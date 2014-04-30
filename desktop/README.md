@@ -597,13 +597,23 @@ Try clicking on the windows, or using your keboard to see the outputs.
 
 #screenshots
 
-##gnome screenshot
+##GNOME screenshot
 
 Ubuntu 12.04 default on `PrtSc` key.
 
 Change directory where images are saved:
 
     gsettings set "org.gnome.gnome-screenshot" "auto-save-directory" "file:///home/$USER/screenshot"
+
+Default shortcuts on Ubuntu 12.04:
+
+- `PrtSc`: take screenshot of entire screen
+- `Alt` + `PrtSc`: take screenshot of current window, the menu including bar. `gnome-screenshot -w`.
+- `Shirt` + `PrtSc`: start a scrosshair cursor and take screenshot of a given selection. `gnome-screenshot -a`.
+
+Useful options:
+
+- remove menu bar: `wB`
 
 ##xwd
 
