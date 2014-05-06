@@ -11,8 +11,7 @@
 #include <sys/socket.h>
 #include "unistd.h"
 
-int main( int argc, char** argv )
-{
+int main(int argc, char** argv) {
     unsigned short server_port = 12345;
     char ch;
     size_t client_len;
@@ -23,8 +22,8 @@ int main( int argc, char** argv )
 	//char protoname[] = "udp";
 
 	protoent = getprotobyname( protoname );
-	if ( protoent == NULL ) {
-        perror( "getprotobyname" );
+	if (protoent == NULL) {
+        perror("getprotobyname");
         exit(EXIT_FAILURE);
 	}
 
@@ -34,8 +33,8 @@ int main( int argc, char** argv )
         protoent->p_proto
         //0
     );
-    if ( server_sockfd == -1 ) {
-        perror( "socket" );
+    if (server_sockfd == -1) {
+        perror("socket");
         exit(EXIT_FAILURE);
     }
 
@@ -51,32 +50,31 @@ int main( int argc, char** argv )
     server_address.sin_family = AF_INET;
     server_address.sin_addr.s_addr = htonl( INADDR_ANY );
     server_address.sin_port = htons( server_port );
-    if ( bind(
+    if (bind(
             server_sockfd,
             (struct sockaddr*)&server_address,
-            sizeof( server_address )
+            sizeof(server_address)
         ) == -1 ) {
-        perror( "bind" );
+        perror("bind");
         exit(EXIT_FAILURE);
     }
 
-    if ( listen( server_sockfd, 5 ) == -1 ) {
-        perror( "listen" );
+    if (listen(server_sockfd, 5) == -1) {
+        perror("listen");
         exit(EXIT_FAILURE);
     }
 
-    while ( 1 )
-    {
-        client_len = sizeof( client_address );
+    while (1) {
+        client_len = sizeof(client_address);
         client_sockfd = accept(
             server_sockfd,
             (struct sockaddr*)&client_address,
             &client_len
         );
-        read( client_sockfd, &ch, 1 );
+        read(client_sockfd, &ch, 1);
         ch++;
-        write( client_sockfd, &ch, 1 );
-        close( client_sockfd );
+        write(client_sockfd, &ch, 1);
+        close(client_sockfd);
     }
     return EXIT_SUCCESS;
 }

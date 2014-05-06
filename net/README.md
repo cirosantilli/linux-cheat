@@ -1202,7 +1202,29 @@ In both cases you should get the HTTP re
 
 `-u`: UDP requests
 
-#samba
+##l
+
+Listen for requests made on a port.
+
+Good way to test tools that send requests like `curl`.
+
+Example:
+
+    nc -l localhost 8000 &
+    curl localhost:8000
+
+Prints:
+
+    GET / HTTP/1.1
+    User-Agent: curl/7.22.0 (i686-pc-linux-gnu) libcurl/7.22.0 OpenSSL/1.0.1 zlib/1.2.3.4 libidn/1.23 librtmp/2.3
+    Host: localhost:8000
+    Accept: */*
+
+Send `SIGSTOP` with CTRL-C, and then kill `nc` with `kill %1`.
+
+TODO: why does it behave weirdly like this?
+
+#Samba
 
 Open source Linux implementation of the SMB/CIFS networking protocol used by default on Windows.
 
