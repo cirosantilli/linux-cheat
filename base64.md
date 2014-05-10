@@ -4,9 +4,9 @@ Byte encoding method, and GNU Coreutils command line utility that implements it.
 
 Transforms binary data which may contain non printable bytes like ASCII 0 into data that contain only printable bytes non space chars.
 
-This makes it easier for humans to view and input the data.
+Advantage: makes it easier for humans to view and input the data.
 
-Downside: data gets larger.
+Disadvantage: data gets 33% larger in average. TODO calculation.
 
 To understand see Wikipedia: <http://en.wikipedia.org/wiki/base64#examples>
 

@@ -1,4 +1,4 @@
-CLI utility that does several web protocols, including HTTP, FTP, mail, dict.
+CLI utility that does several web protocols, including HTTP, FTP, SMTP, DICT.
 
 More powerful than `wget`: only use `wget` for recursive mirroring.
 
@@ -8,13 +8,47 @@ Ubuntu install:
 
     sudo aptitude install -y curl
 
+#Basic usage
+
+Make a `GET / HTTP/1.1` request to Google, wait for response, and print response:
+
+    curl google.com
+
+#Test cURL
+
+cURL does not have a dry-run option built-in: <http://stackoverflow.com/questions/6180162/echo-curl-request-header-body-without-sending-it/6180363#6180363>
+
+There are however a few options to visualize what it is doing:
+
+-   `-v` and other verbosity options.
+-   using `nc -l` and curl `-m 1`:
+
+        nc -l localhost 8000 &
+        curl -m 1 localhost:8000
+
+#v
+
 #trace
+
+#trace-ascii
+
+`-v` , `--trace "$FILE"`, `--trace-ascii "$FILE"`: increasing levels of log verbosity.
+
+`-` to stdout.
 
 Print all data IO and curl status:
 
     curl --trace - "$URL"
 
 Good way to see what is going on.
+
+    curl -Lv google.com
+
+#m
+
+#max-time
+
+Timeout for entire operation.
 
 #L
 
@@ -35,12 +69,6 @@ With `-v` you can see the full transaction:
 
 #HTTP
 
-##GET
-
-Make GET request, response body to stdout:
-
-    curl amazon.com
-
 ##POST
 
 ##d
@@ -51,11 +79,30 @@ Make POST request:
 
 Data from stdin with `-d @-`:
 
-    echo 'asdf' | curl -d @- "$URL"
+    echo 'a=1' | curl -d @- "$URL"
 
 Multiple data are joined by an ampersand `&`:
 
-    curl -d 'a=1' -d 'b=2' --trace - "$URL"
+    curl -d 'a=1' -d 'b=2' "$URL"
+
+##form
+
+##F
+
+Multipart POST request like done from an HTML form by a browser:
+
+    echo "Content of a.txt" > a.txt
+    curl -F "key1=val1" -F "file1=@a.txt" "$URL"
+
+##H
+
+##header
+
+Custom header.
+
+Overrides default cURL headers.
+
+    curl -d '{"a":"b"}' -H "Content-Type:application/json" "$URL"
 
 ##i
 
@@ -88,10 +135,6 @@ Encode spaces and other signs for you:
     curl -d               "name=I%20am%20Ciro" $URL
     curl --data-urlencode "name=I am Ciro"     $URL
 
-Resume download from where it stopped:
-
-    curl -C - -O http://www.gnu.org/software/gettext/manual/gettext.html
-
 #a-z range
 
     curl ftp://ftp.uk.debian.org/debian/pool/main/[a-z]/
@@ -107,23 +150,21 @@ Upload:
     curl -u ftpuser:ftppass -T myfile.txt ftp://ftp.testserver.com
     curl -u ftpuser:ftppass -T "{file1,file2}" ftp://ftp.testserver.com
 
-#mail
+#email
 
-Send mail:
+#SMTP
+
+Send email:
 
     echo $'sent by curl!\n.' | curl --mail-from user@gmail.com --mail-rcpt user@gmail.com smtp://gmail.com
 
-Body ends with a single dot '.' on a line.
+Body ends with a single dot `.` on a line.
 
-#dict
+#DICT
 
     curl dict://dict.org/show:db #dictionnaries
     curl dict://dict.org/d:bash #general
     curl dict://dict.org/d:bash:foldoc #computing
-
-`-v` , `--trace $FILE`, `--trace-ascii $FILE`: increasing levels of log verbosity:
-
-    curl -Lv google.com
 
 #Basic authentication
 

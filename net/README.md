@@ -12,9 +12,9 @@ If information here gets good enough, this will get split into a separate direct
 
 ##Non free
 
-[ste12]: <http://www.amazon.com/TCP-Illustrated-Volume-Addison-Wesley-Professional/dp/0321336313>
+[ste12]: http://www.amazon.com/TCP-Illustrated-Volume-Addison-Wesley-Professional/dp/0321336313
 
-- [stevens - 2012 - tcp ip illustrate volume 1 2nd edition]
+-   [stevens - 2012 - tcp ip illustrate volume 1 2nd edition][ste12]
 
     Extremely clear and exemplified.
 
@@ -24,12 +24,11 @@ If information here gets good enough, this will get split into a separate direct
 
 [dos06]: http://www.amazon.com/Understanding-TCP-IP-ebook/dp/B007TUYE0G/
 
-- [dostalek - 2006 - Understanding tcp ip][dos06]
+-   [dostalek - 2006 - Understanding tcp ip][dos06]
 
-    Explains the most important internet protocol suite protocols deeply.
+    Explains the most important Internet protocol suite protocols deeply.
 
-    Might not be the best first TCP IP book because it is a bit advanced,
-    but it is a very good second one if you know the basics.
+    Might not be the best first TCP IP book because it is a bit advanced, but it is a very good second one if you know the basics.
 
 #OSI vs IPS
 
@@ -84,14 +83,14 @@ Each layer adds a header to the layer below containing its information:
     | internet data                        | internet header |
     | link data                                              | link data  |
 
-- the transport data is the same as the application data.
+-   the transport data is the same as the application data.
 
-- the Internet data contains exactly:
+-   the Internet data contains exactly:
 
     - the transport data
     - the transport header
 
-- the link data contains exactly:
+-   the link data contains exactly:
 
     - the Internet data
     - the Internet header
@@ -104,9 +103,9 @@ It knows the IP of that server.
 
 The browser gives to the networking system
 
-- the HTTP data
-- the IP of the server
-- the port on the server.
+-   the HTTP data
+-   the IP of the server
+-   the port on the server.
 
     HTTP is standardized by IANA to be accepted on port 80/TCP.
 
@@ -142,25 +141,25 @@ Learn what the IP header contains:
 
 Fields by increasing interest / ease to understand ratio:
 
-- version (4 bits)
+-   version (4 bits)
 
     Indicates the protocol version.
 
     Value 4 for IPv4.
 
-- Internet header length (IHL) (4 bits)
+-   Internet header length (IHL) (4 bits)
 
     Length of the IP header only (no data) in 4 byte units.
 
-- total length (2 bytes)
+-   total length (2 bytes)
 
     Total length of header + body in bytes
 
     This must be transmitted as the length is variable.
 
-- IPs of destination and origin (4 bytes each)
+-   IPs of destination and origin (4 bytes each)
 
-- time to live (TTL) (1 byte)
+-   time to live (TTL) (1 byte)
 
     Decreased whenever the packet passes through a router.
 
@@ -168,9 +167,9 @@ Fields by increasing interest / ease to understand ratio:
 
     This prevents lost packages from doing infinite turns on the network.
 
-- header checksum (2 bytes)
+-   header checksum (2 bytes)
 
-- protocol (1 byte)
+-   protocol (1 byte)
 
     Number that identifies the protocol contained in the IP data, for example TCP or UDP.
 
@@ -178,15 +177,15 @@ Fields by increasing interest / ease to understand ratio:
 
     The numbers are assigned by IANA and can be found [here](http://en.wikipedia.org/wiki/List_of_IP_protocol_numbers).
 
-- flags: 3 bits
+-   flags: 3 bits
 
     Used for IP fragmentation.
 
-- fragment offset: (13 bits)
+-   fragment offset: (13 bits)
 
     Used for IP fragmentation.
 
-- identification: (2 bytes)
+-   identification: (2 bytes)
 
     Used for IP fragmentation.
 
@@ -202,18 +201,17 @@ Reassembly of fragments is meant to happen only at the final destination.
 
 The fields used from the IP header  are:
 
-- flags (3 bits)
+-   flags (3 bits)
 
         | 0 | DF | MF |
 
     - 0: reserved, always set to 0
 
-    - `DF`: don't fragment.
+    -   `DF`: don't fragment.
 
         If that is the case, the router first checks the `DF` flag.
 
-        If `DF = 1`, routers should not fragment,
-        and notify the source via an ICMP fragmentation not possible message.
+        If `DF = 1`, routers should not fragment, and notify the source via an ICMP fragmentation not possible message.
 
         If `DF = 0`, fragmentation can occur, and tranmission continues.
 
@@ -223,10 +221,9 @@ The fields used from the IP header  are:
 
         If 1, there are more fragments to come.
 
-        A common technique is to send first the last segment,
-        which allows the destination to know how large a buffer it will need in advance.
+        A common technique is to send first the last segment, which allows the destination to know how large a buffer it will need in advance.
 
-- fragment offset: (13 bits)
+-   fragment offset: (13 bits)
 
     How many 8 byte units of IP data have already been sent.
 
@@ -234,7 +231,7 @@ The fields used from the IP header  are:
 
     But if fragmentation occurs, the following fragments will contain how much IP data has been sent already.
 
-- identification: (2 bytes)
+-   identification: (2 bytes)
 
     It is set by the sender with a different number for each IP datagram.
 
@@ -257,11 +254,11 @@ Each computer knows its IP address.
 
 This can be set in two ways:
 
-- statically and manually: admin enters those values for each computer.
+-   statically and manually: admin enters those values for each computer.
 
     They never change.
 
-- dynamically and automatically.
+-   dynamically and automatically.
 
 ###IP classes
 
@@ -270,7 +267,6 @@ Each address has two parts: network part and host part.
 ####Example: network and host parts
 
 - 2 networks
-
 - 3 bytes for the network part
 - 1 router
 - 3 computers on the same network
@@ -587,7 +583,7 @@ Send an echo every second to monitor connectivity:
 
 #traceroute
 
-Linux utility that shows each step an IP package takes to reach a destination.
+CLI utility that shows each step an IP package takes to reach a destination.
 
 Operation is simple: the program sends the request with TTL = 1, TTL = 2, TTL = 3, and so on, and gets the address at which it stopped via ICMP time exceeded router responses.
 
@@ -597,19 +593,18 @@ Example:
 
 #tcpdump
 
-CLI utility that allows to visualize tcp packets sent and received.
+CLI utility that allows to visualize TCP packets sent and received.
 
 Good intro tutorial: <http://danielmiessler.com/study/tcpdump/>
 
-Also consider Wireshark, whose output is generally easier to interpret
-(but unfortunately is a X GUI instead of CLI).
+Also consider Wireshark, whose output is generally easier to interpret (but unfortunately is a X GUI instead of CLI).
 
 Most useful options:
 
-- `-X`: show ASCII and hex side by side:
-- `-n`: don't resolve hostnames, show numeric IPs
-- `-S`: don't resolve hostnames, show numeric IPs
-- `-vvv`: maximum verbosity level
+-   `-X`: show ASCII and hex side by side:
+-   `-n`: don't resolve hostnames, show numeric IPs
+-   `-S`: don't resolve hostnames, show numeric IPs
+-   `-vvv`: maximum verbosity level
 
     Interprets standard data types and prints them, making output easier to understand.
 
@@ -617,9 +612,25 @@ Example:
 
     sudo tcpdump -SXn
 
+#tcpflow
+
+Show data send and read at a given port.
+
+Easy to read output.
+
+<http://superuser.com/questions/23180/whats-the-easiest-way-to-sniff-tcp-traffic-data-on-linux>
+
+Ubuntu 12.04 install:
+
+    sudo aptitude install tcpflow
+
+Sample usage:
+
+    sudo tcpflow -i any -C -e port 1234
+
 #Wireshark
 
-Set of utilities that that capture TCP IP packages similarly to tcpdump.
+Set of utilities that that capture (snif) TCP IP packages similarly to `tcpdump`.
 
 Analyzes packages if possible, and presents them on a human readable way. For this reason this is an amazing tool to really understand everything that goes on your computer's network interfaces.
 
@@ -1038,7 +1049,7 @@ TODO
 
     man interfaces
 
-###set static ip
+###Set static IP
 
 On a home network that you control, it is better to use intuitive hostnames and let the addresses be dynamic, unless some app really requires you to enter IPs. See hostname for how.
 
@@ -1052,15 +1063,10 @@ On a home network that you control, it is better to use intuitive hostnames and 
     broadcast 192.168.1.255
     gateway 192.168.1.1
 
-- `auto if1 if2`.
+- `auto if1 if2`: automatically create interfaces `if1` and `if2` on `ifup -a`.
+- `iface if1`: from now on, define properties of `if1`.
 
-    Automatically create interfaces `if1` and `if2` on `ifup -a`.
-
-- `iface if1`
-
-    From now on, define properties of `if1`.
-
-#mtu
+#MTU
 
 <http://en.wikipedia.org/wiki/Maximum_transmission_unit>
 
@@ -1072,7 +1078,11 @@ Varies across different link technologies.
 
 #nmap
 
-Show open ports, state and service name associated to the port
+Show open ports, state and service name associated to the port.
+
+Ubuntu 12.04 install:
+
+    sudo aptitude install nmap
 
 TCP services:
 
@@ -1108,43 +1118,15 @@ When a program uses a socket, it binds to it, and other programs cannot use it.
 
 Most useful options:
 
-- `-n`
-
-    Don't resolve IPs into hostnames.
-
-    Greatly speeds up the output generation.
-
-- `-a`
-
-    Show both listening and not listening ports.
-
-- `-p`
-
-    Show program name and pid.
-
-- `-t`
-
-    Show only TCP
-
-- `-u`
-
-    Show only UDP
-
-- `-x`
-
-    Show only UNIX sockets
-
-- `i`
-
-    Show information on interfaces.
-
-- `r`
-
-    Show kernel routing table.
-
-- `-s`
-
-    Show statistics on several protocols.
+- `n`: don't resolve IPs into hostnames. Greatly speeds up the output generation.
+- `a`: show both listening and not listening ports.
+- `p`: show program name and PID.
+- `t`: show only TCP
+- `u`: show only UDP
+- `x`: show only UNIX sockets
+- `i`: show information on interfaces.
+- `r`: show kernel routing table.
+- `s`: show statistics on several protocols.
 
 Sample output for Internet section:
 
@@ -1181,48 +1163,6 @@ also consider:
 
 - `nc`
 - `socat`
-
-#netcat
-
-See `nc`.
-
-#nc
-
-Open, listen, send and receive TCP/UDP packages and sockets
-
-Make an HTTP get request manually to `google.com`:
-
-    echo 'GET / HTTP/1.0' | nc google.com 80
-
-If you have apache working on your computer, you can also do it on localhost to test:
-
-    echo 'GET / HTTP/1.0' | nc localhost 80
-
-In both cases you should get the HTTP re
-
-`-u`: UDP requests
-
-##l
-
-Listen for requests made on a port.
-
-Good way to test tools that send requests like `curl`.
-
-Example:
-
-    nc -l localhost 8000 &
-    curl localhost:8000
-
-Prints:
-
-    GET / HTTP/1.1
-    User-Agent: curl/7.22.0 (i686-pc-linux-gnu) libcurl/7.22.0 OpenSSL/1.0.1 zlib/1.2.3.4 libidn/1.23 librtmp/2.3
-    Host: localhost:8000
-    Accept: */*
-
-Send `SIGSTOP` with CTRL-C, and then kill `nc` with `kill %1`.
-
-TODO: why does it behave weirdly like this?
 
 #Samba
 

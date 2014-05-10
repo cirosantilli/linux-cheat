@@ -112,13 +112,31 @@ Extract:
     tar vxzf "$F".tgz
     tar vxjf "$F".tbz
 
+#gzip
+
+#gunzip
+
 #gz
 
 gzip files.
 
+Vs zip:
+
+-   Completely different file types.
+
+-   Both are use the DEFLATE algorithm: <https://en.wikipedia.org/wiki/DEFLATE>, and therefore have very similar compression ratios and speeds.
+
+-   gzip seems to have very one dominant implementation: GNU, so that gzip can refer to either the utility or format used by that utility.
+
+    zip has many implementations: WinRAR, WinZip on closed source on Windows, Info-ZIP and libzip open source, Info-ZIP being the default one present on Ubuntu 12.04. Therefore the term zip usually onlre refers to 
+
 If a file is only gz but not tgz you cannot use tar to extract it
 
-Extract `a.gz` and erase it if sucessful:
+Create `a.txt.gz` and `rm` `a.txt`:
+
+    gzip a.txt
+
+Extract `a.gz` and erase it if successful:
 
     gunzip a.gz
 

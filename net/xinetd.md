@@ -4,7 +4,7 @@ xinetd is the new version for inetd, thus the "extended".
 
 It seems that in older days many services used inetd as a frontend.
 
-Many major services such as http severs, ftp servers and others have been moved out, and xinetd may not even come installed by default on certain systems such as Ubuntu 13.04
+Many major services such as HTTP severs, FTP servers and others have been moved out, and xinetd may not even come installed by default on certain systems such as Ubuntu 13.04
 
 One of the advantages of using xinetd is that a single process needs to run, and only when a certain service on a given port is required does xinetd turn that service on.
 
