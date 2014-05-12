@@ -1,5 +1,1 @@
-# Booktree
-
-## Book development with Version control
-
-<img alt="logo" src="gitlab_logo.png" width="400">
+**Rendered** with [Kramdown](https://github.com/gettalong/kramdown).

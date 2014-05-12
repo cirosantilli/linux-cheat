@@ -330,6 +330,14 @@ The boundary cannot appear inside the data: the user agent must chose it appropr
 
 The trailing hyphens of the boundary are often added for partial backward compatibility with older multipart RFCs, and to improve readability. TODO are they mandatory?
 
+##Custom headers
+
+<http://stackoverflow.com/questions/3561381/custom-http-headers-naming-conventions>
+
+In the past, prefix by `X-`.
+
+After 2012: cross your fingers and pick a name.
+
 #Body
 
 #HTTPS
