@@ -26,9 +26,9 @@ Same as `cp a b`:
 
     dd if=a of=b
 
-#Status
+#status
 
-Stop printing status lines:
+Stop printing status line at the end of the transfer:
 
     echo a | dd status=none
 

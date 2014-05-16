@@ -1,4 +1,4 @@
-This talks about concepts such as: hard disks, mounting, partitions, filesystem, block devices.
+Filesystems and related concepts: hard disks, mounting, partitions, block devices.
 
 #du
 
@@ -76,7 +76,7 @@ This limits the amount of files you can have on a system in case you have lots o
 
 #Partitions
 
-There are 2 main types of partitions: MBR or GPT
+There are 2 main types of partitions: MBR or GPT.
 
 ##MBR
 
@@ -114,11 +114,42 @@ Benefits:
 - if your home HD gets filled with large downloads, your system won't get into trouble,
 since it uses a separate partition.
 
-Downsides:
+Use the same username on new systems, and mount the partition automatically with `fstab`. For every new system, just copy the fstab line.
 
-- for every new system you must do a bit of fstab work.
+30GiB is a good size for each root partition. Leave everything else for the home partition.
 
-We believe that the upsides are worth the downsides if you have basic sysadmin knowledge.
+#Partition table
+
+Contained in the MBR.
+
+The partition table is optional: <http://askubuntu.com/questions/276582/is-it-safe-to-use-a-usb-external-drive-without-a-valid-partition-table>
+
+If not present, most systems will search for a partition starting at the very beginning of the disk.
+
+In such case, the partition will be mounted directly at `/dev/sdb`, not `/dev/sdb1`
+
+#MBR
+
+The MBR is the first 512 sector of the device found. It contains:
+
+-   a small piece of code (446 bytes) called the primary boot loader.
+
+    This code will then be executed.
+
+    Most often, all it does it to load a second stage bootloader like GRUB.
+
+-   the partition table (64 bytes) describing the primary and extended partitions.
+
+-   2 bytes for MBR validation check.
+
+    It is a fixed magic number <http://stackoverflow.com/questions/1125025/what-is-the-role-of-magic-number-in-boot-loading-in-linux>, that can be used to:
+
+    - check if the device has a MBR
+    - check endianess
+
+The MBR can only be at the start of a physical partition, not of a logical partition.
+
+This is why on bootloader configurations you give `/dev/sda`, instead of `/dev/sda1-4`.
 
 #fuseblk
 
@@ -213,7 +244,13 @@ Those parameters can be gotten with commands such as `sudo fdisk -l`.
 
 #Filesystem
 
-Determines how data will get stored in the hard disk
+Determines how data will be efficiently stored in the hard disk in a linear manner.
+
+Very complex design, which must consider:
+
+- how to store tree structures like directories?
+- how to find things efficiently?
+- if power goes down, will the user lose all data?
 
 ext2, ext3 and ext4 are the ones mainly used in Linux today.
 
@@ -222,8 +259,8 @@ On ext4, only one dir is created at the root: lost+found
 Other important filesystems:
 
 - NTFS: windows today
-- FAT: DOS
-- MFS: Macintosh File System. Mac OS X today.
+- FAT:  DOS
+- MFS:  Macintosh File System. Mac OS X today.
 
 To find out types see blkid or lsblk
 
@@ -379,30 +416,48 @@ Sample output:
 
 The standard naming scheme is:
 
-- `sd` and `hd` are the type of disk TODO
-- `sda` is the first hard disk, `sdb` is the second, `sdc` the third, etc.
-- `sda1` is the primary partition of `sda`, `sda2` the second, etc.
-- `sda5` is the first *logical* partition of `sda`. It starts at 5 because there can only be 4 primary partitions.
+- `sd` and `hd` are the type of disk
+- `sda`         is the first hard disk, `sdb` is the second, `sdc` the third, etc.
+- `sda1`        is the primary partition of `sda`, `sda2` the second, etc.
+- `sda5`        is the first *logical* partition of `sda`. It starts at 5 because there can only be 4 primary partitions.
+
+If a MBR is not present and a filesystem starts directly at the start of the device, then `sda` will be the partition itself.
+
+##SATA
+
+##IDE
+
+##hd vs sd
+
+`hd` is for IDE disks, `sd` for SATA disks.
+
+These are two standards of interface between hard disk and motherboard, with different connectors.
+
+SATA stands for Serial Advanced Technology Attachment (or Serial ATA) and IDE is also called Parallel ATA or PATA.
+
+But by the beginning of 2007, SATA had largely replaced IDE in all new systems. 
+
+<http://www.diffen.com/difference/IDE_vs_SATA>
 
 ##lsblk
 
-List block devices (such as partitions, hard disks or DVD devices), including those which are not mounted.
+List block devices, including those which are not mounted.
 
     sudo lsblk
 
 Sample output:
 
-    NAME  MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
-    sda   8:0  0 465.8G 0 disk
-    |-sda1  8:1  0  1.5G 0 part
-    |-sda2  8:2  0 93.2G 0 part /media/win7
-    |-sda3  8:3  0 13.7G 0 part
-    |-sda4  8:4  0   1K 0 part
-    |-sda5  8:5  0 338.1G 0 part /
-    |-sda6  8:6  0  3.7G 0 part [SWAP]
-    `-sda7  8:7  0 15.6G 0 part
-    sdb   8:16  0 931.5G 0 disk
-    `-sdb1  8:17  0 931.5G 0 part /media/ciro/DC74FA7274FA4EB0
+    NAME    MAJ:MIN RM  SIZE   RO TYPE MOUNTPOINT
+    sda     8:0     0   465.8G 0  disk
+    |-sda1  8:1     0    1.5G  0  part
+    |-sda2  8:2     0   93.2G  0  part /media/win7
+    |-sda3  8:3     0   13.7G  0  part
+    |-sda4  8:4     0     1K   0  part
+    |-sda5  8:5     0   338.1G 0  part /
+    |-sda6  8:6     0    3.7G  0  part [SWAP]
+    `-sda7  8:7     0   15.6G  0  part
+    sdb     8:16    0   931.5G 0  disk
+    `-sdb1  8:17    0   931.5G 0  part /media/ciro/DC74FA7274FA4EB0
 
 `-f`: show mostly information on filesystems:
 
@@ -422,15 +477,27 @@ Sample output:
     sdb
     `-sdb1 ntfs          /media/ciro/DC74FA7274FA4EB0
 
+`-o`: select which columns you want exactly. Most useful information for humans:
+
+    sudo lsblk -o NAME,FSTYPE,MOUNTPOINT,LABEL,UUID,SIZE
+
+`-n`: don't output header with column names. Good way to get information computationally. E.g., get UUID of `/dev/sda1`:
+
+    sudo lsblk -no UUID /dev/sda1
+
 #UUID
 
 Unique identifier for a partition. Field exists in ext and NTFS.
 
 Given when you create of format a partition.
 
-Can be found with tools such as blkid, lsblk (`-o` option) or gparted.
+Can be found with tools such as `lsblk -o`, `blkid`, or `gparted`.
 
 Get UUID of a device:
+
+    sudo lsblk -no UUID /dev/sda1
+
+Get all devices:
 
     sudo lsblk -no UUID /dev/sda1
 

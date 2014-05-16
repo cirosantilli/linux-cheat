@@ -1703,11 +1703,14 @@
 
     ##arch
 
-      # Architecture. Subset of uname.
+      # Architecture of the OS, not CPU hardware: Subset of uname.
 
         arch
 
-      #i686
+      # Sample outputs:
+
+        #i686
+        #x86_64
 
     ##mpstat
 
@@ -1723,13 +1726,25 @@
 
         nproc
 
-    # CPU info dev file:
+    ##cpuinfo
 
-      cat /proc/cpuinfo
+      # CPU info dev file:
+
+        cat /proc/cpuinfo
+
+      # Check if CPU is 64 bit:
+
+        cat /proc/cpuinfo | grep flags | grep lm
+
+      # `lm` is a standard CPU flag that stands for Long Mode and indicates exactly support for 64 bit.
+
+      # Meaning of all flags: <http://unix.stackexchange.com/questions/43539/what-do-the-flags-in-proc-cpuinfo-mean>
 
     # RAM info dev file:
 
       cat /proc/meminfo
+
+    # RAM info dev file:
 
 	##lspci
 
@@ -3731,40 +3746,40 @@
 
   ##who
 
-    #POSIX 7.
+    # POSIX 7.
 
-    #list who is logged on system
+    # List who is logged on system.
 
       who
 
   ##id
 
-    #POSIX 7.
+    # POSIX 7.
 
-    #Shows user and group ids and names.
+    # Shows user and group ids and names.
 
-    #Show all info for a given user:
+    # Show all info for a given user:
 
       u=root
       id "$u"
 
-    #For current user:
+    # For current user:
 
       id
 
-    #Effective userid:
+    # Effective userid:
 
       id -u
 
-    #Effective username:
+    # Effective username:
 
       id -un
 
-    #Real userid:
+    # Real userid:
 
       id -ur
 
-    #Same but for groups:
+    # Same but for groups:
 
       id -g
       id -gn
@@ -3772,33 +3787,37 @@
 
   ##whoami
 
-    #Print effective user name:
+    # Print effective user name:
 
       whoami
 
-    #Same as `id -un`, but not POSIX, so never rely on it.
+    # Same as `id -un`, but not POSIX, so never rely on it.
 
   ##last
 
-    #List last user logins on system:
+    # List last user logins on system:
 
       last
 
   ##tty
 
-    #show current tty
+    # Show current tty:
 
-    tty
+      tty
+
+    # Sample output:
+
       #/dev/pts/1
 
   ##getty
 
-    #the tty that runs on those ctrl-alt-F\d things
+    # The tty that runs on those ctrl-alt-F\d things:
 
-    cat /etc/default/console-setup
+      cat /etc/default/console-setup
 
-    ACTIVE_CONSOLES="/dev/tty[1-6]"
-      #allow you to change the number of consoles and their locations
+    # Allow you to change the number of consoles and their locations:
+
+      ACTIVE_CONSOLES="/dev/tty[1-6]"
 
   ##su
 
@@ -3860,7 +3879,7 @@
 
       #TODO0 login vs su?
 
-  ##sudo
+  ##sudo ##sudoers
 
     # Do next single command as another user or super user.
 
@@ -3878,11 +3897,14 @@
 
     # Syntax:
 
-      #Defaults:ALL timestamp_timeout=0
-        #passwords for all users timeout 0
-      #Defaults:ALL timestamp_timeout=15
-        #BAD
-        #after any user enters a pass, he can sudo without pass for 15 mins
+      # After any user enters a pass, he can sudo without pass for 15 mins:
+
+        #Defaults:ALL timestamp_timeout=15
+
+      # Turn it off. Better for safety.
+
+        #Defaults:ALL timestamp_timeout=0
+
       #main lines:
         #user  hostip=(runas)NOPASSWD ALL
         #%group hostip=(runas)    :/bin/ls,/bin/cat
@@ -3892,17 +3914,26 @@
           #runas: who can he sudo as
           #NOPASSWD: if present, must enter target user's password
           #/bin/ls,/bin/cat: list of comma separated bins he can run, or ALL
-      #aliases:
-        #user
+
+      ##Aliases
+
+        # User:
+
           #User_Alias FUSE_USERS = andy,ellz,matt,jamie
           #FUSE_USERS ALL=(root):/usr/bin/the-application
-        #host:
+
+        # Host:
+
           #Host_Alias HOST = jaunty
           #%admin HOST=(ALL)
-        #runas
+
+        # Runas:
+
           #Runas_Alias USERS = root,andy,ellz,matt,jamie
           #%admin ALL=(USERS) ALL
-        #command
+
+        # Command:
+
           #Cmnd_Alias APT   = /usr/bin/apt-get update,/usr/bin/apt-get upgrade
           #Cmnd_Alias USBDEV = /usr/bin/unetbootin,/usr/bin/gnome-format
           #ALL_PROGS = APT,USBDEV
@@ -3913,6 +3944,10 @@
     # Allow given user to sudo without password:
 
       #username ALL=(ALL) NOPASSWD: ALL
+
+    # CLI:
+
+      #sudo sh -c "echo '$(id -un) ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers"
 
     ##redirection
 

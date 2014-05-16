@@ -1,4 +1,4 @@
-How to install a new OS on your computer, especially a GNU Linux one.
+How to install a new OS on your computer.
 
 #Install a new distro
 
@@ -131,4 +131,24 @@ Procedure: <http://askubuntu.com/questions/88384/how-can-i-repair-grub-how-to-ge
 
 ---
 
-Keep in mind that what GRUB does is simply read its configuration files, and after interpreting those write data to specific points of the HD (Master boot record, at the very beginning of the HD) instructions on how to boot.
+GRUB simply read its configuration files, and after interpreting those write data to specific points of the HD (Master boot record, at the very beginning of the HD) instructions on how to boot.
+
+#32 vs 64 bit
+
+64 bit is faster and already stable: use it.
+
+Every new consumer CPU is 64 bit.
+
+64 bit CPUs are backwards compatible with 32 bit, this is why a 32 bit kernel can be run inside any 64 bit CPU.
+
+In the past, there were some issues as the transition was still happening. Not things are stable enough.
+
+Canonical used to say: prefer 32 bit Ubuntu, but not anymore.
+
+Open source software plays nicely with the transition, as you or the package manager just compiles everything to whichever supported arch. 
+
+In windows, which has less open source software, lots of software is still 32 bit and you only get the 32 bit binary.
+
+Run 32 bit binary in 64 bit Kernel: <http://askubuntu.com/questions/359156/how-do-you-run-a-32-bit-program-on-a-64-bit-version-of-ubuntu>
+
+Docker only supports 64 bit: <https://github.com/dotcloud/docker>

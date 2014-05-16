@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-# Running this file should do all automatable steps to install useful stuff in Ubuntu 12.04.
+# Do all automatable steps to install useful stuff in Ubuntu 12.04.
 
-# To install the SSH survival kit use:
+# Install the SSH survival kit:
 
   #wget -O- https://raw.githubusercontent.com/cirosantilli/linux/master/ubuntu/install.sh | bash -s min-ssh
 
@@ -16,10 +16,12 @@
 
   # SSH survival kit.
 
-    # Package manager
+    # Packages.
 
       sudo apt-get update
       sudo apt-get install -y aptitude
+      # Enable all sources.
+      sudo aptitude update
 
     # git
 
@@ -41,6 +43,10 @@
   if [ "$1" = "min-ssh" ]; then exit 0; fi
 
   # GUI survival kit.
+
+    # Browser
+
+      sudo aptitude install -y flashplugin-installer
 
     # Terminal
 
@@ -74,6 +80,22 @@
 
       sudo aptitude install -y xsel
       sudo aptitude install -y wmctrl
+
+    # GTK theme
+
+      sudo add-apt-repository -y ppa:webupd8team/themes
+      sudo aptitude update
+      sudo aptitude install -y gnomishdark-theme
+
+    # Media:
+
+      sudo aptitude install -y vlc
+
+    # sudo without password:
+
+      #sudo sh -c "echo '$(id -un) ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers"
+
+    # Reduce GRUB timeout:
 
   if [ "$1" = "min" ]; then exit 0; fi
 
@@ -121,20 +143,6 @@
     # Type `printer` in dash.
 
     # The guide shows you everything.
-
-  ##desktop
-
-    sudo aptitude install -y alarm-clock-applet
-    # GNOME tweak tool:
-    sudo aptitude install -y gconf-editor
-    #sudo aptitude install -y logkeys
-    sudo aptitude install -y recordmydesktop
-    #sudo aptitude install -y gtk-recordmydesktop
-    sudo aptitude install -y guvcview
-
-    # ibus input methods for QT:
-    sudo aptitude install -y ibus-qt4
-    # Useful for example if you want Chinese input for Qt applications.
 
   ##book
 
@@ -621,11 +629,10 @@
         # Only exists for 64bit, not 32.
         # http://docs.docker.io/en/latest/installation/ubuntulinux/
 
-          #sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
-          #sudo sh -c "echo deb http://get.docker.io/ubuntu docker main\
-          #> /etc/apt/sources.list.d/docker.list"
-          #sudo aptitude update
-          #sudo aptitude install -y lxc-docker
+          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
+          sudo sh -c "echo deb https://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
+          sudo aptitude update
+          sudo aptitude install -y lxc-docker
 
       ##wine
 
@@ -682,31 +689,9 @@
         sudo aptitude update
         sudo aptitude install -y flashplugin-installer
 
-  ##desktop
-
-        sudo aptitude install -y xbacklight
-        sudo aptitude install -y xsel
-        sudo aptitude install -y wmctrl
-        sudo aptitude install -y xdotool
-
-        #sudo apt-add-repository ppa:cdekter/ppa
-        #sudo aptitude install -y autokey-gtk
-
-      #gtk themes:
-
-        sudo add-apt-repository -y ppa:webupd8team/themes && \
-        sudo aptitude update && \
-        sudo aptitude install -y gnomishdark-theme
-
-        sudo aptitude install -y compizconfig-settings-manager
-
-      #sudo aptitude install zenity
-
-      #sudo add-apt-repository ppa:webupd8team/y-ppa-manager && sudo aptitude update
-      #sudo aptitude install -y yad
-
   ##fs
 
+      sudo aptitude install -y gparted
       sudo aptitude install -y inotify-tools
 
   ##net
@@ -756,6 +741,13 @@
     ##browser
 
         sudo aptitude install -y chromium-browser
+
+      # Google Chrome: <http://askubuntu.com/questions/79280/how-to-install-chrome-browser-properly-via-command-line>
+
+        #wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
+        #sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+        #sudo apt-get update
+        #sudo apt-get install google-chrome-stable
 
       # Terminal web browser:
 
@@ -817,51 +809,75 @@
 
         #sudo aptitude install -y postfix
 
-  ##disk
-
-      sudo aptitude install -y gparted
-
   ##desktop
 
-    # Install all of the following. If a bug relates to graphical stuff,
-    # change desktops to test.
+        sudo aptitude install -y xbacklight
+        sudo aptitude install -y xsel
+        sudo aptitude install -y wmctrl
+        sudo aptitude install -y xdotool
 
-      sudo aptitude install -y gnome-tweak-tool
+        #sudo apt-add-repository ppa:cdekter/ppa
+        #sudo aptitude install -y autokey-gtk
 
-    # Gnome shell:
+      # Modify GTK theme:
 
-      #sudo add-apt-repository -y ppa:gnome3-team/gnome3 && sudo aptitude update
-      #sudo aptitude install -y gnome-shell
+        sudo aptitude install -y gnome-tweak-tool
 
-    # Linux Mint shell cinnamon:
+        sudo aptitude install -y compizconfig-settings-manager
 
-      #sudo add-apt-repository -y ppa:gwendal-lebihan-dev/cinnamon-stable && sudo aptitude update
-      #sudo aptitude install -y cinnamon
+      #sudo aptitude install zenity
 
-    # KDE shell plasma:
+      #sudo add-apt-repository ppa:webupd8team/y-ppa-manager && sudo aptitude update
+      #sudo aptitude install -y yad
 
-      sudo aptitude install -y kde-plasma-desktop
+      sudo aptitude install -y alarm-clock-applet
+      # GNOME tweak tool:
+      sudo aptitude install -y gconf-editor
+      #sudo aptitude install -y logkeys
+      sudo aptitude install -y recordmydesktop
+      #sudo aptitude install -y gtk-recordmydesktop
+      sudo aptitude install -y guvcview
 
-    # Xubuntu shell xfce:
+      # ibus input methods for QT:
+      sudo aptitude install -y ibus-qt4
+      # Useful for example if you want Chinese input for Qt applications.
 
-      sudo aptitude install -y xfce4
-      sudo aptitude install -y xfce4-battery-plugin
+    ##desktop system
 
-    # Lubuntu lxde:
+      # Gnome shell:
 
-      #sudo aptitude install -y lxde
+        #sudo add-apt-repository -y ppa:gnome3-team/gnome3 && sudo aptitude update
+        #sudo aptitude install -y gnome-shell
 
-    #  For `qtconfig-qt4`:
+      # Linux Mint shell cinnamon:
 
-      sudo aptitude install -y qt4-qtconfig
+        #sudo add-apt-repository -y ppa:gwendal-lebihan-dev/cinnamon-stable && sudo aptitude update
+        #sudo aptitude install -y cinnamon
+
+      # KDE shell plasma:
+
+        sudo aptitude install -y kde-plasma-desktop
+
+      # Xubuntu shell xfce:
+
+        sudo aptitude install -y xfce4
+        sudo aptitude install -y xfce4-battery-plugin
+
+      # Lubuntu lxde:
+
+        #sudo aptitude install -y lxde
+
+      #  For `qtconfig-qt4`:
+
+        sudo aptitude install -y qt4-qtconfig
 
   ##chat messaging voice video
 
-    # Skype
+    # Skype. TODO failing.
 
-      sudo add-apt-repository -y "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
-      sudo aptitude update
-      sudo aptitude install -y skype
+      #sudo add-apt-repository -y "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
+      #sudo aptitude update
+      #sudo aptitude install -y skype
 
     # Google talk
 

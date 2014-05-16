@@ -4,7 +4,7 @@ Test apache:
 
     firefox http://localhost/ &
 
-#intro
+#Introduction
 
 Apache is a web server
 
@@ -16,7 +16,7 @@ Then it takes the http request, processes it, and then returns the request to th
 
 Part of the processing may be passed to another program: typically a <#cgi> script
 
-#test preparations
+#Test preparations
 
 Before doing anything, make this test dir:
 
@@ -49,11 +49,9 @@ Finally move our test dir to the serve root:
 
     sudo mv test /var/www/
 
-The default root for serving files is specified in the <#conf file>
-by the `DocumentRoot` directive. In current ubuntu, it is `/var/www/`
+The default root for serving files is specified in the <#conf file> by the `DocumentRoot` directive. In current ubuntu, it is `/var/www/`
 
-The user under which the web server runs must have read access to this directory.
-*This is the default on Ubuntu*, where the apache server runs as user `www-root`!
+The user under which the web server runs must have read access to this directory. *This is the default on Ubuntu*, where the apache server runs as user `www-root`!
 
 Usually this user is a different user from `root` for sercurity.
 
@@ -70,8 +68,7 @@ This file may include others, and for example in Ubuntu the default template doe
 
 so that local configurations can be managed in separate files.
 
-Ubuntu default also creates `*-available` directories, which contain possible configuration files.
-Those should be symlinked to the `enabled` directories to enable them.
+Ubuntu default also creates `*-available` directories, which contain possible configuration files. Those should be symlinked to the `enabled` directories to enable them.
 
 Configurations only apply when you restart apache:
 
@@ -114,14 +111,11 @@ Set Apache serve root at given dir:
 
     DocumentRoot "/var/www/root"
 
-For this to work, make sure `DocumentRoot` is not set anywhere else.
-(by default it was included in the include files, `grep -r DocumenRoot` shows where)
+For this to work, make sure `DocumentRoot` is not set anywhere else. (by default it was included in the include files, `grep -r DocumenRoot` shows where)
 
-For security concerns, only put things you want apache to serve directly inside DocumentRoot
-such as html, css and images.
+For security concerns, only put things you want apache to serve directly inside DocumentRoot such as HTML, CSS and images.
 
-Stuff that users should not see such as cgi scripts and *gasp* ssl certificates
-are better to remain outside it, so that you don't serve them by mistake!
+Stuff that users should not see such as cgi scripts and *gasp* ssl certificates are better to remain outside it, so that you don't serve them by mistake!
 
 ##Listen
 
@@ -197,36 +191,36 @@ for specific dirs, use the `Directory` directive
 
 ###mod_autoindex
 
-generates automatic html listings for dirs
+Generates automatic html listings for dirs
 
-turn off automatic listings for a given dir:
+Turn off automatic listings for a given dir:
 
     <Directory /var/www/root/test/dontlist>
     Options -Indexes
     </Directory>
 
-will simply give a not found
+Will simply give a not found
 
-ignore certain files in the listing:
+Ignore certain files in the listing:
 
     IndexIgnore tmp* ..
 
-add headers/footers before/after index:
+Add headers/footers before/after index:
 
     HeaderName header.html
     ReadmeName footer.html
 
-same header/footer for every dir
+Same header/footer for every dir
 
     HeaderName header.html
     HeaderName /site/header.html
     ReadmeName /site/footer.html
 
-use predefined styles:
+Use predefined styles:
 
     IndexOptions FancyIndexing HTMLTable
 
-use given css style:
+Use given CSS style:
 
     IndexStyleSheet /css/autoindex.css
 
@@ -242,9 +236,9 @@ The official manual page: <http://httpd.apache.org/docs/2.2/sections.html#mergin
 
 ##Files
 
-acts on local filesystem
+Acts on local filesystem.
 
-deny file permissions for files that match regex "^\.ht":
+Deny file permissions for files that match regex `"^\.ht"`:
 
     <Files ~ "^\.ht">
     Order allow,deny
@@ -252,12 +246,11 @@ deny file permissions for files that match regex "^\.ht":
     Satisfy all
     </Files>
 
-Order says: first process all allow directives, then all deny directives.
-since deny came last, it has precedence.
+Order says: first process all allow directives, then all deny directives. Since `Deny` came last, it has precedence.
 
 ##Directory
 
-acts on local filesystem
+Acts on local filesystem
 
     <Directory /var/web/dir1>
     Options +Indexes
@@ -362,23 +355,21 @@ The following goes to google:
 
     firefox localhost/test/redir &
 
-##cgi
+##CGI
 
-**cgi** is a protocol of how a server communicates with a cgi script
+**CGI** is a protocol of how a server communicates with a CGI script.
 
-A cgi script is simply a script/executable that outputs the part of http response
+A CGI script is simply a script/executable that outputs the part of HTTP response.
 
-This part includes some last header lines which the server delegates to it,
-notably `content type`, followed by "\n\n" followed by the entire body.
+This part includes some last header lines which the server delegates to it, notably `content type`, followed by "\n\n" followed by the entire body.
 
 The server passes information to the script through environment variables only.
 
 ###fastcgi
 
-A faster version of cgi that does not start a new process pre request
+A faster version of CGI that does not start a new process pre request
 
-Implementations: mod_fastcgi vs mod_fcgid
-<http://superuser.com/questions/228173/whats-the-difference-between-mod-fastcgi-and-mod-fcgid>
+Implementations: mod_fastcgi vs mod_fcgid <http://superuser.com/questions/228173/whats-the-difference-between-mod-fastcgi-and-mod-fcgid>
 
 ###ScriptAlias
 
@@ -399,7 +390,7 @@ The script:
 
 ####status
 
-Optional, if not given suposes `200 OK`.
+Optional, if not given supposes `200 OK`.
 
 If given as error, server will simply give the error and no data.
 
@@ -424,7 +415,7 @@ Tell server that all .pl and .py files in dire are cgi scripts:
 
     AddHandler cgi-script .cgi .pl
 
-Permit cgi execution for scripts in this dir:
+Permit CGI execution for scripts in this dir:
 
     Options +ExecCGI
     </Location>
@@ -433,8 +424,7 @@ Run it:
 
     firefox localhost/mycgi/test.pl
 
-Note how `ScriptAlias` created a virtual directory
-not present in the actual filesystem.
+Note how `ScriptAlias` created a virtual directory not present in the actual filesystem.
 
 Can also make individual script:
 
@@ -442,7 +432,7 @@ Can also make individual script:
 
 ####alias to script
 
-All subdirs of testpl are generated by the given test.pl:
+All subdirs of `testpl` are generated by the given `test.pl`:
 
     ScriptAlias /test/testpl /usr/lib/cgi-bin/test.pl
 
@@ -451,7 +441,7 @@ All subdirs of testpl are generated by the given test.pl:
 
 ###action
 
-Run script whenever an html file is accessed:
+Run script whenever an HTML file is accessed:
 
     Action test /cgi-bin/test.pl
     AddHandler test .html
@@ -462,7 +452,7 @@ Try it:
 
     firefox localhost/index.html
 
-This is how php does it!
+This is how PHP does it!
 
 #modules
 
@@ -494,7 +484,7 @@ Apache2 ENable Module.
 
 Utility that enables modules easily.
 
-Probably adds LoadModule somewhere.
+Probably adds `LoadModule` somewhere.
 
 List options:
 
@@ -508,15 +498,15 @@ Enable a module:
 
 Part of the very default mime_module
 
-Determines filetypes and sets default actions accordingly
+Determines file types and sets default actions accordingly
 
 Example:
 
     Action add-footer /cgi-bin/footer.pl
     AddHandler add-footer .html
 
-- Action: defines a handler called add-footer
-- AddHandler: uses the handler called add-footer for all html files
+- `Action`: defines a handler called add-footer
+- `AddHandler`: uses the handler called add-footer for all html files
 
 Handlers can be defined in modules
 
@@ -528,7 +518,7 @@ You must chose *both* one <#method> and one <#provider>!
 
 ###prerequisites
 
-First understand http authentication.
+First understand HTTP authentication.
 
 What algorithm is used to store the passwords more or less safely.
 
@@ -550,9 +540,9 @@ Apache conf:
 
 ###digest
 
-Provided by mod_auth_digest.
+Provided by `mod_auth_digest`.
 
-mod_auth_digest is better than mod_auth_basic, so use digest!
+`mod_auth_digest` is better than `mod_auth_basic`, so use digest!
 
     LoadModule auth_digest_module /usr/lib/apache2/modules/mod_auth_digest.so
     <Directory "/var/www/test/auth/">
@@ -584,21 +574,22 @@ Generate user/pass pairs:
 
     sudo htpasswd -bc /var/www/.htpasswd u p
 
-- -c: creates new file, destroying old one! necessary first time!*
-- -b: use pass from command line. *less safe!!*
-    sudo htpasswd -b /var/www/.htpasswd u2 p
+- `-c`: creates new file, destroying old one! *Necessary first time!*
+- `-b`: use pass from command line. *Less safe!*
+
+        sudo htpasswd -b /var/www/.htpasswd u2 p
 
 Lets take a look at the file:
 
     sudo cat /var/www/.htpasswd
 
-Note that the passwords are base64 enoded. See <#base64>
+Note that the passwords are base64 encoded.
 
 ###dbd
 
 SQL database
 
-#try it out!!
+#Try it out!!
 
 Test:
 
@@ -610,30 +601,29 @@ Try u and u2 pass p!
 
     firefox localhost/test/auth &
     firefox localhost/test/auth &
+
 The second time, you may not be prompted for a password!
 
-This is because firefox has cached your password for some time
-and resent it automatically! there is no server state.
+This is because Firefox has cached your password for some time and resent it automatically! there is no server state.
 
 To avoid the cache use curl:
 
     curl -I localhost/test/auth
 
-401 and WWW-Authenticate.
+`401` and `WWW-Authenticate`.
 
 With pass:
 
     curl u:p@localhost/test/auth
     curl -u u:p localhost/test/auth
 
-of course, better using the `-u` option
-which could work also for different authentication methods.
+of course, better using the `-u` option which could work also for different authentication methods.
 
-#php
+#PHP
 
 Interpreter language almost always run from a server to generate web content.
 
-Dominates web today, but faces increasing concurrence python/ruby/perl.
+Dominates web today, but faces increasing concurrence `python/ruby/perl`.
 
 Test:
 
@@ -641,4 +631,4 @@ Test:
     echo '<?php phpinfo(); ?>' | sudo tee /var/www/testphp.php
     firefox http://localhost/testphp.php &
 
-If you see php specs, it works!
+If you see PHP specs, it works!

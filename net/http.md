@@ -285,6 +285,20 @@ Must be one of the request `Accept-Encoding` values.
 
     Supported by almost all modern browsers: Firefox sends it by default, Apache has `mod_gzip` which gzips everything when possible.
 
+###Content-Disposition
+
+Suggeste to the browser what to do to certain types of data, specially content types different from HTML:
+
+`attachment` suggest to the browser to download the file with given filename:
+
+    Content-Disposition: attachment; filename=genome.jpeg;
+
+`inline` suggest to the browser to show the content inline if it has that capability:
+
+    Content-Disposition: inline
+
+In Firefox, the browser preferences under `Edit > Preferences > Application` determine what to do for each MIME type, and overrirides this header.
+
 ###Server
 
 Software that sent the response.

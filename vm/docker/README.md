@@ -6,10 +6,10 @@ It has plans to support it in the future.
 
 Mentioned in many places, huge amount of GitHub stars.
 
-Relies on Linux Kernel namespaces (!) to solve dependency hell.
+Relies on Linux Kernel namespaces to solve dependency hell.
 
 Therefore, works natively only on Linux.
 
-Written in Go (!)
+Written in Go, yet another language.
 
 Faster than a VM since no emulation.

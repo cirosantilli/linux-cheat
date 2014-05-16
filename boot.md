@@ -4,66 +4,60 @@ Info on the boot process and its configuration.
 
 TODO
 
-#bootloading
+#Bootload
 
-Bootloading is the name of the process for starting up the system.
+Bootloading is the name of the process for starting up the system, in particular loading the kernel code, also called kernel image, into RAM memory.
 
-Summary of the boot process: <http://www.ibm.com/developerworks/library/l-linuxboot/>
+Summary of the boot process:
 
-The main job of this operation is loading the OS image (an executable) into memory and get it running.
+- <http://www.ibm.com/developerworks/library/l-linuxboot/>
+- <http://www.thegeekstuff.com/2011/02/linux-boot-process/>
 
-The most popular bootloader for Linux now is Grub. LILO was a popular alternative in the past. Windows has its own bootloader.
+The first thing the computer does is to run fixed code from the BIOS.
 
-It is a program in BIOS that tries to find in all devices (hard disk, cd/dvd, flash drives, floppies, ...) it can see for a Master Boot Record (MBR).
+It tries to find all the devices all devices that can contain a kernel image like: hard disk, CD/DVD, flash drives, floppies.
 
-In normal desktop operation nowadays, the hard disk is the main MBR source, but when you install your OS, you load it from either a CD / DVD or USB stick.
+It searches for the Master Boot Record (MBR).
 
-The MBR is the first 512 sector of the device found. It contains:
+In normal desktop operation, the hard disk is the main MBR source, but when you install your OS, you load it from either a CD / DVD or USB stick.
 
-- a small piece of code (446 bytes) called the primary boot loader.
+The search order is deterministic and configurable. Typically the first and default option is the hard disk.
 
-    This code will then be executed.
+The first splash screen shown to the users comes from this process.
 
-- the partition table (64 bytes) describing the primary and extended partitions
+If you are quick enough on you keyboard, you can stop the default boot, and manually chose another boot source.
 
-    TODO
+This way you can tell your BIOS to take a live CD or USB even if the OS is installed on the hard disk.
 
-It takes the first MBR it finds.
+#Second stage bootloader
 
-The MBR can only be at the start of a physical partition, not of a logical partition.
+The 512B of the MBR is a too little space for having a flexible boot system.
 
-This is why on bootloader configurations you give `/dev/sda`, instead of `/dev/sda1-4` (TODO check)
+The MBR points to a second stage bootloader in its disk which which will do the actual booting.
 
-The search order is deterministic and configurable.
-
-The first initial black screen is shown by BIOS.
-
-If you are quick enough on you keyboard, you can stop the default boot, and enter BIOS options to choose for example which device to take MBR from.
-
-This way you can tell your BIOS to take a live CD or USB even if the OS is installed on the hard disk (usually default location to take MBR from).
+The most popular second stage bootloader for Linux now is GRUB. LILO was a popular alternative in the past. Windows has its own bootloader.
 
 #GRUB
-
-TODO how does GRUB read the disk image and `grub.cfg` from the filesystem. We usually need an OS to read filesystems!
 
 Grand Unified Bootloader.
 
 If you have a Linux dual boot, and you see a menu prompting you to choose the OS, there is a good chance that this is GRUB, since it is the most popular bootloader today.
 
-It allows you basic graphical interaction even before starting any OS!
+It allows you basic graphical interaction even before starting any OS.
 
-Everything is configurable, from the menu entries to the background image! This is why Ubuntu's GRUB is purple!
+Everything is configurable, from the menu entries to the background image. This is why Ubuntu's GRUB is purple.
 
-The main job for grub userspace utilities such as `grub-install` and `update-grub` is to look at the input configuration files, interpret them and write the output configuration information to the correct locations on the hard disk so that they can be found at boot time.
+The main job for GRUB userspace utilities such as `grub-install` and `update-grub` is to look at the input configuration files, interpret them and write the output configuration information to the correct locations on the hard disk so that they can be found at boot time.
 
-The MBR is too small for all the features that GRUB developers wanted, so they use it only to transfer control to another larger code section.
+GRUB has knowledge about filesystems, and is able to read configuration files and the disk image from it.
 
-##versions
+##GRUB versions
 
 GRUB has 2 versions
 
-- 0.97, usually known just as GRUB, or Legacy GRUB.
-- Grub >= 2, which is backwards incompatible, and has more features.
+-   0.97, usually known just as GRUB, or Legacy GRUB.
+
+-   GRUB >= 2, which is backwards incompatible, and has more features.
 
     GRUB 2 is still beta.
 
@@ -91,15 +85,15 @@ Generated files and data after `sudo update-grub`:
 
     sudo vim /etc/default/grub
 
-- `GRUB_DEFAULT`: default OS choice if cursor is not moved.
+-   `GRUB_DEFAULT`: default OS choice if cursor is not moved.
 
-	Starts from 0, the order is the same as shown at grub os choice menu.
+    Starts from 0, the order is the same as shown at grub os choice menu.
 
-- `GRUB_TIMEOUT` : time before auto OS choice in seconds
+-   `GRUB_TIMEOUT` : time before auto OS choice in seconds
 
-- `GRUB_CMDLINE_LINUX_DEFAULT`: space separated list of Kernel boot parameters.
+-   `GRUB_CMDLINE_LINUX_DEFAULT`: space separated list of Kernel boot parameters.
 
-	Those parameters can also be edited from the boot menu for single session by selecting the partition and clicking `e`.
+    Those parameters can also be edited from the boot menu for single session by selecting the partition and clicking `e`.
 
 	Most important to know:
 

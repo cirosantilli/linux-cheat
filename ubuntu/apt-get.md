@@ -18,15 +18,18 @@ The difference between Main, Universe, Restricted and Multiverse can be visualiz
 | Supported   | Main          | Restricted        |
 | Unsupported | Universe      | Multiverse        |
 
+In addition, there are also the `partner` sources.
+
 On new installs, Main and Restricted sources are enabled by default.
 
 By default, only Main sources are enabled. Enable Universe with:
 
-      sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) universe" 
+    sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) universe" 
 
 Enable everything with:
 
-      sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe restricted multiverse" 
+    sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe restricted multiverse"
+    sudo add-apt-repository "deb http://archive.canonical.com/ubuntu $(lsb_release -sc) partner"
 
 The list of all packages can be found at: <http://packages.ubuntu.com/>
 
@@ -46,7 +49,15 @@ Not all of those packages come pre-installed, they can be installed directly wit
 
 ##Partner
 
-TODO: <http://askubuntu.com/questions/456345/what-is-the-difference-between-multiverse-and-partner-sources>
+Support is not given by Canonical, but by the company who produces the software.
+
+Notable examples: Flash, Skype.
+
+<http://askubuntu.com/questions/456345/what-is-the-difference-between-multiverse-and-partner-sources>
+
+Enable:
+
+    sudo add-apt-repository "deb http://archive.canonical.com/ubuntu $(lsb_release -sc) partner"
 
 #Software version
 
@@ -371,6 +382,8 @@ Install specific version of a package:
     sudo apt-get install apache2=2.2.20-1ubuntu1
 
 Very likely to clash with other installed versions of the package.
+
+It is not simple to install to current user without root: <http://askubuntu.com/questions/339/how-can-i-install-a-package-without-root-access>
 
 ##build-deps
 

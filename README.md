@@ -5,12 +5,12 @@ Includes utils that work on Linux, and possibly other OSs too, as well as Linux 
 #Featured
 
 - [ubuntu/install.sh](ubuntu/install.sh): Ubuntu install methods many programs.
-- [utils.sh](utils.sh): dump of many utils that fit in no other category or are not large enough to get their own file. Many POSIX utilities.
+- [utils.sh](utils.sh):                   dump of many utils that fit in no other category or are not large enough to get their own file. Many POSIX utilities.
 
 Base standards:
 
 - [linux.md](linux.md): Linux, LSB.
-- [posix/](posix/): POSIX standard, POSIX C library.
+- [posix/](posix/):     POSIX standard, POSIX C library.
 
 Kernel related:
 
@@ -21,23 +21,24 @@ Initialization:
 
 - [install-os.md](install-os.md): how to install a new OS.
 - [boot.md](boot.md)
-- [init.md](init.md): System V, Upstart.
+- [init.md](init.md):             System V, Upstart.
 
 Base topics:
 
 - [compile/](compile/): compilation process, GCC, dynamic libraries.
 - [desktop/](desktop/): X, XDG, GNOME, KDE and related utilities.
-- [fs.sh](fs.sh): filesystem.
-- [net/](net/): networking.
+- [fs.sh](fs.sh):       filesystem.
+- [net/](net/):         networking.
 - [terminal.md](terminal.md)
 
 Media video, games, etc.) file types, viewers, editors, capture, synthesizers:
 
-- [audio/](audio/): audio, music, sound.
-- [book.md](book.md): PDF, DJVU.
-- [dict.md](dict.md): dictionary formats.
-- [game.md](game.md): games, emulation.
-- [image/](image/): images, photos.
+- [audio/](audio/):     audio, music, sound.
+- [book.md](book.md):   PDF, DJVU.
+- [dict.md](dict.md):   dictionary formats.
+- [game.md](game.md):   games, emulation.
+- [image/](image/):     images, photos.
+- [markup](markup/):    Markdown, RST. Focus on command line interface and extensions.
 - [video.md](video.md): videos, films.
 
 [vm/](vm/): virtual machines, Vagrant.
