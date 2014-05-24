@@ -1,29 +1,50 @@
-Vagrant makes it really fast to create new virtual machines for SSH usage.
+Vagrant is a SSH frontend for virtual machines which makes it really simple to VMs.
 
 For a Vagrant template see: <https://github.com/cirosantilli/vagrant-template>
 
-Vagrant is a frontend to *providers* like VirtualBox (default) or VMware, so you should get those working before using Vagrant.
+Vagrant is a frontend to *providers* like VirtualBox (default), VMware and Docker (via plugins), so you should get those working before using Vagrant.
 
 First create a working directory:
 
     mkdir vagrant
     cd vagrant
 
+#boxes
+
 View available local base boxes:
 
     vagrant box list
 
-This does not list boxes which you have modified the state. There seems to be no interface way of doing that, except going into `.vagrant` and hacking IDs of config files based on IDs you see on your provider's interface.
+This does not list boxes which you have modified the state: e.g., if you start with `precise64`, make two Vagrantfiles, and make some operations on each, this will only list the base box `precise64`.  There seems to be no interface way of doing that, except going into `.vagrant` and hacking IDs of config files based on IDs you see on your provider's interface.
 
-Add a box:
-
-    vagrant box add name url
-
-where name can be anything you wish, for example:
+Add a box from URL, name it `my_precise32`:
 
     vagrant box add precise32 http://files.vagrantup.com/precise32.box
 
-A fine list of third party free boxes can be found at: <http://www.vagrantbox.es/>
+The box name can be used to refer to the box from the command line as in:
+
+    vagrant box remove name
+
+or on Vagrantfiles:
+
+    config.vm.box = 'name'
+
+Adding two boxes with same name is an error, with `--force` overwrites.
+
+    vagrant box add my_precise32 http://files.vagrantup.com/precise32.box
+    vagrant box add my_precise32 http://files.vagrantup.com/precise32.box
+
+The box index from the makers of Vagrant can be found at: <https://vagrantcloud.com>. It is in beta. They do not store the boxes themselves, only links to the boxes and metadata. Integrates with the `vagrant` command line utility. With it, it is possible to simply write in the Vagrantfile:
+
+    config.vm.box_url = 'cirosantilli/precise64_softcover'
+
+or on the command line;
+
+    vagrant box add precise32 'cirosantilli/precise64_softcover'
+
+A fine list of third-party free boxes can be found at: <http://www.vagrantbox.es/>
+
+#Vagrantfile
 
 Create an init file for a vagrant project with an existing box:
 
@@ -47,6 +68,8 @@ The Vagrantfile file will contain:
 so that if anyone else uses this Vagrantfile, `vagrant up` will automatically download the box from the URL.
 
 For this reason you should always specify the URL in your Vagrantfile.
+
+#run
 
 Boot the box configured in current dir:
 

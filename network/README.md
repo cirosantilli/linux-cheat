@@ -50,13 +50,13 @@ Each layer contains many protocols, each of which helps the layer achieve its fu
 
 Some of the most common protocols in each layer are and the function of the layers are:
 
-- application: HTTP, HTTPS, FTP, DHPC and many more.
+-   application: HTTP, HTTPS, FTP, DHPC and many more.
 
     Whatever protocol any application uses.
 
     Many protocols are standardized by large organizations, and have a specific port reserved for them on each computer.
 
-- transport: TCP and UDP are by far the most common
+-   transport: TCP and UDP are by far the most common
 
     The transport layer:
 
@@ -64,11 +64,11 @@ Some of the most common protocols in each layer are and the function of the laye
 
     - guarantees that each chunk arrived, and if not asks for it again.
 
-- Internet: IP is the most common
+-   Internet: IP is the most common
 
     Finds the path between any two computers even if they are not on the same network.
 
-- link: Ethernet, ARP
+-   link: Ethernet, ARP
 
     Finds the path between two computers that are on the same network.
 
@@ -240,7 +240,7 @@ The fields used from the IP header  are:
     Identification numbers can be the same across multiple source IPs,
     but for a single source IPs they are unique.
 
-##ip address
+##IP address
 
 An unique address that identifies a host, for example a separate workstation.
 
@@ -319,14 +319,22 @@ Most common home range is the Class C:
     192.168.0.1 through 192.168.255.254
     subnet mask 255.255.255.0
 
-###External vs internal IP
+###Internal IP
 
-If you use a router, all computers behind the router have a single external IP seen you have an external IP seen on the web and an internal IP seen on the private local network (lan).
+###External IP
+
+If you use a router, all computers behind the router have a single external IP seen you have an external IP seen on the web (WAN) and an internal IP seen on the private local network (LAN).
 
 Get external IP:
 
-    curl http://ipecho.net/plain
+    curl ipecho.net/plain
     curl ifconfig.me
+
+You external IP may change or not depending on how your ISP operates. Most ISPs to modify home user's IPs from time to time to have more flexibility, but many give you the same external IP for at least several hours, making it possible for you to use it for simple development.
+
+This only matters if you want to ha external computers make requests for you, e.g. to serve a web server to the outside world. Replies to requests you make already know where to be routed back to from information sent on the request.
+
+If you are going to use your external IP behind a router, you will need to enable port forwarding.
 
 Get internal addresses for current computer:
 
@@ -337,6 +345,18 @@ Different ones for wireless and for wired connections
 Computers in the network only talk to the router.
 
 The server on the router is called **proxy server**.
+
+Internal IPs may be assigned automatically via the DHPC protocol.
+
+###Port forwarding
+
+By default, if a TCP / UDP SYN request is made to most routers, they are simply dropped.
+
+This means that you cannot serve a web server from behind the router.
+
+To avoid this, you must set up *port forwarding*, that specifies certain ports and protocol (TCP or UDP) that will be sent to a local LAN IP.
+
+It seems only possible to do this if the local IP is static TODO confirm.
 
 ###Subnet mask
 
@@ -399,11 +419,11 @@ The broadcast address means talking to all computers on a given network at once 
 
 #####Class C network
 
-- network part: `192.168.3`
+-   network part: `192.168.3`
 
     Broadcast is: `192.168.3.255`
 
-- network part: `192.168.234`
+-   network part: `192.168.234`
 
     Broadcast is: `192.168.3.255`
 
@@ -507,7 +527,7 @@ ICMP can also contain an optional extra data section after the variable part.
 
 Examples of what ICMP can do:
 
-- ECHO requests.
+-   ECHO requests.
 
     The server responds with another echo request with the same data.
 
@@ -515,42 +535,41 @@ Examples of what ICMP can do:
 
     Used by the ping utility.
 
-- destination unreachable
+-   destination unreachable
 
     Datagram cannot be transmitted further by a router.
 
     TODO when does this happens? This is not the `TTL = 0` since that is covered by Time Exceeded
 
-- source quench
+-   source quench
 
     Router tells source to lower sending speed because the network is too overloaded.
 
-- redirect
+-   redirect
 
     Router tells source to not make that request again, since there is an obvious better choice of router to make the request to.
 
     Typically happens on a LAN with 2 routers, if a host sends a request to a bad router.
 
-- router discovery
+-   router discovery
 
     Source asks for any routers on the LAN to identify themselves.
 
-- time exceeded.
+-   time exceeded.
 
-    - if `code = 0`: TTL reached 0.
+    -   if `code = 0`: TTL reached 0.
 
         Router notifies source of that via ICMP.
 
         Used by `traceroute`.
 
-    - if `code = 1`: reassembly time exceeded.
+    -   if `code = 1`: reassembly time exceeded.
 
         IP headers can be fragmented.
 
-        If the first part reaches, but the second takes too long, the reciever
-        discards the first to make room for other requests, and notifies the source like this.
+        If the first part reaches, but the second takes too long, the reciever discards the first to make room for other requests, and notifies the source like this.
 
-- packet too big (BTP)
+-   packet too big (BTP)
 
     Sent by router to source if it receives a packet that is larger than the MTU and the IP header has `DF = 1`.
 
@@ -651,7 +670,7 @@ A host is anything able to send and receive packages over a network: this includ
 Can be specified by either
 
 - an IP
-- a string that will be resolved by a dns server to an IP
+- a string that will be resolved by a DNS server to an IP
 
 ##host user pair
 
@@ -676,7 +695,7 @@ When outside the local network, the hostname is added before the domain name, e.
 
 It is not a good idea to have a dot `.` in your domain name, since then how could its last part be distinguished from the domain name?
 
-TODO is the hostname `www.google.com` or just `google.com`? Contradictory answers: http://superuser.com/questions/59093/difference-between-host-name-and-domain-name  
+TODO is the hostname `www.google.com` or just `google.com`? Contradictory answers: <http://superuser.com/questions/59093/difference-between-host-name-and-domain-name>
 
 ##www
 
@@ -705,7 +724,7 @@ E.g.: `google.com`, `stackoverflow.com` are commonly called domain names.
 
 A more precise way of speaking is saying that `google` is a subdomain of `com`, and `www` is a subdomain of `google.com`.
 
-They identify a network owned by Google. But in order to get an actual IP, you still need to add the a hostname such as `www`.
+They identify a network owned by Google. But in order to get an actual IP, you still need to add a hostname such as `www`.
 
 Domain names may contain more than one `.`: `bbc.co.uk`.
 
@@ -740,11 +759,66 @@ Dynamic host configuration protocol.
 
 Application layer protocol that automatically assigns configurations to the hosts on a network, such as their IP.
 
-Default IANA ports: udp 67 and 68 (same as its less advanced and less common predecessor `BOOTP`)
+Default IANA ports: UDP 67 and 68 (same as its less advanced and less common predecessor `BOOTP`).
 
 When a computer enters a network and it does not know its own IP.
 
 It must first send a DHCP request to be assigned an IP.
+
+##Static IP
+
+On a home network that you control, it is better to use intuitive hostnames and let the addresses be dynamically set via DHPC, unless you absolutely need a static IP, for example to setup a server behind your router.
+
+DHPC does not know about static IPs: if you set one you must make sure that it is outside of the DHPC range. DHPC is done by the router, and should be configurable from the browser interface.
+
+On my Numericable router, under Network > Basic Settings > IP LAN > I have two fields: `Starting IP Address` and `Ending IP Address` which allow me to control it. By default, the range is 192.168.0.10 to 192.168.0.50, which is a sensible default allowing for 8 small static IPs between 2 and 9, 1 being the router's address.
+
+On Ubuntu 12.04, there are a few ways of doing it.
+
+###Static IP with DHCP reservation
+
+This is not strictly static, but it is the simplest option.
+
+On you router configuration, find the DHCP Reservation Lease Infos.
+
+This allows you to map LAN IPs directly to MAC addresses. On my Numericable router it is found under the IP LAN tab.
+
+Set the interface to use DHCP.
+
+###Static IP with NetworkManager
+
+Using the NetworkManager GUI:
+
+    nm-connection-editor
+
+Select connection > Edit > IPv4 settings, configure.
+
+TODO fails. I lose internet connection on the interface
+
+###Static IP with NetworkManager
+
+Using `/etc/network/interfaces`:
+
+    sudo vim /etc/network/interfaces
+
+Set the file to:
+
+    auto lo
+    iface lo inet loopback
+
+    auto eth0
+    iface eth0 inet static
+    address 192.168.0.2
+    netmask 255.255.255.0
+    gateway 192.168.0.1
+    dns-nameservers 89.2.0.1
+    dns-search example.com
+    #network 192.168.0.0
+
+- `auto if1 if2`: automatically create interfaces `if1` and `if2` on `ifup -a`.
+- `iface if1`: from now on, define properties of `if1`.
+
+TODO fails. I lose internet connection on the interface
 
 #hosts file
 
@@ -784,11 +858,11 @@ The file is:
 
 #DNS
 
-Domain name system.
+Domain Name System.
 
-Part of the application layer of the IPs.
+Part of the application layer.
 
-Standard IANA port: 53/udp
+Standard IANA port: 53/UDP
 
 Protocol that convert strings into IPs, for example:
 
@@ -798,7 +872,7 @@ Before before using an address such as `www.google.com`, any program such as a b
 
 Linux systems usually offer `man resolver` C library interface, which any program can use to resolve DNS names. The resolver library may cache results across applications that have already been resolved.
 
-###DNS on wan
+##DNS on WAN
 
 On the Internet, hostnames are resolved to IPs by DNS servers.
 
@@ -814,11 +888,11 @@ DNS can also be done for local networks:
 
 In which case the DNS server normally resides on the router.
 
-Clients computers on the network are informed that it is a DNS server via DHCP.
+Client computers on the network are informed that it is a DNS server via DHCP.
 
 On your LAN, people can use the host name to communicate between computers
 
-For example, John is running an apache server on the usual port 80. He has hostname `john`.
+For example, John is running an Apache server on the usual port 80. He has hostname `john`.
 
 Mary is on the same network. Therefore, she can refer to `john` simply as `john`. For example:
 
@@ -837,23 +911,19 @@ Sample output:
 
     173.194.78.105
 
-##resolv.conf file
+##resolv.conf
 
-Located at:
+    cat /etc/resolv.conf
 
-    /etc/resolv.conf
-
-Lists DNS servers (they resolve hostnames into IPs ).
+Lists DNS servers.
 
 This file may be automatically generated by utilities.
 
-Weirdly, mine contains:
+On Ubuntu 12.04, you should never edit that file manually. By default it contains:
 
     nameserver 127.0.1.1
 
-which is localhost. TODO understand why? It seems that the DHPC daemon set that.
-
-The actual name server can be found with the `dig | grep SERVER` command.
+which is localhost, and is used indirectly by the NetworkManger system, which you should use instead.
 
 ##hostname utility
 
@@ -862,15 +932,14 @@ Print currently desired hostname:
     echo $HOSTNAME
     hostname
 
-In the default bash `PS1` line for ubuntu and many systems you see:
-`ciro@ciro-Thinkpad-T430`, then the hostname is `ciro-Thinkpad-T430`.
+In the default bash `PS1` line for Ubuntu and many systems you see: `ciro@ciro-Thinkpad-T430`, then the hostname is `ciro-Thinkpad-T430`.
 
 Change hostname for cur session:
 
     h=
     sudo hostname "$h"
 
-prompt `PS1` is not changed immediatelly.
+prompt `PS1` is not changed immediately.
 
 ##Change hostname permanently
 
@@ -879,7 +948,7 @@ prompt `PS1` is not changed immediatelly.
 
 ###Windows
 
-host is referred to as "computer name". good name choice.
+Host is referred to as "computer name". Good name choice, that is exactly what host is.
 
     wmic computersystem where name="%COMPUTERNAME%" call rename name="NEW-NAME"
 
@@ -919,7 +988,7 @@ The apex domain is sometimes called naked domain, since it has no subdomain.
 
 TODO File that tells DNS to redirect to another domain name, creating an alias.
 
-http://en.wikipedia.org/wiki/CNAME_record
+<http://en.wikipedia.org/wiki/CNAME_record>
 
 ##A
 
@@ -931,7 +1000,7 @@ Once you have determined a host (computer), you still have to talk to one of the
 
 Each program listens on an specific port which is set by convention.
 
-Ports from 1 - 1023 are also known as "well-known ports" or "priviledged ports". On UNIX-like systems, only priviledged users (`root`) can bind to those ports. All have reserved or standardized functions by an organization called IANA: <http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers>.
+Ports from 1 - 1023 are also known as "well-known ports" or "privileged ports". On UNIX-like systems, only privileged users (`root`) can bind to those ports. All have reserved or standardized functions by an organization called IANA: <http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers>.
 
 The ports form 1024 to 49151 are the so called "registered ports". Projects can make a request to IANA to register one of thoe posts as used in order to avoid port clashes. On most systems, it is possible to bind to those ports without `sudo`.
 
@@ -957,7 +1026,7 @@ Routers are generally configured through a browser.
 
 First you must make a wired connection to the router.
 
-You must enter the IP address of your router. This is fixed and supplied by the router manufacturer.
+You must enter the IP address of your router. This is fixed and supplied by the router manufacturer. A common address is the first address of the range: `192.168.0.1` for class C.
 
 You must then enter a username and a password. A default will be supplied by the manufacturer, such as `admin` `admin`, or `admin` `password`. This can be changed once you logged in.
 
@@ -970,32 +1039,6 @@ Routing tables say: if the request should go to a given network, send it to a gi
 `0.0.0.0` is the default if no other is found.
 
 Routers have two interfaces each: inside and outside.
-
-#ifconfig
-
-Network InterFace configuration tool.
-
-Includes stuff like IPs, subnet masks, MAC, etc.
-
-Good source: <http://www.thegeekstuff.com/2009/03/ifconfig-7-examples-to-configure-network-interface/>
-
-    ifconfig
-
-Sample interfaces on a modern laptop:
-
-- `eth0`:  wired network 0
-- `wlan0`: Wifi card 0
-- `lo`:    loopback (local host)
-
-Get local IPs (behind router):
-
-    ifconfig | grep -B1 "inet addr" | awk '{ if ( $1 == "inet" ) { print $2 } else if ( $2 == "Link" ) { printf "%s:" ,$1 } }' | awk -F: '{ print $1 ": " $3 }'
-
-`wlan0` and `eth0` are two different interfaces!
-
-#iwconfig
-
-Wireless network configuration
 
 #ARP
 
@@ -1033,38 +1076,169 @@ Numeric instead of names:
 
 #whois
 
-Check info about ip (country and ISP included):
+Check info about IP, country, ISP:
 
     whois 201.81.160.156
 
     whois `curl ifconfig.me`
 
+#Network management tools
+
+There are several levels of network management tools: <http://askubuntu.com/questions/1786/what-is-the-difference-between-network-manager-and-ifconfig-ifup-etc>.
+
+From the lowest level to the highest:
+
+- `ifconfig`
+- `ifup` and `ifdown`
+- NetworkManager
+
+#ifconfig
+
+Network InterFace configuration tool.
+
+Includes stuff like IPs, subnet masks, MAC, etc.
+
+Good source: <http://www.thegeekstuff.com/2009/03/ifconfig-7-examples-to-configure-network-interface/>
+
+    ifconfig
+
+Sample interfaces on a modern laptop:
+
+- `eth0`:  wired network 0
+- `wlan0`: Wifi card 0
+- `lo`:    loopback (local host)
+
+Get local IPs (behind router):
+
+    ifconfig | grep -B1 "inet addr" | awk '{ if ( $1 == "inet" ) { print $2 } else if ( $2 == "Link" ) { printf "%s:" ,$1 } }' | awk -F: '{ print $1 ": " $3 }'
+
+`wlan0` and `eth0` are two different interfaces!
+
+#iwconfig
+
+Wireless network configuration
+
 #ifup
+
+#ifdown
 
 TODO
 
 ##/etc/network/interfaces
 
-###manual
+Configuration for `ifup` and `ifdown`.
 
     man interfaces
 
-###Set static IP
+If you manually set configuration on `/etc/network/interfaces`, NetworkManager will now touch those interfaces and display them as "Not Managed".
 
-On a home network that you control, it is better to use intuitive hostnames and let the addresses be dynamic, unless some app really requires you to enter IPs. See hostname for how.
+#NetworkManager
 
-    sudo vim /etc/network/interfaces
+GNOME project for simplifying network configuration. <https://wiki.gnome.org/Projects/NetworkManager>
 
-    auto lo wlan0 eth0
+Also has an Applet that shows on Ubuntu 12.04's taskbar, indicating connection status.
 
-    iface wlan0 inet static
-    address 192.168.1.100
-    netmask 255.255.255.0
-    broadcast 192.168.1.255
-    gateway 192.168.1.1
+On Ubuntu it comes on the packages `network-manager` and `network-manager-gui` for the applet.
 
-- `auto if1 if2`: automatically create interfaces `if1` and `if2` on `ifup -a`.
-- `iface if1`: from now on, define properties of `if1`.
+It corresponds to the upstart service `network-manager`, so for example to reload configurations it can be restarted with:
+
+    sudo service network-manager restart
+
+##nm-applet
+
+The applet.
+
+##nm-connection-editor
+
+Opened from the applet "Edit Connections".
+
+##nm-tool
+
+Get NetworkManager status from the command line. Sample output:
+
+    NetworkManager Tool
+
+    State: connected (global)
+
+    - Device: wlan0  [NUMERICABLE-B2BD] --------------------------------------------
+    Type:              802.11 WiFi
+    Driver:            rtl8192ce
+    State:             connected
+    Default:           no
+    HW Address:        E0:06:E6:C7:97:8F
+
+    Capabilities:
+        Speed:           72 Mb/s
+
+    Wireless Properties
+        WEP Encryption:  yes
+        WPA Encryption:  yes
+        WPA2 Encryption: yes
+
+    Wireless Access Points (* = current AP)
+        NUMERICABLE-4D5F:Infra, C0:D9:62:C7:43:49, Freq 2412 MHz, Rate 54 Mb/s, Strength 26 WPA WPA2
+        FREEBOX_BRAHIM_GH: Infra, F4:CA:E5:D9:B3:2C, Freq 2437 MHz, Rate 54 Mb/s, Strength 26 WPA
+        Jordy:           Infra, 56:76:06:1D:11:14, Freq 2442 MHz, Rate 54 Mb/s, Strength 26 WPA
+        *NUMERICABLE-B2BD: Infra, E0:AB:31:AC:30:6D, Freq 2412 MHz, Rate 54 Mb/s, Strength 84 WPA WPA2
+        freephonie:      Infra, 56:76:06:1D:11:17, Freq 2442 MHz, Rate 54 Mb/s, Strength 26 WPA Enterprise
+        NUMERICABLE-F1EC:Infra, 00:1A:2B:9B:0C:F4, Freq 2462 MHz, Rate 54 Mb/s, Strength 26 WPA WPA2
+        [...]
+
+    IPv4 Settings:
+        Address:         192.168.0.10
+        Prefix:          24 (255.255.255.0)
+        Gateway:         192.168.0.1
+
+        DNS:             89.2.0.1
+        DNS:             89.2.0.2
+
+
+    - Device: eth0  [Wired connection 1] -------------------------------------------
+    Type:              Wired
+    Driver:            e1000e
+    State:             connected
+    Default:           yes
+    HW Address:        00:21:CC:CE:F2:C1
+
+    Capabilities:
+        Carrier Detect:  yes
+        Speed:           1000 Mb/s
+
+    Wired Properties
+        Carrier:         on
+
+    IPv4 Settings:
+        Address:         192.168.0.11
+        Prefix:          24 (255.255.255.0)
+        Gateway:         192.168.0.1
+
+        DNS:             89.2.0.1
+        DNS:             89.2.0.2
+
+##nmcli
+
+Control NetworkManger from CLI.
+
+Bring down wired connection:
+
+    nmcli con down id 'Wired connection 1'
+    nmcli dev disconnect iface eth0
+
+Bring it back up:
+
+    nmcli con up id 'Wired connection 1'
+
+##/etc/NetworkManager/system-connections/NUMERICABLE-B2BD
+
+##configuration file
+
+NetworkManager's configuration files:
+
+    sudo vim /etc/NetworkManager/system-connections/ID
+
+one per interface.
+
+Modified through the applet.
 
 #MTU
 
@@ -1240,8 +1414,7 @@ TODO get working
 
 Control another computer with you computer.
 
-Unless the other computer says who you are,
-it is impossible to tell that you are not the other computer
+Unless the other computer says who you are, It is impossible to tell that you are not the other computer
 
 Several protocols exist.
 

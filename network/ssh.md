@@ -13,24 +13,24 @@ Per user configurations for both the server and the client are contained under `
 
 #Server
 
-Known as `sshd`, which standas for ssh deamon.
+Known as `sshd`, which stands for ssh daemon.
 
 Must be installed and running on a machine for users from other computers to log into that machine.
 
-The server part of ssh is called sshd.
+The server part of ssh is called `sshd`.
 
 Configuration:
 
     sudo cp  /etc/ssh/sshd_config{,.bak}
     sudo vim /etc/ssh/sshd_config
 
-For the server to work, thw following configuration is minimal:
+For the server to work, the following configuration is minimal:
 
     Host *                  #config for all hosts
     Port 22                 #open port 22
     AllowUsers user1 user2  #allow the given users
 
-The server is often started as part of the initrd system.
+The server is often started as part of the `initrd` system.
 
 Therefore, to get it running you will probably use:
 
@@ -82,12 +82,11 @@ For this to work you need:
 
 There are two main methods of connection:
 
-- using an authorized public RSA id, which does not require a password
-    (unless your password is locally encrypted by a password, which is recommended).
+-   using an authorized public RSA id, which does not require a password, unless your password is locally encrypted by a password, which is recommended.
 
     This method is used if the key is allowed.
 
-- using the same password as the user on the server has.
+-   using the same password as the user on the server has.
 
     This method is only used if there is not authorized key on the local machine.
 
@@ -116,7 +115,7 @@ The default location for authorized keys is `~/.ssh/authorized_keys`. This locat
 
 This means that to login as user `u`, the file `/home/u/.ssh/authorized_keys` must contain your public key. With that you will only be able to login into the account of user `u`.
 
-This file contains one public key per line, which may be preceeded by some options, typically to restrict what the session can do, for example:
+This file contains one public key per line, which may be preceded by some options, typically to restrict what the session can do, for example:
 
     from="ok.com",no-port-forwarding,no-X11-forwarding,
     no-agent-forwarding,no-pty ssh-rsa <key> <comment>
@@ -131,7 +130,7 @@ Options are documented with the server at `man sshd` since they are only used by
 
 Next, your client will only connect to a server if its key is in known hosts. Security is useless if someone is impersonating the message receiver. If the server's public identity is not in the known hosts file, ssh will ask is you want to add it.
 
-SSH is by defaulf very fussy about the permissions of this file which shoudl be:
+SSH is by default very fussy about the permissions of this file which should be:
 
     chmod 700 ~/.ssh
     chmod 600 ~/.ssh/authorized_keys
@@ -180,7 +179,7 @@ You can get the fingerprint or all the fingerprints present on a file via:
     ssh-keygen -lf ~/.ssh/id_rsa.pub
     ssh-keygen -lf ~/.ssh/known_hosts
 
-#usage
+#Usage
 
 Once you log in, it is as if you had a shell on the given ssh server computer!
 
@@ -196,7 +195,7 @@ To close your connection:
 
 or enter `CTRL-D`.
 
-#gui applications
+#GUI applications
 
 It is possible to run X applications remotely, but it may be that the default configurations don't allow you to do that.
 

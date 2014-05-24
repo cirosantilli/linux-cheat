@@ -97,7 +97,7 @@ Generated files and data after `sudo update-grub`:
 
 	Most important to know:
 
-	- useless options on by default on Ubuntu 12.04 which you should really remove because they hide kernel state and potentially useful debug information:
+	-   useless options on by default on Ubuntu 12.04 which you should really remove because they hide kernel state and potentially useful debug information:
 
         - `quiet`: suppress kernel messages.
         - `splash`: shows nice and useless image while the kernel is booting. On by default on Ubuntu 12.04. Remove this useless option,

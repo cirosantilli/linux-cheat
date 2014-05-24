@@ -435,9 +435,19 @@ These are two standards of interface between hard disk and motherboard, with dif
 
 SATA stands for Serial Advanced Technology Attachment (or Serial ATA) and IDE is also called Parallel ATA or PATA.
 
-But by the beginning of 2007, SATA had largely replaced IDE in all new systems. 
+But by the beginning of 2007, SATA had largely replaced IDE in all new systems.
 
 <http://www.diffen.com/difference/IDE_vs_SATA>
+
+#sr0
+
+CD DVD.
+
+`/dev/cdrom` is a symlink to it.
+
+#mmcblk0
+
+A SanDisk SD card had a device named `mmcblk0`.
 
 ##lsblk
 

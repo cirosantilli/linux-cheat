@@ -8,15 +8,29 @@ Vagrant.configure("2") do |config|
 
   # Good list of boxes at: http://www.vagrantbox.es/
 
-    config.vm.box = "precise32"
-    config.vm.box_url = "http://files.vagrantup.com/precise32.box"
+  ##vm
 
-    #config.vm.box = "debian-7.2.0"
-    #config.vm.box_url = "https://dl.dropboxusercontent.com/u/197673519/debian-7.2.0.box"
+    ##box
 
-  # Will appear on most shells as: vagrant@hostname depending on the PS1 line.
-  # Good way to determine in which machine you are.
-  config.vm.hostname = 'HOSTNAME'
+      # Name of an installed box.
+
+    ##box_url
+
+      # URL at which the box can be found if not installed locally.
+
+      config.vm.box = "precise32"
+      config.vm.box_url = "http://files.vagrantup.com/precise32.box"
+
+      #config.vm.box = "debian-7.2.0"
+      #config.vm.box_url = "https://dl.dropboxusercontent.com/u/197673519/debian-7.2.0.box"
+
+      # If box is a shorthand for Vagrant Cloud, box_url is not needed.
+
+    ##hostname
+
+      # Will appear on most shells as: vagrant@hostname depending on the PS1 line.
+      # Good way to determine in which machine you are.
+      config.vm.hostname = 'HOSTNAME'
 
   ##provision
 
@@ -29,7 +43,7 @@ Vagrant.configure("2") do |config|
         # Remember from your shell lessons that doint `sudo su user` does not work inside a script:
         # http://stackoverflow.com/questions/16768777/can-i-switch-user-in-vagrant-bootstrap-shell-script
 
-        # Cleanest solution without privileged: make a separate sh file, and sudo -c ``
+        # Cleanest solution without privileged: make a separate sh file, and `sudo bash file.sh`.
 
       # Multiple methods can be specified. All are run.
 

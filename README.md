@@ -2,7 +2,9 @@ Linux information and cheatsheets.
 
 Includes utils that work on Linux, and possibly other OSs too, as well as Linux internals.
 
-#Featured
+#Index
+
+Important files:
 
 - [ubuntu/install.sh](ubuntu/install.sh): Ubuntu install methods many programs.
 - [utils.sh](utils.sh):                   dump of many utils that fit in no other category or are not large enough to get their own file. Many POSIX utilities.
@@ -25,23 +27,25 @@ Initialization:
 
 Base topics:
 
-- [compile/](compile/): compilation process, GCC, dynamic libraries.
-- [desktop/](desktop/): X, XDG, GNOME, KDE and related utilities.
-- [fs.sh](fs.sh):       filesystem.
-- [net/](net/):         networking.
-- [terminal.md](terminal.md)
+- [compile/](compile/):                       compilation process, GCC, dynamic libraries.
+- [desktop/](desktop/):                       X, XDG, GNOME, KDE and related utilities.
+- [filesystem.md](filesystem.md):             POSIX file permissions.
+- [file-permissions.md](file-permissions.md): filesystem, hard disks, mounting, partitions.
+- [network/](network/):                       networking tools and protocols: HTTP, SSH, curl Apache.
+- [terminal.md](terminal.md):                 terminal emulators, ANSI escapes, control characters.
 
 Media video, games, etc.) file types, viewers, editors, capture, synthesizers:
 
-- [audio/](audio/):     audio, music, sound.
-- [book.md](book.md):   PDF, DJVU.
-- [dict.md](dict.md):   dictionary formats.
-- [game.md](game.md):   games, emulation.
-- [image/](image/):     images, photos.
-- [markup](markup/):    Markdown, RST. Focus on command line interface and extensions.
-- [video.md](video.md): videos, films.
+- [audio/](audio/):                 audio, music, sound.
+- [book.md](book.md):               PDF, DJVU.
+- [dict.md](dict.md):               dictionary formats.
+- [game.md](game.md):               games, emulation.
+- [file-share.md](files-share.md):  Soulseek, Dropbox.
+- [image/](image/):                 images, photos.
+- [markup](markup/):                Markdown, RST. Focus on command line interface and extensions.
+- [video.md](video.md):             videos, films, subtitles.
 
-[vm/](vm/): virtual machines, Vagrant.
+[virtual-machine.md/](virtual-machine): Vagrant, Docker.
 
 #How to search for stuff
 

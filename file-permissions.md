@@ -1,4 +1,4 @@
-#concept
+#Concept
 
 Determines which users can do what with each file.
 
@@ -6,12 +6,9 @@ Specified by POSIX.
 
 Three types of people:
 
-- owner. applies the person who created the file.
-
-- group. the main group of he person who created the file.
-applies to all people who are in that group.
-
-- others. applies to all others who are not owner or in the group.
+- owner: applies the person who created the file.
+- group: the main group of he person who created the file. applies to all people who are in that group.
+- others: applies to all others who are not owner or in the group.
 
 6 types of permissions:
 
@@ -22,14 +19,13 @@ applies to all people who are in that group.
 - sgid
 - suid
 
-#notations
+#Notations
 
-Two standard notation types (POSIX): symbolic and numeric.
+Two standard notation types: symbolic and numeric.
 
-##numeric
+##Numeric
 
-12 bits, logically grouped into 4 groups of three
-thus use of octal, since octal can represent 3 bits per digit)
+12 bits, logically grouped into 4 groups of three thus use of octal, since octal can represent 3 bits per digit)
 
 Meanings:
 
@@ -46,7 +42,7 @@ Meanings:
 - `0002`:       write
 - `0001`:       exec
 
-##symbolic
+##Symbolic
 
 Sample:
 
@@ -56,7 +52,7 @@ Sample:
 
 Meaning of each:
 
-- `1`
+-   `1`
 
     - `-`: regular file
     - `d`: dir
@@ -66,40 +62,39 @@ Meaning of each:
     - `c`: character file
     - `d`: block device file
 
-- `2`
+-   `2`
 
     - `r`: owner can read
     - `-`: owner cannot read
 
-- `3`
+-   `3`
 
     - `w`: owner can write
     - `-`: owner cannot write
 
-- `4`
+-   `4`
 
     - `x`: owner can    execute. suid off
     - `s`:       can           .      on
     - `S`:       cannot        . suid on
 
-- `567`
+-   `567`
 
     Same as `234`, with `7` as `4` but for sgid.
 
-- `8`, `9`
+-   `8`, `9`
 
     Same as `23` and `56`, but for others
 
-- `A`:
+-   `A`:
 
-    Same as `4` and `7`, but replace `suid` by `sticky bit`,
-    `s` by `t` and `S` by `T`.
+    Same as `4` and `7`, but replace `suid` by `sticky bit`, `s` by `t` and `S` by `T`.
 
-#directories
+#Directories
 
 This explains the permissions for directories.
 
-##read
+##Read
 
 It is possible to list directory.
 
@@ -128,13 +123,11 @@ Only works if you have read permission to *all* of the parent directories!
 
     assert [ ! "$?" = 0 ]
 
-##write
+##Write
 
-You can change the list of contents in the dir:
-add, remove and rename.
+You can change the list of contents in the dir: add, remove and rename.
 
-*Only* works if you also have execute permission.
-`w` without `x` on dirs has no effect.
+*Only* works if you also have execute permission. `w` without `x` on dirs has no effect.
 
 Works even if `r` is off.
 
@@ -145,7 +138,7 @@ Works even if `r` is off.
     touch r/d/f
         #permission denied
 
-##execute
+##Execute
 
 If you also have execute permissions to all of the parent dirs then you can:
 
@@ -157,7 +150,7 @@ If you also have execute permissions to all of the parent dirs then you can:
 
 The above can be done even if `r` is off.
 
-##sticky bit
+##Sticky bit
 
 If users cannot delete/move files in dir that don't belong to them
 
@@ -183,7 +176,7 @@ They can however create files.
     rm a/a
         #removed
 
-##sgid
+##Sgid
 
 Files created under sgid dir get the same group as the parent dir.
 
@@ -229,21 +222,20 @@ With sgid
         #g
         #subdirs also get sgid!
 
-###application
+###Application
 
 You want many users to colaborate under a single dir.
 
 You:
 
-1) create a group for collaboration
-2) create the dir with sticky bit
-3) add every user to the group
-4) make everyone give rwx on files they create
+1. create a group for collaboration
+1. create the dir with sticky bit
+1. add every user to the group
+1. make everyone give rwx on files they create
 
-This way, only the group can work under the dir,
-and they all can access each other's files
+This way, only the group can work under the dir, and they all can access each other's files
 
-#files
+#Files
 
 ##suid and sgid
 
@@ -251,8 +243,7 @@ Does not work properly on scripts: you *must* have an executable:
 
     echo '#include <unistd.h>
 
-    int main(int argc, char** argv)
-    {
+    int main(int argc, char** argv) {
         printf( "uid : %llu\n", (long long unsigned)getuid () );
         printf( "euid: %llu\n", (long long unsigned)geteuid() );
         printf( "gid : %llu\n", (long long unsigned)getgid () );

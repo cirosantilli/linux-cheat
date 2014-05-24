@@ -1756,138 +1756,30 @@
 
 		hwinfo | less
 
-  ##performance
+  ##sar
 
-    ##top
+    # Long term performance statistics.
 
-      #ncurses constantly updated process list with cpu and memory usage
+    # You must run this as a cronjob:
 
-      #interface:
+      crontab -e
 
-      #- h: help
-      #- f: field add/remove/sort
-      #- k: kill process
-      #- arrow keys: move view
+    # Paste:
 
-      #sample output:
+      */5 * * * * root /usr/lib/sa/sa1 1 1
 
-        23:00:13 up 12:00, 3 users, load average: 0.72, 0.66, 0.6
-        ^^^^^^^^ up ^^^^^, ^ users, load average: ^^^^, ^^^^, ^^^
-        1      2    3            4   5   6
+    # CPU usage
 
-      #Meanings:
+      sar -u
 
-      #- 1: cur time
-      #- 2: how long the system has been up for
-      #- 3: how many users are logged
-      #- 4: load average for past 1 minute
-      #- 5:            5 minute
-      #- 6:            15 minutes
+    # Disk IO stats:
 
-      ##load average
+      sar –d
 
-        #0.75: 0.75 as many scheduled tasks as your cpu can run
-          #rule of thumb maximum good value
-        #1  :    as many scheduled tasks as your cpu can run
-          #break even point
-          #risky, a littly more and you are behind schedule
-        #5  : 5x
-          #system critically overloaded
+    # Network stats:
 
-        #does not take into account how many cores you have!
-        #ex: for a dual core, breakeven at 2.0!
-
-      ##uptime
-
-        #echo first line of top
-
-          uptime
-
-    ##free
-
-      # Print RAM and swap memory in Megabytes once.
-
-        free
-
-      # Sample output:
-
-        #       total    used    free   shared  buffers   cached
-        #Mem:    604340   597484    6856     0   17548   86520
-        #-/+ buffers/cache:   493416   110924
-        #Swap:      0     0     0
-
-      # - `-m`: megabyte unit
-      # - `-t`: totals at bottom
-      # - `-s1`, `-s0.01`: repeat every N seconds. ms resolution.
-
-    ##vmstat
-
-      #memory, sway, io, cpu
-
-      #run every 1s, 100 times
-
-        vmstat 1 100
-
-      #Vmstat procs Section
-
-          #r field: Total number of runnable process
-          #b field: Total number of blocked process
-
-      #Memory section
-
-          #Swpd field: Used swap space
-          #Free field: Available free RAM
-          #Buff field: RAM used for buffers
-          #Cache field: RAM used for filesystem cache
-
-      #Swap Section
-
-          #Si field: Amount of memory swapped from disk per second
-          #So field: Amount of memory swapped to disk per second
-
-      #IO Section
-
-          #Bi field: Blocks received from disk
-          #Bo field: Blocks sent to disk.
-
-      #System Section
-
-          #In field: Number of interrupts per second.
-            #move you mouse and see this go up!
-
-          #Cs field: Number of context switches per second.
-
-      #CPU Section
-
-          #Us field: Time spend running user code. (non-kernel code)
-          #Sy field: Time spent running kernel code.
-          #Id field: Idle time.
-          #Wa field: Time spent waiting for the IO
-
-    ##sar
-
-      #long term performance statistics
-
-      #you must run this as a cronjob:
-
-        crontab -e
-
-      #paste:
-
-        */5 * * * * root /usr/lib/sa/sa1 1 1
-
-      #cpu usage
-
-        sar -u
-
-      #disk io stats
-
-        sar –d
-
-      #network stats
-
-        sar -n DEV | more
-        sar -n SOCK |more
+      sar -n DEV | more
+      sar -n SOCK |more
 
   ##hardware specs
 
@@ -1924,6 +1816,12 @@
       ##firewire
 
       ##ethernet
+
+    ##lshw
+
+      # Show lots of hardware specs, including networing, USB, CPU.
+
+        sudo lshw
 
 ##ulimit
 
@@ -2172,7 +2070,19 @@
 
     # List current executing processes and their info.
 
-    # On Ubuntu 12.04, implemented by the psmisc package.
+    # On Ubuntu 12.04, implemented by the procps package.
+
+    # `ps` is a tool with a complicated past and mulitple implementations.
+
+    # The procps version http://procps.sourceforge.net/ supports multiple syntaxes for backwards compatibility:
+
+    # - UNIX options, which may be grouped and must be preceded by a dash.
+    # - BSD options, which may be grouped and must not be used with a dash.
+    # - GNU long options, which are preceded by two dashes.
+
+    # For your sanity, we recommend that you use POSIX and GNU syntax only wherever possible,
+    # never BSD syntax.
+
 
     # Implementations commonly use the proc filesystem.
     # There does not seem to be a POSIX way to implement this,
@@ -2187,7 +2097,15 @@
 
     # Best command to see all processes on the system:
 
-      ps aux
+      ps -eF
+
+    # Output fields include:
+
+    # - pid: unique identifier for all process on system
+    # - tty: from which tty it was launched
+    # - time: CPU time used for process, not real time
+    # - cmd: command that launched th process without command line args
+    # - rss: Resident Set Size: used memory.
 
     # See processes running on current tty:
 
@@ -2195,33 +2113,17 @@
       sleep 10 &
       ps
 
-    # Output fields include:
+    # Show all processes:
 
-    # - pid
-      # unique identifier for all process on system
+      ps -e
 
-    # - tty
-      # from which tty it was launched
+      # Show all columns (Full listing):
 
-    # - time
-      # cpu time used for process
-      # not real time
-
-    # - cmd
-      # command that launched th process
-      # without command line args
-
-    # See all process on system (TODO for some reason less than `aux`):
-
-      ps -A
+      ps -eF
 
     # Shows threads of each process:
 
-      ps -Am
-
-    # Shows lots of extra info columns in addition to the 4 default:
-
-      ps -Al
+      ps -em
 
     # Sort output by:
 
@@ -2230,7 +2132,7 @@
     # - pid
     # - tty reversed (-)
 
-      ps -A --sort cmd,-time,pid,-tty
+      ps -ef --sort cmd,-time,pid,-tty
 
     # Get pid of parent of process with pid p
 
@@ -2255,6 +2157,41 @@
         2363 ?    00:12:19     \_ compiz
         3503 ?    00:00:00     |  \_ sh
         3504 ?    00:00:22     |    \_ gtk-window-deco
+
+  ##pstree
+
+    # psmisc package, not POSIX
+
+    # Shows tree of which process invocates which
+
+      pstree
+
+    # This works because in POSIX new processes are created exclusively
+    # by forking from other processes, and parent information is stored
+    # on each process, which dies if the parent dies
+
+    # this is a very insightfull program to understand what happened after
+    # the `init` process, first process on the system and common ancestor of all, started
+
+    # Particularaly interesting if you are on a graphical interface,
+    # to understand where each process comes from
+
+    # Quotint `man pstree`, multiple processes with same name and parent are wrttin in short notation:
+
+      #init-+-getty
+      #   |-getty
+      #   |-getty
+      #   `-getty
+
+    # Becomes:
+
+      #init---4*[getty]
+
+    # Threads (run parallel, but on same data, and cannot fork) are indicated by brackets:
+
+      #icecast2---13*[{icecast2}]
+
+    # Means that `icecast2` has 13 threads.
 
   ##jobs
 
@@ -2555,41 +2492,6 @@
       touch a
       flock a sleep 5 &
 
-  ##pstree
-
-    # psmisc package, not POSIX
-
-    # Shows tree of which process invocates which
-
-      pstree
-
-    # This works because in POSIX new processes are created exclusively
-    # by forking from other processes, and parent information is stored
-    # on each process, which dies if the parent dies
-
-    # this is a very insightfull program to understand what happened after
-    # the `init` process, first process on the system and common ancestor of all, started
-
-    # Particularaly interesting if you are on a graphical interface,
-    # to understand where each process comes from
-
-    # Quotint `man pstree`, multiple processes with same name and parent are wrttin in short notation:
-
-      #init-+-getty
-      #   |-getty
-      #   |-getty
-      #   `-getty
-
-    # Becomes:
-
-      #init---4*[getty]
-
-    # Threads (run parallel, but on same data, and cannot fork) are indicated by brackets:
-
-      #icecast2---13*[{icecast2}]
-
-    # Means that `icecast2` has 13 threads.
-
   ##prtstat
 
     #TODO
@@ -2613,6 +2515,115 @@
     ##ipcrm
 
       # Remove IPC facility.
+
+  ##top
+
+    # Ncurses constantly updated process list with CPU and memory usage.
+
+    # Interface:
+
+    # - h: help
+    # - q: quit
+    # - f: chose which fields to show
+    # - F: chose by which field to sort
+    # - O: move sort field left right
+    # - k: kill process
+    # - arrow keys: move view
+
+    # Sample output:
+
+      23:00:13 up 12:00, 3 users, load average: 0.72, 0.66, 0.6
+      ^^^^^^^^ up ^^^^^, ^ users, load average: ^^^^, ^^^^, ^^^
+      1      2    3            4   5   6
+
+    # Meanings:
+
+    # - 1: cur time
+    # - 2: how long the system has been up for
+    # - 3: how many users are logged
+    # - 4: load average for past 1 minute
+    # - 5:            5 minute
+    # - 6:            15 minutes
+
+    ##load average
+
+      #0.75: 0.75 as many scheduled tasks as your cpu can run
+        #rule of thumb maximum good value
+      #1  :    as many scheduled tasks as your cpu can run
+        #break even point
+        #risky, a littly more and you are behind schedule
+      #5  : 5x
+        #system critically overloaded
+
+      # Does not take into account how many cores you have!
+      # E.g.: for a dual core, breakeven at 2.0!
+
+    ##uptime
+
+      # Echo first line of top.
+
+        uptime
+
+  ##free
+
+    # Print RAM and swap memory in Megabytes once.
+
+      free
+
+    # Sample output:
+
+      #       total    used    free   shared  buffers   cached
+      #Mem:    604340   597484    6856     0   17548   86520
+      #-/+ buffers/cache:   493416   110924
+      #Swap:      0     0     0
+
+    # - `-m`: megabyte unit
+    # - `-t`: totals at bottom
+    # - `-s1`, `-s0.01`: repeat every N seconds. ms resolution.
+
+  ##vmstat
+
+    # Memory, sway, io, cpu
+
+    #run every 1s, 100 times
+
+      vmstat 1 100
+
+    #Vmstat procs Section
+
+        #r field: Total number of runnable process
+        #b field: Total number of blocked process
+
+    #Memory section
+
+        #Swpd field: Used swap space
+        #Free field: Available free RAM
+        #Buff field: RAM used for buffers
+        #Cache field: RAM used for filesystem cache
+
+    #Swap Section
+
+        #Si field: Amount of memory swapped from disk per second
+        #So field: Amount of memory swapped to disk per second
+
+    #IO Section
+
+        #Bi field: Blocks received from disk
+        #Bo field: Blocks sent to disk.
+
+    #System Section
+
+        #In field: Number of interrupts per second.
+          #move you mouse and see this go up!
+
+        #Cs field: Number of context switches per second.
+
+    #CPU Section
+
+        #Us field: Time spend running user code. (non-kernel code)
+        #Sy field: Time spent running kernel code.
+        #Id field: Idle time.
+        #Wa field: Time spent waiting for the IO
 
   ##chroot
 

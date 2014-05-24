@@ -165,7 +165,7 @@ Examples:
 
 ###Predefined character classes
 
-Is the main difference between those and perl (except for very magic perl regex options)
+Is the main difference between those and Perl (except for very magic perl regex options).
 
 They enclosed in `[::]` inside a `[]`. example:
 
@@ -180,7 +180,7 @@ Full list:
 
 In Perl these are backlash escaped chars, much shorter to write...
 
-##Utility command line interface
+##Command line interface
 
 Suggests the following format for documenting CLIs:
 
@@ -188,20 +188,21 @@ Suggests the following format for documenting CLIs:
 
 A few of the most interesting suggests for argument and utility name syntax:
 
-- utility names are *lowercase* alphanum
+-   utility names are *lowercase* alphanumeric.
 
-- options start with one hyphen `-`
+-   options start with one hyphen `-`
 
-- options contain **a single** char only. Do not allow multichar options.
+-   options contain **a single** char only. Do not allow multi character options.
 
-    This is notably not followed by the GNU convention of double hyphen for multichar
-    options `--optionname`.
+    One notable extension is the GNU convention of double hyphen for multi character options `--optionname`.
 
     Or even worse by some programs in the wild which use `-option`...
 
-- `--` marks the last of the options
-- `-` means stdin/stdout when the utility expects a filename as argument
-- `-W` is reserved for vendor options
+    Good discussion about command line interface conventions: <http://stackoverflow.com/questions/10818443/short-long-options-with-option-argument-is-this-some-sort-of-convention>
+
+-   `--` marks the last of the options
+-   `-` means stdin/stdout when the utility expects a filename as argument
+-   `-W` is reserved for vendor options
 
 ##Exit status
 

@@ -95,8 +95,6 @@
 
       #sudo sh -c "echo '$(id -un) ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers"
 
-    # Reduce GRUB timeout:
-
   if [ "$1" = "min" ]; then exit 0; fi
 
   ##package management
@@ -176,7 +174,7 @@
     sudo aptitude install -y blahtexml
     sudo aptitude install -y pandoc
 
-  ##audiou
+  ##audio
 
     sudo aptitude install -y abcde
     sudo aptitude install -y cplay
@@ -189,6 +187,9 @@
     # pico2wave
     sudo aptitude install -y libttspico-utils
     sudo aptitude install -y wavpack
+
+    sudo add-apt-repository -y ppa:flacon && sudo aptitude update
+    sudo aptitude install -y flacon
 
   ##image
 
@@ -364,9 +365,10 @@
     #sudo aptitude install -y golly
     #sudo aptitude install -y gnotski
 
-    #sudo aptitude install -y zsnes
-    #sudo aptitude install -y mupen64plus
-    #sudo aptitude install -y pcsxr
+    sudo aptitude install -y zsnes
+    # Nintendo 64:
+    sudo aptitude install -y mupen64plus
+    sudo aptitude install -y pcsxr
 
     # super maryo chronicles:
 
@@ -576,7 +578,7 @@
       # NVM install:
 
         VERSION=0.10.26
-        curl https://raw.github.com/creationix/nvm/master/install.sh | sh
+        curl https://raw.githubusercontent.com/creationix/nvm/v0.7.0/install.sh | sh
         . ~/.nvm/nvm.sh
         echo ". ~/.nvm/nvm.sh
         nvm use "$VERSION" &>/dev/null
@@ -597,16 +599,15 @@
 
     ##virtualization ##vm
 
-      # Don't forget to enable virtualization on your BIOS when using virtualization tools.
+      # MANUAL: don't forget to enable virtualization on your BIOS when using virtualization tools.
       # Some features may only be available with it enabled.
 
       ##virtualbox
 
-          #wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add -
-          #sudo sh -c 'echo "deb http://download.virtualbox.org/virtualbox/debian raring contrib" >> /etc/apt/sources.list.d/virtualbox.list'
-          #sudo aptitude update
-          #sudo aptitude install -y virtualbox-4.2
-          #MANUAL https://www.virtualbox.org/wiki/Download_Old_Builds_4_2
+          wget -q -O - http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc | sudo apt-key add -
+          sudo sh -c 'echo "deb http://download.virtualbox.org/virtualbox/debian precise non-free contrib" >> /etc/apt/sources.list.d/virtualbox.org.list'
+          sudo aptitude update
+          sudo aptitude install -y virtualbox-4.3
 
         # On the guest:
 
@@ -616,23 +617,36 @@
 
           # MANUAL download:
 
-            #firefox http://www.vagrantup.com/downloads.html
-            #cd download_dir
-            #sudo dpkg -i vagrant*.deb
+            firefox http://www.vagrantup.com/downloads.html
+            cd download_dir
+            sudo dpkg -i vagrant*.deb
 
-          # Aptitude install failed on Ubuntu 12.04.
+          # Aptitude install failed:
 
             #sudo aptitude install -y vagrant
 
       ##docker
 
-        # Only exists for 64bit, not 32.
-        # http://docs.docker.io/en/latest/installation/ubuntulinux/
+        # Only exists for 64 bit, not 32.
+        # Instructions at: http://docs.docker.io/en/latest/installation/ubuntulinux/
 
           sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
           sudo sh -c "echo deb https://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
           sudo aptitude update
           sudo aptitude install -y lxc-docker
+
+        ##drone
+
+            cd /tmp
+            wget http://downloads.drone.io/latest/drone.deb
+            sudo dpkg -i drone.deb
+
+        ##jenkins
+
+            wget -q -O - http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
+            sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
+            sudo apt-get update
+            sudo aptitude install -y jenkins
 
       ##wine
 
@@ -738,16 +752,34 @@
         sudo aptitude install -y nmap
         sudo aptitude install -y whois
 
+      ##phantomjs
+
+        # Very outdated:
+
+          #sudo aptitude install -y phantomjs
+
+        # Latest precompiled stable:
+
+          cd /usr/local/share
+          arch="$(uname -i)"
+          sudo wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-$arch.tar.bz2
+          sudo tar xjf phantomjs-1.9.7-linux-$arch.tar.bz2
+          sudo ln -s /usr/local/share/phantomjs-1.9.7-linux-$arch/bin/phantomjs /usr/local/share/phantomjs
+          sudo ln -s /usr/local/share/phantomjs-1.9.7-linux-$arch/bin/phantomjs /usr/local/bin/phantomjs
+          sudo ln -s /usr/local/share/phantomjs-1.9.7-linux-$arch/bin/phantomjs /usr/bin/phantomjs
+
+        # Build from source takes too long (30 min +).
+
     ##browser
 
         sudo aptitude install -y chromium-browser
 
       # Google Chrome: <http://askubuntu.com/questions/79280/how-to-install-chrome-browser-properly-via-command-line>
 
-        #wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
-        #sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-        #sudo apt-get update
-        #sudo apt-get install google-chrome-stable
+        wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
+        sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+        sudo apt-get update
+        sudo apt-get install google-chrome-stable
 
       # Terminal web browser:
 
@@ -833,26 +865,39 @@
       sudo aptitude install -y alarm-clock-applet
       # GNOME tweak tool:
       sudo aptitude install -y gconf-editor
-      #sudo aptitude install -y logkeys
+      sudo aptitude install -y logkeys
       sudo aptitude install -y recordmydesktop
-      #sudo aptitude install -y gtk-recordmydesktop
+      sudo aptitude install -y gtk-recordmydesktop
       sudo aptitude install -y guvcview
 
       # ibus input methods for QT:
       sudo aptitude install -y ibus-qt4
       # Useful for example if you want Chinese input for Qt applications.
 
+      sudo add-apt-repository -y ppa:tualatrix/ppa && sudo aptitude update
+      sudo aptitude install -y ubuntu-tweak
+
+      sudo add-apt-repository -y ppa:atareao/atareao && sudo aptitude update
+      sudo aptitude install my-weather-indicator
+
+      sudo add-apt-repository -y ppa:daniel.pavel/solaar && sudo aptitude update
+      sudo aptitude install -y solaar
+
+      git clone https://git.lekensteyn.nl/ltunify.git
+      cd ltunify
+      make install-home
+
     ##desktop system
 
       # Gnome shell:
 
-        #sudo add-apt-repository -y ppa:gnome3-team/gnome3 && sudo aptitude update
-        #sudo aptitude install -y gnome-shell
+        sudo add-apt-repository -y ppa:gnome3-team/gnome3 && sudo aptitude update
+        sudo aptitude install -y gnome-shell
 
       # Linux Mint shell cinnamon:
 
-        #sudo add-apt-repository -y ppa:gwendal-lebihan-dev/cinnamon-stable && sudo aptitude update
-        #sudo aptitude install -y cinnamon
+        sudo add-apt-repository -y ppa:gwendal-lebihan-dev/cinnamon-stable && sudo aptitude update
+        sudo aptitude install -y cinnamon
 
       # KDE shell plasma:
 
@@ -865,7 +910,7 @@
 
       # Lubuntu lxde:
 
-        #sudo aptitude install -y lxde
+        sudo aptitude install -y lxde
 
       #  For `qtconfig-qt4`:
 
@@ -875,9 +920,9 @@
 
     # Skype. TODO failing.
 
-      #sudo add-apt-repository -y "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
-      #sudo aptitude update
-      #sudo aptitude install -y skype
+      sudo add-apt-repository -y "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
+      sudo aptitude update
+      sudo aptitude install -y skype
 
     # Google talk
 
@@ -918,13 +963,13 @@
 
     ##ftp
 
-      #very secure ftp deamon ftp server:
+      # Very secure FTP deamon FTP server:
 
-        #sudo aptitude install -y vsftpd
+        sudo aptitude install -y vsftpd
 
       sudo aptitude install -y filezilla
 
-      #higher level ftp operations such as recursive dir addition:
+      # Higher level FTP operations such as recursive dir addition:
 
         sudo aptitude install -y lftp
 
@@ -932,7 +977,7 @@
 
   ##file manager
 
-    #krusader and highly recommended tools
+    # Krusader and highly recommended tools:
 
       sudo aptitude install -y krusader
       sudo aptitude install -y krusader
@@ -944,9 +989,9 @@
 
       sudo aptitude install -y fdupes
 
-  ##gpu
+  ##GPU
 
-    #nvidia
+    # Nvidia.
 
       sudo aptitude install -y nvidia-319
       sudo aptitude install -y nvidia-settings-319
@@ -961,35 +1006,10 @@
 
       sudo aptitude install -y chkconfig
 
-  ##paas
+  ##PaaS
 
     ##Google
 
       # Google Compute Engine gcutil
 
-        #curl https://dl.google.com/dl/cloudsdk/release/install_google_cloud_sdk.bash | bash
-
-##xinit
-
-  #TODO
-
-##ck-list-sessions
-
-  #TODO
-
-##launchpad ppas
-
-  #you must first add ppas with `apt-add-repository`
-
-    sudo add-apt-repository -y ppa:tualatrix/ppa && sudo aptitude update
-    sudo aptitude install -y ubuntu-tweak
-
-    sudo add-apt-repository -y ppa:atareao/atareao && sudo aptitude update
-    sudo aptitude install my-weather-indicator
-
-    sudo add-apt-repository -y ppa:flacon && sudo aptitude update
-    sudo aptitude install -y flacon
-
-##non launchpad ppas
-
-  #you must first add ppas manually:
+        curl https://dl.google.com/dl/cloudsdk/release/install_google_cloud_sdk.bash | bash

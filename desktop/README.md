@@ -843,17 +843,17 @@ Choose Qt themes with:
 
 Sources:
 
-- <http://lxde.org/lxde>
+-   <http://lxde.org/lxde>
 
     Official website.
 
     Good to see what it is made up of.
 
-- <https://wiki.archlinux.org/index.php/LXDE>
+-   <https://wiki.archlinux.org/index.php/LXDE>
 
-    Archilinux wiki.
+    Arch Linux wiki.
 
-    Default DE for archlinux, so lots of info there.
+    Default DE for Arch Linux, so lots of info there.
 
 ###keyboard layout
 
@@ -863,7 +863,7 @@ Right click on panel and add the Keyboard Layout Handler to the panel.
 
 Right click on the Keyboard layout manager and choose your settings.
 
-TODO what are the available layouts? what are the config files?
+TODO what are the available layouts? What are the config files?
 
 #display manager
 
@@ -875,16 +875,15 @@ Shows the initial login screen where you can:
 
 Some implementations:
 
-- LightDM (lightweight), ubuntu
-- KDM, kde
+- LightDM (lightweight), Ubuntu
+- KDM, KDE
 - GDM (gnome) fedora
 
 Find your default X display manager:
 
    cat /etc/X11/default-display-manager
 
-Log out from the grahpical tty and go back to the display manger login screen
-<http://askubuntu.com/questions/180628/how-can-i-logout-from-the-gui-using-cli>:
+Log out from the graphical TTY and go back to the display manger login screen <http://askubuntu.com/questions/180628/how-can-i-logout-from-the-gui-using-cli>:
 
    kill -9 -1
 
@@ -1044,12 +1043,12 @@ Passes window decoration to a Compiz window decorator.
 
 Some Compiz window decorators:
 
-- gtk-window-decorator: uses GTK for window decoration
+- `gtk-window-decorator`: uses GTK for window decoration
 - emerald:
 
 Configurations: `gconf-editor` under `apps.compiz-1`.
 
-Restart compiz after modifying configurations to load them:
+Restart Compiz after modifying configurations to load them:
 
     compiz --replace
 
@@ -1080,16 +1079,15 @@ Each file gets sourced.
 
 Example, in a file called `firefox`, put:
 
-[Desktop Entry]
-    Type=Application
-    Exec=firefox
+    [Desktop Entry]
+        Type=Application
+        Exec=firefox
 
 TODO who executable implements it? which DEs adopt it?
 
 #toolkits
 
-Although there is a X11 c interface, consider using higher level,
-more portable and more convenient interfaces such as:
+Although there is a X11 C interface, consider using higher level, more portable and more convenient interfaces such as:
 
 ##Qt
 
@@ -1104,15 +1102,13 @@ Themes locations:
 
 Customize qt with GUI:
 
-   qtconfig-qt4
+    qtconfig-qt4
 
 You can change themes there.
 
-If you choose the gtk+ theme, it will use your gtk theme.
+If you choose the GTK+ theme, it will use your GTK theme.
 
-Most kde appliations have a command line qt interface part,
-and you can get the qt version, together with the KDE version required
-by doing using `-v`, for example:
+Most KDE applications have a command line qt interface part, and you can get the qt version, together with the KDE version required by doing using `-v`, for example:
 
     krusader -v
 
@@ -1166,21 +1162,21 @@ Very nice demo of lots of 2.0 features with easy to see source code side by side
 
 It is not generally possible to do so.
 
-If the program uses gtk as a dynamic library, you can try:
+If the program uses GTK as a dynamic library, you can try:
 
     ldd /bin/ls
 
-However some programs seem to use gtk as a static library.
+However some programs seem to use GTK as a static library.
 
-Sometimes, programs also give gtk specific options from the command line.
+Sometimes, programs also give GTK specific options from the command line.
 
 ---
-TODO where is gtk configuration stored?
 
-You can install new gtk themes by placing their files under TODO.
+TODO where is GTK configuration stored?
 
-Note however that it is more recommended that you get themes from packages,
-so that those can get automatically updated.
+You can install new GTK themes by placing their files under TODO.
+
+Note however that it is more recommended that you get themes from packages, so that those can get automatically updated.
 
 #Themes
 
@@ -1206,8 +1202,7 @@ Like windows GUI item that contains the start menu.
 
 Typically offer:
 
-- a way to launch programs so that users can:
-    type any part in the middle and click on the auto completed desired match
+- a way to launch programs so that users can: type any part in the middle and click on the auto completed desired match
 
 - contain a list of all windows so that users can point click to open a window
 
@@ -1359,7 +1354,7 @@ Mnemonic: Power Management.
     pmi action suspend
     pmi action hibernate
 
-#lock screen
+#Lock screen
 
 State in which user must enter a password to be able to do or see anything.
 
@@ -1367,7 +1362,7 @@ Does not necessarily suspend computer for power saving.
 
 Usually fires up the screensaver.
 
-#screensaver
+#Screensaver
 
 Available screensavers at `$XDG_CONFIG_DIRS/screensaver` as desktop files.
 
@@ -1588,3 +1583,19 @@ Daemon for Chinese, Japanese, etc. input.
 On Ubuntu, you must install the Qt version separately for it to work on Qt apps via:
 
     sudo aptitude install -y ibus-qt4
+
+#Solaar
+
+Monitor status and configure Logitech wireless devices.
+
+List devices:
+
+    solaar-cli show
+
+List configuration of device:
+
+    solaar-cli config 1
+
+TODO how to change the Fn swap (in some keyboards, if you press F1 it does the Fn version istead). The following fails:
+
+    sudo solaar-cli config 1 fn-swap false
