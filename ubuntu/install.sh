@@ -365,11 +365,6 @@
     #sudo aptitude install -y golly
     #sudo aptitude install -y gnotski
 
-    sudo aptitude install -y zsnes
-    # Nintendo 64:
-    sudo aptitude install -y mupen64plus
-    sudo aptitude install -y pcsxr
-
     # super maryo chronicles:
 
       #sudo aptitude install -y smc
@@ -378,23 +373,32 @@
 
       #sudo aptitude install -y supertuxkart
 
-    ##dosbox
+    ##emulator
 
-        #sudo aptitude install -y dosbox
+      # NES
+      sudo aptitude install -y fceux
+      sudo aptitude install -y zsnes
+      # Nintendo 64
+      sudo aptitude install -y mupen64plus
+      sudo aptitude install -y pcsxr
 
-      ## MANUAL: get the sound working
+      ##dosbox
 
-        #TODO get working
+          #sudo aptitude install -y dosbox
 
-          #pmidi -l
-          #vim ~/.dosbox/dosbox-*.conf
+        # MANUAL: get the sound working
 
-        #put the port in:
+          # TODO get working
 
-          #[midi]
-          #midiconfig=14:0
+            #pmidi -l
+            #vim ~/.dosbox/dosbox-*.conf
 
-        #sudo aptitude install -y pmidi
+          # Put the port in:
+
+            #[midi]
+            #midiconfig=14:0
+
+          #sudo aptitude install -y pmidi
 
   ##editors
 

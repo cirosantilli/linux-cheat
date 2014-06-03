@@ -2,7 +2,7 @@
 
 ##nethack
 
-Most famous dangeon crawler.
+Most famous dungeon crawler.
 
 Save is only pause: no return from death.
 
@@ -42,7 +42,7 @@ Cute!
 
 Lots of console games/cute apps.
 
-Highly recommened.
+Highly recommended.
 
 List games on Ubuntu:
 
@@ -88,7 +88,7 @@ Count primes:
 
     primes 1 100 | wc -l
 
-`factor` is not included here as it is part of coreutils...
+`factor` is not included here as it is part of coreutils.
 
 ###robots
 
@@ -226,7 +226,11 @@ Includes a map designer.
 
 #emulation
 
-##snes
+##NES
+
+###FCEUX
+
+##SNES
 
 ###zsnes
 
@@ -234,9 +238,9 @@ Features:
 
 - fast forward
 - states
-- good rom support
+- good ROM support
 
-##nintendo 64
+##Nintendo 64
 
 ###mupen64plus
 

@@ -12,7 +12,7 @@ Important files:
 Base standards:
 
 - [linux.md](linux.md): Linux, LSB.
-- [posix/](posix/):     POSIX standard, POSIX C library.
+- [posix.md](posix.md): POSIX standards.
 
 Kernel related:
 

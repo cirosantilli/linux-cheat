@@ -1,4 +1,6 @@
-Cheat on POSIX, including the POSIX C API.
+Cheat on POSIX.
+
+For a cheat on the POSIX C API see: <https://github.com/cirosantilli/cpp/tree/99ad8ab9aee7bf2d8c47c9e25f4631eddb556ccf/posix>
 
 POSIX command line utilities shall not be discussed here because it is better to group utilities together with other non-POSIX utilities which have similar functions, for example discussing both `kill` (POSIX) and `killall` (non-POSIX) side by side.
 
@@ -8,7 +10,7 @@ POSIX is also known as: Single Unix specification (SUS)
 
 #Sources
 
-- Matthew; Stones - Beginning Linux Programming <http://www.amazon.com/Beginning-Linux-Programming-Neil-Matthew/dp/0470147628>
+-   Matthew; Stones - Beginning Linux Programming <http://www.amazon.com/Beginning-Linux-Programming-Neil-Matthew/dp/0470147628>
 
     very good intro do many of POSIX utilities
 

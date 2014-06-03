@@ -736,11 +736,18 @@
 
       gvim
 
-  ##libreoffice
+  ##Libreoffice
 
     # Project contains wysiwyg text editor, tables, image editor, database management.
 
     # How to add new spellchecking language:<http://askubuntu.com/questions/72099/how-to-install-a-libreoffice-dictionary-spelling-check-thesaurus>
+
+    ##Calc
+
+      # Always show a row or column, specially the header if the table is long:
+
+      # - click on column that *follows* the one that should always show
+      # - Window > Freeze
 
 ##text
 

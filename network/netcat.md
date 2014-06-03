@@ -52,6 +52,18 @@ To do multiple tests of what is being sent, just wrap in a while and give an emp
 
     while true; do printf '' | nc -l localhost 8000; done
 
+If `-l` is given, then the hostname is optional. If the hostname is not given, `nc` listens on all interfaces (TODO confirm).
+
+#v
+
+Give more verbose output.
+
+E.g., on `nc -l`, prints an extra line:
+
+    Connection from 127.0.0.1 port 8000 [tcp/*] accepted
+
+before the request.
+
 #k
 
 Keep listing after the first connection instead of shutting down.

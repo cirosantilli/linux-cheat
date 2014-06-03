@@ -129,8 +129,7 @@ TODO continue. Add diagrams.
 
 Protocol that allows to:
 
-- assign addresses to network interfaces (which have distinct hardware addresses),
-
+- assign addresses to network interfaces.
 - find path between one computer to another, possibly passing through many routers
 
 ##IP header
@@ -319,11 +318,15 @@ Most common home range is the Class C:
     192.168.0.1 through 192.168.255.254
     subnet mask 255.255.255.0
 
+###LAN IP
+
 ###Internal IP
+
+###WAN IP
 
 ###External IP
 
-If you use a router, all computers behind the router have a single external IP seen you have an external IP seen on the web (WAN) and an internal IP seen on the private local network (LAN).
+If you use a router, your entire network has a single IP seen from the outside (WAN), and an internal IP for each interface seen on the private local network (LAN).
 
 Get external IP:
 
@@ -336,13 +339,11 @@ This only matters if you want to ha external computers make requests for you, e.
 
 If you are going to use your external IP behind a router, you will need to enable port forwarding.
 
-Get internal addresses for current computer:
+Get LAN IPs for all interfaces on current computer:
 
     ifconfig | grep -B1 "inet addr" | awk '{ if ( $1 == "inet" ) { print $2 } else if ( $2 == "Link" ) { printf "%s:" ,$1 } }' | awk -F: '{ print $1 ": " $3 }'
 
-Different ones for wireless and for wired connections
-
-Computers in the network only talk to the router.
+Each interface has its own IP. Therefore, a single computer can have multiple LAN IPs: one for the wired connection, one for the Wiki, one loopback localhost, etc.
 
 The server on the router is called **proxy server**.
 
@@ -718,6 +719,12 @@ As of early 2014:
 - `facebook.com` redirects to `www.facebook.com`
 - `google.com` redirects to `www.google.com`
 
+##localhost
+
+Host that refers to the computer itself, specially for testing purposes.
+
+Corresponds to a virtual device called the loopback interface.
+
 #Domain name
 
 E.g.: `google.com`, `stackoverflow.com` are commonly called domain names.
@@ -753,7 +760,7 @@ Some country ones have become generic: `.io` is a notable example, popular among
 
 #DHCP
 
-Dynamic host configuration protocol.
+Dynamic Host Configuration Protocol.
 
 <http://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol>
 
@@ -765,7 +772,9 @@ When a computer enters a network and it does not know its own IP.
 
 It must first send a DHCP request to be assigned an IP.
 
-##Static IP
+The server usually (TODO always?) runs in the router, and can be configured from the router's interface.
+
+#Static IP
 
 On a home network that you control, it is better to use intuitive hostnames and let the addresses be dynamically set via DHPC, unless you absolutely need a static IP, for example to setup a server behind your router.
 
@@ -775,17 +784,21 @@ On my Numericable router, under Network > Basic Settings > IP LAN > I have two f
 
 On Ubuntu 12.04, there are a few ways of doing it.
 
-###Static IP with DHCP reservation
+##Static IP with DHCP reservation
 
 This is not strictly static, but it is the simplest option.
 
 On you router configuration, find the DHCP Reservation Lease Infos.
 
-This allows you to map LAN IPs directly to MAC addresses. On my Numericable router it is found under the IP LAN tab.
+This allows you to map LAN IPs directly to MAC addresses.
+
+On my Numericable router it is found under the IP LAN tab.
 
 Set the interface to use DHCP.
 
-###Static IP with NetworkManager
+The assigned address must be in the DHCP range.
+
+##Static IP with NetworkManager
 
 Using the NetworkManager GUI:
 
@@ -795,7 +808,7 @@ Select connection > Edit > IPv4 settings, configure.
 
 TODO fails. I lose internet connection on the interface
 
-###Static IP with NetworkManager
+##Static IP with NetworkManager
 
 Using `/etc/network/interfaces`:
 
@@ -993,6 +1006,16 @@ TODO File that tells DNS to redirect to another domain name, creating an alias.
 ##A
 
 Points a domain to an IP. The final part of the resolution.
+
+##DDNS
+
+Dynamic DNS.
+
+A way to update DNS as IPs change.
+
+Useful for example if you want to give a hostname for your home network, in which the IP is dynamic for most ISPs. A DDNS service like <http://www.noip.com> can give you a persistent hostname anyways.
+
+TODO what is it exactly? How does it work? A protocol? Part of DNS?
 
 #Port
 
@@ -1357,6 +1380,12 @@ Search with default engine:
 Starts with disabled extensions in case they are causing a crash:
 
     firefox -safe-mode
+
+##Chrome
+
+Some websites run neither on Firefox nor Chromium, only Chrome.
+
+To have multiple chrome profiles do:
 
 ##w3m
 
