@@ -1,48 +1,44 @@
-gdb uses symbol information contained in executables to debug them
+GDB uses symbol information contained in executables to debug them
 
-See info on gcc debug flags for how to generate that information.
-As a summary, to get the maximum amount of debug information just use:
+See info on GCC debug flags for how to generate that information. As a summary, to get the maximum amount of debug information just use:
 
     gcc -ggdb3 a.c
 
-To run executable and debug it with gdb use:
+To run executable and debug it with GDB use:
 
     gdb a.out
 
-it is possible to attach gdb to a running instance of a program
-after it was run:
+It is possible to attach GDB to a running instance of a program after it was run:
 
     gdb a.out $pid
 
-when you quit gdb, the process will continue to run
+When you quit GDB, the process will continue to run
 
-#commands
+#Commands
 
-commands you can run from inside gdb
+Commands you can run from inside GDB
 
-run prog
+Run program:
 
     r
 
-if already runnin, kill and rerun.
-keeps breakpoints, etc
+If already running, kill and rerun. Keeps breakpoints, etc.
+
+Start running with arguments. Next `r` calls will reuse those args:
 
     r 1 2
 
-start running with arguments
-next r calls will use those args
-
-removes previously set args:
+Remove previously set args:
 
     set args
 
-kill program:
+Kill program:
 
     k
 
-keeps breakpoints, etc saved for next debug session
+Keep breakpoints, etc. saved for next debug session.
 
-TODO format the rest of this section on md
+TODO format the rest of this section as md:
 
     b
 

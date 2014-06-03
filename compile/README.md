@@ -4,15 +4,15 @@ Contains:
 - tools for compiling languages (C, C++, Fortran, etc.) into executables, such as GCC
 - tools for examining executable files
 
-#formats
+#Formats
 
 There are different types of executable and object files.
 
-##elf
+##ELF
 
 Defined in the LSB.
 
-Superseeds `.coff` which superseeds `a.out`.
+Supersedes `.coff` which supersedes `a.out`.
 
 Specifies format for both object files (`.o`), shared object files (`.so`) and executable files.
 
@@ -88,6 +88,6 @@ Shows size of each memory part of a executable:
     gcc a.o
     size a.out a.o
 
-- text : instructions
-- data : init and uinit data
-- dec and hex : size of executable in dec and hex
+- text:            instructions
+- data:            init and uinit data
+- `dec` and `hex`: size of executable in decimal and hexadecimal
