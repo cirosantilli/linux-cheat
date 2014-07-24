@@ -24,11 +24,11 @@ Run program:
 
 If already running, kill and rerun. Keeps breakpoints, etc.
 
-Start running with arguments. Next `r` calls will reuse those args:
+Start running with arguments. Next `r` calls will reuse those argument:
 
     r 1 2
 
-Remove previously set args:
+Remove previously set arguments:
 
     set args
 

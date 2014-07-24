@@ -224,6 +224,17 @@ A few of the most interesting suggests for argument and utility name syntax:
 
     GNU goes further and [specifies that](http://www.gnu.org/software/bash/manual/bashref.html#Exit-Status) when terminated by a signal, the exit status shall be 128 + the normal error status.
 
+##Filenames
+
+POSIX filenames are extremely restrictive: more than any modern operating system:
+
+- only `a-zA-Z0-9._-` characters allowed
+- maximum filename is 14 bits. 255 on Linux.
+
+It also has rules which are enforced on all modern operating systems:
+
+- reserved characters: slash `/` and `null`
+
 #TODO
 
 - understand difference between the two: http://unix.stackexchange.com/questions/14368/difference-between-posix-single-unix-specification-and-open-group-base-specifi

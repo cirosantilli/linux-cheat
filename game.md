@@ -240,6 +240,10 @@ Features:
 - states
 - good ROM support
 
+###snes9x-gtk
+
+Lag.
+
 ##Nintendo 64
 
 ###mupen64plus
@@ -293,6 +297,40 @@ Full screen:
 
     alias mupen="mupen64plus --fullscreen"
     mupen rom.v64
+
+##Game Boy Advance
+
+###VisualBoy Advance
+
+Two versions: GTK or not. Take GTK.
+
+Executable name: `gvba`.
+
+Version 1.8.0 had the too fast bug: <http://askubuntu.com/questions/62611/visual-boy-advanced-emulator-runs-too-fast>. Seems unsolved.
+
+###mednafen
+
+0.8.D.3 has not friendly configuration interface, but works well.
+
+`F1` for options.
+
+`Alt-Shift-1` to configure controller 1.
+
+Backtick `` ` `` to fast forward.
+
+Edit `~/.mednafen/mednafen.cfg` line `command.fast_forward` to  `command.fast_forward keyboard 32`.
+
+`keyboard` values seems to follow <http://expandinghead.net/keycode.html>
+
+##Nintendo DS
+
+###Desmume
+
+Works very well.
+
+- F1-9: load state
+- shift + F1-9: save state
+- space: play / pause
 
 ##ps1
 

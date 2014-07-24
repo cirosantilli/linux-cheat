@@ -31,7 +31,8 @@
 		# Edit In-line, modifying files.
 		# What would get printed is put into file instead
 
-		# WARNING: symlinks are overwritten with files. TODO how to avoid this? Possible on GNU sed with --follow-symlinks.
+		# WARNING: symlinks are overwritten with files. TODO how to avoid this?
+		# Possible on GNU sed with --follow-symlinks.
 
 			printf 'a\nb\n' > f
 			assert [ "`perl -lpi -e 's/a/A/g' f`" ]
@@ -75,11 +76,11 @@
 
 		# Literal:
 
-            [ "$(echo $'a:b:c' | perl -F':' -lane 'print $F[0] . " " . $F[1] . " " . $F[2]')" = "a b c"] || exit 1
+      [ "$(echo $'a:b:c' | perl -F':' -lane 'print $F[0] . " " . $F[1] . " " . $F[2]')" = "a b c"] || exit 1
 
 		# regex separator:
 
-            [ "$(echo 'a:%b:]c' | perl -F'/:./' -lane 'print $F[0] . " " . $F[1] . " " . $F[2]')" = "a b c" ] || exit 1
+      [ "$(echo 'a:%b:]c' | perl -F'/:./' -lane 'print $F[0] . " " . $F[1] . " " . $F[2]')" = "a b c" ] || exit 1
 
 	##0
 
@@ -115,7 +116,10 @@
 
 			# Remove the annoying end newline which may match your `\s`!
 
-			# Downside: not possible to remove lines with it.
+			# Downsides:
+
+			# - not possible to remove lines with it
+			# - will add trailing newline to files which did not end in newlinew
 
 	##M
 
@@ -131,13 +135,13 @@
 
     # Find files with matching names and print only new modified lines to stdout:
 
-        find . -iname "*.tex" | xargs perl -lane 'print if s/a/A/g'
+      find . -iname "*.tex" | xargs perl -lane 'print if s/a/A/g'
 
     # Useful before you do mass refactoring
 
     # Make the modifications on files with matching names, print nothing to stdout
 
-        find . -iname "*.tex" | xargs perl -lapi -e 's/a/A/g'
+      find . -iname "*.tex" | xargs perl -lapi -e 's/a/A/g'
 
     ##multiline ##slurp
 

@@ -337,6 +337,12 @@ no warnings;
     #- `\U`: Start replacing by uppercase until `\E` is found or end of regexp.
     #- `\E`
 
+    # Lowercase:
+
+        #s/(.)/lc($1)/eg
+
+    # `e` says that the replace will be an arbitrary Perl rexpression.
+
 #defalut variables
 
     ##sources

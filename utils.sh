@@ -2414,8 +2414,8 @@
 
     # Make a process that continues to run even if calling bash dies:
 
-      nohup firefox >/dev/null &
-      echo "$!" > /tmp/firefox-pid
+      nohup firefox >'/dev/null' 2>&1 &
+      echo "$!" >'/tmp/firefox.pid'
       exit
 
     # This would send a HUP signal to Firefox, which kills most programs.
@@ -2424,7 +2424,7 @@
 
     # When you do this, you will often want to store the PID of the program to kill it later with:
 
-      kill "$(cat firefox-pid)"
+      kill "$(cat firefox.pid)"
 
     # Consequences of `nohup`:
 
@@ -2552,6 +2552,10 @@
     # - 5:            5 minute
     # - 6:            15 minutes
 
+    # Not possible to show more processes:
+    # http://unix.stackexchange.com/questions/36222/how-to-see-complete-list-of-processes-in-top
+    # Use `htop`.
+
     ##load average
 
       #0.75: 0.75 as many scheduled tasks as your cpu can run
@@ -2570,6 +2574,12 @@
       # Echo first line of top.
 
         uptime
+
+  ##htop
+
+    # Better top.
+
+    # Possible to scroll down.
 
   ##free
 
@@ -3906,6 +3916,11 @@
     # Configuration file:
 
       sudo cat /etc/sudoers
+
+    # Use `HOME` as `root/` instead of current user:
+
+      sudo env | grep -E '^HOME='
+      sudo -H env | grep -E '^HOME='
 
     ##visudo
 

@@ -27,7 +27,7 @@ Initialization:
 
 Base topics:
 
-- [compile/](compile/):                       compilation process, GCC, dynamic libraries.
+- [compile/](compile/):                       compilation process, dynamic libraries.
 - [desktop/](desktop/):                       X, XDG, GNOME, KDE and related utilities.
 - [filesystem.md](filesystem.md):             POSIX file permissions.
 - [file-permissions.md](file-permissions.md): filesystem, hard disks, mounting, partitions.

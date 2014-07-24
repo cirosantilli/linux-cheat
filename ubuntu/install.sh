@@ -36,7 +36,7 @@
     # Editor
 
       sudo aptitude install -y vim
-      git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+      git clone https://github.com/gmarik/vundle.git "$HOME/.vim/bundle/vundle"
       # TODO fails from bash pipe becuase not TTY.
       #vim +PluginInstall +qall
 
@@ -130,7 +130,10 @@
       sudo aptitude install -y finger
       # Multiverse.
       sudo aptitude install -y gddrescue
+      sudo aptitude install -y finger
+      sudo aptitude install -y htop
       sudo aptitude install -y makepasswd
+      sudo aptitude install -y puppet
 
   ##printer
 
@@ -170,9 +173,12 @@
 
       curl https://raw.github.com/cirosantilli/latex-cheat/master/install-texlive2013-ubuntu12.04.sh | bash
 
-    sudo aptitude install -y asciidoc
-    sudo aptitude install -y blahtexml
-    sudo aptitude install -y pandoc
+      sudo aptitude install -y asciidoc
+      sudo aptitude install -y blahtexml
+
+    # Up to date version with `cabal install`.
+
+      sudo aptitude install -y pandoc
 
   ##audio
 
@@ -375,12 +381,30 @@
 
     ##emulator
 
-      # NES
-      sudo aptitude install -y fceux
-      sudo aptitude install -y zsnes
-      # Nintendo 64
-      sudo aptitude install -y mupen64plus
+      ##NES
+
+        sudo aptitude install -y fceux
+
+      ##SNES.
+
+        # 32 bit only:
+
+          sudo aptitude install -y zsnes
+
+        # 64 bit also:
+
+          sudo add-apt-repository ppa:bearoso/ppa
+          sudo apt-get update
+          sudo apt-get install snes9x-gtk
+
+      ##Nintendo 64
+
+        sudo aptitude install -y mupen64plus
+
+      sudo aptitude install -y desmume
       sudo aptitude install -y pcsxr
+      sudo aptitude install -y visualboyadvance-gtk
+      sudo aptitude install -y visualboyadvance-gtk
 
       ##dosbox
 
@@ -391,7 +415,7 @@
           # TODO get working
 
             #pmidi -l
-            #vim ~/.dosbox/dosbox-*.conf
+            #vim "$HOME/.dosbox/dosbox-*.conf"
 
           # Put the port in:
 
@@ -412,6 +436,25 @@
 
         #sudo aptitude install -y libreoffice-base
 
+    ##Atom
+
+      # Requires: node, C++
+
+      # First install a recent node *as root*:
+
+        sudo add-apt-repository ppa:chris-lea/node.js
+        sudo apt-get update
+        sudo aptitude install -y nodejs
+
+      # Then:
+
+        sudo aptitude install -y libgnome-keyring-dev
+        git clone https://github.com/atom/atom
+        cd atom
+        script/build # Creates application at $TMPDIR/atom-build/Atom
+        sudo script/grunt install # Installs command to /usr/local/bin/atom
+        script/grunt mkdeb # Generates a .deb package at $TMPDIR/atom-build
+
   ##terminal emulators
 
     #sudo aptitude install -y guake
@@ -424,11 +467,36 @@
 
   ##program
 
-    #gcc docs:
+      sudo aptitude install -y ant
+      sudo aptitude install -y automake
+      sudo aptitude install -y bison
+      sudo aptitude install -y build-essential
+      sudo aptitude install -y cmake
+      sudo aptitude install -y doxygen
+      sudo aptitude install -y doxygen-doc
+      sudo aptitude install -y exuberant-ctags
+      sudo aptitude install -y flex
+      sudo aptitude install -y g++
+      sudo aptitude install -y libtool
+      sudo aptitude install -y m4
+
+    ##version control
+
+        # Very outdated:
+        sudo aptutide install -y tig
+
+        sudo aptitude install -y bzr
+        sudo aptitude install -y cvs
+        sudo aptutide install -y mercurial
+        sudo aptitude install -y subversion
+
+    ##C and C++ gcc g++
+
+      # gcc docs:
 
         #sudo aptitude install -y gcc-doc
 
-      # Located at: `/usr/share/doc/gcc-doc`
+      # Installed at: `/usr/share/doc/gcc-doc`
 
       # gcc and c++ 4.8. Default on Ubuntu 12.04 is 4.6.
 
@@ -442,46 +510,6 @@
         sudo aptitude install -y g++-4.8
         sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 50
 
-    # Glasgow haskell compiler:
-
-      #sudo aptitude install -y ghc
-
-      sudo aptitude install -y build-essential
-
-      sudo aptitude install -y ant
-      sudo aptitude install -y automake
-      sudo aptitude install -y doxygen
-      sudo aptitude install -y doxygen-doc
-      sudo aptitude install -y cmake
-      sudo aptitude install -y exuberant-ctags
-      sudo aptitude install -y g++
-      sudo aptitude install -y libtool
-      #sudo aptitude install -y m4
-
-    ##fortran
-
-      # GNU fortran 77:
-
-        sudo aptitude install -y g77
-
-      # GNU fortran 95:
-
-        sudo aptitude install -y gfortran
-
-      sudo aptitude install -y nasm
-
-    ##version control
-
-        # Very outdated:
-        #sudo aptutide install -y tig
-        sudo aptitude install -y bzr
-        sudo aptitude install -y cvs
-        sudo aptutide install -y mercurial
-        sudo aptitude install -y subversion
-
-    #sudo aptitude install -y puppet
-
-    ##c and c++ libraries
 
       # Requirements to build conqueror:
 
@@ -506,22 +534,7 @@
 
         # Install all packages:
 
-          #sudo aptitude install -y libboost-all-dev
-
-        # For G++ 4.8:
-
-          sudo aptitude install -y libboost1.48-all-dev
-
-        # Some subprojects have specific packages of their own,
-        # but we recommend that you install all at once as it is not that large.
-
-          #sudo aptitude install -y libboost-dbg
-          #sudo aptitude install -y libboost-doc
-          #sudo aptitude install -y libboost-graph-dev
-
-        # To find what you need:
-
-          #apt-cache search liboost
+          sudo aptitude install -y libboost-all-dev
 
       # Blas C / Fotran and lapack fortran:
 
@@ -566,110 +579,6 @@
           sudo aptitude install -y liblua5.1-0-dev libmad0-dev liba52-0.7.4-dev \
             libxcb-composite0-dev libxcb-xv0-dev libxcb-randr0-dev libgcrypt11-dev
 
-    ##python
-
-        sudo aptitude install -y gunicorn
-
-    ##ruby
-
-        curl -L https://get.rvm.io | bash -s stable
-        . ~/.rvm/scripts/rvm
-        rvm install 2.1.1
-        # Logout, login, and works for all shells.
-
-    ##node
-
-      # NVM install:
-
-        VERSION=0.10.26
-        curl https://raw.githubusercontent.com/creationix/nvm/v0.7.0/install.sh | sh
-        . ~/.nvm/nvm.sh
-        echo ". ~/.nvm/nvm.sh
-        nvm use "$VERSION" &>/dev/null
-        " >> ~/.bashrc
-        nvm install "$VERSION"
-
-      # Package node: old. Use NVM.
-
-        #sudo aptitude install -y nodejs
-
-      # NPM: comes with later nodes.
-
-        #sudo aptitude install -y npm
-
-      # After install, configure with:
-
-        npm config set registry http://registry.npmjs.org/
-
-    ##virtualization ##vm
-
-      # MANUAL: don't forget to enable virtualization on your BIOS when using virtualization tools.
-      # Some features may only be available with it enabled.
-
-      ##virtualbox
-
-          wget -q -O - http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc | sudo apt-key add -
-          sudo sh -c 'echo "deb http://download.virtualbox.org/virtualbox/debian precise non-free contrib" >> /etc/apt/sources.list.d/virtualbox.org.list'
-          sudo aptitude update
-          sudo aptitude install -y virtualbox-4.3
-
-        # On the guest:
-
-          #sudo aptitude install virtualbox-guest-utils
-
-        ##vagrant
-
-          # MANUAL download:
-
-            firefox http://www.vagrantup.com/downloads.html
-            cd download_dir
-            sudo dpkg -i vagrant*.deb
-
-          # Aptitude install failed:
-
-            #sudo aptitude install -y vagrant
-
-      ##docker
-
-        # Only exists for 64 bit, not 32.
-        # Instructions at: http://docs.docker.io/en/latest/installation/ubuntulinux/
-
-          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
-          sudo sh -c "echo deb https://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
-          sudo aptitude update
-          sudo aptitude install -y lxc-docker
-
-        ##drone
-
-            cd /tmp
-            wget http://downloads.drone.io/latest/drone.deb
-            sudo dpkg -i drone.deb
-
-        ##jenkins
-
-            wget -q -O - http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
-            sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
-            sudo apt-get update
-            sudo aptitude install -y jenkins
-
-      ##wine
-
-          sudo add-apt-repository ppa:ubuntu-wine/ppa
-          sudo aptitudeapt-get update
-          sudo aptitude install -y wine1.7
-          sudo aptitude install -y winetricks
-          winetricks winxp d3dx9 vcrun2005 vcrun2008 wininet corefonts
-
-      # play on linux:
-
-          sudo aptitude install -y playonlinux
-
-    ##perl
-
-      # Interpreters and related libs.
-
-        sudo aptitude install -y perl-doc
-
     ##Java
 
       # Java is a pain to make work sometimes.
@@ -706,6 +615,189 @@
         sudo apt-add-repository -y "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
         sudo aptitude update
         sudo aptitude install -y flashplugin-installer
+
+    ##python
+
+      # pip:
+
+        wget -O- 'https://bootstrap.pypa.io/get-pip.py' | sudo python
+
+        sudo aptitude install -y gunicorn
+
+    ##ruby
+
+        curl -L 'https://get.rvm.io' | bash -s stable
+        # WARNING: fails with `-eu`.
+        . "$HOME/.rvm/scripts/rvm"
+        rvm install '2.1.1'
+        # Logout, login, and works for all shells.
+
+    ##node
+
+      # NVM install:
+
+        VERSION='0.10.26'
+        curl 'https://raw.githubusercontent.com/creationix/nvm/v0.7.0/install.sh' | sh
+        # WARNING: fails with `-eu`.
+        . "$HOME/.nvm/nvm.sh"
+        echo '. "$HOME/.nvm/nvm.sh"
+        nvm use "'"$VERSION"'" &>/dev/null
+        ' >> "$HOME/.bashrc"
+        nvm install "$VERSION"
+
+      # Uninstall:
+
+        #rm -rf -- "${HOME}/.nvm" "${HOME}/.npm" "${HOME}/.bower"
+
+      # Package node: old. Use NVM.
+
+        #sudo aptitude install -y nodejs
+
+      # NPM: comes together with up to date nodes.
+
+      # Good up to date PPA:
+
+        #sudo add-apt-repository ppa:chris-lea/node.js
+        #sudo apt-get update
+        #sudo aptitude install -y nodejs
+
+      # After install, configure with:
+
+        npm config set registry 'http://registry.npmjs.org/'
+
+    ##go
+
+        # Requires: mercurial, bison.
+        if [ ! -f "$HOME/.gvm/scripts/gvm" ]; then
+          bash < <(curl -LSs 'https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer')
+        fi
+        . "$HOME/.gvm/scripts/gvm"
+        gvm install 'go1.2.2'
+        gvm use 'go1.2.2' --default
+
+    ##lua
+
+        #sudo aptitude install -y lua5.2
+
+      # Not compatible with lua5.2: already requires lua5.1:
+
+        #sudo aptitude install -y luarocks
+
+      # TODO even if installaed alone some packages installed with it fail.
+
+      # Manual install:
+
+        dir='luarocks'
+        cd '/tmp'
+        git clone https://github.com/keplerproject/luarocks "$dir"
+        cd "$dir"
+        git checkout "$(git describe --tags --abbrev=0)"
+        ./configure
+        make
+        sudo make install
+        cd '..'
+        rm -rf -- "$dir"
+
+    ##virtualization ##vm
+
+      # MANUAL: don't forget to enable virtualization on your BIOS when using virtualization tools.
+      # Some features may only be available with it enabled.
+
+      ##virtualbox
+
+          wget -q -O - http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc | sudo apt-key add -
+          sudo sh -c 'echo "deb http://download.virtualbox.org/virtualbox/debian precise non-free contrib" >> /etc/apt/sources.list.d/virtualbox.org.list'
+          sudo aptitude update
+          sudo aptitude install -y virtualbox-4.3
+
+        # On the guest:
+
+          #sudo aptitude install virtualbox-guest-utils
+
+        ##vagrant
+
+          # MANUAL download:
+
+            firefox http://www.vagrantup.com/downloads.html
+            cd download_dir
+            sudo dpkg -i vagrant*.deb
+
+          # Aptitude install failed:
+
+            #sudo aptitude install -y vagrant
+
+      ##docker
+
+        # Only exists for 64 bit, not 32.
+        # Instructions at: http://docs.docker.io/en/latest/installation/ubuntulinux/
+
+          sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-keys '36A1D7869245C8950F966E92D8576A8BA88D21E9'
+          sudo sh -c "echo deb https://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
+          sudo aptitude update
+          sudo aptitude install -y lxc-docker
+
+        ##drone
+
+            cd /tmp
+            wget http://downloads.drone.io/latest/drone.deb
+            sudo dpkg -i drone.deb
+
+        ##jenkins
+
+            wget -q -O - http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
+            sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
+            sudo apt-get update
+            sudo aptitude install -y jenkins
+
+      ##wine
+
+          sudo add-apt-repository ppa:ubuntu-wine/ppa
+          sudo aptitudeapt-get update
+          sudo aptitude install -y wine1.7
+          sudo aptitude install -y winetricks
+          winetricks winxp d3dx9 vcrun2005 vcrun2008 wininet corefonts
+
+      # play on linux:
+
+          sudo aptitude install -y playonlinux
+
+    ##perl
+
+      # Interpreters and related libs.
+
+        sudo aptitude install -y perl-doc
+
+    ##haskell
+
+      # Glasgow Haskell Compiler:
+
+        #sudo aptitude install -y ghc
+
+      # Glasgw Haskell Compiler, libs, package manager, etc. Convenient.
+
+        sudo aptitude install -y haskell-platform
+        echo ''
+
+        printf '\nexport PATH="$PATH:$HOME/.cabal/bin"\n' >> "$HOME/.profile"
+
+        # Because Ubuntu's default `.profile` sources `.bashrc` which does `[ -z "$PS1" ]`, which fails on `-u`.
+        # Only needed if you will run downloaded binaries immediately.
+        export PS1=''
+        . "$HOME/.profile"
+
+        cabal update
+
+    ##fortran
+
+      # GNU fortran 77:
+
+        sudo aptitude install -y g77
+
+      # GNU fortran 95:
+
+        sudo aptitude install -y gfortran
+
+      sudo aptitude install -y nasm
 
   ##fs
 

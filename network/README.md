@@ -2,8 +2,6 @@ Networking protocols and applications. E.g.: TCP/IP, email, Firefox, netstat, et
 
 Almost all OS specifics currently only discuss for Linux, but additions of other OSs are welcome.
 
-If information here gets good enough, this will get split into a separate directory and include non Linux utilities, since much of what is discussed here is cross platform.
-
 #Sources
 
 ##Free
@@ -739,24 +737,33 @@ Domain names may contain more than one `.`: `bbc.co.uk`.
 
 The subdomain can include a period (.) but not as the first or last character. Consecutive periods (...) are not allowed. A subdomain cannot exceed 25 characters.
 
+##example.com
+
+<http://example.com> is a test domain reserved by IANA.
+
+It is a serves as a great URL placeholder on simple examples.
+
 #Top level domain
 
 `.com`, `.net`, `.io`, `.fr` are examples.
 
 Every name must be under one of those.
 
-They are controlled by IANA, and there are not that many out there except for the country ones: <http://en.wikipedia.org/wiki/List_of_Internet_top-level_domains>
+They are controlled by IANA, and there are not that many out there
+except for the country ones: <http://en.wikipedia.org/wiki/List_of_Internet_top-level_domains>
 
 To get a country TLD, it seems that you must have some link with the country.
 
-Some TLDs are reserved for certain uses and registrars must check that you / your organization are eligible: `.gov` for governments, `.mit` for US military.
+Some TLDs are reserved for certain uses and registrars must check that you/ your organization
+are eligible: `.gov` for governments, `.mit` for US military.
 
 Some interesting ones:
 
 - `.sexy` and `.xxx`. Guess what.
 - `.guru`. No suggested use. Funny.
 
-Some country ones have become generic: `.io` is a notable example, popular amongst startups as of 2014-03. Short, sounds good, reminds of IO input output.
+Some country ones have become generic: `.io` is a notable example,
+popular amongst startups as of 2014-03. Short, sounds good, reminds of IO input output.
 
 #DHCP
 
@@ -776,11 +783,18 @@ The server usually (TODO always?) runs in the router, and can be configured from
 
 #Static IP
 
-On a home network that you control, it is better to use intuitive hostnames and let the addresses be dynamically set via DHPC, unless you absolutely need a static IP, for example to setup a server behind your router.
+On a home network that you control, it is better to use intuitive hostnames
+and let the addresses be dynamically set via DHPC, unless you absolutely need a static IP,
+for example to setup a server behind your router.
 
-DHPC does not know about static IPs: if you set one you must make sure that it is outside of the DHPC range. DHPC is done by the router, and should be configurable from the browser interface.
+DHPC does not know about static IPs: if you set one you must make sure
+that it is outside of the DHPC range. DHPC is done by the router,
+and should be configurable from the browser interface.
 
-On my Numericable router, under Network > Basic Settings > IP LAN > I have two fields: `Starting IP Address` and `Ending IP Address` which allow me to control it. By default, the range is 192.168.0.10 to 192.168.0.50, which is a sensible default allowing for 8 small static IPs between 2 and 9, 1 being the router's address.
+On my Numericable router, under Network > Basic Settings > IP LAN > I have two fields:
+`Starting IP Address` and `Ending IP Address` which allow me to control it.
+By default, the range is 192.168.0.10 to 192.168.0.50, which is a sensible default
+allowing for 8 small static IPs between 2 and 9, 1 being the router's address.
 
 On Ubuntu 12.04, there are a few ways of doing it.
 
@@ -881,9 +895,13 @@ Protocol that convert strings into IPs, for example:
 
     http://www.google.com -> 173.194.34.34
 
-Before before using an address such as `www.google.com`, any program such as a browser must first resolve the hostname `www.google.com` into an IP by asking that from a server.
+Before before using an address such as `www.google.com`,
+any program such as a browser must first resolve the hostname `www.google.com`
+into an IP by asking that from a server.
 
-Linux systems usually offer `man resolver` C library interface, which any program can use to resolve DNS names. The resolver library may cache results across applications that have already been resolved.
+Linux systems usually offer `man resolver` C library interface,
+which any program can use to resolve DNS names.
+The resolver library may cache results across applications that have already been resolved.
 
 ##DNS on WAN
 
@@ -945,7 +963,8 @@ Print currently desired hostname:
     echo $HOSTNAME
     hostname
 
-In the default bash `PS1` line for Ubuntu and many systems you see: `ciro@ciro-Thinkpad-T430`, then the hostname is `ciro-Thinkpad-T430`.
+In the default bash `PS1` line for Ubuntu and many systems you see:
+`ciro@ciro-Thinkpad-T430`, then the hostname is `ciro-Thinkpad-T430`.
 
 Change hostname for cur session:
 
@@ -979,7 +998,8 @@ TODO
 
 ##Zone file
 
-When you register for a domain of your own, you will start thinking about this: it is the main setting on your registrar interface.
+When you register for a domain of your own, you will start thinking about this:
+it is the main setting on your registrar interface.
 
 <http://en.wikipedia.org/wiki/Zone_file>
 
@@ -987,11 +1007,15 @@ When you register for a domain of your own, you will start thinking about this: 
 
 `@` in the zone file means the domain you own without any subdomain.
 
-E.g., if you own `cirosantilli.com`, `@` means `cirosantilli.com` itself, while `www` means `www.cirosantilli.com`.
+E.g., if you own `cirosantilli.com`, `@` means `cirosantilli.com` itself,
+while `www` means `www.cirosantilli.com`.
 
-Apex domains are more restrictive than subdomains, and certain hosting services advise against it, such as GitHub Pages.
+Apex domains are more restrictive than subdomains,
+and certain hosting services advise against it, such as GitHub Pages.
 
-The main problem is that in services such as GitHub pages you don't get an actual IP, so you can't point the Apex to an IP (which is simple), and the `CNAME` "workaround" is not good enough in that case.
+The main problem is that in services such as GitHub pages you don't get an actual IP,
+so you can't point the Apex to an IP (which is simple),
+and the `CNAME` "workaround" is not good enough in that case.
 
 ###naked domain
 
@@ -1013,19 +1037,28 @@ Dynamic DNS.
 
 A way to update DNS as IPs change.
 
-Useful for example if you want to give a hostname for your home network, in which the IP is dynamic for most ISPs. A DDNS service like <http://www.noip.com> can give you a persistent hostname anyways.
+Useful for example if you want to give a hostname for your home network,
+in which the IP is dynamic for most ISPs.
+A DDNS service like <http://www.noip.com> can give you a persistent hostname anyways.
 
 TODO what is it exactly? How does it work? A protocol? Part of DNS?
 
 #Port
 
-Once you have determined a host (computer), you still have to talk to one of the specific programs running on that computer.
+Once you have determined a host (computer), you still have to talk to one of the specific programs
+running on that computer.
 
 Each program listens on an specific port which is set by convention.
 
-Ports from 1 - 1023 are also known as "well-known ports" or "privileged ports". On UNIX-like systems, only privileged users (`root`) can bind to those ports. All have reserved or standardized functions by an organization called IANA: <http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers>.
+Ports from 1 - 1023 are also known as "well-known ports" or "privileged ports".
+On UNIX-like systems, only privileged users (`root`) can bind to those ports.
+All have reserved or standardized functions by an organization called IANA:
+<http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers>.
 
-The ports form 1024 to 49151 are the so called "registered ports". Projects can make a request to IANA to register one of thoe posts as used in order to avoid port clashes. On most systems, it is possible to bind to those ports without `sudo`.
+The ports form 1024 to 49151 are the so called "registered ports".
+Projects can make a request to IANA to register one of those posts
+as used in order to avoid port clashes.
+On most systems, it is possible to bind to those ports without `sudo`.
 
 There are 2 ports number 10: `10/tcp` and `10/udp`, each for a different protocol.
 
@@ -1049,9 +1082,11 @@ Routers are generally configured through a browser.
 
 First you must make a wired connection to the router.
 
-You must enter the IP address of your router. This is fixed and supplied by the router manufacturer. A common address is the first address of the range: `192.168.0.1` for class C.
+You must enter the IP address of your router. This is fixed and supplied by the router manufacturer.
+A common address is the first address of the range: `192.168.0.1` for class C.
 
-You must then enter a username and a password. A default will be supplied by the manufacturer, such as `admin` `admin`, or `admin` `password`. This can be changed once you logged in.
+You must then enter a username and a password. A default will be supplied by the manufacturer,
+such as `admin` `admin`, or `admin` `password`. This can be changed once you logged in.
 
 ##Routing table
 
@@ -1069,7 +1104,8 @@ Address Resolution Protocol.
 
 Only used when the sender detects that the searched IP is on the same network as itself.
 
-In that case, it can simply get the destination MAC address and send the packages over the LAN directly to the destination without passing through the router.
+In that case, it can simply get the destination MAC address and send the packages over the LAN
+directly to the destination without passing through the router.
 
 ARP is a protocol that does just that: it finds the MAC address from an IP on a LAN.
 
@@ -1083,7 +1119,8 @@ Also known as: ARP cache, MAC cache.
 
 CLI utility that shows the ARP table.
 
-To see a computer on the table, remember that you first must have tried to contact it somehow, so first ping that computer:
+To see a computer on the table, remember that you first must have tried to contact it somehow,
+so first ping that computer:
 
     timeout 3 ping 192.168.1.3; arp -a
 
@@ -1107,7 +1144,8 @@ Check info about IP, country, ISP:
 
 #Network management tools
 
-There are several levels of network management tools: <http://askubuntu.com/questions/1786/what-is-the-difference-between-network-manager-and-ifconfig-ifup-etc>.
+There are several levels of network management tools:
+<http://askubuntu.com/questions/1786/what-is-the-difference-between-network-manager-and-ifconfig-ifup-etc>.
 
 From the lowest level to the highest:
 
@@ -1153,7 +1191,8 @@ Configuration for `ifup` and `ifdown`.
 
     man interfaces
 
-If you manually set configuration on `/etc/network/interfaces`, NetworkManager will now touch those interfaces and display them as "Not Managed".
+If you manually set configuration on `/etc/network/interfaces`,
+NetworkManager will now touch those interfaces and display them as "Not Managed".
 
 #NetworkManager
 
@@ -1163,7 +1202,8 @@ Also has an Applet that shows on Ubuntu 12.04's taskbar, indicating connection s
 
 On Ubuntu it comes on the packages `network-manager` and `network-manager-gui` for the applet.
 
-It corresponds to the upstart service `network-manager`, so for example to reload configurations it can be restarted with:
+It corresponds to the upstart service `network-manager`,
+so for example to reload configurations it can be restarted with:
 
     sudo service network-manager restart
 
@@ -1307,9 +1347,11 @@ Get list PID and program name of programs using ports.
 
 Shows both TCP/UDP Internet connections and UNIX domain sockets.
 
-In short: Internet connections are done via sockets whose address is given by an IP and a port number, and can communicate across computers
+In short: Internet connections are done via sockets whose address is given by an IP and a port number,
+and can communicate across computers
 
-UNIX domain sockets are only for local communication. They are put into the filesystem and identified by a path on the filesystem
+UNIX domain sockets are only for local communication.
+They are put into the filesystem and identified by a path on the filesystem
 
 When a program uses a socket, it binds to it, and other programs cannot use it.
 
@@ -1469,8 +1511,10 @@ It is hard to distinguish them.
 
 Generally, web server only speaks HTTP and serves static pages.
 
-An app server, reads the HTTP, and then decides to pass the request on to a programming language like Ruby or Python if it cannot deal with it himself through an interface such as CGI.
+An app server, reads the HTTP, and then decides to pass the request on to a programming language
+like Ruby or Python if it cannot deal with it himself through an interface such as CGI.
 
-In most production environments, the server knows which files it can serve directly without going through a script, making thing faster.
+In most production environments, the server knows which files it can serve directly
+without going through a script, making thing faster.
 
 Applications like Apache and Nginx.

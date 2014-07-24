@@ -122,7 +122,8 @@ Redirect to another page for a given reason.
 
 All of those statuses require the `Location` header that indicates where to redirect to.
 
-It is also common to offer an HTML redirect page in case the user agent does not follow redirects. Most browsers do so by default, and don't ever show Moved pages.
+It is also common to offer an HTML redirect page in case the user agent does not follow redirects.
+Most browsers do so by default, and don't ever show Moved pages.
 
     HTTP/1.1 301 Moved Permanently
     Location: http://www.example.org/
@@ -139,6 +140,34 @@ It is also common to offer an HTML redirect page in case the user agent does not
     </body>
     </html>
 
+Good discussion on <http://stackoverflow.com/questions/4764297/difference-between-http-redirect-codes>
+
+TODO what happens on circular redirects?
+
+#####301
+
+Permanent redirect: the page has been moved forever.
+
+Next time, UAs can cache this redirect, and may not even bother sending a request to the first location.
+
+Only works for `GET` requests.
+
+TODO how to revert this if you change your mind later?
+<http://getluky.net/2010/12/14/301-redirects-cannot-be-undon/>
+suggests it is impossible.
+
+#####302
+
+Hell.
+
+In the spec, exact same as 307.
+
+In practice, implemented exactly as 303, even on 2014 browsers,
+and nothing can be done to change that without breaking things.
+
+Still the most common response promoted by 2014 web frameworks.
+TODO why? Compatibility with HTTP 1.0 which does not have 303 and 307?
+
 #####304
 
 Not modified.
@@ -152,6 +181,15 @@ It would be wasteful to refecth the current page if it was not modified since it
 If the client already has an older version of the resource cached, it can send in the request one of the fields `If-Modified-Since` or `If-Match` containing the date at which the resource was obtained.
 
 The server sees if the resource has been updated since that date, and if not can return a 304.
+
+#####307
+
+In the spec, exact same as 302.
+
+Introduced in HTTP 1.1 with 303 because all browsers treat 302 as 303,
+and nothing can be done to change it now.
+
+This time we hope browsers will follow the spec.
 
 ####401
 
@@ -211,6 +249,8 @@ Curl 7.22:
 
 A comma separated list of MIME type that the client wants as a response.
 
+Specified on the response by the `Content-Type` header.
+
 It is possible that a single URL is able to return several types.
 
 In this case this field can be used by the server to determine the type to serve.
@@ -239,7 +279,7 @@ Firefox 29:
 
 ###Connection
 
-`keep-alive`: 
+`keep-alive`: TODO
 
 ##Response headers
 
@@ -287,7 +327,7 @@ Must be one of the request `Accept-Encoding` values.
 
 ###Content-Disposition
 
-Suggeste to the browser what to do to certain types of data, specially content types different from HTML:
+Suggests to the browser what to do to certain types of data, specially content types different from HTML:
 
 `attachment` suggest to the browser to download the file with given filename:
 
@@ -343,6 +383,18 @@ The boundary is always surrounded by CRLFs which are not part of the data.
 The boundary cannot appear inside the data: the user agent must chose it appropriately.
 
 The trailing hyphens of the boundary are often added for partial backward compatibility with older multipart RFCs, and to improve readability. TODO are they mandatory?
+
+##CORS headers
+
+The following headers are used for CORS requests:
+
+###Origin
+
+###Access-Control-Allow-Origin: http://api.bob.com
+
+###Access-Control-Allow-Credentials: true
+
+###Access-Control-Expose-Headers: FooBar
 
 ##Custom headers
 
@@ -461,6 +513,46 @@ Safer than digest: replay attacks impossible.
 Requires server state, so HTTP 1.1 only.
 
 Little current support/usage.
+
+##CSRF
+
+##Cross site request forgery
+
+The attacker Bob posts on a website:
+
+    http://bank.com?transfer-ammount=10000&to=bob
+
+Alice clicks on the disguised link, her browser sends the authentication cookies,
+authenticates and makes the request.
+
+How to prevent it:
+<https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29_Prevention_Cheat_Sheet>
+
+###Synchronizer Token Pattern.
+
+The most popular prevention mechanism.
+
+Send extra randomly generated data with valid forms.
+
+Generation can be per session or per form, which is more secure but less efficient
+and may have usability impact.
+
+The method relies on the same origin policy:
+if it did not exist the attacker would be able to obtain the token.
+
+This method is implemented by default in most web frameworks,
+either by adding a hidden form field (Django) or `meta` elements like Rails:
+
+    <meta content="authenticity_token" name="csrf-param" />
+    <meta content="asdfqwerASDFQWER12345678" name="csrf-token" />
+
+###Reauthenticate
+
+Ask user for password again before critical operations.
+
+Used in all online banking systems.
+
+Inconvenient for users since an extra action is required before an authentic request.
 
 #Sources
 

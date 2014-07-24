@@ -65,6 +65,10 @@ Increases volume 5x:
 
     lame --scale 5 a.mp3
 
+WAV to MP3:
+
+    lame a.wav a.mp3
+
 ##id3tool
 
 Get id3 tags info (for mp3 for example):

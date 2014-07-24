@@ -82,7 +82,8 @@ Most distributions install their own bootloader, meaning that they rewrite the e
 
 This means that if the new bootloader cannot recognize certain types of boot data on each partition, you will not see those partitions as bootable.
 
-This is for example the case if you install a distro with GRUB 2 (Ubuntu 13.04), and then install another distro which uses GRUB (Fedora 17)
+This is for example the case if you install a distro with GRUB 2 (Ubuntu 13.04),
+and then install another distro which uses GRUB (Fedora 17)
 
 GRUB cannot recognize GRUB 2 booting data since it came before GRUB 2 existed, so you will not see your old bootable partitions as bootable.
 
