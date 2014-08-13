@@ -31,7 +31,7 @@ Base topics:
 - [desktop/](desktop/):                       X, XDG, GNOME, KDE and related utilities.
 - [filesystem.md](filesystem.md):             POSIX file permissions.
 - [file-permissions.md](file-permissions.md): filesystem, hard disks, mounting, partitions.
-- [network/](network/):                       networking tools and protocols: HTTP, SSH, curl Apache.
+- [special-files](special-files):             `proc`, `dev` and `sys` filesystems.
 - [terminal.md](terminal.md):                 terminal emulators, ANSI escapes, control characters.
 
 Media video, games, etc.) file types, viewers, editors, capture, synthesizers:
@@ -46,6 +46,10 @@ Media video, games, etc.) file types, viewers, editors, capture, synthesizers:
 - [video.md](video.md):             videos, films, subtitles.
 
 [virtual-machine.md/](virtual-machine): Vagrant, Docker.
+
+Related subjects in other repositories:
+
+- [networking](https://github.com/cirosantilli/net): networking tools and protocols: HTTP, SSH, curl Apache.
 
 #How to search for stuff
 

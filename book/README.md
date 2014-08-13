@@ -6,24 +6,62 @@ Pure image or text formats such as JPEG or TeX are not covered here.
 
 Formats that contain image, text, fonts such as PDF or DJVU but not not formats that map directly to bits such as PNG or JPEG.
 
-- PS
+-   PS
 
-    a programming language! can have goto, branch, variables
-    levels refer to versions: 1, 2 and 3 exist up to today
-    cannot split page by page
+    A Turing complete programming language. Can have goto, branch, variables.
 
-- EPS: encapsulated postscript
-- DJVU:
-- MOBI: Mobipocket company, free format, bought by Amazon
-- RTF: Rich Text Format, proprietary Microsoft
+    Versions are called levels: 1, 2 and 3 exist up to today.
+
+    Since it is a programming language, it is not possible to evaluate the last pages without going through the previous ones, as those may contain variables or other definitions.
+
+-   EPS: encapsulated postscript
+
+-   DJVU:
+
+-   epub: TODO
+
+-   MOBI: Mobipocket company, free format, bought by Amazon. TODO vs epub.
+
+-   RTF: Rich Text Format, proprietary Microsoft
 
 ##PDF
 
+First created by Adobe as a proprietary format in 1993.
+
+Version 1.7 released in 2007 as a payed ISO standard and for public implementation without royalties, except for some proprietary extensions.
+
+A free ISO approved copy is made freely available at the Adobe website free of charge: <http://www.adobe.com/devnet/pdf/pdf_reference.html>. It matches the ISO spec exactly.
+
+The spec is quite readable, with many examples. In particular, Annex H contains a few examples of increasing complexity of PDF files.
+
 Text layers, image layers, each page can be serially downloaded and viewed.
 
-A common viewing library is Poppler: <http://en.wikipedia.org/wiki/Poppler_%28software%29>. It also contains many useful utilities.
+A common Linux viewing library implementation is Poppler: <http://en.wikipedia.org/wiki/Poppler_%28software%29>. It also contains many useful utilities.
 
 PDF fonts can be either found in a renderer path, or be embedded in the document. The [standard 14 fonts]](http://en.wikipedia.org/wiki/Portable_Document_Format#Standard_Type_1_Fonts_.28Standard_14_Fonts.29)must always be supported. 
+
+PDF is human readable (TODO no compression?), so in theory it is possible to write it by hand with a text editor.
+
+However, it was not designed to be written by hand. For example:
+
+- for the `xref` table it is necessary to include byte offsets of certain chunks of text.
+- some objects have must have two sided parent child links between them.
+- byte counts are necessary at certain points, like before streams.
+
+This means that PDF is a base bad input format: it should be used as an output format only. Those design choices with redundancy are made to make PDFs faster to render.
+
+PDF is influenced by PostScript.
+
+Sources:
+
+- Short but good intro: <http://www.gnupdf.org/Introduction_to_PDF>
+- <http://brendanzagaeski.appspot.com/0005.html>
+- A few tutorials: <http://blog.idrsolutions.com/?s=%22Make+your+own+PDF+file%22>
+
+TODO:
+
+- how to generate the `xref` table automatically to make it more feasible to write test PDFs by hand?
+- fix byte counts on annex the hello world PDF: [hello-world.md](hello-world.md).
 
 #Viewers
 
@@ -52,7 +90,7 @@ Book library management + command line utils
 
 ##ebook-convert
 
-Convert between ebook formats: pdf, mobi,
+Convert between ebook formats: PDF, MOBI, etc.
 
 #Utilities
 
@@ -78,19 +116,19 @@ TODO list all fonts?
 
 TXT to PS
 
-Does not work for UTF8. For that use [paps][].
+Does not work for UTF8. For that use `paps`:
 
     a2ps -o a.ps a.txt
 
-- `-1`: one page per sheet (default is 2)
+-   `-1`: one page per sheet (default is 2)
 
         a2ps -B -1 -o a.ps a.txt
 
-- `-B`: remove default headers:
+-   `-B`: remove default headers:
 
         a2ps -B -o a.ps a.txt
 
-- `--borders=no`: no default borders:
+-   `--borders=no`: no default borders:
 
         a2ps -B -1 --borders=no -o a.ps a.txt
 
@@ -104,11 +142,11 @@ Output to stdout
 
     ps2pdf a.ps out.pdf
 
-read from stdin:
+Read from stdin:
 
     ps2pdf - a.pdf
 
-out to stdout:
+Out to stdout:
 
     ps2pdf a.ps -
 
@@ -272,7 +310,7 @@ TODO
 
 Formats:
 
-- TrueType
+-   TrueType
 
     Proprietary Apple.
 
@@ -280,7 +318,7 @@ Formats:
 
     File extension: `ttf`
 
-- OpenType
+-   OpenType
 
     Proprietary Microsoft (ironic name... *open* type)
 
@@ -288,7 +326,7 @@ Formats:
 
     File extensions: `ttf` or `otf` (compressed)
 
-- Type-1:
+-   Type-1:
 
     Designed for postscript.
 
@@ -312,7 +350,7 @@ Archmage:
 
     archmage a.chm
 
-##chm to pdf
+##chm to PDF
 
 `chm2pdf`: <http://www.ubuntugeek.com/how-to-convert-chm-files-into-pdf-files-in-ubuntu.html>
 
@@ -327,5 +365,4 @@ Did not work for me:
 ##chm readers
 
 - `chmsee`: GTK+, few preferences but just works.
-- `kchmreader`: KDE, broken colors on Ubuntu 12.04
-
+- `kchmreader`: KDE, broken colors on Ubuntu 12.04.

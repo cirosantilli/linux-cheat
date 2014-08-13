@@ -18,7 +18,7 @@ This is distribution dependent.
 
 See System V init system.
 
-#run levels
+#Run levels
 
 See System V init system.
 
@@ -125,11 +125,11 @@ Same as `sudo service --status-all`:
 
 Good sources:
 
-- <http://upstart.ubuntu.com/getting-started.html>
+-   <http://upstart.ubuntu.com/getting-started.html>
 
     Good intro, but few options commented.
 
-- <http://upstart.ubuntu.com/cookbook/>
+-   <http://upstart.ubuntu.com/cookbook/>
 
     Very good manual.
 
@@ -165,7 +165,7 @@ Examples:
 
 Some systems such as Ubuntu use upstart, newer replacement to the `system v` init system
 
-- `/etc/init`: upstart configuration files
+-   `/etc/init`: upstart configuration files
 
 	Named services that can be used via:
 
@@ -177,7 +177,7 @@ Some systems such as Ubuntu use upstart, newer replacement to the `system v` ini
 
 	files in this directory.
 
-- `/etc/init.d`: classic System V rc dirs
+-   `/etc/init.d`: classic System V rc dirs
 
 	Upstart is backwards compatible and can also understand:
 
@@ -195,7 +195,7 @@ Required to start script automatically at startup: if missing it won't start.
 
 The service must start only once all of its requirements have already done so.
 
-To start after the very basic facilities are set up (e.g. filesystems and networking) the manual recommends either:
+To start after the very basic facilities are set up(e.g. filesystems and networking) the manual recommends either:
 
     start on runlevel [2345]
 

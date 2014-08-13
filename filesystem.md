@@ -311,7 +311,7 @@ Consider using gparted if you have X11.
 - `-t`: type: ext2, ext3, ext4
 - `-L`: label
 - `-i`: inodes per group (power of 2)
-- `-j`: use ext3 journaling. TODO for -t ext3/4, is it created by default?
+- `-j`: use ext3 journaling. TODO for `-t` ext3/4, is it created by default?
 
 #tune2fs
 
@@ -786,7 +786,13 @@ Check and repair Linux filesystems.
 
 Take action whenever file changes: <http://superuser.com/questions/181517/how-to-execute-a-command-whenever-a-file-changes>
 
-Portability: Linux only.
+Portability: Linux only. Relies directly on the `inotify` system calls. More info at:
+
+    man inotify
+
+Ubuntu install:
+
+    sudo aptitude install -y inotify-tools
 
 Usage:
 

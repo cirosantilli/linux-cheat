@@ -78,6 +78,7 @@
 
     # X
 
+      #sudo aptitude install -y xclip
       sudo aptitude install -y xsel
       sudo aptitude install -y wmctrl
 

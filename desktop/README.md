@@ -512,6 +512,10 @@ Follows standard input as it grows
     echo c > f
     assert [ "`xsel`" = $'a\n' ]
 
+##xclip
+
+Alternative tool to `xsel`.
+
 ##xmodmap
 
 View and modify key mappings.

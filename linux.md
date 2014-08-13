@@ -16,13 +16,13 @@ The list of certified distributions and products can be found here: <https://www
 
 Notable certified systems include:
 
-- Ubuntu 9.4
+-   Ubuntu 9.4
 
     However not later versions up to time of writing
 
     [It seems that](http://askubuntu.com/questions/89125/does-ubuntu-follow-the-linux-standard-base-lsb) Ubuntu does not intend to fully comply on certain specific points, but only be highly compliant.
 
-- Red Hat Enterprise Linux 6.0
+-   Red Hat Enterprise Linux 6.0
 
 #GNU
 
@@ -60,19 +60,25 @@ There a few POSIX requirements that the Linux kernel explicitly does not impleme
 
 ##core
 
-- CLI utilities. Very close to POSIX except that:
+-   CLI utilities. Very close to POSIX except that:
 
     - adds `lsb_release`
 
     The Desktop specification also adds `xdg-utils`.
 
-- elf file type
-- rpm is the default packaging format! The package format is not specified.
-- users and groups
-- system initialization
-- libc: C standard libraries shared object
-- libm: C math library shared object
-- libncurses: for command line interfaces
+-   elf file type
+
+-   rpm is the default packaging format! The package format is not specified.
+
+-   users and groups
+
+-   system initialization
+
+-   libc: C standard libraries shared object
+
+-   libm: C math library shared object
+
+-   libncurses: for command line interfaces
 
 ##C++
 
@@ -127,7 +133,7 @@ It is also maintained by the Linux foundation, and followed by the LSB.
 
 ##De facto but not mentioned in FHS
 
-- `/etc/alternatives`
+-   `/etc/alternatives`
 
     Contains symlinks that determine default programs.
 
@@ -154,7 +160,7 @@ LSB does however specifies many more tools than POSIX and supports almost all ba
 
 #Sources
 
-- `git clone http://git.kernel.org/pub/scm/docs/man-pages/man-pages`
+-   `git clone http://git.kernel.org/pub/scm/docs/man-pages/man-pages`
 
     The Linux man pages, documenting the kernel and C interfaces to it.
 
@@ -163,7 +169,7 @@ LSB does however specifies many more tools than POSIX and supports almost all ba
     - `Documentation/` for docs
     - `include/linux` for stuff you may use from modules
 
-- info
+-   info
 
     GNU project substitute for man.
 
@@ -171,19 +177,19 @@ LSB does however specifies many more tools than POSIX and supports almost all ba
 
     Better node wise navigation.
 
-- the geek stuff
+-   the geek stuff
 
    <http://www.thegeekstuff.com>
 
    Short tutorials with lots of examples.
 
-- <http://www.linuxfromscratch.org/>
+-   <http://www.linuxfromscratch.org/>
 
     Linux from scratch.
 
     Teaches how to build a minimal Linux distro from base standard packages.
 
-- <https://wiki.archlinux.org/index.php/Installation_Guide>
+-   <https://wiki.archlinux.org/index.php/Installation_Guide>
 
     Arch Linux installation guide.
 
@@ -191,9 +197,9 @@ LSB does however specifies many more tools than POSIX and supports almost all ba
 
     Like LFS but you start at a higher level already.
 
-- <http://www.cavecanen.org/linux/humour/horrorstories.txt>
+-   <http://www.cavecanen.org/linux/humour/horrorstories.txt>
 
     Real *NIX sysadmin horror stories of things gone terribly wrong.
 
-[lsb]: http://www.linuxfoundation.org/collaborate/workgroups/lsb/download
 [linux foundation]: http://www.linuxfoundation.org/
+[lsb]:              http://www.linuxfoundation.org/collaborate/workgroups/lsb/download

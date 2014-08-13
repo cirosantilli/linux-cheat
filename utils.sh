@@ -2537,7 +2537,7 @@
     # - k: kill process
     # - arrow keys: move view
 
-    # Sample output:
+    # Sample first line:
 
       23:00:13 up 12:00, 3 users, load average: 0.72, 0.66, 0.6
       ^^^^^^^^ up ^^^^^, ^ users, load average: ^^^^, ^^^^, ^^^
@@ -2548,9 +2548,9 @@
     # - 1: cur time
     # - 2: how long the system has been up for
     # - 3: how many users are logged
-    # - 4: load average for past 1 minute
-    # - 5:            5 minute
-    # - 6:            15 minutes
+    # - 4: load average for past  1 minute
+    # - 5:                        5 minutes
+    # - 6:                       15 minutes
 
     # Not possible to show more processes:
     # http://unix.stackexchange.com/questions/36222/how-to-see-complete-list-of-processes-in-top
@@ -2569,11 +2569,11 @@
       # Does not take into account how many cores you have!
       # E.g.: for a dual core, breakeven at 2.0!
 
-    ##uptime
+  ##uptime
 
-      # Echo first line of top.
+    # Echo first line of top.
 
-        uptime
+      uptime
 
   ##htop
 
@@ -3155,7 +3155,7 @@
       # - `-D`: preserve special and device files. Requires sudo.
       # - `-g`: preserve group. Requires `sudo`.
       # - `-l`: copy symlinks as symlinks.
-      # - `-o`: perserve owner. Requires `sudo`.
+      # - `-o`: preserve owner. Requires `sudo`.
       # - `-p`: preserve permissions.
       # - `-r`: recurse into directories.
       # - `-t`: preserve modification times.
