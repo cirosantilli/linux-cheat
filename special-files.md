@@ -38,6 +38,8 @@ Some interesting files include:
 
 -   `cat /proc/sched_debug`: scheduler info for debugging
 
+-   `cat /proc/mounts`: list all mounted filesystems and some info on them
+
 -   `cat /proc/modules`: information on modules
 
 -   `cat /proc/devices`: information on registered character and block devices.
