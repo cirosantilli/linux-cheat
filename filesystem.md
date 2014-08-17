@@ -268,6 +268,32 @@ Each partition can have a different filesystem.
 
 When creating partitions for external storage devices such as USB stick nowadays, the best option is NTFS since Linux can read write to it out of the box, and it can be used on the 95% of computers because they use Windows (which does not read / write to ext out of the box.)
 
+##tmpfs
+
+##ramfs
+
+Types of filesystems that exists only in RAM. It is therefore fast and can only be small.
+
+Can be useful if you want to speed up some filesystem operations and have enough RAM for it.
+
+tmpfs vs ramfs:
+
+-   tmpfs has a fixed size: it does not grow dynamically and raises an error if you blow the limit.
+
+    ramfs can grow dynamically and does not use swap.
+
+-   tmpfs uses swap, ramfs does not.
+
+Create a tmpfs:
+
+    mkdir -p /mnt/tmp
+    mount -t tmpfs -o size=20m tmpfs /mnt/tmp
+
+Create a ramfs:
+
+    mkdir -p /mnt/ram
+    mount -t ramfs -o size=20m ramfs /mnt/ram
+
 #Create filesystems
 
 Find all commands to make filesystems:
@@ -676,15 +702,15 @@ Syntax:
     <file system> <mount point>  <type> <options>    <dump> <pass>
     1             2              3      4            5      6
 
-1. identifier to the file system.
+1.  identifier to the file system.
 
-Ex:
+    E.g.:
 
-- `/dev/sda1`
-- `UUID=ABCD1234ABCD1234`
-- `LABEL=mylabel`
+    - `/dev/sda1`
+    - `UUID=ABCD1234ABCD1234`
+    - `LABEL=mylabel`
 
-2. where it will get mounted.
+2.  where it will get mounted.
 
     The most standard option is to make a subdir of `/media` like `/media/windows`.
 
@@ -692,15 +718,15 @@ Ex:
 
     It seems that fstab can auto create/remove the missing dirs.
 
-3. Type. ext[234], NTFS, etc.
+3.  Type. ext[234], NTFS, etc.
 
-4. Options.
+4.  Options.
 
     - `defaults`. Use default options for the current filesystem type.
 
-5. Dump. Used by the dump utility to make backups. If `0`, don't make backups. If `1`, make them.
+5.  Dump. Used by the dump utility to make backups. If `0`, don't make backups. If `1`, make them.
 
-6. Pass. Used by `fsck`. If `0` the FS is ignored by `fsck`, `1` it is checked with highest priority, `2` checked with smaller priority.
+6.  Pass. Used by `fsck`. If `0` the FS is ignored by `fsck`, `1` it is checked with highest priority, `2` checked with smaller priority.
 
 Use 1 for the primary partition, `2` for the others.
 
@@ -749,6 +775,12 @@ It is best to use auto, because DVD can be of several formats.
 ##mountall
 
 mountall is on Ubuntu 12.04 the utility that reads fstab and mounts all the filesystems listed there.
+
+##/proc/mounts
+
+List mounted filesystems:
+
+    cat /proc/mounts
 
 #fuser
 
