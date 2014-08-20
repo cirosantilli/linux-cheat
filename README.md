@@ -38,6 +38,7 @@ Media video, games, etc.) file types, viewers, editors, capture, synthesizers:
 
 - [audio/](audio/):                 audio, music, sound.
 - [book.md](book.md):               PDF, DJVU.
+- [compression.md](compression.md): Zip, tar, gzip, 7z.
 - [dict.md](dict.md):               dictionary formats.
 - [game.md](game.md):               games, emulation.
 - [file-share.md](files-share.md):  Soulseek, Dropbox.
