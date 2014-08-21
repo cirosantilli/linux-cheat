@@ -160,9 +160,9 @@ Interpret input configuration files and update the MBR on the given disk:
 
 If for example you install a new Linux distro, and you want to restore your old distro's GRUB configuration, you must log into the old distro and do `grub-install`, therefore telling your system via the MBR to use the installation parameters given on the old distro.
 
-##sources
+##Sources
 
-- <http://www.dedoimedo.com/computers/grub-2.html>
+-   <http://www.dedoimedo.com/computers/grub-2.html>
 
     Great configuration tutorial.
 

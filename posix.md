@@ -10,11 +10,11 @@ POSIX is also known as: Single Unix specification (SUS)
 
 #Sources
 
--   Matthew; Stones - Beginning Linux Programming <http://www.amazon.com/Beginning-Linux-Programming-Neil-Matthew/dp/0470147628>
+-   <http://www.amazon.com/Beginning-Linux-Programming-Neil-Matthew/dp/0470147628>
 
-    very good intro do many of POSIX utilities
+    Matthew; Stones - Beginning Linux Programming.
 
-    very interesting examples and topics
+    Very good intro do many of POSIX utilities with interesting examples and topics.
 
 #Introduction
 
@@ -95,7 +95,7 @@ Very small, contains:
 
 ##Environment variables
 
-In POSIX 7, those are defined in: Base Definitions > Enviroment Variables.
+In POSIX 7, those are defined in: Base Definitions > Environment Variables.
 
 POSIX specifies:
 
@@ -110,7 +110,7 @@ The following variables have fixed purposes in POSIX 7:
 - `PWD`
 - `TMPDIR`
 - `COLUMNS` and `LINES`: current width of terminal
-- `SHELL`: this is *not* the current shell! it conatains the path of the defualt shell
+- `SHELL`: this is *not* the current shell! It contains the path of the default shell.
 - `TERM`: analogous to shell
 
 The following variables don't have fixed purposes, but POSIX says that they must be used with caution:
@@ -210,17 +210,18 @@ A few of the most interesting suggests for argument and utility name syntax:
 
 [POSIX specifies that](http://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_08):
 
-- 0 is for success, all others for errors.
+-   `0`: success, all others for errors.
 
     It may seem counter intuitive to call 0 success since it is associated with false in C, but it is like that because there is only one type of success, and the other values indicate the exact cause of failure.
 
-- 127 is for command not found. Try:
+-   `127`: command not found. Try:
 
         asdfqwer
         echo $?
 
-- 126 is for command found but not executable
-- values greater than 128 indicate that a process was terminated by a signal.
+-   `126`: command found but not executable.
+
+-   Values greater than 128 indicate that a process was terminated by a signal.
 
     GNU goes further and [specifies that](http://www.gnu.org/software/bash/manual/bashref.html#Exit-Status) when terminated by a signal, the exit status shall be 128 + the normal error status.
 

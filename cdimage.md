@@ -1,13 +1,12 @@
-how to do operations such as convert and mount on cds, dvds, blurays, etc.
+How to do operations such as convert and mount on CDs, DVDs, Blu-rays, etc.
 
-#formats
+#Formats
 
-- bin: raw cd bytes
-- iso: open standard
-- mdf/mds pair: proprietary of Alcohol 120% company
+- bin: raw CD bytes
+- ISO: open standard
+- `mdf`/`mds` pair: proprietary of the Alcohol 120% company
 
-#mount
+#Mount
 
     sudo mkdir /media/iso
     sudo mount -o loop path/to/iso/file/YOUR_ISO_FILE.ISO /media/iso
-

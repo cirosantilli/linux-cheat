@@ -1,8 +1,10 @@
 Terminal superpowers:
 
-- create a remote ssh session, detach from it, close the ssh connection, ssh again, and reattach to the old bash!
-- open multiple terminal windows in a single terminal.
-- send keys to an open terminal. E.g.: from Vim, send `make<cr>` to an open terminal.
+-   create a remote ssh session, detach from it, close the ssh connection, ssh again, and reattach to the old bash!
+
+-   open multiple terminal windows in a single terminal.
+
+-   send keys to an open terminal. E.g.: from Vim, send `make<cr>` to an open terminal.
 
     There is already a plug-in that interfaces with Vim: <https://github.com/benmills/vimux>
 
@@ -66,9 +68,11 @@ Attach again to a session:
 
 Window shortcuts:
 
-- `,`: create a new window (Vim tab)
-- `c`: create a new window (Vim tab)
-- `w`: list windows in current session
+-   `,`: create a new window (Vim tab)
+
+-   `c`: create a new window (Vim tab)
+
+-   `w`: list windows in current session
 
     The list of windows is also shown at the bottom status line:
 
@@ -85,7 +89,6 @@ Pane shortcuts:
 
 - `n`: and `p`: next and previous window
 - `0`: to `9`: switch to given window ID
-
 - `%`: split horizontally
 - `"`: split vertically:
 - Arrows: navigate panes.

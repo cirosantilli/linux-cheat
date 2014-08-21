@@ -332,21 +332,21 @@ Works very well.
 - shift + F1-9: save state
 - space: play / pause
 
-##ps1
+##PS1
 
 ###pcsxr
 
 ##dosbox
 
-Some good games there
+Some good games there:
 
     cd
     mkdir dos
     dosbox game.exe
 
-there are also `.bat` and `.com` executables
+There are also `.bat` and `.com` executables.
 
-Inside the emulator
+Inside the emulator:
 
     mount c /home/$USER/dos
     c:

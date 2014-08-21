@@ -20,9 +20,9 @@ Hosts standard specifications and software projects.
 
 Specifies:
 
-- autostart
+-   autostart
 
-- `echo $XDG_CURRENT_DESKTOP`: current DE in use.
+-   `echo $XDG_CURRENT_DESKTOP`: current DE in use.
 
     Gnome 3 output: GNOME
 
@@ -72,7 +72,7 @@ Temporary data. Default: `~/.cache`. Can get rather large, and since the standar
 
 TODO why does it show a single line only? what should this list?
 
-#x11
+#X11
 
 Real name: X Window System
 
@@ -100,20 +100,20 @@ X is an abstraction layer for things like:
 
 X does not:
 
-- relegates certain jobs to x display managers and x window managers.
+-   relegates certain jobs to x display managers and x window managers.
 
-- panel
+-   panel
 
-- a desktop that shows files contained in some predefined folder. TODO who does that?
+-   a desktop that shows files contained in some predefined folder. TODO who does that?
 
-- sound management
+-   sound management
 
-    this has been taken up by other projects:
+    This has been taken up by other projects:
 
     - PulseAudio
     - Advanced Linux Sound Architecture (ALSA)
 
-Usually graphic accelerated. This is why messing with gpu settings may break your desktop.
+Usually graphic accelerated. This is why messing with GPU settings may break your desktop.
 
 X11 uses a server/client mode
 
@@ -122,20 +122,20 @@ Client and server can be on different machines
 Client:
 
 - typically programs with a window
-- clients give commands to the xserver and tell it to draw on screen
+- clients give commands to the X server and tell it to draw on screen
 - clients respond to input events via callback functions
 
 Server:
 
-- creates the image
+-   creates the image
 
-- sends inputs events to clients who responds to it via callbacks
+-   sends inputs events to clients who responds to it via callbacks
 
-- a server has many displays
+-   a server has many displays
 
-- a display has many screens, one mouse and one keyboard
+-   a display has many screens, one mouse and one keyboard
 
-- to set the display to use use the DISPLAY var:
+-   to set the display to use use the DISPLAY var:
 
         env DISPLAY=localhost:0.1 firefox & #single commena
 
@@ -172,7 +172,7 @@ where `0` is the display number.
 
 ##X
 
-Get xserver version
+Get X server version
 
     sudo X -version
 
@@ -299,11 +299,11 @@ Send an `a` keystroke and then a `b` keystroke to the current window:
 
     xdotool key ctrl+l
 
-Sends a, b, space, c and d:
+Sends `a`, `b`, `space`, `c` and `d`:
 
     xdotool type 'ab cd'
 
-a, waits 1 ms, b:
+`a`, waits 1 ms, `b`:
 
     xdotool type --delay 1 'ab'
 
@@ -333,11 +333,11 @@ Get info:
 
 In order to act on a window, one must first select it. The ways to do it are:
 
-- default (no special option): case insensitive title substring match.
+-   default (no special option): case insensitive title substring match.
 
     In case of multiple matches, the first one is chosen.
 
-    Ex:
+    E.g.:
 
         wmctrl -a '- mozilla firefox'
 
@@ -345,9 +345,9 @@ In order to act on a window, one must first select it. The ways to do it are:
 
         'Google - Mozilla Firefox'
 
-- `-F`: case sensitive title substring match.
+-   `-F`: case sensitive title substring match.
 
-    Ex:
+    E.g.:
 
         wmctrl -Fa '- Mozilla Firefox'
 
@@ -373,18 +373,16 @@ Close window:
 
     wmctrl -c '- mozilla firefox'
 
-Resize and repozition window:
+Resize and reposition window:
 
     wmctrl -r '- mozilla firefox' -e 1,0,0,800,600
                                      1 2 3 4   5
 
 `-r` selects the window for commands that already take other arguments such as `-e`
 
-1: gravity TODO
-
-2 and 3: position.
-
-4 and 5: size.
+- `1`: gravity TODO
+- `2` and `3`: position.
+- `4` and `5`: size.
 
 If the window is maximized, this does nothing.
 
@@ -394,7 +392,9 @@ Switch to desktop 1:
 
 ##keyboard and mouse automation
 
-autokey: high level, gui interface x11 automation
+###AutoKey
+
+High level, GUI interface X11 automation.
 
 ##xbacklight
 
@@ -459,23 +459,35 @@ Outputs:
     800x600        60.3     56.2
     640x480        59.9
 
-so the asterisk `*` gives the new resolution.
+So the asterisk `*` gives the new resolution.
 
 Change to default resolution (the one with the plus sign `+`):
 
     xrandr -s 0
 
+##PRIMARY selection
+
+##CLIPBOARD
+
+##selection
+
+X support an arbitrary number of selections.
+
+The most important ones are widely implemented by default by most GUI systems:
+
+-   `PRIMARY`: automatically updated to the last selected text.
+
+    It can be pasted with a middle click.
+
+-   `CLIPBOARD`: Ctrl + C, Ctrl + V mechanism.
+
+Each selection contains data completely separate from the others.
+
+Those concepts touched by freedesktop.org: <http://freedesktop.org/wiki/Specifications/ClipboardsWiki/>
+
 ##xsel
 
 Manipulate the x selection and clipboard
-
-###x selection
-
-X selection is the last focused selected text.
-
-It can be pasted with a middle click.
-
-It is similar to the clipboard, but is another storage area.
 
 Set the x selection:
 
@@ -560,33 +572,33 @@ Put this in your `~/.xinitrc`.
 
 ##Simple GUI apps
 
-Either for testing or usuful utilities.
+Either for testing or useful utilities.
 
-- `xcalc`
+-   `xcalc`
 
     Simple scientific calculations
 
-- `xgc`
+-   `xgc`
 
     X Graphics Demo.
 
-- `xeyes`
+-   `xeyes`
 
     Fun X11 test program.
 
-- `xfontsel`
+-   `xfontsel`
 
     Point and click and view how a font looks like.
 
-- `xmag`
+-   `xmag`
 
     Magnifying lens.
 
-- `xmore`
+-   `xmore`
 
     `more`, but in X!
 
-- `xtime`
+-   `xtime`
 
     Pointer clock.
 
@@ -597,7 +609,7 @@ Opens test window and prints x events description to stdout:
     xterm
     xev
 
-Try clicking on the windows, or using your keboard to see the outputs.
+Try clicking on the windows, or using your keyboard to see the outputs.
 
 #screenshots
 
@@ -613,7 +625,7 @@ Default shortcuts on Ubuntu 12.04:
 
 - `PrtSc`: take screenshot of entire screen
 - `Alt` + `PrtSc`: take screenshot of current window, the menu including bar. `gnome-screenshot -w`.
-- `Shirt` + `PrtSc`: start a scrosshair cursor and take screenshot of a given selection. `gnome-screenshot -a`.
+- `Shirt` + `PrtSc`: start a crosshair cursor and take screenshot of a given selection. `gnome-screenshot -a`.
 
 Useful options:
 
@@ -637,7 +649,7 @@ Make a `png` screenshot:
 
 	xwd | xwdtopnm | pnmtopng > Screenshot.png
 
-##recordemydesktop
+##recordeMyDesktop
 
 Makes videos out of your desktop.
 
@@ -695,14 +707,14 @@ Other sessions may use different spawn strategies.
 
 So notice a few interesting facts:
 
-- `lightdm` comes first and spanws `Xorg` and `lxsession`
+-   `lightdm` comes first and spawns `Xorg` and `lxsession`
 
-- `lxsession` spawns all the other desktop components, such as:
+-   `lxsession` spawns all the other desktop components, such as:
 
     - the `openbox` window manager
     - the `xcreensaver` window manager
 
-- `firefox` is a direct child of init. Therefore `lxpanel` must have re-parented it to `init`, so that it can keep running even if `lxpanel` is killed or restarted.
+-   `firefox` is a direct child of init. Therefore `lxpanel` must have re-parented it to `init`, so that it can keep running even if `lxpanel` is killed or restarted.
 
 Gnome 3 spawn tree (xterm launched via the dash) looks like:
 
@@ -825,15 +837,15 @@ This means for example that there will be many shared object files under `/usr/l
 
 ##LXDE
 
-Default DE for Archlinux.
+Default DE for Arch Linux.
 
-Very lightweight and fast. Really makes programs open, close and change tabs and subwindows faster.
+Very lightweight and fast. Really makes programs open, close and change tabs and sub-windows faster.
 
 Follows `freedesktop.org` standards.
 
-Default window manager: openbox.
+Default window manager: Openbox.
 
-For keyboard shortcuts, see info on openbox.
+For keyboard shortcuts, see info on Openbox.
 
 Configuration files:
 
@@ -885,28 +897,26 @@ Some implementations:
 
 Find your default X display manager:
 
-   cat /etc/X11/default-display-manager
+    cat /etc/X11/default-display-manager
 
 Log out from the graphical TTY and go back to the display manger login screen <http://askubuntu.com/questions/180628/how-can-i-logout-from-the-gui-using-cli>:
 
-   kill -9 -1
+    kill -9 -1
 
 `man kill` tells us that here:
 
-- `-9` is for signal number 9, SIGKILL
-- `-1` is a special number, which means all pids except for init and the kill process itself.
+- `-9` is for signal number 9, `SIGKILL`
+- `-1` is a special number, which means all PIDs except for init and the kill process itself.
 
 ##lightdm
 
 Default display manager for Ubuntu.
 
-###sources
+Sources
 
-- <https://wiki.ubuntu.com/LightDM>
+-   <https://wiki.ubuntu.com/LightDM>
 
-    ubuntu docs
-
----
+    Ubuntu docs
 
 Desktop chosen on last login:
 
@@ -922,23 +932,23 @@ Don't edit the configuration file directly, use this instead:
 
 Options:
 
-- allow-guest
+-   allow-guest
 
-- `--autologin-user <username>`: autologin the given user at startup without asking for password.
+-   `--autologin-user <username>`: auto-login the given user at startup without asking for password.
 
         sudo /usr/lib/lightdm/lightdm-set-defaults --autologin "$USER"
 
-- `--session <session>`: which session to log into. Examples: ubuntu, LXDE, etc.
+-   `--session <session>`: which session to log into. Examples: Ubuntu, LXDE, etc.
 
     The possibilities can be found at:
 
         ls /usr/share/xsessions
 
-- display-setup-script=[script|command]
+-   `display-setup-script=[script|command]`
 
-- `--hide-users <true-false>`: if false, don't show user list to select from.
+-   `--hide-users <true-false>`: if false, don't show user list to select from.
 
-   This prevent users from discovering the names of all users on the system.
+    This prevent users from discovering the names of all users on the system.
 
 Restart LightDM:
 
@@ -1027,11 +1037,11 @@ For the right, the minus sight `-` indicates that the distance is between the ri
 
 It is possible to bind keys to shell commands as follows:
 
-      <keybind key="W-F">
-          <action name="Execute">
-              <command>wmctrl -a '- mozilla firefox'</command>
-          </action>
-       </keybind>
+    <keybind key="W-F">
+        <action name="Execute">
+            <command>wmctrl -a '- mozilla firefox'</command>
+        </action>
+    </keybind>
 
 Restart after changing config file to apply the changes:
 
@@ -1056,7 +1066,7 @@ Restart Compiz after modifying configurations to load them:
 
     compiz --replace
 
-You should do this from a tty other than tty7.
+You should do this from a tty other than `tty7`.
 
 #session manager
 
@@ -1066,7 +1076,7 @@ TODO
 
 User space startup programs can only start after the display manager has logged the use in.
 
-Therefore, they must either be launched by the DM at the end of its opertion, or by something spawned by it.
+Therefore, they must either be launched by the DM at the end of its operation, or by something spawned by it.
 
 ##autostart
 
@@ -1087,7 +1097,7 @@ Example, in a file called `firefox`, put:
         Type=Application
         Exec=firefox
 
-TODO who executable implements it? which DEs adopt it?
+TODO who executable implements it? Which DEs adopt it?
 
 #toolkits
 
@@ -1191,12 +1201,12 @@ Theme folders:
 - `/usr/share/themes/`
 - `~/.themes/`
 
-Those folders contain themes for gtk and window managers.
+Those folders contain themes for GTK and window managers.
 
-Each dire structure is like:
+Each directory structure is like:
 
-    - `/usr/share/themes/theme-name/gtk-2.0`
-    - `/usr/share/themes/theme-name/openbox-3.0`
+- `/usr/share/themes/theme-name/gtk-2.0`
+- `/usr/share/themes/theme-name/openbox-3.0`
 
 TODO where are Qt themes stored?
 
@@ -1207,11 +1217,8 @@ Like windows GUI item that contains the start menu.
 Typically offer:
 
 - a way to launch programs so that users can: type any part in the middle and click on the auto completed desired match
-
 - contain a list of all windows so that users can point click to open a window
-
 - contain a list of programs so that users can click to open the programs
-
 - holds applets: small icons that offer interface for processes which users don't want to have a window, such as clock, logout/shutdown GUI, Internet connection.
 
 Panels are X clients.
@@ -1236,7 +1243,7 @@ Sources:
 
 ###dconf
 
-dconf is the new backend for gsettings.
+DConf is the new backend for gsettings.
 
 It is also the name of a CLI utility used to view and edit dconf settings.
 
@@ -1287,7 +1294,7 @@ gsettings is a frontend for both dconf on Linux, and possibly other backends on 
 
 Therefore, applications should only use it directly, and not dconf, to achieve greater portability.
 
-On current GNOME based desktops, it does not support gconf.
+On current GNOME based desktops, it does not support GConf.
 
 Set the value of a key:
 
@@ -1431,7 +1438,7 @@ This discusses the desktop files under `$XDG_DATA_DIRS/applications` such as `$X
 
 Sources:
 
-- <https://developer.gnome.org/integration-guide/stable/desktop-files.html.en>
+-   <https://developer.gnome.org/integration-guide/stable/desktop-files.html.en>
 
     GNOME tutorial. Claims to follow freedesktop.org specs: <http://standards.freedesktop.org/menu-spec/latest/index.html>
 
@@ -1472,11 +1479,11 @@ Sample file (abridged):
 
 How this file could be used by the DE:
 
-- when users want to search for an application, and they don't know the exact name for the application, they can query for metadata.
+-   when users want to search for an application, and they don't know the exact name for the application, they can query for metadata.
 
     For example on Ubuntu Panel, if you type `WWW`, Firefox will be suggested, because `WWW` is in its keywords metadata.
 
-- when a file with unknown type is going to be opened, if there are no associations to it, the DE could use the `MimeType` field to make suggestions, of possible suitable alternatives.
+-   when a file with unknown type is going to be opened, if there are no associations to it, the DE could use the `MimeType` field to make suggestions, of possible suitable alternatives.
 
 ##Icon
 
@@ -1487,8 +1494,7 @@ Icons are needed at several places to help identify the application:
 
 The icon is identified by the `Icon` field, which corresponds to a file under `XDG_DATA_DIRS/icons`.
 
-That directory may contain multiple versions of each icon, at various resolutions, color depths and styles,
-since icon themes can also change with DE settings. `hicolor/48x48` should contains lots of standard icons.
+That directory may contain multiple versions of each icon, at various resolutions, color depths and styles, since icon themes can also change with DE settings. `hicolor/48x48` should contains lots of standard icons.
 
 #Default applications
 

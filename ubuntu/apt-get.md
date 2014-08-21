@@ -201,9 +201,9 @@ Launchpad is maintained by Canonical, and it is easy to Install/remove packages 
 
 `-y`: don't ask for confirmation:
 
-    sudo add-apt-repository -y ppa
+    sudo add-apt-repository -y ppa:user/repo
 
-Remove sources
+Remove sources:
 
 You could remove them manually, but there it is better to do that with `ppa-purge`:
 

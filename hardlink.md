@@ -1,14 +1,15 @@
-points to an inode, a filesystem address id,
-analogous to what a c is to memory
+Points to an inode.
 
-#create
+#Create
 
-create with ln:
+Create with `ln`:
 
     echo a > a
     ln a b
 
-#get inode
+#Get inode of a file
+
+With `stat`:
 
     echo a > a
     ln a b
@@ -16,8 +17,7 @@ create with ln:
 
 #mv
 
-unlike symlinks, even if you move any of the files,
-changes in one file reflect immediatelly on the other:
+Unlike symlinks, even if you move any of the files, changes in one file reflect immediately on the other:
 
     echo a > a
     ln a b
@@ -26,25 +26,23 @@ changes in one file reflect immediatelly on the other:
     echo b > d/b
     [ `cat a` = b ] || exit 1
 
-#it is not efficient to find all paths of an inode
+#It is not efficient to find all paths of an inode
 
-the only way to do that is searching every file on the system,
-if you have permissions...
+The only way to do that is searching every file on the system, if you have permissions...
 
-the only way to check if two files are hardlinked is by comparing their inodes.
+The only way to check if two files are hardlinked is by comparing their inodes.
 
-#count
+#Count
 
-it is possible to tell how many hardlinks a file has with stat:
+It is possible to tell how many hardlinks a file has with stat:
 
     stat -c '%h' f
 
-since the filesystem has to count this to be able to delete the file
-when the count reaches 0.
+Since the filesystem has to count this to be able to delete the file when the count reaches 0.
 
-#permissions
+#Permissions
 
-you must have read *and* write premissions to the file in order to make a hardlink to it:
+You must have read *and* write permissions to the file in order to make a hardlink to it:
 
     su a
     touch a
@@ -53,7 +51,6 @@ you must have read *and* write premissions to the file in order to make a hardli
     ln a aln
         #operation not permitted
 
-this differs from copying where only read permission is emough.
+This differs from copying where only read permission is enough.
 
-this is because if you can access the hardlink to the file,
-then you can modify the file itself.
+This is because if you can access the hardlink to the file, then you can modify the file itself.

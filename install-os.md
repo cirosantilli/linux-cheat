@@ -103,7 +103,7 @@ All that is needed to do this is to issue:
 
 Where:
 
-- `/media/grub2/system/mount/point`
+-   `/media/grub2/system/mount/point`
 
     Mount point for you GRUB 2 system.
 
@@ -113,7 +113,7 @@ Where:
 
     If that is the case, you can check where you partition is mounted with `sudo mount -l`, and then looking into partitions that have the correct type and listing the files inside candidates to make sure that it is the correct partition.
 
-- `/dev/sdX`
+-   `/dev/sdX`
 
     Device file for the Hard disk you want to install GRUB on.
 

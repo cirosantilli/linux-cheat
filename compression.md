@@ -9,7 +9,7 @@ The performance parameters are:
 - ability to break into chunks
 - keep file metadata such as permissions, hidden (windows), etc.
 
-#zip
+#ZIP
 
 Most widely supported format.
 
@@ -19,11 +19,26 @@ Easy to view and extract single files.
 
 Compresses dir file by file it seems.
 
-zip file or directory
+ZIP file or directory:
 
     zip -r "$F".zip "$F"
 
-`-r`: add dir recursively. Otherwise, adds only the top dir!
+`-r`: add dir recursively. Otherwise, adds only the top dir and not its contents.
+
+Using it on a directory will keep the top directory in the ZIP. To avoid that and keep only the files in the directory, do:
+
+    cd dir
+    zip -r ../dir.zip .
+
+If you don't have hidden files on the top level:
+
+    zip -r dir.zip dir/*
+
+Note that:
+
+    zip -r dir.zip dir/.*
+
+will not work by default for hidden files, since `.*` will also expand to `.` and `..` with default `bash` options.
 
 `-e`: encrypt:
 
@@ -47,7 +62,7 @@ To a dir:
 
     for F in *; do echo "$F"; echo "$F".zip; zip "$F".zip "$F"; done
 
-zip every file in cur dir to file.zip
+ZIP every file in cur dir to file.zip
 
 #tar tar.gz tgz tar.bz2 tb2
 
@@ -140,16 +155,16 @@ Extract `a.gz` and erase it if successful:
 
     gunzip a.gz
 
-#rar
+#RAR
 
-Proprietary Roshal ARchive.
+Proprietary `Roshal ARchive`, after it's creator Eugene Roshal.
 
 Can do split archive.
 
-Split archive extensions:
+Split archive extensions match the following Perl regexes:
 
-- .part\d+.rar
-- .r\d+
+- `.part\d+\.rar`
+- `.r\d+`
 
 Extract contents of `a.rar` to `./`
 
@@ -172,13 +187,12 @@ Out to `./out/` directory, creates this directory if necessary:
 
     unrar x a.rar out
 
-Extract multipart rar:
+Extract multipart RAR:
 
     unrar x a.r00
     unrar x a.part1.rar
 
-Eecursivelly finds all files in `a.rar`, and outputs them to current dir
-with old basename possible name conflicts
+Recursively find all files in `a.rar`, and outputs them to current dir with old basename possible name conflicts:
 
     unrar e a.rar
 
@@ -195,7 +209,7 @@ Sample output:
     f1
     f2
 
-##rar create
+##Create RAR
 
 `a` for add:
 
@@ -208,13 +222,13 @@ Microsoft proprietary program.
 Can do lots of formats:
 
 - 7z format
-- rar with p7zip-rar installed
+- RAR with `p7zip-rar` installed
 - zip
 
 But *use only for 7z*, which it was made for.
 
-With 7zip, you can open .exe files to extract their inner data.
+With 7zip, you can open `.exe` files to extract their inner data.
 
 #File roller
 
-Very good gui app to view inside archives and extrac them.
+Very good GUI app to view inside multiple archive formats and extract them.

@@ -1,12 +1,12 @@
 #!/usr/bin/env gnuplot
 
-#install:
+#Install:
 
   #sudo aptitude install gnuplot-x11
 
-##review
+##Review
 
-  ##uses its own scripting language
+  ##Uses its own scripting language
 
     #the awk of plotting: very domain specific language.
 
@@ -15,7 +15,7 @@
     #but if you get slightly away from its intended usage
     #it becomes insane or impossible to get the task done.
 
-  ##limitations
+  ##Limitations
 
     #- cannot draw primitives like points or lines
     #- cannot draw vector flow plots from functions

@@ -826,12 +826,18 @@ Ubuntu install:
 
     sudo aptitude install -y inotify-tools
 
-Usage:
+Usage single file:
 
     cd /tmp
     f=file
     echo a > "$f"
     while inotifywait -e close_write "$f"; do cat "$f"; done
+
+`make` on any directory changes with nice separator between commands:
+
+	while inotifywait -qq -e 'close_write,moved_to,create' '.'; do printf '\n%70s\n' | tr ' ' '='; make --no-print-directory; done
+
+`-q` quiet to stop it from printing one message every time it starts watching, `-qq` to print nothing at all.
 
 Go to another shell and:
 
@@ -852,9 +858,9 @@ Workaround: monitor directory:
     cd /tmp
     f=file
     while true; do
-    change=$(inotifywait -e close_write,moved_to,create .)
-    change=${change#./ * }
-    if [ "$change" = "$f" ]; then make; fi
+      change=$(inotifywait -e close_write,moved_to,create .)
+      change=${change#./ * }
+      if [ "$change" = "$f" ]; then make; fi
     done
 
 And then it works

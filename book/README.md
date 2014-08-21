@@ -6,7 +6,9 @@ Pure image or text formats such as JPEG or TeX are not covered here.
 
 Formats that contain image, text, fonts such as PDF or DJVU but not not formats that map directly to bits such as PNG or JPEG.
 
--   PS
+-   PS, PostScript.
+
+    By Adobe, like PDF, but created earlier. They both competed, but PDF ended winning.
 
     A Turing complete programming language. Can have goto, branch, variables.
 
@@ -14,54 +16,19 @@ Formats that contain image, text, fonts such as PDF or DJVU but not not formats 
 
     Since it is a programming language, it is not possible to evaluate the last pages without going through the previous ones, as those may contain variables or other definitions.
 
--   EPS: encapsulated postscript
+-   EPS: encapsulated postscript. Contains a PostScript, with some extra metadata.
 
 -   DJVU:
 
--   epub: TODO
+-   DVI: specifically created for the output of TeX. It is possible to reverse engineer low level TeX from it, although not of course the high level macros. Not Turing complete. Cannot embed fonts. Not human readable. Can then be converted to other formats like PDF.
 
--   MOBI: Mobipocket company, free format, bought by Amazon. TODO vs epub.
+-   EPUB: multi file zipped XML + XHTML + CSS. Open source and large support.
+
+-   [O'Reilly HTMLBook](http://oreillymedia.github.io/HTMLBook/). Single file HTML5 subset. Used for their books internally, cannot be converted to PDF for free although they [do have a closed source converter](http://forum.atlas.oreilly.com/t/is-is-possible-to-compile-books-locally/11), used as back-end in their Atlas platform.
+
+-   MOBI: Mobipocket company, free format, bought by Amazon. TODO vs EPUB.
 
 -   RTF: Rich Text Format, proprietary Microsoft
-
-##PDF
-
-First created by Adobe as a proprietary format in 1993.
-
-Version 1.7 released in 2007 as a payed ISO standard and for public implementation without royalties, except for some proprietary extensions.
-
-A free ISO approved copy is made freely available at the Adobe website free of charge: <http://www.adobe.com/devnet/pdf/pdf_reference.html>. It matches the ISO spec exactly.
-
-The spec is quite readable, with many examples. In particular, Annex H contains a few examples of increasing complexity of PDF files.
-
-Text layers, image layers, each page can be serially downloaded and viewed.
-
-A common Linux viewing library implementation is Poppler: <http://en.wikipedia.org/wiki/Poppler_%28software%29>. It also contains many useful utilities.
-
-PDF fonts can be either found in a renderer path, or be embedded in the document. The [standard 14 fonts]](http://en.wikipedia.org/wiki/Portable_Document_Format#Standard_Type_1_Fonts_.28Standard_14_Fonts.29)must always be supported. 
-
-PDF is human readable (TODO no compression?), so in theory it is possible to write it by hand with a text editor.
-
-However, it was not designed to be written by hand. For example:
-
-- for the `xref` table it is necessary to include byte offsets of certain chunks of text.
-- some objects have must have two sided parent child links between them.
-- byte counts are necessary at certain points, like before streams.
-
-This means that PDF is a base bad input format: it should be used as an output format only. Those design choices with redundancy are made to make PDFs faster to render.
-
-PDF is influenced by PostScript.
-
-Sources:
-
-- Short but good intro: <http://www.gnupdf.org/Introduction_to_PDF>
-- <http://brendanzagaeski.appspot.com/0005.html>
-- A few tutorials: <http://blog.idrsolutions.com/?s=%22Make+your+own+PDF+file%22>
-
-TODO:
-
-- how to generate the `xref` table automatically to make it more feasible to write test PDFs by hand?
-- fix byte counts on annex the hello world PDF: [hello-world.md](hello-world.md).
 
 #Viewers
 
@@ -330,7 +297,7 @@ Formats:
 
     Designed for postscript.
 
-    Was Adobe proprietary but has become free on condition that it is not modified. TODO check this crazy license.
+    Was Adobe proprietary but has become free on condition that it is not modified.
 
     Extensions: `afm`, `pfb`, `pfm`.
 

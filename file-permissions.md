@@ -228,10 +228,10 @@ You want many users to colaborate under a single dir.
 
 You:
 
-1. create a group for collaboration
-1. create the dir with sticky bit
-1. add every user to the group
-1. make everyone give rwx on files they create
+- create a group for collaboration
+- create the dir with sticky bit
+- add every user to the group
+- make everyone give rwx on files they create
 
 This way, only the group can work under the dir, and they all can access each other's files
 

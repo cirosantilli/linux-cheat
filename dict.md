@@ -1,76 +1,76 @@
-#formats
+#Formats
 
 ##stardict
 
 <http://goldendict.org/dictionaries.php>
 
-for dicts, go: <www.stardict.org/download.php>
+For dicts, go: <www.stardict.org/download.php>
 
 ##bgl
 
-babylon
+Babylon.
 
-windows oriented: exes on site!
+Windows oriented: exes on site!
 
-can open .exe with 7zip to extract data content
+Can open .exe with 7zip to extract data content.
 
-now most exes are downloaders without blgs, probably vendor lockin
+Now most exes are downloaders without blgs, probably vendor lock-in.
 
 I found some that actually contained the blg here:
 
     http://www.babylon.com/dictionaries-glossaries
 
-#goldendict
+#Goldendict
 
-fork of stardict
+Fork of stardict.
 
-select text can make popup windows!
+Select text can make popup windows!
 
-supported formats: stardict, blg,
+Supported formats: stardict, blg,
 
 #sdcv
 
-command line stardict
+Command line stardict.
 
-supported formats: stardict only
+Supported formats: stardict only.
 
-to install dict place it under:
+To install dict place it under:
 
     /usr/share/stardict/dic
     $(HOME)/.stardict/dic
 
-list available dicts:
+List available dicts:
 
     sdcv -l
 
-#spell checking
+#Spell checking
 
 ##aspell
 
 ###features
 
-can add words to dict
+Can add words to dict.
 
-understands some predefined formats!
+Understands some predefined formats!
 
-interactively checks files for spelling errors:
+Interactively checks files for spelling errors:
 
     aspell -c f
 
-if modified, change inline but create `.bak` file
+If modified, change inline but create `.bak` file.
 
-french:
+French:
 
     aspell -l fr -c f
 
-must first install wordlist
+Must first install wordlist.
 
-same but ignore language constructs (modes):
+Same but ignore language constructs (modes):
 
     aspell --mode=tex -c f
     aspell --mode=html -c f
 
-modes can be added/removed. They are called `filters`
+Modes can be added/removed. They are called `filters`:
 
     sudo aspell --add-filter=$f
     sudo aspell --remove-filter=$f

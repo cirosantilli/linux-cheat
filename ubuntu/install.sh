@@ -921,9 +921,17 @@
         sudo aptitude install -y postgresql
         sudo aptitude install -y postgresql-client
 
-      # Redis server and cli client:
+      # Redis
 
-        sudo aptitude install -y redis-server
+        # Server and cli client:
+
+          sudo aptitude install -y redis-server
+
+        # More recent:
+
+          sudo apt-add-repository ppa:chris-lea/redis-server
+          sudo aptitude update
+          sudo aptitude install -y redis-server
 
       # MongoDB server and cli client:
 

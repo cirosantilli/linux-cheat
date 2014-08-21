@@ -4,7 +4,7 @@ Takes each line of stdin runs a command with that line as argument.
 
 Great for combo with `find` to do a command on all files found.
 
-#alternatives
+#Alternatives
 
 Downsides of xargs:
 
@@ -45,7 +45,7 @@ This is so common that you should:
 
 You should always to use `-I` because:
 
-- it takes one line at a time.
+-   it takes one line at a time.
 
     By default, **XARGS TAKES MULTIPLE LINES AND FEEDS THEM ALL TO THE COMMAND AT ONCE**, so:
 
@@ -57,7 +57,7 @@ You should always to use `-I` because:
 
     `-I` solves this because it implies `-L1`, which tells it to take one line at a time.
 
-- you can escape filenames properly (considering they have no newlines...).
+-   you can escape filenames properly (considering they have no newlines...).
 
     By default, xargs does not quote arguments for you:
 
@@ -93,7 +93,7 @@ Classic combo with `find -print0`:
 
 Using `-0` is the most robust form.
 
-#detailed operation
+#Detailed operation
 
 Read line from stdin, append as argument to the given command
 
@@ -138,7 +138,7 @@ Outputs:
     a
     b
 
-#multiple commands
+#Multiple commands
 
 The only way to do multiple commands per line is using `xargs bash` technique:
 
@@ -155,7 +155,7 @@ Only use this for very simple commands, or you are in for an escaping hell!
 
 If you feel the need to do this, it is likely that you should consider a "read while" technique instead or a Python script.
 
-#interactive commands
+#Interactive commands
 
 `xargs` takes its arguments from stdin, so it does not allow you to run commands that require stdin interaction such as `aspell`. The following fails:
 
@@ -165,13 +165,13 @@ One workaround is to open a new terminal for each command:
 
     find . -iname '*.md' | xargs -I'{}' xterm -e aspell -c '{}'
 
-#applications
+#Applications
 
 Find and replace in files found with perl regex:
 
     find . -type f | xargs perl -pie 's/a/A/g'
 
-##find files whose path differ from other files only by case
+##Find files whose path differ from other files only by case
 
 Useful when copying from Linux to a system that does not accept files that differ only by case (Mac OS X and Windows)
 
@@ -181,6 +181,6 @@ Remove them:
 
     find . | sort -f | uniq -di | xargs -I'{}' rm '{}'
 
-#parallel
+#Parallel
 
 TODO GNU xargs that does jobs in parallel? Looks promising.

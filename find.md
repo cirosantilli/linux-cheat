@@ -377,7 +377,7 @@ Find empty files and directories:
 
     find . -empty
 
-##action gnu extensions
+##GNU extensions actions
 
 ###print0
 

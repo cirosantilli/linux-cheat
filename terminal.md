@@ -231,10 +231,10 @@ Which can be broken up as:
 where:
 
 1. CSI
-1. underline on
-1. separator
-1. bold
-1. SGR
+2. underline on
+3. separator
+4. bold
+5. SGR
 
 How it works:
 
@@ -391,7 +391,7 @@ The most common action is to print every byte to the screen as the corresponding
 
 #Terminal emulator vs sh interpreter
 
-sh interpreters take raw text and do certain actions.
+`sh` interpreters take raw text and do certain actions.
 
 This raw text could come either from text files (scripts) or pipes, but in any case it is just raw text.
 
@@ -411,20 +411,21 @@ Output:
 
     a
 
-so `a` was written to the current terminal.
+So `a` was written to the current terminal.
 
 #Good terminal emulators
 
 Drop-down capability is a huge advantage: hit a key, and the terminal appears. Options:
 
-- `guake`: GNOME
-- `yakuake`: KDE
+-   `guake`: GNOME
 
-`finalterm` <https://github.com/p-e-w/finalterm> integrates with the interpreter it is running, offering features like:
+-   `yakuake`: KDE
 
-- drop-down list auto-completion
-- mouse click on ls items to `cd` into them
+-   `finalterm` <https://github.com/p-e-w/finalterm> integrates with the interpreter it is running, offering features like:
 
-Terminator <https://launchpad.net/terminator> is a window splitter master, but `tmux` does everything it does and better.
+    - drop-down list auto-completion
+    - mouse click on ls items to `cd` into them
+
+-   Terminator <https://launchpad.net/terminator> is a window splitter master, but `tmux` does everything it does and better.
 
 [wiki-ansi-escape]: http://en.wikipedia.org/wiki/ANSI_escape_code

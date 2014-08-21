@@ -1,10 +1,10 @@
 Linux in informal terms can be either a computer system that:
 
-- complies to the [Linux Standard Base (LSB)](lsb) which is the main standard maintained by the [Linux foundation][]
+- complies to the [Linux Standard Base (LSB)][lsb] which is the main standard maintained by the [Linux foundation][]
 
-- uses the Linux kernel. TODO is this specified by the LSB? where? <http://unix.stackexchange.com/questions/75611/what-does-the-linux-standard-base-specify-about-the-kernel> 
+- uses the Linux kernel. TODO is this specified by the LSB? where? <http://unix.stackexchange.com/questions/75611/what-does-the-linux-standard-base-specify-about-the-kernel>. Information specific to the Linux kernel is not covered in this section.
 
-The [LSB] specifies the minimum interfaces every Linux system must offer.
+The [LSB][] specifies the minimum interfaces every Linux system must offer.
 
 The central component of the Linux operating system is the Linux kernel, released in 1991 by Linus Trovalds, however much of its core user space software comes from the GNU project. For this reason Linux systems may also be called GNU/Linux. 
 
@@ -36,17 +36,13 @@ For example, the following central components originate from GNU:
 
 It seems that the GNU project is not officially called like that anymore, and has transformed into the *free software foundation* (FSF) also founded by Stallman. TODO check
 
-Amongst the projects of the FSF is the *gnu operating system*. they are also active in legal causes and activism for free software.
+Amongst the projects of the FSF is the *gnu operating system*. They are also active in legal causes and activism for free software.
 
 The GNU operating system is developing its own kernel called *HUD*, but the own project states that it is not yet ready for broad usage
 
 The FSF insists on calling what most people call Linux as GNU/Linux, which sounds quite reasonable considering they developed a great part of the userspace core.
 
 The GNU software foundation is the creator and current maintainer of the GPL license, and mostly uses that license for its software and is the main enforcer of its infringements.
-
-##GNU alternatives
-
-Some notable alternatives to the GNU tools:
 
 #POSIX
 
@@ -97,9 +93,28 @@ There a few POSIX requirements that the Linux kernel explicitly does not impleme
 - ALSA (sound)
 - freedesktop.org XDG [Base Directory structure](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html), and [xdg-utils](http://portland.freedesktop.org/xdg-utils-1.0/).
 
-#Basename conventions
+#FHS
 
-Not in the FHS, but often used.
+The filesystem hierarchy standard specifies base directories for the system and what should go in them.
+
+It is also maintained by the Linux foundation, and followed by the LSB.
+
+[freedesktop.org basedir spec](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html)  is another an important directory standard that specifies directory structures on top of the FHS. It has been adopted by the recent LSB 4.1 under the desktop section: <http://refspecs.linux-foundation.org/LSB_4.1.0/LSB-Desktop-generic/LSB-Desktop-generic.html#XDG-BASEDIR>
+
+##De facto but not mentioned in FHS
+
+###/etc/alternatives`
+
+Contains symlinks that determine default programs.
+
+For example: `editor -> /usr/bin/vim` and so on.
+
+Can be updated via `man update-alternatives`.
+
+Some important ones are:
+
+- editor: text editor
+- x-www-browser: text editor
 
 ###^\.
 
@@ -122,29 +137,6 @@ Original installation file.
 ###\.d$
 
 Many theories, a plausible one: differentiate `a.conf file` from `a.conf.d` dir normally, all files in the `a.conf.d` dir will be sourced as if they are inside `a.conf`.
-
-#FHS
-
-The filesystem hierarchy standard specifies base directories for the system and what should go in them.
-
-It is also maintained by the Linux foundation, and followed by the LSB.
-
-[freedesktop.org basedir spec](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html)  is another an important directory standard that specifies directory structures on top of the FHS. It has been adopted by the recent LSB 4.1 under the desktop section: <http://refspecs.linux-foundation.org/LSB_4.1.0/LSB-Desktop-generic/LSB-Desktop-generic.html#XDG-BASEDIR>
-
-##De facto but not mentioned in FHS
-
--   `/etc/alternatives`
-
-    Contains symlinks that determine default programs.
-
-    For example: `editor -> /usr/bin/vim` and so on.
-
-    Can be updated via `man update-alternatives`.
-
-    Some important ones are:
-
-    - editor: text editor
-    - x-www-browser: text editor
 
 #Distributions
 
@@ -169,19 +161,19 @@ LSB does however specifies many more tools than POSIX and supports almost all ba
     - `Documentation/` for docs
     - `include/linux` for stuff you may use from modules
 
--   info
+-   info man pages.
 
-    GNU project substitute for man.
+    GNU project substitute for `man`.
 
     Usually much longer explanations and examples.
 
     Better node wise navigation.
 
--   the geek stuff
+-   <http://www.thegeekstuff.com>
 
-   <http://www.thegeekstuff.com>
+    The geek stuff.
 
-   Short tutorials with lots of examples.
+    Short tutorials with lots of examples.
 
 -   <http://www.linuxfromscratch.org/>
 

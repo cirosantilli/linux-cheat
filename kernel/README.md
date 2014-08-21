@@ -1,43 +1,35 @@
-The Linux kernel is written on mainly on C99 standard,with **gasp** gcc extensions, which it uses extensively, both on points which cannot be done in any other way without the extensions (inline assembly), but also at points where those are not strictly necessary, for example to improve debugging and performance.
+The Linux kernel is written on mainly on C99 standard with GCC extensions, which it uses extensively, both on points which cannot be done in any other way without the extensions (inline assembly), but also at points where those are not strictly necessary, for example to improve debugging and performance.
 
-Besides the Linux kernel, what most people call a Linux system, or more precisely a Linux distribution, must also contain many more user level basic services such as the python interpreter, the X server, etc. The extra user space services are specified by the lsb, and are not a part of the Linux kernel.
+Besides the Linux kernel, what most people call a Linux system, or more precisely a Linux distribution, must also contain many more user level basic services such as the python interpreter, the X server, etc. The extra user space services are specified by the LSB, and are not a part of the Linux kernel.
 
 You cannot use user space libs such as libc to program the kernel, since the kernel itself itself if need to be working for user space to work.
 
-#examples portability
-
 All code samples were tested on kernel 3.10.
 
-#sources
+#Sources
 
 Consider reading books on general operating system concepts, as those tend to explain better concepts which are used on Linux as well as other OS.
 
 Linux documentation kind of sucks.
 
-Most function definitions or declarations don't contain any comments, so you really need to have a book in your hands to understand things.
+Most function definitions or declarations don't contain any comments, so you really need to have a book in your hands to understand the high level of things.
 
-Therefore, the only way to understand things is to hope to find them on some book, and if not, interpret source codes, which are possibly very convoluted for performance and other complex restrictions.
+##Free sources
 
-Maybe there is a good reason for that.
-
-##free sources
-
-[free-electrons]: http://lxr.free-electrons.com/ident
-
-- [free-electrons][]
+-   [free-electrons][]
 
     One of the best ways of searching where things are defined / declared on the source code.
 
-    Possible alternatives: ctags and grep.
+    Possible alternatives: `ctags` and `grep`.
 
-- `grep -R`
+-   `grep -R`
 
     Possible way to find where something is defined.
 
-    May take a long time on the rource root, and it may be hard to get the actual definitions,
+    May take a long time on the source root, and it may be hard to get the actual definitions,
     but it does works sometimes.
 
-- `ctags -R`
+-   `ctags -R`
 
     Better than grep to find where things are defined / declared.
 
@@ -45,28 +37,26 @@ Maybe there is a good reason for that.
 
         ctags -R --c-kinds=-m
 
-    on the kerne root generated a file of 134M, but this might be worth it as it may save lots of grepping time.
+    on the kernel root generated a file of 134M, but this might be worth it as it may save lots of grepping time.
 
     You will might then want to add the following to your `.bashrc`:
 
-            function ctag { grep "^$1" tags; } #CTAgs Grep for id
-            function rctag { cd `git rev-parse --show-toplevel` && grep "^$1" tags; }
+        function ctag { grep "^$1" tags; } #CTAgs Grep for id
+        function rctag { cd `git rev-parse --show-toplevel` && grep "^$1" tags; }
 
     Another similar option is to use [free-electrons][].
 
-[kernel-org]: https://www.kernel.org/doc/
-
-- [kernel-org][]
+-   [kernel-org][]
 
     kernel.org resources list
 
-- `git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git`
+-   `git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git`
 
     The source code, *the* only definitive source.
 
     The built-in docs are not very good though.
 
-- `make htmldoc` on the source.
+-   `make htmldoc` on the source.
 
     Generates documentation for the kernel from comments, and puts it under `Documentation/DocBook/index.html`
 
@@ -77,19 +67,13 @@ Maybe there is a good reason for that.
     Weirdly the snapshots of htmldoc on kernel.org have some extra functions, check it out:
     <https://www.kernel.org/doc/htmldocs/kernel-api.html>
 
-[kernel-org]: https://www.kernel.org/doc/
-
-- [kernel-org][]
+-   [kernel-org][]
 
     kernel.org resources list
 
-[kernelnewbies]: http://kernelnewbies.org/
+-   [kernelnewbies][]
 
-- [kernelnewbies][]
-
-[kernel-mail]: http://vger.kernel.org/vger-lists.html
-
-- [kernel-mail][]
+-   [kernel-mail][]
 
     Kernel mailing lists.
 
@@ -99,15 +83,11 @@ Maybe there is a good reason for that.
 
 ###Books on general operating systems
 
-[stallings11]: http://www.amazon.com/Operating-Systems-Internals-Principles-Edition/dp/013230998X
-
-- [stallings11][]
+-   [stallings11][]
 
 ###Books on the Linux kernel
 
-[corbet05]: http://www.amazon.com/books/dp/0596005903
-
-- [corbet05][]
+-   [corbet05][]
 
     Shows lots of kernel to kernel interfaces, but not the internals.
 
@@ -115,43 +95,39 @@ Maybe there is a good reason for that.
 
     Good first Linux book read.
 
-[bovet05]: http://www.amazon.com/books/dp/0596005652
-
-- [bovet05][]
+-   [bovet05][]
 
     Inner workings.
 
     Reasonable info on x86 hardware.
 
-[love06]: http://www.amazon.com/books/dp/0596005652
+-   [love06][]
 
-- [love06][]
+    Love - 2006 - Linux kernel development.
 
-    Love - 2006 - Linux kernel devlopement.
+#What the kernel does
 
-#what the kernel does
+The kernel does the most fundamental operations such as:
 
-the kernel does the most fundamental operations such as:
-
-- **user permission control**
+-   **user permission control**
 
     The kernel determines what programs can do or not, enforcing for example file permissions.
 
-- **virtual address space**
+-   **virtual address space**
 
-     All programs see is a virtual address space from 0 to a max size, even if the physical memory may be split in a complex way in the physical RAM.
+    All programs see is a virtual address space from 0 to a max size, even if the physical memory may be split in a complex way in the physical RAM.
 
-     If they try write out of this space, the kernel termiates them, so that they don't mess up with other process memory
+    If they try write out of this space, the kernel terminates them, so that they don't mess up with other process memory.
 
-     this also increases portability across different memory devices and architectures.
+    This also increases portability across different memory devices and architectures.
 
-- **filesystem**
+-   **filesystem**
 
      The kernel abstracts individual filesystems into a simple directory file tree easily usable by any program, without considering the filesystem type or the hardware type (hd, flash device, floppy disk, etc.)
 
-- **concurrence**
+-   **concurrence**
 
-     The kernel schedules programs one after another quite quickly and in a smart way, so that even users with a single processor can have the impression that they are running multiple applications at the same time, while in reality all they are doing is switching very quickly between applications.
+    The kernel schedules programs one after another quite quickly and in a smart way, so that even users with a single processor can have the impression that they are running multiple applications at the same time, while in reality all they are doing is switching very quickly between applications.
 
 Therefore it reaches general goals such as:
 
@@ -223,7 +199,7 @@ One major application of this is to ignore those files from source control. The 
 
 ##include/linux
 
-Default places for almost all important headers for intefaces that can be used across the kernel.
+Default places for almost all important headers for interfaces that can be used across the kernel.
 
 Some subsystems however are large enough to merit separate directories in include such as `net` which holds the networking includes.
 
@@ -231,7 +207,7 @@ Important files include:
 
 - `sched.h`:    scheduling and task key structures
 - `fs.h`:       key filesystem structures
-- `compiler.h`: compiler related stuff such as `__user`, which expands to a gcc `__attribute__`.
+- `compiler.h`: compiler related stuff such as `__user`, which expands to a GCC `__attribute__`.
 - `types.h`:    typedefs
 
 ##include/asm-generic
@@ -274,7 +250,7 @@ TODO what is the difference from `lib`?
 
 Seems to contain utilities which are useful throughout the kernel, such as:
 
-- `EXPORT_SYMBOL` under perf/util/include/linux/export.h
+- `EXPORT_SYMBOL` under `perf/util/include/linux/export.h`
 
 ##scripts
 
@@ -300,17 +276,17 @@ Sound code.
 
 Memory management.
 
-##ipc
+##IPC
 
 IPC stuff such as semaphores under `sem.c` or message queues under `mqueue.c`.
 
-##find definitions
+##Find definitions
 
-A possible way to find and navigate the kernel source code is via: ctags.
+A possible way to find and navigate the kernel source code is via: `ctags`.
 
 Also consider `ack` or good and old GNU `grep -r`.
 
-For example, to try to find the definition of struct `s`:
+For example, to try to find the definition of `struct s`:
 
     ack '^struct s \{'
 
@@ -318,22 +294,19 @@ For example, to try to find the definition of struct `s`:
 
 <http://stackoverflow.com/questions/9094237/whats-the-difference-between-usr-include-linux-and-the-include-folder-in-linux>
 
-- `/usr/include/linux` is owned by libc on linux, and used to call kernel services from userspace.
-	TODO understand with a sample usage
+-   `/usr/include/linux` is owned by libc on Linux, and used to call kernel services from userspace. TODO understand with a sample usage
 
-- `/usr/src/linux-headers-$(uname -r)/include/linux/` is exactly part of the kernel tree under `include`
-	for a given kernel version.
+-   `/usr/src/linux-headers-$(uname -r)/include/linux/` is exactly part of the kernel tree under `include` for a given kernel version.
 
-	can be used to offer access to the kernel's inner workings
+    Can be used to offer access to the kernel's inner workings.
 
-	it is useful for example for people writting kernel modules,
-	and is automatically included by the standard module `Makefile`.
+    It is useful for example for people writing kernel modules, and is automatically included by the standard module `Makefile`.
 
 ##System.map
 
 Generated at the top level and then placed at `/boot/System.map-<version>`.
 
-#special files
+#Special files
 
 The kernel communicates parameters to user space using special files, located mainly under `/proc/`, `/sys/` and `/dev/`.
 
@@ -341,7 +314,7 @@ The standard files shall not be discussed here since they can be accessed from u
 
 Only the kernel internal point of view shall be discussed here, for example how to create such special files.
 
-#user programs
+#User programs
 
 User programs such as a simple hello world run inside an abstraction called *process* defined by the kernel.
 
@@ -353,11 +326,11 @@ A simple example is the c `printf` function, which must at some point ask the ke
 
 Another simple example is file io.
 
-#floating point
+#Floating point
 
 You cannot use floating point operations on kernel code because that would incur too much overhead of saving floating point registers on some architectures, so don't do it.
 
-#rings
+#Rings
 
 x86 implemented concept
 
@@ -372,11 +345,11 @@ Linux uses 2:
 
 this is used to separate who can do what
 
-#version number
+#Version number
 
 - rc = Release Candidate
 
-#compile
+#Compile
 
 Get the source:
 
@@ -425,21 +398,21 @@ Tested on Ubuntu 13.04 with kernel dev version `3.10.0-rc5+`
 
 This will place:
 
-- the compiled kernel under `/boot/vmlinuz-<version>`
+-   the compiled kernel under `/boot/vmlinuz-<version>`
 
-- config file `.config` as `/boot/config-<version>`
+-   config file `.config` as `/boot/config-<version>`
 
-- `System.map` under `/boot/System.map-<version>`.
+-   `System.map` under `/boot/System.map-<version>`.
 
 	This contains symbolic debug information.
 
-- `/lib/modules/<version>/` for the modules
+-   `/lib/modules/<version>/` for the modules
 
 Now reboot, from the GRUB menu choose "Advanced Ubuntu options", and then choose the newly installed kernel.
 
-TODO how to go back to the old kernel image by default at startup? going again into advance options and clicking on it works, but the default is still the newer version which was installed.
+TODO how to go back to the old kernel image by default at startup? Going again into advance options and clicking on it works, but the default is still the newer version which was installed.
 
-TODO how to install the /usr/src/linux-headers- headers?
+TODO how to install the `/usr/src/linux-headers- headers`?
 
 #test
 
@@ -455,7 +428,7 @@ Furthermore, if your module messes up bad enough, it could destroy disk data, so
 
 Consider using a virtual machine instead.
 
-##virtual machine
+##Virtual machine
 
 The best way to tests a fully blown kernel modification in full security.
 
@@ -475,17 +448,17 @@ You can then easily test your kernel modules on the virtual machine by using a s
 
 Where:
 
-- `UNAME`:
+-   `UNAME`:
 
-    username of the user on the virtual machine
+    Username of the user on the virtual machine.
 
-- `DIRNAME`:
+-   `DIRNAME`:
 
     Directory name to be used for compilation relative to current dir.
 
     Its content is removed at every compile, so don't put important stuff in there.
 
-- `/media/sf_kernel`:
+-   `/media/sf_kernel`:
 
     Directory shared between client and host, that corresponds to the host's location of the module code and `Makefile`.
 
@@ -505,16 +478,15 @@ View and modify kernel parameters at runtime:
 
 #Coding conventions
 
-- tabs instead of spaces. Configure editors to view tabs as 8 spcaes. In `vim` you could source:
+-   Tabs instead of spaces. Configure editors to view tabs as 8 spaces. In `vim` you could source:
 
-               if expand('%:e') =~ '\(c\|cpp\|f\)'
-                    set noexpandtab
-                    set tabstop=8
-                    set shiftwidth=8
-               endif
+        if expand('%:e') =~ '\(c\|cpp\|f\)'
+            set noexpandtab
+            set tabstop=8
+            set shiftwidth=8
+        endif
 
-     the 8 space rule is needed when we want to make ascii tables and align each column at a multiple of the tab width
-     so that it is easier to write the table.
+     The 8 space rule is needed when we want to make ASCII tables and align each column at a multiple of the tab width so that it is easier to write the table.
 
      For example, if a tab has 8 spaces then only one tab is need for:
 
@@ -538,8 +510,8 @@ View and modify kernel parameters at runtime:
 
 Functions that start with two underscores are low level functions. This means that:
 
-1. there is probably a more convenient and usually more correct function available.
-2. it is more likely to get deprecated some day.
+- there is probably a more convenient and usually more correct function available.
+- it is more likely to get deprecated some day.
 
 The message is then clear: avoid using those unless you know exactly what you are doing and you really need to do it.
 
@@ -547,7 +519,7 @@ The message is then clear: avoid using those unless you know exactly what you ar
 
 Each process has a representation on the file system under `/proc/\d+` which allows users with enough privilege to gather information on them. Sample interesting fields:
 
-- limits: limits to various resources which are imposed by the kernel
+-   limits: limits to various resources which are imposed by the kernel
 
     Going over those limits may cause the kernel to terminate processes with certain signals
 
@@ -628,39 +600,37 @@ Good source on the subject: <http://stackoverflow.com/questions/18431261/how-doe
 
 Free:
 
-- good beginner's tutorial: <http://duartes.org/gustavo/blog/post/anatomy-of-a-program-in-memory>
+-   good beginner's tutorial: <http://duartes.org/gustavo/blog/post/anatomy-of-a-program-in-memory>
 
-- good tutorial: <http://www.bottomupcs.com/virtual_address_and_page_tables.html>
+-   good tutorial: <http://www.bottomupcs.com/virtual_address_and_page_tables.html>
 
-[rutgers-memory]: http://www.cs.rutgers.edu/~pxk/416/notes/09-memory.html
-
-- [Rutgers lecture notes on Memory Management][rutgers-memory]
+-   [Rutgers lecture notes on Memory Management](http://www.cs.rutgers.edu/~pxk/416/notes/09-memory.html)
 
     Good info on the historical development of virtual adress space techniques.
 
 Non-free:
 
-- bovet - 2005 - Understanding the Linux Kernel. Chapter "Memory Adressing".
+-   Bovet - 2005 - Understanding the Linux Kernel. Chapter "Memory Addressing".
 
     Good info on the x86 memory hardware.
 
 ##Goals of a virtual memory space
 
-- allow multiple programs to share a single RAM, while having the the convenient illusion that their memory is contiguous.
+-   allow multiple programs to share a single RAM, while having the convenient illusion that their memory is contiguous.
 
     It would be hard to do this without paging because the memory size of programs changes with time and is not predictable.
 
-- protection: control which addresses process can or cannot use.
+-   protection: control which addresses process can or cannot use.
 
     For example, processes cannot accesses pages of another process, specially the kernel itself!
 
     If a page cannot be found in the page table of a process then the processes does not have the right to access it.
 
-- swap to disk: allow for programs to use more RAM than is available.
+-   swap to disk: allow for programs to use more RAM than is available.
 
     It suffices to store a flag indicating if memory is on main memory or on disk, and if it is on disk then the address indicates the disk address of the page.
 
-- fast process switch.
+-   fast process switch.
 
     Switching the entire processes in memory comes down to a single operation of changing the page table in use.
 
@@ -672,11 +642,11 @@ In order to understand why virtual memory via paging is good, it is a good idea 
 
 ##Hardware support
 
-RAM memory access is one of the most common operations doen by a program.
+RAM memory access is one of the most common operations done by a program.
 
 Therefore if any control is to be done at every single memory operation, it must be *very* fast. This is why most architectures have some hardware support for those control operations.
 
-It is then necessary to first understand how those hardware cirquits work. Architecture specifics shall not be discussed here: look for specific info on each Architecture.
+It is then necessary to first understand how those hardware circuits work. Architecture specifics shall not be discussed here: look for specific info on each Architecture.
 
 A good place to start is with x86 paging circuitry.
 
@@ -747,8 +717,8 @@ The process memory space is divided as follows:
 
 Valid program accesses:
 
-- RW on: data, BSS, heap, memory mappings and stack
-- R on: text
+- `RW` on: data, BSS, heap, memory mappings and stack
+- `R` on: text
 
 If a process tries to access addresses between TASK_SIZE and RLIMIT_STACK the kernel may allow its stack to grow.
 
@@ -758,23 +728,23 @@ Any other access attempt will generate a TODO page or seg fault?
 
 Never changes between processes.
 
-TASK_SIZE is typically 3/4 of the total memory.
+`TASK_SIZE` is typically 3/4 of the total memory.
 
 Note that this is *virtual* memory, so it is independent of the actual size of the memory as the hardware and the kernel can give processes the illusion that they actually have amounts of memory larger than the hardware for instance.
 
-##random offset segments
+##Random offset segments
 
-Randomly generated for each proess to avoid attacks.
+Randomly generated for each process to avoid attacks.
 
 Must be small not to take too much space.
 
-##stack
+##Stack
 
 Grows down.
 
 May be allowed to increase by the OS access is done before the maximum stack value `RLIMIT_STACK`.
 
-##memory mapping
+##Memory mapping
 
 Created via `mmap` system calls.
 
@@ -782,7 +752,7 @@ Stores dynamically loaded library code.
 
 ##Heap
 
-Usually managed by language libraries such as C malloc.
+Usually managed by language libraries such as C `malloc`.
 
 Manipulated on the system level by the `brk` syscall.
 
@@ -815,8 +785,7 @@ Pages are modeled by `struct page` under `mm_types.h`.
 Hardware deals in terms of pages to:
 
 - make retrieval faster, since the bus clock is much slower than the cpu clock and because of memory locality.
-
-- serve as a standard unit for page swap betweem RAM and HD
+- serve as a standard unit for page swap between RAM and HD.
 
 ##Page flags
 
@@ -832,20 +801,13 @@ Paging usually has hardware support today.
 
 Modern systems are preemptive: they can stop tasks to start another ones, and continue with the old task later
 
-A major reason for this is to give users the illusion that their text editor, compiler and music player can run at the same time even if they have a single cpu
+A major reason for this is to give users the illusion that their text editor, compiler and music player can run at the same time even if they have a single CPU.
 
-Scheduling is choshing which processes will run next
+Scheduling is choosing which processes will run next.
 
-The processes which stopped running is said to have been *preempted*
+The processes which stopped running is said to have been *preempted*.
 
 The main difficulty is that switching between processes (called *context switch*) has a cost because if requires copying old memory out and putting new memory in.
-
-Balancing this is a question throughput vs latency balace.
-
-- throughput is the total average performance. Constant context switches reduce it because they have a cost
-- latency is the time it takes to attend to new matters such as refreshing the screen for the user.
-
-Reducing latency means more context switches which means smaller throughput
 
 #Scheduling
 
@@ -859,10 +821,7 @@ The processes which stopped running is said to have been *preempted*
 
 The main difficulty is that switching between processes (called *context switch*) has a cost because if requires copying old memory out and putting new memory in.
 
-Balancing this is a question throughput vs latency balace.
-
-- throughput is the total average performance. Constant context switches reduce it because they have a cost
-- latency is the time it takes to attend to new matters such as refreshing the screen for the user. Reducing latency means more context switches which means smaller throughput
+Balancing this is a throughput vs latency question.
 
 ##Sleep
 
@@ -881,25 +840,25 @@ Higher level method: wait queues.
 
 Processes can be in one of the following states (`task_struct->state` fields)
 
-- running: running. `state = TASK_RUNNING`
+-   running: running. `state = TASK_RUNNING`
 
-- waiting: wants to run, but scheduler let another one run for now
+-   waiting: wants to run, but scheduler let another one run for now
 
     `state = TASK_RUNNING`, but the scheduler is letting other processes run for the moment.
 
-- sleeping: is waiting for an event before it can run
+-   sleeping: is waiting for an event before it can run
 
     `state = TASK_INTERRUPTIBLE` or `TASK_UNINTERRUPTIBLE`.
 
-- stopped: execution purpusifully stopped for exaple by SIGSTOP for debugging
+-   stopped: execution purposefully stopped for example by `SIGSTOP` for debugging
 
     `state = TASK_STOPPED` or `TASK_TRACED`
 
-- zombie: has been killed but is waiting for parent to call wait on it.
+-   zombie: has been killed but is waiting for parent to call wait on it.
 
     `state = TASK_ZOMBIE`
 
-- dead: the process has already been waited for,
+-   dead: the process has already been waited for,
 and is now just waiting for the system to come and free its resources.
 
     `state = TASK_DEAD`
@@ -942,13 +901,13 @@ Priority is a measure of how important processes are, which defines how much CPU
 
 There are 2 types of priority:
 
-- real time priority
+-   real time priority.
 
     Ranges from 0 to 99
 
     Only applies to process with a real time scheduling policy
 
-- normal priorities
+-   normal priorities.
 
     Ranges from -20 to 19
 
@@ -979,7 +938,7 @@ An increase in 1 nice level means 10% more CPU power.
 
 ###Completely fair scheduler
 
-All normal processes are currently dealt with internally by the *completelly fair scheduler* (CFS)
+All normal processes are currently dealt with internally by the *completelly fair scheduler* (CFS).
 
 The idea behind this scheduler is imagining a system where there are as many CPU's as there are processes a system where there are as many CPU's as there are processes
 
@@ -1046,6 +1005,16 @@ When there are no other processes to do, the scheduler chooses a (TODO dummy?) p
 
 A run queue is a list of processes that will be given cpu time in order which process will be activated.
 
-it is managed by schedulers, and is a central part of how the scheduler chooses which process to run next
+It is managed by schedulers, and is a central part of how the scheduler chooses which process to run next
 
 There is one run queue per processor.
+
+[bovet05]:        http://www.amazon.com/books/dp/0596005652
+[corbet05]:       http://www.amazon.com/books/dp/0596005903
+[free-electrons]: http://lxr.free-electrons.com/ident
+[kernel-mail]:    http://vger.kernel.org/vger-lists.html
+[kernel-org]:     https://www.kernel.org/doc/
+[kernel-org]:     https://www.kernel.org/doc/
+[kernelnewbies]:  http://kernelnewbies.org/
+[love06]:         http://www.amazon.com/books/dp/0596005652
+[stallings11]:    http://www.amazon.com/Operating-Systems-Internals-Principles-Edition/dp/013230998X
