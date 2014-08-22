@@ -7,7 +7,7 @@ Specified by POSIX.
 Three types of people:
 
 - owner: applies the person who created the file.
-- group: the main group of he person who created the file. applies to all people who are in that group.
+- group: the main group of he person who created the file. Applies to all people who are in that group.
 - others: applies to all others who are not owner or in the group.
 
 6 types of permissions:
@@ -16,8 +16,8 @@ Three types of people:
 - write
 - execute
 - sticky bit
-- sgid
-- suid
+- SGID
+- SUID
 
 #Notations
 
@@ -25,12 +25,16 @@ Two standard notation types: symbolic and numeric.
 
 ##Numeric
 
-12 bits, logically grouped into 4 groups of three thus use of octal, since octal can represent 3 bits per digit)
+12 bits, logically grouped into 4 groups of three, thus the natural usage of octal notation, which can represent 3 bits per digit.
+
+Explained at:
+
+    man stat
 
 Meanings:
 
-- `4000`: suid
-- `2000`: sgid
+- `4000`: SUID
+- `2000`: SGID
 - `1000`: sticky bit
 - `0400`: owner read
 - `0200`:       write
@@ -41,6 +45,21 @@ Meanings:
 - `0004`: other read
 - `0002`:       write
 - `0001`:       exec
+
+In Linux, the file type is also stored in the same `struct` as it's permissions. It is therefore also possible to show the file type (regular file, directory, symlink, device, etc.) in the same number that describes the permission by adding 6  more bits:
+
+    S_IFMT     0170000   bit mask for the file type bit fields
+    S_IFSOCK   0140000   socket
+    S_IFLNK    0120000   symbolic link
+    S_IFREG    0100000   regular file
+    S_IFBLK    0060000   block device
+    S_IFDIR    0040000   directory
+    S_IFCHR    0020000   character device
+    S_IFIFO    0010000   FIFO
+
+This also suggests why the symbolic notation also incorporates this information in a single word: because all that data is in the same place.
+
+TODO: why the leading `0`?
 
 ##Symbolic
 
@@ -57,8 +76,8 @@ Meaning of each:
     - `-`: regular file
     - `d`: dir
     - `l`: symlink (not for hardlink)
-    - `p`: named pipe (fifo)
-    - `s`: unix socket
+    - `p`: named pipe (FIFO)
+    - `s`: Unix socket
     - `c`: character file
     - `d`: block device file
 
@@ -74,13 +93,13 @@ Meaning of each:
 
 -   `4`
 
-    - `x`: owner can    execute. suid off
+    - `x`: owner can    execute. SUID off
     - `s`:       can           .      on
-    - `S`:       cannot        . suid on
+    - `S`:       cannot        . SUID on
 
 -   `567`
 
-    Same as `234`, with `7` as `4` but for sgid.
+    Same as `234`, with `7` as `4` but for SGID.
 
 -   `8`, `9`
 
@@ -142,10 +161,8 @@ Works even if `r` is off.
 
 If you also have execute permissions to all of the parent dirs then you can:
 
-- cd into dir (every process has current dir informatio associated to it)
-
+- `cd` into dir (every process has current dir information associated to it)
 - access items in dir if their permissions let also you, for example modify file data.
-
 - modify item list (add rename remove) *if w bit is also on*
 
 The above can be done even if `r` is off.
@@ -176,11 +193,11 @@ They can however create files.
     rm a/a
         #removed
 
-##Sgid
+##SGID
 
-Files created under sgid dir get the same group as the parent dir.
+Files created under SGID dir get the same group as the parent dir.
 
-Dirs created under sgid also have sgid set!
+Dirs created under SGID also have SGID set!
 
     a=
     b=
@@ -189,7 +206,7 @@ Dirs created under sgid also have sgid set!
     gb=`id -gn "$b"`
     su "$a"
 
-Without sgid:
+Without SGID:
 
     mkdir not-sgid
     chmod 777 not-sgid
@@ -205,7 +222,7 @@ Without sgid:
     test -g not-sgid/d && echo g
 
 
-With sgid
+With SGID
 
     mkdir sgid
     chmod 2777 sgid
@@ -224,20 +241,20 @@ With sgid
 
 ###Application
 
-You want many users to colaborate under a single dir.
+You want many users to collaborate under a single dir.
 
 You:
 
 - create a group for collaboration
 - create the dir with sticky bit
 - add every user to the group
-- make everyone give rwx on files they create
+- make everyone give `rwx` on files they create
 
 This way, only the group can work under the dir, and they all can access each other's files
 
 #Files
 
-##suid and sgid
+##SUID and SGID
 
 Does not work properly on scripts: you *must* have an executable:
 
