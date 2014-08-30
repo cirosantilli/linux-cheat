@@ -59,7 +59,7 @@ In Linux, the file type is also stored in the same `struct` as it's permissions.
 
 This also suggests why the symbolic notation also incorporates this information in a single word: because all that data is in the same place.
 
-TODO: why the leading `0`?
+The leading `0` denotes octal notation.
 
 ##Symbolic
 

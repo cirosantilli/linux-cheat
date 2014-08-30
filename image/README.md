@@ -44,7 +44,9 @@ Algorithm: removes high frequencies of the image's 2D Fourier transform.
 
 ##SVG
 
-Vector, XML based, non compressed.
+Vector, XML based, non-compressed.
+
+Standard developed by W3C, so the format is closely linked to the web and browsers. Latest version: <http://www.w3.org/TR/SVG/>. Can be styled by separate CSS style sheets.
 
 Image is described by mathematical formulas, not bits, therefore it is potentially tiny if the image is mathematically simple and the description is perfect (to floating point precision), which allows for example for infinite zoom.
 

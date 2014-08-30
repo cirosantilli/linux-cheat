@@ -81,7 +81,7 @@ Most function definitions or declarations don't contain any comments, so you rea
 
 ##Payed sources
 
-###Books on general operating systems
+###Books on operating systems in general
 
 -   [stallings11][]
 
@@ -129,10 +129,14 @@ The kernel does the most fundamental operations such as:
 
     The kernel schedules programs one after another quite quickly and in a smart way, so that even users with a single processor can have the impression that they are running multiple applications at the same time, while in reality all they are doing is switching very quickly between applications.
 
+-   **virtualization**
+
+    The kernel can make a single system look like multiple systems, e.g. to allow code to be run in a well determined environment. The subsystem that does this is called LXC: `Linux Containers`, and is exploited in applications such as Docker.
+
 Therefore it reaches general goals such as:
 
 - increasing code portability across different hardware and architectures
-- creating useful and simple abstractions which programs can rely on (contiguous RAM memory, files, processes, user permissions, etc)
+- creating useful and simple abstractions which programs can rely on (contiguous RAM memory, files, processes, user permissions, etc.)
 
 #POSIX
 
@@ -332,7 +336,7 @@ You cannot use floating point operations on kernel code because that would incur
 
 #Rings
 
-x86 implemented concept
+x86 implemented concept.
 
 Programs can run in different rings.
 
@@ -414,11 +418,11 @@ TODO how to go back to the old kernel image by default at startup? Going again i
 
 TODO how to install the `/usr/src/linux-headers- headers`?
 
-#test
+#Test the kernel
 
 Tips on how to test with the kernel.
 
-##kernel module
+##Kernel module
 
 A kernel module can be inserted and removed while the kernel is running, so it may prevent a time costly rebooting.
 
@@ -525,9 +529,9 @@ Each process has a representation on the file system under `/proc/\d+` which all
 
 #Interruptions
 
-- user space process can be interrupted by anything, including other user space processes.
+-   user space process can be interrupted by anything, including other user space processes.
 
-- kernel space processes can be interrupted by other kernel processes or interrupts handlers, but not by user space processes.
+-   kernel space processes can be interrupted by other kernel processes or interrupts handlers, but not by user space processes.
 
     Examples of things that generate kernel space processes:
 
@@ -732,7 +736,13 @@ Never changes between processes.
 
 Note that this is *virtual* memory, so it is independent of the actual size of the memory as the hardware and the kernel can give processes the illusion that they actually have amounts of memory larger than the hardware for instance.
 
+##ASLR
+
+##Address space layout randomization
+
 ##Random offset segments
+
+<http://en.wikipedia.org/wiki/Address_space_layout_randomization#Linux>
 
 Randomly generated for each process to avoid attacks.
 
@@ -1009,11 +1019,18 @@ It is managed by schedulers, and is a central part of how the scheduler chooses 
 
 There is one run queue per processor.
 
+#LXC
+
+##cgroups
+
+##Namespaces
+
+It seems that cgroups and namespaces are parts of the LXC subsystem. TODO confirm.
+
 [bovet05]:        http://www.amazon.com/books/dp/0596005652
 [corbet05]:       http://www.amazon.com/books/dp/0596005903
 [free-electrons]: http://lxr.free-electrons.com/ident
 [kernel-mail]:    http://vger.kernel.org/vger-lists.html
-[kernel-org]:     https://www.kernel.org/doc/
 [kernel-org]:     https://www.kernel.org/doc/
 [kernelnewbies]:  http://kernelnewbies.org/
 [love06]:         http://www.amazon.com/books/dp/0596005652

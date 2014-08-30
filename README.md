@@ -46,6 +46,12 @@ Media video, games, etc.) file types, viewers, editors, capture, synthesizers:
 - [markup](markup/):                Markdown, RST. Focus on command line interface and extensions.
 - [video.md](video.md):             videos, films, subtitles.
 
+Generic data formats:
+
+- [json.md](json.md)
+- [unicode.md](unicode.md)
+- [xml/](xml/)
+
 [virtual-machine.md/](virtual-machine): Vagrant, Docker.
 
 Related subjects in other repositories:

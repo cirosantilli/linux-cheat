@@ -61,3 +61,9 @@ Important implications:
 ##ubuntu-tweak
 
 Configure Ubuntu.
+
+#HWE
+
+#Hardware Enablement
+
+http://askubuntu.com/questions/248914/what-is-hardware-enablement-hwe

@@ -329,7 +329,7 @@ Get info:
 - `-d`: desktop info
 - `-m`: window manager info
 
-###window choice
+###Window choice
 
 In order to act on a window, one must first select it. The ways to do it are:
 
@@ -801,7 +801,17 @@ GNOME and KDE rivalry started when KDE chose to use QT in 1998 which was not GPL
 
 As of Qt 4, LGPL versions of Qt exist on all platforms, but the damage has been done: the open source community is divided and maintain duplicate versions for many desktop software, thus using up resources.
 
-###applications
+###KDE command line options
+
+KDE has a great level of uniformity across its programs, and all of them get standard KDE command line options.
+
+Some useful options are:
+
+-   `--caption asdfqwer`: set the caption for the window.
+
+    E.g., if without this option you would get: `filename.pdf - Okular` on the window title, with the option it becomes `filename.pdf - asdfqwer`. This is useful to reference the application from another program like `wmctrl -a asdfqwer`.
+
+###Applications
 
 KDE offers both basic building blocks, and full applications.
 
@@ -811,7 +821,7 @@ KDESC applications release at the same time as new KDE versions. For example, Ok
 
 There are also projects which use KDE, but which are not part of the KDESC.
 
-###libs
+###Libraries
 
 A typical KDE application relies on the following shared libraries:
 
@@ -1492,7 +1502,7 @@ Icons are needed at several places to help identify the application:
 - when showing a program suggestion list
 - when switching windows
 
-The icon is identified by the `Icon` field, which corresponds to a file under `XDG_DATA_DIRS/icons`.
+The icon is identified by the `Icon` field, which corresponds to a file under `$XDG_DATA_DIRS/icons`.
 
 That directory may contain multiple versions of each icon, at various resolutions, color depths and styles, since icon themes can also change with DE settings. `hicolor/48x48` should contains lots of standard icons.
 

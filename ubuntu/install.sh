@@ -20,7 +20,6 @@
 
       sudo apt-get update
       sudo apt-get install -y aptitude
-      # Enable all sources.
       sudo aptitude update
 
     # git
@@ -69,12 +68,6 @@
     # Communication
 
       sudo aptitude install -y pidgin
-      sudo aptitude install -y skype
-      # Google Talk
-      wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-      sudo sh -c 'echo "deb http://dl.google.com/linux/talkplugin/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-      sudo aptitude update
-      sudo aptitude install -y google-talkplugin
 
     # X
 
@@ -100,7 +93,9 @@
 
   ##package management
 
-      sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe restricted multiverse" 
+      # Enable all sources: main, universe, restricted, multiverse and partner.
+      sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe restricted multiverse"
+      sudo add-apt-repository "deb http://archive.canonical.com/ubuntu $(lsb_release -sc) partner"
       sudo aptitude update
       sudo aptitude install -y apt-rdepends
       sudo aptitude install -y apt-file
@@ -613,9 +608,9 @@
 
     ##flash
 
-        sudo apt-add-repository -y "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
-        sudo aptitude update
-        sudo aptitude install -y flashplugin-installer
+        # Source: partner.
+
+          sudo aptitude install -y flashplugin-installer
 
     ##python
 
@@ -920,6 +915,8 @@
         sudo aptitude install -y libpq-dev
         sudo aptitude install -y postgresql
         sudo aptitude install -y postgresql-client
+        # GUI PG viewer / editor. Not browser based.
+        sudo aptitude install -y pgadmin3
 
       # Redis
 
@@ -1023,10 +1020,8 @@
 
   ##chat messaging voice video
 
-    # Skype. TODO failing.
+    # Skype. Source: partner.
 
-      sudo add-apt-repository -y "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
-      sudo aptitude update
       sudo aptitude install -y skype
 
     # Google talk
