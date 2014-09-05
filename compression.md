@@ -64,9 +64,13 @@ To a dir:
 
 ZIP every file in cur dir to file.zip
 
-#tar tar.gz tgz tar.bz2 tb2
+#tb2
 
-Name origin: tape archive.
+#tgz
+
+#tar
+
+Name origin: `Tape ARchive`.
 
 The tar *format* is specified by POSIX 7 together with the `pax` utility: <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/pax.html#tag_20_92>
 
@@ -82,10 +86,6 @@ It is a popular option to transform directories in to files in Nix systems, as t
 - timestamps
 
 Since tar offers no compression, it is often coupled with `gz` and `bz2`: those are files compressors.
-
-`.gz` gives similar compression ration as `.zip`
-
-`.gz2` gives more compression than `.gz` (30% for ROMs), but is much slower to make, and you can't extract individual files easily.
 
 tar end compressions are used so commonly together that shorthand extensions exist for them:
 
@@ -127,25 +127,33 @@ Extract:
     tar vxzf "$F".tgz
     tar vxjf "$F".tbz
 
+#zlib
+
 #gzip
 
 #gunzip
 
 #gz
 
-gzip files.
+Extension: `gz`.
+
+Library name: zlib, GNU.
+
+Popular wrapper: `gzip`, and `gunzip` to unzip.
 
 Vs zip:
 
 -   Completely different file types.
 
--   Both are use the DEFLATE algorithm: <https://en.wikipedia.org/wiki/DEFLATE>, and therefore have very similar compression ratios and speeds.
+-   Both use the DEFLATE algorithm: <https://en.wikipedia.org/wiki/DEFLATE>, and therefore have very similar compression ratios and speeds.
 
--   gzip seems to have very one dominant implementation: GNU, so that gzip can refer to either the utility or format used by that utility.
+-   The zlib library does not focus on directories: only single files. For this reason it is commonly used together with `tar` which only packs directories into a file. For convenience however, the command line executable can deal with `.tgz` files.
 
-    zip has many implementations: WinRAR, WinZip on closed source on Windows, Info-ZIP and libzip open source, Info-ZIP being the default one present on Ubuntu 12.04. Therefore the term zip usually onlre refers to 
+-   gzip seems to have very one dominant implementation: GNU zlib, so that gzip can refer to either the utility or format used by that utility.
 
-If a file is only gz but not tgz you cannot use tar to extract it
+    zip has many implementations: WinRAR, WinZip on closed source on Windows, Info-ZIP and libzip open source, Info-ZIP being the default one present on Ubuntu 12.04. Therefore the term zip usually only refers to the file format.
+
+If a file is only `.gz` but not `.tgz` you cannot use tar to extract it.
 
 Create `a.txt.gz` and `rm` `a.txt`:
 
@@ -154,6 +162,31 @@ Create `a.txt.gz` and `rm` `a.txt`:
 Extract `a.gz` and erase it if successful:
 
     gunzip a.gz
+
+`.gz` all files under given directory recursively individually. Remove each original:
+
+    gzip -r .
+
+##Hardlinks
+
+##Keep original
+
+Does not work if the file has any hard links, probably because that would not reduce memory usage as it breaks the hardlink. AKA: tries to be too smart and annoys us to hell!
+
+Workaround: keep the original on the operations: <http://unix.stackexchange.com/questions/46786/how-to-tell-gzip-to-keep-original-file>
+
+Workarounds: `-c` outputs to stdout:
+
+    gzip -c a > a.gz
+
+Read input from stdin:
+
+    gzip < a > a.gz
+
+And finally, `gzip` 1.6 (2013) has the `-k, --keep` option:
+
+    gzip -k a
+    gzip -kr .
 
 #RAR
 

@@ -2579,7 +2579,9 @@
 
     # Better top.
 
-    # Possible to scroll down.
+    # More options, and much easier to use: self explanatory interface.
+
+    # Possible to scroll down the process list.
 
   ##free
 
