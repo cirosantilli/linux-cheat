@@ -104,29 +104,6 @@ Useful after a `<C-S>`.
 
 Send a `SIGQUIT` to foreground process.
 
-To view the coredump which is the main difference in between this and `SIGTERM`, first do:
-
-    ulimit -c unlimited
-
-on the terminal where you will run the command to enable core dumps, since they often come disabled by default.
-
-Then:
-
-    sleep 10
-
-and finally `<C-\>`.
-
-Now a core dump file named `core` should have been generated in the current dir:
-
-    less core
-
-This generated a file of 300K for me, so we can understand why they are disabled by default.
-
-The core file is binary. To interpret it you must have compiled the program with debugging information and then use GDB on the core file and the executable as:
-
-    gcc -g -o myfile myfile.c
-    gdb myfile core
-
 ##c-d
 
 Send EOF to pipe.

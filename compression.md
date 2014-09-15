@@ -167,6 +167,10 @@ Extract `a.gz` and erase it if successful:
 
     gzip -r .
 
+##gz file format
+
+IETF standardized format: <https://www.ietf.org/rfc/rfc1952.txt>
+
 ##Hardlinks
 
 ##Keep original

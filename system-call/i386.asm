@@ -1,3 +1,10 @@
+; IA32 system call inteface.
+;
+; Conventions:
+;
+; - `%eax` holds the syscall number
+; - `%ebx`, `%ecx`, `%edx`, `%esx`, `%edi` are the params
+
 section .data
 
 ;strings
@@ -132,7 +139,7 @@ _start:
                     ;mov eax, bs5_2
                     ;call print_string
 
-                ;;close
+                ;close
 
                     ;mov eax, 6              ;sys_close
                     ;int 80h

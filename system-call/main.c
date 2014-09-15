@@ -1,14 +1,5 @@
 /*
-How to make a system call from c,
-and main cheat on system calls that can be exemplified.
-
-System calls that have very similar POSIX wrappers such as `getpid`
-shall only be mentioned but not explained in detail.
-
-System calls that have glibc interfaces very similar to bare syscalls
-shall be documented using the more convenient glibc interface.
-
-Other calls can be documented with `system`.
+How to make a system call from C.
 
 #syscall
 
@@ -18,7 +9,7 @@ Other calls can be documented with `system`.
 
     Takes the syscall number followed by a variable number of arguments:
 
-        syscall( number, arg1, arg2, ...)
+        syscall(number, arg1, arg2, ...)
 
     This function is not a bare system call only on what concerns error handling:
     the same processing that is done for the POSIX library is done in case of error,
@@ -44,28 +35,18 @@ Other calls can be documented with `system`.
 
 #__NR_XXX macros
 
-    Are defined in the linux kernel directly.
+    Are defined in the Linux kernel directly.
 
 #SYS_ macros
 
-    are defined in terms of `__NR_` for compatibility
+    Are defined in terms of `__NR_` for compatibility.
 
-    TODO: what is the difference between `asm/unistd.h __NR_X` and `sys/types SYS_NAME`? which is better in which situtaions?
+    TODO: what is the difference between `asm/unistd.h __NR_X` and `sys/types SYS_NAME`?
+    which is better in which situtaions?
 
 #_syscall macro
 
     Deprecated method to do direct system calls. Don't use it.
-
-#wrappers
-
-    instead of using system calls, consider using wrappers:
-
-    - ansi libc
-    - posix as in unistd
-
-    many of those wrappers are very thin and don't do much more than the system call itself
-
-    this is why so many wrapper functions have very similar names and interfaces to the actual calls.
 
 #TODO
 
@@ -75,11 +56,6 @@ Other calls can be documented with `system`.
         is this exactly how those are exposed? Or is there a way that does not require POSIX headers?
 */
 
-/*
-`_GNU_SOURCE` needs to enable the linux extensions.
-It *must* come before includes so that the preprocessor can see it..
-Cannot have strict ansi ( implied by `-std=c99` or `-ansi`. See: `features.h`.
-*/
 #define _GNU_SOURCE
 
 #include <assert.h>
@@ -88,115 +64,32 @@ Cannot have strict ansi ( implied by `-std=c99` or `-ansi`. See: `features.h`.
 #include <stdio.h>
 
 #include <fcntl.h>
-#include <sched.h>              /* syscall */
-#include <unistd.h>             /* syscall */
-#include <sys/time.h>
 #include <sys/resource.h>
-#include <sys/syscall.h>        /* __NR_XXX, SYS_XXX*/
-#include <sys/wait.h>           //wait, sleep
-/* #include <asm/unistd.h>      // __NR_XXX. Already included by `sys/syscall.h` */
-/* #include <sys/types.h>       // for SYS_<name> */
 
-#include <linux/reboot.h>         /* LINUX_REBOOT_XXX, */
+#include <sched.h>              // syscall
+#include <unistd.h>             // syscall
+#include <sys/time.h>
+#include <sys/syscall.h>        //  __NR_XXX, SYS_XXX
+    // #include <asm/unistd.h>      //  __NR_XXX. Already included by `sys/syscall.h`.
+    // #include <sys/types.h>       //  for SYS_<name>
 
-int main( int argc, char** argv )
-{
+#include <linux/reboot.h>       // LINUX_REBOOT_XXX
+
+int main(int argc, char** argv) {
     /*
     #syscall
 
         Example os syscall usage.
     */
     {
-        assert( syscall( __NR_getpid )  == getpid() );
-        assert( syscall( __NR_getppid ) == getppid() );
-    }
-
-    /*
-    #getpriority
-
-        Returns nice value on the range 0 .. 39, unlike the `getpriority` POSIX function
-        which returns values between -20 and 19.
-
-        This is done so as to follow the usual convention
-        that sytem calls should return negative values only in case of error.
-    */
-    {
-        long int prio = syscall( __NR_getpriority, PRIO_PROCESS, 0 );
-        printf( "getpriority = %ld\n", prio );
-        assert( getpriority( PRIO_PROCESS, 0 ) + 20 == prio );
-    }
-
-    /*
-    #reboot
-
-        Reboots or enables/disables ctrl+alt+del reboot.
-
-            man 2 reboot
-
-        No POSIX wrapper
-
-        The man is serious: power off and restart are immediate.
-        Programs are killed immediately, so any on RAM changes that should me made are not made.
-
-        Also as the man says filsystem writes are not synced by this call,
-        so there may be data loss because of cached writes which were never made.
-
-        This system call can only be done with elevated priviledges (sudo).
-
-    #magic numbers
-
-        The magic numbers are numbers chosen to a rare value (not 0, 1 or -1 for example!).
-
-        Their purpose is so that developpers won't accidentally reboot the system when testing system calls in assembler
-        if they get a single number wrong.
-
-        Their actual values are the dates of Linus and his three daughters birthdays when vied in hexa:
-        <http://stackoverflow.com/questions/4808748/magic-numbers-of-the-linux-reboot-system-call>
-
-        TODO0 how to shut the system down nicely, asking processes to terminate?
-            Is it necessary to loop over pids via proc filesystem and send terminate signals explicitly?
-
-        TODO0 restart2 message is printed where?
-
-        TODO0 what is halt?
-
-        TODO0 why CAD on did nothing (c-a-del still does nothing)? how do i get my cad key?
-
-    #sync
-
-        Same as POSIX wrapper.
-
-    #fsync
-
-        Same as POSIX wrapper.
-    */
-    if ( 0 )
-    {
-        if ( syscall( __NR_sync ) != 0 ) {
-            perror( "sync" );
-        }
-
-        if (
-            syscall(
-                __NR_reboot,
-                LINUX_REBOOT_MAGIC1,
-                LINUX_REBOOT_MAGIC2,
-                LINUX_REBOOT_CMD_POWER_OFF,     NULL
-                //LINUX_REBOOT_CMD_RESTART,     NULL
-                //LINUX_REBOOT_CMD_RESTART2,    "BYE BYE"
-                //LINUX_REBOOT_CMD_HALT,        NULL
-                //LINUX_REBOOT_CMD_CAD_OFF,     NULL
-                //LINUX_REBOOT_CMD_CAD_ON,      NULL
-            )
-            != 0
-        ) {
-            perror( "reboot" );
-        }
-
+        assert(syscall(__NR_getpid)  == getpid());
+        assert(syscall(__NR_getppid) == getppid());
     }
 
     /*
     #brk
+
+        TODO: convert and move to glibc cheat as it has wrappers.
 
         Sources:
 
@@ -231,108 +124,98 @@ int main( int argc, char** argv )
         More convenient than `brk`.
     */
     {
-        //TODO0 confirm all of this. Hard to find docs!
+        // TODO confirm all of this. Hard to find docs!
 
         unsigned long p, old_p;
         char *cp;
 
-        //allocation is sure to fail and return current address
-        //TODO0 is this correct? is there another way to get the end of the data?
-        p = syscall( __NR_brk, NULL );
-        printf( "brk = %lu\n", p );
+        // Allocation is sure to fail and return current address
+        // TODO is this correct? is there another way to get the end of the data?
+        p = syscall(__NR_brk, NULL);
+        printf("brk = %lu\n", p);
 
         old_p = p;
 
-        //allocate memory
-        p = syscall( __NR_brk, p + 1 );
+        // Allocate memory.
+        p = syscall(__NR_brk, p + 1);
 
-        //system call did not work
-        if ( p < old_p ) {
-            assert( false );
+        // System call did not work.
+        if (p < old_p) {
+            assert(false);
         }
 
-        //check that the alloation works
-        p = syscall( __NR_brk, NULL );
-        assert( p == old_p + 1 );
+        // Check that the alloation works.
+        p = syscall(__NR_brk, NULL);
+        assert(p == old_p + 1);
 
-        //use newly allocated memory
+        // Use newly allocated memory
         cp = (char*)p;
         *cp = 1;
 
-        //deallocate
-        p = syscall( __NR_brk, old_p );
-        if ( p > old_p ) {
-            assert( false );
+        // Deallocate
+        p = syscall(__NR_brk, old_p);
+        if (p > old_p) {
+            assert(false);
         }
     }
 
     /*
-    #mmap
+    #reboot
+
+        TODO: convert and move to glibc cheat as it has wrappers.
+
+        Reboots or enables/disables ctrl+alt+del reboot.
+
+            man 2 reboot
+
+        No POSIX wrapper available.
+
+        The man is serious: power off and restart are immediate.
+        Programs are killed immediately, so any on RAM changes that should me made are not made.
+
+        Also as the man says filsystem writes are not synced by this call,
+        so there may be data loss because of cached writes which were never made.
+
+        This system call can only be done with elevated priviledges (sudo).
+
+    #magic numbers
+
+        The magic numbers are numbers chosen to a rare value (not 0, 1 or -1 for example!).
+
+        Their purpose is so that developpers won't accidentally reboot the system when testing system calls in assembler
+        if they get a single number wrong.
+
+        Their actual values are the dates of Linus and his three daughters birthdays when vied in hexa:
+        <http://stackoverflow.com/questions/4808748/magic-numbers-of-the-linux-reboot-system-call>
+
+        TODO how to shut the system down nicely, asking processes to terminate?
+            Is it necessary to loop over pids via proc filesystem and send terminate signals explicitly?
+
+        TODO restart2 message is printed where?
+
+        TODO what is halt?
+
+        TODO why CAD on did nothing (c-a-del still does nothing)? how do i get my cad key?
     */
-    {
-    }
-
-    /*
-    #stime
-
-        Set time retreived by time system call.
-    */
-
-    /*
-    #acct
-
-        Write acconting information on process that start and end to given file.
-
-        Given file must exist.
-
-        Must be sudo to do it.
-
-        Description of output under:
-
-            man 5 acct
-    */
-    {
-        char *fname = "acct.tmp";
-
-        if ( creat( fname, S_IRWXU ) == -1 )
-        {
-            //may fail because the file was owned by root
-            perror( "creat" );
+    if (0) {
+        if (syscall(__NR_sync) != 0) {
+            perror("sync");
         }
 
-        if ( acct( fname ) == -1 )
-        {
-            perror( "acct" );
-            //may happen if we are not root
+        if (
+            syscall(
+                __NR_reboot,
+                LINUX_REBOOT_MAGIC1,
+                LINUX_REBOOT_MAGIC2,
+                LINUX_REBOOT_CMD_POWER_OFF,     NULL
+                //LINUX_REBOOT_CMD_RESTART,     NULL
+                //LINUX_REBOOT_CMD_RESTART2,    "BYE BYE"
+                //LINUX_REBOOT_CMD_HALT,        NULL
+                //LINUX_REBOOT_CMD_CAD_OFF,     NULL
+                //LINUX_REBOOT_CMD_CAD_ON,      NULL
+            ) != 0
+        ) {
+            perror("reboot");
         }
-    }
-
-    /*
-    #uselib
-
-        Load dynamic library.
-
-        So there is (unsurprisingly) a syscall for this.
-    */
-    {
-    }
-
-    /*
-    #swapon
-
-        Manage in shich devices swap memory can exist.
-
-    #swapoff
-    */
-    {
-    }
-
-    /*
-    #exit
-
-        Same as ASCII exit().
-    */
-    {
-        syscall( __NR_exit, EXIT_SUCCESS );
     }
 }

@@ -17,11 +17,11 @@ OUTS		:= $(addprefix $(OUT_DIR), $(OUTS_NODIR))
 
 all: mkdir $(OUTS)
 
-# rule to make c files
+# Rule to make C files.
 $(OUT_DIR)%$(OUT_EXT): %.c
 	gcc -Wall -std=c99 -pedantic-errors -o "$@" "$<"
 
-# rule to make asm files
+# Rule to make asm files.
 $(OUT_DIR)%$(OUT_EXT): %.asm
 	$(eval OBJ := "$(OUT_DIR)$*".o)
 	nasm -w+all -f elf -o "$(OBJ)" "$<"

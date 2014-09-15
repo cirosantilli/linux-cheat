@@ -1,27 +1,32 @@
 POSIX 7, with many GNU extensions.
 
-Reads source files and generates a list of objects that can be later searched.
+Reads source files and generates a list of objects
+that can be later searched.
 
-Objects are things like C symbols: variable names, function names, structure names, macros.
+Objects are things like C symbols: variable names,
+function names, structure names, macros.
 
-Therefore the output os this program is useful if you want to find where something is defined in a large source code,
-such as the Linux kernel for example.
+Therefore the output of this program is useful if you want to find
+where something is defined in a large source code, such as the Linux kernel for example.
 
 The output is both human and computer readable, therefore to use it you can either:
 
-- look at the file yourself and search.
+-   look at the file yourself and search.
 
     Useful when there are many possible definition places,
-    and you might be able to guess the correct one by looking at the extra fields of the file.
+    and you might be able to guess the correct one by looking
+    at the extra fields of the file.
 
-- use an editor such as VIM which has built-in functionalinties that allows you to
-    move cursor on top of the symbol, click something (`<C-]>`), and magically jump to the definition
+-   use an editor such as VIM which has built-in functionalities
+    that allows you to move cursor on top of the symbol, click something (`<C-]>`),
+    and magically jump to the definition
 
-    There could however be many candidate objects with the same nameso you might have to loop a large list of tags.
+    There could however be many candidate objects with the same name
+    so you might have to loop a large list of tags.
 
     If that is the case, it might be easier to read the `tags` file directly.
 
-#basic usage
+#Basic usage
 
 Put output on a file named `tags` on current dir:
 
@@ -35,18 +40,19 @@ Recurse (GNU extension):
 
     ctags -R
 
-Makes a single ctags in current directory recursing into all child dirs.
+Makes a single `tags` in current directory recursing into all child directories.
 
-#supported languages
+#Supported languages
 
 POSIX requires only a that small set of C and FORTRAN symbols be processed.
-GNU extends it considerably, and adds support for many languages. The language list on the GNU implementation can be found with:
+GNU extends it considerably, and adds support for many languages.
+The language list on the GNU implementation can be found with:
 
     ctags --list-languages
 
 For me, this includes languages such as `C++`, `python`, `java` and many more.
 
-#objects of each language
+#Objects of each language
 
 To view what kinds of objects can be processed, which are processed by default,
 and the one letter codes for each object type use:
@@ -82,7 +88,7 @@ These can be specified with:
 
 Example for the C language:
 
-Only `c` and `d` ojects:
+Only `c` and `d` objects:
 
     ctags -R --c-kinds=cd
 
@@ -99,7 +105,7 @@ named `x` besides the definition which you want.
 
 This happens often on the Linux kernel code for example.
 
-#header extensions
+#Header extensions
 
 Extensions interpreted as headers when doing `-R` for example:
 
@@ -107,17 +113,17 @@ Extensions interpreted as headers when doing `-R` for example:
 
 Can be modified with `-h`.
 
-#tag file format
+#Tag file format
 
     "%s\t%s\t/%s/\t%s\n", <identifier>, <filename>, <pattern>, <extension-field>
 
-- identifier: the id of the object
+-   identifier: the id of the object
 
-- filename: file in which it is located
+-   filename: file in which it is located
 
-- pattern:
+-   pattern:
 
-    ex command to find that line in the file.
+    Command to find that line in the file.
 
     May be either a regex (`-N`, default) or a line number (`-n`).
 
@@ -126,7 +132,7 @@ Can be modified with `-h`.
 
     Advantage of line numbers: file is smaller.
 
-- extension-field
+-   extension-field
 
     GNU extension.
 
@@ -134,7 +140,13 @@ Can be modified with `-h`.
 
     Can be controlled by the `--fields` option.
 
-#alternatives
+#Alternatives
 
-- exuberant-ctags
-- cscope
+- Cscope
+
+##exuberant-ctags
+
+Supports 55 languages
+
+    exuberant-ctags a.c
+    less tags

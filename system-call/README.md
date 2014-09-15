@@ -1,6 +1,11 @@
 This discusses system calls from an userland point of view. Kernel internals of system calls are not discussed here.
 
-Tell your OS to do things which user space program can't do directly such as:
+System calls that have very similar ANSI C, POSIX or glibc wrappers will get detailed explanations in those cheatsheets: this will only mention their existence, and comment on extensions not present in those wrappers. It is of course not a coincidence that those interfaces and the system calls are so similar, since:
+
+- many system calls were designed to implement POSIX interfaces
+- almost all architecture portable system calls have a glibc wrapper
+
+System calls tell your OS to do things which user space program can't do directly such as:
 
 - write to stdout, stderr, files
 - exit a program
@@ -9,47 +14,82 @@ Tell your OS to do things which user space program can't do directly such as:
 - access devices
 - process / threading threading management
 
-All of those operations are ultra OS dependent, so when possible one should use portable wrappers libraries like ANSI libc or the POSIX headers
+All of those operations are ultra OS dependent, so when possible one should use portable wrappers libraries like ANSI C, the POSIX headers.
 
-It is highly recommended that you also understand how to make system calls directly from assembler to really understand them since they have a primary assembly interface.
+It is highly recommended that you also understand how to make system calls:
 
-It is also possible to call them from C code via certain macros.
+- directly from assembler to really understand them since they have a primary assembly interface. See [i386.asm](i386.asm) for some examples.
+- glibc non-ANSI `syscall` macro. See [main.c](main.c).
 
-System call interfaces have to be very stable
+System call interfaces are kept very stable since client code can rely directly on it. For this reason, some calls have multiple versions such as `dup`, `dup2` and `dup3`. This is unlike other kernel functions that can be used by device drivers, which are considered much more acceptable to break to make improvements.
 
-#sources
-
-- <http://syscalls.kernelgrok.com/>
-
-    full linux syscal list
-
-    links to the c manpages
-
-    register args mnemonic
-
-    links to online source code
-
-- <http://www.lxhp.in-berlin.de/lhpsysc0.html>
-
-    contains actual binary values of constants so you can make he calls from assembler
-
-#Linux
-
-System calls available on one architechture may differ from those available on another architechture.
+System calls available on one architecture may differ from those available on another architecture.
 
 Most of the more commonly used ones are available on all architectures.
 
-There are a bit more than 350 system calls available on all architecture, although individual architectures can have many more. For example `alpha` has 505 syscalls as of 3.10-rc5.
+There are a bit more than 350 system calls available on all architecture, although individual architectures can have many more. For example `alpha` has 505 syscalls as of `3.10-rc5`.
 
 Each system call gets a number in order of addition to the kernel: this is called *syscall number*
-
 This number can never be changed, but system calls may be declared deprecated.
 
-To make any of the system calls, one must use the instruction `int $0x80`
+TODO where to get the list of system calls on the source code tree.
+The system calls are implemented on their corresponding section, e.g., filesystem related system calls go under `fs/`.
 
-`%eax` holds the syscall number
+#Sources
 
-`%ebx`, `%ecx`, `%edx`, `%esx`, `%edi` are the params
+This describes methods on how to get information on system calls without reading through the actual source code.
+
+Note however that all of those methods have certain limits, and there might be no actual alternative to getting your hands dirty and reading the source.
+
+TODO how to get a list of syscalls available on all architectures without grepping/processing kernel code?
+
+TODO where are the descriptions of what a system call does in official docs (in the kernel tree for ideally?) Or bad / no docs as for the rest of the API?
+
+##kernel.org
+
+Official Linux kernel related domain.
+
+Documentation at: <https://www.kernel.org/doc/>
+
+###man pages
+
+Hosted under `kernel.org`, so does have some official endorsement: <https://www.kernel.org/doc/man-pages/>
+
+The man pages project documents portable glibc C interfaces to system calls, which are very to the actual system calls.
+
+The entire section 2 of `man` is about system calls. For general info see:
+
+- `man 2 syscalls`: list of system calls available on *most* architectures
+- `man 2 syscall`: a function that allows to make direct system calls in C
+
+To get info on specific system calls do:
+
+    man 2 write
+    man 2 reboot
+
+##POSIX
+
+Linux is highly POSIX compatible, which means that many of its system calls exist to implement POSIX C library functions.
+
+Often those functions have very similar names and arguments, and the POSIX descriptions are really good, which makes this a good way to learn what syscalls do.
+
+POSIX is portable so in learning it you also learn an interface which works on many other systems.
+
+POSIX functions are more basic than those which are not in POSIX but on the Linux API, so it is a good idea to start with them.
+
+##Third-party compilations
+
+The following sources don't seem to be explicitly endorsed by the Linux community, but are good nonetheless.
+
+-   <http://syscalls.kernelgrok.com>
+
+    Links to the C manpages and source code.
+
+    Register arguments mnemonics.
+
+-   <http://www.lxhp.in-berlin.de/lhpsysc0.html>
+
+    Contains actual binary values of constants so you can make he calls from assembler.
 
 #Return value
 
@@ -65,21 +105,21 @@ In case of failure the program does not crash and no messages are printed: it is
 
 By convention:
 
-- most system calls return 0 on success, -1 on failure.
+-   most system calls return 0 on success, -1 on failure.
 
     In those cases, the main goal is not getting the actual return of the system call, but doing some side effect with it.
 
-- some system calls can return positive integers in case of success, and -1 means failure.
+-   some system calls can return positive integers in case of success, and -1 means failure.
 
     For example `write` returns the number of bytes written if successful.
 
     Since this can never be negative, `-1` is used for errors.
 
-- some system calls are always successful.
+-   some system calls are always successful.
 
     This is the case for `getpid`, since all processes must have a PID, and any process has the privilege to view its own PID.
 
-- `getpriority` is a special case, since for historical reasons the nice or a process is represented between -20 and 19.
+-   `getpriority` is a special case, since for historical reasons the nice or a process is represented between -20 and 19.
 
     The solution is that the system call is simply shifted from 0 to 39.
 
@@ -87,7 +127,7 @@ By convention:
 
     Wrapper libraries such as POSIX may then convert this to the nice value between -20 and 19.
 
-- a few system alls can return truly any positive or negative integers.
+-   a few system alls can return truly any positive or negative integers.
 
     This is the case for `ptrace`.
 
@@ -102,85 +142,22 @@ By convention:
         }
         return res;
 
-    so that a user program has to do:
+    So that a user program has to do:
 
-            errno = 0;
-            res = ptrace(PTRACE_PEEKDATA, pid, addr, NULL);
-            if (res == -1 && errno != 0)
-                    /* error */
+        errno = 0;
+        res = ptrace(PTRACE_PEEKDATA, pid, addr, NULL);
+        if (res == -1 && errno != 0)
+                /* error */
 
 ##errno
 
-errno is an ANSI C and POSIX library level concept that does not exist on the system call level,
+`errno` is an ANSI C and POSIX library level concept that does not exist on the system call level,
 
 It attempts to expose a simpler interface to user programs, always returning `-1` on errors and using `errno` to identify the error.
 
 System calls return only a single register value, and it is up to the syscall wrappers to transform that value into a proper return value and set `errno`.
 
-Beware that the `syscall` macro, while very low level syscall wrapper, still does return value and errno setting manipulations just in a similar way to the POSIX error handling.
-
-#Get info on Linux system calls
-
-This describes methods on how to get information on system calls without reading through the actual source code.
-
-Note however that all of those methods have certain limits, and there might be no actual alternative to getting your hands dirty and reading the source.
-
-Details on how to search the kernel source code for information on system calls shall not be described here but inside a kernel internals cheat, since such a discussion overlaps too much with how system calls work internally.
-
-TODO where are the descriptions of what a system call does in official docs (in the kernel tree for ideally?) Bad / missing docs as for the rest of the API? Is man-pages official?
-
-TODO how to get a list of syscalls available on all architectures without grepping/processing kernel code?
-
-##POSIX
-
-Linux is highly POSIX compatible, which means that many of its system calls exist to implement POSIX C library functions.
-
-Often those functions have very similar names and arguments, and the POSIX descriptions are really good, which makes this a good way to learn what syscalls do.
-
-POSIX is portable so in learning it you also learn an interface which works on many other systems.
-
-POSIX functions are more basic than those which are not in POSIX but on the Linux API, so it is a good idea to start with them.
-
-##man pages
-
-TODO is the `man-pages` project official?
-
-The man pages project documents portable glibc C interfaces to system calls.
-
-This includes many POSIX C library functions, plus Linux extensions which glibc makes available via feature test macros such as `_BSD_SOURCE` which must be defined before the headers are included.
-
-For example, to enable the BSD extensions, one would need to do:
-
-    #define _BSD_SOURCE
-    #include <unistd.h>
-
-but the contrary would not work:
-
-    #include <unistd.h>
-    #define _BSD_SOURCE
-
-Remember that all extensions can be enabled at once via:
-
-    _GNU_SOURCE
-
-and that all feature test macros are defined under:
-
-    man feature_test_macros
-
-While not bare system calls, most of those wrappers have the same names and interfaces as the actual system calls, and do very little processing of their own.
-
-Also almost all portable system calls have a glibc wrapper.
-
-The entire section 2 of `man` is about system calls. You should check:
-
-- `man 2 syscalls`: list of system calls available on *most* architectures
-
-- `man 2 syscall`: a function that allows to make direct system calls in c
-
-To get info on specific system calls do:
-
-    man 2 write
-    man 2 reboot
+Beware that the `syscall` macro, while very low level syscall wrapper, still does return value and `errno` setting manipulations just in a similar way to the POSIX error handling.
 
 #strace
 
@@ -197,185 +174,130 @@ Includes calls that load program.
     gcc a.c
     strace ./a.out
 
-#Examples syscalls
+#Sample syscalls
 
-This section shows system calls and what they do
+This section shows sample system calls and what they do.
 
-Required concepts needed to understand the sytem calls are also discussed here
+Concepts needed to understand the system calls are briefly mentioned. Most concepts map to `struct`s, and to know what is going on you need to understand what fields the `struct` contains, i.e., what data is present in the concept model. E.g., the process `struct` has an associated `PID`, current directory, nice value, etc.
 
-##File descriptors
+If the call has an analogue glibc wrapper, it will only be listed but not explained.
 
-File descriptors contain know the position you are in the stream
+##File and directories
 
-File descriptors allow you to get/give data from anything outside ram:
+The concept of file descriptor exists much like in POSIX. They contain information such as position in the stream, and are represented by a `struct`
 
-- files
-- devices (such as you mouse, keyboard, etc)
-
-Related system calls are:
+File descriptors:
 
 - `open`
 - `close`
 - `write`
 - `read`
-
-- get data to ram
-- return no of bytes read if no error
-- return error code if error
-- increase position of fd
-
-###lseek
-
-Reposition read/write
-
-Cannot be done on pipes or sockets
-
+- `lseek`
 - `dup`
 - `dup2`
 - `dup3`
 - `fcntl`
 
-##Files and dirs
+Files:
 
-- `getcwd`: processes have working info associated
-- `chdir`
-- `fchdirusing` a file descriptor instead of string
-- `chrootuse` new root (default `/` ) for paths starting with `/`
-- `creatcreate` file or device. TODO: what is a device
-- `mknodcreate` a directory or special or ordinary file
-- `linkcreate` new name for file
-- unlinkdelete hardlink to file. If it is the last, deletes the file from system.
+- `creat`
+- `creatcreate`: file or device
+- `mknodcreate`: a directory or special or ordinary file
+- `linkcreate`: new name for file
+- `unlinkdelete`: hardlink to file. If it is the last, deletes the file from system
 - `mkdir`
 - `rmdir`
 - `rename`
-- `accesscheck` real user's permissions for a file
-- `chmod`
 
+Permissions:
+
+- `chmod`
 - `chown`
-- `fhownby` file descriptor
-- `lchownno` sym links
+- `accesscheck`: real user's permissions for a file
+
+Other:
+
+- `fhownby`: file descriptor
+- `lchownno`: symlinks
+- `stat`
+
+Filesystems:
+
+- `mount`
+- `umount`
+
+##time
+
+- `nanosleep`
+- `stimeset`
+- `time`
+- `timesprocess`
+
+##Threads and processes
+
+- `capget`
+- `capset`
+- `chdir`
+- `chrootuse`. Used to implement POSIX `chroot`.
+- `clone`
+- `execve`
+- `exit`
+- `fchdirusing`: a file descriptor instead of string
+- `fork`
+- `get_thread_area`
+- `getcwd`: POSIX
+- `ptrace`
+- `kill`
+- `set_thread_area`
+- `set_thread_area`
+- `sethostnameprocess`
+- `utimechange`: access and modification time of files
+- `wait4`
+- `waitid`
+- `waitpid`
+
+Priority related calls:
+
+- `nice`
+- `getpriority`
+- `setpriority`
+
+IDs:
+
+- `getuid`
+- `setuid`
+- `geteuid`
+- `seteuid`
+- `setresuid`
+- `getresuid`
+- `getppidprocess`: `man getppid`
+
+Data segment size:
+
+- `brk`
 
 #TODO
 
 The following needs some formatting.
 
-##sethostnameprocess have associated hostname info
+##IPC
 
-##time
+Signals:
 
-###timesince January 1, 1970
-###stimeset system time
-###timesprocess and waitee for time
-###nanosleep
-###utimechange access and modification time of files
+- `signal`
+- `sigaction`
+- `futex`: used in POSIX pthread mutexes
 
-##threads
+####Semaphores
 
-###capget
-###capset
-###set_thread_area
-###get_thread_area
-###clone
-
-creates thread: a process that can share open file descriptors and
-memory
-
-##process
-
-###exit
-###fork
-
-creates process that is exact copy of current
-
-open file descriptors TODO
-
-###execve
-
-run process. does not return on sucess: old program ends
-
-common combo: fork before, then execve
-
-###kill
-###waitpid
-###wait4
-###waitid
-###set_thread_area
-###priority
-
-process have a priority number from -20 to 19
-
-lower number means higher priority
-
-####nice
-####getpriority
-####setpriority
-
-###ptraceTODO ?
-
-###ids
-
-every process has the following associated information:
-
-####real and effective useriddefaults to user who executed process
-####real and effective groupiddefaults to main group of user who executed process
-####supplementary group ids
-####parent id and parent groupdefaults to TODO effective or real of parent?
-
-it is possible to change those values at runtime
-
-####getuid, setuid, geteuid, seteuid, setresuid, getresuid
-
-get set
-
-nothing = real
-
-e = effective
-
-res = real, effective and save all at once
-
-####getgroups setgroups
-
-set suplementary group ids
-
-####parent process
-
-every process has information about its parent's id
-
-#####getppidprocess parent id
-#####getpgidprocess group id
-
-##data segment size
-
-###brkset
-###sbrkincrement. called if heap is not large enough on `malloc`
-
-##mount
-##umount
-
-##ipc
-
-###signals
-
-####signal
-####sigactionhandler gets more info than with signal
-####sys_pausewait for signal
-####alarmsend alarm signal in n secs
-
-###futex
-
-basis for semaphores and posix pthread mutexes
-
-####semaphores
-
-shared integer resources that can be possessed and freed
+Shared integer resources that can be possessed and freed
 indicating that other process may proceed
 
-can be named or unnamed
+Can be named or unnamed
 
-in general each semaphore can have multiple values
-(in real life they have 3!)
+In general each semaphore can have multiple values. In real life they have 3!
 
-binary semaphore = a mutex
+Binary semaphore = a mutex.
 
 #####semget
 #####semop
@@ -387,11 +309,11 @@ binary semaphore = a mutex
 
 ###flockadvisory
 
-file lock
+File lock.
 
 ###sockets
 
-main difference: can connect different computers!
+Main difference: can connect different computers!
 
 ####accept
 ####bind
@@ -412,12 +334,8 @@ TODO
 
 ###cacheflush
 
-flush instruction or data cache contents
+Flush instruction or data cache contents.
 
 ###getpagesize
 
-get memory page size
-
-#TODO
-
-TODO what is `include/linux/syscalls.h`? cross arch calls?
+Get memory page size.

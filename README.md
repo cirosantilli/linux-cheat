@@ -9,6 +9,11 @@ Important files:
 - [ubuntu/install.sh](ubuntu/install.sh): Ubuntu install methods many programs.
 - [utils.sh](utils.sh):                   dump of many utils that fit in no other category or are not large enough to get their own file. Many POSIX utilities.
 
+Documentation viewers:
+
+- [man.sh](man.sh)
+- [info.sh](info.sh)
+
 Base standards:
 
 - [linux.md](linux.md): Linux, LSB.
@@ -27,7 +32,6 @@ Initialization:
 
 Base topics:
 
-- [compile/](compile/):                       compilation process, dynamic libraries.
 - [desktop/](desktop/):                       X, XDG, GNOME, KDE and related utilities.
 - [filesystem.md](filesystem.md):             POSIX file permissions.
 - [file-permissions.md](file-permissions.md): filesystem, hard disks, mounting, partitions.
@@ -54,9 +58,15 @@ Generic data formats:
 
 [virtual-machine.md/](virtual-machine): Vagrant, Docker.
 
+Programming tools:
+
+- [compile/](compile/): compilation process, dynamic libraries.
+- [ack.sh](ack.sh)
+
 Related subjects in other repositories:
 
 - [networking](https://github.com/cirosantilli/net): networking tools and protocols: HTTP, SSH, curl Apache.
+
 
 #How to search for stuff
 

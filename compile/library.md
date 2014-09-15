@@ -1,6 +1,6 @@
 To use a library you may need:
 
--   the compiled `.so` or `.a` 
+-   the compiled `.so` or `.a`
 
 -   for C and C++, the header `.h` file(s).
 
@@ -18,7 +18,7 @@ They have `.so` extension on Linux and `.dll` on windows
 
 Dynamic libraries are different from static libraries (`.o` and `.a`) static libraries are put inside the executable at compile time.
 
-Advantages and disadvantages of dynamic libraries over static libraries are the usual tradeoffs of share vs embbed design choices.
+Advantages and disadvantages of dynamic libraries over static libraries are the usual trade-offs of share vs embed design choices.
 
 Advantages:
 
@@ -46,7 +46,7 @@ Since the disadvantages are so minor, it is almost always better to use dynamic 
 
 #Search path
 
-Find where gcc search path for both `.a` and `.so`:
+Find where GCC search path for both `.a` and `.so`:
 
     gcc -print-search-dirs | grep '^libraries' | tr ':' $'\n'
 
@@ -93,9 +93,9 @@ Standard: up to 3 numbers.
 
 Yes, they come after the `.so` otherwise there would be ambiguity: `liba.1.so` is version 1 of `liba` or simply `lib.a.1`?
 
-To link to a given version use full basename linking with verison number.
+To link to a given version use full basename linking with version number.
 
-linking takes care of version defaults:
+Linking takes care of version defaults:
 
 -   `liba.so.1.1.1`
 
@@ -157,7 +157,7 @@ How this information is represented is a part of the `.elf` format definition.
 
 ###What can be passed to -l
 
-The name given to -l must be either:
+The name given to `-l` must be either:
 
 -   stripped from `lib` and `.so` part
 
@@ -165,7 +165,7 @@ The name given to -l must be either:
 
 -   colon + `:`full basename. Ex: `-l:libm.so.1`
 
-You need to compile like this so gcc can tell if all your functions are definied.
+You need to compile like this so GCC can tell if all your functions are defined.
 
 ###Relative vs absolute
 
@@ -243,7 +243,8 @@ View library load path:
 
     cat /etc/ld.so.conf
 
-Remember: after modifying this file, you must update the load file [cache][] or your changes will not be taken into effect.
+Remember: after modifying this file, you must update the load file cache
+or your changes will not be taken into effect.
 
 May also include other files by adding a line to that file:
 
@@ -251,7 +252,7 @@ May also include other files by adding a line to that file:
 
 This is done by default on Ubuntu.
 
-To take includes into consideration and print the actual search path, use ldconfig.
+To take includes into consideration and print the actual search path, use `ldconfig`.
 
 So you also need to look inside included files for the libraries:
 
@@ -338,7 +339,7 @@ Don't rely on this method for production.
 
 Program that loads shared libs for other programs.
 
-central part of the Linux system.
+Central part of the Linux system.
 
 This program links to no shared libs!
 
