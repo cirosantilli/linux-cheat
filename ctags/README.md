@@ -150,3 +150,5 @@ Supports 55 languages
 
     exuberant-ctags a.c
     less tags
+
+Seems to be the main Ubuntu package that offers a `ctags` utility.

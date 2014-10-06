@@ -1,10 +1,8 @@
-Cheat on POSIX.
-
 For a cheat on the POSIX C API see: <https://github.com/cirosantilli/cpp/tree/99ad8ab9aee7bf2d8c47c9e25f4631eddb556ccf/posix>
 
 POSIX command line utilities shall not be discussed here because it is better to group utilities together with other non-POSIX utilities which have similar functions, for example discussing both `kill` (POSIX) and `killall` (non-POSIX) side by side.
 
-POSIX is means: Portable Operating System Interface for uniX.
+POSIX means: `Portable Operating System Interface for uniX`.
 
 POSIX is also known as: Single Unix specification (SUS)
 
@@ -24,7 +22,7 @@ Currently, GNU/Linux and mac systems are largely POSIX compliant but not certifi
 
 The specification if free to view.
 
-Has several versions. The last at the time of writting was made in 2008
+Has several versions.
 
 POSIX issue 7: IEEE formal name: `IEEE Std 1003.1-2008` highly recommended link: <http://pubs.opengroup.org/onlinepubs/9699919799/>
 
@@ -62,7 +60,7 @@ Examples:
 - `ls`
 - `cat`
 - `mkdir`
-- `c99` and `fortr77`: compiler interfaces for C99 and Fortran77!
+- `c99` and `fortr77`: compiler interfaces for C99 and Fortran 77!
 
 and tons of others which most people never heard of
 
@@ -110,8 +108,21 @@ The following variables have fixed purposes in POSIX 7:
 - `PWD`
 - `TMPDIR`
 - `COLUMNS` and `LINES`: current width of terminal
-- `SHELL`: this is *not* the current shell! It contains the path of the default shell.
-- `TERM`: analogous to shell
+- `SHELL`:               this is *not* the current shell! It contains the path of the default shell.
+- `TERM`:                analogous to shell
+
+The following variables determine the locale applications should use:
+
+- `LC_CTYPE`:    Character classification and case conversion.
+- `LC_COLLATE`:  Collation order.
+- `LC_MONETARY`: Monetary formatting.
+- `LC_NUMERIC`:  Numeric, non-monetary formatting.
+- `LC_TIME`:     Date and time formats.
+- `LC_MESSAGES`: Formats of informative and diagnostic messages and interactive responses.
+
+They are defined at: <http://pubs.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap07.html>
+POSIX also offers interfaces to modify those variables. The exact location where they are implemented
+is not specified. E.g., on Ubuntu 14.04, they are stored under `/etc/default/locale`.
 
 The following variables don't have fixed purposes, but POSIX says that they must be used with caution:
 
@@ -203,7 +214,9 @@ A few of the most interesting suggests for argument and utility name syntax:
     Good discussion about command line interface conventions: <http://stackoverflow.com/questions/10818443/short-long-options-with-option-argument-is-this-some-sort-of-convention>
 
 -   `--` marks the last of the options
+
 -   `-` means stdin/stdout when the utility expects a filename as argument
+
 -   `-W` is reserved for vendor options
 
 ##Exit status

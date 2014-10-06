@@ -1,9 +1,20 @@
-Ubuntu specific info.
-
 Most useful files:
 
 - [install.sh](install.sh): installation procedures for tons of programs.
-- [apt-get.md](apt-get.md): information on Ubuntu's package system.
+- [apt-get.md](apt-get.md): information on Ubuntu's packages and related tools.
+
+#Sources
+
+-   <http://www.ubuntu.com/>: central official resource that links to all
+
+-   <http://askubuntu.com/>
+
+    Stack Exchange for Ubuntu. Sometimes you get fast answers, sometimes not.
+
+-   <https://bugs.launchpad.net/ubuntu/>: official bug tracker.
+
+    Includes bugs on the officially supported packages, e.g.: restricted:
+    <https://bugs.launchpad.net/ubuntu/+source/nvidia-graphics-drivers-304>
 
 #Introduction
 
@@ -33,37 +44,73 @@ Ubuntu is maintained by the company Canonical, while Debian is managed by the co
 
 Important implications:
 
-- many key package manager programs are the same:
+-   many key package manager programs are the same:
 
 	- `dpkg` for packages
 	- `upstart` for init
 
-- special directories conventions are the same:
+-   special directories conventions are the same:
 
 	- `/media` for mounting
-
-#Get current Ubuntu version
-
-	lsb_release -a | grep Release
-
-#Upgrade Ubuntu to newer version
-
-	sudo aptitude install -y update-manager-core
-	sudo do-release-upgrade
-	sudo aptitude update && sudo aptitude upgrade
 
 #Open app without global menu
 
 	env UBUNTU_MENUPROXY=0 golly
 
+#Configurations
+
 #Utilities
+
+##Get current Ubuntu version
+
+	lsb_release -a | grep Release
+
+##Upgrade Ubuntu to newer version
+
+	sudo aptitude install -y update-manager-core
+	sudo do-release-upgrade
+	sudo aptitude update && sudo aptitude upgrade
+
 
 ##ubuntu-tweak
 
-Configure Ubuntu.
+Configure Ubuntu GUI.
+
+##ubuntu-drivers
+
+Present in 14.04. `jockey` was used in 12.04.
+
+Command line interface for the "Additional drivers" dialog.
+
+List possible drivers for present hardware:
+
+    sudo ubuntu-drivers devices
+
+Sample output from an NVIDIA GPU:
+
+    == /sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0 ==
+    vendor   : NVIDIA Corporation
+    modalias : pci:v000010DEd00000DEFsv000017AAsd000021F4bc03sc00i00
+    model    : GF108M [NVS 5400M]
+    driver   : nvidia-304 - distro non-free
+    driver   : nvidia-331-updates - distro non-free
+    driver   : nvidia-304-updates - distro non-free
+    driver   : nvidia-331 - distro non-free recommended
+    driver   : xserver-xorg-video-nouveau - distro free builtin
+
+You can then install or uninstall the drivers with `apt-get`:
+`nvidia-304`, `nvidia-331`, etc. are the actual package names.
+
+##Locale
+
+On 14.04, the following file defines many locale environment variables:
+
+    cat /etc/default/locale
+
+It sets them based on your location, not on your language.
 
 #HWE
 
 #Hardware Enablement
 
-http://askubuntu.com/questions/248914/what-is-hardware-enablement-hwe
+<http://askubuntu.com/questions/248914/what-is-hardware-enablement-hwe>

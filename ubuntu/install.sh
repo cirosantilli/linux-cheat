@@ -14,7 +14,7 @@
 
 ##installation procedures
 
-  # SSH survival kit.
+  ##SSH survival kit
 
     # Packages.
 
@@ -26,11 +26,11 @@
 
       sudo aptitude install -y git
 
-    # Dotfiles:
+    # Dotfiles: only if not a shared home directory.
 
-      git clone https://github.com/cirosantilli/dotfiles
-      cd dotfiles
-      ./install.sh
+      #git clone https://github.com/cirosantilli/dotfiles
+      #cd dotfiles
+      #./install.sh
 
     # Editor
 
@@ -41,11 +41,28 @@
 
   if [ "$1" = "min-ssh" ]; then exit 0; fi
 
-  # GUI survival kit.
+  ##GUI survival kit
 
-    # Browser
+    ##package management
 
-      sudo aptitude install -y flashplugin-installer
+        # Enable all sources: main, universe, restricted, multiverse and partner.
+        sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe restricted multiverse"
+        sudo add-apt-repository "deb http://archive.canonical.com/ubuntu $(lsb_release -sc) partner"
+        sudo aptitude update
+        sudo aptitude install -y apt-rdepends
+        sudo aptitude install -y apt-file
+        apt-file update
+        sudo aptitude install -y ppa-purge
+
+      # Usefull stuff that does not come by default or Canonical would have to pay royalties:
+
+        sudo aptitude install -y ubuntu-restricted-extras
+
+    # GTK theme
+
+      sudo add-apt-repository ppa:noobslab/themes
+      sudo apt-get update
+      sudo apt-get install gnomishdark
 
     # Terminal
 
@@ -61,13 +78,37 @@
       sudo aptitude install -y konsole
       sudo aptitude install -y kwalletmanager
 
+    ##Browser
+
+        sudo aptitude install -y flashplugin-installer
+
+        sudo aptitude install -y chromium-browser
+
+      # Google Chrome: <http://askubuntu.com/questions/79280/how-to-install-chrome-browser-properly-via-command-line>
+
+        wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
+        sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+        sudo apt-get update
+        sudo apt-get install google-chrome-stable
+
     # PDF
 
       sudo aptitude install -y okular okular-extra-backends
 
-    # Communication
+    ## Communication
 
-      sudo aptitude install -y pidgin
+        sudo aptitude install -y pidgin
+
+      # Skype. Source: partner.
+
+        sudo aptitude install -y skype
+
+      # Google talk.
+
+        wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+        sudo sh -c 'echo "deb http://dl.google.com/linux/talkplugin/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+        sudo aptitude update
+        sudo aptitude install -y google-talkplugin
 
     # X
 
@@ -75,36 +116,24 @@
       sudo aptitude install -y xsel
       sudo aptitude install -y wmctrl
 
-    # GTK theme
-
-      sudo add-apt-repository -y ppa:webupd8team/themes
-      sudo aptitude update
-      sudo aptitude install -y gnomishdark-theme
-
     # Media:
 
       sudo aptitude install -y vlc
 
-    # sudo without password:
+    ##Configuration
 
-      #sudo sh -c "echo '$(id -un) ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers"
+      # Fundamental system configurations.
+
+      # sudo without password:
+
+        #sudo sh -c "echo '$(id -un) ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers"
+
+      # Quick OS system choice and show kernel messages:
+
+        #sudo sh -c "printf 'GRUB_TIMEOUT=1\nGRUB_CMDLINE_LINUX_DEFAULT=""\n'" >> /etc/default/grup"
+        #sudo update-grub
 
   if [ "$1" = "min" ]; then exit 0; fi
-
-  ##package management
-
-      # Enable all sources: main, universe, restricted, multiverse and partner.
-      sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe restricted multiverse"
-      sudo add-apt-repository "deb http://archive.canonical.com/ubuntu $(lsb_release -sc) partner"
-      sudo aptitude update
-      sudo aptitude install -y apt-rdepends
-      sudo aptitude install -y apt-file
-      apt-file update
-      sudo aptitude install -y ppa-purge
-
-  # Usefull stuff that does not come by default or Canonical would have to pay royalties:
-
-    sudo aptitude install -y ubuntu-restricted-extras
 
   ##uncategorized
 
@@ -262,8 +291,6 @@
       sudo aptitude install -y cuneiform
 
   ##video
-
-      sudo aptitude install -y vlc
 
     # handbreak
 
@@ -453,13 +480,13 @@
 
   ##terminal emulators
 
-    #sudo aptitude install -y guake
-    #sudo aptitude install -y yakuake
-    sudo aptitutde install -y tmux
+      sudo aptitude install -y yakuake
 
-    sudo add-apt-repository -y ppa:finalterm/daily
-    sudo aptitude update
-    sudo aptitude install -y finalterm
+      sudo aptitutde install -y tmux
+
+      sudo add-apt-repository -y ppa:finalterm/daily
+      sudo aptitude update
+      sudo aptitude install -y finalterm
 
   ##program
 
@@ -490,7 +517,7 @@
 
       # gcc docs:
 
-        #sudo aptitude install -y gcc-doc
+        sudo aptitude install -y gcc-doc
 
       # Installed at: `/usr/share/doc/gcc-doc`
 
@@ -505,26 +532,6 @@
         # G++
         sudo aptitude install -y g++-4.8
         sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 50
-
-
-      # Requirements to build conqueror:
-
-        sudo aptitude install -y libkonq5-dev
-
-        sudo aptitude install -y libirrlicht-dev
-        sudo aptitude install -y libirrlicht-doc
-
-        sudo aptitude install -y freeglut3-dev
-
-        sudo aptitude install -y libopencv-dev
-        sudo aptitude install -y opencv-doc
-
-        sudo aptitude install -y libplplot-dev
-        sudo aptitude install -y plplot11-driver-xwin
-
-        sudo aptitude install -y linux-source linux-headers
-        #sudo aptitude install -y check
-        sudo aptitude install -y libncurses5-dev
 
       # Boost c++
 
@@ -568,12 +575,33 @@
 
           sudo aptitude install -y libkdegames-dev
 
-      ##vlc
+      ##Build requirements
 
-        # Missing development requirements to compile VLC:
+        # Stuff that is only needed if you want to develop those programs.
+
+        # VLC:
 
           sudo aptitude install -y liblua5.1-0-dev libmad0-dev liba52-0.7.4-dev \
             libxcb-composite0-dev libxcb-xv0-dev libxcb-randr0-dev libgcrypt11-dev
+
+        # Konqueror:
+
+          sudo aptitude install -y libkonq5-dev
+
+          sudo aptitude install -y libirrlicht-dev
+          sudo aptitude install -y libirrlicht-doc
+
+          sudo aptitude install -y freeglut3-dev
+
+          sudo aptitude install -y libopencv-dev
+          sudo aptitude install -y opencv-doc
+
+          sudo aptitude install -y libplplot-dev
+          sudo aptitude install -y plplot11-driver-xwin
+
+          sudo aptitude install -y linux-source linux-headers
+          #sudo aptitude install -y check
+          sudo aptitude install -y libncurses5-dev
 
     ##Java
 
@@ -606,21 +634,17 @@
 
       sudo aptitude install -y maven
 
-    ##flash
-
-        # Source: partner.
-
-          sudo aptitude install -y flashplugin-installer
-
-    ##python
+    ##Python
 
       # pip:
 
         wget -O- 'https://bootstrap.pypa.io/get-pip.py' | sudo python
 
-        sudo aptitude install -y gunicorn
+      sudo aptitude install -y gunicorn
 
-    ##ruby
+    ##Ruby
+
+      # RVM and similar are the best method:
 
         curl -L 'https://get.rvm.io' | bash -s stable
         # WARNING: fails with `-eu`.
@@ -628,7 +652,13 @@
         rvm install '2.1.1'
         # Logout, login, and works for all shells.
 
-    ##node
+      # Brigthbox is maintaining quite a few Rubies on their PPA:
+
+        sudo add-apt-repository ppa:brightbox/ruby-ng
+        sudo apt-get update
+        sudo aptitude install -y ruby2.1 ruby2.1-dev
+
+    ##Node.js
 
       # NVM install:
 
@@ -661,7 +691,7 @@
 
         npm config set registry 'http://registry.npmjs.org/'
 
-    ##go
+    ##Go
 
         # Requires: mercurial, bison.
         if [ ! -f "$HOME/.gvm/scripts/gvm" ]; then
@@ -671,7 +701,7 @@
         gvm install 'go1.2.2'
         gvm use 'go1.2.2' --default
 
-    ##lua
+    ##Lua
 
         #sudo aptitude install -y lua5.2
 
@@ -694,12 +724,12 @@
         cd '..'
         rm -rf -- "$dir"
 
-    ##virtualization ##vm
+    ##Virtualization ##VM
 
       # MANUAL: don't forget to enable virtualization on your BIOS when using virtualization tools.
       # Some features may only be available with it enabled.
 
-      ##virtualbox
+      ##Virtualbox
 
           wget -q -O - http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc | sudo apt-key add -
           sudo sh -c 'echo "deb http://download.virtualbox.org/virtualbox/debian precise non-free contrib" >> /etc/apt/sources.list.d/virtualbox.org.list'
@@ -864,15 +894,6 @@
 
     ##browser
 
-        sudo aptitude install -y chromium-browser
-
-      # Google Chrome: <http://askubuntu.com/questions/79280/how-to-install-chrome-browser-properly-via-command-line>
-
-        wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
-        sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-        sudo apt-get update
-        sudo apt-get install google-chrome-stable
-
       # Terminal web browser:
 
         sudo aptitude install -y w3m w3m-img
@@ -1017,23 +1038,6 @@
       #  For `qtconfig-qt4`:
 
         sudo aptitude install -y qt4-qtconfig
-
-  ##chat messaging voice video
-
-    # Skype. Source: partner.
-
-      sudo aptitude install -y skype
-
-    # Google talk
-
-      wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-      sudo sh -c 'echo "deb http://dl.google.com/linux/talkplugin/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-      sudo aptitude update
-      sudo aptitude install -y google-talkplugin
-
-    # Pidgin
-
-      sudo aptitude install -y pidgin
 
   ##file sharing
 

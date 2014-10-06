@@ -584,40 +584,6 @@
       123    1    12345
       12345  123  1
 
-  ##sort
-
-    # Sort linewise.
-
-    # Uses External R-Way merge.
-    # This algorithm allows to sort files that are larger than RAM memory.
-
-    # Sort f1, f2 together linewise:
-
-      sort f1 f2
-
-    # Useful options:
-
-    # -r : reverse order
-    # -n : numbers
-    # -u : uniq. remove dupesls -lh | sort -k5hr
-    # -t: : set field separator to ':'
-    # -k5 : sort by field N
-      # -k 2,2n -k 4,4hr : sort by columns. from 2 to 2, numeric, then from 4 to 4, human and reverse
-    # -R : randomize
-    # -h : sort by human readable filesizes: 1k, 2M, 3G
-    # -f : ignore case. random lower/upper order
-    # -fs : ignore case and put always upper before lower
-    # -b : ignore leading blanks
-    # -uf : remove dupes, cas insensitive (A and a are dupes)
-    # -m : supposesing f1 and f2 are already sorted, making merge faster
-    # -c : check if is sorted
-
-    ##GNU extensions
-
-      # Sort dot separated versions numbers:
-
-        [ "$(printf '10.0\n9.10\n9.9\n' | sort -V)" = "$(printf '9.9\n9.10\n10.0\n')" ] || exit 1
-
   ##tsort
 
     # Topological sorting:
@@ -632,93 +598,6 @@
         #contains loop
       echo $?
         #1
-
-  ##uniq
-
-    # POSIX 7
-
-    #*Ajacent* dupe line operations.
-
-    #Remove adjacent dupes lines:
-
-      [ "$(printf 'a\nb\n' | uniq )" = $'a\nb' ] || exit 1
-      [ "$(printf 'a\na\n' | uniq )" = $'a' ]  || exit 1
-
-    #Non adjacent dupes are not removed:
-
-      [ "$(printf 'a\nb\na\na\n' | uniq )" = $'a\nb\na' ] || exit 1
-
-    #Thus the sort combo:
-
-      [ "$(printf 'a\nb\na\na\n' | sort | uniq )" = $'a\nb' ] || exit 1
-
-    #Other options:
-
-    #-u : only show lines that have no dupe
-    #-d : dupe lines only
-    #-c : shows dupe count before each ine
-
-  ##tee
-
-    # POSIX 7
-
-    # echoes stdin to multiple files ant to stdout.
-
-    # echo to stdout and file:
-
-      echo a | tee file
-
-    # echo to file and stderr:
-
-      echo a | tee file 1>&2
-
-    # echo to file and sort
-
-      echo a | tee file | sort
-
-    # echo append to file:
-
-      echo a | tee –a file
-
-    # echo to multple files
-
-      echo a | tee f1 f2 f3
-
-    # tee to multiple processes:
-
-      echo a | tee >(seqn 2) tee >(seqn 2) | tr a b
-
-    # note how process are run in parallel and output order is variable.
-
-  ##tr
-
-    # POSIX 7
-
-    # Charwise text operations.
-
-    # Replaces a by A and b by B and c by C:
-
-      [ `echo -n cab | tr abc ABC` = CAB ] || exit 1
-
-    # Ranges are understood. Convert to uppercase:
-
-      [ `echo -n cab | tr a-z A-Z` = CAB ] || exit 1
-
-    # POSIX character classes are understood. Remove non alphtnum chras:
-
-      [ `echo -n 'ab_@' | tr -cd "[:alpha:]"` = ab ] || exit 1
-
-    # - `c`: complement and replace. replaces all non abc chars by d
-
-        [ `echo -n dcba | tr -c abc 0` = 0cba ] || exit 1
-
-    # - `d`: deletes abc chars:
-
-        [ `echo -n dcba | tr -d abc` = d ] || exit 1
-
-    # - `s`: replaces multiple consecutive 'a's and 'b's by isngle a
-
-        [ `echo -n aabbaac | tr -s ab` = abac ] || exit 1
 
   ##cut
 
@@ -749,33 +628,6 @@
     # Column range from first to third:
 
       [ "$(printf 'a:b:c\nd:e:f\n' | cut -d: -f1-3)" = "$(printf "a:b:c\nd:e:f")" ] || exit 1
-
-  ##wc
-
-    # POSIX 7
-
-    # Does word, line, character and other similar counts.
-
-    # Mnemonic: Word Count.
-
-      printf 'a\nb c\n' | wc
-        #1 3 5
-        #^ ^ ^
-        #a b c
-
-    # Legend:
-
-    # - `a`: newline
-    # - `b`: word
-    # - `c`: byte
-
-    # Options:
-
-    # - `c` bytes only
-    # - `m` chars only
-    # - `l` newlines only
-    # - `L` max line lenght only
-    # - `w` words only
 
   ##head
 
@@ -1250,7 +1102,7 @@
         distro_id="$(lsb_release -i | sed -r 's/.*:\t(.*)/\1/')"
         distro_version="$(lsb_release -r | sed -r 's/.*:\t(.*)/\1/')"
 
-  ##processor ##cpu
+  ##Processor ##CPU
 
     ##arch
 
@@ -2683,12 +2535,14 @@
     # Very powerful and flexible file copy tool.
 
     # Can:
-    # - works over networks. Both machines must have it installed.
+    #
+    # -   work over networks. Both machines must have it installed.
     #
     #     Capable of compressing before sending over the network, and decrompressing on the other side.
     #
-    # - synchronize differentially
-    # - encrypt files sent
+    # -   synchronize differentially
+    #
+    # -   encrypt files sent
 
     # Useful options:
 
@@ -2696,7 +2550,7 @@
 
       # Sets : `-Dgloprt`
 
-      # Does what you want it to do, even before you know you need it:
+      # Does what you want it to do, before you notice you need it:
 
       # - `-D`: preserve special and device files. Requires sudo.
       # - `-g`: preserve group. Requires `sudo`.

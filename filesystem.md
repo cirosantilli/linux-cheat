@@ -118,7 +118,7 @@ Use the same username on new systems, and mount the partition automatically with
 
 30GiB is a good size for each root partition. Leave everything else for the home partition.
 
-#Partition table
+##Partition table
 
 Contained in the MBR.
 

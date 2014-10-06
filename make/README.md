@@ -1,48 +1,37 @@
 Make allows you to:
 
-- make command line interfaces of the type:
+-   make command line interfaces of the type:
 
         make <something> a=b c=d
 
-    *very* easily
+    *very* easily.
 
-- only build outputs when inputs have changed
+-   only build outputs when inputs have changed
 
-    this may save lots of time when building large projects
+    This may save lots of time when building large projects.
 
-Make is specified by posix and implemented by GNU with extensions
+Make is specified by POSIX and implemented by GNU with extensions
 It is the de facto standard make tool for POSIX systems.
 
-#downsides of make
+#Downsides of Make
 
 The main problems of make are:
 
-- low cross-platform portability
-- its Yet Another Scripting Language to learn (and not a very powerful one at that)
+- not available on Windows
+- its Yet Another Scripting Language to learn, and uses Bash inside of it
 
-#alternatives
+#Alternatives
 
-Because of the downsides of make, many other make systems have been devised. None has yet dominated on most applications, but important ones include:
+Because of the downsides of make, many other make systems have been devised.
+None has yet dominated on most applications, but important ones include:
 
-- cmake
+-   CMake
 
-    Generates programs that make the project, including projects for IDEs.
-
-    For example, it can generated:
-
-    - POSIX `Makefiles` on Linux,
-    - `cmd.exe` build scripts for Windows
-    - CodeBlocks project
-
-    all from the same input file.
-
-    Makefiles for cmake (called `CMakeLists.txt`) are written in Yet Another Scripting Language.
-
-- rake
+-   Rake.
 
     Similar to `make`, Ruby implemented with makefiles written in pure Ruby.
 
-- apache ant
+-   Apache Ant.
 
     Written in Java, mainly used for Java project.
 
@@ -52,20 +41,20 @@ Because of the downsides of make, many other make systems have been devised. Non
 
 - <http://stackoverflow.com/questions/12669367/should-i-name-makefile-or-makefile>
 
-`make` tries the following names, in order: GNUmakefile, makefile and Makefile
+make tries the following names, in order: `GNUmakefile`, `makefile` and `Makefile`.
 
 `Makefile` has the advantages:
 
-- appears at the top of ls by default (because ascii uppercase comes before ascii lowercase)
+- appears at the top of ls by default (because ASCII uppercase comes before ASCII lowercase)
 - is more conventional
 
 `makefile` has the advantages:
 
 - sticks to the other widespread convention of naming everything lowercase
 
-#command line options
+#Command line options
 
-- `-j5`: let make run in 5 threads.
+-   `-j5`: let make run in 5 threads.
 
     *Be warned*: this will make standard output of all threads mix up so the stdout will be meaningless.
 
@@ -76,10 +65,10 @@ Because of the downsides of make, many other make systems have been devised. Non
     `a`, `b`, and `c` are run in parallel, it it might be the case that
     `c` *must* run only after `a` and `b`.
 
-#sources
+#Sources
 
-- <http://www.jfranken.de/homepages/johannes/vortraege/make_inhalt.en.html>
+-   <http://www.jfranken.de/homepages/johannes/vortraege/make_inhalt.en.html>
 
-    good first tutorial to make
+    Good first tutorial to make.
 
-- <http://www-cip.physik.uni-bonn.de/pool/infos/make/advanced.html>
+-   <http://www-cip.physik.uni-bonn.de/pool/infos/make/advanced.html>

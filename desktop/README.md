@@ -227,7 +227,7 @@ Keep examining the properties, and print if changes happen:
 
 Modify key maps.
 
-For example, to exchange exc and caps lock:
+For example, to exchange ESC and Caps Lock:
 
 	f=~/.Xmodmap
 	echo "! Swap caps lock and escape
@@ -245,6 +245,14 @@ To make this happen every time at startup TODO broken?:
 	chmod +x ~/.xinitrc
 
 The `~/.xsession` file could also be used depending on system
+
+##xinitrc
+
+Sourced in Ubuntu 12.04, but not 14.04.
+
+##xsessionrc
+
+TODO vs `xinitrc`?
 
 ##xdotool
 

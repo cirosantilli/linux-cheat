@@ -87,7 +87,7 @@ Window shortcuts:
 
 Pane shortcuts:
 
-- `n`: and `p`: next and previous window
+- `n` and `p`: next and previous window
 - `0`: to `9`: switch to given window ID
 - `%`: split horizontally
 - `"`: split vertically:
@@ -96,7 +96,7 @@ Pane shortcuts:
 - `o`: cycle through panes in order
 - `{}`: current pane's position with next / previous one
 - `!`: remove pane from window and open it in a window of its own
-- `x`: kill the current pane
+- `x`: kill / close the current pane
 
 #Send keys
 

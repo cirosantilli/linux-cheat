@@ -18,6 +18,8 @@ The difference between Main, Universe, Restricted and Multiverse can be visualiz
 | Supported   | Main          | Restricted        |
 | Unsupported | Universe      | Multiverse        |
 
+The list of all above packages can be found at: <http://packages.ubuntu.com/>
+
 In addition, there are also the `partner` sources.
 
 On new installs, Main and Restricted sources are enabled by default.
@@ -31,8 +33,6 @@ Enable everything with:
     sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe restricted multiverse"
     sudo add-apt-repository "deb http://archive.canonical.com/ubuntu $(lsb_release -sc) partner"
 
-The list of all packages can be found at: <http://packages.ubuntu.com/>
-
 PPAs vs Universe: universe passes some selection form Canonical, PPAs don't.
 
 ##Pre-installed
@@ -43,7 +43,7 @@ Current 12.04.4 was at <http://releases.ubuntu.com/precise/ubuntu-12.04.4-deskto
 
 ##Main
 
-Officially supported software. Full list for 12.04 + their recommendations + the files they provide. Not possible to see the file contents: <http://packages.ubuntu.com/precise/allpackagesx>
+Officially supported software. Full list for 12.04 + their recommendations + the files they provide: <http://packages.ubuntu.com/precise/allpackages>. Not possible to see the file contents.
 
 Not all of those packages come pre-installed, they can be installed directly with `apt-get` since their source is already enabled by default.
 
@@ -93,18 +93,6 @@ Updates that come from a new release and were enabled to older systems.
 
 Enabled by default.
 
-#apt-get vs aptitude vs synaptic
-
-Summary: **always** use `aptitude` instead of `apt-get`!
-
-Reason: on remove aptitude removes all dependencies which were not installed explicitly But apt-get does not. Example: you installed package a, with 50 dependencies d1, d2, etc. which were not installed. If you do `apt-get unsinstall a`, the deps stay, and you have to do `apt-get uninstall d1, d2, ...`, but if you installed with `aptitude`, and you do `aptitude unistall`, D1 .. d50 are all removed.
-
-*it seems that* apt-get aptitude, and synaptic are front-ends for dpkg. Therefore they should be compatible.
-
-Synaptic has a GUI interface, but less options.
-
-Aptitude seems to be more powerful than apt-get
-
 #Metapackages
 
 Metapackages are packages that contain no source code of their own, but have several dependencies
@@ -119,6 +107,10 @@ It seems that aptitude can store this information, and uninstall metapackages in
 
 There seems to be no way of telling
 
+#Transitional packages
+
+TODO <http://askubuntu.com/questions/20377/what-exact-purpose-have-transitional-packages>
+
 #dev packages
 
 Are packages that contain libraries to build stuff, typically `.h` and `.so` files
@@ -130,6 +122,18 @@ Their names are typically of the type, `libXXX-dev`, e.g.
 Of just with the `-dev` suffix:
 
 	nvidia-cuda-dev
+
+#apt-get vs aptitude vs synaptic
+
+Summary: **always** use `aptitude` instead of `apt-get`!
+
+Reason: on remove aptitude removes all dependencies which were not installed explicitly But apt-get does not. Example: you installed package a, with 50 dependencies d1, d2, etc. which were not installed. If you do `apt-get unsinstall a`, the deps stay, and you have to do `apt-get uninstall d1, d2, ...`, but if you installed with `aptitude`, and you do `aptitude unistall`, D1 .. d50 are all removed.
+
+*it seems that* apt-get aptitude, and synaptic are front-ends for dpkg. Therefore they should be compatible.
+
+Synaptic has a GUI interface, but less options.
+
+Aptitude seems to be more powerful than apt-get
 
 #PPA
 
