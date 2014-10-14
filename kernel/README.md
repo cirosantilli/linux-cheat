@@ -875,7 +875,6 @@ and is now just waiting for the system to come and free its resources.
 
 The following transitions are possible:
 
-
     +----------+ +--------+
     |          | |        |
     v          | v        |

@@ -782,32 +782,6 @@ List mounted filesystems:
 
     cat /proc/mounts
 
-#fuser
-
-View which processes are using a device:
-
-    fuser -m /dev/sdb1
-
-Useful if you want to unmount a filesystem, and you have to find out who is still using it.
-
-#lsof
-
-List all open files and pipes.
-
-- `COMMAND`: process name.
-- `PID`:     process ID
-- `USER`:    username
-- `FD`:      file descriptor
-- `TYPE`:    node type of the file
-- `DEVICE`:  device number
-- `SIZE`:    file size
-- `NODE`:    node number
-- `NAME`:    full path of the file name.
-
-Usage:
-
-    lsof
-
 #fsck
 
 File System Check.

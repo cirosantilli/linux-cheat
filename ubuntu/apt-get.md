@@ -39,7 +39,9 @@ PPAs vs Universe: universe passes some selection form Canonical, PPAs don't.
 
 List of pre-installed packages perversion: <http://askubuntu.com/questions/50077/how-to-get-a-list-of-preinstalled-packages>
 
-Current 12.04.4 was at <http://releases.ubuntu.com/precise/ubuntu-12.04.4-desktop-i386.manifest> but may be removed once a new one comes.
+12.04.4 at <http://releases.ubuntu.com/precise/ubuntu-12.04.4-desktop-i386.manifest> but may be removed once a new one comes.
+
+For other versions see the parent URL.
 
 ##Main
 

@@ -1393,71 +1393,11 @@
 
 ##process
 
-  # Get cur pid in bash:
-
-    echo $$
-    echo $pid
-
-  ##pwd
-
-    # Print working directory of process.
-
-    # Each program has a working directory set by the OS.
-
-    # Processes inherit working directory of calling process
-
-      mkdir a
-      chmod 777 a
-      echo pwd > a/a
-      chmod 777 a/a
-      ./a/a
-
-    #`pwd`
-    #outside /a, the working directory of the caller (bash cwd)
-
   ##pwdx
 
     # Print current working directory of given process:
 
       pwdx $pid
-
-  ##sleep
-
-    # POSIX 7
-
-    # Do nothing for 2 seconds:
-
-      sleep 2
-
-  ##wait
-
-    # POSIX 7
-
-    # Wait for process with given pid to terminate.
-
-    ##$!
-
-      # The PID of the last background process is stored in `$!`.
-
-    # Sleep 2 seconds and echo done:
-
-      sleep 3 &
-      wait $!
-      echo $?
-
-    # Gets `$?` right even if process over already:
-
-      false &
-      sleep 2
-      true
-      wait $!
-      [ "`echo $?`" = 1 ] || exit 1
-
-      true &
-      sleep 2
-      false
-      wait $!
-      [ "`echo $?`" = 0 ] || exit 1
 
   ##trap
 
@@ -1466,190 +1406,6 @@
       trap "echo a" SIGINT SIGTERM
 
     # Now Ctrl-C away and notice `a` get printed.
-
-  ##ps
-
-    # POSIX 7
-
-    # List current executing processes and their info.
-
-    # On Ubuntu 12.04, implemented by the procps package.
-
-    # `ps` is a tool with a complicated past and mulitple implementations.
-
-    # The procps version http://procps.sourceforge.net/ supports multiple syntaxes for backwards compatibility:
-
-    # - UNIX options, which may be grouped and must be preceded by a dash.
-    # - BSD options, which may be grouped and must not be used with a dash.
-    # - GNU long options, which are preceded by two dashes.
-
-    # For your sanity, we recommend that you use POSIX and GNU syntax only wherever possible,
-    # never BSD syntax.
-
-
-    # Implementations commonly use the proc filesystem.
-    # There does not seem to be a POSIX way to implement this,
-    # except maybe following a process tree.
-
-    # Good short summary:
-
-      ps --help
-
-    # ps interface is ugly: some options have dash GNU style, others simply don't, and have no dash equivalent.
-    # Live with it.
-
-    # Best command to see all processes on the system:
-
-      ps -eF
-
-    # Output fields include:
-
-    # - pid: unique identifier for all process on system
-    # - tty: from which tty it was launched
-    # - time: CPU time used for process, not real time
-    # - cmd: command that launched th process without command line args
-    # - rss: Resident Set Size: used memory.
-
-    # See processes running on current tty:
-
-      sleep 10 &
-      sleep 10 &
-      ps
-
-    # Show all processes:
-
-      ps -e
-
-      # Show all columns (Full listing):
-
-      ps -eF
-
-    # Shows threads of each process:
-
-      ps -em
-
-    # Sort output by:
-
-    # - cmd
-    # - time reversed (because of the `-`)
-    # - pid
-    # - tty reversed (-)
-
-      ps -ef --sort cmd,-time,pid,-tty
-
-    # Get pid of parent of process with pid p
-
-      p=
-      ps -p $p -o ppid=
-
-    ##GNU extensions
-
-      # Show process tree:
-
-        ps -A --forest
-
-      # Sample output:
-
-        1258 ?    00:00:00 lightdm
-        1279 tty7   00:17:31 \_ Xorg
-        1479 ?    00:00:00 \_ lightdm
-        1750 ?    00:00:01   \_ gnome-session
-        1868 ?    00:00:00     \_ lightdm-session <defunct>
-        1913 ?    00:00:00     \_ ssh-agent
-        1950 ?    00:00:31     \_ gnome-settings-
-        2363 ?    00:12:19     \_ compiz
-        3503 ?    00:00:00     |  \_ sh
-        3504 ?    00:00:22     |    \_ gtk-window-deco
-
-  ##pstree
-
-    # psmisc package, not POSIX
-
-    # Shows tree of which process invocates which
-
-      pstree
-
-    # This works because in POSIX new processes are created exclusively
-    # by forking from other processes, and parent information is stored
-    # on each process, which dies if the parent dies
-
-    # this is a very insightfull program to understand what happened after
-    # the `init` process, first process on the system and common ancestor of all, started
-
-    # Particularaly interesting if you are on a graphical interface,
-    # to understand where each process comes from
-
-    # Quotint `man pstree`, multiple processes with same name and parent are wrttin in short notation:
-
-      #init-+-getty
-      #   |-getty
-      #   |-getty
-      #   `-getty
-
-    # Becomes:
-
-      #init---4*[getty]
-
-    # Threads (run parallel, but on same data, and cannot fork) are indicated by brackets:
-
-      #icecast2---13*[{icecast2}]
-
-    # Means that `icecast2` has 13 threads.
-
-  ##jobs
-
-    # Shows:
-
-    # - jobspec   : a local job id.
-    # - status    : runnning, stopped, done
-    # - invocation  : exact program call, including command line args. Ex: `ls ~`
-
-      jobs
-
-    # Show pids of background jobs:
-
-      jobs -p
-
-    ##jobspecs
-
-      # Local job id, found by using <#jobs>
-
-      # Certain commands such as `kill`, `fg` them in addition to pids.
-
-      # They are:
-
-      # - %N	Job number [N]
-      # - %S	Invocation (command line) of job begins with string S
-      #  If several matches, ambiguous, and does nothing.
-      # - ?S	Invocation (command line) of job contains within it string S
-      # - %%	"current" job (last job stopped in foreground or started in background)
-      # - %+	"current" job (last job stopped in foreground or started in background)
-      # - %-	last job
-
-    # It is possible to use jobspecs directly with certain bash built-ins that could also take PID.
-    # For example, to kill process by jobspec `%1`:
-
-      #kill %1
-
-    # Note that `kill` also usually exists as an external executable, and that the external executable
-    # cannot kill by jobspec since this information is only known by bash itself.
-
-    # `help kill` states that one of the reasons why `kill` is implemented as a bash built-in is to be
-    # able to write `kill %1`.
-
-    #ls &
-    #sleep 100 &
-    #sleep 100 &
-    #sleep 100 &
-      #runs on background
-      #
-      #[1] 12345678
-      #means local id 1
-      #process number 12345678
-      #
-      #when process ends, it prints ``[n] 1234`` and disappears
-      #
-      #stdout continues to go to cur terminal, even if in bg
 
   ##bg
 
@@ -1675,180 +1431,14 @@
 
   ##disown
 
-    #vlc 100 &
-    #vlc 100 &
-    #vlc 100 &
-    #disown %3
-      #remove job 3 from list of sub jobs
-      #closing bash will not kill it anymore
+    # Remove job 3 from list of sub jobs.
 
-  ##kill
+    # Closing bash will not kill it anymore.
 
-    # POSIX 7
-
-    # Kill exists as a bash built-in.
-    # One of the reasons for this is to allow users to `kill` by jobspec for example as `sleep 1- &; kill %1`,
-    # Which an external executable could not do. Killin gby PID is required by POSIX 7.
-
-    # Send signals to a process. Signals are an ANSI C concept, with POSIX and Linux extensions.
-
-    # Does not necessarily send SIGKILL, nor is SIGKILL the default signal sent!
-    # The default signal it sends is SIGTERM.
-
-    # It is unfortunatelly named kill because most signals end up killing process,
-    # or also because the most used signal is SIGTERM generated by a C-C on the terminal.
-    # which has the usual effect of killing a process.
-
-    # List all signals available on the system:
-
-      kill -l
-
-    # Lists numbers and descriptions.
-
-    # Send SIGTERM signal to process:
-
-      ps -A
-      ID=
-      kill $ID
-
-    # SIGTERM is the default signal sent by `kill`.
-
-    # Select by pid, found on ps for example.
-
-    # Select by job-id found on jobs:
-
-      sleep 10 &
-      jobs
-      kill %1
-
-    # POSIX specifies this.
-
-    # Send stop signal to process:
-
-      kill -s SIGSTOP $ID
-      kill -s sigstop $ID
-      kill -s STOP $ID
-      kill -s stop $ID
-
-    # All of the above are specified by POSIX.
-
-    # Where `SIGSTOP` is the standard signal name.
-
-    # Also possible with the XSI extension:
-
-      kill -SIGSTOP $ID
-      kill -sigstop $ID
-      kill -STOP $ID
-      kill -stop $ID
-
-    # But not recommended because it is less uniform parameter passing,
-    # and not guaranteed to be on all implementations.
-
-  ##killall
-
-    # Send signals to all process by name
-
-    # psmisc package
-
-    # Application: firefox/skype hanged. `ps -A | grep -i firef',
-    # confirm that the name is firefox and that it is the only one with that name, and then:
-
-      killall firefox
-
-    # This sengs SIGTERM, which programs may be programmed to handle,
-    # so the progrma may still hang ( and in theory be trying to finish nicelly, although in practice this never happens... )
-
-    # Kill it without mercy:
-
-      killall -s 2
-
-    # which sends SIGINT, which processes cannot handle, so they die.
-
-  ##env
-
-    # POSIX 7
-
-    # Shows all environment variables and their values:
-
-      env
-
-    # Change environment for a single command:
-
-      a=b
-      env a=c echo $a
-      #c
-      echo $a
-      #b
-
-    # In bash it is also possible to do (not sure about portability):
-
-      a=b
-      a=c echo $a
-      #c
-      echo $a
-      #b
-
-    ##-i
-
-      #exec in a clean environment:
-
-        [ "`env -i a=b env`" = "a=b" ] || exit 1
-
-      ##start a subshell in the cleanest env possible
-
-        #don't forget: subshells inherit all exported vars
-
-          env -i bash --noprofile --norc
-          env
-          #some default vars might still be there!
-          #I get: SHLVL, PWD
-          exit
-
-  ##nohup
-
-    # POSIX 7
-
-    # Make a process that continues to run even if calling bash dies:
-
-      nohup firefox >'/dev/null' 2>&1 &
-      echo "$!" >'/tmp/firefox.pid'
-      exit
-
-    # This would send a HUP signal to Firefox, which kills most programs.
-
-    # Firefox still lives! it would be killed if it were not for nohup.
-
-    # When you do this, you will often want to store the PID of the program to kill it later with:
-
-      kill "$(cat firefox.pid)"
-
-    # Consequences of `nohup`:
-
-    # - if stdin came from terminal (not pipe for example),
-    #     sdtin comes from `/dev/null` (you have no stdin!) instead
-    #
-    # - if stdout would go to terminal (not pipe for example)
-    #     it is *appended to* `./nohup.out`, and if not possible from `$HOME/nohup.out`
-    #     instead
-    #
-    #     If no stdout is generated, `nohup.out` is not created
-    #
-    #     you can also redirect stdout to any file you want via `nohup cmd > file`
-    #     for example `nohup cmd > /dev/null` to ignore output
-    # - the program is still visible in `jobs`, and may be killed with `kill %+`
-    # - if you don't use `&`, it runs on foreground, preventing you from using bash
-
-    # How to test all this:
-
-      nohup bash -c 'for i in {1..10}; do echo $i; sleep 1; done'
-
-    # Try:
-
-      #append `> f` to command
-      #append `&`  to command
-
-      jobs
-      cat nohup.out
+      #vlc 100 &
+      #vlc 100 &
+      #vlc 100 &
+      #disown %3
 
   ##timeout
 
@@ -1858,35 +1448,6 @@
 
       [ `timeout 3 bash -c 'for i in {1..2}; do echo $i; sleep 1; done'` = $'1\n2\n' ] || exit 1
       [ `timeout 1 bash -c 'for i in {1..2}; do echo $i; sleep 1; done'` = $'1\n' ] || exit 1
-
-  ##nice
-
-    # - -20: highest priority
-    # - 20: lowest priority
-
-    # Mnemonic: the nicest you are, the more you let others run!
-
-    # POSIX 7
-
-    # Therefore the concept of niceness is included in POSIX.
-
-    # View nice of all processes:
-
-      ps axl
-
-    # Run program with a nice of 10:
-
-      nice -10 ./cmd
-
-    #- 10:
-
-      sudo nice --10 ./cmd
-
-    # You need sudo to decrease nice
-
-    # Change priority of process by PID:
-
-      renice 16 -p 13245
 
   ##flock
 
@@ -1918,52 +1479,6 @@
     ##ipcrm
 
       # Remove IPC facility.
-
-  ##top
-
-    # Ncurses constantly updated process list with CPU and memory usage.
-
-    # Interface:
-
-    # - h: help
-    # - q: quit
-    # - f: chose which fields to show
-    # - F: chose by which field to sort
-    # - O: move sort field left right
-    # - k: kill process
-    # - arrow keys: move view
-
-    # Sample first line:
-
-      23:00:13 up 12:00, 3 users, load average: 0.72, 0.66, 0.6
-      ^^^^^^^^ up ^^^^^, ^ users, load average: ^^^^, ^^^^, ^^^
-      1      2    3            4   5   6
-
-    # Meanings:
-
-    # - 1: cur time
-    # - 2: how long the system has been up for
-    # - 3: how many users are logged
-    # - 4: load average for past  1 minute
-    # - 5:                        5 minutes
-    # - 6:                       15 minutes
-
-    # Not possible to show more processes:
-    # http://unix.stackexchange.com/questions/36222/how-to-see-complete-list-of-processes-in-top
-    # Use `htop`.
-
-    ##load average
-
-      #0.75: 0.75 as many scheduled tasks as your cpu can run
-        #rule of thumb maximum good value
-      #1  :    as many scheduled tasks as your cpu can run
-        #break even point
-        #risky, a littly more and you are behind schedule
-      #5  : 5x
-        #system critically overloaded
-
-      # Does not take into account how many cores you have!
-      # E.g.: for a dual core, breakeven at 2.0!
 
   ##uptime
 
@@ -2000,11 +1515,11 @@
 
     # Memory, sway, io, cpu
 
-    #run every 1s, 100 times
+    # Run every 1s, 100 times.
 
       vmstat 1 100
 
-    #Vmstat procs Section
+    # Vmstat procs Section
 
         #r field: Total number of runnable process
         #b field: Total number of blocked process
@@ -2040,174 +1555,7 @@
         #Id field: Idle time.
         #Wa field: Time spent waiting for the IO
 
-  ##chroot
-
-    # Execute single command with new root.
-
-    # The root of a process is a Linux concept: every process descriptor has a root field,
-    # and system calls issued from that process only look from under the root (known as `/` to that process).
-
-    ##application
-
-      # You have a partition that contains a linux system,
-      # but for some reason you are unable to run it.
-
-      # You can use that partition with bash by using chroot into it,
-      # and you might then try to fix it from there.
-
-      # Example:
-
-        sudo chroot /media/other_linux/
-
-      # More advanced example, if you want to start from a completelly clean bash environment:
-
-        sudo chroot /media/other_linux /bin/env -i \
-            HOME=/root         \
-            TERM="$TERM"        \
-            PS1='\u:\w\$ '       \
-            PATH=/bin:/usr/bin:/sbin:/usr/sbin \
-            /bin/bash --login
-
-      # This will in addition clear enviroment variables, and read login scripts found on the chroot.
-
-  ##eval
-
-    # POSIX 7.
-
-    # Exec string in current bash
-
-      eval "a=b"
-      [ $a = b ] || exit 1
-
-    # Concatenates arguments, space separated:
-
-      [ `eval echo a` = a ] || exit 1
-
-    ##applications
-
-      # Make varname from var>
-
-        a=b
-        eval "$a=c"
-        [ $b = c ] || exit 1
-
 ##files
-
-  ##ls
-
-    # POSIX 7
-
-    # List files in dirs
-
-    ##-l
-
-      # Show lots of information:
-
-        ls -l
-
-      # Sample output:
-
-        #-rw-rw-r-- 1 ciro ciro  4 Feb 25 11:53 a
-        #1     2 3  4    5 6      7
-
-      #1) file permissions. See permissions
-      #2) for files, number of hardlinks. For dirs number of subdirs + parent + self (min is 2 therefore)
-      #3) owner
-      #4) group
-      #5) size in bytes
-      #6) last modified
-      #7) filename
-
-    # ls is aware if its ouput goes to a pipe or not.
-    # if yes, automatically newline separates it:
-
-      ls | cat
-
-    # One per line:
-
-      ls -1
-
-    # ls a file:
-
-      touch a
-      [ "$(ls a)" = "a" ] || exit 1
-
-    # ls a dir:
-
-      mkdir d
-      touch d/a d/b
-      [ "$(ls d)" = "$(printf 'a\nb\n')" ] || exit 1
-
-    # ls many dirs:
-
-      mkdir d
-      touch d/a d/b
-      mkdir e
-      touch e/a e/b
-      ls d e
-        #nice listing of both
-
-    # -d: list dirnames only:
-
-      mkdir d
-      touch d/a d/b
-      mkdir e
-      touch e/a e/b
-      [ "$(ls -d d e)" = "$(printf 'd\ne\n')" ] || exit 1
-
-    # -lL : when showing symlinks, shows info to what is linked to
-
-    # Sort:
-
-      # Modification time (newest first):
-
-        ls -t
-
-      # Inode change:
-
-        ls -tc
-
-      # File access:
-
-        ls -tu
-
-      # Reverse sort order:
-
-        ls -tr
-
-    ##dircolors
-
-      # Config ls colors
-
-    ##GNU extensions
-
-      # -R: recursive
-
-        ls -R
-
-  ##tree
-
-    #prints visual file tree
-
-    #install:
-
-      sudo aptitude install tre
-
-    #recurse 2 levels (default infinite):
-
-      tree -L 2
-
-    #-a: include hidden:
-
-      tree -a
-
-    ##--charset
-
-      #select a smaller charset for output:
-
-        tree --charset=ascii
-
-      #this is good if you want to paste output!
 
   ##cd
 
@@ -2253,11 +1601,13 @@
 
   ##touch
 
-    #POSIX
+    # POSIX
 
-    touch f
-      #creates file if does not exist.
-      #updates modify date to present if exists
+    # Create file if does not exist.
+
+    # Update modify date to present if it exists.
+
+      touch f
 
   ##mkdir
 
@@ -2397,7 +1747,7 @@
         cp a b
         [ "`cat b`" = $'a' ] || exit 1
 
-    ##gnu extensions
+    ##GNU extensions
 
       # The following GNU extensions are very useful and did not fit into any other category:
 
@@ -2978,56 +2328,6 @@
             echo eq
         fi
 
-  ##locate
-
-    # Searchs for files in entire computer.
-
-    # Prints all matches.
-
-    # This uses a database, which must be updated with updatedb before your new file is found.
-
-    # Commonly, `updatedb` is a cronjob.
-
-    # Match any substring in entire path:
-
-      locate a
-      locate /a
-
-    # To force update of file cache, use updatedb.
-
-  ##updatedb
-
-    # Update file cache for locate:
-
-      sudo updatedb
-
-  ##file
-
-    # POSIX 7
-
-    # Attempts to determine file type and retreive metadata.
-
-    # This is in general impossible,
-    # but program makes good guesses.
-
-      echo a > a
-      file a
-
-    # Output:
-
-      a: ASCII text
-
-    ##-L
-
-      # Follow links
-
-        echo a > a
-        ln -s a b
-        file b
-          #b: symbolic link to `a'
-        file -L b
-          #b: ASCII text
-
   ##fuser
 
     #psmisc package
@@ -3089,23 +2389,7 @@
     # Check if path is portable across POSIX systems:
 
       pathchk -p 'a'
-      pathchk -p '\'
-
-  ##fdupes
-
-    # Fine command line tool for eliminating byte by byte duplicates
-    # you can either:
-
-    # - pick one by one
-    # - tell fdupes to pick the first one without asking (seem to pick one of the dirs first always)
-
-    # Finds and prints dupes:
-
-      fdupes -r .
-
-    # Finds dupes, and prompt which to keep for each match
-
-      fdupes -rd .
+      pathchk -p '\\'
 
 ##setterm
 

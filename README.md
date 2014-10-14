@@ -56,17 +56,43 @@ Generic data formats:
 - [unicode.md](unicode.md)
 - [xml/](xml/)
 
-[virtual-machine.md/](virtual-machine): Vagrant, Docker.
+File and directory related utilities:
+
+- [fdupes.md](fdupes.md)
+- [find.md](find.md)
+- [locate.md](locate.md)
+- [ls.md](ls.md)
+- [tree.md](tree.md)
 
 Programming tools:
 
 - [compile/](compile/): compilation process, dynamic libraries.
 - [ack.sh](ack.sh)
 
+[virtual-machine.md/](virtual-machine/): Vagrant, Docker.
+
+Process control:
+
+- [chroot.sh](chroot.sh)
+- [env.sh](env.sh)
+- [jobs.sh](jobs.sh)
+- [lsof.md](lsof.md)
+- [nice.sh](nice.sh)
+- [nohup.sh](nohup.sh)
+- [ps.sh](ps.sh)
+- [pstree.sh](pstree.sh)
+- [pwd.sh](pwd.sh)
+- [sleep.sh](sleep.sh)
+- [top.sh](top.sh)
+- [wait.sh](wait.sh)
+
+Other tools:
+
+- [eval.sh](eval.sh)
+
 Related subjects in other repositories:
 
 - [networking](https://github.com/cirosantilli/net): networking tools and protocols: HTTP, SSH, curl Apache.
-
 
 #How to search for stuff
 
