@@ -270,6 +270,10 @@ Searches package name and descriptions on the web:
 
 Pattern is a POSIX ERE.
 
+Automatically install updates: <http://askubuntu.com/questions/9/how-do-i-enable-automatic-updates>
+
+    sudo dpkg-reconfigure unattended-upgrades
+
 #apt-file
 
 Search for and list package files. **very** useful to know: which package provides a missing file like a `bin/name` or `include/name.h`?

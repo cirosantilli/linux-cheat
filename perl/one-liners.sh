@@ -152,10 +152,6 @@
 
       # For the love of God, do not use `-l` with this unless you know what you are doing.
 
-      # **Whatch out for the trailing newline!**. `.` will match any character now.
-
-      # Useful to do mass regex refactoring.
-
       # Remember that the dot does not match newlines by default.
 
         [ -z "$(printf 'a\n' | perl -0777 -ne 'print m/a./')" ] || exit 1

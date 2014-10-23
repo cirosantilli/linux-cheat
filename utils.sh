@@ -599,36 +599,6 @@
       echo $?
         #1
 
-  ##cut
-
-    # POSIX 7
-
-    # Select columns from text tables.
-
-    # The delimier can only be a single character, so quite limited.
-
-    # For more complex operation such as selecting a line from a certain field, consider `awk`.
-
-    # `-f`: field. what column to print:
-
-      [ "$(printf 'a\tb\nc\td\n' | cut -f1)" = "$(printf "a\nc")" ] || exit 1
-
-    # `-d`: delimier:
-
-      [ "$(printf 'a:b\nc:d\n' | cut -d: -f1)" = "$(printf "a\nc")" ] || exit 1
-
-    # Gets last if delimier too large:
-
-      [ "$(printf 'a\n' | cut -d: -f2)" = "a" ] || exit 1
-
-    # Multiple columns, first and third:
-
-      [ "$(printf 'a:b:c\nd:e:f\n' | cut -d: -f1,3)" = "$(printf "a:c\nd:f")" ] || exit 1
-
-    # Column range from first to third:
-
-      [ "$(printf 'a:b:c\nd:e:f\n' | cut -d: -f1-3)" = "$(printf "a:b:c\nd:e:f")" ] || exit 1
-
   ##head
 
     # POSIX 7
@@ -1480,37 +1450,6 @@
 
       # Remove IPC facility.
 
-  ##uptime
-
-    # Echo first line of top.
-
-      uptime
-
-  ##htop
-
-    # Better top.
-
-    # More options, and much easier to use: self explanatory interface.
-
-    # Possible to scroll down the process list.
-
-  ##free
-
-    # Print RAM and swap memory in Megabytes once.
-
-      free
-
-    # Sample output:
-
-      #       total    used    free   shared  buffers   cached
-      #Mem:    604340   597484    6856     0   17548   86520
-      #-/+ buffers/cache:   493416   110924
-      #Swap:      0     0     0
-
-    # - `-m`: megabyte unit
-    # - `-t`: totals at bottom
-    # - `-s1`, `-s0.01`: repeat every N seconds. ms resolution.
-
   ##vmstat
 
     # Memory, sway, io, cpu
@@ -1897,6 +1836,8 @@
     # Useful options:
 
     # - `-a`: "archive mode".
+
+        # rsync -a origin dest
 
       # Sets : `-Dgloprt`
 

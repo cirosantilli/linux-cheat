@@ -62,9 +62,17 @@ Data instead of configurations. Default: `/usr/local/share/:/usr/share/`.
 
 ###XDG_DATA_DIRS
 
+###cache dir
+
 ###XDG_CACHE_HOME
 
+<http://askubuntu.com/questions/102046/is-it-okay-to-delete-cache>
+
 Temporary data. Default: `~/.cache`. Can get rather large, and since the standard says that "non-essential data files should be stored" there, it should be fine to delete it.
+
+There is no global cache size option: you must configure cache limits for each individual application.
+
+Note that some applications always build a cache before being used, e.g. `apt-file`.
 
 #xdg-settings
 
@@ -74,9 +82,9 @@ TODO why does it show a single line only? what should this list?
 
 #X11
 
-Real name: X Window System
+Real name: X Window System.
 
-X11 is a `window system`
+X11 is a window system.
 
 It is by far the most commonly used on Linux.
 

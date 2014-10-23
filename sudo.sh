@@ -1,63 +1,3 @@
-##su
-
-  # Become another user, such as root:
-
-    su otheruser
-      #enter otheruser pass
-    whoami
-      #otheruser
-
-  # Start a login shell as user a:
-
-    su - a
-
-  # Without this starts a non-login shell.
-
-  ##don't use from script
-
-    # You probably don't want to use this on a script, only on interactive sessions.
-
-    # Doing:
-
-      printf 'echo a\nsu a\necho b' | bash -x
-
-    # Gives:
-
-      su: must be run from a terminal
-
-    # Doing:
-
-      echo 'echo a
-      su git
-      echo b
-      ' > a.sh
-      bash a.sh -x
-
-    # Stops the script and puts you on an interactive session.
-
-    # Workarounds for scripts: <http://stackoverflow.com/questions/1988249/how-do-i-use-su-to-execute-the-rest-of-the-bash-script-as-that-user>
-
-    # TODO understand behaviour precisely.
-
-  ##become root
-
-    #BAD: never become root, as it is dangerous.
-
-    #Give root a pass so people can log into it:
-
-      sudo passwd root
-
-    #On some systems such as ubuntu, sudo has no pass by default.
-
-      su
-        #enter root pass
-      whoami
-        #root
-
-  ##login
-
-    #TODO0 login vs su?
-
 ##sudo ##sudoers
 
   # Do next single command as another user or super user.
@@ -83,115 +23,129 @@
 
   # because the home gets overwritten before.
 
-  ##visudo
+  ##/etc/sudoers
 
-    # Should only be edited with visudo, analogous to vipw.
+    # Configuration file for sudo.
 
-      sudo visudo
+    ##visudo
 
-  # Syntax:
+      # Command that should be used to edit the `/etc/sudoers` files.
 
-    # After any user enters a pass, he can sudo without pass for 15 mins:
+      # Analogous to `vipw` for the passwd file.
 
-      #Defaults:ALL timestamp_timeout=15
+        sudo visudo
 
-    # Turn it off. Better for safety.
+    ##Syntax
 
-      #Defaults:ALL timestamp_timeout=0
+      # After any user enters a pass, he can sudo without pass for 15 mins:
 
-    #main lines:
-      #user  hostip=(runas)NOPASSWD ALL
-      #%group hostip=(runas)    :/bin/ls,/bin/cat
-        #user: who will get sudo premissions
-          #add '%' for group: ex: %group ...
-          #can be ALL
-        #runas: who can he sudo as
-        #NOPASSWD: if present, must enter target user's password
-        #/bin/ls,/bin/cat: list of comma separated bins he can run, or ALL
+        #Defaults:ALL timestamp_timeout=15
 
-    ##Aliases
+      # Turn it off. Better for safety.
 
-      # User:
+        #Defaults:ALL timestamp_timeout=0
 
-        #User_Alias FUSE_USERS = andy,ellz,matt,jamie
-        #FUSE_USERS ALL=(root):/usr/bin/the-application
+      # Main lines:
 
-      # Host:
+        #user  hostip=(runas)NOPASSWD ALL
+        #%group hostip=(runas)    :/bin/ls,/bin/cat
+          #user: who will get sudo premissions
+            #add '%' for group: ex: %group ...
+            #can be ALL
+          #runas: who can he sudo as
+          #NOPASSWD: if present, must enter target user's password
+          #/bin/ls,/bin/cat: list of comma separated bins he can run, or ALL
 
-        #Host_Alias HOST = jaunty
-        #%admin HOST=(ALL)
+      ##Aliases
 
-      # Runas:
+        # User:
 
-        #Runas_Alias USERS = root,andy,ellz,matt,jamie
-        #%admin ALL=(USERS) ALL
+          #User_Alias FUSE_USERS = andy,ellz,matt,jamie
+          #FUSE_USERS ALL=(root):/usr/bin/the-application
 
-      # Command:
+        # Host:
 
-        #Cmnd_Alias APT   = /usr/bin/apt-get update,/usr/bin/apt-get upgrade
-        #Cmnd_Alias USBDEV = /usr/bin/unetbootin,/usr/bin/gnome-format
-        #ALL_PROGS = APT,USBDEV
-        #%admin ALL=(ALL) ALL
+          #Host_Alias HOST = jaunty
+          #%admin HOST=(ALL)
 
-  # Common combos:
+        # Runas:
 
-  # Allow given user to sudo without password:
+          #Runas_Alias USERS = root,andy,ellz,matt,jamie
+          #%admin ALL=(USERS) ALL
 
-    #username ALL=(ALL) NOPASSWD: ALL
+        # Command:
 
-  # CLI:
+          #Cmnd_Alias APT   = /usr/bin/apt-get update,/usr/bin/apt-get upgrade
+          #Cmnd_Alias USBDEV = /usr/bin/unetbootin,/usr/bin/gnome-format
+          #ALL_PROGS = APT,USBDEV
+          #%admin ALL=(ALL) ALL
 
-    #sudo sh -c "echo '$(id -un) ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers"
+      ##Allow given user to sudo without password
 
-  ##redirection
+        # Allow given user to sudo without password:
 
-    # sudo passes its stdin to the called program:
+          #username ALL=(ALL) NOPASSWD: ALL
 
-      echo a | sudo cat
-        #a
+        # CLI:
 
-    # Cannot "echo to a file" directly without permission
+          #sudo sh -c "echo '$(id -un) ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers"
 
-      su a
-      mkdir b
-      chown b b
-      #fails:
-      sudo echo a > b/a
+    ##Redirection
 
-    # The reason why this fails is that bash gives sudo two arguments: `echo` and `a`.
+      # sudo passes its stdin to the called program:
 
-    # sudo does `echo a`, produces `a`, and then *bash* attempts the redirection by writing
-    # `a` to `b/a`, which of course fails because bash does not the necessary permissions.
+        echo a | sudo cat
+          #a
 
-    # Workarounds for that include:
+      # Cannot "echo to a file" directly without permission
 
-    # Put everything inside a single bash command:
+        su a
+        mkdir b
+        chown b b
+        #fails:
+        sudo echo a > b/a
 
-      sudo bash -c 'echo a > b/a'
+      # The reason why this fails is that bash gives sudo two arguments: `echo` and `a`.
 
-    # This works, but may lead to quoting hell.
+      # sudo does `echo a`, produces `a`, and then *bash* attempts the redirection by writing
+      # `a` to `b/a`, which of course fails because bash does not the necessary permissions.
 
-    # sudo a tee and let it do the work:
+      # Workarounds for that include:
 
-      echo a | sudo tee b/a
+      # Put everything inside a single bash command:
 
-    # And if we want to append to the file instead:
+        sudo bash -c 'echo a > b/a'
 
-      echo a | sudo tee -a b/a
+      # This works, but may lead to quoting hell.
 
-    # The resaon this works is because `sudo` redirects its stdin
-    # to the stdin of the program it will call.
+      # sudo a tee and let it do the work:
 
-    # `-e` to edit a file as sudo:
+        echo a | sudo tee b/a
 
-      sudo -e /etc/file.conf
+      # And if we want to append to the file instead:
 
-    # Multiline sudo via EOF:
+        echo a | sudo tee -a b/a
 
-      sudo tee /some/path <<EOF
+      # The resaon this works is because `sudo` redirects its stdin
+      # to the stdin of the program it will call.
+
+      # `-e` to edit a file as sudo:
+
+        sudo -e /etc/file.conf
+
+      # Multiline sudo via EOF:
+
+        sudo tee /some/path <<EOF
 EOF
 
-  ##ubuntu default sudo config
+  ##Environemnt variables
+
+    # By default, `sudo` ignores the current environment variables to start a new "fresh" session.
+
+    # This can be avoided with the `-E` option:
+    # <http://stackoverflow.com/questions/8633461/how-to-keep-environment-variables-when-using-sudo>
+
+  ##Ubuntu default sudo config
 
     # In Ubuntu, sudo group allows members to sudo whatever they want as root
 

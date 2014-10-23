@@ -16,17 +16,7 @@ This is distribution dependent.
 
 #rc.local
 
-See System V init system.
-
 #Run levels
-
-See System V init system.
-
-#init.d
-
-`/etc/init.d` holds System V scripts, which are then symlinked to `/etc/rcX/[SK]XXname` files.
-
-`/etc/init` is Upstart specific.
 
 #System V init system
 
@@ -51,9 +41,9 @@ Therefore this is a POSIX 7 supported concept.
 The LSB goes further and specifies:
 
 - 0: Halt: Shuts down the system.
-- 1: Single-user Mode: Mode for administrative tasks.[2][2]
-- 2: Multi-user Mode: Does not configure network interfaces and does not export networks services.[3]
-- 3: Multi-user Mode with Networking: Starts the system normally.[4]
+- 1: Single-user Mode: Mode for administrative tasks.
+- 2: Multi-user Mode: Does not configure network interfaces and does not export networks services.
+- 3: Multi-user Mode with Networking: Starts the system normally.
 - 4: Not used/User-definable: For special purposes.
 - 5: Start the system normally with appropriate display manager. ( with GUI ): Same as runlevel 3 + display manager.
 - 6: Reboot: Reboots the system.
@@ -62,41 +52,29 @@ Get current runlevel (POSIX 7):
 
     who -r
 
+##init.d
+
+`/etc/init.d` holds System V scripts, which are then symlinked from `/etc/rcX/[SK]XXname` files.
+
+`/etc/init` is Upstart specific.
+
 ##init command
 
 Set runlevel to 6, causing the system to reboot:
 
     #sudo init 6
 
-##update-rc.d
+##chkconfig
 
-CLI tool that manages symlinks between `/etc/init.d` and `/etc/rcX`.
-
-Prevent a service from starting at startup (remove the symlink):
-
-    sudo update-rc.d apache2 disable
-
-Enable a service:
-
-    sudo update-rc.d apache2 defaults
-
-Set the `<start><stop>` levels of the script script:
-
-    sudo update-rc.d apache2 defaults 21
-
-The above sets start to `2` and stop to `1`.
-
-##checkconfig
-
-Ubuntu install:
+Ubuntu install before 14.04:
 
     sudo aptitude install -y chkconfig
 
-Show table containing status of each service based on the runlevel:
+Removed in 14.04 and replaced by `sysv-rc-config`.
+
+Show table saying which service is on at which runlevel:
 
     chkconfig --list
-
-Allows you to see is a service automatically starts at startup or not.
 
 Sample output:
 
@@ -109,9 +87,9 @@ Show only for a single service:
 
 ##initctl
 
-Same as `sudo service --status-all`:
+Same as `sudo service --status-all` but for System V:
 
-    initctl list
+    sudo initctl list
 
 ##Ubuntu specific
 
@@ -123,6 +101,12 @@ Same as `sudo service --status-all`:
 
 #upstart
 
+Intended as a backwards compatible replacement for System V.
+
+Major advantage: automatically deals with dependency order, while in System V you have to linearize the dependencies manually.
+
+Used in Ubuntu 12.04 and 14.14, but will be replaced by `systemd` in the future.
+
 Good sources:
 
 -   <http://upstart.ubuntu.com/getting-started.html>
@@ -132,6 +116,8 @@ Good sources:
 -   <http://upstart.ubuntu.com/cookbook/>
 
     Very good manual.
+
+<http://askubuntu.com/questions/2075/whats-the-difference-between-service-and-etc-init-d>
 
 ##service
 
@@ -204,3 +190,33 @@ To start after the very basic facilities are set up(e.g. filesystems and network
 To start after `/etc/fstab` mountings have been done on Ubuntu 12.04, use:
 
     start on stopped mountall
+
+##update-rc.d
+
+CLI tool that manages symlinks between `/etc/init.d` and `/etc/rcX`.
+
+Prevent a service from starting at startup (remove the symlink):
+
+    sudo update-rc.d apache2 disable
+
+Enable a service:
+
+    sudo update-rc.d apache2 defaults
+
+Set the `<start><stop>` levels of the script script:
+
+    sudo update-rc.d apache2 defaults 21
+
+The above sets start to `2` and stop to `1`.
+
+##sysv-rc-config
+
+ncurses manager of Upstart scripts.
+
+Analogous to `chkconfig` for System V.
+
+#systemd
+
+Newer alternative to Upstart.
+
+Enabled by default on Arch, Red Hat, Debian, and planned on Ubuntu.

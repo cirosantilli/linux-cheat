@@ -53,6 +53,8 @@
         sudo aptitude install -y apt-file
         apt-file update
         sudo aptitude install -y ppa-purge
+        # Automatically run upgrades without confirmation.
+        sudo dpkg-reconfigure unattended-upgrades
 
       # Usefull stuff that does not come by default or Canonical would have to pay royalties:
 
@@ -148,6 +150,7 @@
   ##text
 
       sudo aptitude install -y dos2unix
+      sudo aptitude install -y pcregrep
 
   ##sysadmin
 

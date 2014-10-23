@@ -174,3 +174,9 @@ Colors matching parts of strings.
 Accept all and highlight pattern:
 
     grep --color -E "pattern|$" file
+
+# Multiline searches
+
+Impossible: <http://stackoverflow.com/questions/152708/how-can-i-search-for-a-multiline-pattern-in-a-file>
+
+Use `pcregrep` instead.

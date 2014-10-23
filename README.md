@@ -1,8 +1,10 @@
+#Linux Cheat
+
 Linux information and cheatsheets.
 
 Includes utils that work on Linux, and possibly other OSs too, as well as Linux internals.
 
-#Index
+##Index
 
 Important files:
 
@@ -58,6 +60,7 @@ Generic data formats:
 
 File and directory related utilities:
 
+- [du.md](du.md)
 - [fdupes.md](fdupes.md)
 - [find.md](find.md)
 - [locate.md](locate.md)
@@ -69,32 +72,34 @@ Programming tools:
 - [compile/](compile/): compilation process, dynamic libraries.
 - [ack.sh](ack.sh)
 
-[virtual-machine.md/](virtual-machine/): Vagrant, Docker.
-
-Process control:
+Process-related tools:
 
 - [chroot.sh](chroot.sh)
 - [env.sh](env.sh)
+- [free.md](env.md)
+- [htop.md](htop.md)
 - [jobs.sh](jobs.sh)
 - [lsof.md](lsof.md)
 - [nice.sh](nice.sh)
 - [nohup.sh](nohup.sh)
-- [ps.sh](ps.sh)
+- [ps.md](ps.md)
 - [pstree.sh](pstree.sh)
 - [pwd.sh](pwd.sh)
 - [sleep.sh](sleep.sh)
-- [top.sh](top.sh)
+- [top.md](top.md)
 - [wait.sh](wait.sh)
 
 Other tools:
 
 - [eval.sh](eval.sh)
 
+[virtual-machine.md/](virtual-machine/): Vagrant, Docker.
+
 Related subjects in other repositories:
 
 - [networking](https://github.com/cirosantilli/net): networking tools and protocols: HTTP, SSH, curl Apache.
 
-#How to search for stuff
+##How to search for stuff
 
 If you know what you are searching for, use the following methods to search by keyword.
 
@@ -117,7 +122,7 @@ and not just:
 
 since those could be regular commented out code.
 
-#Definition: utils
+##Definition: utils
 
 By *utils* we mean:
 
@@ -127,11 +132,11 @@ By *utils* we mean:
 
 either in the LSB or not.
 
-#Other OS
+##Other OS
 
 Many of those tools may be cross platform or have very similar ports for other OSs so the info here is also useful for other OS. I have not however tested anything in any OS except Linux.
 
-#This is the default utils repo
+##This is the default utils repo
 
 Those utils are kept in this repo because they don't deserve a repo of their own because there is not enough info written on them.
 

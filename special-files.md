@@ -24,23 +24,23 @@ Some interesting files include:
 
     This is why that dir is called `/proc`
 
--   `cat /proc/version`: Linux kernel version and other system info. Similar to `uname -a` output.
-
 -   `cat /proc/cpuinfo`: information on CPU
 
 -   `cat /proc/meminfo`: information on RAM memory
 
--   `cat /proc/slabinfo`: slab allocator info
+-   `cat /proc/modules`: information on modules
 
--   `cat /proc/softirqs`: `softirq` info
+-   `cat /proc/mounts`: list all mounted filesystems and some info on them
 
 -   `cat /proc/partitions`: `softirq` info
 
 -   `cat /proc/sched_debug`: scheduler info for debugging
 
--   `cat /proc/mounts`: list all mounted filesystems and some info on them
+-   `cat /proc/slabinfo`: slab allocator info
 
--   `cat /proc/modules`: information on modules
+-   `cat /proc/softirqs`: `softirq` info
+
+-   `cat /proc/version`: Linux kernel version and other system info. Similar to `uname -a` output.
 
 -   `cat /proc/devices`: information on registered character and block devices.
 
@@ -74,9 +74,19 @@ Some interesting files include:
     2. type. Same as used by the `nm` utility.
     3. id
 
-###loadavg
+##/proc/uptime
 
-###Load average
+How long the system has been up for.
+
+Used by the procps `uptime` utility.
+
+Sample output:
+
+    6729.78 23034.43
+
+##/proc/loadavg
+
+##Load average
 
     cat /proc/loadavg
 
@@ -97,9 +107,11 @@ Meaning:
     - `1.0` all CPU time was used exactly.
     - `2.0` it would require 2 CPUs to handle the load. The wait queue got longer.
 
-    This number does not consider how many CPU cores you have. E.g., if you have 4 cores, then you can handle a load average of `4.0`.
+    This number does not consider how many CPU cores you have.
+    E.g., if you have 4 cores, then you can handle a load average of `4.0`.
 
-    A good rule of thumb is: keep it below `0.7`. If it goes over, start investigating before things start break.
+    A good rule of thumb is: keep it below `0.7`.
+    If it goes over, start investigating before things start break.
 
 -   4: TODO
 
@@ -111,15 +123,18 @@ Used by tools such as `top`, `uptime`.
 
 Represent devices, either physical or virtual.
 
-Many virtual devices are created automatically by the Kernel to offer certain file like operations, such as random number generation.
+Many virtual devices are created automatically by the Kernel to offer
+certain file like operations, such as random number generation.
 
-Device drivers are kernel modules created by hardware vendors that implement a dev file that allows access to a device.
+Device drivers are kernel modules created by hardware vendors that implement
+a dev file that allows access to a device.
 
-Several virtual dev files are documented directly under their basename, e.g.: `/dev/null` is documented at:
+Several virtual dev files are documented directly under their basename,
+e.g.: `/dev/null` is documented at:
 
     man null
 
-##sda
+##/dev/sda
 
 Device files of this type represent block devices such as hard disks or flash memory.
 
@@ -127,7 +142,8 @@ The first device is `sda`, the second `sdb`, and so on.
 
 Also, partitions inside those devices have device files for them too.
 
-The first primary partition inside `sda` will be called `sda1`, the second main partition `sda2`, and so on.
+The first primary partition inside `sda` will be called `sda1`,
+the second main partition `sda2`, and so on.
 
 Logical partitions are numbered from `sda5` onwards.
 
@@ -143,7 +159,7 @@ Example: write pseudorandom sequences into `/dev/sda/` to hide data:
 
     #sudo dd bs=4M if=/dev/urandom of=/dev/sda
 
-##null
+##/dev/null
 
     man null
 
@@ -155,13 +171,14 @@ Very useful to discard undesired stdout / stderr:
 
 Generates no output.
 
-##zero
+##/dev/zero
 
     man zero
 
 Returns as many zeros as asked for by a read syscall.
 
-You cannot `cat` this because cat reads until the file is over, but this special file is *never* over.
+You cannot `cat` this because cat reads until the file is over,
+but this special file is *never* over.
 
 Application: reset entire partitions to 0.
 
@@ -177,7 +194,7 @@ Output:
 
 Meaning if you don't speak `od` language (now is a good time to learn): 512 bytes with value 0.
 
-##full
+##/dev/full
 
     man full
 
@@ -191,23 +208,27 @@ If you read from it, returns as many null chars as were asked for by read, like 
 
 ##Pseudorandom number generators
 
-The kernel implements a random number generator which draws entropy from non predictable events, typically device events such as mice movements or disk reads for example.
+The kernel implements a random number generator which draws entropy from
+non-predictable events, typically device events such as mice movements or disk reads for example.
 
-Just like for `/dev/zero`, it is useless to cat those files, since they don't have and end, and `cat` tries to read to the end of the file before printing.
+Just like for `/dev/zero`, it is useless to cat those files, since they don't have and end,
+and `cat` tries to read to the end of the file before printing.
 
-###random
+###/dev/random
 
     man random
 
-`/dev/random` returns random numbers one by one whenever enough entropy is generated. It is slower than `urandom`, but has greater entropy.
+`/dev/random` returns random numbers one by one whenever enough entropy is generated.
+It is slower than `urandom`, but has greater entropy.
 
-###urandom
+###/dev/urandom
 
 Documented at:
 
     man urandom
 
-`/dev/urandom` returns random numbers continuously. It is faster than `random`, but has less entropy. It should however be good enough for most applications.
+`/dev/urandom` returns random numbers continuously. It is faster than `random`,
+but has less entropy. It should however be good enough for most applications.
 
 Example: get 16 random bytes:
 
@@ -224,7 +245,7 @@ Sample output:
 
 Since the 16 bytes are random, the lines are extremely likely to be different.
 
-##tty
+##/dev/tty
 
 The current terminal. Also works on xterm windows.
 
@@ -235,13 +256,13 @@ Try:
 
 `a` appears on the terminal screen even if stdout was redirected to `/dev/null`, because `a` was sent directly to the tty.
 
-##console
+##/dev/console
 
 Similar to `tty`, but may only work on actual ttys such as Ubuntu Ctrl + Alt + F2, and not on xterm windows.
 
 Discussion: <http://unix.stackexchange.com/questions/60641/linux-difference-between-dev-console-dev-tty-and-dev-tty0>
 
-##mice
+##/dev/input/mice
 
 You can have some fun with mouses. Search for the mice or mouse device files and cat them:
 

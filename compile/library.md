@@ -44,6 +44,10 @@ Disadvantages:
 
 Since the disadvantages are so minor, it is almost always better to use dynamic linking.
 
+##Dynamic linking vs Dynamic loading
+
+<http://www.ibm.com/developerworks/library/l-dynamic-libraries/>
+
 #Search path
 
 Find where GCC search path for both `.a` and `.so`:
