@@ -1,4 +1,4 @@
-#Linux Cheat
+# ![logo](logo.jpg) Linux Cheat
 
 Linux information and cheatsheets.
 

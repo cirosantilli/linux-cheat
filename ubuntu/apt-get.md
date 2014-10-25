@@ -241,28 +241,7 @@ Keep a list of all PPAs added like this somewhere.
 
 If you want to uninstall, you will remember the filename to remove.
 
-#dpkg
-
-Info on installed packages.
-
-List all installed packages and greps for `foo`:
-
-	dpkg -l | grep $EXPRESSION
-
-The first two letters mean:
-
-- `ii`: installed
-- `rc`: configuration files only (`rc` means config such as in `bashRC`)
-
-List files in installed package
-
-	dpkg -L mysql
-
-Install `.deb` file:
-
-	dpkg -i a.deb
-
-new packages ##apt-cache
+##apt-cache
 
 Searches package name and descriptions on the web:
 
@@ -270,71 +249,9 @@ Searches package name and descriptions on the web:
 
 Pattern is a POSIX ERE.
 
-Automatically install updates: <http://askubuntu.com/questions/9/how-do-i-enable-automatic-updates>
-
-    sudo dpkg-reconfigure unattended-upgrades
-
-#apt-file
-
-Search for and list package files. **very** useful to know: which package provides a missing file like a `bin/name` or `include/name.h`?
-
-    sudo aptitude install apt-file
-    apt-file update
-    f=
-
-##search
-
-Search for file "$F" in packages.
-
-    apt-file search "$f"
-
-Literal full path substring match
-
-Use Perl regex:
-
-    apt-file search -x "a.c"
-
-Combo: search for an executable called `a2x`:
-
-    apt-file search bin/a2x
-
-##Show
-
-Shows files in package `p`:
-
-    p=
-    apt-file show "$p"
-
-##Get info on packages before installing them
-
-List package dependencies
-
-    apt-cache depends $PKG
-
-Find who depends on $PKG (reverse dependencies):
-
-    sudo apt-rdepends -r $PKG
-
-Get basic information about a package:
-
-    apt-cache show $PKG
-
-Get detailed information about a package:
-
-    apt-cache showpkg $PKG
-
-    sudo aptitude install debtags
-    debtags tag ls $PKG
-
-Package naming conventions:
-
-    -dev:  headers and libs, no docs
-    -doc:  documentation
-    -test: tests
-
 #aptitude
 
-#First time usage
+##First time usage
 
 Before you do anything else, do:
 
@@ -450,7 +367,7 @@ Great when you are going to compile it from source to get the latest version.
 
     sudo apt-get build-dep $PKG
 
-#combos
+#Combos
 
 To correct dependency problems try:
 
@@ -467,4 +384,4 @@ To correct dependency problems try:
 
 #Create packages
 
-TODO! Someday ill get to the point of having something useful to package too myself... And then I'll learn this! =)
+TODO!

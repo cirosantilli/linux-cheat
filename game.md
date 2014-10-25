@@ -50,7 +50,7 @@ List games on Ubuntu:
 
 Review top 10: <http://techtinkering.com/2009/08/11/my-top-10-classic-text-mode-bsd-games/>
 
-###adventure games
+###Adventure games
 
 Computer RPGs.
 
@@ -146,7 +146,7 @@ CLI go.
 
 Conway's game of life simulator
 
-Because the global menu does not work, deactivate it on ubuntu:
+Because the global menu does not work, deactivate it on Ubuntu:
 
     env UBUNTU_MENUPROXY=0 golly
 
@@ -156,7 +156,7 @@ Minesweeper clone
 
     gnomine
 
-##gnotski
+##Gnotski
 
 Knotski clone.
 
@@ -170,7 +170,7 @@ Also known as connect four.
 
 Warning: this games has been solved, so the program might do perfect play =)
 
-#kde
+#KDE
 
 ##kreversi
 
@@ -178,7 +178,7 @@ Reversi for KDE.
 
 #fps
 
-##urban terror
+##Urban Terror
 
 CS like, but mostly capture the flag.
 
@@ -186,7 +186,7 @@ Good inertia, not too fast.
 
 Free but closed source.
 
-##world of padman
+##World of Padman
 
 FPS, very large scenarios, cool weapons.
 
@@ -194,17 +194,17 @@ Too fast for my taste.
 
 #clones
 
-##pingus
+##Pingus
 
-Great lemmings clone.
+Lemmings clone.
 
 Includes map designer.
 
-##hedgewars
+##Hedgewars
 
-Great worms clone, has same feeling. Includes map builder.
+Worms clone, has same feeling. Includes map builder.
 
-##super maryo chronicles
+##Super Maryo Chronicles
 
 Super mario bros clone.
 
@@ -212,11 +212,11 @@ Super mario bros clone.
 
 Mario Kart 64 clone.
 
-#strategy
+#Strategy
 
-##battle for wesnoth
+##Battle for Wesnoth
 
-Turn based unit control on 2d hexagonal map.
+Turn based unit control on 2D hexagonal map.
 
 Very addictive and time consuming.
 
@@ -306,7 +306,9 @@ Two versions: GTK or not. Take GTK.
 
 Executable name: `gvba`.
 
-Version 1.8.0 had the too fast bug: <http://askubuntu.com/questions/62611/visual-boy-advanced-emulator-runs-too-fast>. Seems unsolved.
+Version 1.8.0 had the too fast bug:
+<http://askubuntu.com/questions/62611/visual-boy-advanced-emulator-runs-too-fast>.
+Seems unsolved.
 
 ###mednafen
 

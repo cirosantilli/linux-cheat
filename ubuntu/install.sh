@@ -82,8 +82,6 @@
 
     ##Browser
 
-        sudo aptitude install -y flashplugin-installer
-
         sudo aptitude install -y chromium-browser
 
       # Google Chrome: <http://askubuntu.com/questions/79280/how-to-install-chrome-browser-properly-via-command-line>
@@ -92,6 +90,14 @@
         sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
         sudo apt-get update
         sudo apt-get install google-chrome-stable
+
+      ##Flash
+
+        # Ubuntu 12.02:
+
+          #sudo aptitude install -y flashplugin-installer
+
+          sudo aptitude install -y adobe-flashplugin
 
     # PDF
 

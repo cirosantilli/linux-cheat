@@ -70,7 +70,7 @@ Ubuntu install before 14.04:
 
     sudo aptitude install -y chkconfig
 
-Removed in 14.04 and replaced by `sysv-rc-config`.
+Removed in 14.04 and replaced by `sysv-rc-conf`.
 
 Show table saying which service is on at which runlevel:
 
@@ -87,13 +87,43 @@ Show only for a single service:
 
 ##initctl
 
-Same as `sudo service --status-all` but for System V:
+Show status of all services:
 
     sudo initctl list
+
+Like `sudo service --status-all` but for System V.
+
+#/etc/init.d
+
+System V scripts, which will be symlinked from the `rc.d` directories.
+
+##/etc/inittab
+
+System V configuration file.
+
+Not used in Upstart.
 
 ##Ubuntu specific
 
 `/etc/defaults/name` are shell scripts that contain environment variables which can be used by the corresponding init script. Rationale: scripts can be updated without destroying parameters. File in `defaults` are never changed by the package manager.
+
+##update-rc.d
+
+CLI tool that manages System V symlinks between `/etc/rcX` and  `/etc/init.d`.
+
+Prevent a service from starting at startup (removes the symlink):
+
+    sudo update-rc.d apache2 disable
+
+Enable a service:
+
+    sudo update-rc.d apache2 defaults
+
+Set the `<start><stop>` levels of the script script:
+
+    sudo update-rc.d apache2 defaults 21
+
+The above sets start to `2` and stop to `1`.
 
 #init directory
 
@@ -147,33 +177,23 @@ Examples:
     sudo service apache2 restart
     sudo restart apache2
 
-##script location
+Service only works for Upstart services, it does not see System V ones.
 
-Some systems such as Ubuntu use upstart, newer replacement to the `system v` init system
+##/etc/init
 
--   `/etc/init`: upstart configuration files
+Upstart configuration files
 
-	Named services that can be used via:
+Named services that can be used via:
 
-	    sudo service XXX start
+    sudo service XXX start
 
-	correspond to:
+correspond to:
 
-	    /etc/init/XXX.conf
+    /etc/init/XXX.conf
 
-	files in this directory.
+files in this directory.
 
--   `/etc/init.d`: classic System V rc dirs
-
-	Upstart is backwards compatible and can also understand:
-
-	    /etc/init.d/XXX
-
-	as service:
-
-	    sudo service XXX start
-
-##start on
+###start on
 
 Determines event when the startup script will start.
 
@@ -191,25 +211,13 @@ To start after `/etc/fstab` mountings have been done on Ubuntu 12.04, use:
 
     start on stopped mountall
 
-##update-rc.d
+##Disable upstart services at boot
 
-CLI tool that manages symlinks between `/etc/init.d` and `/etc/rcX`.
+The only way seems to be manually modifying the file to comment out the `start` line:
 
-Prevent a service from starting at startup (remove the symlink):
+<http://askubuntu.com/questions/19320/how-to-enable-or-disable-services>
 
-    sudo update-rc.d apache2 disable
-
-Enable a service:
-
-    sudo update-rc.d apache2 defaults
-
-Set the `<start><stop>` levels of the script script:
-
-    sudo update-rc.d apache2 defaults 21
-
-The above sets start to `2` and stop to `1`.
-
-##sysv-rc-config
+##sysv-rc-conf
 
 ncurses manager of Upstart scripts.
 

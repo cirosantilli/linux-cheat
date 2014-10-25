@@ -321,12 +321,6 @@ no warnings;
         my @a = ("a0b1" =~ m/(\d)/g);
         #@a == ["0", "1"] or die;
 
-    # Loop multiple matches:
-
-        my $s = "a0";
-        $s =~ s/a(.)/b$1/ or die;
-        #$s == "b0" or die;
-
     # Almost every backslash escape has a meaning in Perl.
 
     #- `\A`: Matches only at the beginning of a string
@@ -343,7 +337,20 @@ no warnings;
 
     # `e` says that the replace will be an arbitrary Perl rexpression.
 
-#defalut variables
+    ##s/ operator
+
+        # Substitution:
+
+            my $s = "a0";
+            $s =~ s/a(.)/b$1/ or die;
+            $s == "b0" or die;
+
+            my $s = "a c";
+            $s =~ s/a\b/b/ or die;
+            $s == "b c" or die;
+
+
+#Defalut variables
 
     ##sources
 
@@ -406,13 +413,13 @@ no warnings;
 
             print $0;
 
-    ##command line arguments
+    ##Command line arguments
 
         # TODO
 
             #say $ARGV[0];
 
-    ##regex
+    ##Regex related special variables
 
         #- $1..$9 #nth capturing group of last regex match
 
@@ -424,7 +431,7 @@ no warnings;
 
         #- $+
 
-    ##environment
+    ##Environment
 
             say "ENV";
             foreach my $key (keys %ENV) {
@@ -582,3 +589,5 @@ no warnings;
 
             `true`;
             print $?, "\n";
+
+print 'ALL ASSERTS PASSED'
