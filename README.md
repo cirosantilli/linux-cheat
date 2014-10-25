@@ -97,7 +97,8 @@ Other tools:
 
 Related subjects in other repositories:
 
-- [networking](https://github.com/cirosantilli/net): networking tools and protocols: HTTP, SSH, curl Apache.
+- [C++ Cheat](https://github.com/cirosantilli/cpp-cheat): contains some compilation / language heavy subjects like the POSIX C API or generation of dynamic libraries.
+- [Networking Cheat](https://github.com/cirosantilli/networking-tutorial): networking tools and protocols: HTTP, SSH, curl Apache.
 
 ##How to search for keywords
 
