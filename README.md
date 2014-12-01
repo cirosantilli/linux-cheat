@@ -8,97 +8,97 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
 
 Important files:
 
-- [ubuntu/install.sh](ubuntu/install.sh): Ubuntu install methods many programs.
-- [utils.sh](utils.sh): dump of many utils that fit in no other category or are not large enough to get their own file. Many POSIX utilities.
+- [ubuntu/install](ubuntu/install.sh): Ubuntu install methods many programs.
+- [utils](utils.sh): dump of many utils that fit in no other category or are not large enough to get their own file. Many POSIX utilities.
 
 Documentation viewers:
 
-- [man.sh](man.sh)
-- [info.sh](info.sh)
+- [man](man.sh)
+- [info](info.sh)
 
 Base standards:
 
-- [linux.md](linux.md): Linux, LSB.
-- [posix.md](posix.md): POSIX standards.
+- [Linux](linux.md): Linux, LSB.
+- [POSIX](posix.md)
 
 Kernel related:
 
-- [kernel/](kernel/)
-- [system-call/](system-call/)
+- [Kernel](kernel/)
+- [System Call](system-call/)
 
 Initialization:
 
-- [install-os.md](install-os.md): how to install a new OS.
-- [boot.md](boot.md)
-- [init.md](init.md): System V, Upstart.
+- [Install OS](install-os.md): how to install a new OS.
+- [Boot](boot.md)
+- [Init](init.md): System V, Upstart.
 
 Base topics:
 
-- [desktop/](desktop/): X, XDG, GNOME, KDE and related utilities.
-- [filesystem.md](filesystem.md): POSIX file permissions.
-- [file-permissions.md](file-permissions.md): filesystem, hard disks, mounting, partitions.
-- [special-files.md](special-files.md): `proc`, `dev` and `sys` filesystems.
-- [terminal.md](terminal.md): terminal emulators, ANSI escapes, control characters.
+- [Desktop](desktop/): X, XDG, GNOME, KDE and related utilities.
+- [Filesystem](filesystem.md): POSIX file permissions.
+- [File permissions](file-permissions.md): filesystem, hard disks, mounting, partitions.
+- [Special files](special-files.md): `proc`, `dev` and `sys` filesystems.
+- [Terminal](terminal.md): terminal emulators, ANSI escapes, control characters.
 
 Media video, games, etc.) file types, viewers, editors, capture, synthesizers:
 
-- [audio/](audio/): audio, music, sound.
-- [book.md](book.md): PDF, DJVU.
-- [compression.md](compression.md): Zip, tar, gzip, 7z.
-- [dict.md](dict.md): dictionary formats.
-- [game.md](game.md): games, emulation.
-- [file-sharing.md](files-sharing.md):  Soulseek, Dropbox.
-- [image/](image/): images, photos.
-- [markup](markup/): Markdown, RST. Focus on command line interface and extensions.
-- [video.md](video.md): videos, films, subtitles.
+- [Audio](audio/): audio, music, sound.
+- [Book](book.md): PDF, DJVU.
+- [Compression](compression.md): Zip, tar, gzip, 7z.
+- [Dictionary](dictionary.md): dictionary formats.
+- [Game](game.md): games, emulation.
+- [File sharing](files-sharing.md):  Soulseek, Dropbox.
+- [Image](image/): images, photos.
+- [Markup](markup/): Markdown, RST. Focus on command line interface and extensions.
+- [Video](video.md): videos, films, subtitles.
 
 Generic data formats:
 
-- [json.md](json.md)
-- [unicode.md](unicode.md)
-- [xml/](xml/)
+- [JSON](json.md)
+- [Unicode](unicode.md)
+- [XML](xml/)
 
 File and directory related utilities:
 
-- [du.md](du.md)
-- [fdupes.md](fdupes.md)
-- [find.md](find.md)
-- [locate.md](locate.md)
-- [ls.md](ls.md)
-- [tree.md](tree.md)
+- [du](du.md)
+- [fdupes](fdupes.md)
+- [find](find.md)
+- [locate](locate.md)
+- [ls](ls.md)
+- [tree](tree.md)
 
 Programming tools:
 
-- [compile/](compile/): compilation process, dynamic libraries.
-- [ack.sh](ack.sh)
+- [ack](ack.sh)
+- [Compile](compile/): compilation process, dynamic libraries.
 
 Process-related tools:
 
-- [chroot.sh](chroot.sh)
-- [env.sh](env.sh)
-- [free.md](env.md)
-- [htop.md](htop.md)
-- [jobs.sh](jobs.sh)
-- [lsof.md](lsof.md)
-- [nice.sh](nice.sh)
-- [nohup.sh](nohup.sh)
-- [ps.md](ps.md)
-- [pstree.sh](pstree.sh)
-- [pwd.sh](pwd.sh)
-- [sleep.sh](sleep.sh)
-- [top.md](top.md)
-- [ulimit.md](ulimit.md)
-- [wait.sh](wait.sh)
+- [chroot](chroot.sh)
+- [env](env.sh)
+- [free](env.md)
+- [htop](htop.md)
+- [jobs](jobs.sh)
+- [lsof](lsof.md)
+- [nice](nice.sh)
+- [nohup](nohup.sh)
+- [ps](ps.md)
+- [pstree](pstree.sh)
+- [pwd](pwd.sh)
+- [sleep](sleep.sh)
+- [top](top.md)
+- [ulimit](ulimit.md)
+- [wait](wait.sh)
 
 Cryptography:
 
-- [gpg.md](gpg.md)
+- [GPG](gpg.md)
 
 Other tools:
 
-- [eval.sh](eval.sh)
+- [eval](eval.sh)
 
-[virtual-machine.md/](virtual-machine/): Vagrant, Docker.
+[Virtual machine](virtual-machine/): Vagrant, Docker.
 
 Related subjects in other repositories:
 
