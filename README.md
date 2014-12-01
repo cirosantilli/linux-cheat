@@ -37,7 +37,7 @@ Base topics:
 - [desktop/](desktop/): X, XDG, GNOME, KDE and related utilities.
 - [filesystem.md](filesystem.md): POSIX file permissions.
 - [file-permissions.md](file-permissions.md): filesystem, hard disks, mounting, partitions.
-- [special-files](special-files): `proc`, `dev` and `sys` filesystems.
+- [special-files.md](special-files.md): `proc`, `dev` and `sys` filesystems.
 - [terminal.md](terminal.md): terminal emulators, ANSI escapes, control characters.
 
 Media video, games, etc.) file types, viewers, editors, capture, synthesizers:
