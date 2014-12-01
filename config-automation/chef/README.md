@@ -1,3 +1,5 @@
+#Vagrant
+
 Good intro tutorial: <http://gettingstartedwithchef.com/first-steps-with-chef.html>
 
 Important terms:

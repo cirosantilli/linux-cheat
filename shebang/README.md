@@ -1,3 +1,5 @@
+#Shebang
+
 Shebang is the `#!` thing at the top of many Linux scripts.
 
 Tells Linux which interpreter to use to run the program.
@@ -11,7 +13,7 @@ The shebang is not specified by POSIX, so don't try to do fancy things with it
 like passing command line arguments to the interpreter:
 <http://stackoverflow.com/questions/4303128/how-to-use-multiple-arguments-with-a-shebang-i-e>
 
-#What it does exactly
+##What it does exactly
 
 Try `./print_args_shebang c d` to really understand what happens
 
@@ -45,7 +47,7 @@ which for the Python interpreter means:
 
     Therefore: all interpreted languages should have `#` as their comment character!
 
-#env
+##env
 
 You could use `!#/bin/bash` instead but if you go on a system
 where bash is located at `/usr/bin/bash`, your script breaks.
@@ -55,7 +57,7 @@ Therefore: **always** use `env`.
 With `env`, path is used instead, so if `bash` is in the user's `PATH`,
 and `/usr/bin/env` exists it works.
 
-##Why it works
+###Why it works
 
 `env cmd` simply executes a program in current environment
 
@@ -66,15 +68,15 @@ The advantage of this is that:
 - `env` is more often located in `/usr/bin` than bash in `/usr` across *NIX TODO check
 - all you interpreters
 
-#Why not determine interpreter from extension
+##Why not determine interpreter from extension
 
 In Windows, interpreter is determined by extension.
 
-###Advantage of extension
+####Advantage of extension
 
 Easier to spot program type from file browser.
 
-###Disadvantage of extension
+####Disadvantage of extension
 
 You need an extra EXT `env` var that says: you can execute `a.py` as `py`, `a.sh` as `a`.
 

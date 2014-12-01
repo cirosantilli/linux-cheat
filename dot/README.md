@@ -1,3 +1,5 @@
-plain text graph description language and name of a program that converts `.dot` files to images
+#Dot
 
-can also describe graph appearance
+Plain text graph description language and name of a program that converts `.dot` files to images.
+
+Can also describe graph appearance.

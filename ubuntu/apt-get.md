@@ -1,6 +1,8 @@
-Information about `apt-get`, `dpkg`, `aptitude`, Ubuntu official repositories, PPAs and related concepts.
+#apt-get
 
-#Source types
+`apt-get`, `dpkg`, `aptitude`, Ubuntu official repositories, PPAs and related concepts.
+
+##Source types
 
 The following are the major sources of software:
 
@@ -35,7 +37,7 @@ Enable everything with:
 
 PPAs vs Universe: universe passes some selection form Canonical, PPAs don't.
 
-##Pre-installed
+###Pre-installed
 
 List of pre-installed packages perversion: <http://askubuntu.com/questions/50077/how-to-get-a-list-of-preinstalled-packages>
 
@@ -43,13 +45,13 @@ List of pre-installed packages perversion: <http://askubuntu.com/questions/50077
 
 For other versions see the parent URL.
 
-##Main
+###Main
 
 Officially supported software. Full list for 12.04 + their recommendations + the files they provide: <http://packages.ubuntu.com/precise/allpackages>. Not possible to see the file contents.
 
 Not all of those packages come pre-installed, they can be installed directly with `apt-get` since their source is already enabled by default.
 
-##Partner
+###Partner
 
 Support is not given by Canonical, but by the company who produces the software.
 
@@ -61,7 +63,7 @@ Enable:
 
     sudo add-apt-repository "deb http://archive.canonical.com/ubuntu $(lsb_release -sc) partner"
 
-#Software version
+##Software version
 
 For stability and QA, there is only a fixed version of each software per Ubuntu version, except for occasional:
 
@@ -73,29 +75,29 @@ updates. Those updates normally only touch critical components, and even after a
 
 Therefore, the most flexible way of getting updated version of software are PPAs.
 
-##Security
+###Security
 
 Hot-fixes that must be updated quickly.
 
-##Updates
+###Updates
 
 Simply updates, not yet in another version.
 
 Enabled by default.
 
-##Proposed
+###Proposed
 
 Proposed for updates, but not yet tested.
 
 Disabled by default.
 
-##Backports
+###Backports
 
 Updates that come from a new release and were enabled to older systems.
 
 Enabled by default.
 
-#Metapackages
+##Metapackages
 
 Metapackages are packages that contain no source code of their own, but have several dependencies
 
@@ -109,11 +111,11 @@ It seems that aptitude can store this information, and uninstall metapackages in
 
 There seems to be no way of telling
 
-#Transitional packages
+##Transitional packages
 
 TODO <http://askubuntu.com/questions/20377/what-exact-purpose-have-transitional-packages>
 
-#dev packages
+##dev packages
 
 Are packages that contain libraries to build stuff, typically `.h` and `.so` files
 
@@ -125,7 +127,7 @@ Of just with the `-dev` suffix:
 
 	nvidia-cuda-dev
 
-#apt-get vs aptitude vs synaptic
+##apt-get vs aptitude vs synaptic
 
 Summary: **always** use `aptitude` instead of `apt-get`!
 
@@ -137,7 +139,7 @@ Synaptic has a GUI interface, but less options.
 
 Aptitude seems to be more powerful than apt-get
 
-#PPA
+##PPA
 
 PPAs are sources of software.
 
@@ -146,13 +148,13 @@ To add a new source you must do two things:
 - add the PPA key to the trusted PPA list
 - add the PPA to the PPA list
 
-##Find PPAs
+###Find PPAs
 
 Launchpad <https://launchpad.net> is the main source for PPAs and the site is maintained by Ubuntu. Look there first.
 
 Next Google it.
 
-##List PPAs
+###List PPAs
 
 Default sources:
 
@@ -162,7 +164,7 @@ PPAs:
 
     ls -1 /etc/apt/sources.list.d/
 
-##Keys
+###Keys
 
 In order to trust a PPA, you have to add its key.
 
@@ -191,7 +193,7 @@ add keys:
 
     wget -q -O - http://archive.getdeb.net/getdeb-archive.key | sudo apt-key add -
 
-##add-apt-repository
+###add-apt-repository
 
 Add key to PPAs in Launchpad.
 
@@ -220,7 +222,7 @@ Not sure what is the weight of:
 
     sudo add-apt-repository --remote
 
-##PPAs outside launchpad
+###PPAs outside launchpad
 
 The best I could find for now to add was the GetDeb way:
 
@@ -241,7 +243,7 @@ Keep a list of all PPAs added like this somewhere.
 
 If you want to uninstall, you will remember the filename to remove.
 
-##apt-cache
+###apt-cache
 
 Searches package name and descriptions on the web:
 
@@ -249,16 +251,16 @@ Searches package name and descriptions on the web:
 
 Pattern is a POSIX ERE.
 
-#aptitude
+##aptitude
 
-##First time usage
+###First time usage
 
 Before you do anything else, do:
 
     sudo apt-get update
     sudo apt-get install aptitude
 
-###Proxy
+####Proxy
 
 Setup connexion through a proxy via:
 
@@ -268,7 +270,7 @@ Add line:
 
     Acquire::http::Proxy "http://proxy.server.here:port/";
 
-##update
+###update
 
 Looks for possible updgrades on known sources, but does not install them:
 
@@ -282,7 +284,7 @@ Meaning of output: TODO
     Hit http://security.ubuntu.com precise-security Release.gpg
     Ign http://archive.canonical.com precise/partner TranslationIndex
 
-##install
+###install
 
 Install package
 
@@ -312,13 +314,13 @@ Very likely to clash with other installed versions of the package.
 
 It is not simple to install to current user without root: <http://askubuntu.com/questions/339/how-can-i-install-a-package-without-root-access>
 
-##build-deps
+###build-deps
 
 Install build dependencies for a package.
 
     sudo aptitude build-deps $PKG
 
-##upgrade installed packages
+###upgrade installed packages
 
 Move to next version
 
@@ -334,7 +336,7 @@ Upgrades all packages, even if upgrade requires installation of new packages
 
     sudo apt-get dist-upgrade
 
-##remove packages
+###remove packages
 
     sudo apt-get remove $PKG
 
@@ -359,7 +361,7 @@ TODO:
 
     sudo apt-get clean
 
-##build-dep
+###build-dep
 
 Install all build dependencies for a package.
 
@@ -367,7 +369,7 @@ Great when you are going to compile it from source to get the latest version.
 
     sudo apt-get build-dep $PKG
 
-#Combos
+##Combos
 
 To correct dependency problems try:
 
@@ -382,6 +384,6 @@ To correct dependency problems try:
     Also, if the package comes from a ppa, remove the ppa and try again
     Sources list. does not include ppas
 
-#Create packages
+##Create packages
 
 TODO!

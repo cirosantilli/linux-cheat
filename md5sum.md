@@ -1,3 +1,5 @@
+#md5sum
+
 Generates / checks MD5 checksums.
 
     echo a > a
@@ -14,7 +16,7 @@ Sample output:
     a: OK
     b: OK
 
-#Application
+##Application
 
 Have I downloaded the right file?
 

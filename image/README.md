@@ -1,6 +1,8 @@
-#Formats
+#Image
 
-##GIF
+##Formats
+
+###GIF
 
 Max 8 bit colors.
 
@@ -14,7 +16,7 @@ Can contain multiple images to make very short videos.
 
 To create a GIF from multiple images or vice versa use ImageMagick `convert`.
 
-##PNG
+###PNG
 
 Lossless compression, alpha layer, wide software support.
 
@@ -26,13 +28,13 @@ This is useful for slow data channels like the Internet, so that when the browse
 
 This increases the size of the image, since it is then necessary to keep bit position information.
 
-##APNG
+###APNG
 
 Animated PNG! Works on Firefox. Goodbye GIF.
 
 Sample: <http://people.mozilla.org/~dolske/apng/demo.html>
 
-##JPG
+###JPG
 
 Lossy, good compression/quality loss ratio, wide software support.
 
@@ -42,7 +44,7 @@ Amount to lose can be controlled to increase compression.
 
 Algorithm: removes high frequencies of the image's 2D Fourier transform.
 
-##SVG
+###SVG
 
 Vector, XML based, non-compressed.
 
@@ -56,13 +58,13 @@ Render size may be higher though, but at least over the Internet this is counter
 
 Reasonable browser support and increasing.
 
-##BMP
+###BMP
 
 Bit by bit, no compression.
 
 Specified by Microsoft.
 
-##Netpbm
+###Netpbm
 
 - PBM: black and white (1 or 0!)
 - PGM: gray scale
@@ -94,28 +96,28 @@ An example to differentiate ASCII from binary. For PBM:
 
 To view the minimalistic examples in this repo, open them with an image editor and do a huge zoom.
 
-##TIF
+###TIF
 
 Lossless or lossy, in practice lossless applications only.
 
-#Get info on image
+##Get info on image
 
 - `file $f`: type, and for certain formats size other major parameters such as depth.
 - ImageMagick `identify -format $f`
 
-#Editors
+##Editors
 
 [Gimp](gimp.md).
 
-##Inkscape
+###Inkscape
 
 Good SVG GUI editor.
 
-##Dia
+###Dia
 
 GNOME diagram editor
 
-##DOT
+###DOT
 
 Graph format and name of an editor utility.
 
@@ -127,9 +129,9 @@ Convert DOT file to image formats:
     dot -Tpdf -o outfile.pdf input.dot
     dot -Tsvg -o outfile.svg input.dot
 
-#Viewers
+##Viewers
 
-##eog
+###eog
 
 Eyes of GNOME.
 
@@ -137,7 +139,7 @@ Lightweight image viewer:
 
     eog a.jpg
 
-##img2txt
+###img2txt
 
 Convert image to ASCII art.
 
@@ -150,13 +152,13 @@ Stdout output:
 
 - `-W`: width
 
-###caca view
+####caca view
 
 `img2text` on X window:
 
     cacaview a.pjg
 
-##aview
+###aview
 
 Converts image to ASCII art! Not as good as `img2txt`.
 
@@ -170,19 +172,19 @@ And changing the width was not working for me:
 
     asciiview -width a.jpg
 
-#Utilities
+##Utilities
 
 [ImageMagick](imagemagick.md)
 
-##ExactImage
+###ExactImage
 
 ImageMagick competitor, supposedly faster. C++ template API.
 
-##caca-utils
+###caca-utils
 
 Contains `img2txt`.
 
-##dvipng
+###dvipng
 
 Convert DVI to PNG.
 

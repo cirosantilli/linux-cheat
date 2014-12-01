@@ -1,3 +1,5 @@
+#pcregrep
+
 Grep on Perl steroids.
 
 - `M`: multiline matches. Probably the best way to do it:

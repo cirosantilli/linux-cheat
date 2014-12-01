@@ -1,3 +1,5 @@
+#tmux
+
 Terminal superpowers:
 
 -   create a remote ssh session, detach from it, close the ssh connection, ssh again, and reattach to the old bash!
@@ -18,7 +20,7 @@ What it can't do:
 
 - save sessions to disk
 
-#Sessions
+##Sessions
 
 Has a server client model. The first time you launch the tmux command, it launches both the server and a client.
 
@@ -61,7 +63,7 @@ Attach again to a session:
 
 `$`: rename current session
 
-#Windows and panes
+##Windows and panes
 
 - windows are like Vim tabs
 - panes are like Vim windows.
@@ -98,7 +100,7 @@ Pane shortcuts:
 - `!`: remove pane from window and open it in a window of its own
 - `x`: kill / close the current pane
 
-#Send keys
+##Send keys
 
 Send keys to a session:
 
@@ -116,24 +118,24 @@ Some special strings include:
 - `C-x`: Control X
 - `M-x`: Alt X
 
-#Copy mode
+##Copy mode
 
-#History
+##History
 
 Mode in which history can be browsed, edited and copied to be later pasted on another window.
 
-#Configuration
+##Configuration
 
 Configuration file: `~/.tmux.conf`
 
 Options shall not be discussed here: they will be commented directly on my `.tmux.conf`.
 
-#Interactive
+##Interactive
 
 tmux starts a login shell by default.
 
 Therefore, `.bashrc` will get sourced.
 
-[This SO thread](http://unix.stackexchange.com/questions/38402/aliases-and-tmux) recommends to work arond this by adding to `~/.bash_profile`:
+[This SO thread](http://unix.stackexchange.com/questions/38402/aliases-and-tmux) recommends to work around this by adding to `~/.bash_profile`:
 
     case $- in *i*) . ~/.bashrc;; esac

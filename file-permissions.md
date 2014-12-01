@@ -1,4 +1,6 @@
-#Concept
+#File permissions
+
+##Concept
 
 Determines which users can do what with each file.
 
@@ -19,11 +21,11 @@ Three types of people:
 - SGID
 - SUID
 
-#Notations
+##Notations
 
 Two standard notation types: symbolic and numeric.
 
-##Numeric
+###Numeric
 
 12 bits, logically grouped into 4 groups of three, thus the natural usage of octal notation, which can represent 3 bits per digit.
 
@@ -61,7 +63,7 @@ This also suggests why the symbolic notation also incorporates this information 
 
 The leading `0` denotes octal notation.
 
-##Symbolic
+###Symbolic
 
 Sample:
 
@@ -109,11 +111,11 @@ Meaning of each:
 
     Same as `4` and `7`, but replace `suid` by `sticky bit`, `s` by `t` and `S` by `T`.
 
-#Directories
+##Directories
 
 This explains the permissions for directories.
 
-##Read
+###Read
 
 It is possible to list directory.
 
@@ -142,7 +144,7 @@ Only works if you have read permission to *all* of the parent directories!
 
     assert [ ! "$?" = 0 ]
 
-##Write
+###Write
 
 You can change the list of contents in the dir: add, remove and rename.
 
@@ -157,7 +159,7 @@ Works even if `r` is off.
     touch r/d/f
         #permission denied
 
-##Execute
+###Execute
 
 If you also have execute permissions to all of the parent dirs then you can:
 
@@ -167,7 +169,7 @@ If you also have execute permissions to all of the parent dirs then you can:
 
 The above can be done even if `r` is off.
 
-##Sticky bit
+###Sticky bit
 
 If users cannot delete/move files in dir that don't belong to them
 
@@ -193,7 +195,7 @@ They can however create files.
     rm a/a
         #removed
 
-##SGID
+###SGID
 
 Files created under SGID dir get the same group as the parent dir.
 
@@ -239,7 +241,7 @@ With SGID
         #g
         #subdirs also get sgid!
 
-###Application
+####Application
 
 You want many users to collaborate under a single dir.
 
@@ -252,9 +254,9 @@ You:
 
 This way, only the group can work under the dir, and they all can access each other's files
 
-#Files
+##Files
 
-##SUID and SGID
+###SUID and SGID
 
 Does not work properly on scripts: you *must* have an executable:
 

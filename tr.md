@@ -1,6 +1,8 @@
-POSIX 7
+#tr
 
-Character-wise text operations.
+POSIX 7.
+
+Character-wise replace operations.
 
 Replace `a` by `A`, `b` by `B` and `c` by `C`:
 

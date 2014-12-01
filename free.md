@@ -1,3 +1,5 @@
+#free
+
 Implemented by the procps package on Ubuntu 14.04.
 
 Print RAM and swap memory in Megabytes:

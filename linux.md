@@ -1,3 +1,5 @@
+#Linux
+
 Linux in informal terms can be either a computer system that:
 
 - complies to the [Linux Standard Base (LSB)][lsb] which is the main standard maintained by the [Linux foundation][]
@@ -8,7 +10,7 @@ The [LSB][] specifies the minimum interfaces every Linux system must offer.
 
 The central component of the Linux operating system is the Linux kernel, released in 1991 by Linus Trovalds, however much of its core user space software comes from the GNU project. For this reason Linux systems may also be called GNU/Linux. 
 
-#Certification
+##Certification
 
 The Linux foundation offers certification and compliance verification tools for distribution developers and application developers.
 
@@ -24,7 +26,7 @@ Notable certified systems include:
 
 -   Red Hat Enterprise Linux 6.0
 
-#GNU
+##GNU
 
 The user space programs of most Linux distributions are mostly inherited from the *GNU project* which was created in 1983 by Richard Stallman.
 
@@ -44,7 +46,7 @@ The FSF insists on calling what most people call Linux as GNU/Linux, which sound
 
 The GNU software foundation is the creator and current maintainer of the GPL license, and mostly uses that license for its software and is the main enforcer of its infringements.
 
-#POSIX
+##POSIX
 
 LSB is already highly POSIX compliant, and it states that it is on of its long term goals meant to become fully POSIX compatible
 
@@ -52,9 +54,9 @@ Incompatibilities are being listed for future resolution.
 
 There a few POSIX requirements that the Linux kernel explicitly does not implement because it considers them impossible to implement efficiently.
 
-#LSB
+##LSB
 
-##core
+###core
 
 -   CLI utilities. Very close to POSIX except that:
 
@@ -76,16 +78,16 @@ There a few POSIX requirements that the Linux kernel explicitly does not impleme
 
 -   libncurses: for command line interfaces
 
-##C++
+###C++
 
 - C standard library shared objects are required
 
-##Interpreted languages
+###Interpreted languages
 
 - Python
 - Perl
 
-##Desktop
+###Desktop
 
 - OpenGL shared objects
 - X11, GTK+, Qt runtimes
@@ -93,7 +95,7 @@ There a few POSIX requirements that the Linux kernel explicitly does not impleme
 - ALSA (sound)
 - freedesktop.org XDG [Base Directory structure](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html), and [xdg-utils](http://portland.freedesktop.org/xdg-utils-1.0/).
 
-#FHS
+##FHS
 
 The filesystem hierarchy standard specifies base directories for the system and what should go in them.
 
@@ -101,9 +103,9 @@ It is also maintained by the Linux foundation, and followed by the LSB.
 
 [freedesktop.org basedir spec](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html)  is another an important directory standard that specifies directory structures on top of the FHS. It has been adopted by the recent LSB 4.1 under the desktop section: <http://refspecs.linux-foundation.org/LSB_4.1.0/LSB-Desktop-generic/LSB-Desktop-generic.html#XDG-BASEDIR>
 
-##De facto but not mentioned in FHS
+###De facto but not mentioned in FHS
 
-###/etc/alternatives`
+####/etc/alternatives
 
 Contains symlinks that determine default programs.
 
@@ -116,29 +118,44 @@ Some important ones are:
 - editor: text editor
 - x-www-browser: text editor
 
-###^\.
+####/etc/issue
+
+Contains the message that is printed before login shells (Ubuntu Ctrl + Alt + 1).
+
+See:
+
+    man issue
+
+<http://unix.stackexchange.com/questions/84280/is-etc-issue-common-file>
+
+Of course, since this is meant to be shown to end users,
+it serves as a broadcast message for CLI only environments,
+and should not be used to identify the distribution even though
+it usually contains the distribution ID by default.
+
+####^\.
 
 Hidden files.
 
 It is up to programs to decide how to treat them.
 
-###\.~$
+####\.~$
 
 Backup file.
 
-###\.bak$
+####\.bak$
 
 Backup file.
 
-###\.orig$
+####\.orig$
 
 Original installation file.
 
-###\.d$
+####\.d$
 
 Many theories, a plausible one: differentiate `a.conf file` from `a.conf.d` dir normally, all files in the `a.conf.d` dir will be sourced as if they are inside `a.conf`.
 
-#Distributions
+##Distributions
 
 A Linux distribution is a LSB compliant system.
 
@@ -150,7 +167,7 @@ LSB is meant to contain all the core tools that allow compliant applications to 
 
 LSB does however specifies many more tools than POSIX and supports almost all base tools used by user friendly applications found in distributions.
 
-#Sources
+##Sources
 
 -   `git clone http://git.kernel.org/pub/scm/docs/man-pages/man-pages`
 

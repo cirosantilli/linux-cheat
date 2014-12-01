@@ -1,6 +1,8 @@
-#Console
+#Game
 
-##nethack
+##Command line
+
+###nethack
 
 Most famous dungeon crawler.
 
@@ -8,13 +10,13 @@ Save is only pause: no return from death.
 
 Many things kill you for totally unpredictable reasons.
 
-##fortune
+###fortune
 
 Tells you fortune to stdout!
 
     fortune
 
-##cowsay
+###cowsay
 
 An ASCII art cow echoes stdin:
 
@@ -26,19 +28,19 @@ Combo with fortune:
     fortune | cowsay
     fortune | cowsay
 
-##moon-buggy
+###moon-buggy
 
 Jump over craters and shoot forward:
 
     moon-buggy
 
-##robotfindskitten
+###robotfindskitten
 
 Cute!
 
     robotfindskitten
 
-##bsdgames
+###bsdgames
 
 Lots of console games/cute apps.
 
@@ -50,7 +52,7 @@ List games on Ubuntu:
 
 Review top 10: <http://techtinkering.com/2009/08/11/my-top-10-classic-text-mode-bsd-games/>
 
-###Adventure games
+####Adventure games
 
 Computer RPGs.
 
@@ -58,27 +60,27 @@ Read the description of places and things.
 
 Type what to do and where to go.
 
-####battlestar
+#####battlestar
 
-####adventure
+#####adventure
 
-####phantasia
+#####phantasia
 
-####battlestar
+#####battlestar
 
-###backgammon
+####backgammon
 
-###number
+####number
 
 Convert number in numerals to number in English:
 
     assert [ `echo 1 | number` = "one." ]
 
-###pom
+####pom
 
 Displays the phase of the moon.
 
-###primes
+####primes
 
 Print primes between 1 to 100:
 
@@ -90,7 +92,7 @@ Count primes:
 
 `factor` is not included here as it is part of coreutils.
 
-###robots
+####robots
 
 Very simple, fun, but too much luck.
 
@@ -102,7 +104,7 @@ Play with better settings:
 
     alias robots="robots -ta`for i in {1..10000}; do echo -n n; done`"
 
-###atc
+####atc
 
 Nice timing memory.
 
@@ -120,29 +122,29 @@ Play a scenario:
 
 Cannot pause...
 
-###hack
+####hack
 
 Nethack predecessor.
 
     hack
 
-###hunt
+####hunt
 
 Multiplayer shooter.
 
 Looks *very* promising, but multiplayer only, and no online mode.
 
-##gnugo
+###gnugo
 
 CLI go.
 
-#netreck
+##netreck
 
 2D non terminal spaceship mouse clicking online multiplayer classic.
 
-#gnome
+##gnome
 
-##golly
+###golly
 
 Conway's game of life simulator
 
@@ -150,13 +152,13 @@ Because the global menu does not work, deactivate it on Ubuntu:
 
     env UBUNTU_MENUPROXY=0 golly
 
-##gnomine
+###gnomine
 
 Minesweeper clone
 
     gnomine
 
-##Gnotski
+###Gnotski
 
 Knotski clone.
 
@@ -164,21 +166,21 @@ Knotski clone.
 
 No, Knotski has nothing to do with KDE =)
 
-##four-in-a-row
+###four-in-a-row
 
 Also known as connect four.
 
 Warning: this games has been solved, so the program might do perfect play =)
 
-#KDE
+##KDE
 
-##kreversi
+###kreversi
 
 Reversi for KDE.
 
-#fps
+##fps
 
-##Urban Terror
+###Urban Terror
 
 CS like, but mostly capture the flag.
 
@@ -186,35 +188,35 @@ Good inertia, not too fast.
 
 Free but closed source.
 
-##World of Padman
+###World of Padman
 
 FPS, very large scenarios, cool weapons.
 
 Too fast for my taste.
 
-#clones
+##clones
 
-##Pingus
+###Pingus
 
 Lemmings clone.
 
 Includes map designer.
 
-##Hedgewars
+###Hedgewars
 
 Worms clone, has same feeling. Includes map builder.
 
-##Super Maryo Chronicles
+###Super Maryo Chronicles
 
 Super mario bros clone.
 
-##Tux Kart
+###Tux Kart
 
 Mario Kart 64 clone.
 
-#Strategy
+##Strategy
 
-##Battle for Wesnoth
+###Battle for Wesnoth
 
 Turn based unit control on 2D hexagonal map.
 
@@ -224,15 +226,15 @@ Open source, but could be a professionally made game: graphics, music and gamepl
 
 Includes a map designer.
 
-#emulation
+##emulation
 
-##NES
+###NES
 
-###FCEUX
+####FCEUX
 
-##SNES
+###SNES
 
-###zsnes
+####zsnes
 
 Features:
 
@@ -240,13 +242,13 @@ Features:
 - states
 - good ROM support
 
-###snes9x-gtk
+####snes9x-gtk
 
 Lag.
 
-##Nintendo 64
+###Nintendo 64
 
-###mupen64plus
+####mupen64plus
 
 Features:
 
@@ -298,9 +300,9 @@ Full screen:
     alias mupen="mupen64plus --fullscreen"
     mupen rom.v64
 
-##Game Boy Advance
+###Game Boy Advance
 
-###VisualBoy Advance
+####VisualBoy Advance
 
 Two versions: GTK or not. Take GTK.
 
@@ -310,7 +312,7 @@ Version 1.8.0 had the too fast bug:
 <http://askubuntu.com/questions/62611/visual-boy-advanced-emulator-runs-too-fast>.
 Seems unsolved.
 
-###mednafen
+####mednafen
 
 0.8.D.3 has not friendly configuration interface, but works well.
 
@@ -324,9 +326,9 @@ Edit `~/.mednafen/mednafen.cfg` line `command.fast_forward` to  `command.fast_fo
 
 `keyboard` values seems to follow <http://expandinghead.net/keycode.html>
 
-##Nintendo DS
+###Nintendo DS
 
-###Desmume
+####Desmume
 
 Works very well.
 
@@ -334,11 +336,11 @@ Works very well.
 - shift + F1-9: save state
 - space: play / pause
 
-##PS1
+###PS1
 
-###pcsxr
+####pcsxr
 
-##dosbox
+###dosbox
 
 Some good games there:
 

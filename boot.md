@@ -1,10 +1,12 @@
+#Boot
+
 Info on the boot process and its configuration.
 
-#BIOS
+##BIOS
 
 TODO
 
-#Bootload
+##Bootload
 
 Bootloading is the name of the process for starting up the system, in particular loading the kernel code, also called kernel image, into RAM memory.
 
@@ -29,7 +31,7 @@ If you are quick enough on you keyboard, you can stop the default boot, and manu
 
 This way you can tell your BIOS to take a live CD or USB even if the OS is installed on the hard disk.
 
-#Second stage bootloader
+##Second stage bootloader
 
 The 512B of the MBR is a too little space for having a flexible boot system.
 
@@ -37,7 +39,7 @@ The MBR points to a second stage bootloader in its disk which which will do the 
 
 The most popular second stage bootloader for Linux now is GRUB. LILO was a popular alternative in the past. Windows has its own bootloader.
 
-#GRUB
+##GRUB
 
 Grand Unified Bootloader.
 
@@ -51,7 +53,7 @@ The main job for GRUB userspace utilities such as `grub-install` and `update-gru
 
 GRUB has knowledge about filesystems, and is able to read configuration files and the disk image from it.
 
-##GRUB versions
+###GRUB versions
 
 GRUB has 2 versions
 
@@ -69,7 +71,7 @@ Determine your GRUB version with:
 
 Here we discuss GRUB 2.
 
-##configuration
+###configuration
 
 Input files:
 
@@ -81,7 +83,7 @@ Generated files and data after `sudo update-grub`:
 - `/boot/grub/grub.cfg`
 - MBR bootstrap code
 
-###/etc/default/grub
+####/etc/default/grub
 
     sudo vim /etc/default/grub
 
@@ -102,7 +104,7 @@ Generated files and data after `sudo update-grub`:
         - `quiet`: suppress kernel messages.
         - `splash`: shows nice and useless image while the kernel is booting. On by default on Ubuntu 12.04. Remove this useless option,
 
-###/etc/grub.d/
+####/etc/grub.d/
 
 Contains executables.
 
@@ -138,7 +140,7 @@ Windows example:
 
 It is common to add one OS menu entry per file so that it is easy to change their order (just change alphabetical order).
 
-###os_prober
+####os_prober
 
 Looks for several OS and adds them automatically to GRUB menu.
 
@@ -146,13 +148,13 @@ Recognizes Linux and Windows.
 
 TODO how to use it
 
-###update-grub
+####update-grub
 
 Interpret input configuration files and update `/etc/default/grub` which will be used at boot time.
 
 You must to this every time you change the input configuration files for the changes to take effect.
 
-###grub-install
+####grub-install
 
 Interpret input configuration files and update the MBR on the given disk:
 
@@ -160,13 +162,13 @@ Interpret input configuration files and update the MBR on the given disk:
 
 If for example you install a new Linux distro, and you want to restore your old distro's GRUB configuration, you must log into the old distro and do `grub-install`, therefore telling your system via the MBR to use the installation parameters given on the old distro.
 
-##Sources
+###Sources
 
 -   <http://www.dedoimedo.com/computers/grub-2.html>
 
     Great configuration tutorial.
 
-#boot directory
+##boot directory
 
 Usually located at `/boot/`.
 

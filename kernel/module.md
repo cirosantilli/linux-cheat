@@ -1,3 +1,5 @@
+#Module
+
 There are things which are hard to do from regular user programs such as directly talking to hardware
 
 Some operations can be done via system calls, but if you want flexibility and speed, using the kernel ring is fundamental
@@ -17,7 +19,7 @@ Device drivers (programs that enables the computer to talk to hardware) are one 
 
 Two devices can map to the same hardware!
 
-#Config files
+##Config files
 
 If file it gets read, if dir, all files in dir get read:
 
@@ -28,9 +30,9 @@ Modules loaded at boot:
 
     sudo cat /etc/modules
 
-#module-init-tools
+##module-init-tools
 
-##package version
+###package version
 
 From any of the commands, `--version`:
 
@@ -38,7 +40,7 @@ From any of the commands, `--version`:
 
 Package that provides utilities
 
-##lsmod
+###lsmod
 
 List loaded kernel modules.
 
@@ -73,14 +75,14 @@ Also contains two more columns:
 - status: Live, Loading or Unloading
 - memory offset: 0x129b0000
 
-##modinfo
+###modinfo
 
 Get info about a module by filename or by module name:
 
     modinfo ./a.ko
     modinfo a
 
-##insmod
+###insmod
 
     sudo insmod
 
@@ -88,7 +90,7 @@ Loads the module.
 
 Does not check for dependencies.
 
-##modprobe
+###modprobe
 
 List available modules relative path to `/lib/modules/VERSION/`:
 
@@ -117,13 +119,13 @@ Get info about given `.ko` module file:
     m=a
     sudo rmmod $m
 
-#makefile
+##makefile
 
 Kernel modules are built using a makefile located at:
 
 	/lib/modules/$(uname -r)/build
 
-##includes
+###includes
 
 Header files come from the same directory as the makefile: `/lib/modules/$(uname -r)/build`.
 
@@ -131,11 +133,11 @@ TODO what is: `/usr/src/linux-headers-$(uname -r)/` ?
 
 Those come directly from the kernel source tree.
 
-##headers
+###headers
 
 See [this](#includes).
 
-#Device drivers
+##Device drivers
 
 Devices map to filesystem under `/dev/`. You can get info on them with:
 
@@ -162,7 +164,7 @@ The `b` here is my HD.
 
 Each partition also gets a `b` file.
 
-##Major and minor numbers
+###Major and minor numbers
 
 Using `ls -l`:
 
@@ -190,7 +192,7 @@ Both are stored inside a `dev_t` type (a single int, with some bytes for each nu
 - `MINOR(dev_t dev)`: get major number of a `dev_t`
 - `MKDEV(int major, int minor)`: make `dev_t` from major and minor
 
-##alloc_chrdev_region
+###alloc_chrdev_region
 
 Allocate character device major and minor number for a new driver.
 
@@ -221,23 +223,23 @@ Once a module is done with the device numbers, it should free those numbers via 
 
 This does not create actual device files.
 
-##cdev
+###cdev
 
 Represents a character device in the kernel.
 
-##cdev_init
+###cdev_init
 
 Initializes a `cdev`, allocating data for it, and setting its file operations:
 
     void cdev_init(struct cdev *cdev, struct file_operations *fops);
 
-##cdev_add
+###cdev_add
 
 Register a `cdev` structure once it has been set up.
 
     int cdev_add(struct cdev *dev, dev_t num, unsigned int count);
 
-##iminor and imajor
+###iminor and imajor
 
 Inodes contain references to `cdev`.
 
@@ -246,7 +248,7 @@ To get the major and minor numbers from a character dev inode, use:
     unsigned int iminor(struct inode *inode);
     unsigned int imajor(struct inode *inode);
 
-##create a character file from sh
+###create a character file from sh
 
 Character files can be created with the `mknod` command.
 
@@ -263,7 +265,7 @@ Therefore all of the following device files will do the same thing for example w
     sudo mknod /dev/test c 1 2
     sudo mknod /tmp/asdf c 1 2
 
-#Hardware communication
+##Hardware communication
 
 Talking to hardware always comes down to writing bytes in specific registers at a given memory addresses.
 

@@ -1,12 +1,14 @@
-#Formats
+#Dictionary
 
-##stardict
+##Formats
+
+###stardict
 
 <http://goldendict.org/dictionaries.php>
 
-For dicts, go: <www.stardict.org/download.php>
+For dictionaries see: <http://www.stardict.org/download.php>
 
-##bgl
+###bgl
 
 Babylon.
 
@@ -14,42 +16,42 @@ Windows oriented: exes on site!
 
 Can open .exe with 7zip to extract data content.
 
-Now most exes are downloaders without blgs, probably vendor lock-in.
+Now most exes are downloaders without `blgs`, probably vendor lock-in.
 
-I found some that actually contained the blg here:
+I found some that actually contained the `blg` here:
 
     http://www.babylon.com/dictionaries-glossaries
 
-#Goldendict
+##GoldenDict
 
-Fork of stardict.
+Fork of StarDict.
 
 Select text can make popup windows!
 
-Supported formats: stardict, blg,
+Supported formats: StarDict, `blg`.
 
-#sdcv
+##sdcv
 
-Command line stardict.
+Command line for StarDict.
 
-Supported formats: stardict only.
+Supported formats: StarDict only.
 
-To install dict place it under:
+To install a dictionary, place it under:
 
     /usr/share/stardict/dic
     $(HOME)/.stardict/dic
 
-List available dicts:
+List available dictionaries:
 
     sdcv -l
 
-#Spell checking
+##Spell checking
 
-##aspell
+###Aspell
 
-###features
+####Features
 
-Can add words to dict.
+Can add words to dictionary.
 
 Understands some predefined formats!
 
@@ -63,7 +65,7 @@ French:
 
     aspell -l fr -c f
 
-Must first install wordlist.
+Must first install the word lists.
 
 Same but ignore language constructs (modes):
 
@@ -75,12 +77,10 @@ Modes can be added/removed. They are called `filters`:
     sudo aspell --add-filter=$f
     sudo aspell --remove-filter=$f
 
-#hunspell
+##Hunspell
 
-Derived from myspell and mostly backwards compatible.
+Derived from MySpell and mostly backwards compatible.
 
-TODO0
+##MySpell
 
-#myspell
-
-Superseeded by hunspell.
+Superseded by Hunspell.

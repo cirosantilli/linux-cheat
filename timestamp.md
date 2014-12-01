@@ -116,6 +116,8 @@ Birth time.
 
 Time of original creation of the file, not considering modifications.
 
+Not POSIX nor widely supported.
+
     echo a > a
     stat a
     chmod 777 a

@@ -1,3 +1,5 @@
+#sort
+
 Sort line wise.
 
 Uses External R-Way merge.
@@ -9,11 +11,11 @@ Sort `f1`, `f2` together line wise:
 
 Useful options:
 
--   `-r` : reverse order
+-   `-r`: reverse order
 
--   `-n` : numbers
+-   `-n`: numbers
 
--   `-u` : `uniq`
+-   `-u`: `uniq`
 
 -   `-t:`: set field separator to `:`
 
@@ -28,25 +30,24 @@ Useful options:
 
     From field 2 to 2, numerically, then from 4 to 4, human and reverse
 
--   `-R` : randomize: pseudo reverse of sorting.
+-   `-R`: randomize: pseudo reverse of sorting.
 
--   `-h` : sort by human readable file sizes like `1k`, `2M`, `3G`
+-   `-h`: sort by human readable file sizes like `1k`, `2M`, `3G`
 
--   `-f` : ignore case
+-   `-f`: ignore case
 
 -   `-fs`: ignore case and put always upper before lower
 
--   `-b` : ignore leading blanks
+-   `-b`: ignore leading blanks
 
 -   `-uf`: remove duplicates case insensitive
 
--   `-m` : suppose `f1` and `f2` are already sorted, making sort faster
+-   `-m`: suppose `f1` and `f2` are already sorted, making sort faster
 
--   `-c` : check if is sorted
+-   `-c`: check if is sorted
 
-#GNU extensions
+##GNU extensions
 
 -   `-V`: sort dot separated versions numbers:
 
         [ "$(printf '10.0\n9.10\n9.9\n' | sort -V)" = "$(printf '9.9\n9.10\n10.0\n')" ] || exit 1
-

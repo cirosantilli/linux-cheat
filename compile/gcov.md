@@ -1,3 +1,5 @@
+#gcov
+
 GCC test coverage metrics.
 
 Must compile with `-ftest-coverate` to use:

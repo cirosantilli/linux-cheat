@@ -1,22 +1,24 @@
+#GPG
+
 GNU Private Guard encryption.
 
 Encrypt data and verify identities through algorithms sch as RSA.
 
 Interface based on the 1991 commercial Pretty Good Privacy (PGP). The interface has been open sourced as `OpenPGP`.
 
-#Sources
+##Sources
 
 - <https://alexcabal.com/creating-the-perfect-gpg-keypair/>
 - <http://www.spywarewarrior.com/uiuc/gpg/gpg-com-4.htm>
 - <http://www.madboa.com/geek/gpg-quickstart/>
 - <https://help.ubuntu.com/community/GnuPrivacyGuardHowto>
 
-#Test preparation
+##Test preparation
 
     F=a
     echo a > "$F"
 
-#Encryption without keys
+##Encryption without keys
 
 Encryption and digital signing.
 
@@ -46,7 +48,7 @@ Decrypt from stdin:
 
     cat "$F".gpg | gpg -o "$F" -d
 
-#tar combos
+##tar combos
 
 `tar.gz` encrypt `"$F"` to `F.tgz.gpg`, remove original:
 
@@ -57,7 +59,7 @@ Decrypt from stdin:
 
     gpg -d "$F" | tar xz && rm "$F"
 
-#Encryption with keys
+##Encryption with keys
 
 You have to understand the very basics of asymmetric encryption such as RSA before reading this.
 
@@ -67,7 +69,7 @@ Generate pub/private pair:
 
 You will be prompted for the key configuration.
 
-##User id
+###User id
 
 UID can either be any case insensitive substring of the key name or email that only one user has:
 
@@ -76,7 +78,7 @@ UID can either be any case insensitive substring of the key name or email that o
 
 If you enter your name and email at key creation time, your email servers as UID.
 
-##Key id
+###Key id
 
 Is an identifier of the key:
 
@@ -88,7 +90,7 @@ To get it, use:
 
 TODO: how is it calculated this id?
 
-##Files
+###Files
 
 Stored under `~/gnupg/`:
 
@@ -100,7 +102,7 @@ Stored under `~/gnupg/`:
 
 Each key file (`.asc` or `.gpg`) may contain many keys.
 
-##list-keys
+###list-keys
 
 List pub keys which you trust:
 
@@ -125,7 +127,7 @@ Meaning of fields: TODO
 - `12345678`: key id, `name` in the manual
 - `1234R`: TODO
 
-##edit-key
+###edit-key
 
 Add extra information to keys:
 
@@ -162,7 +164,7 @@ If you have they corresponding private key, GPG will require you to delete the p
     gpg --delete-secret-keys $K
 
 
-##fingerprint
+###fingerprint
 
 Same as `list-keys`, but also show key fingerprints.
 
@@ -177,7 +179,7 @@ Sample output:
     uid                  user <email>
     sub   1234R/87654321 2000-01-01
 
-##subkey
+###subkey
 
 There can be multiple subkeys per pub key.
 
@@ -185,7 +187,7 @@ Application: <http://blog.dest-unreach.be/wp-content/uploads/2009/04/pgp-subkeys
 
 TODO
 
-##Encrypt and decrypt
+###Encrypt and decrypt
 
 Create a `"$F".gpg` pubkey encrypted file:
 
@@ -197,7 +199,7 @@ Decrypt file for which you own the private key:
 
     gpg -o "$F".out -e "$F"
 
-##Verify file
+###Verify file
 
 Create a `"$F"` verification file:
 
@@ -209,7 +211,7 @@ Verify file with its verification file:
 
 Only works of course if the key is in you keyring.
 
-##clearsign
+###clearsign
 
 Analogous to signing a document, scanning and uploading it:
 
@@ -234,7 +236,7 @@ Sample output:
     <BASE64 signature data>
     -----END PGP SIGNATURE-----
 
-#Publish you pubkey
+##Publish you pubkey
 
 So that others can:
 
@@ -257,7 +259,7 @@ View keys in a key file (`.asc` or `.gpg`):
 
     gpg a.gpg
 
-##keyserver
+###keyserver
 
 The best method to publish your pubkey. People only have to know your keyserver, and they can look for your key themselves.
 
@@ -281,6 +283,6 @@ Search for someone's key on a server:
 
 TODO not working
 
-#hkp protocol
+##hkp protocol
 
 HTTP Keyserver Protocol (HKP), used for example to publish keys.

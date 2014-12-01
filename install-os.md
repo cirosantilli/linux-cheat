@@ -1,6 +1,8 @@
+#Install OS
+
 How to install a new OS on your computer.
 
-#Install a new distro
+##Install a new distro
 
 Most distros are distributed in ISOs suitable to burning on a CD or DVD, from which you can then boot the computer and install them.
 
@@ -16,7 +18,7 @@ You could however mount your hard disk, and write to it after you booted from th
 
 You will need a free partition for the installation.
 
-##USB install
+###USB install
 
 The main parameters to watch for each method are:
 
@@ -25,7 +27,7 @@ The main parameters to watch for each method are:
 - destroys existing data in USB?
 - allows persistent storage?
 
-###From Windows
+####From Windows
 
 Pendrive Linux <http://www.pendrivelinux.com> is a very good tool that:
 
@@ -36,7 +38,7 @@ From Windows, there are methods of USB installation which does not destroy USB d
 
 Some installers even allow you to reserve space on the USB for persistent storage, so that you can use your OS from the USB just as if it were an small and fast HD.
 
-###dd method
+####dd method
 
 Works for any distribution.
 
@@ -66,7 +68,7 @@ This will erase all data on the USB!
 
 *Don't* write to the first partition `/dev/sdX1`, since what we want is to write to the start of the device, not to the start of its first partition!
 
-###usb-creator-gtk
+####usb-creator-gtk
 
 Ubuntu specific.
 
@@ -76,7 +78,7 @@ Allows easy creation of persistent storage USB of up to 4GiB, and more with hack
 
     gksudo usb-creator-gtk
 
-##Bootloader problems
+###Bootloader problems
 
 Most distributions install their own bootloader, meaning that they rewrite the existing bootloader.
 
@@ -91,7 +93,7 @@ Therefore, if you have the choice, the best option in this case would be to firs
 
 This can be corrected in 2 ways: from a live boot, or from an existing partition with GRUB 2.
 
-###Live boot
+####Live boot
 
 If you can Live boot in the distro that uses GRUB 2 things are easy.
 
@@ -121,7 +123,7 @@ Where:
 
 Source: <http://askubuntu.com/questions/59359/unable-to-boot-into-ubuntu-after-ubuntu-fedora-dual-boot/59376#59376>
 
-###Existing GRUB 2 partitions
+####Existing GRUB 2 partitions
 
 If you do not have access to a Live CD, you can mount the GRUB 2 partition,
 and `chroot` into it, and then reinstall GRUB 2.
@@ -134,7 +136,7 @@ Procedure: <http://askubuntu.com/questions/88384/how-can-i-repair-grub-how-to-ge
 
 GRUB simply read its configuration files, and after interpreting those write data to specific points of the HD (Master boot record, at the very beginning of the HD) instructions on how to boot.
 
-#32 vs 64 bit
+##32 vs 64 bit
 
 64 bit is faster and already stable: use it.
 

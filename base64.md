@@ -28,6 +28,20 @@ Standards exist which drop the power of 2 requirement. Base85 encodes 4 bytes in
 
 Base85 implementations are slower than Base64 and less common. Data gets 25% bigger instead of 33% as for Base64.
 
+##Base58
+
+<http://en.wikipedia.org/wiki/Base58>
+
+Base 64 with a few characters removed to make it easier for humans to read:
+
+- `I` (capital `i`) and `l` (lower case `L`) because they look alike
+- `O` (capital `o`) and `0` (zero) because they look alike
+- non alpha characters: `+` and `/`
+
+The actual order is not well specified, and more specific standards must be considered.
+
+E.g., Bitcoin and Ripple use different orders.
+
 ##Why not use hexadecimal?
 
 Even simpler for humans, but data gets much larger Ks the base is smaller.

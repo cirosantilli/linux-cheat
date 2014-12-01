@@ -1,3 +1,5 @@
+#dd
+
 POSIX 7.
 
 Low level file operations.
@@ -8,7 +10,7 @@ Funny mnemonic: Data Destroyer.
 
 Reason: the main use case for `dd` is to manipulate block devices like hard disks at a low level without considering file structure. This makes operations such as disk copy very fast, but can make a wipe a disk by changing two characters of a command.
 
-#if of
+##if of
 
 - if = input file. If not given, stdin.
 - of = output file. If not given, stdout.
@@ -26,13 +28,13 @@ Same as `cp a b`:
 
     dd if=a of=b
 
-#status
+##status
 
 Stop printing status line at the end of the transfer:
 
     echo a | dd status=none
 
-#bs
+##bs
 
 How many input and output bytes to read/write at once.
 
@@ -42,14 +44,14 @@ Also defines the block size for count, skip and seek.
 
 Default values: 512 B.
 
-#count
+##count
 
 Copy up to count blocks (defined by bs):
 
     [ `echo -n 1234 | dd status=none bs=2 count=1` = 12 ] || exit 1
     [ `echo -n 1234 | dd status=none bs=1 count=3` = 123 ] || exit 1
 
-#size suffixes
+##size suffixes
 
 -`c`: 1 (char)
 -`w`: 2 (word)
@@ -67,19 +69,19 @@ The larger the chunk size, the potentially faster file transfers will be.
 
 Nowadays, `4M` is a good value for large file transfers.
 
-#skip
+##skip
 
 Skip first `n` input blocks (defined by bs or ibs):
 
     [ `echo -n 123 | dd status=none bs=1 skip=1` = 23 ] || exit 1
 
-#seek
+##seek
 
 Skip first `n` output blocks (defined by bs or obs):
 
 TODO minimal example.
 
-#conv
+##conv
 
 Comma separated list of options.
 
@@ -95,11 +97,11 @@ Most useful ones:
 
     Application: part of your hard disk is broken, but you are willing to risk a faulty full transfer anyways.
 
-#iflag oflag
+##iflag oflag
 
 TODO
 
-#Applications
+##Applications
 
 Copy one hard disk to another:
 
@@ -115,7 +117,7 @@ If you are really serious about preventing forensic data recovery, use a program
 
 If you just want to hide content from very simple retrieval, doing this command for a few seconds is likely to destroy the partition table, and that should be enough.
 
-#ddrescue
+##ddrescue
 
 Like `dd`, but behaves smartly for disk errors.
 

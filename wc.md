@@ -1,3 +1,5 @@
+#wc
+
 POSIX 7
 
 Does word, line, character and other similar counts.

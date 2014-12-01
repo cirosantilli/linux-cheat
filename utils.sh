@@ -1196,35 +1196,6 @@
 
         sudo lshw
 
-##ulimit
-
-  #Get and set limits for applications running under curent shell.
-
-  #POSIX 7.
-
-  #POSIX only mandates a single option: `-f` for the maximum file size.
-
-  #Get value of limit:
-
-    ulimit -f
-
-  #Set value:
-
-    ulimit -f 0
-    sudo ulimit -f unlimited
-
-  #Certain limits may require root priviledges to increase.
-
-  ##GNU extensions
-
-    #GNU adds many more options in its sh and bash implementations.
-
-    #In both cases `ulimit` is implemented as a built-in.
-
-    #View all limits (including the unit and the option name):
-
-      ulimit -a
-
 ##read
 
   # Read from stdin and stores in shell variables.

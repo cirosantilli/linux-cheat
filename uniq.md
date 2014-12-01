@@ -1,3 +1,5 @@
+#uniq
+
 POSIX 7
 
 *Ajacent* dupe line operations.

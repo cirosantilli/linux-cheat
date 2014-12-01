@@ -1,3 +1,5 @@
+#logrotate
+
 A log file is a file that stores notifications, often automatically made by programs that run on the background like servers or the kernel.
 
 Log file for system wide utilities are often stored under `/var/log`.

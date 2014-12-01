@@ -1,3 +1,5 @@
+# du
+
 POSIX 7 <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/du.html>
 
 Mnemonic: Disk Usage.

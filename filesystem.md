@@ -1,10 +1,12 @@
+#Filesystem
+
 Filesystems and related concepts: hard disks, mounting, partitions, block devices.
 
-#Partitions
+##Partitions
 
 There are 2 main types of partitions: MBR or GPT.
 
-##MBR
+###MBR
 
 You can only have 4 primary partitions.
 
@@ -20,7 +22,7 @@ You can visualize which partition is inside which disk with `sudo lsblk -l`.
 
 TODO more common?
 
-##GPT
+###GPT
 
 Arbitrary amount of primary partitions.
 
@@ -30,7 +32,7 @@ You should unmount partitions before making change to them.
 
 To get info on partitions, start/end, filesystem type and flags, consider: `parted`, `df -f`
 
-##Home partition
+###Home partition
 
 If you are a developer, create a separate partition and put your home on the root `/` of that partition.
 
@@ -44,7 +46,7 @@ Use the same username on new systems, and mount the partition automatically with
 
 30GiB is a good size for each root partition. Leave everything else for the home partition.
 
-##Partition table
+###Partition table
 
 Contained in the MBR.
 
@@ -54,7 +56,7 @@ If not present, most systems will search for a partition starting at the very be
 
 In such case, the partition will be mounted directly at `/dev/sdb`, not `/dev/sdb1`
 
-#MBR
+##MBR
 
 The MBR is the first 512 sector of the device found. It contains:
 
@@ -77,11 +79,11 @@ The MBR can only be at the start of a physical partition, not of a logical parti
 
 This is why on bootloader configurations you give `/dev/sda`, instead of `/dev/sda1-4`.
 
-#fuseblk
+##fuseblk
 
 TODO. NTFS partitions as such.
 
-#Format disks
+##Format disks
 
 To format a disk is to prepare it for initial utilization, often destroying all data it contains.
 
@@ -92,7 +94,7 @@ Disk formating consists mainly of two steps:
 
 GUI tools such as gparted exist to make both those steps conveniently.
 
-#fdisk
+##fdisk
 
 View and edit partition tables and disk parameters.
 
@@ -106,7 +108,7 @@ Better use gparted for simple operations if you have X11
 
 To view/edit partitions with interactive CLI prompt interface.
 
-##l
+###l
 
 Show lots of partition and disk data on all disks:
 
@@ -131,7 +133,7 @@ Sample output for each disk:
     /dev/sda6    940277760  948099071   3910656  82 Linux swap / Solaris
     /dev/sda7    907640832  940267519  16313344  83 Linux
 
-##REPL
+###REPL
 
 Edit partitions for `sdb` on REPL interface:
 
@@ -148,7 +150,7 @@ Most useful commands:
 - `-d`: delete a partition.
 - `-w`: write enqueued changes and exit.
 
-#Hard disks
+##Hard disks
 
 Hard disks are represented by the system as block devices.
 
@@ -168,7 +170,7 @@ To understand those concepts, you must visualize the hard disk's physical arrang
 
 Those parameters can be gotten with commands such as `sudo fdisk -l`.
 
-#Filesystem
+##Filesystem
 
 Determines how data will be efficiently stored in the hard disk in a linear manner.
 
@@ -194,9 +196,9 @@ Each partition can have a different filesystem.
 
 When creating partitions for external storage devices such as USB stick nowadays, the best option is NTFS since Linux can read write to it out of the box, and it can be used on the 95% of computers because they use Windows (which does not read / write to ext out of the box.)
 
-##tmpfs
+###tmpfs
 
-##ramfs
+###ramfs
 
 Types of filesystems that exists only in RAM. It is therefore fast and can only be small.
 
@@ -212,15 +214,15 @@ tmpfs vs ramfs:
 
 Create a tmpfs:
 
-    mkdir -p /mnt/tmp
-    mount -t tmpfs -o size=20m tmpfs /mnt/tmp
+    sudo mkdir -p /mnt/tmp
+    sudo mount -t tmpfs -o size=20m tmpfs /mnt/tmp
 
 Create a ramfs:
 
-    mkdir -p /mnt/ram
-    mount -t ramfs -o size=20m ramfs /mnt/ram
+    sudo mkdir -p /mnt/ram
+    sudo mount -t ramfs -o size=20m ramfs /mnt/ram
 
-#Create filesystems
+##Create filesystems
 
 Find all commands to make filesystems:
 
@@ -254,7 +256,7 @@ You should only use on partition devices (ex: `sda1`), not on the entire devices
 
 If you want to edit the partition table, first use a tool like `fdisk`.
 
-#mke2fs
+##mke2fs
 
 Make ext[234] partitions.
 
@@ -265,7 +267,7 @@ Consider using gparted if you have X11.
 - `-i`: inodes per group (power of 2)
 - `-j`: use ext3 journaling. TODO for `-t` ext3/4, is it created by default?
 
-#tune2fs
+##tune2fs
 
 Get and set parameters of ext filesystems that can be tuned after creation.
 
@@ -273,9 +275,9 @@ List all parameters:
 
     sudo tune2fs -l /dev/sda5
 
-#mkswap
+##mkswap
 
-#Swap partition
+##Swap partition
 
 The swap partition is used by OS to store RAM that is not being used at the moment to make room for more RAM.
 
@@ -311,13 +313,13 @@ Make a swap partition on partition with random UUID.
 
 Swap must be off.
 
-#gparted
+##gparted
 
 GUI to `fdisk` + `mke2fs.`
 
 Very powerful and simple to use.
 
-#parted
+##parted
 
 Get information on all partitions
 
@@ -336,13 +338,13 @@ Sample output:
     6   481GB  485GB  4005MB logical  linux-swap(v1)
     3   485GB  500GB  14.7GB primary  ntfs
 
-#sda
+##sda
 
-#sdb
+##sdb
 
-#hda
+##hda
 
-#Device files
+##Device files
 
 Each hard disk and partition corresponds to device file.
 
@@ -375,11 +377,11 @@ The standard naming scheme is:
 
 If a MBR is not present and a filesystem starts directly at the start of the device, then `sda` will be the partition itself.
 
-##SATA
+###SATA
 
-##IDE
+###IDE
 
-##hd vs sd
+###hd vs sd
 
 `hd` is for IDE disks, `sd` for SATA disks.
 
@@ -391,17 +393,17 @@ But by the beginning of 2007, SATA had largely replaced IDE in all new systems.
 
 <http://www.diffen.com/difference/IDE_vs_SATA>
 
-#sr0
+##sr0
 
 CD DVD.
 
 `/dev/cdrom` is a symlink to it.
 
-#mmcblk0
+##mmcblk0
 
 A SanDisk SD card had a device named `mmcblk0`.
 
-##lsblk
+###lsblk
 
 List block devices, including those which are not mounted.
 
@@ -447,7 +449,7 @@ Sample output:
 
     sudo lsblk -no UUID /dev/sda1
 
-#UUID
+##UUID
 
 Unique identifier for a partition. Field exists in ext and NTFS.
 
@@ -463,13 +465,13 @@ Get all devices:
 
     sudo lsblk -no UUID /dev/sda1
 
-#blkid
+##blkid
 
 Get UUID, label and filesystem type for all partitions
 
     sudo blkid
 
-#Label
+##Label
 
 An ext partitions concept.
 
@@ -477,7 +479,7 @@ Determines the mount name for the partition.
 
 Should be unique, but not sure this is enforced. TODO
 
-##e2label
+###e2label
 
 Get / set ext[234] label info
 
@@ -492,7 +494,7 @@ List all labels:
 
     sudo blkid
 
-#/dev/disk
+##/dev/disk
 
 Symlinks to partition identifiers.
 
@@ -511,7 +513,7 @@ Example:
 
     ls -l by-id
 
-#Mount
+##Mount
 
 Mounting is the operation of making a block device available for operations such as open, read and write.
 
@@ -529,7 +531,7 @@ You can mount several times on the same point, the last operation hiding the old
 
 You can mount with the mount utility, and unmount with the umount utility.
 
-##mount utility
+###mount utility
 
 Mount block device file on filesystem:
 
@@ -550,7 +552,7 @@ Shows:
 - type
 - flags
 
-##bind
+###bind
 
 Make one dir a copy of the other, much like a hardlink does to files.
 
@@ -567,7 +569,7 @@ Requires `sudo` like mount because it uses kernel internals to do it. For an use
     [ `ls a` = $'a\nb' ] || exit 1
     [ -z `ls b` ] || exit 1
 
-##bindfs
+###bindfs
 
 Like bind, but allows you to mess with ownership and permissions.
 
@@ -587,9 +589,9 @@ Unmount:
 
     fusermount -u /home/johnc/ISO-images
 
-##Unmount
+###Unmount
 
-##umount
+###umount
 
 Unmount what is mounted on given directory:
 
@@ -601,7 +603,7 @@ Unmount block device from all directories it is mounted:
 
 `umount` can only be used if the device is not in use. To determine which processes are using a device, use `lsof` or `fuser`.
 
-##fstab
+###fstab
 
 This is about the config file located at `/etc/fstab`.
 
@@ -656,7 +658,7 @@ Syntax:
 
 Use 1 for the primary partition, `2` for the others.
 
-##mtab
+###mtab
 
 Explained in:
 
@@ -680,7 +682,7 @@ Sample lines of the file:
     none /sys/fs/fuse/connections fusectl rw 0 0
     /dev/sdb1 /media/SYSTEM_DRV fuseblk rw,nosuid,nodev,allow_other,default_permissions,blksize=4096 0 0
 
-##Auto mount Windows filesystems
+###Auto mount Windows filesystems
 
 To mount Windows filesystems such as NTFS or DOS use:
 
@@ -688,7 +690,7 @@ To mount Windows filesystems such as NTFS or DOS use:
 
 This way, dirs will be 000 and files 666 (not executable).
 
-##DVD
+###DVD
 
 Mounting DVDs / USBs is similar to mounting partitions:
 
@@ -698,23 +700,23 @@ However if you use auto, you always get errors when the DVD is empty.
 
 It is best to use auto, because DVD can be of several formats.
 
-##mountall
+###mountall
 
 mountall is on Ubuntu 12.04 the utility that reads fstab and mounts all the filesystems listed there.
 
-##/proc/mounts
+###/proc/mounts
 
 List mounted filesystems:
 
     cat /proc/mounts
 
-#fsck
+##fsck
 
 File System Check.
 
 Check and repair Linux filesystems.
 
-#inotify
+##inotify
 
 Take action whenever file changes: <http://superuser.com/questions/181517/how-to-execute-a-command-whenever-a-file-changes>
 

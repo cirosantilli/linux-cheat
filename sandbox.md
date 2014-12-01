@@ -1,4 +1,6 @@
-This section discusses how to run untrusted code in a sandboxed environment.
+#Sandbox
+
+How to run untrusted code in a sandboxed environment that limits its capabilities.
 
 It appears that safe and low overhead virtualization is not yet a well achieved goal, and there is a log of work being put into it today. 
 
@@ -15,21 +17,21 @@ The following aspects must be either denied or give a quota to:
 - CPU usage
 - other devices and associated system resources: file descriptors (hard disk device availability), 
 
-# Process limits
+##Process limits
 
 Linux and POSIX offer several per process limits. POSIX ones are documented with the `getrlimit` interface at <http://pubs.opengroup.org/onlinepubs/9699919799/functions/getrlimit.html>
 
 For those limits to be useful, you need limit the maximum number of processes an user can run, possibly to 1. It seems that this can be done through PAM limits.
 
-# Per user limits
+##Per user limits
 
-##PAM
+###PAM
 
-##/etc/security/limits.conf
+###/etc/security/limits.conf
 
 TODO confirm this section.
 
-Module that sets per user resoruce quotas.
+Module that sets per user resource quotas.
 
 <http://www.cyberciti.biz/tips/linux-limiting-user-process.html>
 
@@ -38,11 +40,11 @@ Allows for several useful limits, e.g. `nproc` for the number or processes.
     man limits.conf
     man pam_limits
 
-# Docker
+## Docker
 
 TODO
 
-# Sources
+## Sources
 
 There are tons of SO questions about this subject, each with a different requirement set:
 

@@ -1,3 +1,5 @@
+#grep
+
 POSIX 7
 
 Select lines from stdin or files.
@@ -10,7 +12,7 @@ Basic usage:
     printf 'a\nb\n' > f
     [ "$(grep a f)" = "ab" ] || exit 1
 
-#Pattern
+##Pattern
 
 grep can use POSIX BRE (default) and POSIX ERE via `-E`.
 
@@ -18,7 +20,7 @@ Don't forget: BRE is deprecated.
 
 Perl regex is not specified in POSIX, but the GNU implementation offers the option, but states in the man that it is highly experimental (from which we deduce they are not relying on Perl itself).
 
-#i
+##i
 
 Case insensitive:
 
@@ -28,7 +30,7 @@ Output:
 
     A
 
-#E
+##E
 
 Find with ERE:
 
@@ -36,7 +38,7 @@ Find with ERE:
 
 Much saner and more powerful than BREs.
 
-##Application: filter lines by length
+###Application: filter lines by length
 
 `N` characters or more:
 
@@ -48,7 +50,7 @@ Less than `N` characters:
 
 Not very fast, but best golfer I have seen so far. `sed` for inline.
 
-#F
+##F
 
 Fixed, that is, literal non BRE search:
 
@@ -58,7 +60,7 @@ Output:
 
     *
 
-#v
+##v
 
 Invert: print lines that don't match:
 
@@ -74,14 +76,14 @@ Remove line from file:
     grep -v "$l" "$f" > "$tmp"
     mv "$tmp" "$f"
 
-#Exit status
+##Exit status
 
 0 if at least one match, 1 otherwise.
 
     echo a | grep -q b && assert false
     echo a | grep -q a || assert false
 
-#q
+##q
 
 Quiet, suppress stdout.
 
@@ -97,13 +99,13 @@ Append line to file only if it is not there already:
 
 Very useful for files that have unordered sets of things separated by newlines.
 
-#l
+##l
 
 Show only matching filenames.
 
 Specially useful with `-r`.
 
-#c
+##c
 
 Count how many lines match
 
@@ -113,7 +115,7 @@ Output:
 
     2
 
-#e
+##e
 
 Multiple criteria OR. Mnemonic: Either.
 
@@ -125,20 +127,20 @@ All patterns are ERE:
 
     printf 'a\nb\n' | grep -E -e 'a' -e 'b'
 
-#n
+##n
 
 Show matching line Numbers
 
-#f
+##f
 
 Grep for either of lines of an input file.
 
 	printf "ab\ncd\n" > f
 	[ "$(printf "0ab\n1ef\n2cd" | grep -f f)" = "$(printf "0ab\n2cd\n")" ] || exit 1
 
-#GNU extensions
+##GNU extensions
 
-##r
+###r
 
 Recurse, print filenames before batches.
 
@@ -149,25 +151,25 @@ No more `find . -type f | xargs` !
 
     grep -r 'a' .
 
-##A
+###A
 
 Also print `n` lines following the match:
 
     assert [ "`printf 'a\nb\n' | grep -A1 a`" = $'a\nb' ]
 
-###application
+####application
 
 Get the nth line after matching line:
 
     assert [ "`printf 'a\nb\n' | grep -A1 a | tail -n1`" = $'b' ]
 
-##B
+###B
 
 Before. Contrary of `-A`.
 
     assert [ "`printf 'a\nb\n' | grep -B1 b`" = $'a\nb' ]
 
-##color
+###color
 
 Colors matching parts of strings.
 
@@ -175,7 +177,11 @@ Accept all and highlight pattern:
 
     grep --color -E "pattern|$" file
 
-# Multiline searches
+###o
+
+Only print matches.
+
+## Multiline searches
 
 Impossible: <http://stackoverflow.com/questions/152708/how-can-i-search-for-a-multiline-pattern-in-a-file>
 

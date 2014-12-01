@@ -9,7 +9,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
 Important files:
 
 - [ubuntu/install.sh](ubuntu/install.sh): Ubuntu install methods many programs.
-- [utils.sh](utils.sh):                   dump of many utils that fit in no other category or are not large enough to get their own file. Many POSIX utilities.
+- [utils.sh](utils.sh): dump of many utils that fit in no other category or are not large enough to get their own file. Many POSIX utilities.
 
 Documentation viewers:
 
@@ -30,27 +30,27 @@ Initialization:
 
 - [install-os.md](install-os.md): how to install a new OS.
 - [boot.md](boot.md)
-- [init.md](init.md):             System V, Upstart.
+- [init.md](init.md): System V, Upstart.
 
 Base topics:
 
-- [desktop/](desktop/):                       X, XDG, GNOME, KDE and related utilities.
-- [filesystem.md](filesystem.md):             POSIX file permissions.
+- [desktop/](desktop/): X, XDG, GNOME, KDE and related utilities.
+- [filesystem.md](filesystem.md): POSIX file permissions.
 - [file-permissions.md](file-permissions.md): filesystem, hard disks, mounting, partitions.
-- [special-files](special-files):             `proc`, `dev` and `sys` filesystems.
-- [terminal.md](terminal.md):                 terminal emulators, ANSI escapes, control characters.
+- [special-files](special-files): `proc`, `dev` and `sys` filesystems.
+- [terminal.md](terminal.md): terminal emulators, ANSI escapes, control characters.
 
 Media video, games, etc.) file types, viewers, editors, capture, synthesizers:
 
-- [audio/](audio/):                 audio, music, sound.
-- [book.md](book.md):               PDF, DJVU.
+- [audio/](audio/): audio, music, sound.
+- [book.md](book.md): PDF, DJVU.
 - [compression.md](compression.md): Zip, tar, gzip, 7z.
-- [dict.md](dict.md):               dictionary formats.
-- [game.md](game.md):               games, emulation.
+- [dict.md](dict.md): dictionary formats.
+- [game.md](game.md): games, emulation.
 - [file-share.md](files-share.md):  Soulseek, Dropbox.
-- [image/](image/):                 images, photos.
-- [markup](markup/):                Markdown, RST. Focus on command line interface and extensions.
-- [video.md](video.md):             videos, films, subtitles.
+- [image/](image/): images, photos.
+- [markup](markup/): Markdown, RST. Focus on command line interface and extensions.
+- [video.md](video.md): videos, films, subtitles.
 
 Generic data formats:
 
@@ -87,6 +87,7 @@ Process-related tools:
 - [pwd.sh](pwd.sh)
 - [sleep.sh](sleep.sh)
 - [top.md](top.md)
+- [ulimit.md](ulimit.md)
 - [wait.sh](wait.sh)
 
 Other tools:

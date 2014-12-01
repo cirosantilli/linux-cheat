@@ -1,10 +1,12 @@
+#xargs
+
 POSIX 7
 
 Takes each line of stdin runs a command with that line as argument.
 
 Great for combo with `find` to do a command on all files found.
 
-#Alternatives
+##Alternatives
 
 Downsides of xargs:
 
@@ -23,7 +25,7 @@ In scripts, always use the more versatile (and slightly more verbose) read while
 
 Or do yourself a favor and use Python.
 
-#-I
+##-I
 
 What you will want to use 95% of the time are commands of the form:
 
@@ -77,7 +79,7 @@ Gives an error
 
     xargs: unmatched single quote; by default quotes are special to xargs unless you use the -0 option
 
-#-0
+##-0
 
 Read up to NUL char instead of newline char.
 
@@ -93,7 +95,7 @@ Classic combo with `find -print0`:
 
 Using `-0` is the most robust form.
 
-#Detailed operation
+##Detailed operation
 
 Read line from stdin, append as argument to the given command
 
@@ -138,7 +140,7 @@ Outputs:
     a
     b
 
-#Multiple commands
+##Multiple commands
 
 The only way to do multiple commands per line is using `xargs bash` technique:
 
@@ -155,7 +157,7 @@ Only use this for very simple commands, or you are in for an escaping hell!
 
 If you feel the need to do this, it is likely that you should consider a "read while" technique instead or a Python script.
 
-#Interactive commands
+##Interactive commands
 
 `xargs` takes its arguments from stdin, so it does not allow you to run commands that require stdin interaction such as `aspell`. The following fails:
 
@@ -165,13 +167,13 @@ One workaround is to open a new terminal for each command:
 
     find . -iname '*.md' | xargs -I'{}' xterm -e aspell -c '{}'
 
-#Applications
+##Applications
 
 Find and replace in files found with perl regex:
 
     find . -type f | xargs perl -pie 's/a/A/g'
 
-##Find files whose path differ from other files only by case
+###Find files whose path differ from other files only by case
 
 Useful when copying from Linux to a system that does not accept files that differ only by case (Mac OS X and Windows)
 
@@ -181,6 +183,6 @@ Remove them:
 
     find . | sort -f | uniq -di | xargs -I'{}' rm '{}'
 
-#Parallel
+##Parallel
 
 TODO GNU xargs that does jobs in parallel? Looks promising.

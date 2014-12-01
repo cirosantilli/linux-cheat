@@ -1,6 +1,8 @@
+#OCR
+
 Optical character recognition: transform images of text into ASCII or Unicode.
 
-#Add text layer to PDFs
+##Add text layer to PDFs
 
 *OCR indexing*: transform PDF text-only to searchable PDF.
 
@@ -14,17 +16,17 @@ Before you go about extracting PDFs, you must use the right command to convert! 
     convert -density 300 -monochrome -normalize a.pdf a.png
     convert -depth 1 -density 300 -normalize a.pdf a.png
 
-#hORC
+##hORC
 
 <http://en.wikipedia.org/wiki/HOCR>
 
 Format that contains OCR + info about page position and certainty of match. Allows for example to add text layers to image only PDFs.
 
-#Tools
+##Tools
 
-##Tesseract
+###Tesseract
 
-###Chinese
+####Chinese
 
 Tesseract looks for `zho` instead of `chi_sim` there is probably a better way to do this in the Tesseract configs, but apparently not directly from vobsub2srt
 
@@ -33,7 +35,7 @@ Tesseract looks for `zho` instead of `chi_sim` there is probably a better way to
 
 `-psm 1`: detects pages *and* script automatically. `1` is just a magic mode without meaning.
 
-##Cuneiform
+###Cuneiform
 
     cuneiform -l eng -f text -o "$f.txt" "$f.png"
 
@@ -41,6 +43,6 @@ Tesseract looks for `zho` instead of `chi_sim` there is probably a better way to
 
 `-l`: Language, see `man cuneirform`.
 
-##hocr2pdf from the ExactImage package
+###hocr2pdf from the ExactImage package
 
     hocr2pdf -i "$f.png" -s -o "$f.pdf" < "$f.hocr"

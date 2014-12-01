@@ -1,3 +1,5 @@
+#ps
+
 POSIX 7 <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/ps.html>
 
 List current executing processes and their info.
@@ -34,17 +36,23 @@ Best command to see all processes on the system:
 
 Output fields include:
 
-- `PID`: unique identifier for all process on system
-- `TTY`: from which tty it was launched
-- `TIME`: CPU time used for process, not real time
-- `CMD`: command that launched th process without command line arguments
-- `RSS`: (not POSIX) Resident Set Size. Memory used directly by the program in the RAM (so no swap)
-         and that is not shared with other programs (shared memory like shared libraries).
-         <http://stackoverflow.com/questions/7880784/what-is-rss-and-vsz-in-linux-memory-management>
-- `VSZ`: (not POSIX) Virtual Memory Size: the entire address space that is visible by the program,
-         although not necessarily loaded in memory. Includes swap and parts of shared libraries
-         not loaded in RAM.
-- `%MEM`: (not POSIX) percentage of `RSS` out of the total memory
+-   `PID`: unique identifier for all process on system
+
+-   `TTY`: from which tty it was launched
+
+-   `TIME`: CPU time used for process, not real time
+
+-   `CMD`: command that launched th process without command line arguments
+
+-   `RSS`: (not POSIX) Resident Set Size. Memory used directly by the program in the RAM (so no swap)
+    and that is not shared with other programs (shared memory like shared libraries).
+    <http://stackoverflow.com/questions/7880784/what-is-rss-and-vsz-in-linux-memory-management>
+
+-   `VSZ`: (not POSIX) Virtual Memory Size: the entire address space that is visible by the program,
+    although not necessarily loaded in memory. Includes swap and parts of shared libraries
+    not loaded in RAM.
+
+-   `%MEM`: (not POSIX) percentage of `RSS` out of the total memory
 
 See processes running on current tty:
 
@@ -69,9 +77,9 @@ Get PID of parent of process with given PID `p`
     p=1234
     ps -p "$p" -o ppid=
 
-#Procps extensions
+##Procps extensions
 
-##Sort
+###Sort
 
 Sort output by:
 
@@ -94,7 +102,7 @@ Very useful sorts include:
 
         ps aux --sort '%cpu'
 
-##Process tree
+###Process tree
 
 Show process tree:
 

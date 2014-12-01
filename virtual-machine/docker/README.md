@@ -1,3 +1,5 @@
+#Docker
+
 <https://github.com/dotcloud/docker>
 
 Relies on Linux Kernel namespaces to solve dependency hell.
@@ -17,7 +19,7 @@ Good getting started: <http://docs.docker.io/introduction/working-with-docker/>
 
 Docker was developed by a company called dotCloud Inc, and open sourced. dotCloud was renamed to Docker Inc. in 2014.
 
-#help
+##help
 
 List all commands:
 
@@ -32,7 +34,7 @@ Good info on the manpages:
     man docker
     man docker-run
 
-#Images
+##Images
 
 Public image index at <https://index.docker.io/>.
 
@@ -81,7 +83,7 @@ Interesting images include:
 - [dockerfile/ubuntu](https://github.com/dockerfile/ubuntu/blob/master/Dockerfile): Ubuntu 14.04 with a few basic packages added like Git and cURL.
 
 
-#run
+##run
 
 *Create* a new container and run command on it. Use `start` to reuse a container created with `run`.
 
@@ -156,9 +158,9 @@ Same goes for a bare `CMD nginx`, since by default Nginx turns itself into a bac
     id="$(sudo docker run -d -p 127.0.0.1:8000:80 dockerfile/nginx)"
     sudo docker stop "$id"
 
-##volume
+###volume
 
-##v
+###v
 
 Share directory between guest and host:
 
@@ -170,7 +172,7 @@ Share directory between guest and host:
 
 Can only take absolute paths. Efficient for large files, unlike some VM schemes.
 
-#ps
+##ps
 
 List running containers:
 
@@ -217,7 +219,7 @@ Remove all containers <http://stackoverflow.com/questions/17236796/how-to-remove
 
     sudo docker rm $(sudo docker ps -aq --no-trunc)
 
-#attach
+##attach
 
 Attach to a running container:
 
@@ -231,7 +233,7 @@ Now stdin and stdout of both terminals are attached: whatever you do on one show
 
 Detach with `Ctrl-p + Ctrl-q`. Doing `Ctrl-d` would terminate the shell and the container. You can detach even if you are in the last TTY.
 
-#Dockerfile
+##Dockerfile
 
 Dockerfiles use yet another programming language.
 
@@ -244,7 +246,7 @@ Documentation at: <http://docs.docker.io/reference/builder/>
 
 Build is *very* efficient. Each step generates a new cached machine. Next machines pick up from those caches. So if you run `apt-get install biglib` and `build` twice, it will only download the library once! Downside: no state is kept between builds.
 
-#build
+##build
 
 Generate a container from the Dockerfile in the current directory with given name:
 

@@ -218,4 +218,19 @@ int main(int argc, char** argv) {
             perror("reboot");
         }
     }
+
+    /*
+    #sendfile
+
+        187 in x86.
+
+            man sendfile
+
+        Transfers data from one FD to another, without passing through userspace as in a read write pair.
+
+        This is therefore the most efficient way to copy one file into another.
+
+        Comparison to other methods and implementation:
+        http://stackoverflow.com/questions/10195343/copy-a-file-in-an-sane-safe-and-efficient-way
+    */
 }

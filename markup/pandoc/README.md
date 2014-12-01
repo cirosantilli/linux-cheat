@@ -1,8 +1,10 @@
+#Pandoc
+
 Converts between various input and output formats.
 
 Written in Haskell... this alone makes me prefer a C based one like [Multimarkdown](https://github.com/fletcher/MultiMarkdown-4).
 
-Very good command line interface.
+Very good command line interface and feature set.
 
 Many markdown extensions, some useless because there are already standard / "much more common in other engine" ways of doing them like tilde `~~~` code blocks or parenthesis ordered lists `(1)`.
 

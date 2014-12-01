@@ -1,4 +1,6 @@
-Info about the init process and related concepts such as system V init system.
+#init
+
+Information about the init process and related concepts such as system V init system.
 
 First user-space process and parent of all processes!
 
@@ -14,11 +16,11 @@ A great way to understand what happens after `init` is to use `pstree`.
 
 This is distribution dependent.
 
-#rc.local
+##rc.local
 
-#Run levels
+##Run levels
 
-#System V init system
+##System V init system
 
 Ubuntu currently uses both System V init and the newer (backwards compatible) Upstart alternative.
 
@@ -52,19 +54,19 @@ Get current runlevel (POSIX 7):
 
     who -r
 
-##init.d
+###init.d
 
 `/etc/init.d` holds System V scripts, which are then symlinked from `/etc/rcX/[SK]XXname` files.
 
 `/etc/init` is Upstart specific.
 
-##init command
+###init command
 
 Set runlevel to 6, causing the system to reboot:
 
     #sudo init 6
 
-##chkconfig
+###chkconfig
 
 Ubuntu install before 14.04:
 
@@ -85,7 +87,7 @@ Show only for a single service:
 
     chkconfig --list apache2
 
-##initctl
+###initctl
 
 Show status of all services:
 
@@ -93,21 +95,21 @@ Show status of all services:
 
 Like `sudo service --status-all` but for System V.
 
-#/etc/init.d
+##/etc/init.d
 
 System V scripts, which will be symlinked from the `rc.d` directories.
 
-##/etc/inittab
+###/etc/inittab
 
 System V configuration file.
 
 Not used in Upstart.
 
-##Ubuntu specific
+###Ubuntu specific
 
 `/etc/defaults/name` are shell scripts that contain environment variables which can be used by the corresponding init script. Rationale: scripts can be updated without destroying parameters. File in `defaults` are never changed by the package manager.
 
-##update-rc.d
+###update-rc.d
 
 CLI tool that manages System V symlinks between `/etc/rcX` and  `/etc/init.d`.
 
@@ -125,11 +127,11 @@ Set the `<start><stop>` levels of the script script:
 
 The above sets start to `2` and stop to `1`.
 
-#init directory
+##init directory
 
 `/etc/init` is Upstart specific. It contains scripts that correspond to Upstart services.
 
-#upstart
+##upstart
 
 Intended as a backwards compatible replacement for System V.
 
@@ -149,7 +151,7 @@ Good sources:
 
 <http://askubuntu.com/questions/2075/whats-the-difference-between-service-and-etc-init-d>
 
-##service
+###service
 
 Upstart interface to init scripts.
 
@@ -179,7 +181,7 @@ Examples:
 
 Service only works for Upstart services, it does not see System V ones.
 
-##/etc/init
+###/etc/init
 
 Upstart configuration files
 
@@ -193,7 +195,7 @@ correspond to:
 
 files in this directory.
 
-###start on
+####start on
 
 Determines event when the startup script will start.
 
@@ -211,19 +213,19 @@ To start after `/etc/fstab` mountings have been done on Ubuntu 12.04, use:
 
     start on stopped mountall
 
-##Disable upstart services at boot
+###Disable upstart services at boot
 
 The only way seems to be manually modifying the file to comment out the `start` line:
 
 <http://askubuntu.com/questions/19320/how-to-enable-or-disable-services>
 
-##sysv-rc-conf
+###sysv-rc-conf
 
 ncurses manager of Upstart scripts.
 
 Analogous to `chkconfig` for System V.
 
-#systemd
+##systemd
 
 Newer alternative to Upstart.
 

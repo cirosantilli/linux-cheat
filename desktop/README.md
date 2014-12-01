@@ -1,10 +1,12 @@
+#Desktop
+
 Info on freedesktop.org, the X Window System, Display managers, desktop environments like GNOME, KDE, and closely related utilities such as `xsel`, `wmctrl` or `recordmydesktop`.
 
-#XDG
+##XDG
 
 See freedesktop.org.
 
-#freedesktop.org
+##freedesktop.org
 
 AKA XDG because freedesktop.org was formerly known as the X Desktop Group, and the acronym "XDG" remains common in their work.
 
@@ -26,7 +28,7 @@ Specifies:
 
     Gnome 3 output: GNOME
 
-##xdg-utils
+###xdg-utils
 
 <http://portland.freedesktop.org/xdg-utils-1.0/>.
 
@@ -34,7 +36,7 @@ A few useful applications that should be standard.
 
 Adopted by the LSB 4.1.
 
-##Base directory spec
+###Base directory spec
 
 <http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html>
 
@@ -42,29 +44,29 @@ Specifies where configuration and data files should be put, and environment vari
 
 All environment variables have a default value to be assumed in case they are not present.
 
-###XDG_CONFIG_HOME
+####XDG_CONFIG_HOME
 
 Base location of per-user configuration files. Default value: `.config`.
 
-###XDG_CONFIG_DIRS
+####XDG_CONFIG_DIRS
 
 Comma separated list of where to look for cross user configuration files.
 
 Default value: `/etc/xdg`
 
-###XDG_DATA_HOME
+####XDG_DATA_HOME
 
 Data instead of configurations. Default: `.local`.
 
-###XDG_DATA_DIRS
+####XDG_DATA_DIRS
 
 Data instead of configurations. Default: `/usr/local/share/:/usr/share/`.
 
-###XDG_DATA_DIRS
+####XDG_DATA_DIRS
 
-###cache dir
+####cache dir
 
-###XDG_CACHE_HOME
+####XDG_CACHE_HOME
 
 <http://askubuntu.com/questions/102046/is-it-okay-to-delete-cache>
 
@@ -74,13 +76,13 @@ There is no global cache size option: you must configure cache limits for each i
 
 Note that some applications always build a cache before being used, e.g. `apt-file`.
 
-#xdg-settings
+##xdg-settings
 
     xdg-settings --list
 
 TODO why does it show a single line only? what should this list?
 
-#X11
+##X11
 
 Real name: X Window System.
 
@@ -152,7 +154,7 @@ Server:
 A good way to see some basic and useful application implemented in pure X as demos
 is to do `ls /etc/X11/app-defaults`
 
-##xorg
+###xorg
 
 Dominant implementation of the X server.
 
@@ -178,13 +180,13 @@ Log file:
 
 where `0` is the display number.
 
-##X
+###X
 
 Get X server version
 
     sudo X -version
 
-##xhost
+###xhost
 
 View and edit on which users may connect to an X server.
 
@@ -204,11 +206,11 @@ Let a single user connect:
 
     xhost + another-user
 
-##startx
+###startx
 
 TODO
 
-##xlsclients
+###xlsclients
 
 List x clients.
 
@@ -220,7 +222,7 @@ More detailed info:
 
 	xlsclients -l
 
-##xprop
+###xprop
 
 Get window info on a window
 
@@ -231,7 +233,7 @@ Keep examining the properties, and print if changes happen:
 
 	xprop -spy -name Krusader
 
-##xmodmap
+###xmodmap
 
 Modify key maps.
 
@@ -254,19 +256,19 @@ To make this happen every time at startup TODO broken?:
 
 The `~/.xsession` file could also be used depending on system
 
-##xinitrc
+###xinitrc
 
 Sourced in Ubuntu 12.04, but not 14.04.
 
-##xsessionrc
+###xsessionrc
 
 TODO vs `xinitrc`?
 
-##xdotool
+###xdotool
 
 Send clicks and manage window properties from sh.
 
-###select window
+####select window
 
 Before you try to do things to a window,
 you must say which window you want to act on.
@@ -287,7 +289,7 @@ Act on windows with given name:
 
 Name is exactly what is shown on window title bar.
 
-###keystrokes
+####keystrokes
 
 Keystroke types:
 
@@ -323,7 +325,7 @@ Sends `a`, `b`, `space`, `c` and `d`:
 
     xdotool type --delay 1 'ab'
 
-###sync
+####sync
 
 Wait for application to start before sending a command to it:
 
@@ -332,7 +334,7 @@ Wait for application to start before sending a command to it:
 
 In this way, you can launch an app and send commands, making sure they will be received!
 
-##wmctrl
+###wmctrl
 
 Control windows and get info on them from sh (maximize, minimize, focus, etc.)
 
@@ -345,7 +347,7 @@ Get info:
 - `-d`: desktop info
 - `-m`: window manager info
 
-###Window choice
+####Window choice
 
 In order to act on a window, one must first select it. The ways to do it are:
 
@@ -375,7 +377,7 @@ In order to act on a window, one must first select it. The ways to do it are:
 
         'Google - mozilla firefox'
 
-###actions
+####actions
 
 Once a window is selected, actions can be done on it.
 
@@ -406,13 +408,13 @@ Switch to desktop 1:
 
     wmctrl -s 1
 
-##keyboard and mouse automation
+###keyboard and mouse automation
 
-###AutoKey
+####AutoKey
 
 High level, GUI interface X11 automation.
 
-##xbacklight
+###xbacklight
 
 Control screen brightness
 
@@ -424,7 +426,7 @@ Set lightning to 80%:
 
     xbacklight -set 80
 
-##xrandr
+###xrandr
 
 Acronym for X Resize, rotate AND Reflect
 
@@ -481,11 +483,11 @@ Change to default resolution (the one with the plus sign `+`):
 
     xrandr -s 0
 
-##PRIMARY selection
+###PRIMARY selection
 
-##CLIPBOARD
+###CLIPBOARD
 
-##selection
+###selection
 
 X support an arbitrary number of selections.
 
@@ -501,7 +503,7 @@ Each selection contains data completely separate from the others.
 
 Those concepts touched by freedesktop.org: <http://freedesktop.org/wiki/Specifications/ClipboardsWiki/>
 
-##xsel
+###xsel
 
 Manipulate the x selection and clipboard
 
@@ -517,14 +519,14 @@ Get the x selection
     echo b | xsel -a
     assert [ "`xsel`" = $'a\nb\n' ]
 
-###x clipboard
+####x clipboard
 
 Set and get the clipboard (control c control v access):
 
     echo a | xsel -b
     assert [ `xsel -b` = a ]
 
-###follow
+####follow
 
 Follows standard input as it grows
 
@@ -534,17 +536,17 @@ Follows standard input as it grows
     echo b >> f
     assert [ "`xsel`" = $'a\nb\n' ]
 
-###stop
+####stop
 
     echo a | xsel
     echo c > f
     assert [ "`xsel`" = $'a\n' ]
 
-##xclip
+###xclip
 
 Alternative tool to `xsel`.
 
-##xmodmap
+###xmodmap
 
 View and modify key mappings.
 
@@ -574,11 +576,11 @@ Up to 8 keysyms bay be attached to each keycode.
 
 However, only the first 4 are commonly used.
 
-##setxkblayout
+###setxkblayout
 
 TODO
 
-##setxkbmap
+###setxkbmap
 
 Swap ESC and CapsLock:
 
@@ -586,7 +588,7 @@ Swap ESC and CapsLock:
 
 Put this in your `~/.xinitrc`.
 
-##Simple GUI apps
+###Simple GUI apps
 
 Either for testing or useful utilities.
 
@@ -618,7 +620,7 @@ Either for testing or useful utilities.
 
     Pointer clock.
 
-##xev
+###xev
 
 Opens test window and prints x events description to stdout:
 
@@ -627,9 +629,9 @@ Opens test window and prints x events description to stdout:
 
 Try clicking on the windows, or using your keyboard to see the outputs.
 
-#screenshots
+##screenshots
 
-##GNOME screenshot
+###GNOME screenshot
 
 Ubuntu 12.04 default on `PrtSc` key.
 
@@ -647,7 +649,7 @@ Useful options:
 
 - remove menu bar: `wB`
 
-##xwd
+###xwd
 
 Take screenshots.
 
@@ -665,7 +667,7 @@ Make a `png` screenshot:
 
 	xwd | xwdtopnm | pnmtopng > Screenshot.png
 
-##recordeMyDesktop
+###recordeMyDesktop
 
 Makes videos out of your desktop.
 
@@ -684,7 +686,7 @@ Most useful command:
 
 Use if from a drop-down terminal like Guake so in the 2 seconds you can make it disappear.
 
-#Desktop environment
+##Desktop environment
 
 Includes a many components, such as:
 
@@ -757,7 +759,7 @@ KDE spawn tree:
          |         |         `-{lightdm}
          ...
 
-##GNOME
+###GNOME
 
 GNOME 3 is the default DE for Fedora.
 
@@ -773,11 +775,11 @@ Acts as a large frontend for several things such as printers, screen, etc., much
 
 Good way to manage GTK themes and other GNOME things: `gnome-tweak-tool`.
 
-##Unity
+###Unity
 
 Default DE for Ubuntu 12.04+.
 
-###Unity window manager
+####Unity window manager
 
 Default window manager: Ubuntu 13.04 ships with 2 Compiz *and* Metacity, the choice depends on your hardware support: <http://askubuntu.com/questions/24977/why-does-ubuntu-use-two-window-managers-compiz-and-metacity>
 
@@ -787,27 +789,27 @@ You can decide which one is use via:
 
     ps -A | grep -e compiz -e metacity
 
-###Unity panel
+####Unity panel
 
 Named: unity-panel-service.
 
 An important part of Unity (basically the only distinctive feature of most DEs)
 
-###Unity utility
+####Unity utility
 
 Restart the unity shell only, less effective and drastic than restarting LightDM:
 
     unity --restart
 
-###Applets
+####Applets
 
-####Alarm clock applet
+#####Alarm clock applet
 
 Notifies you with sounds when a certain time passed.
 
-####weather indicator
+#####weather indicator
 
-##KDE
+###KDE
 
 Default DE for the KDE distro.
 
@@ -817,7 +819,7 @@ GNOME and KDE rivalry started when KDE chose to use QT in 1998 which was not GPL
 
 As of Qt 4, LGPL versions of Qt exist on all platforms, but the damage has been done: the open source community is divided and maintain duplicate versions for many desktop software, thus using up resources.
 
-###KDE command line options
+####KDE command line options
 
 KDE has a great level of uniformity across its programs, and all of them get standard KDE command line options.
 
@@ -827,7 +829,7 @@ Some useful options are:
 
     E.g., if without this option you would get: `filename.pdf - Okular` on the window title, with the option it becomes `filename.pdf - asdfqwer`. This is useful to reference the application from another program like `wmctrl -a asdfqwer`.
 
-###Applications
+####Applications
 
 KDE offers both basic building blocks, and full applications.
 
@@ -837,7 +839,7 @@ KDESC applications release at the same time as new KDE versions. For example, Ok
 
 There are also projects which use KDE, but which are not part of the KDESC.
 
-###Libraries
+####Libraries
 
 A typical KDE application relies on the following shared libraries:
 
@@ -849,7 +851,7 @@ A typical KDE application relies on the following shared libraries:
     libQtCore.so.4
     libQtDBus.so.4
 
-###kde4-config
+####kde4-config
 
 Get information on KDE configuration on current system.
 
@@ -861,7 +863,7 @@ The value is usually `/usr`
 
 This means for example that there will be many shared object files under `/usr/lib/kde4/`, and that the installed executables will go under `/usr/bin`.
 
-##LXDE
+###LXDE
 
 Default DE for Arch Linux.
 
@@ -897,7 +899,7 @@ Sources:
 
     Default DE for Arch Linux, so lots of info there.
 
-###keyboard layout
+####keyboard layout
 
 <http://www.pclinuxos.com/forum/index.php?topic=87702.0>
 
@@ -907,7 +909,7 @@ Right click on the Keyboard layout manager and choose your settings.
 
 TODO what are the available layouts? What are the config files?
 
-#display manager
+##display manager
 
 Shows the initial login screen where you can:
 
@@ -934,7 +936,7 @@ Log out from the graphical TTY and go back to the display manger login screen <h
 - `-9` is for signal number 9, `SIGKILL`
 - `-1` is a special number, which means all PIDs except for init and the kill process itself.
 
-##lightdm
+###lightdm
 
 Default display manager for Ubuntu.
 
@@ -984,7 +986,7 @@ Also restarts X. Closes all your programs that have windows.
 
 Only do this on a tty, not on an xterminal probably because your terminal is going to die in the middle of the operation
 
-#Window manager
+##Window manager
 
 An X window manager interacts with X to do things like:
 
@@ -1013,7 +1015,7 @@ Get currently used window manager info:
 
     wmctrl -m
 
-##Openbox
+###Openbox
 
 Default for LXDE.
 
@@ -1075,9 +1077,9 @@ Restart after changing config file to apply the changes:
 
 Does not close applications.
 
-##mutter
+###mutter
 
-##Compiz
+###Compiz
 
 Passes window decoration to a Compiz window decorator.
 
@@ -1094,17 +1096,17 @@ Restart Compiz after modifying configurations to load them:
 
 You should do this from a tty other than `tty7`.
 
-#session manager
+##session manager
 
 TODO
 
-#startup programs
+##startup programs
 
 User space startup programs can only start after the display manager has logged the use in.
 
 Therefore, they must either be launched by the DM at the end of its operation, or by something spawned by it.
 
-##autostart
+###autostart
 
 Used by Ubuntu, LXDE, KDE, GNOME
 
@@ -1125,11 +1127,11 @@ Example, in a file called `firefox`, put:
 
 TODO who executable implements it? Which DEs adopt it?
 
-#toolkits
+##toolkits
 
 Although there is a X11 C interface, consider using higher level, more portable and more convenient interfaces such as:
 
-##Qt
+###Qt
 
 Used mainly by KDE.
 
@@ -1158,7 +1160,7 @@ which produces output like:
     KDE Development Platform: 4.10.4
     Krusader: 2.4.0-beta1 "Migration
 
-##GTK
+###GTK
 
 3 versions: 1, 2 and 3.
 
@@ -1198,7 +1200,7 @@ Very nice demo of lots of 2.0 features with easy to see source code side by side
 
     gtk-demo
 
-##TODO how to find if an application uses GTK and which version
+###TODO how to find if an application uses GTK and which version
 
 It is not generally possible to do so.
 
@@ -1218,7 +1220,7 @@ You can install new GTK themes by placing their files under TODO.
 
 Note however that it is more recommended that you get themes from packages, so that those can get automatically updated.
 
-#Themes
+##Themes
 
 Control how the system looks.
 
@@ -1236,7 +1238,7 @@ Each directory structure is like:
 
 TODO where are Qt themes stored?
 
-#Panels
+##Panels
 
 Like windows GUI item that contains the start menu.
 
@@ -1249,13 +1251,13 @@ Typically offer:
 
 Panels are X clients.
 
-##LXPanel
+###LXPanel
 
 LXDE default.
 
 Configuration files: `.config/lxpanel/LXDE/`
 
-##dconf vs gconf vs gsettings
+###dconf vs gconf vs gsettings
 
 Applications can them to manage user preferences. in key/value manner, where keys are put in a `/` separated tree.
 
@@ -1267,7 +1269,7 @@ Sources:
 - <http://askubuntu.com/questions/249887/gconf-dconf-gsettings-and-the-relationship-between-them>
 - gconf vs dconf: <http://askubuntu.com/questions/34490/what-are-the-differences-between-gconf-and-dconf>
 
-###dconf
+####dconf
 
 DConf is the new backend for gsettings.
 
@@ -1296,7 +1298,7 @@ GUI editor: `dconf-editor`.
 
     dconf write org/gnome/gnome-screenshot/auto-save-directory "/home/ciro"
 
-###gconf
+####gconf
 
 XML based.
 
@@ -1314,7 +1316,7 @@ Get all the XML confs:
 
 GUI editor: `gconf-editor`
 
-##gsettings
+###gsettings
 
 gsettings is a frontend for both dconf on Linux, and possibly other backends on other systems such as the Windows registry (binary).
 
@@ -1338,19 +1340,19 @@ Return key to its default value:
 
     gsettings reset com.canonical.desktop.interface scrollbar-mode
 
-#power
+##power
 
-##shutdown
+###shutdown
 
 Sends TODO signal to running processes and waits for them to terminate nicely:
 
     sudo shutdown -P now
 
-##reboot
+###reboot
 
     sudo reboot
 
-##suspend and hibernate
+###suspend and hibernate
 
 Sources:
 
@@ -1359,13 +1361,13 @@ Sources:
 
 Both can be done with `pmi`, `pm-utils` or `dbus-send`
 
-###suspend
+####suspend
 
 Keeps things on RAM, but pauses all processes that can be paused, and turns off screen.
 
 You need to use a bit of power to keep it suspended.
 
-###hibernate
+####hibernate
 
 Save RAM to disk, shuts down almost everything.
 
@@ -1373,11 +1375,11 @@ Uses very little to no power.
 
 TODO pmi vs pm-utils?
 
-##ACPI
+###ACPI
 
 TODO
 
-##pm-utils package
+###pm-utils package
 
 Maintained by freedesktop.org: <http://pm-utils.freedesktop.org/wiki/>
 
@@ -1386,12 +1388,12 @@ Mnemonic: Power Management.
     pm-suspend
     pm-hibernate
 
-##pmi
+###pmi
 
     pmi action suspend
     pmi action hibernate
 
-#Lock screen
+##Lock screen
 
 State in which user must enter a password to be able to do or see anything.
 
@@ -1399,13 +1401,13 @@ Does not necessarily suspend computer for power saving.
 
 Usually fires up the screensaver.
 
-#Screensaver
+##Screensaver
 
 Available screensavers at `$XDG_CONFIG_DIRS/screensaver` as desktop files.
 
 You can execute screensavers under `TryExec` of the desktop entries to see how they look like.
 
-##xdg-screensaver
+###xdg-screensaver
 
 XDG utils package
 
@@ -1415,15 +1417,15 @@ Lock screen and activate screensaver:
 
 Seems to reset to the current desktop's default if any is recognized such as gnome-screensaver.
 
-##xscreensaver
+###xscreensaver
 
 Seems to fail is another screensaver such as gnome-screensaver can run.
 
-##gnome-screensaver
+###gnome-screensaver
 
 Seems that it was rewritten and screensaver change is not implemented as of 07/2013: <http://askubuntu.com/questions/64086/how-can-i-change-or-install-screensavers>
 
-#D-Bus
+##D-Bus
 
 IPC library and daemon.
 
@@ -1431,11 +1433,11 @@ Specified by freedesktop.org: <http://www.freedesktop.org/wiki/Software/dbus/>
 
 Main method used for IPC in KDE 4 and GNOME.
 
-##dbus-monitor
+###dbus-monitor
 
 View D-Bus messages as they are sent.
 
-##dbus-send
+###dbus-send
 
 Suspend computer:
 
@@ -1444,11 +1446,11 @@ Suspend computer:
         /org/freedesktop/UPower \
         org.freedesktop.UPower.Suspend
 
-##libdbus
+###libdbus
 
 Library that allows application to communicate with D-Bus.
 
-#Desktop file format
+##Desktop file format
 
 Files with extension `.desktop`.
 
@@ -1458,7 +1460,7 @@ The fields it can contain are left for each spec: this only specifies syntax. An
 
 Specs: <http://standards.freedesktop.org/desktop-entry-spec/latest/>
 
-#Applications desktop files
+##Applications desktop files
 
 This discusses the desktop files under `$XDG_DATA_DIRS/applications` such as `$XDG_DATA_DIRS/applications/firefox.desktop`.
 
@@ -1511,7 +1513,7 @@ How this file could be used by the DE:
 
 -   when a file with unknown type is going to be opened, if there are no associations to it, the DE could use the `MimeType` field to make suggestions, of possible suitable alternatives.
 
-##Icon
+###Icon
 
 Icons are needed at several places to help identify the application:
 
@@ -1522,13 +1524,13 @@ The icon is identified by the `Icon` field, which corresponds to a file under `$
 
 That directory may contain multiple versions of each icon, at various resolutions, color depths and styles, since icon themes can also change with DE settings. `hicolor/48x48` should contains lots of standard icons.
 
-#Default applications
+##Default applications
 
 This talks about how to allow users to choose their default application when opening certain types of file.
 
 There are many systems, and they have some degree of compatibility.
 
-##xdg-open
+###xdg-open
 
 XDG utils package, part of the LSB.
 
@@ -1555,19 +1557,19 @@ Configuration files:
 
 - MIME -> program mapping under `$XDG_DATA_DIRS/applications`, either `defaults.list` (old) or `mimeapps.list` (new).
 
-###update-mime-database
+####update-mime-database
 
 shared-mime-info package.
 
-##gnome-open
+###gnome-open
 
 Gnome specific. Use `xdg-open` instead..
 
-##kde-open
+###kde-open
 
 KDE specific. Use `xdg-open` instead..
 
-##alternatives system
+###alternatives system
 
 One configuration method is to make symbolic links such as `/usr/bin/editor` to either `vi` or `ed` for example.
 
@@ -1575,7 +1577,7 @@ The standard way is to first link `/usr/bin/editor` to `/etc/alternatives/editor
 
 In this way, all preferences are stored under `etc` as specified by the LSB.
 
-##update-alternatives
+###update-alternatives
 
 The `update-alternatives` utility can be used to manage that system.
 
@@ -1598,7 +1600,7 @@ TODO: understand the following command:
 
 I used this to link `gcc` to `gcc-4.8` instead of `4.6`.
 
-#logkeys
+##logkeys
 
 Writes all key presses to a file.
 
@@ -1612,7 +1614,7 @@ End logging:
 
     sudo logkeys -k
 
-#IBus input methods
+##IBus input methods
 
 Daemon for Chinese, Japanese, etc. input.
 
@@ -1620,7 +1622,7 @@ On Ubuntu, you must install the Qt version separately for it to work on Qt apps 
 
     sudo aptitude install -y ibus-qt4
 
-#Solaar
+##Solaar
 
 Monitor status and configure Logitech wireless devices.
 

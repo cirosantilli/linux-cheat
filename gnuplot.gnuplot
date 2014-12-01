@@ -11,7 +11,7 @@
     #the awk of plotting: very domain specific language.
 
     #can get specific jobs done in seconds with amazing golfing.
-    
+
     #but if you get slightly away from its intended usage
     #it becomes insane or impossible to get the task done.
 

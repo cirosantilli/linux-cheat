@@ -1,3 +1,5 @@
+# Atom
+
 Text editor.
 
 Open source.
@@ -16,22 +18,22 @@ Command cheatsheets:
 
 - <https://bugsnag.com/blog/atom-editor-cheat-sheet>
 
-# Commands
+## Commands
 
 `c-,`: configuration view
 
-# Configuration files
+## Configuration files
 
 All under `~/.atom/`
 
 - `config.cson`: main configuration file
 - `keybinding.cson`
 
-# Packages
+## Packages
 
 Disable packages: not possible through GUI. `config.cson` > `core` > `disabledPackages` array.
 
-## APM
+### APM
 
 Search for package:
 
@@ -41,6 +43,6 @@ Install package:
 
     apm install vim-mode
 
-## Packages I recommend:
+### Packages I recommend:
 
     apm install vim-mode

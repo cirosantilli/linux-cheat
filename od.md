@@ -1,4 +1,6 @@
-Utilities similar to `od` that can be used to view binary data.
+#od
+
+`od` and similar tools used to view binary data.
 
 Very useful for viewing binary data which contains values which cannot be interpreted as some character set (ASCII, UTF-8) that can be printed to terminal screen.
 
@@ -9,8 +11,6 @@ You have some fun exploring things such as:
 - partition tables:
 
         sudo hd -n 512 /dev/sda
-
-#od
 
 POSIX 7
 
@@ -72,13 +72,13 @@ Best command for computational use:
 
     printf "ab" | od -Ax -tx1
 
-#t
+##t
 
-formaT specifier.
+`formaT` specifier.
 
-##tx
+###tx
 
-x means hexadecimal
+`x` means hexadecimal.
 
 1 and 2 means how many bytes per block.
 
@@ -102,7 +102,7 @@ Output:
 
 Note how the bytes are inverted in each block.
 
-##to
+###to
 
 Octal.
 
@@ -121,7 +121,7 @@ Note how this is less convenient that hexadecimal since each byte needs 3 charac
 
 Another downside of using octal: 3 octal character makes 9 bits (3 per charcter) and not 8 as in a byte, so it is not possible to have for example `444`.
 
-##tc
+###tc
 
 Show bytes that can be represented as ASCII characters as ASCII characters.
 
@@ -154,7 +154,7 @@ Since it would be ugly to represent it as a lie break, and since it has a C back
 
 - `0x01` falls in neither of the above cases, so it is represented in octal as `001`.
 
-#w
+##w
 
 Line width.
 
@@ -197,7 +197,7 @@ Note how the last line is always present and empty.
 
 It always gives the total number of bytes.
 
-#Duplicate lines
+##Duplicate lines
 
 `od` automatically hides one or more duplicate lines and represents them with an asterisk `*`.
 
@@ -222,7 +222,7 @@ If there was no line hiding, it would have looked like this:
 
 This is a very good behaviour since it lest you focus on the differences only.
 
-#-A
+##-A
 
 Radix of the line numbers.
 
@@ -260,7 +260,7 @@ Output:
     0000048 79 20 7a 0a
     0000052
 
-#-N
+##-N
 
 Maximum number of bytes to read.
 

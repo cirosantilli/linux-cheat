@@ -1,3 +1,5 @@
+#Configuration automation
+
 This is about systems that help you automate system configuration.
 
 One of the major application of such systems is in web development to consistently

@@ -1,3 +1,5 @@
+#POSIX
+
 For a cheat on the POSIX C API and all the concepts necessary to understand it see:
 <https://github.com/cirosantilli/cpp/tree/99ad8ab9aee7bf2d8c47c9e25f4631eddb556ccf/posix>
 
@@ -7,7 +9,7 @@ POSIX means: `Portable Operating System Interface for uniX`.
 
 POSIX is also known as: Single Unix specification (SUS)
 
-#Sources
+##Sources
 
 -   <http://www.amazon.com/Beginning-Linux-Programming-Neil-Matthew/dp/0470147628>
 
@@ -15,7 +17,7 @@ POSIX is also known as: Single Unix specification (SUS)
 
     Very good intro do many of POSIX utilities with interesting examples and topics.
 
-#Introduction
+##Introduction
 
 An operating system standardization by both IEEE and `the open group` (merger of the `Open software foundation` with `X/Open`)
 
@@ -29,7 +31,7 @@ POSIX issue 7: IEEE formal name: `IEEE Std 1003.1-2008` highly recommended link:
 
 Single UNIX Specification, Version 4: <http://www.unix.org/version4/>
 
-#The Open Group
+##The Open Group
 
 Major open group supporters whose major supporters include:
 
@@ -43,15 +45,15 @@ Major open group supporters whose major supporters include:
 
 Therefore some of the top users/creators of software.
 
-#Examples of what POSIX specifies
+##Examples of what POSIX specifies
 
-##Shell command language
+###Shell command language
 
 A shell language including almost all the basic `bash` syntax.
 
 `bash` is compliant with extensions
 
-##Utilities
+###Utilities
 
 Utilities that should be available to the shell (either as programs in path or shell builtins, this is not specified).
 
@@ -65,7 +67,7 @@ Examples:
 
 and tons of others which most people never heard of
 
-##System interfaces
+###System interfaces
 
 Standard C interfaces to the system.
 
@@ -84,15 +86,21 @@ However many of the Linux system calls resemble those closely because of the com
 
 In most Linux, the POSIX C interface is implemented as part of `glibc`, which also implements ANSI libc and Linux extensions.
 
-##Directory structure
+###Directory structure
 
-Very small, contains:
+<http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap10.html#tag_10>
+
+Specifies very few directories:
 
 - `/`
 - `/tmp`
 - `/dev/null`
+- `/dev/tty`
+- `/dev/console`
 
-##Environment variables
+Extended notably by the FHS.
+
+###Environment variables
 
 In POSIX 7, those are defined in: Base Definitions > Environment Variables.
 
@@ -131,7 +139,7 @@ The following variables don't have fixed purposes, but POSIX says that they must
 - `PAGER`: default pager program ( `more`, `less`, etc. )
 - `PPID`: PID of parent process
 
-##Regular expressions
+###Regular expressions
 
     man 7 regex
 
@@ -144,7 +152,7 @@ Basic is deprecated, so don't use it.
 
 Some POSIX utilities such as `grep` or `sed` use BREs by default (backwards compatibility) but can use EREs with an option.
 
-###BRE vs ERE
+####BRE vs ERE
 
 The main difference is that EREs add more Perl-like special characters.
 
@@ -177,7 +185,7 @@ Examples:
     echo $'a\nb'    | grep -E '[[:alpha:]]'
     echo $'a\nA'    | grep -E '[[:upper:][:lower:]]'`" = $'a\nA' ]
 
-###Predefined character classes
+####Predefined character classes
 
 Is the main difference between those and Perl (except for very magic perl regex options).
 
@@ -194,7 +202,7 @@ Full list:
 
 In Perl these are backlash escaped chars, much shorter to write...
 
-##Command line interface
+###Command line interface
 
 Suggests the following format for documenting CLIs:
 
@@ -220,7 +228,7 @@ A few of the most interesting suggests for argument and utility name syntax:
 
 -   `-W` is reserved for vendor options
 
-##Exit status
+###Exit status
 
 [POSIX specifies that](http://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_08):
 
@@ -239,7 +247,7 @@ A few of the most interesting suggests for argument and utility name syntax:
 
     GNU goes further and [specifies that](http://www.gnu.org/software/bash/manual/bashref.html#Exit-Status) when terminated by a signal, the exit status shall be 128 + the normal error status.
 
-##Filenames
+###Filenames
 
 POSIX filenames are extremely restrictive: more than any modern operating system:
 
@@ -250,6 +258,6 @@ It also has rules which are enforced on all modern operating systems:
 
 - reserved characters: slash `/` and `null`
 
-#TODO
+##TODO
 
 - understand difference between the two: http://unix.stackexchange.com/questions/14368/difference-between-posix-single-unix-specification-and-open-group-base-specifi

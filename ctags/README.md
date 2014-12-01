@@ -1,3 +1,5 @@
+#ctags
+
 POSIX 7, with many GNU extensions.
 
 Reads source files and generates a list of objects
@@ -26,7 +28,7 @@ The output is both human and computer readable, therefore to use it you can eith
 
     If that is the case, it might be easier to read the `tags` file directly.
 
-#Basic usage
+##Basic usage
 
 Put output on a file named `tags` on current dir:
 
@@ -42,7 +44,7 @@ Recurse (GNU extension):
 
 Makes a single `tags` in current directory recursing into all child directories.
 
-#Supported languages
+##Supported languages
 
 POSIX requires only a that small set of C and FORTRAN symbols be processed.
 GNU extends it considerably, and adds support for many languages.
@@ -52,7 +54,7 @@ The language list on the GNU implementation can be found with:
 
 For me, this includes languages such as `C++`, `python`, `java` and many more.
 
-#Objects of each language
+##Objects of each language
 
 To view what kinds of objects can be processed, which are processed by default,
 and the one letter codes for each object type use:
@@ -105,7 +107,7 @@ named `x` besides the definition which you want.
 
 This happens often on the Linux kernel code for example.
 
-#Header extensions
+##Header extensions
 
 Extensions interpreted as headers when doing `-R` for example:
 
@@ -113,7 +115,7 @@ Extensions interpreted as headers when doing `-R` for example:
 
 Can be modified with `-h`.
 
-#Tag file format
+##Tag file format
 
     "%s\t%s\t/%s/\t%s\n", <identifier>, <filename>, <pattern>, <extension-field>
 
@@ -140,11 +142,11 @@ Can be modified with `-h`.
 
     Can be controlled by the `--fields` option.
 
-#Alternatives
+##Alternatives
 
 - Cscope
 
-##exuberant-ctags
+###exuberant-ctags
 
 Supports 55 languages
 

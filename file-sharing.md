@@ -1,4 +1,6 @@
-#Dropbox
+#File Sharing
+
+##Dropbox
 
 See your home files on browser:
 
@@ -39,7 +41,7 @@ Autostart Dropbox at startup:
 
     dropbox autostart y
 
-#Ubuntu one
+##Ubuntu one
 
 Open source cross platform canonical Dropbox-like program.
 
@@ -63,11 +65,11 @@ Get file public URL to the clipboard:
 
 There exist taskbar status indicator exists at <https://launchpad.net/indicator-ubuntuone>.
 
-#Nicotine+
+##Nicotine+
 
 Soulseek client.
 
-##Behind a proxy router
+###Behind a proxy router
 
 Go to the router admin panel, port forwarding part.
 
@@ -83,7 +85,7 @@ Now either put your files in another partition at the root, or symlink your shar
 
     sudo ln -s /home/soulseek path/to/share/folder
 
-#NFS
+##NFS
 
 Network File System.
 
@@ -91,6 +93,6 @@ Designed for LAN, has higher throughput than FTP.
 
 FTP preferred on WAN.
 
-#LDAP
+##LDAP
 
 TODO

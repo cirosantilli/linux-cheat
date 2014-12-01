@@ -1,3 +1,5 @@
+#find
+
 Find files recursively under given directories.
 
 Very powerful.
@@ -9,7 +11,7 @@ POSIX 7, however breaks almost all of of POSIX and GNU command line interface st
 
 Consider `locate` if you are going to look in the entire file system.
 
-#General syntax
+##General syntax
 
 There are 3 parts to a find:
 
@@ -45,11 +47,11 @@ Therefore, the minimal find command is:
 
 which finds all files and directories under the current dir
 
-#Criteria
+##Criteria
 
 Say *what* find should find
 
-##name
+###name
 
 Match **entire** basenames POSIX RE:
 
@@ -63,11 +65,11 @@ It is a POSIX BRE:
 
 Therefore the previous finds both `mp3` and `mp4` files (and `mp5` if that exists):
 
-##iname
+###iname
 
 Same as -name but case insensitive:
 
-##path
+###path
 
 Looks at *entire* file path filtering by POSIX BRE.
 
@@ -87,7 +89,7 @@ Finds anything under `./.vim` folder. Same as `find ./vim`:
 
     find . -path './.vim/*'
 
-##type
+###type
 
 Files only:
 
@@ -97,7 +99,7 @@ Directories only:
 
     find . -type d
 
-##perm
+###perm
 
 Find by permissions.
 
@@ -120,7 +122,7 @@ Give `g+x` to all files that have `u+x`:
 
     find . -type f -perm +100 | xargs chmod g+x
 
-##prune
+###prune
 
 Do not search into directories that match what comes before prune.
 
@@ -132,7 +134,7 @@ Find all files that are neither hidden themselves, nor children of a hidden pare
 
     find . -path '*/.*' -prune -o ! -name '.' -print
 
-##depth
+###depth
 
 Entries of the directory are acted upon before the directory.
 
@@ -142,17 +144,17 @@ Useful if you want to rename both the containing directory and the files inside 
 
 This nullifies `prune`.
 
-##xdev
+###xdev
 
 Do not go into other devices:
 
     find . -xdev file1
 
-#multiple criteria
+##multiple criteria
 
 You can combine criteria with boolean operations to make your search finer.
 
-##and
+###and
 
 `-a` all conditions must be satisfied.
 
@@ -166,13 +168,13 @@ Same as above with explicit and:
 
     find . -type f -a -iname '*.pdf'
 
-##not
+###not
 
 Find all paths which are not files:
 
     find . ! -type f
 
-##or
+###or
 
 Paths with either PDF or DjVu extension:
 
@@ -213,7 +215,7 @@ Which is the same as the original:
 
     find . -type f -iname '*.pdf' -o -iname '*.djvu'
 
-##Parenthesis
+###Parenthesis
 
 You can change logical operation precedence with parenthesis.
 
@@ -223,11 +225,11 @@ Do not forget to escape your parenthesis!
 
 Either files with extension pdf of paths (includes dirs) with extension djvu. Parenthesis are used to change precendence order.
 
-#Actions
+##Actions
 
 You can do things with the files you find.
 
-##print
+###print
 
 The default action is to print found files to stdout.
 
@@ -245,13 +247,13 @@ Best POSIX 7 option:
 
     find . | sed "s|^\./||"
 
-##delete
+###delete
 
 Deletes matching files.
 
     find . -iname '*.tmp' -delete
 
-##exec
+###exec
 
 Executes shell command on each found file.
 
@@ -281,7 +283,7 @@ TODO: why does the following fail:
 
 This is probably because `basename {}` gets evaluated before `{}` is replaced by the find result basename `{}` returns `{}`, and AFTER THAT `{}` gets expanded to the find result ( not just the basename therefore )
 
-#Combos
+##Combos
 
 Remove all `Thubs.db` files (aka good bye Windows Media Player):
 
@@ -301,7 +303,7 @@ With GNU you get the better:
 
 which avoids calling `rmdir` on non empty directories.
 
-##Multiple actions
+###Multiple actions
 
 If you want to take multiple actions, the sanest way is to use the POSIX:
 
@@ -317,11 +319,11 @@ Or the newline immune GNU:
       echo
     done
 
-#GNU extensions
+##GNU extensions
 
-##Criteria GNU extensions
+###Criteria GNU extensions
 
-###mindepth
+####mindepth
 
 Same as find but no `.`:
 
@@ -331,7 +333,7 @@ Same as find but no `.`:
 
     find . ! -path .
 
-###maxdepth
+####maxdepth
 
 find in current dir only:
 
@@ -343,7 +345,7 @@ find in current dir and direct children dirs
 
 find in current and direct sons only
 
-###samefile
+####samefile
 
 Find all content duplicates of `file1`:
 
@@ -351,7 +353,7 @@ Find all content duplicates of `file1`:
 
 Usese hash comparison.
 
-###regex
+####regex
 
 Find regexes.
 
@@ -367,19 +369,19 @@ Finds paths under `/home`, that end in .txt:
 
     find . -regex '^/home/.*\.txt$'
 
-###iregex
+####iregex
 
 Regex case insensitive.
 
-###empty
+####empty
 
 Find empty files and directories:
 
     find . -empty
 
-##GNU extensions actions
+###GNU extensions actions
 
-###print0
+####print0
 
 Prints outputs ended in null character instead of newline.
 
@@ -401,7 +403,7 @@ GNU utils which support NUL termination:
 
     sort -z
 
-###printf
+####printf
 
 Print formated data about files found. Format:
 

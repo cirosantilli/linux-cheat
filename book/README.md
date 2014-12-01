@@ -1,8 +1,10 @@
+#Book
+
 A book format is in general a format that can represent multiple images, text and multiple pages such as PDF, DJVU or PS.
 
 Pure image or text formats such as JPEG or TeX are not covered here.
 
-#Formats
+##Formats
 
 Formats that contain image, text, fonts such as PDF or DJVU but not not formats that map directly to bits such as PNG or JPEG.
 
@@ -30,9 +32,9 @@ Formats that contain image, text, fonts such as PDF or DJVU but not not formats 
 
 -   RTF: Rich Text Format, proprietary Microsoft
 
-#Viewers
+##Viewers
 
-##Okular
+###Okular
 
 KDE default viewer.
 
@@ -47,21 +49,21 @@ Single instance:
 
 `a.pdf` is closed, `b.pdf` is opened on same window.
 
-##fbreader
+###fbreader
 
 MOBI reader.
 
-#Calibre
+##Calibre
 
 Book library management + command line utils
 
-##ebook-convert
+###ebook-convert
 
 Convert between ebook formats: PDF, MOBI, etc.
 
-#Utilities
+##Utilities
 
-##paps
+###paps
 
 Converts TXT to PS.
 
@@ -79,7 +81,7 @@ Font:
 
 TODO list all fonts?
 
-##a2ps
+###a2ps
 
 TXT to PS
 
@@ -103,7 +105,7 @@ Output to stdout
 
     a2ps -o - a.txt
 
-##ps2pdf
+###ps2pdf
 
     ps2pdf a.ps
 
@@ -117,7 +119,7 @@ Out to stdout:
 
     ps2pdf a.ps -
 
-##pdftk
+###pdftk
 
 PDF Tool Kit
 
@@ -189,48 +191,48 @@ Repair a PDF’s Corrupted XREF Table and Stream Lengths (If Possible):
 
     pdftk broken.pdf output fixed.pdf
 
-##pdfjam
+###pdfjam
 
 Package that includes several PDF utils.
 
-##popler
+###popler
 
-###pdftotext
+####pdftotext
 
 Extract text layer from PDF:
 
     pdftotext a.pdf
     less a.txt
 
-###pdfimages
+####pdfimages
 
 Extracts all images of a PDF as PPM or PBM.
 
     pdfimages a.pdf
 
-###pdffonts
+####pdffonts
 
 TODO lists which fonts? available on computer? used by given PDF?
 
     pdffonts a.pdf
 
-###pdfinfo
+####pdfinfo
 
 Get various specs on the given PDF:
 
     pdfinfo a.pdf
 
-##Edit PDF content in GUI
+###Edit PDF content in GUI
 
 Consider LibreOffice draw + PDF importer.
 
 <http://askubuntu.com/questions/162037/how-to-edit-pdfs/288020#288020>
 
-##djvulibre-bin
+###djvulibre-bin
 
 DJVU CLI tools.
 
-###ddjvu
+####ddjvu
 
 Convert DJVU to other formats.
 
@@ -246,13 +248,13 @@ Outputs pages 1 and 3, followed by all the document pages in reverse order up to
 
 Loses text layer.
 
-###djvm
+####djvm
 
 Get number of pages of DJVU:
 
     djvm -l speak\ chinese\ 2.djvu | sed -nre '$ s/.+#([0-9]+).+/\1/p'
 
-#pdfcrop
+##pdfcrop
 
 Remove empty margins of PDF files.
 
@@ -260,7 +262,7 @@ Greatly increases file size (10x).
 
 	pdfcrop a.pdf
 
-#Fonts
+##Fonts
 
 Description of how TXT and UTF data should look like.
 
@@ -269,7 +271,7 @@ Locations:
 - `/usr/share/X11/fonts`
 - `/usr/share/fonts`
 
-##xlsfonts
+###xlsfonts
 
 TODO
 
@@ -301,7 +303,7 @@ Formats:
 
     Extensions: `afm`, `pfb`, `pfm`.
 
-#chm
+##chm
 
 Microsoft proprietary.
 
@@ -311,13 +313,13 @@ Compiled form of HTML, not directly plain text.
 
 Has been reverse engineered.
 
-##chm to HTML
+###chm to HTML
 
 Archmage:
 
     archmage a.chm
 
-##chm to PDF
+###chm to PDF
 
 `chm2pdf`: <http://www.ubuntugeek.com/how-to-convert-chm-files-into-pdf-files-in-ubuntu.html>
 
@@ -329,7 +331,7 @@ Did not work for me:
 
     chm2pdf --book a.chm
 
-##chm readers
+###chm readers
 
 - `chmsee`: GTK+, few preferences but just works.
 - `kchmreader`: KDE, broken colors on Ubuntu 12.04.

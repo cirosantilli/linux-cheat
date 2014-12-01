@@ -1,10 +1,12 @@
+#Gimp
+
 Image manipulation.
 
 Huge amount of functions, but has a learning curve.
 
 Learn the shortcuts and be happy.
 
-#Docking
+##Docking
 
 Understand a bit about Gimp's docking: <https://www.youtube.com/watch?v=rEYdWCP9d80>
 
@@ -14,7 +16,7 @@ Avoid multi window madness:
 
 Needs Gimp 2.8 (Ubuntu 12.04 stops at Gimp 2.6).
 
-#Layers
+##Layers
 
 If you don't know what layers are and how to use them, learn *now*
 
@@ -33,13 +35,13 @@ Layer Z order is given by the order on the layer dialog.
 
 The layer lock, when active, makes all locked layers move together via the `M` tool.
 
-#Grid
+##Grid
 
 - View -> Grid: toggle grid visibility
 - View -> Snap to Grid
 - Image -> Configure Grid: set grid size
 
-#Copy page
+##Copy page
 
 `Shift + C` copy saves the current selection
 
@@ -47,7 +49,7 @@ The layer lock, when active, makes all locked layers move together via the `M` t
 
 To transform it into an actual layer, select it on the layer dialog and push "Create a new layer and add it to the image."
 
-#Tools
+##Tools
 
 Resize entire image:
 
@@ -55,43 +57,48 @@ Resize entire image:
 
 Shortcuts:
 
-- `Shift + B`: bucket fill.
+-   `Shift + B`: bucket fill.
 
-- `Ctrl + D`: duplicate current image.
+-   `Ctrl + D`: duplicate current image.
 
-- `Shift + E`: eraser
+-   `Shift + E`: eraser
 
     To get hard edges, there is a checkbox on the tool option.
 
     On images without alpha layer, eraser does not erase to transparency: it paints the background color!
 
-- `M`: move.
+-   `M`: move.
 
     Selects the topmost non transparent layer at pixel under cursor.
 
     `Shift + M`: move current layer regardless of transparency.
 
-- `N`: peNcil
+-   `N`: peNcil
 
     - `Shift + `
 
-- `O`: select color of a given pixel
+-   `O`: select color of a given pixel
 
-- `Q`: alignment tool.
+-   `Q`: alignment tool.
 
     Aligns centers, left, right, top bottom of multiple layers.
 
-- `Ctrl + PageDown`: go to previous tab
+-   `Ctrl + PageDown`: go to previous tab
 
-- `Shift + R`: rotate selection tool
+-   `T`: text tool. To move text around, use the Move tool.
+    You must click precisely on a character, not on the background.
 
-- `X`: swap primary and secondary colors
+-   `Shift + T`: resize, scale selection
 
-- `Y`: redo
+-   `Shift + R`: rotate selection tool
 
-- `Z`: undo
+-   `X`: swap primary and secondary colors
 
-##Selection tools
+-   `Y`: redo
+
+-   `Z`: undo
+
+###Selection tools
 
 -   `R`: rectangle select tool.
 
@@ -99,7 +106,7 @@ Shortcuts:
 
     For example, to draw a rectangle, use this tool, then bucket fill inside the selection.
 
-    While the `R` tool is active, you can use it to move and resize the current rectangle selection.
+    While the `R` tool is active, you can use it to move the current rectangle selection.
 
     To deactivate a rectangle selection, select the tool, and click once without dragging anywhere outside the selection.
 

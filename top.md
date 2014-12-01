@@ -1,3 +1,5 @@
+#top
+
 Ncurses constantly updated process list with CPU and memory usage.
 
 On Ubuntu 14.04 implemented on the procps package.
@@ -18,7 +20,7 @@ Output fields:
 - `VIRT`: same as `VSZ` on `ps`.
 - `SHR`: which subset of `VIRT` is shared.
 
-#uptime
+##uptime
 
 First line of top:
 

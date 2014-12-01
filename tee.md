@@ -1,3 +1,5 @@
+#tee
+
 POSIX 7
 
 Echo stdin to multiple files ant to stdout.

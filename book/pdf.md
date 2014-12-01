@@ -1,6 +1,8 @@
+#PDF
+
 First created by Adobe as a proprietary format in 1993.
 
-Apparently not Turing complete in itself, although it can embed Turing complete objects like Javascript and Flash, which viewers may or may not play.
+Apparently not Turing complete in itself, although it can embed Turing complete objects like JavaScript and Flash, which viewers may or may not play.
 
 Version 1.7 released in 2007 as a payed ISO standard and for public implementation without royalties, except for some proprietary extensions.
 
@@ -24,7 +26,7 @@ This means that PDF is a base bad input format: it should be used as an output f
 
 PDF is influenced by PostScript.
 
-#Capabilities
+##Capabilities
 
 -   text: contains text layers. TODO: are text objects broken into lines? How does search work?
 
@@ -76,21 +78,21 @@ TODO: can PDFs be compressed? It seems that Stream objects can all be compressed
 
 TODO: can PDFs automatically do line wrapping? Or does software like LaTeX have to explicitly position all characters?
 
-#Implementations
+##Implementations
 
 A common Linux rendering library implementation is Poppler: <http://en.wikipedia.org/wiki/Poppler_%28software%29>. It also contains many useful utilities.
 
 Another implementation is GNU PDF, which was removed from the list of GNU's high priority projects because of Poppler: <http://en.wikipedia.org/wiki/GNU_PDF>
 
-PDF.js is a Javascript browser PDF renderer: <https://github.com/mozilla/pdf.js>
+PDF.js is a JavaScript browser PDF renderer: <https://github.com/mozilla/pdf.js>
 
-#PDF subsets
+##PDF subsets
 
 <http://www.gnupdf.org/Standards_comparison#Standardized_subsets>
 
 Reduce the amount of capabilities to make it easier to implement and print.
 
-##PDF/X
+###PDF/X
 
 <http://en.wikipedia.org/wiki/PDF-X>
 
@@ -99,12 +101,12 @@ PDF subset, easier for printing:
 - all fonts embedded
 - all images on a format suitable for printing
 
-#TODO
+##TODO
 
 - how to generate the `xref` table automatically to make it more feasible to write test PDFs by hand?
 - fix byte counts on annex the hello world PDF: [hello-world.md](hello-world.md).
 
-#Sources
+##Sources
 
 Good information on PDF is *hard* to find. This is quite insane considering it is *the* most popular book format today, specially when compared to HTML. 
 

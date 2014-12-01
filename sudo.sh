@@ -90,52 +90,62 @@
 
           #sudo sh -c "echo '$(id -un) ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers"
 
-    ##Redirection
+  ##Shell built-ins
 
-      # sudo passes its stdin to the called program:
+    # Sudo takes a binary as argument. As a consequence, you cannot run shell built-ins with it:
 
-        echo a | sudo cat
-          #a
+      #sudo cd /
 
-      # Cannot "echo to a file" directly without permission
+    # The first time this bit me was with `ulimit`:
 
-        su a
-        mkdir b
-        chown b b
-        #fails:
-        sudo echo a > b/a
+      #sudo ulimit
 
-      # The reason why this fails is that bash gives sudo two arguments: `echo` and `a`.
+  ##Redirection
 
-      # sudo does `echo a`, produces `a`, and then *bash* attempts the redirection by writing
-      # `a` to `b/a`, which of course fails because bash does not the necessary permissions.
+    # sudo passes its stdin to the called program:
 
-      # Workarounds for that include:
+      echo a | sudo cat
+        #a
 
-      # Put everything inside a single bash command:
+    # Cannot "echo to a file" directly without permission
 
-        sudo bash -c 'echo a > b/a'
+      su a
+      mkdir b
+      chown b b
+      #fails:
+      sudo echo a > b/a
 
-      # This works, but may lead to quoting hell.
+    # The reason why this fails is that bash gives sudo two arguments: `echo` and `a`.
 
-      # sudo a tee and let it do the work:
+    # sudo does `echo a`, produces `a`, and then *bash* attempts the redirection by writing
+    # `a` to `b/a`, which of course fails because bash does not the necessary permissions.
 
-        echo a | sudo tee b/a
+    # Workarounds for that include:
 
-      # And if we want to append to the file instead:
+    # Put everything inside a single bash command:
 
-        echo a | sudo tee -a b/a
+      sudo bash -c 'echo a > b/a'
 
-      # The resaon this works is because `sudo` redirects its stdin
-      # to the stdin of the program it will call.
+    # This works, but may lead to quoting hell.
 
-      # `-e` to edit a file as sudo:
+    # sudo a tee and let it do the work:
 
-        sudo -e /etc/file.conf
+      echo a | sudo tee b/a
 
-      # Multiline sudo via EOF:
+    # And if we want to append to the file instead:
 
-        sudo tee /some/path <<EOF
+      echo a | sudo tee -a b/a
+
+    # The resaon this works is because `sudo` redirects its stdin
+    # to the stdin of the program it will call.
+
+    # `-e` to edit a file as sudo:
+
+      sudo -e /etc/file.conf
+
+    # Multiline sudo via EOF:
+
+      sudo tee /some/path <<EOF
 EOF
 
   ##Environemnt variables

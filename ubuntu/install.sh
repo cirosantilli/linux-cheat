@@ -143,7 +143,9 @@
 
   if [ "$1" = "min" ]; then exit 0; fi
 
-  ##uncategorized
+  ##Uncategorized
+
+  ##Misc
 
     # xxencode, BASE64, quoted printable, BinHex
 
@@ -152,6 +154,11 @@
     # mime messages
 
       #sudo aptitude install -y mpack
+
+    # Bitcoin
+
+      sudo add-apt-repository -y ppa:bitcoin/bitcoin && sudo aptitude update
+      sudo aptitude install -y bitcoin-qt
 
   ##text
 
