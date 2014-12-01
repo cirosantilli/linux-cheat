@@ -2,7 +2,9 @@
 
 Get and set resource limits for a process and its children.
 
-POSIX 7: <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/ulimit.html#tag_20_137>
+POSIX 7: <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/ulimit.html>
+
+Linux and POSIX offer several per process limits. POSIX ones are documented with the `getrlimit` interface at <http://pubs.opengroup.org/onlinepubs/9699919799/functions/getrlimit.html>
 
 On Ubuntu, implemented as a `sh` and `bash` built-in:
 
@@ -77,3 +79,20 @@ Linux deals well with CPU limits since CPU usage rotates according to nice, but 
 <http://unix.stackexchange.com/questions/44985/limit-memory-usage-for-a-single-linux-process>
 
 The timeout tool aims to limit CPU and RAM for the children as well as parent: <https://github.com/pshved/timeout>
+
+##Per user limits
+
+###PAM
+
+###/etc/security/limits.conf
+
+TODO confirm this section.
+
+Module that sets per user resource quotas.
+
+<http://www.cyberciti.biz/tips/linux-limiting-user-process.html>
+
+Allows for several useful limits, e.g. `nproc` for the number or processes.
+
+    man limits.conf
+    man pam_limits

@@ -58,6 +58,12 @@ Generic data formats:
 - [Unicode](unicode.md)
 - [XML](xml/)
 
+Markup compilers:
+
+- [Kramdown](kramdown/)
+- [Pandoc](pandoc/)
+- [RST](rst/)
+
 File and directory related utilities:
 
 - [du](du.md)
