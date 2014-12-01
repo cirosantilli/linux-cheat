@@ -47,7 +47,7 @@ Media video, games, etc.) file types, viewers, editors, capture, synthesizers:
 - [compression.md](compression.md): Zip, tar, gzip, 7z.
 - [dict.md](dict.md): dictionary formats.
 - [game.md](game.md): games, emulation.
-- [file-share.md](files-share.md):  Soulseek, Dropbox.
+- [file-sharing.md](files-sharing.md):  Soulseek, Dropbox.
 - [image/](image/): images, photos.
 - [markup](markup/): Markdown, RST. Focus on command line interface and extensions.
 - [video.md](video.md): videos, films, subtitles.
@@ -89,6 +89,10 @@ Process-related tools:
 - [top.md](top.md)
 - [ulimit.md](ulimit.md)
 - [wait.sh](wait.sh)
+
+Cryptography:
+
+- [gpg.md](gpg.md)
 
 Other tools:
 
