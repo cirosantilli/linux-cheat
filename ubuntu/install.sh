@@ -851,7 +851,15 @@
         sudo aptitude install -y apache2
         sudo aptitude install -y libapache2-mod-fastcgi
 
+        sudo aptitude install -y ngrok-client
+        sudo aptitude install -y ngrok-server
+        sudo aptitude install -y nmap
+        sudo aptitude install -y openssh-client
+        sudo aptitude install -y openssh-server
+        sudo aptitude install -y squid3
         sudo aptitude install -y traceroute
+        sudo aptitude install -y tshark
+        sudo aptitude install -y whois
         sudo aptitude install -y wireshark
 
       #php:
@@ -883,12 +891,6 @@
           firefox http://localhost/phpmyadmin &
 
         # Login: 'root'. password: what you entered at installation.
-
-        sudo aptitude install -y openssh-client
-        sudo aptitude install -y openssh-server
-
-        sudo aptitude install -y nmap
-        sudo aptitude install -y whois
 
       ##phantomjs
 

@@ -1,4 +1,4 @@
-# ![logo](logo.jpg) Linux Cheat
+# Linux Cheat ![logo](logo.jpg)
 
 Linux information and cheatsheets.
 
@@ -95,10 +95,6 @@ Process-related tools:
 - [top](top.md)
 - [ulimit](ulimit.md)
 - [wait](wait.sh)
-
-Cryptography:
-
-- [GPG](gpg.md)
 
 Other tools:
 
