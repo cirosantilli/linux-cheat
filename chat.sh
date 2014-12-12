@@ -2,11 +2,11 @@
 
 # Chat utilities, specially command line ones.
 
-##mseg write wall
+## mseg write wall
 
   # Write messages to other users on the system.
 
-  ##mseg
+  ## mseg
 
     # Enable/disable messages:
 
@@ -17,7 +17,7 @@
       mseg
         #y
 
-  ##write
+  ## write
 
     # Write to a user in a TTY:
 
@@ -34,7 +34,7 @@
       h=
       sudo write $h@$u tty2
 
-  ##wall
+  ## wall
 
     # Write to all:
 
@@ -57,7 +57,7 @@
       #go to tty3
       #your message is there!
 
-##talk
+## talk
 
   # Commandline chat program.
 
@@ -65,7 +65,7 @@
 
     sudo aptitude install -y talk
 
-##IRC
+## IRC
 
   #internet relay chat
 
@@ -83,7 +83,7 @@
 
   #it is also possible to send files to people
 
-  ##commands
+  ## commands
 
     #intro: <http://www.irchelp.org/irchelp/irctutorial.html>
 
@@ -91,26 +91,26 @@
 
     #/connect <server>
 
-    ##ubuntu channel
+    ## ubuntu channel
 
-        ##register
+        ## register
 
           xdotool type "/msg nickserv register $password $email"
 
-        ##verify registration
+        ## verify registration
 
           #go to your email and get the registration code
 
           regcode=
           xdotool type "/msg nickserv verify register $uname $regcode"
 
-  ##clients
+  ## clients
 
-    ##pidgin
+    ## pidgin
 
       #good because integrates with other ims
 
-      ##create account
+      ## create account
 
         #irc server + username on that server == a pidgin account
 
@@ -118,7 +118,7 @@
 
         #enter server username and pass
 
-      ##join/create channel:
+      ## join/create channel:
 
         #an irc channel == a pidgin chat
 
@@ -133,7 +133,7 @@
 
         #if you close the chat window, it will not be on your buddy list anymore
 
-      ##add channel to buddy list permanently:
+      ## add channel to buddy list permanently:
 
         #buddies > add a group. name it "irc".
 
@@ -141,6 +141,6 @@
 
         #buddies > add a chat. choose type irc, server, channel.
 
-  ##irssi
+  ## irssi
 
     #ncurses

@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
-##about
+## about
 
   # This file is being cut up into smaller files.
 
   # Distribution specific installation procedures are put outside of this section.
 
-  # For a summary of up to level 2 header: `grep -E '^[[:space:]]{0,4}##' %`.
+  # For a summary of up to level 2 header: `grep -E '^[[:space:]]{0,4}## ' %`.
 
-##Sources
+## Sources
 
   # - http://linux.die.net/
 
@@ -55,9 +55,9 @@
 
     # Teaches how to build a minimal Linux distro
 
-##configuration
+## configuration
 
-  ##Ubuntu
+  ## Ubuntu
 
     #jockey
 
@@ -71,9 +71,9 @@
 
         jockey-text --enable=$DRIVER
 
-##programming
+## programming
 
-  ##pkg-config
+  ## pkg-config
 
     #info is contained in "$PKG_NAME.pc" files located mainly under:
 
@@ -87,9 +87,9 @@
       CFLAGS=$(shell pkg-config --cflags pkgname)
       LIBS=$(shell pkg-config --libs pkgname)
 
-  ##diff
+  ## diff
 
-    ##diff
+    ## diff
 
       # GNU diffutils package.
 
@@ -117,15 +117,15 @@
         touch b/c
         diff a b
 
-    ##patch
+    ## patch
 
-    ##wdiff
+    ## wdiff
 
       # Word oriented diff.
 
         wdiff a b
 
-    ##kiff3
+    ## kiff3
 
       # KDE 3 way merge tool.
 
@@ -135,7 +135,7 @@
 
         kdiff3 f1 f2 -o fout
 
-  ##source-highlight
+  ## source-highlight
 
     # Takes in source files and produces highlighted output in one of the formats:
 
@@ -151,7 +151,7 @@
 
       source-highlight a.py
 
-  ##pygments
+  ## pygments
 
     #python package for multi language syntax coloring.
 
@@ -167,7 +167,7 @@
     #input and output formats here were inferred from extension,
     #but can be explicitly set too.
 
-  ##c99
+  ## c99
 
     #POSIX C99 compiler!
 
@@ -175,13 +175,13 @@
 
     #At first glance `gcc -std=c99` is largely compatible with the POSIX c99.
 
-  ##fort77
+  ## fort77
 
     #POSIX fortran compiler.
 
-##file management
+## file management
 
-  ##krusader
+  ## krusader
 
     #KDE extra gear <http://extragear.kde.org/>
 
@@ -199,15 +199,15 @@
 
       #filezilla is still better at this I think.
 
-##time date
+## time date
 
-  ##cal
+  ## cal
 
     # cout an ASCII art calendar:
 
       cal
 
-  ##date
+  ## date
 
     # POSIX 7.
 
@@ -219,13 +219,13 @@
 
       date "+%Y-%m-%d-%H-%M-%S"
 
-    ##gnu extensions
+    ## gnu extensions
 
       # Set system date:
 
         sudo date -s "1 JUN 2012 09:30:00"
 
-  ##hwclock
+  ## hwclock
 
     #see hardware clock time:
 
@@ -235,7 +235,7 @@
 
       sudo hwclock --systohc
 
-  ##set you time zone
+  ## set you time zone
 
     #on dual boot with windows there are conflicts because Windows uses local time, and Linux UTC (more logical...). you must either tell Linux to use local, or better, Windows to use UTC
 
@@ -245,9 +245,9 @@
       $TIMEZONE_NAME=
       cp $TIMEZONE_LOCATION/$TIMEZONE_NAME /etc/localtime
 
-##editor IDE
+## editor IDE
 
-  ##vim
+  ## vim
 
     # Move very fast with your keyboard without using a mouse.
 
@@ -258,26 +258,26 @@
 
       gvim
 
-  ##Libreoffice
+  ## Libreoffice
 
     # Project contains wysiwyg text editor, tables, image editor, database management.
 
     # How to add new spellchecking language:<http://askubuntu.com/questions/72099/how-to-install-a-libreoffice-dictionary-spelling-check-thesaurus>
 
-    ##Calc
+    ## Calc
 
       # Always show a row or column, specially the header if the table is long:
 
       # - click on column that *follows* the one that should always show
       # - Window > Freeze
 
-##text
+## text
 
-  ##echo
+  ## echo
 
     #POSIX 7>
 
-    ##versions
+    ## versions
 
       #POSIX says that: A string to be written to standard output.
 
@@ -313,7 +313,7 @@
 
       [ "`echo a b c`" = "a b c" ] || exit 1
 
-    ##gnu implementation
+    ## gnu implementation
 
       #As explained in the versions section, POSIX does not specificy behaviour
       #if `-n` input starts or if input contains `\n`, and in practice inplementations
@@ -338,7 +338,7 @@
       #IMPOSSIBLE! not even gnu echo supports `--` since POSIX says that this should be supported.
       #=) use `printf`.
 
-  ##printf
+  ## printf
 
     # POSIX 7.
 
@@ -385,7 +385,7 @@
 
       printf "%ba" "\n"
 
-  ##yes
+  ## yes
 
     # coreutils
 
@@ -408,15 +408,15 @@
 
       yes | timeout 1 cat
 
-  ##rev
+  ## rev
 
     # Reverse bytewise.
 
       [ "`printf 'ab\n' | rev`" = $'ba' ] || exit 1
 
-  ##pagers
+  ## pagers
 
-    ##less
+    ## less
 
       # File pager (viewer).
 
@@ -451,26 +451,26 @@
 
           ls --color | less -R
 
-    ##more
+    ## more
 
       # Worse than less:
 
         echo a | more
 
-    ##pg
+    ## pg
 
       # Worse than more:
 
         echo a | pg
 
-    ##pr
+    ## pr
 
       # Break file into pages with a certain number of lines
       # and print to stdout:
 
         ( for i in `seq 200`; do echo a; done ) | pr
 
-  ##nl
+  ## nl
 
     # POSIX 7
 
@@ -478,7 +478,7 @@
 
       nl "$f"
 
-  ##fold
+  ## fold
 
     # Wrap lines.
 
@@ -493,7 +493,7 @@
 
       [ "`echo -e "12345 6" | fold -s -w 3`" = $'123\n45\n6' ] || exit 1
 
-  ##fmt
+  ## fmt
 
     # coreutils.
 
@@ -501,7 +501,7 @@
 
       [ `echo "a bcd" | fold -w 2` = $'a\nbcd' ] || exit 1
 
-  ##column
+  ## column
 
     # bsdmainutils
 
@@ -532,7 +532,7 @@
       123    1    12345
       12345  123  1
 
-  ##tsort
+  ## tsort
 
     # Topological sorting:
     # <http://en.wikipedia.org/wiki/Tsort_%28Unix%29>
@@ -547,7 +547,7 @@
       echo $?
         #1
 
-  ##split
+  ## split
 
     # corutils.
 
@@ -570,7 +570,7 @@
     # - `b`: bytes per file
     # - `n`: number of files
 
-  ##csplit
+  ## csplit
 
     #corutils.
 
@@ -584,7 +584,7 @@
       [ `cat xx01` = $'aa\n1' ] || exit 1
       [ `cat xx02` = $'aa\n2' ] || exit 1
 
-  ##paste
+  ## paste
 
     # POSIX 7.
 
@@ -601,7 +601,7 @@
       echo -e "c c\nc c\nc"          > c
       paste a b c
 
-  ##expand
+  ## expand
 
     # POSIX 7
 
@@ -609,11 +609,11 @@
 
       echo -e "a\tb" | expand
 
-    ##unexpand
+    ## unexpand
 
       #contrary
 
-  ##seq
+  ## seq
 
     # Counts to stdout.
 
@@ -633,7 +633,7 @@
     # - `s`: separator
     # - `w`: equal width
 
-    ##non-application
+    ## non-application
 
       # You could use this for loops:
 
@@ -649,9 +649,9 @@
       # Use this only if you really need to control
       # the output with the options.
 
-  ##path operations
+  ## path operations
 
-    ##basename ##dirname
+    ## basename ##dirname
 
       # POSIX 7
 
@@ -663,7 +663,7 @@
 
       # Extensions can be extracted naively with variable expansion, but it is not trivial to make it work for dot files.
 
-  ##strings
+  ## strings
 
     # Search for printable strings in file.
 
@@ -675,13 +675,13 @@
       gcc c.c
       strings a.out
 
-##moreutils
+## moreutils
 
   #extra base linux utils
 
     sudo aptitude install moreutils
 
-  ##sponge
+  ## sponge
 
     #solves the input to output problem problem
 
@@ -699,7 +699,7 @@
       grep 0 a | sponge a
       [ "`cat a`" = '0' ] || exit 1
 
-  ##vipe
+  ## vipe
 
     # Use editor (aka vim =)) in the middle of a pipe:
 
@@ -718,16 +718,16 @@
       a="`echo -e "\n#lines starting with '#' will be ignored" | vipe | grep -Ev '^#' `"
       echo "$a"
 
-##character encoding
+## character encoding
 
-  ##chinese
+  ## chinese
 
     # - Guobiao is mainly used in Mainland China and Singapore. Named as `GB\d+`
     # - Big5, used in Taiwan, Hong Kong and Macau
 
     # `file` does not work properly for chinese
 
-  ##dos2unix
+  ## dos2unix
 
     # CR LF to CR.
 
@@ -739,7 +739,7 @@
 
     # Does some smart heuristic things like skipping binary files and FIFOs, so better than `sed`.
 
-  ##enca
+  ## enca
 
     # Detect and convert international encodings.
 
@@ -760,7 +760,7 @@
     # You give languages as locales
     # (i think as 2 letter iso 639-1 codes <http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes> since only `zh` worked for chinese)
 
-  ##iconv
+  ## iconv
 
     # Convert character encodings.
 
@@ -782,15 +782,15 @@
 
     # No changes made to file: only outputs to stdout.
 
-  ##convmv
+  ## convmv
 
     # mv converting encodings
 
-##cron
+## cron
 
   # Tell the computer to do things at specified times automatially.
 
-  ##crontab
+  ## crontab
 
     # POSIX 7.
 
@@ -863,7 +863,7 @@
 
       crontab -r -u username
 
-  ##batch
+  ## batch
 
     # POSIX 7
 
@@ -879,7 +879,7 @@
 
       echo "touch a" | at -q b now
 
-  ##at
+  ## at
 
     # Schedule job at a single specified time.
 
@@ -918,9 +918,9 @@
         #if allow exists, this is ignored!
         #if not, denies only to listed users
 
-##system info
+## system info
 
-  ##uname
+  ## uname
 
     #POSIX 7.
 
@@ -934,7 +934,7 @@
 
     # You can each isolated with other opts.
 
-  ##lsb_release
+  ## lsb_release
 
     # Command required by the LSB.
 
@@ -947,9 +947,9 @@
         distro_id="$(lsb_release -i | sed -r 's/.*:\t(.*)/\1/')"
         distro_version="$(lsb_release -r | sed -r 's/.*:\t(.*)/\1/')"
 
-  ##Processor ##CPU
+  ## Processor ##CPU
 
-    ##arch
+    ## arch
 
       # Architecture of the OS, not CPU hardware: Subset of uname.
 
@@ -960,13 +960,13 @@
         #i686
         #x86_64
 
-    ##mpstat
+    ## mpstat
 
       # Processor related stats:
 
         mpstat
 
-    ##nproc
+    ## nproc
 
       # Number of processing unites (= cores?).
 
@@ -974,7 +974,7 @@
 
         nproc
 
-    ##cpuinfo
+    ## cpuinfo
 
       # CPU info dev file:
 
@@ -994,17 +994,17 @@
 
     # RAM info dev file:
 
-	##lspci
+	## lspci
 
 		sudo lspci
 
-	##hwinfo
+	## hwinfo
 
 		sudo aptitude install -y hwinfo
 
 		hwinfo | less
 
-  ##sar
+  ## sar
 
     # Long term performance statistics.
 
@@ -1029,11 +1029,11 @@
       sar -n DEV | more
       sar -n SOCK |more
 
-  ##hardware specs
+  ## hardware specs
 
-    ##bus
+    ## bus
 
-      ##usb
+      ## usb
 
         # New: usb 3.0
         # Old still existing: usb 2.0
@@ -1054,24 +1054,24 @@
           # - signaling rate: 5 Gbit/s (Super Speed mode)
           # - maximal cable length: 5 meters
 
-          ##differentiate from usb 2.0
+          ## differentiate from usb 2.0
 
             # - 3.0 tipically blue while 2.0 black
             # - 3.0 has 8 pins instead of 4
             # - ss for super spped may be written
             # - <http://www.usb3.com/usb3-info.html>
 
-      ##firewire
+      ## firewire
 
-      ##ethernet
+      ## ethernet
 
-    ##lshw
+    ## lshw
 
       # Show lots of hardware specs, including networing, USB, CPU.
 
         sudo lshw
 
-##read
+## read
 
   # Read from stdin and stores in shell variables.
 
@@ -1104,7 +1104,7 @@
 
   #Read from file descriptor linewise and assign to variable.
 
-    ##applications
+    ## applications
 
       #Read file linewise:
 
@@ -1127,22 +1127,22 @@
         #done < <( echo -e "a : b\nc : d" )
         #IFS="$IFS_OLD"
 
-  ##GNU extensions
+  ## GNU extensions
 
     #-p print a prompt message:
 
       read -p "enter string: " s
       echo "you entered $s"
 
-##process
+## process
 
-  ##pwdx
+  ## pwdx
 
     # Print current working directory of given process:
 
       pwdx $pid
 
-  ##trap
+  ## trap
 
     # Capture signals.
 
@@ -1150,7 +1150,7 @@
 
     # Now Ctrl-C away and notice `a` get printed.
 
-  ##bg
+  ## bg
 
     #POSIX 7
 
@@ -1163,7 +1163,7 @@
       #bg %-
         #before last bg job [-]
 
-  ##fg
+  ## fg
 
     #POSIX 7
 
@@ -1172,7 +1172,7 @@
       #fg
         #last job
 
-  ##disown
+  ## disown
 
     # Remove job 3 from list of sub jobs.
 
@@ -1183,7 +1183,7 @@
       #vlc 100 &
       #disown %3
 
-  ##timeout
+  ## timeout
 
     # Run command for at most n seconds, and kill it if it does not finish in time
 
@@ -1192,22 +1192,22 @@
       [ `timeout 3 bash -c 'for i in {1..2}; do echo $i; sleep 1; done'` = $'1\n2\n' ] || exit 1
       [ `timeout 1 bash -c 'for i in {1..2}; do echo $i; sleep 1; done'` = $'1\n' ] || exit 1
 
-  ##flock
+  ## flock
 
     # Puts an advisory file lock on given file while a command executes:
 
       touch a
       flock a sleep 5 &
 
-  ##prtstat
+  ## prtstat
 
     #TODO
 
-  ##peekfd
+  ## peekfd
 
     #TODO
 
-  ##ipcs
+  ## ipcs
 
     # List info on inter process communication facilities:
 
@@ -1219,11 +1219,11 @@
     # - semaphores
     # - message queues
 
-    ##ipcrm
+    ## ipcrm
 
       # Remove IPC facility.
 
-  ##vmstat
+  ## vmstat
 
     # Memory, sway, io, cpu
 
@@ -1267,9 +1267,9 @@
         #Id field: Idle time.
         #Wa field: Time spent waiting for the IO
 
-##files
+## files
 
-  ##cd
+  ## cd
 
     #POSIX
 
@@ -1311,7 +1311,7 @@
       pwd
         #~/a
 
-  ##touch
+  ## touch
 
     # POSIX
 
@@ -1321,7 +1321,7 @@
 
       touch f
 
-  ##mkdir
+  ## mkdir
 
     #POSIX
 
@@ -1345,13 +1345,13 @@
       mkdir -m 1777 d
       [ `stat -c "%A" d` = 'drwxrwxrwt' ] || exit 1
 
-  ##mv
+  ## mv
 
     # POSIX
 
     # Move or rename files and dirs.
 
-    ##files
+    ## files
 
       # If dest does not exist, move the file to it:
 
@@ -1376,7 +1376,7 @@
         mkdir d
         mv a d
 
-    ##dirs
+    ## dirs
 
       # Same as files except does not overwrite non empty dirs:
 
@@ -1392,9 +1392,9 @@
         mv d d2
           #cannot mv: dir not empty
 
-    ##GNU extensions
+    ## GNU extensions
 
-      ##b ##s
+      ## b ##s
 
         # Make backup if dest exits
 
@@ -1432,13 +1432,13 @@
           [ -f a ] || exit 1
           [ -f a.bak ] || exit 1
 
-  ##cp
+  ## cp
 
     # POSIX
 
     # Copy files and dirs.
 
-    ##file
+    ## file
 
       # If dest does not exist, create it:
 
@@ -1459,7 +1459,7 @@
         cp a b
         [ "`cat b`" = $'a' ] || exit 1
 
-    ##GNU extensions
+    ## GNU extensions
 
       # The following GNU extensions are very useful and did not fit into any other category:
 
@@ -1468,7 +1468,7 @@
         # Useful when copying a lot of files in an interactive session
         # to check if that progress is going on.
 
-    ##dir
+    ## dir
 
         function setup_test
         {
@@ -1525,7 +1525,7 @@
         if cp -R d d3; then assert false; fi
         teardown_test
 
-    ##symlink
+    ## symlink
 
       # By default, for files copies content of symlinks to new files/dirs:
 
@@ -1560,7 +1560,7 @@
       # the only thing this could do is to copy dirs
       # and symlink files. But then why not do this with hardlinks?
 
-    ##hardlink
+    ## hardlink
 
         echo a > a
         cp -l a b
@@ -1586,13 +1586,13 @@
 
         cp -fl a b
 
-    ##applications
+    ## applications
 
       # Copy all files from a directory into another existing directory (including hidden):
 
         cp -dR from/. to
 
-  ##rsync
+  ## rsync
 
     # Very powerful and flexible file copy tool.
 
@@ -1640,13 +1640,13 @@
       # WARNING: your disk must be ext4, not NTFS, or permissions are impossible.
       # In that case: http://unix.stackexchange.com/questions/11757/is-ntfs-under-linux-able-to-save-a-linux-file-with-its-chown-and-chmod-settings
 
-  ##rm
+  ## rm
 
     # Remove files and dirs.
 
     # -r: recursive. Mandatory for directories. Potentially dangerous.
 
-  ##recover data removed with rm like tools
+  ## recover data removed with rm like tools
 
     # `rm` only removes files from filesystem indexes, but the data remains in place
     # until the event that another file is writen on it, which may take severl minutes or hours.
@@ -1662,7 +1662,7 @@
     # so if you serious about clearing a hard disk, mechanical desctruction is a better option
     # (open the hard disk case and destroy the disk).
 
-  ##rename
+  ## rename
 
     # Mass file regex renaming.
 
@@ -1674,14 +1674,14 @@
 
       rename 's/^([0-9]) /0$1 /g' *.mp3
 
-  ##cpio
+  ## cpio
 
     #TODO
 
     find . ! -iname '* - *' -type f -print | cpio -pvdumB './no author'
     #find selected files to destination, building and keeping their relative directory structure
 
-  ##install
+  ## install
 
     # Move and set: mode, ownership and groups.
 
@@ -1692,7 +1692,7 @@
       [ -d a/b ] || exit 1
       [ -d a/b/c ] || exit 1
 
-  ##mkfifo
+  ## mkfifo
 
     # POSIX 7
 
@@ -1717,7 +1717,7 @@
     # - `echo` terminates
     # - `cat` reads the data from the pipe and terminates
 
-  ##mknod
+  ## mknod
 
     # Create character, block or FIFO (named pipe) files.
 
@@ -1725,7 +1725,7 @@
 
       sudo mknod /dev/coffee c 12 2
 
-  ##chown
+  ## chown
 
     # POSIX 7
 
@@ -1764,7 +1764,7 @@
 
       sudo chown :newgroup
 
-  ##chmod
+  ## chmod
 
     # POSIX
 
@@ -1820,7 +1820,7 @@
 
       chmod 777 "$f"
 
-    ##sticky bit, suid sgid bits
+    ## sticky bit, suid sgid bits
 
       # Sticky bit:
 
@@ -1864,7 +1864,7 @@
       su b
       if ! chmod 770 a; then assert true; fi
 
-  ##umask
+  ## umask
 
     # Shows/sets permissions that will be *removed*.
 
@@ -1887,7 +1887,7 @@
       touch c
         #---------
 
-  ##stat
+  ## stat
 
     # POSIX
 
@@ -1908,7 +1908,7 @@
       touch f
       stat f
 
-    ##-c
+    ## -c
 
       # Format string:
 
@@ -1924,7 +1924,7 @@
         ln a b
         [ "`stat -c "%i" a`" = "`stat -c '%i' b`" ] || exit 1
 
-    ##--print
+    ## --print
 
       # Like `-c` but interprets escapes like `\n`:
 
@@ -1932,9 +1932,9 @@
         echo "`stat --print "%a\n%a\n" a`"
         [ "`stat --print "\n" a`" = $'\n' ] || exit 1
 
-  ##links
+  ## links
 
-    ##ln
+    ## ln
 
       # Make hardlinks and symlinks
 
@@ -1975,7 +1975,7 @@
         ln /full/path/to/dest name
         [ `readlink name` = "/full/path/to/dest" ] || exit 1
 
-    ##readlink
+    ## readlink
 
       # Get target of symlink
 
@@ -1990,7 +1990,7 @@
 
         [ "`readlink -f c`" = $'a' ] || exit 1
 
-    ##realpath
+    ## realpath
 
       # Resolve all symbolic links and '.' and '..' entries of a path recursivelly
 
@@ -2016,7 +2016,7 @@
 
         # and is part of coreutils, so more widespread default.
 
-  ##fuser
+  ## fuser
 
     #psmisc package
 
@@ -2045,7 +2045,7 @@
 
       fuser -v -n tcp 5000
 
-  ##mktemp
+  ## mktemp
 
     # Create temporary files in the temporary directory.
 
@@ -2072,14 +2072,14 @@
 
     # Must use `--tmpdir` with template or else file is created in current dir
 
-  ##pathchk
+  ## pathchk
 
     # Check if path is portable across POSIX systems:
 
       pathchk -p 'a'
       pathchk -p '\\'
 
-##setterm
+## setterm
 
   # Outputs stdout that changes terminal properties.
 
@@ -2088,7 +2088,7 @@
     setterm -cursor off
     setterm -cursor on
 
-##Users and groups
+## Users and groups
 
   # To play around with those in Ubuntu, do ctrl+alt+f2, f3 ... f7
   # and you will go into login shells
@@ -2130,7 +2130,7 @@
 
     cat /etc/default/useradd
 
-  ##groups
+  ## groups
 
     # List groups of user `"$u"`:
 
@@ -2144,7 +2144,7 @@
 
       groups
 
-  ##who
+  ## who
 
     # POSIX 7.
 
@@ -2152,7 +2152,7 @@
 
       who
 
-  ##id
+  ## id
 
     # POSIX 7.
 
@@ -2185,7 +2185,7 @@
       id -gn
       id -gr
 
-  ##whoami
+  ## whoami
 
     # Print effective user name:
 
@@ -2193,13 +2193,13 @@
 
     # Same as `id -un`, but not POSIX, so never rely on it.
 
-  ##last
+  ## last
 
     # List last user logins on system:
 
       last
 
-  ##tty
+  ## tty
 
     # Show current tty:
 
@@ -2209,7 +2209,7 @@
 
       #/dev/pts/1
 
-  ##getty
+  ## getty
 
     # The tty that runs on those ctrl-alt-F\d things:
 
@@ -2219,7 +2219,7 @@
 
       ACTIVE_CONSOLES="/dev/tty[1-6]"
 
-  ##logout
+  ## logout
 
     # Logs out.
 
@@ -2227,13 +2227,13 @@
 
       logout
 
-  ##faillog
+  ## faillog
 
     # See log of failed login attempts (3 in a row):
 
       faillog -a
 
-  ##useradd
+  ## useradd
 
     # Create a new user with username `$u`:
 
@@ -2301,7 +2301,7 @@
 
         sudo useradd -e 2000-00-00 -f 5 $u
 
-  ##userdel
+  ## userdel
 
     # Remove users.
 
@@ -2315,14 +2315,14 @@
 
       userdel -r $u
 
-  ##groupadd
+  ## groupadd
 
     # Create new groups
 
       g=
       sudo groupadd $g
 
-  ##usermod
+  ## usermod
 
     # Add/remove users to groups
 
@@ -2352,7 +2352,7 @@
 
       usermod -md $d $u
 
-  ##passwd
+  ## passwd
 
     # File that holds usernames and key account options,
     # and command line utility to edit that file.
@@ -2401,13 +2401,13 @@
 
       sudo passwd -u "$u"
 
-    ##vipw
+    ## vipw
 
      # To directly edit the `/etc/passwd` file, use `vipw`,
      # which is vi in a mode that checks the file syntax before saving,
      # since syntax errors could lead to serious security faults.
 
-  ##makepasswd
+  ## makepasswd
 
     # Generates random passwords that follows certain rules.
 
@@ -2418,7 +2418,7 @@
 
       makepasswd --chars 10
 
-  ##chsh
+  ## chsh
 
     # Change the default shell of current user to `/bin/bash`:
 
@@ -2428,7 +2428,7 @@
 
       cat /etc/shells
 
-  ##ac
+  ## ac
 
     # Register and view user login statistics.
 
@@ -2440,7 +2440,7 @@
 
       ac -p
 
-  ##finger
+  ## finger
 
     # Shows user info.
 
@@ -2448,7 +2448,7 @@
 
       finger "$u"
 
-  ##pinky
+  ## pinky
 
     # coreutils
 
@@ -2460,17 +2460,17 @@
 
       sudo chfn -f full_name -r room_no -w work_ph -h home_ph -o other $u
 
-  ##ldap
+  ## ldap
 
     # Filesystem, printer, etc server over network
 
-  ##radius
+  ## radius
 
     # Login server.
 
     # freeradius is the major implementation.
 
-##setleds
+## setleds
 
   # Set/get capslock, numlock and scrolllock led state;
 

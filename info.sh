@@ -10,7 +10,7 @@
   # - ?: help
   # - x: close help
 
-  ##page
+  ## page
 
     # - <space>:  down one page. May change nodes.
     # - <backspace>: up one page. May change nodes.
@@ -18,7 +18,7 @@
     # - s, /: search string
     # - {, }: repeat search back/forward
 
-  ##menu
+  ## menu
 
     # - <arrows>: move cursor
     # - <enter>: go to link under cursor
@@ -28,7 +28,7 @@
     #     can tab complete.
     #     even without tab complete, goes to first match on enter.
 
-  ##node
+  ## node
 
     # - u: parent node
     # - t: top node
@@ -37,7 +37,7 @@
     # - l: go to last viewed node. can be used several times.
     # - g: like m, but search all nodes
 
-  ##search
+  ## search
 
     # - /: regex
     # - {: next   match of previous search

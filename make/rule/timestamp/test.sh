@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-##in out
+## in out
 
 #create `in`:
 make change_in
@@ -13,7 +13,7 @@ make change_in
 make out
 make clean
 
-##nodep
+## nodep
 
 #runs:
 make nodep
@@ -22,7 +22,7 @@ make change_nodep
 make nodep
 make clean
 
-##phony
+## phony
 
 #runs:
 make phony

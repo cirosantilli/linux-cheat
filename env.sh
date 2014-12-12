@@ -21,7 +21,7 @@
   [ "$(a='c' bash -c 'echo "$a"')" = 'c' ] || exit 1
   [ "$a" = 'b' ] || exit 1
 
-##i
+## i
 
   # Run command in a clean environment without inheriting exports
   # except those explicitly given.

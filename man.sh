@@ -5,7 +5,7 @@
 # POSIX 7 specifies only the option `-k` and nothing about pages,
 # those are Linux concepts.
 
-##pages
+## pages
 
   # The manual is organized into 7 pages.
 
@@ -97,7 +97,7 @@
       man 8 grub-install
       man 8 mount
 
-##GNU command line options
+## GNU command line options
 
   # Exact search on title. Shows only first page found match:
 
@@ -119,7 +119,7 @@
 
   # May be slow:
 
-  ##--regex
+  ## --regex
 
     # Whatever you were searching search with ERE now.
 
@@ -139,7 +139,7 @@
 
     man -k .
 
-##linux man-pages project
+## linux man-pages project
 
   # <https://www.kernel.org/doc/man-pages/>
 
@@ -149,7 +149,7 @@
 
   # It is not a part of the kernel tree, and does not seem to be mentioned in the LSB.
 
-##whatis
+## whatis
 
   # Non POSIX
 
@@ -157,7 +157,7 @@
 
     whatis ls
 
-##manpath
+## manpath
 
   # Man search path
 
@@ -177,12 +177,12 @@
 
     ls /usr/share/man/man1 | less
 
-##GUI front-ends
+## GUI front-ends
 
   # There is one single and drastic advantage to it:
   # clickable references to other manpages
 
-  ##yelp
+  ## yelp
 
     # Ubuntu default documentation front-end. Also does other formats.
 

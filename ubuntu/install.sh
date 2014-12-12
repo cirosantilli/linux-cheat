@@ -12,9 +12,9 @@
 
 # Non-automatable steps shall be labelled with: `MANUAL`
 
-##installation procedures
+## installation procedures
 
-  ##SSH survival kit
+  ## SSH survival kit
 
     # Packages.
 
@@ -41,9 +41,9 @@
 
   if [ "$1" = "min-ssh" ]; then exit 0; fi
 
-  ##GUI survival kit
+  ## GUI survival kit
 
-    ##package management
+    ## package management
 
         # Enable all sources: main, universe, restricted, multiverse and partner.
         sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe restricted multiverse"
@@ -80,7 +80,7 @@
       sudo aptitude install -y konsole
       sudo aptitude install -y kwalletmanager
 
-    ##Browser
+    ## Browser
 
         sudo aptitude install -y chromium-browser
 
@@ -91,7 +91,7 @@
         sudo apt-get update
         sudo apt-get install google-chrome-stable
 
-      ##Flash
+      ## Flash
 
         # Ubuntu 12.02:
 
@@ -128,7 +128,7 @@
 
       sudo aptitude install -y vlc
 
-    ##Configuration
+    ## Configuration
 
       # Fundamental system configurations.
 
@@ -143,9 +143,9 @@
 
   if [ "$1" = "min" ]; then exit 0; fi
 
-  ##Uncategorized
+  ## Uncategorized
 
-  ##Misc
+  ## Misc
 
     # xxencode, BASE64, quoted printable, BinHex
 
@@ -160,12 +160,12 @@
       sudo add-apt-repository -y ppa:bitcoin/bitcoin && sudo aptitude update
       sudo aptitude install -y bitcoin-qt
 
-  ##text
+  ## text
 
       sudo aptitude install -y dos2unix
       sudo aptitude install -y pcregrep
 
-  ##sysadmin
+  ## sysadmin
 
       sudo aptitude install -y acct
       sudo aptitude install -y finger
@@ -176,7 +176,7 @@
       sudo aptitude install -y makepasswd
       sudo aptitude install -y puppet
 
-  ##printer
+  ## printer
 
     # MANUAL
 
@@ -186,7 +186,7 @@
 
     # The guide shows you everything.
 
-  ##book
+  ## book
 
     sudo aptitude install -y okular okular-extra-backends
     #sudo aptitude install -y fbreader
@@ -195,7 +195,7 @@
     sudo aptitude install -y pdftk
     sudo aptitude install -y djvulibre-bin
 
-    ##chm
+    ## chm
 
       sudo aptitude install -y chmsee
       sudo aptitude install -y chm2pdf
@@ -221,7 +221,7 @@
 
       sudo aptitude install -y pandoc
 
-  ##audio
+  ## audio
 
     sudo aptitude install -y abcde
     sudo aptitude install -y cplay
@@ -238,7 +238,7 @@
     sudo add-apt-repository -y ppa:flacon && sudo aptitude update
     sudo aptitude install -y flacon
 
-  ##image
+  ## image
 
     sudo aptitude install -y aview
     sudo aptitude install -y caca-utils
@@ -266,14 +266,14 @@
 
       sudo aptitude install -y inkscape
 
-  ##dict
+  ## dict
 
     sudo aptitude install -y aspell
     sudo aptitude install -y aspell-fr
     sudo aptitude install -y aspell-pt-br
     sudo aptitude install -y goldendict
 
-  ##sox
+  ## sox
 
       sudo aptitude intall -y sox
       sudo aptitude intall -y libsox-fmt-mp3
@@ -284,9 +284,9 @@
 
     sudo aptitude install -y sysstat
 
-  ##ocr
+  ## ocr
 
-    ##tesseract
+    ## tesseract
 
         sudo aptitude install -y tesseract-ocr
 
@@ -306,7 +306,7 @@
 
       sudo aptitude install -y cuneiform
 
-  ##video
+  ## video
 
     # handbreak
 
@@ -327,7 +327,7 @@
 
       sudo aptitude install -y libav-tools
 
-    ##editors
+    ## editors
 
       # Cinelerra:
 
@@ -335,7 +335,7 @@
         #sudo apt-get update
         #sudo apt-get install cinelerra-cv
 
-      ##pitivi
+      ## pitivi
 
         # A bit too old, missing key features like multi selection on video line:
 
@@ -352,7 +352,7 @@
           make
           sudo make install
 
-  ##compression
+  ## compression
 
       sudo aptitude install -y zip unzip
 
@@ -385,9 +385,9 @@
 
       sudo aptitude install -y file-roller
 
-  ##game
+  ## game
 
-    ##getdeb
+    ## getdeb
 
       # Non Launchapd ppa with lots of good games.
 
@@ -418,13 +418,13 @@
 
       #sudo aptitude install -y supertuxkart
 
-    ##emulator
+    ## emulator
 
-      ##NES
+      ## NES
 
         sudo aptitude install -y fceux
 
-      ##SNES.
+      ## SNES.
 
         # 32 bit only:
 
@@ -436,7 +436,7 @@
           sudo apt-get update
           sudo apt-get install snes9x-gtk
 
-      ##Nintendo 64
+      ## Nintendo 64
 
         sudo aptitude install -y mupen64plus
 
@@ -445,7 +445,7 @@
       sudo aptitude install -y visualboyadvance-gtk
       sudo aptitude install -y visualboyadvance-gtk
 
-      ##dosbox
+      ## dosbox
 
           #sudo aptitude install -y dosbox
 
@@ -463,11 +463,11 @@
 
           #sudo aptitude install -y pmidi
 
-  ##editors
+  ## editors
 
       #sudo aptitude install -y eclipse
 
-    ##Libreoffice
+    ## Libreoffice
 
         sudo aptitude install -y libreoffice
 
@@ -475,7 +475,7 @@
 
         #sudo aptitude install -y libreoffice-base
 
-    ##Atom
+    ## Atom
 
       # Requires: node, C++
 
@@ -494,7 +494,7 @@
         sudo script/grunt install # Installs command to /usr/local/bin/atom
         script/grunt mkdeb # Generates a .deb package at $TMPDIR/atom-build
 
-  ##terminal emulators
+  ## terminal emulators
 
       sudo aptitude install -y yakuake
 
@@ -504,7 +504,7 @@
       sudo aptitude update
       sudo aptitude install -y finalterm
 
-  ##program
+  ## program
 
       sudo aptitude install -y ant
       sudo aptitude install -y automake
@@ -519,7 +519,7 @@
       sudo aptitude install -y libtool
       sudo aptitude install -y m4
 
-    ##version control
+    ## version control
 
         # Very outdated:
         sudo aptutide install -y tig
@@ -529,7 +529,7 @@
         sudo aptutide install -y mercurial
         sudo aptitude install -y subversion
 
-    ##C and C++ gcc g++
+    ## C and C++ gcc g++
 
       # gcc docs:
 
@@ -575,13 +575,13 @@
         sudo aptitude install -y libqt4-dev
         sudo aptitude install -y qt4-demos
 
-      ##gtk
+      ## gtk
 
           sudo aptitude install -y libgtk-3-dev
           sudo aptitude install -y libgtk-3-doc
           sudo aptitude install -y gtk2.0-examples
 
-      ##KDE
+      ## KDE
 
         # KDE core dev libs:
 
@@ -591,7 +591,7 @@
 
           sudo aptitude install -y libkdegames-dev
 
-      ##Build requirements
+      ## Build requirements
 
         # Stuff that is only needed if you want to develop those programs.
 
@@ -619,7 +619,7 @@
           #sudo aptitude install -y check
           sudo aptitude install -y libncurses5-dev
 
-    ##Java
+    ## Java
 
       # Java is a pain to make work sometimes.
 
@@ -651,7 +651,7 @@
 
       sudo aptitude install -y maven
 
-    ##Python
+    ## Python
 
       # pip:
 
@@ -659,7 +659,7 @@
 
       sudo aptitude install -y gunicorn
 
-    ##Ruby
+    ## Ruby
 
       # RVM and similar are the best method:
 
@@ -675,7 +675,7 @@
         sudo apt-get update
         sudo aptitude install -y ruby2.1 ruby2.1-dev
 
-    ##Node.js
+    ## Node.js
 
       # NVM install:
 
@@ -708,7 +708,7 @@
 
         npm config set registry 'http://registry.npmjs.org/'
 
-    ##Go
+    ## Go
 
         # Requires: mercurial, bison.
         if [ ! -f "$HOME/.gvm/scripts/gvm" ]; then
@@ -718,7 +718,7 @@
         gvm install 'go1.2.2'
         gvm use 'go1.2.2' --default
 
-    ##Lua
+    ## Lua
 
         #sudo aptitude install -y lua5.2
 
@@ -741,12 +741,12 @@
         cd '..'
         rm -rf -- "$dir"
 
-    ##Virtualization ##VM
+    ## Virtualization ##VM
 
       # MANUAL: don't forget to enable virtualization on your BIOS when using virtualization tools.
       # Some features may only be available with it enabled.
 
-      ##Virtualbox
+      ## Virtualbox
 
           wget -q -O - http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc | sudo apt-key add -
           sudo sh -c 'echo "deb http://download.virtualbox.org/virtualbox/debian precise non-free contrib" >> /etc/apt/sources.list.d/virtualbox.org.list'
@@ -757,7 +757,7 @@
 
           #sudo aptitude install virtualbox-guest-utils
 
-        ##vagrant
+        ## vagrant
 
           # MANUAL download:
 
@@ -769,7 +769,7 @@
 
             #sudo aptitude install -y vagrant
 
-      ##docker
+      ## docker
 
         # Only exists for 64 bit, not 32.
         # Instructions at: http://docs.docker.io/en/latest/installation/ubuntulinux/
@@ -779,20 +779,20 @@
           sudo aptitude update
           sudo aptitude install -y lxc-docker
 
-        ##drone
+        ## drone
 
             cd /tmp
             wget http://downloads.drone.io/latest/drone.deb
             sudo dpkg -i drone.deb
 
-        ##jenkins
+        ## jenkins
 
             wget -q -O - http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
             sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
             sudo apt-get update
             sudo aptitude install -y jenkins
 
-      ##wine
+      ## wine
 
           sudo add-apt-repository ppa:ubuntu-wine/ppa
           sudo aptitudeapt-get update
@@ -804,13 +804,13 @@
 
           sudo aptitude install -y playonlinux
 
-    ##perl
+    ## perl
 
       # Interpreters and related libs.
 
         sudo aptitude install -y perl-doc
 
-    ##haskell
+    ## haskell
 
       # Glasgow Haskell Compiler:
 
@@ -830,7 +830,7 @@
 
         cabal update
 
-    ##fortran
+    ## fortran
 
       # GNU fortran 77:
 
@@ -842,12 +842,12 @@
 
       sudo aptitude install -y nasm
 
-  ##fs
+  ## fs
 
       sudo aptitude install -y gparted
       sudo aptitude install -y inotify-tools
 
-  ##net
+  ## net
 
       sudo aptitude install -y apache2
       sudo aptitude install -y libapache2-mod-fastcgi
@@ -872,7 +872,7 @@
       sudo aptitude install -y whois
       sudo aptitude install -y wireshark
 
-    ##PHP
+    ## PHP
 
         sudo aptitude install -y php5
 
@@ -882,7 +882,7 @@
           #Will ask you to initialize the password for the `root` user.
         sudo aptitude install -y sqlite
 
-    ##phpmyadmin
+    ## phpmyadmin
 
       # First make sure that php and mysql are installed.
 
@@ -902,7 +902,7 @@
 
       # Login: 'root'. password: what you entered at installation.
 
-    ##phantomjs
+    ## phantomjs
 
       # Very outdated:
 
@@ -920,7 +920,7 @@
 
       # Build from source takes too long (30 min +).
 
-    ##browser
+    ## browser
 
       # Terminal web browser:
 
@@ -932,13 +932,13 @@
         sudo apt-get update
         sudo apt-get install tor-browser
 
-    ##db
+    ## db
 
       # MySQL:
 
         sudo aptitude install -y mysql-server
 
-      ##remove mysql
+      ## remove mysql
 
         # Sometimes, misterious forces will prevent you mysql server from starting
         # and you will fell like erasing everything and restarting.
@@ -983,7 +983,7 @@
 
         sudo aptitude install -y mongodb
 
-    ##mail
+    ## mail
 
         sudo aptitude install -y mutt
         sudo aptitude install -y ssmtp
@@ -992,7 +992,7 @@
 
         #sudo aptitude install -y postfix
 
-  ##desktop
+  ## desktop
 
         sudo aptitude install -y xbacklight
         sudo aptitude install -y xsel
@@ -1038,7 +1038,7 @@
       cd ltunify
       make install-home
 
-    ##desktop system
+    ## desktop system
 
       # Gnome shell:
 
@@ -1067,9 +1067,9 @@
 
         sudo aptitude install -y qt4-qtconfig
 
-  ##file sharing
+  ## file sharing
 
-    ##torrent
+    ## torrent
 
       #deluge
 
@@ -1089,11 +1089,11 @@
       sudo apt-get update
       sudo aptitude install indicator-ubuntuone
 
-    ##soulseek
+    ## soulseek
 
       sudo aptitude install -y nicotine+
 
-    ##ftp
+    ## ftp
 
       # Very secure FTP deamon FTP server:
 
@@ -1107,7 +1107,7 @@
 
     sudo aptitude install -y samba
 
-  ##file manager
+  ## file manager
 
     # Krusader and highly recommended tools:
 
@@ -1121,7 +1121,7 @@
 
       sudo aptitude install -y fdupes
 
-  ##GPU
+  ## GPU
 
     # Nvidia.
 
@@ -1130,17 +1130,17 @@
       sudo aptitude install -y nvidia-prime
       sudo aptitude install -y nvidia-opencl-dev
 
-  ##encoding
+  ## encoding
 
       sudo aptitude install convmv
 
-  ##init
+  ## init
 
       sudo aptitude install -y chkconfig
 
-  ##PaaS
+  ## PaaS
 
-    ##Google
+    ## Google
 
       # Google Compute Engine gcutil
 

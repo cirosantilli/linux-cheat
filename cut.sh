@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-##cut
+## cut
 
   # POSIX 7: <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/cut.html#tag_20_28>
 

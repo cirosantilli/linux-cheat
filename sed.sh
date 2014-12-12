@@ -11,7 +11,7 @@ set -eu
 
 # Beginner to pro tutorial: <http://www.grymoire.com/Unix/Sed.html>
 
-##alternatives
+## alternatives
 
   # Consider using Python instead of this, or Perl if your are insane and really want to golf.
 
@@ -19,32 +19,32 @@ set -eu
 
   # The only real advantage of sed over Perl is that Sed is POSIX, while perl is only LSB.
 
-##s command
+## s command
 
   # Substitute:
 
     [ "$(printf 'aba\ncd\n' | sed 's/a/b/')" = $'bba\ncd' ] || exit 1
 
-  ##patterns are BREs
+  ## patterns are BREs
 
     # `+` is ordinary, thus BRE, and no match TODO fails?
 
       #[ "$(echo 'aa' | sed 's/[[:alpha:]]/b/')" = 'ba' ] || exit 1
       #[ "$(echo 'aa' | sed 's/.+/b/')" = 'ab' ] || exit 1
 
-    ##r
+    ## r
 
       # Use EREs instead of BREs. Always use it.
 
         [ "$(echo 'aa' | sed -r 's/.+/b/')" = 'b' ] || exit 1
 
-  ##g
+  ## g
 
     # Replaces multiple non overalpping times on each line:
 
       [ "$(echo 'aba' | sed 's/a/b/g')" = 'bbb' ] || exit 1
 
-  ##capturing groups
+  ## capturing groups
 
       [ "$(echo a1 | sed -r 's/a(.)/b\1/')" = 'b1' ] || exit 1
       [ "$(echo a1 | sed -r 's/a(.)/b\\1/')" = 'b\1' ] || exit 1
@@ -54,17 +54,17 @@ set -eu
 
       #no non-greedy *? operator. use [^]* combo instead
 
-  ##flags
+  ## flags
 
-    ##g
+    ## g
 
       # Replace as many times as possible in string
 
-    ##p
+    ## p
 
       # Is can also be a flag, besides being the print command
 
-    ##w
+    ## w
 
       # Write lines to file:
 
@@ -72,13 +72,13 @@ set -eu
         printf 'a\nb\na\n' | sed -n "s/a/A/w $f"
         [ "$(cat "$f")" = $'A\nA' ] || exit 1
 
-##/
+## /
 
   # Only exec next command if match:
 
     [ "$(printf 'a\nb\n' | sed -n '/a/p')" = 'a' ] || exit 1
 
-##restrict lines
+## restrict lines
 
   # Line number:
 
@@ -98,7 +98,7 @@ set -eu
 
     [ "$(printf 'a\nb\nc\nd\n' | sed '1,3 s/./e/')" = $'e\ne\ne\nd' ] || exit 1
 
-  ##pattern range
+  ## pattern range
 
       [ "$(printf 'a\nb\nc\nd\n' | sed '/a/,/c/ s/./0/')" = $'0\n0\n0\nd' ] || exit 1
 
@@ -106,11 +106,11 @@ set -eu
 
       [ "$(printf 'a\nb\n0\n0\na\nb\n' | sed '/a/,/b/ s/./A/')" = $'A\nA\n0\n0\nA\nA' ] || exit 1
 
-  ##multiple commands per restriction
+  ## multiple commands per restriction
 
     [ "$(printf 'a\nb\n' | sed '1 {s/./c/; s/c/d/}')" = $'d\nb' ] || exit 1
 
-  ##!
+  ## !
 
     # Negation.
 
@@ -119,25 +119,25 @@ set -eu
       [ "$(printf 'a\nb\n' | sed -n '1! p')" = 'b' ] || exit 1
       [ "$(printf 'a\nb\n' | sed -n '/a/! p')" = 'b' ] || exit 1
 
-##multiple commands
+## multiple commands
 
   # Concatenate with ; or newlines:
 
     [ "$(printf 'a\nb\n' | sed '/a/ s/./B/; /B/ {s/B/C/; s/C/D/}')" = $'D\nb' ] || exit 1
 
-##q
+## q
 
   # Quit, stop execution:
 
     [ "$(printf 'a\nb\n' | sed 's/./c/; q')" = 'c' ] || exit 1
 
-##d
+## d
 
   # Delete:
 
     [ "$(printf 'a\nb\n' | sed '/a/ d')" = 'b' ] || exit 1
 
-##a, i, c
+## a, i, c
 
   # Append (after), insert (before), change
 
@@ -145,24 +145,24 @@ set -eu
     [ "$(printf 'a\nb\n' | sed '1 i 0')" = $'0\na\nb' ] || exit 1
     [ "$(printf 'a\nb\n' | sed '1 c 0')" = $'0\nb' ] || exit 1
 
-  ##newlines and spaces
+  ## newlines and spaces
 
     [ "$(printf 'a\nb\n' | sed '1 c 0 1\n2 3')" = $'0 1\n2 3\nb' ] || exit 1
 
-##=
+## =
 
   # Line number:
 
     [ "$(printf 'a\nb\na\n' | sed -n '/a/ =')" = $'1\n3' ] || exit 1
 
-##y
+## y
 
   # Replace individual chars tr-like:
 
     [ "$(printf 'a\nb\n' | sed 'y/ab/01/')" = $'0\n1' ] || exit 1
     [ "$(printf 'a\nb\n' | sed 'y/ab/AB/')" = $'A\nB' ] || exit 1
 
-##multiline
+## multiline
 
   # - pattern space: buffer that holds each line.
 
@@ -193,17 +193,17 @@ set -eu
 
   # - `D`: delete first line of pattern space. go to next line.
 
-##hold buffer
+## hold buffer
 
   # There is an storage area called **hold buffer** in addition to the pattern buffer.
 
   # It can contain the strings.
 
-  ##h
+  ## h
 
     # Put pattern buffer into storage
 
-  ##x
+  ## x
 
     # Exchange storage and pattern.
 
@@ -215,32 +215,32 @@ set -eu
 
       [ "$(printf 'a\nb\n' | sed -n '/b/ {x;p;d}; h')" = $'a' ] || exit 1
 
-  ##g
+  ## g
 
     # Pattern space = hold space
 
       [ "$(printf 'a\nb\n' | sed -n 'h; /a/ {s/a/c/;x;p;g;p}')" = $'a\nc' ] || exit 1
 
-  ##G
+  ## G
 
     # Pattern space += hold space
 
       [ "$(printf 'a\nb\n' | sed -n 'h; /a/ {s/a/c/;x;G;p}')" = $'a\nc' ] || exit 1
 
-##goto
+## goto
 
-  ##label
+  ## label
 
     # May be on same line as command, ex: `:l s/a/b/` is the same as `:l; s/a/b`.
 
-  ##b
+  ## b
 
     # Unconditional jump.
 
       [ "$(printf 'a\nb\n' | sed '/a/ b c; s/./c/; :c')" = $'a\nc' ] || exit 1
       [ "$(printf 'a\nb\n' | sed '/a/ b c; s/./c/; :c s/c/d')" = $'a\nd' ] || exit 1
 
-  ##t
+  ## t
 
     # Jump if last s changed pattern space.
 
@@ -252,9 +252,9 @@ set -eu
 
       [ "$(printf 'a b c\n' | sed ':a s/a[^c]/a/; t a')" = $'ac' ] || exit 1
 
-##Command line arguments
+## Command line arguments
 
-  ##n
+  ## n
 
     # Don't print all lines (default).
 
@@ -266,7 +266,7 @@ set -eu
 
       sed -n '/find/p'
 
-  ##i
+  ## i
 
     # Edit files in-place, modifying them.
 
@@ -288,7 +288,7 @@ set -eu
 
     # Cannot be used with stdin input!
 
-  ##e
+  ## e
 
     # Execute.
 
@@ -300,21 +300,21 @@ set -eu
 
       [ "$(printf 'a\nb\n' | sed -e 's/a/b/' -e 's/b/c/')" = $'c\nc' ] || exit 1
 
-  ##f
+  ## f
 
     # Read commands from given file.
 
     # One command per line.
 
-    ##shebang
+    ## shebang
 
       # Can exec sed script with following shebang:
 
         #!/bin/sed -f
 
-  ##GNU extensions
+  ## GNU extensions
 
-##applications
+## applications
 
   # If modified, print line number, old line, new line
 

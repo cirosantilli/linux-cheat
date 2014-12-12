@@ -3,7 +3,7 @@
 # The root of a process is a Linux concept: every process descriptor has a root field,
 # and system calls issued from that process only look from under the root (known as `/` to that process).
 
-##application
+## application
 
   # You have a partition that contains a linux system,
   # but for some reason you are unable to run it.

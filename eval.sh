@@ -9,7 +9,7 @@
 
   [ `eval echo a` = a ] || exit 1
 
-##applications
+## applications
 
   # Make varname from var>
 

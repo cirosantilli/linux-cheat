@@ -1,4 +1,4 @@
-##sudo ##sudoers
+## sudo ##sudoers
 
   # Do next single command as another user or super user.
 
@@ -23,11 +23,11 @@
 
   # because the home gets overwritten before.
 
-  ##/etc/sudoers
+  ## /etc/sudoers
 
     # Configuration file for sudo.
 
-    ##visudo
+    ## visudo
 
       # Command that should be used to edit the `/etc/sudoers` files.
 
@@ -35,7 +35,7 @@
 
         sudo visudo
 
-    ##Syntax
+    ## Syntax
 
       # After any user enters a pass, he can sudo without pass for 15 mins:
 
@@ -56,7 +56,7 @@
           #NOPASSWD: if present, must enter target user's password
           #/bin/ls,/bin/cat: list of comma separated bins he can run, or ALL
 
-      ##Aliases
+      ## Aliases
 
         # User:
 
@@ -80,7 +80,7 @@
           #ALL_PROGS = APT,USBDEV
           #%admin ALL=(ALL) ALL
 
-      ##Allow given user to sudo without password
+      ## Allow given user to sudo without password
 
         # Allow given user to sudo without password:
 
@@ -90,7 +90,7 @@
 
           #sudo sh -c "echo '$(id -un) ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers"
 
-  ##Shell built-ins
+  ## Shell built-ins
 
     # Sudo takes a binary as argument. As a consequence, you cannot run shell built-ins with it:
 
@@ -100,7 +100,7 @@
 
       #sudo ulimit
 
-  ##Redirection
+  ## Redirection
 
     # sudo passes its stdin to the called program:
 
@@ -148,14 +148,14 @@
       sudo tee /some/path <<EOF
 EOF
 
-  ##Environemnt variables
+  ## Environemnt variables
 
     # By default, `sudo` ignores the current environment variables to start a new "fresh" session.
 
     # This can be avoided with the `-E` option:
     # <http://stackoverflow.com/questions/8633461/how-to-keep-environment-variables-when-using-sudo>
 
-  ##Ubuntu default sudo config
+  ## Ubuntu default sudo config
 
     # In Ubuntu, sudo group allows members to sudo whatever they want as root
 

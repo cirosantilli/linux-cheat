@@ -1,4 +1,4 @@
-##su
+## su
 
   # Become another user, such as root:
 
@@ -13,7 +13,7 @@
 
   # Without this starts a non-login shell.
 
-  ##don't use from script
+  ## don't use from script
 
     # You probably don't want to use this on a script, only on interactive sessions.
 
@@ -39,7 +39,7 @@
 
     # TODO understand behaviour precisely.
 
-  ##become root
+  ## become root
 
     #BAD: never become root, as it is dangerous.
 
@@ -54,7 +54,7 @@
       whoami
         #root
 
-  ##login
+  ## login
 
     #TODO0 login vs su?
 

@@ -31,7 +31,7 @@
 
     echo $'clear\ncup 10 0' | tput -S
 
-##colors
+## colors
 
     CLEAR_TERMINAL=`tput clear`
 
@@ -103,7 +103,7 @@
     #cyan 	6
     #white 	7o
 
-##setterm
+## setterm
 
     #outputs stdout that changes terminal properties
 

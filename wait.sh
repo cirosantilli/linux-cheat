@@ -2,7 +2,7 @@
 
 # Wait for process with given pid to terminate.
 
-##$!
+## $!
 
   # The PID of the last background process is stored in `$!`.
 

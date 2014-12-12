@@ -10,7 +10,7 @@
 
   jobs -p
 
-##jobspecs
+## jobspecs
 
   # Local job id, found by using <#jobs>
 

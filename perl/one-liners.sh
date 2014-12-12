@@ -2,7 +2,7 @@
 
 # Cheat on the perl command line interface, including very useful one liner combos.
 
-##command line options
+## command line options
 
     # Official man:
 
@@ -10,11 +10,11 @@
 
     # Not part of LSB, so you may need to install perldoc.
 
-	##e "$s"
+	## e "$s"
 
 		#execute given string instead of file program
 
-	##n:
+	## n:
 
 		# Use `while (<>) { ... }` loop aroud given program
 		# This makes perl act linewise.
@@ -22,11 +22,11 @@
 		# Therfore to print the current line, you instead of `print($_)` can simply write `print`
 		# the endline `"\n"` is part of the string.
 
-	##p
+	## p
 
 		# Same as `-n`, with `print` at end
 
-	##i
+	## i
 
 		# Edit In-line, modifying files.
 		# What would get printed is put into file instead
@@ -50,7 +50,7 @@
 			assert [ "`cat f`" = $'A\nb' ]
 			assert [ "`cat f.bak`" = $'a\nb' ]
 
-	##a
+	## a
 
 		# Autosplit
 
@@ -68,7 +68,7 @@
 
 			assert[ "`echo $'a\0b\tc' | perl -nae 'print $F[0]. ":" . $F[1] . ":" . $F[2]'`" = "a:b:c"]
 
-	##F
+	## F
 
 		# `-F: '/pattern/'`: set field separator for `-a`
 
@@ -82,23 +82,23 @@
 
       [ "$(echo 'a:%b:]c' | perl -F'/:./' -lane 'print $F[0] . " " . $F[1] . " " . $F[2]')" = "a b c" ] || exit 1
 
-	##0
+	## 0
 
 		#`- 000` sets `$/` (IRS) to a given octal value
 
 		# Default: "\n"
 
-		##special values
+		## special values
 
-			##0777
+			## 0777
 
 				# Slurp mode. read everything at once.
 
-			##00
+			## 00
 
 				# Paragraph mode. read up to "\n\n".
 
-	##l
+	## l
 
     # Does two things:
 
@@ -109,7 +109,7 @@
 
 		# Default `$\`: ''
 
-		##application
+		## application
 
 			# Add newline to prints if `-0` is not set
 			# (and thus equals newline)
@@ -121,7 +121,7 @@
 			# - not possible to remove lines with it
 			# - will add trailing newline to files which did not end in newlinew
 
-	##M
+	## M
 
 		# Import modules.
 
@@ -129,7 +129,7 @@
 
 			perl -MList::Util=sum -alne 'print sum @F'
 
-##combos
+## combos
 
     # **Very dangerous!!!!**, so make a backup of the current directory before proceeding.
 
@@ -143,7 +143,7 @@
 
       find . -iname "*.tex" | xargs perl -lapi -e 's/a/A/g'
 
-    ##multiline ##slurp
+    ## multiline ##slurp
 
       # For multiline operations:
 

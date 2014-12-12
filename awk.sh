@@ -12,7 +12,7 @@
 
 # For even more sanity, use Python.
 
-##variables
+## variables
 
   #same as c
 
@@ -22,7 +22,7 @@
   #$\n: fields
   #last field: $(NF-1)
 
-  ##FS
+  ## FS
     #field (column) separator
     #FS=':' FS=/[[:space:]]/ -F'/[[:space:]]/'
   #OFS: output field separator
@@ -40,7 +40,7 @@
 
 #- if else for while: like C
 
-##general syntax
+## general syntax
 
   #A general awk program is of the type:
 
@@ -57,13 +57,13 @@
   echo '0.5 0.5' | awk '{print $1+$2}'
   #1
 
-##string num conversion
+## string num conversion
 
     awk 'BEGIN{print "1"+1}'
     awk 'BEGIN{print " 1"+1}'
     #2
 
-##print
+## print
 
   awk 'BEGIN{print "a", 1}'
     #'a 1'
@@ -74,7 +74,7 @@
   awk '{print}'
     #cat
 
-##applications
+## applications
 
   #Print second field of all entries if first field equals:
 

@@ -14,7 +14,7 @@
 
     #It is possible for example to open new tabs or toogle visibility from other shells.
 
-##yakuake
+## yakuake
 
     #KDE alternative.
 
