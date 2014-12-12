@@ -640,6 +640,7 @@
         sudo add-apt-repository -y ppa:webupd8team/java
         sudo aptitude update
         sudo aptitude install -y oracle-java8-installer
+        sudo aptitude install -y oracle-java7-installer
 
       # This already comes with the browser plugin.
 
@@ -848,67 +849,76 @@
 
   ##net
 
-        sudo aptitude install -y apache2
-        sudo aptitude install -y libapache2-mod-fastcgi
+      sudo aptitude install -y apache2
+      sudo aptitude install -y libapache2-mod-fastcgi
 
-        sudo aptitude install -y ngrok-client
-        sudo aptitude install -y ngrok-server
-        sudo aptitude install -y nmap
-        sudo aptitude install -y openssh-client
-        sudo aptitude install -y openssh-server
-        sudo aptitude install -y squid3
-        sudo aptitude install -y traceroute
-        sudo aptitude install -y tshark
-        sudo aptitude install -y whois
-        sudo aptitude install -y wireshark
+      sudo aptitude install -y mongodb-client
+      sudo aptitude install -y mongodb-server
 
-      #php:
+      sudo aptitude install -y ngrok-client
+      sudo aptitude install -y ngrok-server
+      sudo aptitude install -y nmap
+      sudo aptitude install -y openssh-client
+      sudo aptitude install -y openssh-server
+      sudo aptitude install -y squid3
+
+      sudo aptitude install -y tomcat7
+      sudo aptitude install -y tomcat7-admin
+      sudo aptitude install -y tomcat7-docs
+      sudo aptitude install -y tomcat7-examples
+
+      sudo aptitude install -y traceroute
+      sudo aptitude install -y tshark
+      sudo aptitude install -y whois
+      sudo aptitude install -y wireshark
+
+    ##PHP
 
         sudo aptitude install -y php5
 
-      #php apache module:
+      # php Apache module:
 
         sudo aptitude install -y libapache2-mod-php5
           #Will ask you to initialize the password for the `root` user.
         sudo aptitude install -y sqlite
 
-      ##phpmyadmin
+    ##phpmyadmin
 
-        # First make sure that php and mysql are installed.
+      # First make sure that php and mysql are installed.
 
-          sudo aptitude install -y libapache2-mod-auth-mysql php5-mysql phpmyadmin
+        sudo aptitude install -y libapache2-mod-auth-mysql php5-mysql phpmyadmin
 
-          sudo vim /etc/apache2/apache2.conf
+        sudo vim /etc/apache2/apache2.conf
 
-        # Ensure following line is anywhere in the file:
+      # Ensure following line is anywhere in the file:
 
-          #Include /etc/phpmyadmin/apache.conf
+        #Include /etc/phpmyadmin/apache.conf
 
-          sudo service apache2 restart
+        sudo service apache2 restart
 
-        # Test phpmyadmin and mysql:
+      # Test phpmyadmin and mysql:
 
-          firefox http://localhost/phpmyadmin &
+        firefox http://localhost/phpmyadmin &
 
-        # Login: 'root'. password: what you entered at installation.
+      # Login: 'root'. password: what you entered at installation.
 
-      ##phantomjs
+    ##phantomjs
 
-        # Very outdated:
+      # Very outdated:
 
-          #sudo aptitude install -y phantomjs
+        #sudo aptitude install -y phantomjs
 
-        # Latest precompiled stable:
+      # Latest precompiled stable:
 
-          cd /usr/local/share
-          arch="$(uname -i)"
-          sudo wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-$arch.tar.bz2
-          sudo tar xjf phantomjs-1.9.7-linux-$arch.tar.bz2
-          sudo ln -s /usr/local/share/phantomjs-1.9.7-linux-$arch/bin/phantomjs /usr/local/share/phantomjs
-          sudo ln -s /usr/local/share/phantomjs-1.9.7-linux-$arch/bin/phantomjs /usr/local/bin/phantomjs
-          sudo ln -s /usr/local/share/phantomjs-1.9.7-linux-$arch/bin/phantomjs /usr/bin/phantomjs
+        cd /usr/local/share
+        arch="$(uname -i)"
+        sudo wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-$arch.tar.bz2
+        sudo tar xjf phantomjs-1.9.7-linux-$arch.tar.bz2
+        sudo ln -s /usr/local/share/phantomjs-1.9.7-linux-$arch/bin/phantomjs /usr/local/share/phantomjs
+        sudo ln -s /usr/local/share/phantomjs-1.9.7-linux-$arch/bin/phantomjs /usr/local/bin/phantomjs
+        sudo ln -s /usr/local/share/phantomjs-1.9.7-linux-$arch/bin/phantomjs /usr/bin/phantomjs
 
-        # Build from source takes too long (30 min +).
+      # Build from source takes too long (30 min +).
 
     ##browser
 

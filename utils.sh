@@ -91,6 +91,8 @@
 
     ##diff
 
+      # GNU diffutils package.
+
       # Compare files *and* directory contents
 
       # Files:
@@ -115,30 +117,6 @@
         touch b/c
         diff a b
 
-    ##comm
-
-      # Ultra simple diff.
-
-      # Useless.
-
-      # POSIX 7.
-
-      cd "`mktemp -d`"
-      echo -e "a\nc" > a
-      echo -e "b\nc" > b
-      comm a b
-        #a
-        #  b
-        #    c
-
-        #3 cols:
-          #lines only in a
-          #      in b
-          #   in both
-
-        #tab separated columns
-          #long lines look horrible
-
     ##patch
 
     ##wdiff
@@ -159,17 +137,17 @@
 
   ##source-highlight
 
-    #takes in source files and produces highlighted output in one of the formats:
+    # Takes in source files and produces highlighted output in one of the formats:
 
-    #- html
-    #- ansi terminal escape sequences
-    #- pdf
+    # - html
+    # - ansi terminal escape sequences
+    # - pdf
 
-    #list all languages supported:
+    # List all languages supported:
 
       source-highlight --lang-list
 
-    #generate an `a.html` highlighted version of `a.py`:
+    # Generate an `a.html` highlighted version of `a.py`:
 
       source-highlight a.py
 
@@ -430,36 +408,6 @@
 
       yes | timeout 1 cat
 
-  ##cat
-
-    # POSIX 7
-
-    # concatenate files to stdout
-
-       echo asdf > a
-       echo qwer > b
-
-       [ `cat a` = asdf ] || exit 1
-       [ `cat b` = qwer ] || exit 1
-
-       [ `cat a b` = `printf asdf\nqwer` ] || exit 1
-
-    # stdin:
-
-       [ `echo a | cat` = a ] || exit 1
-
-  ##tac
-
-    # cat reversed linewise
-
-    # Coreutils, not posix.
-
-      [ "$(printf "a\nb\n" | tac)" = "$(printf "b\na")" ] || exit 1
-
-    # Things get messy if the input does not end in newline:
-
-      [ "$(printf "a\nb" | tac)" = "$(printf "ba")" ] || exit 1
-
   ##rev
 
     # Reverse bytewise.
@@ -598,79 +546,6 @@
         #contains loop
       echo $?
         #1
-
-  ##head
-
-    # POSIX 7
-
-    # Keep only 10 first lines:
-
-      seq 20 | head
-
-    # Keep only 2 first lines:
-
-      [ "$(printf "1\n2\n3\n4\n" | head -n2)" = "$(printf "1\n2\n")" ] || exit 1
-
-    # 2 first bytes:
-
-      [ "$(echo -en 'abc' | head -c 2)" = "ab" ] || exit 1
-
-    ##GNU coreutils
-
-      # Remove last two bytes:
-
-        [ "$(echo -en 'abc' | head -c -2)" = "a" ] || exit 1
-
-  ##tail
-
-    # POSIX 7
-
-    # Opposite of head.
-
-    # Show last 10 lines of f:
-
-      seq 20 | tail
-
-    # Keep only 2 last lines:
-
-      [ "$(printf "1\n2\n3\n4\n" | tail -n2)" = "$(printf "3\n4\n")" ] || exit 1
-
-      tail -n3 "$f"
-
-    ##GNU coreutils
-
-      # Keep only lines from the Nth onwards:
-
-        [ "$(printf "1\n2\n3\n4\n" | tail -n +2)" = "$(printf "2\n3\n4\n")" ] || exit 1
-        [ "$(printf "1\n2\n3\n4\n" | tail -n +3)" = "$(printf "3\n4\n")" ] || exit 1
-
-  ##truncate
-
-    # GNU corutils.
-
-    # Sets file to given size.
-
-    # If greater, pads with 0s.
-
-    # If smaller, data loss.
-
-    # Operates inline without mercy, only works on files.
-
-      echo ab > f
-      truncate -s 1 f
-      [ `cat f` = a ] || exit 1
-
-      truncate -s 2 f
-      hexdump
-      [ `cat f` = $'a\0' ] || exit 1
-
-    # Negative values truncate up to from the end:
-
-      echo abc > f
-      truncate -s -1 f
-      [ `cat f` = ab ] || exit 1
-
-    # *Must* have a space: `-s -1`, *not* `-s-1`.
 
   ##split
 
@@ -2141,32 +2016,6 @@
 
         # and is part of coreutils, so more widespread default.
 
-  ##cmp
-
-    # Compares F and G byte by byte, until first difference is found.
-
-      cmp "$F" "$G"
-
-    # If equal, print nothing.
-
-    # Else, print location of first difference.
-
-    ##-s
-
-      # Silent
-
-      # Return status 0 if equal
-      # != 0 otherwise.
-
-      # Prints nothing.
-
-        cmp -s "$F" "$G"
-        if [ $? -eq 1 ]; then
-            echo neq
-        else
-            echo eq
-        fi
-
   ##fuser
 
     #psmisc package
@@ -2239,7 +2088,7 @@
     setterm -cursor off
     setterm -cursor on
 
-##users and groups
+##Users and groups
 
   # To play around with those in Ubuntu, do ctrl+alt+f2, f3 ... f7
   # and you will go into login shells
@@ -2577,7 +2426,7 @@
 
     # View available shells on the system:
 
-      less /etc/shells
+      cat /etc/shells
 
   ##ac
 

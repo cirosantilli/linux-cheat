@@ -3,7 +3,7 @@ set -eu
 
 # TODO make all asserts pass
 
-# POSIX 7
+# POSIX 7 <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/sed.html>
 
 # Stream EDitor
 

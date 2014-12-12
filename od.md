@@ -1,18 +1,20 @@
-#od
+# od
 
-`od` and similar tools used to view binary data.
+View binary data.
+
+POSIX 7: <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/od.html>
+
+Saner non-POSIX 7 alternatives: `hd`, `hexdump`.
 
 Very useful for viewing binary data which contains values which cannot be interpreted as some character set (ASCII, UTF-8) that can be printed to terminal screen.
 
 You have some fun exploring things such as:
 
-- executables such as elf files
+-   executables such as elf files
 
-- partition tables:
+-   partition tables:
 
         sudo hd -n 512 /dev/sda
-
-POSIX 7
 
 Octal dump.
 
@@ -263,51 +265,3 @@ Output:
 ##-N
 
 Maximum number of bytes to read.
-
-#hd
-
-Very similar to od.
-
-Uses saner hexadecimal defaults and shows ASCII side by side.
-
-Not POSIX 7.
-
-Saner than hexdump.
-
-Very close to hexdump, but also shows ASCII visualization on the side of hexa visualization.
-
-Example:
-
-    echo -en {a..z} "\n \x01" | hd
-
-Output:
-
-    00000000  61 20 62 20 63 20 64 20  65 20 66 20 67 20 68 20  |a b c d e f g h |
-    00000010  69 20 6a 20 6b 20 6c 20  6d 20 6e 20 6f 20 70 20  |i j k l m n o p |
-    00000020  71 20 72 20 73 20 74 20  75 20 76 20 77 20 78 20  |q r s t u v w x |
-    00000030  79 20 7a 20 0a 20 01                              |y z . .|
-    00000037
-
-Non ASCII and whitespace chars or control chars such as newline or `\x01` are represented as dots on the ASCII side notation.
-
-Offsets are in hexadecimal: 00, 10, 20.
-
-#hexdump
-
-Very similar to od, but not POSIX 7.
-
-Uses saner hexadecimal defaults.
-
-`hd` has even saner defaults.
-
-View bytes in hexadecimal.
-
-    echo -n abc | hexdump -C
-
-Options:
-
-- `-C` : see bytes in hexadecimal
-- `-n32` : only 32 bytes
-- `-s32` : start at byte 32
-- `-v`: show duplicate lines
-- `-e '1/1 " %02X"'`: format string

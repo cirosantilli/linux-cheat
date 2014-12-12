@@ -4,7 +4,7 @@ Linux information and cheatsheets.
 
 Includes Linux concepts and utilities that work on Linux, not necessarily in the LSB.
 
-##Index
+## Index
 
 Important files:
 
@@ -40,6 +40,57 @@ Base topics:
 - [Special files](special-files.md): `proc`, `dev` and `sys` filesystems.
 - [Terminal](terminal.md): terminal emulators, ANSI escapes, control characters.
 
+Basic stream and file manipulation:
+
+- [cat](cat.md)
+- [head](head.md)
+- [tac](tac.md)
+- [tail](tail.md)
+- [truncate](truncate.md)
+
+File and directory:
+
+- [du](du.md)
+- [fdupes](fdupes.md)
+- [find](find.md)
+- [locate](locate.md)
+- [ls](ls.md)
+- [tree](tree.md)
+
+Diff:
+
+- [comm](comm.md)
+- [cmp](cmp.md)
+
+Binary data viewers:
+
+- [hd](hd.md)
+- [hexdump](hexdump.md)
+- [od](od.md)
+
+Programming:
+
+- [ack](ack.sh)
+- [Compile](compile/): compilation process, dynamic libraries.
+
+Processes:
+
+- [chroot](chroot.sh)
+- [env](env.sh)
+- [free](env.md)
+- [htop](htop.md)
+- [jobs](jobs.sh)
+- [lsof](lsof.md)
+- [nice](nice.sh)
+- [nohup](nohup.sh)
+- [ps](ps.md)
+- [pstree](pstree.sh)
+- [pwd](pwd.sh)
+- [sleep](sleep.sh)
+- [top](top.md)
+- [ulimit](ulimit.md)
+- [wait](wait.sh)
+
 Media video, games, etc.) file types, viewers, editors, capture, synthesizers:
 
 - [Audio](audio/): audio, music, sound.
@@ -64,39 +115,7 @@ Markup compilers:
 - [Pandoc](pandoc/)
 - [RST](rst/)
 
-File and directory related utilities:
-
-- [du](du.md)
-- [fdupes](fdupes.md)
-- [find](find.md)
-- [locate](locate.md)
-- [ls](ls.md)
-- [tree](tree.md)
-
-Programming tools:
-
-- [ack](ack.sh)
-- [Compile](compile/): compilation process, dynamic libraries.
-
-Process-related tools:
-
-- [chroot](chroot.sh)
-- [env](env.sh)
-- [free](env.md)
-- [htop](htop.md)
-- [jobs](jobs.sh)
-- [lsof](lsof.md)
-- [nice](nice.sh)
-- [nohup](nohup.sh)
-- [ps](ps.md)
-- [pstree](pstree.sh)
-- [pwd](pwd.sh)
-- [sleep](sleep.sh)
-- [top](top.md)
-- [ulimit](ulimit.md)
-- [wait](wait.sh)
-
-Other tools:
+Misc:
 
 - [eval](eval.sh)
 
@@ -107,7 +126,7 @@ Related subjects in other repositories:
 - [C++ Cheat](https://github.com/cirosantilli/cpp-cheat): contains some compilation / language heavy subjects like the POSIX C API or generation of dynamic libraries.
 - [Networking Cheat](https://github.com/cirosantilli/networking-tutorial): networking tools and protocols: HTTP, SSH, curl Apache.
 
-##How to search for keywords
+## How to search for keywords
 
 If you know what you are searching for, use the following methods to search by keyword.
 
