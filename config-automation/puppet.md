@@ -1,4 +1,4 @@
-#Puppet
+# Puppet
 
 Cross platform system configuration manager.
 
@@ -27,7 +27,7 @@ New resources can be installed via plugins, or made available in newer versions 
 
 Good intro: <http://docs.puppetlabs.com/learning/index.html>
 
-##describe subcommand
+## describe subcommand
 
 Get info on currently installed resources:
 
@@ -35,7 +35,7 @@ Get info on currently installed resources:
     puppet describe -s user     # Print short information about a type, without describing every attribute
     puppet describe user        # Print long information, similar to what appears in the type reference.
 
-##resource subcommand
+## resource subcommand
 
 View or modify resources.
 

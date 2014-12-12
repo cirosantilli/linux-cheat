@@ -1,4 +1,4 @@
-#Configuration automation
+# Configuration automation
 
 This is about systems that help you automate system configuration.
 

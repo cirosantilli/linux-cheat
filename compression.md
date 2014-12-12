@@ -1,4 +1,4 @@
-#Compression
+# Compression
 
 File compression formats and utilities.
 
@@ -11,7 +11,7 @@ The performance parameters are:
 - ability to break into chunks
 - keep file metadata such as permissions, hidden (windows), etc.
 
-##ZIP
+## ZIP
 
 Most widely supported format.
 
@@ -66,11 +66,11 @@ To a dir:
 
 ZIP every file in cur dir to file.zip
 
-##tb2
+## tb2
 
-##tgz
+## tgz
 
-##tar
+## tar
 
 Name origin: `Tape ARchive`.
 
@@ -129,13 +129,13 @@ Extract:
     tar vxzf "$F".tgz
     tar vxjf "$F".tbz
 
-##zlib
+## zlib
 
-##gzip
+## gzip
 
-##gunzip
+## gunzip
 
-##gz
+## gz
 
 Extension: `gz`.
 
@@ -169,13 +169,13 @@ Extract `a.gz` and erase it if successful:
 
     gzip -r .
 
-###gz file format
+### gz file format
 
 IETF standardized format: <https://www.ietf.org/rfc/rfc1952.txt>
 
-###Hardlinks
+### Hardlinks
 
-###Keep original
+### Keep original
 
 Does not work if the file has any hard links, probably because that would not reduce memory usage as it breaks the hardlink. AKA: tries to be too smart and annoys us to hell!
 
@@ -194,7 +194,7 @@ And finally, `gzip` 1.6 (2013) has the `-k, --keep` option:
     gzip -k a
     gzip -kr .
 
-##RAR
+## RAR
 
 Proprietary `Roshal ARchive`, after it's creator Eugene Roshal.
 
@@ -248,13 +248,13 @@ Sample output:
     f1
     f2
 
-###Create RAR
+### Create RAR
 
 `a` for add:
 
     rar a dir.rar dir
 
-##7zip
+## 7zip
 
 Microsoft proprietary program.
 
@@ -268,6 +268,6 @@ But *use only for 7z*, which it was made for.
 
 With 7zip, you can open `.exe` files to extract their inner data.
 
-##File roller
+## File roller
 
 Very good GUI app to view inside multiple archive formats and extract them.

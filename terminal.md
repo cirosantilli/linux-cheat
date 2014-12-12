@@ -1,4 +1,4 @@
-#Terminal
+# Terminal
 
 Cheat on terminal emulators.
 
@@ -8,7 +8,7 @@ Those machines are now extinct, but their human machine interface legacy lives o
 
 The exact operation of terminal emulators is not standardized by POSIX (TODO check) but rather a de facto standard inherited from an influential terminal (a machine) that was very popular in the past called the VT100. We shall therefore describe here VT100 like terminal emulators.
 
-##Control characters
+## Control characters
 
 When most key presses are entered on the terminal, they simply get printed to the screen, for example `a`, `?` etc.
 
@@ -24,7 +24,7 @@ To test the process control jobs, use the helper script:
 
 which prints one integer per second.
 
-###c-c
+### c-c
 
 Send a `SIGTERM` signal to the foreground process.
 
@@ -40,7 +40,7 @@ This is very useful when you want the current application to stop running, becau
 
 Note however that applications can handle `SIGTERM`, and some pesky applications won't terminated on `<C-C>` (some may at least ask you if you want to terminate, or tell you how to do so).
 
-###c-z
+### c-z
 
 Send a `SIGSTOP` to foreground process, and put it on background.
 
@@ -82,7 +82,7 @@ Next time, just don't forget to do:
 
     firefox &
 
-###c-s
+### c-s
 
 Like `<C-Z>`, send `SIGSTOP` to foreground process.
 
@@ -96,17 +96,17 @@ Enter `<C-Z>`. The process stops, but the terminal is useless since it is still 
 
 The process can be resumed with `<C-Q>`.
 
-###c-q
+### c-q
 
 Send a `SIGCONT` to foreground process.
 
 Useful after a `<C-S>`.
 
-###c-\
+### c-\
 
 Send a `SIGQUIT` to foreground process.
 
-###c-d
+### c-d
 
 Send EOF to pipe.
 
@@ -116,21 +116,21 @@ But if you want to be able to give newlines, you have to enter a `<C-D>` to end 
 
 TODO add an example, maybe with `cat`.
 
-###c-?
+### c-?
 
 Clear line.
 
-###c-h
+### c-h
 
 Destructive backspace.
 
-###c-j
+### c-j
 
 Newline `\n` char.
 
-###Carriage return
+### Carriage return
 
-###c-m
+### c-m
 
 Carriage return.
 
@@ -144,13 +144,13 @@ Try it out:
 
 You should see on your terminal exactly `4523`, as the `01` got overwritten.
 
-###c-[
+### c-[
 
 Same as ESC. Try `<c-v><esc>`.
 
 Type `asdf`. Type `c-h`. terminal removes the `f`.
 
-###c-v c-X
+### c-v c-X
 
 Input a literal control char `c-x`, bypassing any special meaning.
 
@@ -172,7 +172,7 @@ The typical thing that happens is that some program is reading from the terminal
 
 What the terminal does on key presses is not officially standardized but the VT100 behavior became the de facto standard <http://en.wikipedia.org/wiki/VT100> so this is what computer terminal programs emulate. VT100 uses ASCII values only (0-127) with Ctrl + keys to reach the non alphanumerical values.
 
-##ANSI escape codes
+## ANSI escape codes
 
 The VT100 can also stuff that have no ASCII value like:
 
@@ -187,7 +187,7 @@ To use ANSI escape seriously and in a more portable and clear way, use `tput` in
 
 It is however better to understand the low level ANSI escape codes before moving to the higher level `tput`.
 
-###Text attributes
+### Text attributes
 
 ANSI codes allow one to control text attributes such as color and font.
 
@@ -264,7 +264,7 @@ How it works:
 
     Besides `m`, there are many other possible characters, which have different effects. The list of all characters can be found at [wiki-ansi-escape][].
 
-###Cursor position
+### Cursor position
 
 You can also set cursor position by outputting special control strings to stdout.
 
@@ -288,17 +288,17 @@ Things will get really; ugly as you start to rewrite previous `PS1`, `PS2` and s
 
 This should rarely be piped to other programs, only given to terminals otherwise all those ugly chars will go to the pipe! Programs that color stuff should always test if output is going to a pipe or not.
 
-##Canonical vs non canonical
+## Canonical vs non canonical
 
 Canonical waits for newline to make data available to program, non canonical does not.
 
 <http://stackoverflow.com/questions/358342/canonical-vs-non-canonical-terminal-input>
 
-##General operation
+## General operation
 
 The terminal is a GUI between the user and the system.
 
-###Terminals work with bytes
+### Terminals work with bytes
 
 VT100 works only with ASCII values as input and outputs (in range 0 - 127) with control + keys to reach the non alphanumerical values as shown at: <http://en.wikipedia.org/wiki/ASCII>. This allows all the 0 - 127 range to be reached.
 
@@ -306,7 +306,7 @@ Certain key presses cannot be translated into single bytes, for example a left a
 
 Current terminal emulators may however accept any bytes as input, and even display those bytes correctly supposing a given encoding (usually UTF-8).
 
-###Input
+### Input
 
 As any GUI, the terminal takes user input, takes actions, and gives the user output.
 
@@ -332,7 +332,7 @@ There are two basic types of actions that the terminal emulator can make when it
 
 The above actions also depend if the terminal is on canonical or non canonical mode.
 
-###Output
+### Output
 
 The terminal must also decide what to do with the stdout generated by the interpreter.
 
@@ -368,7 +368,7 @@ The most common action is to print every byte to the screen as the corresponding
 
     Must be interpreted to do all sorts of special things, such as move the cursor or cange colors.
 
-##Terminal emulator vs sh interpreter
+## Terminal emulator vs sh interpreter
 
 `sh` interpreters take raw text and do certain actions.
 
@@ -378,7 +378,7 @@ Terminal emulators are GUIs that interface with users in more complex ways.
 
 It is easy to get the two mixed up because most of the time terminal emulators simply accumulate input chars, wait for an `<enter>` keypress, and then send strings to the sh interpreter.
 
-##/dev/tty
+## /dev/tty
 
 Special file, reading and writing to it is the same as reading and writing to current terminal.
 
@@ -392,7 +392,7 @@ Output:
 
 So `a` was written to the current terminal.
 
-##Good terminal emulators
+## Good terminal emulators
 
 Drop-down capability is a huge advantage: hit a key, and the terminal appears. Options:
 

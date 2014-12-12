@@ -1,4 +1,4 @@
-#Gimp
+# Gimp
 
 Image manipulation.
 
@@ -6,7 +6,7 @@ Huge amount of functions, but has a learning curve.
 
 Learn the shortcuts and be happy.
 
-##Docking
+## Docking
 
 Understand a bit about Gimp's docking: <https://www.youtube.com/watch?v=rEYdWCP9d80>
 
@@ -16,7 +16,7 @@ Avoid multi window madness:
 
 Needs Gimp 2.8 (Ubuntu 12.04 stops at Gimp 2.6).
 
-##Layers
+## Layers
 
 If you don't know what layers are and how to use them, learn *now*
 
@@ -35,13 +35,13 @@ Layer Z order is given by the order on the layer dialog.
 
 The layer lock, when active, makes all locked layers move together via the `M` tool.
 
-##Grid
+## Grid
 
 - View -> Grid: toggle grid visibility
 - View -> Snap to Grid
 - Image -> Configure Grid: set grid size
 
-##Copy page
+## Copy page
 
 `Shift + C` copy saves the current selection
 
@@ -49,7 +49,7 @@ The layer lock, when active, makes all locked layers move together via the `M` t
 
 To transform it into an actual layer, select it on the layer dialog and push "Create a new layer and add it to the image."
 
-##Tools
+## Tools
 
 Resize entire image:
 
@@ -98,7 +98,7 @@ Shortcuts:
 
 -   `Z`: undo
 
-###Selection tools
+### Selection tools
 
 -   `R`: rectangle select tool.
 

@@ -1,4 +1,4 @@
-#uniq
+# uniq
 
 POSIX 7
 

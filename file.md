@@ -1,4 +1,4 @@
-#file
+# file
 
 POSIX 7
 
@@ -14,7 +14,7 @@ Output:
 
     a: ASCII text
 
-##L
+## L
 
 Follow links:
 

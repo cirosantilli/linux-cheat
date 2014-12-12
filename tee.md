@@ -1,4 +1,4 @@
-#tee
+# tee
 
 POSIX 7
 

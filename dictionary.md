@@ -1,14 +1,14 @@
-#Dictionary
+# Dictionary
 
-##Formats
+## Formats
 
-###stardict
+### stardict
 
 <http://goldendict.org/dictionaries.php>
 
 For dictionaries see: <http://www.stardict.org/download.php>
 
-###bgl
+### bgl
 
 Babylon.
 
@@ -22,7 +22,7 @@ I found some that actually contained the `blg` here:
 
     http://www.babylon.com/dictionaries-glossaries
 
-##GoldenDict
+## GoldenDict
 
 Fork of StarDict.
 
@@ -30,7 +30,7 @@ Select text can make popup windows!
 
 Supported formats: StarDict, `blg`.
 
-##sdcv
+## sdcv
 
 Command line for StarDict.
 
@@ -45,11 +45,11 @@ List available dictionaries:
 
     sdcv -l
 
-##Spell checking
+## Spell checking
 
-###Aspell
+### Aspell
 
-####Features
+#### Features
 
 Can add words to dictionary.
 
@@ -77,10 +77,10 @@ Modes can be added/removed. They are called `filters`:
     sudo aspell --add-filter=$f
     sudo aspell --remove-filter=$f
 
-##Hunspell
+## Hunspell
 
 Derived from MySpell and mostly backwards compatible.
 
-##MySpell
+## MySpell
 
 Superseded by Hunspell.

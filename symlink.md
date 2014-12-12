@@ -1,8 +1,8 @@
-#Symlink
+# Symlink
 
 Symlink concepts and manipulation.
 
-##Create
+## Create
 
 Use `ln -s` (POSIX 7):
 
@@ -10,7 +10,7 @@ Use `ln -s` (POSIX 7):
     ln -s a b
     [ `cat b` = a ] || exit 1
 
-##If target is moved the link breaks
+## If target is moved the link breaks
 
 Broken links are also known as *dangling links*.
 
@@ -21,7 +21,7 @@ If a program tries to open them, it gets a permission error:
     mv a c
     if cat b; then exit 1; fi
 
-##Check if path is symlink
+## Check if path is symlink
 
 Symlinks are identified by system metadata. Programs can tell if a file is a symlink or not:
 
@@ -29,7 +29,7 @@ Symlinks are identified by system metadata. Programs can tell if a file is a sym
     ln -s a b
     [ -L b ] || exit 1
 
-##readlink
+## readlink
 
 Get path to which symlink points to:
 
@@ -37,7 +37,7 @@ Get path to which symlink points to:
     ln -s a b
     [ `readlink b` = a ] || exit 1
 
-##Relative vs absolute
+## Relative vs absolute
 
 Symlinks can contain either relative paths or absolute paths:
 
@@ -45,7 +45,7 @@ Symlinks can contain either relative paths or absolute paths:
     mkdir d
     ln -s a d/a
 
-##What programs do when they see a symlink is up to them to decide
+## What programs do when they see a symlink is up to them to decide
 
 File content changes always affect the target of the link:
 
@@ -71,7 +71,7 @@ It is therefore possible to make hardlinks of symlinks:
     ln b c
     [ `readlink c` = a ] || exit 1
 
-##Permissions
+## Permissions
 
 Symlinks always show 777 permission, but this permission means nothing:
 

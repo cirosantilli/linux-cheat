@@ -1,4 +1,4 @@
-#gcov
+# gcov
 
 GCC test coverage metrics.
 

@@ -1,4 +1,4 @@
-#System call
+# System call
 
 This discusses system calls from an userland point of view. Kernel internals of system calls are not discussed here.
 
@@ -37,7 +37,7 @@ This number can never be changed, but system calls may be declared deprecated.
 TODO where to get the list of system calls on the source code tree.
 The system calls are implemented on their corresponding section, e.g., filesystem related system calls go under `fs/`.
 
-##Sources
+## Sources
 
 This describes methods on how to get information on system calls without reading through the actual source code.
 
@@ -47,13 +47,13 @@ TODO how to get a list of syscalls available on all architectures without greppi
 
 TODO where are the descriptions of what a system call does in official docs (in the kernel tree for ideally?) Or bad / no docs as for the rest of the API?
 
-###kernel.org
+### kernel.org
 
 Official Linux kernel related domain.
 
 Documentation at: <https://www.kernel.org/doc/>
 
-####man pages
+#### man pages
 
 Hosted under `kernel.org`, so does have some official endorsement: <https://www.kernel.org/doc/man-pages/>
 
@@ -69,7 +69,7 @@ To get info on specific system calls do:
     man 2 write
     man 2 reboot
 
-###POSIX
+### POSIX
 
 Linux is highly POSIX compatible, which means that many of its system calls exist to implement POSIX C library functions.
 
@@ -79,7 +79,7 @@ POSIX is portable so in learning it you also learn an interface which works on m
 
 POSIX functions are more basic than those which are not in POSIX but on the Linux API, so it is a good idea to start with them.
 
-###Third-party compilations
+### Third-party compilations
 
 The following sources don't seem to be explicitly endorsed by the Linux community, but are good nonetheless.
 
@@ -93,13 +93,13 @@ The following sources don't seem to be explicitly endorsed by the Linux communit
 
     Contains actual binary values of constants so you can make he calls from assembler.
 
-##Return value
+## Return value
 
 The return value of the system call is put into `eax` when the system call is finished.
 
 That is the only way for the system call to communicate directly with the calling process: `errno` is TODO.
 
-###Errors
+### Errors
 
 System calls can fail for much more reasons than is the case with userspace function, since the kernel has to be careful and prevent processes from messing up the system.
 
@@ -151,7 +151,7 @@ By convention:
         if (res == -1 && errno != 0)
                 /* error */
 
-###errno
+### errno
 
 `errno` is an ANSI C and POSIX library level concept that does not exist on the system call level,
 
@@ -161,7 +161,7 @@ System calls return only a single register value, and it is up to the syscall wr
 
 Beware that the `syscall` macro, while very low level syscall wrapper, still does return value and `errno` setting manipulations just in a similar way to the POSIX error handling.
 
-##strace
+## strace
 
 List system calls made by executable.
 
@@ -176,7 +176,7 @@ Includes calls that load program.
     gcc a.c
     strace ./a.out
 
-##Sample syscalls
+## Sample syscalls
 
 This section shows sample system calls and what they do.
 
@@ -184,7 +184,7 @@ Concepts needed to understand the system calls are briefly mentioned. Most conce
 
 If the call has an analogue glibc wrapper, it will only be listed but not explained.
 
-###File and directories
+### File and directories
 
 The concept of file descriptor exists much like in POSIX. They contain information such as position in the stream, and are represented by a `struct`
 
@@ -228,14 +228,14 @@ Filesystems:
 - `mount`
 - `umount`
 
-###time
+### time
 
 - `nanosleep`
 - `stimeset`
 - `time`
 - `timesprocess`
 
-###Threads and processes
+### Threads and processes
 
 - `capget`
 - `capset`
@@ -278,11 +278,11 @@ Data segment size:
 
 - `brk`
 
-##TODO
+## TODO
 
 The following needs some formatting.
 
-###IPC
+### IPC
 
 Signals:
 
@@ -290,7 +290,7 @@ Signals:
 - `sigaction`
 - `futex`: used in POSIX pthread mutexes
 
-#####Semaphores
+##### Semaphores
 
 Shared integer resources that can be possessed and freed
 indicating that other process may proceed
@@ -301,43 +301,43 @@ In general each semaphore can have multiple values. In real life they have 3!
 
 Binary semaphore = a mutex.
 
-######semget
-######semop
-######semtimedop
-######semctl
+###### semget
+###### semop
+###### semtimedop
+###### semctl
 
-####pipecreate pipe
-####pipe2pipe with flags
+#### pipecreate pipe
+#### pipe2pipe with flags
 
-####flockadvisory
+#### flockadvisory
 
 File lock.
 
-####sockets
+#### sockets
 
 Main difference: can connect different computers!
 
-#####accept
-#####bind
-#####socket
-#####socketcall
-#####socketpair
-#####listen
+##### accept
+##### bind
+##### socket
+##### socketcall
+##### socketpair
+##### listen
 
-####shared memory
-
-TODO
-
-####memory queues
+#### shared memory
 
 TODO
 
-####memory
+#### memory queues
 
-####cacheflush
+TODO
+
+#### memory
+
+#### cacheflush
 
 Flush instruction or data cache contents.
 
-####getpagesize
+#### getpagesize
 
 Get memory page size.

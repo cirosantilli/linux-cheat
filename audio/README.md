@@ -1,6 +1,6 @@
-#Audio
+# Audio
 
-##Directories
+## Directories
 
 On most systems, sound will be kept under:
 
@@ -22,9 +22,9 @@ If you want to have some real good fun try:
 
     find /usr/share/sounds -type f -iname '*.ogg' | sort | xargs -I'{}' play '{}'
 
-##Players
+## Players
 
-###paplay
+### paplay
 
 Pulse Audio play.
 
@@ -39,17 +39,17 @@ Terminates when over. Good option to play an alarm signal after a very long comm
 
     sleep 5 && play ~/share/sounds/alert.*
 
-###aplay
+### aplay
 
 ALSA player.
 
 Comes with Ubuntu 12.04, but did not work very well.
 
-###play
+### play
 
 SoX package. Similar to `paplay`.
 
-###cplay
+### cplay
 
 ncurses CLI.
 
@@ -57,9 +57,9 @@ Has a file browser.
 
     cplay
 
-##Manipulation
+## Manipulation
 
-###lame
+### lame
 
 Encode, decode and modify MP3.
 
@@ -71,7 +71,7 @@ WAV to MP3:
 
     lame a.wav a.mp3
 
-###id3tool
+### id3tool
 
 Get id3 tags info (for mp3 for example):
 
@@ -83,19 +83,19 @@ Get id3 tags info (for mp3 for example):
 
     install -D "$1" /music/mp3/"$ARTIST-$ALBUM-$YEAR"/"$TRACKNUM-$ARTIST-$TITLE".mp3
 
-###Cut up FLAC CUE into multiple files
+### Cut up FLAC CUE into multiple files
 
-####flacon
+#### flacon
 
 GUI.
 
-####shntool
+#### shntool
 
 Single APE and CUE in dir, FLAC output, formatted as number, author, track
 
     shntool split -f *.cue -o flac *.ape -t '%n - %p - %t'
 
-###SoX
+### SoX
 
 Set of utilities record, play and modify files via CLI.
 
@@ -109,7 +109,7 @@ Record from microphone into `a.wav` file:
 
 `ctrl+c` to stop recording.
 
-##ALSA
+## ALSA
 
 Advanced Linux Sound API.
 
@@ -119,7 +119,7 @@ The kernel sound subsystem is called ALSA.
 
 There are a few tools that interact with it.
 
-###alsamixer
+### alsamixer
 
 ncurses interface to view/control sound parameters
 
@@ -130,7 +130,7 @@ Commands:
 - left/right : change active parameter
 - up/down    : change active parameter value
 
-###amixer
+### amixer
 
 CLI for sound control.
 
@@ -146,21 +146,21 @@ Unmute sound:
 
     amixer -D pulse set Master 1+ unmute
 
-###aplay
+### aplay
 
 Command line tool that takes numeric input from stdin and generate sound.
 
-##pulseaudio
+## pulseaudio
 
-###pacmd
+### pacmd
 
 Command line control to PulseAudio.
 
-##rip
+## rip
 
-###abcde
+### abcde
 
-####CLI
+#### CLI
 
 Rip from DVD:
 
@@ -170,9 +170,9 @@ Automatically finds right configurations on most systems.
 
 Creates dir in cur dir and saves rip out as `.ogg` in it.
 
-##Synthesis
+## Synthesis
 
-###pico2wave
+### pico2wave
 
 Text to speech.
 
@@ -184,6 +184,6 @@ Say "hello world":
 
 `"hello world"` is **not** a filename! It is the actual input! There seems to be no way to get input from files or stdin.
 
-###Virtual Midi Piano Keyboard
+### Virtual Midi Piano Keyboard
 
-###vmpk
+### vmpk

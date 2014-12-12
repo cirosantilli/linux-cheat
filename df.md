@@ -1,4 +1,4 @@
-#df
+# df
 
 POSIX 7 <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/df.html>
 
@@ -43,7 +43,7 @@ Also show partition filesystems type:
 
     df -T
 
-##i
+## i
 
 Get percentage of free / used inodes:
 

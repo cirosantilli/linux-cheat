@@ -1,4 +1,4 @@
-#apt-file
+# apt-file
 
 Search for and list package files. **very** useful to know: which package provides a missing file like a `bin/name` or `include/name.h`?
 
@@ -6,7 +6,7 @@ Search for and list package files. **very** useful to know: which package provid
     apt-file update
     f=
 
-##search
+## search
 
 Search for file `"$F"` in packages.
 
@@ -22,14 +22,14 @@ Combo: search for an executable called `a2x`:
 
     apt-file search bin/a2x
 
-##Show
+## Show
 
 Shows files in package `p`:
 
     p=
     apt-file show "$p"
 
-##Get info on packages before installing them
+## Get info on packages before installing them
 
 List package dependencies
 

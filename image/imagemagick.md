@@ -1,4 +1,4 @@
-#ImageMagick
+# ImageMagick
 
 Tons of image conversion tools.
 
@@ -10,7 +10,7 @@ Man pages are very shallow: have a look at the online docs instead:
 
 - <http://www.imagemagick.org/script/command-line-options.php>
 
-##identify
+## identify
 
 Get info on ImageMagick on given image file and file formats supported by ImageMagick.
 
@@ -22,7 +22,7 @@ Get size of an image:
 
     identify -format "%[fx:w]x%[fx:h]" a.jpg
 
-##convert
+## convert
 
 - process images
 - converts between formats
@@ -32,7 +32,7 @@ Does not do:
 
 - DJVU
 
-###resize
+### resize
 
 Resize to 50% or original size:
 
@@ -52,7 +52,7 @@ Resize to fixed width of 100 px, height maintains original proportion:
 
 	convert large.png -resize 100x small.png
 
-###crop
+### crop
 
 `10x10`: rectangle to keep:
 
@@ -72,7 +72,7 @@ Bottom 50 percent:
 
         convert -gravity south -crop 100x50% a.jpg b.jpg
 
-###color
+### color
 
 -   `-colorspace Gray`: convert to grayscale:
 
@@ -98,13 +98,13 @@ Bottom 50 percent:
 
         convert -level -100,100 a.jpg b.jpg
 
-###Transparency to white
+### Transparency to white
 
 <http://stackoverflow.com/questions/2322750/replace-transparency-in-png-images-with-white-background>
 
     convert image.png -background white -alpha remove white.png
 
-###GIF operations
+### GIF operations
 
 GIF to several images:
 
@@ -124,7 +124,7 @@ Loop once and stop
 
     convert -delay 100 -loop 1 img*.png img.gif
 
-##animate
+## animate
 
 Animate multiple images interactively:
 

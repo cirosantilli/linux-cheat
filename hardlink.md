@@ -1,15 +1,15 @@
-#Hardlink
+# Hardlink
 
 Points to an inode.
 
-##Create
+## Create
 
 Create with `ln`:
 
     echo a > a
     ln a b
 
-##Get inode of a file
+## Get inode of a file
 
 With `stat`:
 
@@ -17,7 +17,7 @@ With `stat`:
     ln a b
     [ `stat -c '%i' a` = `stat -c '%i' b ` ] || exit 1
 
-##mv
+## mv
 
 Unlike symlinks, even if you move any of the files, changes in one file reflect immediately on the other:
 
@@ -28,13 +28,13 @@ Unlike symlinks, even if you move any of the files, changes in one file reflect 
     echo b > d/b
     [ `cat a` = b ] || exit 1
 
-##It is not efficient to find all paths of an inode
+## It is not efficient to find all paths of an inode
 
 The only way to do that is searching every file on the system, if you have permissions...
 
 The only way to check if two files are hardlinked is by comparing their inodes.
 
-##Count
+## Count
 
 It is possible to tell how many hardlinks a file has with stat:
 
@@ -42,7 +42,7 @@ It is possible to tell how many hardlinks a file has with stat:
 
 Since the filesystem has to count this to be able to delete the file when the count reaches 0.
 
-##Permissions
+## Permissions
 
 You must have read *and* write permissions to the file in order to make a hardlink to it:
 

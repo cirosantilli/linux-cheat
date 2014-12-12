@@ -1,4 +1,4 @@
-#wc
+# wc
 
 POSIX 7
 

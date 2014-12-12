@@ -1,50 +1,50 @@
-#Video
+# Video
 
-##Base Concepts
+## Base Concepts
 
-###ripping
+### ripping
 
 Taking the DVD from the DVD to files in computer.
 
-###Transcoding
+### Transcoding
 
 Transforming the DVD contents to another, generally smaller and single file, format such as `avi`.
 
 Transcoding may be a time consuming process, since it means to do complete data format conversion usually on large files and as of 2013 takes times in the 1h - 4h range.
 
-###Title
+### Title
 
 A DVD can contain one or many titles. Usually each title contains one entire continuous film sequence such as the main film or an extra such as an interview with the director.
 
-###Codec
+### Codec
 
 A program capable of `COmpressing and DECompressing` certain formats.
 
 The term is often used in phrases as: "Do you have the codec for XXX to watch" in which it means, do you have the program that does the decoding?
 
-###Subtitles
+### Subtitles
 
 Subtitles are often stored in DVDs as images the format pair: idx + sub.
 
 If you want srts, which is a text-only, smaller and human editable format on a text editor, first extract the VobSub pairs from the container (via mkvextract for example for mkv containers) and then use a tool such as `vobsub2srt` which will do OCR on the images.
 
-###Multiplexing
+### Multiplexing
 
 TODO
 
-##Containers
+## Containers
 
 Are file types that wrap video, audio and subtitles in a single files.
 
 Popular container formats include:
 
-###mkv
+### mkv
 
 Open standard.
 
-###ogv
+### ogv
 
-###ogg
+### ogg
 
 Open standard by <Xiph.Org>.
 
@@ -52,23 +52,23 @@ Before 2007, used for audio only or audio video.
 
 Since 2007, <Xiph.Org> recommends using it only for audio only Vorbis, and using ogv for video.
 
-###mpg
+### mpg
 
 One of the extensions for MPEG-1 video.
 
 It is possible to concatenate `mpg` files directly via `cat` to get a larger one.
 
-###MPEG-4 Part 14
+### MPEG-4 Part 14
 
-###mp4
+### mp4
 
 More linked to Apple.
 
-###avi
+### avi
 
 Created by Microsoft.
 
-##DVD regions
+## DVD regions
 
 DVDs have regions: <http://en.wikipedia.org/wiki/DVD_region_code>
 
@@ -78,23 +78,23 @@ DVD readers have a limited number of region changes, sometimes around 5.
 
 For certain DVD readers, after this number of changes, *you cannot change it anymore*!
 
-##Capture
+## Capture
 
-###guvcview
+### guvcview
 
 View and record video audio from a webcam.
 
-##Players
+## Players
 
-###VLC
+### VLC
 
 Great cross platform video player
 
-##Editors
+## Editors
 
 All editors we have tried so far were buggy. Good luck!
 
-###PiTiV
+### PiTiV
 
 GNOME based.
 
@@ -102,22 +102,22 @@ Less buggy of the options we tried so far.
 
 Latest release 0.93 is the first that leaves alpha and enters beta.
 
-###OpenSHOT
+### OpenSHOT
 
 Generally simple good. Downsides:
 
 - video preview refreshes too slowly.
 - corrupted ogv inputs on the combined output
 
-###Cinelerra
+### Cinelerra
 
 Fails to open ogv.
 
 Very non standard interface, four separate windows...
 
-##Formats
+## Formats
 
-###MPEG-1
+### MPEG-1
 
 <http://en.wikipedia.org/wiki/MPEG-1>
 
@@ -130,25 +130,25 @@ Extensions:
 - `.mp3` for audio
 - `.mpg` for audio / video
 
-###H.264/MPEG-4 AVC
+### H.264/MPEG-4 AVC
 
 Lossy.
 
 An important open source library implementation is the x264 library.
 
-###Theora
+### Theora
 
 Free lossy compression format: no patents by the <http://en.wikipedia.org/wiki/Xiph.Org_Foundation>
 
 Often used with other patent free formats Vorbis and the Ogg container.
 
-##Utilities and libraries
+## Utilities and libraries
 
 Many utilities are front-ends to libraries provided by a single project.
 
-###libav
+### libav
 
-###ffmpeg
+### ffmpeg
 
 Large open source project to offer tools that deal with many, many video formats and containers.
 
@@ -156,7 +156,7 @@ Also the name of an utility to convert between formats,
 which has been renamed to `avconv` and deprecated the old name,
 presumably because it does much more than mpeg now, and is linked to `libav`.
 
-####avconv utility
+#### avconv utility
 
 In Ubuntu, the `ffmpeg` and `avconv` utilities are contained in the `libav-tools` package.
 
@@ -170,7 +170,7 @@ You must specify frame rate, as the following fails because MPEG does not suppor
 
     avconv -i input.ogv output.mpg
 
-###mkvtools
+### mkvtools
 
 See info about a:
 
@@ -192,7 +192,7 @@ The type is that contained in the tracks, not necessarily srt,
 
 The output may be an VobSub idx + sub or srt depending on what is contained in the mkv. If you want srt from VobSub, try vobsub2srt.
 
-###Ogg Video Tools
+### Ogg Video Tools
 
 Tools for ogg manipulation.
 
@@ -204,13 +204,13 @@ Concatenate ogv containers:
 
 Broken on Ubuntu 12.04, claims to have been corrected on 12.10: <https://bugs.launchpad.net/ubuntu/+source/oggvideotools/+bug/944444>
 
-###x264
+### x264
 
 Codec library for the `H.264/MPEG-4 AVC` format.
 
-##Rip utilities
+## Rip utilities
 
-###HandBrake
+### HandBrake
 
 Open source transcoder.
 
@@ -266,9 +266,9 @@ In an `.mkv`, you can store MPEG-4 video created by ffmpeg, x264, or Theora vide
 - CRF 20 = 2141 MB
 - CRF 16 = 4503 MB
 
-##Subtitle utilities
+## Subtitle utilities
 
-###vobsub2srt
+### vobsub2srt
 
 Uses Tesseract for the OCR: this means you must install Tesseract languages.
 
@@ -292,7 +292,7 @@ Don't know what to do if two subs for the same language such as simplified and t
 
 Don't forget to rename output as as a.eng.srt before going to the next language.
 
-###srtmerge
+### srtmerge
 
 Merge two srt files.
 

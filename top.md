@@ -1,4 +1,4 @@
-#top
+# top
 
 Ncurses constantly updated process list with CPU and memory usage.
 
@@ -20,7 +20,7 @@ Output fields:
 - `VIRT`: same as `VSZ` on `ps`.
 - `SHR`: which subset of `VIRT` is shared.
 
-##uptime
+## uptime
 
 First line of top:
 

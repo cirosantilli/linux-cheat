@@ -1,14 +1,14 @@
-#Compile
+# Compile
 
 - information related to executables such as formats (ex: elf) and dynamic linking
 - tools for compiling languages (C, C++, Fortran, etc.) into executables, such as GCC
 - tools for examining executable files
 
-##Formats
+## Formats
 
 There are different types of executable and object files.
 
-###ELF
+### ELF
 
 Defined in the LSB.
 
@@ -18,15 +18,15 @@ Specifies format for both object files (`.o`), shared object files (`.so`) and e
 
 Its structure can be examined in a human readable way via `readelf` and `objdump`.
 
-###mach-o
+### mach-o
 
 MAC OS.
 
-###pe
+### pe
 
 Windows current `.exe` as of 2013.
 
-##binutils
+## binutils
 
 Gnu set of utilities to compile and view and modify compiled code.
 
@@ -34,7 +34,7 @@ Official site: <http://sourceware.org/binutils/>.
 
 As stated there, the two main utilities are `ld`, the gnu liner, and `as` the gnu assembler.
 
-###ar
+### ar
 
 Create `.a` archives from `.o` files:
 
@@ -42,13 +42,13 @@ Create `.a` archives from `.o` files:
 
 TODO this is deprecated in POSIX 7, why?
 
-###nm
+### nm
 
 Get symbol table for object files:
 
     nm a.o
 
-###readelf
+### readelf
 
 Get information stored inside executable files in a human readable way.
 
@@ -63,11 +63,11 @@ To show only specific informations:
 - `-s`: symtable (defined stuff) of elf, `.o` or `.so`
 - `-d`: dependencies of an executable (symbols and shared libs)
 
-###elfedit
+### elfedit
 
 TODO
 
-###objdump
+### objdump
 
 See assembler instructions of object file or executable:
 
@@ -80,7 +80,7 @@ Intermingle original C code with disassembly more or less where they coincide:
 
 Binary files must be compiled with debugging information.
 
-###size
+### size
 
 Shows size of each memory part of a executable:
 

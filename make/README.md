@@ -1,4 +1,4 @@
-#Make
+# Make
 
 Make allows you to:
 
@@ -15,14 +15,14 @@ Make allows you to:
 Make is specified by POSIX and implemented by GNU with extensions
 It is the de facto standard make tool for POSIX systems.
 
-##Downsides of Make
+## Downsides of Make
 
 The main problems of make are:
 
 - not available on Windows
 - its Yet Another Scripting Language to learn, and uses Bash inside of it
 
-##Alternatives
+## Alternatives
 
 Because of the downsides of make, many other make systems have been devised.
 None has yet dominated on most applications, but important ones include:
@@ -39,7 +39,7 @@ None has yet dominated on most applications, but important ones include:
 
     Makefiles are written in XML, so a bit verbose to write by hand.
 
-##makefile vs Makefile
+## makefile vs Makefile
 
 - <http://stackoverflow.com/questions/12669367/should-i-name-makefile-or-makefile>
 
@@ -54,7 +54,7 @@ make tries the following names, in order: `GNUmakefile`, `makefile` and `Makefil
 
 - sticks to the other widespread convention of naming everything lowercase
 
-##Command line options
+## Command line options
 
 -   `-j5`: let make run in 5 threads.
 
@@ -67,7 +67,7 @@ make tries the following names, in order: `GNUmakefile`, `makefile` and `Makefil
     `a`, `b`, and `c` are run in parallel, it it might be the case that
     `c` *must* run only after `a` and `b`.
 
-##Sources
+## Sources
 
 -   <http://www.jfranken.de/homepages/johannes/vortraege/make_inhalt.en.html>
 

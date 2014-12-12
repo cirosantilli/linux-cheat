@@ -1,4 +1,4 @@
-#ps
+# ps
 
 POSIX 7 <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/ps.html>
 
@@ -77,9 +77,9 @@ Get PID of parent of process with given PID `p`
     p=1234
     ps -p "$p" -o ppid=
 
-##Procps extensions
+## Procps extensions
 
-###Sort
+### Sort
 
 Sort output by:
 
@@ -102,7 +102,7 @@ Very useful sorts include:
 
         ps aux --sort '%cpu'
 
-###Process tree
+### Process tree
 
 Show process tree:
 

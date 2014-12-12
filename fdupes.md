@@ -1,4 +1,4 @@
-#fdupes
+# fdupes
 
 Fine command line tool for eliminating byte by byte duplicates you can either:
 

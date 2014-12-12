@@ -1,4 +1,4 @@
-#simple-scan
+# simple-scan
 
 GUI scanner interface.
 

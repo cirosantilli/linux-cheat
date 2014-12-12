@@ -12,7 +12,7 @@ And one timestamp with very little current support:
 
 - btime
 
-#atime
+# atime
 
 Access time.
 
@@ -46,7 +46,7 @@ Examples:
     ls d
     stat d
 
-#mtime
+# mtime
 
 Modification time.
 
@@ -94,7 +94,7 @@ Only top level directory changes are considered, since only those are stored in 
     stat d
         #mtime unchanged
 
-#ctime
+# ctime
 
 Change time.
 
@@ -110,7 +110,7 @@ Example:
         #ctime changed
         #mtime same
 
-#btime
+# btime
 
 Birth time.
 

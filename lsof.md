@@ -1,4 +1,4 @@
-#lsof
+# lsof
 
 List all open files, pipes, ports.
 
@@ -56,13 +56,13 @@ Check an specific file:
     lsof /tmp/foo
       #
 
-##t
+## t
 
 List only process IDs.
 
 Suitable for script consumption.
 
-##i
+## i
 
 Search for processes listening on a port:
 

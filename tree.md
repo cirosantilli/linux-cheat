@@ -1,4 +1,4 @@
-#tree
+# tree
 
 Print ASCII art file tree.
 

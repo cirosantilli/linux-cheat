@@ -1,4 +1,4 @@
-#Perl
+# Perl
 
 The focus of this is knowing the minimum possible to be able to do one liners, specially in text processing.
 
@@ -16,7 +16,7 @@ In Ubuntu install docs with:
 
     sudo aptitude install -y perl-doc
 
-##CPAN
+## CPAN
 
 Name of the major package repository for Perl modules, and of the command line tool used to install them.
 

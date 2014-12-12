@@ -1,4 +1,4 @@
-#ulimit
+# ulimit
 
 Get and set resource limits for a process and its children.
 
@@ -21,7 +21,7 @@ Limits are enforced per process, so if a process is able to fork it can blow the
 
 If programs try to break those limits, the system call fails, and often the program crashes.
 
-##f
+## f
 
 POSIX only specifies this option: the maximum file size that can be written in 512 byte blocks.
 
@@ -46,7 +46,7 @@ Set value:
 
     sudo -c ulimit -Sf unlimited
 
-##GNU extensions
+## GNU extensions
 
 GNU adds many more options in its sh and bash implementations.
 
@@ -56,9 +56,9 @@ List all limits (including the unit and the option name):
 
     ulimit -a
 
-###S
+### S
 
-###H
+### H
 
 Linux has the concept of hard and soft limits.
 
@@ -68,7 +68,7 @@ Soft limits can be increased by any user, up to the hard limit, and the hard lim
 
 Bash also provides the `soft` and `hard` special limit values which refer to the current soft and hard values.
 
-###v
+### v
 
 Virtual memory.
 
@@ -80,11 +80,11 @@ Linux deals well with CPU limits since CPU usage rotates according to nice, but 
 
 The timeout tool aims to limit CPU and RAM for the children as well as parent: <https://github.com/pshved/timeout>
 
-##Per user limits
+## Per user limits
 
-###PAM
+### PAM
 
-###/etc/security/limits.conf
+### /etc/security/limits.conf
 
 TODO confirm this section.
 

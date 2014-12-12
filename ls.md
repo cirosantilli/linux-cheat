@@ -1,10 +1,10 @@
-#ls
+# ls
 
 POSIX 7
 
 List files in directories.
 
-##l
+## l
 
 Show lots of information:
 
@@ -61,7 +61,7 @@ One per line:
 
 `-lL`: when showing symlinks, shows info to what is linked to
 
-##Sort
+## Sort
 
 Modification time (newest first):
 
@@ -79,7 +79,7 @@ Reverse sort order:
 
     ls -tr
 
-##GNU extensions
+## GNU extensions
 
 `-R`: recursive
 

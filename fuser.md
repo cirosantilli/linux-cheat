@@ -1,4 +1,4 @@
-#fuser
+# fuser
 
 View which processes are using a device.
 
@@ -15,11 +15,11 @@ Similar to `lsof`.
 
 Useful if you want to unmount a filesystem, and you have to find out who is still using it.
 
-##k
+## k
 
 Send `SIGKILL` to found process
 
-##t
+## t
 
 Search in given domain instead of file paths.
 

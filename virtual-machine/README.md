@@ -1,8 +1,8 @@
-#Virtual machine
+# Virtual machine
 
 Virtualization tools such as VirtualBox, Vagrant or Docker.
 
-##Introduction
+## Introduction
 
 Virtualization is running an operating system inside another one without rebooting.
 
@@ -20,7 +20,7 @@ To interface with the guest from the host, you can either either use:
 
 Filesystem may be set to be a file on the host representing the filesystem.
 
-##Applications
+## Applications
 
 - switch quickly between the two OS without reboot or the need to partition your disk.
 
@@ -72,7 +72,7 @@ Important niche of application for VMs include:
 
     This is used for example by AWS.
 
-##Alternatives to virtual machines
+## Alternatives to virtual machines
 
 - wine.
 
@@ -86,7 +86,7 @@ Important niche of application for VMs include:
 
 - Docker: <https://github.com/dotcloud/docker>
 
-##Hardware support
+## Hardware support
 
 The x86 family has hardware features that improve performance and may be even required for certain virtualizations.
 
@@ -94,21 +94,21 @@ Those features can be turned on or off by the BIOS, and in many modern systems t
 
 If you plan on using virtualization, the first thing you should do is to enable such features by going into the BIOS config (first screen shown at computer startup), and looking for a virtualization section.
 
-##Formats
+## Formats
 
-###ovf
+### ovf
 
 [OVF](http://en.wikipedia.org/wiki/Open_Virtualization_Format) is one open virtual machine format that is supported across the most popular VM runners, including VirtualBox and VMware.
 
-###box
+### box
 
 Native VirtualBox format.
 
-###vmdk
+### vmdk
 
 Native VMware format.
 
-##VirtualBox
+## VirtualBox
 
 Open source cross platform option by Oracle.
 
@@ -122,7 +122,7 @@ Start running the system, and since the virtual HD is empty, it will boot from t
 
 Certain key combinations are always captured by the host, such as Ctrl-Alt-Del or Ctrl-Alt-BACKSPACE. You can send any Ctrl-Alt-KEY combination by using host_key + KEY, where host_key is right control version 4.2.
 
-###guest utils
+### guest utils
 
 Certain features require that you install VirtualBox utilities on the guest, for example directory sharing.
 
@@ -134,8 +134,8 @@ Otherwise, see [this](http://www.virtualbox.org/manual/ch04.html#idp11306688) fo
 
 If you don't have X, you may be able to switch to terminal mode via some special key combination (Ctrl-Alt-F2 on Ubuntu for example) install the utils via the terminal, and then reboot.
 
-###box location
+### box location
 
 Box state machines are stored under: `~/VirtualBox VMs/`.
 
-##VMware
+## VMware

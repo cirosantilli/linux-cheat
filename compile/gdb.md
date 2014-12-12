@@ -1,4 +1,4 @@
-#GDB
+# GDB
 
 GDB uses symbol information contained in executables to debug them
 
@@ -16,7 +16,7 @@ It is possible to attach GDB to a running instance of a program after it was run
 
 When you quit GDB, the process will continue to run
 
-##Commands
+## Commands
 
 Commands you can run from inside GDB
 

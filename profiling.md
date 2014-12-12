@@ -1,4 +1,4 @@
-#Profiling
+# Profiling
 
 Profiling is testing how fast an executable or script runs,
 and trying to speed it up if needed.
@@ -10,7 +10,7 @@ One of the major techniques to speeding up is to find what is the slowest part o
 program (the bottle neck) and working on it, since most programs spend much of their
 running time on a single part.
 
-##time
+## time
 
 There are two utilities called time:
 
@@ -39,7 +39,7 @@ Output fields:
 
 Also does other profiles like does memory IO besides CPU usage.
 
-##gprof
+## gprof
 
 `binutils` package
 

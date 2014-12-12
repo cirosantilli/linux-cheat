@@ -1,4 +1,4 @@
-#Vagrant
+# Vagrant
 
 Vagrant is a SSH frontend for virtual machines which makes it really simple to VMs.
 
@@ -11,7 +11,7 @@ First create a working directory:
     mkdir vagrant
     cd vagrant
 
-##boxes
+## boxes
 
 View available local base boxes:
 
@@ -46,7 +46,7 @@ or on the command line;
 
 A fine list of third-party free boxes can be found at: <http://www.vagrantbox.es/>
 
-##Vagrantfile
+## Vagrantfile
 
 Create an init file for a vagrant project with an existing box:
 
@@ -71,7 +71,7 @@ so that if anyone else uses this Vagrantfile, `vagrant up` will automatically do
 
 For this reason you should always specify the URL in your Vagrantfile.
 
-##run
+## run
 
 Boot the box configured in current dir:
 
@@ -120,7 +120,7 @@ Destroy machine, including persistent state like hard disk:
 
 Does not remove the vagrant configuration files in current directory.
 
-##provision
+## provision
 
 Provisioning is automatically running commands on the box when it is first upped, typically to install programs.
 
@@ -146,7 +146,7 @@ Up without provisioning:
 
     vagrant up --no-provision
 
-##port forwarding
+## port forwarding
 
 Add the following to your configuration file:
 
@@ -157,7 +157,7 @@ Now requests on the host `192.168.3.4:3000` will be redirected to the guest at `
 
 Vagrant forwards by default the host's `localhost:2222` to the guest's `localhost:22`, and `8080` to `80`. This way, from any directory in the host is is possible to connect to the guest via SSH by doing `ssh -p 2222 vagrant@localhost` and then entering the password for user `vagrant` which is `vagrant by default`.
 
-##plugins
+## plugins
 
 Plugins are installed on the host and give extra capabilities to Vagrant.
 
@@ -165,11 +165,11 @@ List installed plugins:
 
     vagrant plugin list
 
-##shared folders
+## shared folders
 
 See synced folders.
 
-##synced folders
+## synced folders
 
 Synced folders are simply mounted from host to guest:
 
@@ -179,17 +179,17 @@ The directory must exist on the host, but is automatically created if it does no
 
 If you share the vagrant home or its parents, you cannot ssh into the machine anymore because the `.ssh` will disappear.
 
-##box location
+## box location
 
 The base boxes (added via `add`) are stored under `~/.vagrant.d/boxes`. These are not the actual state machines, whose directory depends on which provider you use.
 
 To actually get the box state, it seems that the only way is to do provider specific things.
 
-##package
+## package
 
 Create new box
 
-###From another box
+### From another box
 
 The typical workflow is to:
 
@@ -223,7 +223,7 @@ And we are done!
 
 A good place to store open source boxes for download as of 2014-03 is Source Forge, which allows fast unlimited downloads, soft 5Gb disk space, and does not mind if your source is hosted on GitHub: <http://sourceforge.net/blog/github-projects-downloads-are-welcome>. For large files such as VMs, you will need to use a `scp` upload: <https://sourceforge.net/apps/trac/sourceforge/wiki/SCP>, and it takes around 20 hours to complete.
 
-###From scratch
+### From scratch
 
 Will be much harder, as it requires you to install necessary dependencies to Vagrant.
 

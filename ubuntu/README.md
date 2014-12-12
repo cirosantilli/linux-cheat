@@ -1,11 +1,11 @@
-#Ubuntu
+# Ubuntu
 
 Most useful files:
 
 - [install.sh](install.sh): installation procedures for tons of programs.
 - [apt-get.md](apt-get.md): information on Ubuntu's packages and related tools.
 
-##Sources
+## Sources
 
 -   <http://www.ubuntu.com/>: central official resource that links to all
 
@@ -18,7 +18,7 @@ Most useful files:
     Includes bugs on the officially supported packages, e.g.: restricted:
     <https://bugs.launchpad.net/ubuntu/+source/nvidia-graphics-drivers-304>
 
-##Introduction
+## Introduction
 
 Ubuntu is likely to be one of the most used distros as of 2014-03:
 
@@ -26,7 +26,7 @@ Ubuntu is likely to be one of the most used distros as of 2014-03:
 
 Ubuntu is maintained by the company Canonical which gets money by offering maintenance,
 
-##Releases
+## Releases
 
 Ubuntu is releases happen at approximately 6 month intervals.
 
@@ -38,7 +38,7 @@ One in every four releases is marked Long Term Support LTS and receives official
 
 For your sanity: only use LTS releases. If a problem is corrected in a future version, and there is a workaround, use the workaround. 6 months is too short a time interval for stability, and all server software should run on LTS, so you can reproduce production more easily.
 
-##Debian
+## Debian
 
 Ubuntu is a Debian based distribution.
 
@@ -55,30 +55,30 @@ Important implications:
 
 	- `/media` for mounting
 
-##Open app without global menu
+## Open app without global menu
 
 	env UBUNTU_MENUPROXY=0 golly
 
-##Configurations
+## Configurations
 
-##Utilities
+## Utilities
 
-###Get current Ubuntu version
+### Get current Ubuntu version
 
 	lsb_release -a | grep Release
 
-###Upgrade Ubuntu to newer version
+### Upgrade Ubuntu to newer version
 
 	sudo aptitude install -y update-manager-core
 	sudo do-release-upgrade
 	sudo aptitude update && sudo aptitude upgrade
 
 
-###ubuntu-tweak
+### ubuntu-tweak
 
 Configure Ubuntu GUI.
 
-###ubuntu-drivers
+### ubuntu-drivers
 
 Present in 14.04. `jockey` was used in 12.04.
 
@@ -103,7 +103,7 @@ Sample output from an NVIDIA GPU:
 You can then install or uninstall the drivers with `apt-get`:
 `nvidia-304`, `nvidia-331`, etc. are the actual package names.
 
-###Locale
+### Locale
 
 On 14.04, the following file defines many locale environment variables:
 
@@ -111,8 +111,8 @@ On 14.04, the following file defines many locale environment variables:
 
 It sets them based on your location, not on your language.
 
-##HWE
+## HWE
 
-##Hardware Enablement
+## Hardware Enablement
 
 <http://askubuntu.com/questions/248914/what-is-hardware-enablement-hwe>

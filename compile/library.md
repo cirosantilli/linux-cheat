@@ -1,4 +1,4 @@
-#Library
+# Library
 
 To use a library you may need:
 
@@ -12,7 +12,7 @@ To use a library you may need:
 
 Either those must be in you compiler find path (different for headers and compiled files) or you must explicitly add them to the path.
 
-##Dynamic vs static
+## Dynamic vs static
 
 Dynamic libraries are compiled libraries kept outside of the executable and are used at run time.
 
@@ -46,17 +46,17 @@ Disadvantages:
 
 Since the disadvantages are so minor, it is almost always better to use dynamic linking.
 
-###Dynamic linking vs Dynamic loading
+### Dynamic linking vs Dynamic loading
 
 <http://www.ibm.com/developerworks/library/l-dynamic-libraries/>
 
-##Search path
+## Search path
 
 Find where GCC search path for both `.a` and `.so`:
 
     gcc -print-search-dirs | grep '^libraries' | tr ':' $'\n'
 
-##Static
+## Static
 
 Gets included inside the generated executable, making it larger.
 
@@ -67,23 +67,23 @@ You don't have to worry about dependencies.
     ar rcs a.a a.o b.o
     gcc a.a c.c
 
-##Dynamic
+## Dynamic
 
-###loading vs linking
+### loading vs linking
 
 There are two methods of using dynamic libraries in Linux: linking and loading.
 
-####linking
+#### linking
 
 Link to lib for entire program.
 
 Simpler.
 
-####loading
+#### loading
 
 Explicitly load needed functions during program execution.
 
-###create so
+### create so
 
 *Must* compile like this:
 
@@ -93,7 +93,7 @@ Explicitly load needed functions during program execution.
 
 using `-fPIC` and `-shared`.
 
-###version numbering
+### version numbering
 
 Standard: up to 3 numbers.
 
@@ -149,7 +149,7 @@ Rationale: if you underspecify the library you get by default the most recent.
 
 Convention: change in first number means possible interface break.
 
-###Compile executable that depends on an so
+### Compile executable that depends on an so
 
 You must tell `gcc` which libs to use with the `-l` flag.
 
@@ -161,7 +161,7 @@ How this information is represented is a part of the `.elf` format definition.
 
 *Remember*: when the program will run, it must be able to find that `.so` again on the load path!
 
-####What can be passed to -l
+#### What can be passed to -l
 
 The name given to `-l` must be either:
 
@@ -173,7 +173,7 @@ The name given to `-l` must be either:
 
 You need to compile like this so GCC can tell if all your functions are defined.
 
-####Relative vs absolute
+#### Relative vs absolute
 
 The path to the so gets stored inside the elf so that it can be found when the program will load.
 
@@ -196,20 +196,20 @@ Store the full path in the elf file:
 
 It must be in the load path.
 
-####Append path to so header search path
+#### Append path to so header search path
 
-#####-L option
+##### -L option
 
     gcc a.c -o a.out -L/full/path/to/ -lm
     gcc a.c -o a.out -L./rel/path/to/ -lm
 
-#####LD_LIBRARY_PATH
+##### LD_LIBRARY_PATH
 
     env LIBRARY_PATH=$LIBRARY_PATH:/path/to/ gcc a.c -o a.out -llib
 
 `LIBRARY_PATH` is different from `LD_LIBRARY_PATH`! `LIBRARY_PATH` is only used at compile time while `LD_LIBRARY_PATH` is only used at compile time.
 
-###Use so at runtime
+### Use so at runtime
 
 After an executable has been compiled to use an so, the so must be found at runtime.
 
@@ -219,7 +219,7 @@ The interpreter will use the library path stored inside the elf file that is bei
 
 There is no need to use the load path if an absolute path was stored in the executable, but this is not recommended since it would not be portable.
 
-####Best production method
+#### Best production method
 
     sudo mv liba.so /some/where/in/link/path
     sudo ldconfig
@@ -227,7 +227,7 @@ There is no need to use the load path if an absolute path was stored in the exec
 
 This supposes that when you compiled you used: `-lliba.so`.
 
-####Environment variable
+#### Environment variable
 
 Good:
 
@@ -243,7 +243,7 @@ This only works if you are in the right dir since relative path is take to curre
 
 `LD_LIBRARY_PATH` has nothing to do with `LIBRARY_PATH` path variable which is used during compilation by gcc! `LD_LIBRARY_PATH` is used during execution by the linker!
 
-####Load path
+#### Load path
 
 View library load path:
 
@@ -269,7 +269,7 @@ The following paths are hard codded in `ldconfig`:
 - `/lib/`
 - `/usr/lib/`
 
-####View load path
+#### View load path
 
 Print actual search path after resolving directives like `include`:
 
@@ -283,7 +283,7 @@ Print cache stored in `/etc/ld.so.cache` and `.d` includes. does not show in whi
 
     ldconfig -p
 
-#####hwcap
+##### hwcap
 
 When using commands like `ldconfig -v`, you may see outputs like:
 
@@ -301,7 +301,7 @@ What the flags mean is defined by x86 and somewhat standardized across vendors:
 
 TODO where `ldconfig` finds this info:
 
-####Cache
+#### Cache
 
 It would be very slow to search the path every time.
 
@@ -317,7 +317,7 @@ Even if the linker finds the lib in the path, it does not automatically add it t
 
 Running `ldconfig` is a part of every package install/uninstall if it contains a library.
 
-####ldd
+#### ldd
 
 List required shared libraries of an executable and if they can be found.
 
@@ -333,7 +333,7 @@ Possible outputs:
 - `liba.1.so => /lib/liba.1.so`
 - `liba.1.so => not found`
 
-######Environment
+###### Environment
 
 You can also add to path with environment variables.
 
@@ -341,7 +341,7 @@ Don't rely on this method for production.
 
     export LD_LIBRARY_PATH="/path/to/link"
 
-####Interpreter
+#### Interpreter
 
 Program that loads shared libs for other programs.
 
@@ -355,7 +355,7 @@ This gives an output such as:
 
     /lib/ld-linux.so.2
 
-###Override symbols in libraries
+### Override symbols in libraries
 
 Symbols in `a.o` will override symbols in linked libs.
 

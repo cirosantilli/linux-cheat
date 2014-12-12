@@ -1,4 +1,4 @@
-#Special files
+# Special files
 
 The kernel communicates parameters to user space using special files, located mainly under `/proc/`, `/sys/` and `/dev/`.
 
@@ -10,7 +10,7 @@ Certain utilities are implemented on Linux not via system calls, but by interpre
 
 TODO why is it advantages to use special files instead of system calls? Is it useful mostly to handle information for which the output size is unknown, by reusing file IO operations?
 
-##proc filesystem
+## proc filesystem
 
 Offer access system information of user processes.
 
@@ -78,7 +78,7 @@ Some interesting files include:
     2. type. Same as used by the `nm` utility.
     3. id
 
-###/proc/uptime
+### /proc/uptime
 
 How long the system has been up for.
 
@@ -88,9 +88,9 @@ Sample output:
 
     6729.78 23034.43
 
-###/proc/loadavg
+### /proc/loadavg
 
-###Load average
+### Load average
 
     cat /proc/loadavg
 
@@ -123,7 +123,7 @@ Meaning:
 
 Used by tools such as `top`, `uptime`.
 
-##dev filesystem
+## dev filesystem
 
 Represent devices, either physical or virtual.
 
@@ -138,7 +138,7 @@ e.g.: `/dev/null` is documented at:
 
     man null
 
-###/dev/sda
+### /dev/sda
 
 Device files of this type represent block devices such as hard disks or flash memory.
 
@@ -163,7 +163,7 @@ Example: write pseudorandom sequences into `/dev/sda/` to hide data:
 
     #sudo dd bs=4M if=/dev/urandom of=/dev/sda
 
-###/dev/null
+### /dev/null
 
     man null
 
@@ -175,7 +175,7 @@ Very useful to discard undesired stdout / stderr:
 
 Generates no output.
 
-###/dev/zero
+### /dev/zero
 
     man zero
 
@@ -198,7 +198,7 @@ Output:
 
 Meaning if you don't speak `od` language (now is a good time to learn): 512 bytes with value 0.
 
-###/dev/full
+### /dev/full
 
     man full
 
@@ -210,7 +210,7 @@ Example:
 
 If you read from it, returns as many null chars as were asked for by read, like `/dev/zero`.
 
-###Pseudorandom number generators
+### Pseudorandom number generators
 
 The kernel implements a random number generator which draws entropy from
 non-predictable events, typically device events such as mice movements or disk reads for example.
@@ -218,14 +218,14 @@ non-predictable events, typically device events such as mice movements or disk r
 Just like for `/dev/zero`, it is useless to cat those files, since they don't have and end,
 and `cat` tries to read to the end of the file before printing.
 
-####/dev/random
+#### /dev/random
 
     man random
 
 `/dev/random` returns random numbers one by one whenever enough entropy is generated.
 It is slower than `urandom`, but has greater entropy.
 
-####/dev/urandom
+#### /dev/urandom
 
 Documented at:
 
@@ -249,7 +249,7 @@ Sample output:
 
 Since the 16 bytes are random, the lines are extremely likely to be different.
 
-###/dev/tty
+### /dev/tty
 
 The current terminal. Also works on xterm windows.
 
@@ -260,13 +260,13 @@ Try:
 
 `a` appears on the terminal screen even if stdout was redirected to `/dev/null`, because `a` was sent directly to the tty.
 
-###/dev/console
+### /dev/console
 
 Similar to `tty`, but may only work on actual ttys such as Ubuntu Ctrl + Alt + F2, and not on xterm windows.
 
 Discussion: <http://unix.stackexchange.com/questions/60641/linux-difference-between-dev-console-dev-tty-and-dev-tty0>
 
-###/dev/input/mice
+### /dev/input/mice
 
 You can have some fun with mouses. Search for the mice or mouse device files and cat them:
 
@@ -280,6 +280,6 @@ Now note that when you move the mouse, cat spits something out to the screen!
 
 `mice` is the combination of all mice, and each other `mouseX` is a single mouse device.
 
-##sys filesystem
+## sys filesystem
 
 TODO

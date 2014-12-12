@@ -1,4 +1,4 @@
-#sort
+# sort
 
 Sort line wise.
 
@@ -46,7 +46,7 @@ Useful options:
 
 -   `-c`: check if is sorted
 
-##GNU extensions
+## GNU extensions
 
 -   `-V`: sort dot separated versions numbers:
 
