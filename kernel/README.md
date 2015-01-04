@@ -478,12 +478,6 @@ Or:
 
     cat /proc/version
 
-## sysctl
-
-View and modify kernel parameters at runtime:
-
-    sudo sysctl –a
-
 ## Coding conventions
 
 -   Tabs instead of spaces. Configure editors to view tabs as 8 spaces. In `vim` you could source:

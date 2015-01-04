@@ -16,13 +16,33 @@ Code chart: browser by category or input as specific hex: <http://www.unicode.or
 
 ## Plane
 
-<http://en.wikipedia.org/wiki/Plane_%28Unicode%29>
+<http://en.wikipedia.org/wiki/Plane_(Unicode)>
+
+There are 17 planes, 0 to 16, so not a multiple of 2! This is because of the limit of the UTF-16 encoding.
+
+0 is filled and has the most important characters.
+
+1 and 2 are used for less common scripts.
+
+3 through 13 are not used yet.
+
+14 and 15 are the private use area.
+
+## Point notation
+
+Points are noted as `U+` followed by an hexadecimal number, with leading zeros stripped.
+
+Therefore:
+
+- plane 0 is noted as `U+XXXX`,
+- planes 1 - 9 are noted as: `U+XXXXX`
+- planes nd 10 to 16 as `U+XXXXXX`
 
 ## Interesting characters
 
 -   Emoticon set: <http://www.unicode.org/charts/PDF/U1F600.pdf>
 
--   Trigram for heaven U+2630 ☰
+-   Trigram for heaven `U+2630` ☰
 
     Similar to the popular "Menu" symbol found in many current applications. Interesting reuse for an ancient Chinese symbol!
 
@@ -36,11 +56,23 @@ Code chart: browser by category or input as specific hex: <http://www.unicode.or
 
     Unicode also has other exotic spaces: <http://en.wikipedia.org/wiki/Whitespace_character>
 
+## Replacement character
+
+`U+FFFD` �
+
+Commonly used when the software does have the glyph in the right font, or for invalid code points.
+
 ### Non-characters
 
 <http://en.wikipedia.org/wiki/Universal_Character_Set_characters#Non-characters>
 
 60 characters that are guaranteed never to be mapped to anything.
+
+### Private use area
+
+<http://en.wikipedia.org/wiki/Private_Use_Areas>
+
+Planes 15 and 16.
 
 ## Tools
 

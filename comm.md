@@ -6,10 +6,7 @@ POSIX 7. <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/comm.html>
 
 Coreutils package.
 
-    cd "`mktemp -d`"
-    echo -e "a\nc" > a
-    echo -e "b\nc" > b
-    comm a b
+    comm <(printf 'a\nc\n') <(printf 'b\nc\n')
 
 Output:
 
@@ -19,6 +16,22 @@ Output:
 
 This produces 3 columns by indentation:
 
-- lines only in `a`
-- lines only in `b`
-- lines in both
+- lines only in the first file
+- lines only in the second file
+- lines in both files
+
+## 1
+
+## 2
+
+## 3
+
+Suppress the given column.
+
+List intersection:
+
+    comm -12 <(printf 'a\nc\n') <(printf 'b\nc\n')
+
+Output:
+
+    c

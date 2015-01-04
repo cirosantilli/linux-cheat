@@ -12,8 +12,8 @@ Make allows you to:
 
     This may save lots of time when building large projects.
 
-Make is specified by POSIX and implemented by GNU with extensions
-It is the de facto standard make tool for POSIX systems.
+Make is specified by POSIX <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/make.html>
+and implemented by GNU with extensions. It is the de facto standard make tool for POSIX systems.
 
 ## Downsides of Make
 

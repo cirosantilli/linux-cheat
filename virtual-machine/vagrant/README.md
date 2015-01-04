@@ -193,9 +193,11 @@ Create new box
 
 The typical workflow is to:
 
-- start with the officially supported `precise32` box
-- create a script / Chef Recipe / Puppet Recipe that installs everything that needs to be installed
-- once satisfied, package the box because
+-   start with the officially supported box like an Ubuntu one
+
+-   create a script / Chef Recipe / Puppet Recipe that installs everything that needs to be installed
+
+-   once satisfied, package the box because
 
     - other people can download it faster because it is a single file rather than multiple GET requests to different servers
     - installations may fail, for example due to Internet failures.

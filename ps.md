@@ -84,9 +84,9 @@ Get PID of parent of process with given PID `p`
 Sort output by:
 
 - `CMD`
-- `TIME` reversed (because of the `-`)
+- `TIME`: reversed (because of the `-`)
 - `PID`
-- `TTY` reversed (`-`)
+- `TTY`
 
 <!-- -->
 

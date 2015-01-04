@@ -369,6 +369,14 @@ Great when you are going to compile it from source to get the latest version.
 
     sudo apt-get build-dep $PKG
 
+### download
+
+Download a `.deb` without installing it:
+
+    dpkg-download $PKG
+
+<http://askubuntu.com/questions/47865/how-do-i-use-apt-get-to-only-download-packages>
+
 ## Combos
 
 To correct dependency problems try:

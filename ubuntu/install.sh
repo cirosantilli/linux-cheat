@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Do all automatable steps to install useful stuff in Ubuntu 12.04.
+# Do all automatable steps to install useful stuff in Ubuntu.
 
 # Install the SSH survival kit:
 
@@ -74,11 +74,32 @@
 
       sudo aptitude install -y vim-gtk
 
-    # File manager
+    ## File manager
 
-      sudo aptitude install -y krusader
-      sudo aptitude install -y konsole
-      sudo aptitude install -y kwalletmanager
+    ## File manager
+
+      ## Krusader
+
+        sudo aptitude install -y krusader
+        # Needed to manage bookmarks,
+        # otherwise button does nothing:
+        # https://bugs.launchpad.net/ubuntu/+source/krusader/+bug/999695
+        sudo aptitude install -y kde-baseapps-bin
+        #sudo aptitude install -y konqueror
+        # Terminal emulator
+        sudo aptitude install -y konsole
+        # Help
+        #sudo aptitude install -y khelpcenter4
+        # Password manager
+        sudo aptitude install -y kwalletmanager
+
+        sudo aptitude install -y fdupes
+
+      # Terminal based:
+
+        sudo aptitude install -y lfm
+        sudo aptitude install -y mc
+        sudo aptitude install -y vifm
 
     ## Browser
 
@@ -765,7 +786,7 @@
             cd download_dir
             sudo dpkg -i vagrant*.deb
 
-          # Aptitude install failed:
+          # Aptitude install failed on 12.04 and is generally too old.
 
             #sudo aptitude install -y vagrant
 
@@ -1106,20 +1127,6 @@
         sudo aptitude install -y lftp
 
     sudo aptitude install -y samba
-
-  ## file manager
-
-    # Krusader and highly recommended tools:
-
-      sudo aptitude install -y krusader
-      sudo aptitude install -y krusader
-      sudo aptitude install -y kde-baseapps-bin  # needs to manage bookmarks. (otherwise, button does nothing): https://bugs.launchpad.net/ubuntu/+source/krusader/+bug/999695
-      #sudo aptitude install -y konqueror
-      sudo aptitude install -y konsole      # needs to terminal emulator. (otherwise, button does nothing)
-      #sudo aptitude install -y khelpcenter4    # help
-      sudo aptitude install -y kwalletmanager   # password manager
-
-      sudo aptitude install -y fdupes
 
   ## GPU
 

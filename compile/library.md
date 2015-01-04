@@ -39,9 +39,7 @@ Advantages:
 Disadvantages:
 
 - more complicated to use
-
 - usage is OS dependant
-
 - slight load overhead
 
 Since the disadvantages are so minor, it is almost always better to use dynamic linking.
@@ -55,6 +53,17 @@ Since the disadvantages are so minor, it is almost always better to use dynamic 
 Find where GCC search path for both `.a` and `.so`:
 
     gcc -print-search-dirs | grep '^libraries' | tr ':' $'\n'
+
+### -L option
+
+Append to search path of executable:
+
+    gcc a.c -o a.out -L/full/path/to/ -lm
+    gcc a.c -o a.out -L./rel/path/to/ -lm
+
+### LIBRARY_PATH
+
+Colon separated list of paths that does the same as `-L`.
 
 ## Static
 
@@ -93,11 +102,11 @@ Explicitly load needed functions during program execution.
 
 using `-fPIC` and `-shared`.
 
-### version numbering
+### Version numbering
 
 Standard: up to 3 numbers.
 
-Yes, they come after the `.so` otherwise there would be ambiguity: `liba.1.so` is version 1 of `liba` or simply `lib.a.1`?
+Yes, they come after the `.so` otherwise there would be ambiguity: `liba.1.so` is version 1 of `liba` or simply a library called `lib.a.1`?
 
 To link to a given version use full basename linking with version number.
 
@@ -109,45 +118,34 @@ Linking takes care of version defaults:
 
 -   `liba.so.1.1`
 
-    Itself
-
-    or a link to `1.1.1`
-
-    or a link to `1.1.2`
-
-    ...
+    - Itself
+    - or a link to `1.1.1`
+    - or a link to `1.1.2`
+    - or a link to ...
 
 -   `liba.so.1`
 
-    Itself,
-
-    or a link to `1.1`
-
-    or a link to `1.2`
-
-    or a link to `1.1.2`
-
-    or a link to `1.2.1`
-
-    ...
+    - Itself,
+    - or a link to `1.1`
+    - or a link to `1.2`
+    - or a link to `1.1.2`
+    - or a link to `1.2.1`
+    - or a link to ...
 
 -   `liba.so`
 
-    Itself,
-
-    or a link to `1`
-
-    or a link to `2`
-
-    or a link to `1.1`
-
-    or a link to `1.2`
-
-    ...
+    - Itself,
+    - or a link to `1`
+    - or a link to `2`
+    - or a link to `1.1`
+    - or a link to `1.2`
+    - or a link to ...
 
 Rationale: if you underspecify the library you get by default the most recent.
 
 Convention: change in first number means possible interface break.
+
+TODO confirm: GCC does not resolve the conventional versioning names automatically: for library `a` to be found, there must be a file named exactly `liba.so` in the path. `liba.so.1` and others will not work.
 
 ### Compile executable that depends on an so
 
@@ -196,18 +194,13 @@ Store the full path in the elf file:
 
 It must be in the load path.
 
-#### Append path to so header search path
-
-##### -L option
-
-    gcc a.c -o a.out -L/full/path/to/ -lm
-    gcc a.c -o a.out -L./rel/path/to/ -lm
+#### Append path to so search path
 
 ##### LD_LIBRARY_PATH
 
     env LIBRARY_PATH=$LIBRARY_PATH:/path/to/ gcc a.c -o a.out -llib
 
-`LIBRARY_PATH` is different from `LD_LIBRARY_PATH`! `LIBRARY_PATH` is only used at compile time while `LD_LIBRARY_PATH` is only used at compile time.
+`LIBRARY_PATH` is different from `LD_LIBRARY_PATH`! `LIBRARY_PATH` is only used at compile time while `LD_LIBRARY_PATH` is only used at load time.
 
 ### Use so at runtime
 

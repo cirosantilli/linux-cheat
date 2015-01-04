@@ -760,28 +760,6 @@
     # You give languages as locales
     # (i think as 2 letter iso 639-1 codes <http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes> since only `zh` worked for chinese)
 
-  ## iconv
-
-    # Convert character encodings.
-
-    # Major encodings:
-    # - ASCII
-    # - UTF-8
-    # - UTF-16
-    # - Chinese
-      # - GB18030: Guobiao Mainland China and Singapore. prefixed by GB, latest version GB18030
-      # - BIG-5: Taiwan, Hong Kong and Macau, is a one or two byte encoding.
-
-    # List available encodings:
-
-      iconv -l
-
-    # Convert contents of F from BIG-FIVE to UTF-8:
-
-      iconv -f BIG-FIVE -t UTF-8 "$F"
-
-    # No changes made to file: only outputs to stdout.
-
   ## convmv
 
     # mv converting encodings

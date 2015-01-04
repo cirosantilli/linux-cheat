@@ -90,7 +90,7 @@ In most Linux, the POSIX C interface is implemented as part of `glibc`, which al
 
 <http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap10.html#tag_10>
 
-Specifies very few directories:
+Specifies very few files and directories:
 
 - `/`
 - `/tmp`

@@ -1,16 +1,11 @@
 #!/usr/bin/env bash
 
-# POSIX 7.
+# POSIX 7. <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/awk.html>
 
-# Turing Machine, but use only for **ultra simple** POSIX text table field manipulation.
+# Turing Machine, but use only for *ultra simple* POSIX text table field manipulation:
+# it only has better golfing on that very limited problem set.
 
-# awk only gets slightly better golfing on a very limited problem set
-
-# The only real advantage of awk over perl is the fact that it is in POSIX,
-# while Perl is only in LSB. awk only has slighty better golfing.
-# Therefore: don't rely on awk GNU extensions, or you lose the only major advantage of awk!
-
-# For even more sanity, use Python.
+# For more sanity, use Perl or Python.
 
 ## variables
 
@@ -76,14 +71,18 @@
 
 ## applications
 
-  #Print second field of all entries if first field equals:
+  # Print second field of all entries if first field equals a given integer value:
 
-    [ "$(echo $'1 a\n2 b\n1 c' | awk '$1 == 1 { print $2 }')" = "$(printf 'a\nc')" ] || exit 1
+    [ "$(printf '1 a\n2 b\n01 c\n' | awk '$1 == 1 { print $2 }')" = "$(printf 'a\nc')" ] || exit 1
 
-  #Same as above, but print only first match:
+  # Same as above, but match strings (note how `01` equals `1` for integer comparison;
+
+    [ "$(printf '1 a\n2 b\n01 c\n' | awk '$1 == "1" { print $2 }')" = "$(printf 'a')" ] || exit 1
+
+  # Same as above, but print only first match:
 
     [ "$(echo $'1 a\n2 b\n1 c' | awk '$1 == 1 { print $2; exit }')" = a ] || exit 1
 
-  #Same as above, but match EREs:
+  # Same as above, but match EREs:
 
     [ "$(echo $'1 a\n2 b\n1 c' | awk '$1 ~/^1$/ { print $2; exit }')" = a ] || exit 1

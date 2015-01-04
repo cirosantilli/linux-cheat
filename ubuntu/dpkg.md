@@ -28,6 +28,10 @@ Remove previously installed package:
 
 You don't need the `.deb` to uninstall it.
 
+Unpack a `.deb` file:
+
+    dpkg-deb -R $PKG.deb .
+
 Automatically install updates without asking for confirmation:
 <http://askubuntu.com/questions/9/how-do-i-enable-automatic-updates>
 

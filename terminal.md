@@ -168,9 +168,13 @@ To view the ASCII value of a sequence:
 
 When you press a key, X tells the terminal about the key press, and the terminal decides what to do with it.
 
-The typical thing that happens is that some program is reading from the terminal (bash shell, sh shell, python shell, etc)
+The typical thing that happens is that some program is reading from the terminal (bash shell, sh shell, python shell, etc.)
 
 What the terminal does on key presses is not officially standardized but the VT100 behavior became the de facto standard <http://en.wikipedia.org/wiki/VT100> so this is what computer terminal programs emulate. VT100 uses ASCII values only (0-127) with Ctrl + keys to reach the non alphanumerical values.
+
+### Null character
+
+TODO how to insert a literal null character? The usual representation is `^@`, but hitting `<c-v><c-s-2>` and variants did not work for me.
 
 ## ANSI escape codes
 
@@ -342,7 +346,7 @@ The most common action is to print every byte to the screen as the corresponding
 
     Some of them have visual representations, such as `\t` which prints a tab of `\n`, but others do not.
 
-    `^A` is a very special case. It is called beep char, and if configured to do so, terminals may emit a beep when they see this at stdout. try (you must do <c-v><c-a>, not copy paste...):
+    `^A` is a very special case. It is called beep char, and if configured to do so, terminals may emit a beep when they see this at stdout. try (you must do `<c-v><c-a>`, not copy paste...):
 
         echo ^A
 
