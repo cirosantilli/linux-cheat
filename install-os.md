@@ -2,9 +2,9 @@
 
 How to install a new OS on your computer.
 
-## Install a new distro
+## Install a new distribution
 
-Most distros are distributed in ISOs suitable to burning on a CD or DVD, from which you can then boot the computer and install them.
+Most distributions are distributed in ISOs suitable to burning on a CD or DVD, from which you can then boot the computer and install them.
 
 It is also possible to put the CD or DVD image in a USB.
 
@@ -92,6 +92,23 @@ GRUB cannot recognize GRUB 2 booting data since it came before GRUB 2 existed, s
 Therefore, if you have the choice, the best option in this case would be to first install the GRUB distro, and only then the GRUB 2 distro, so that in the end you will have GRUB 2, which will see both partitions as bootable.
 
 This can be corrected in 2 ways: from a live boot, or from an existing partition with GRUB 2.
+
+### Graphics card problems
+
+If you graphics card is proprietary, Ubuntu boot may get locked on a black screen or a black screen with white patterns. In that case, follow the steps at: <http://askubuntu.com/a/162076/52975>, in particular:
+
+- go the GRUB menu by holding shift at startup
+- English
+- `F6`
+- nomodeset
+
+Install, then add the proprietary drivers.
+
+### Multiple hard disks
+
+Watch out if you don't have multiple hard disks on your machine, in which case you will see `sda` and `sdb` on the installation process.
+
+TODO: how to install on the second hard disk?
 
 #### Live boot
 
