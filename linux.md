@@ -155,6 +155,10 @@ Original installation file.
 
 Many theories, a plausible one: differentiate `a.conf file` from `a.conf.d` dir normally, all files in the `a.conf.d` dir will be sourced as if they are inside `a.conf`.
 
+#### /etc/environment
+
+TODO
+
 ## Distributions
 
 A Linux distribution is a LSB compliant system.

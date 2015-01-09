@@ -1530,6 +1530,8 @@ This talks about how to allow users to choose their default application when ope
 
 There are many systems, and they have some degree of compatibility.
 
+`update-alternatives` and `/etc/alternatives` is an important Linux method of executable selection.
+
 ### xdg-open
 
 XDG utils package, part of the LSB.
@@ -1568,37 +1570,6 @@ Gnome specific. Use `xdg-open` instead..
 ### kde-open
 
 KDE specific. Use `xdg-open` instead..
-
-### alternatives system
-
-One configuration method is to make symbolic links such as `/usr/bin/editor` to either `vi` or `ed` for example.
-
-The standard way is to first link `/usr/bin/editor` to `/etc/alternatives/editor`, and then `/etc/alternatives/editor` to the desired executable (say `/usr/bin/vi`).
-
-In this way, all preferences are stored under `etc` as specified by the LSB.
-
-### update-alternatives
-
-The `update-alternatives` utility can be used to manage that system.
-
-For example, to configure the default browser use:
-
-    sudo update-alternatives --config x-www-browser
-
-This will show the possibilities (TODO how does he know?) for you to choose from them.
-
-The most important alternatives include:
-
-- `editor`: text editor
-- `x-www-browser`: web browser
-
-TODO: understand the following command:
-
-    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 50
-
-- `50`: priority of the alternative. Metadata associated by `update-alternatives`. Alternative with greatest priority wins.
-
-I used this to link `gcc` to `gcc-4.8` instead of `4.6`.
 
 ## logkeys
 
