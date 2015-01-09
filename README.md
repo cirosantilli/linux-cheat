@@ -123,8 +123,9 @@ Misc:
 
 Related subjects in other repositories:
 
+- [Ubuntu Cheat](https://github.com/cirosantilli/ubuntu-cheat): Ubuntu specifics.
 - [C++ Cheat](https://github.com/cirosantilli/cpp-cheat): contains some compilation / language heavy subjects like the POSIX C API or generation of dynamic libraries.
-- [Networking Cheat](https://github.com/cirosantilli/networking-tutorial): networking tools and protocols: HTTP, SSH, curl Apache.
+- [Networking Cheat](https://github.com/cirosantilli/networking-cheat): networking tools and protocols: HTTP, SSH, curl Apache.
 
 ## How to search for keywords
 

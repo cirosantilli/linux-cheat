@@ -2,11 +2,12 @@
 
 Programming IDE.
 
-## Comparison to Vim
+## Vs Vim
 
 Advantages over Vim:
 
 - everything coded in Java
+- huge Java integration
 
 Downside:
 
@@ -26,7 +27,9 @@ Install Eclipse as a regular user, not as root or via package managers like `apt
 
 Preferences, settings are under Window > Preferences
 
-Keyboard shortcuts are under: General > Keys
+## Keyboard shortcuts
+
+General > Keys
 
 ## Plugins
 
@@ -59,6 +62,16 @@ Inverse search from Okular: Settings > Configure Okular > Editor
     Editor: custom text editor,
     Command: gvim --remote +%l %f
 
+#### EGit
+
+Configure: Preferences > Team
+
+Parses git configure files as key value pairs and shows them on Eclipse. Doesn't even suggest possible key values.
+
+#### Vrapper
+
+<http://vrapper.sourceforge.net/home>
+
 ### Color themes
 
 Best place to find color themes: <http://eclipse-color-theme.github.com/update>. It already comes with many color themes.
@@ -70,11 +83,3 @@ Otherwise to install epf themes: File > Import > Preferences > Select *.epf
 Good dark theme: <http://www.eclipsecolorthemes.org/?view=theme&id=7915>
 
 For the GUI, Appearance > Classic worked best for Ubuntu Unity.
-
-### Git
-
-EGit comes on the most recommended install.
-
-Configure: Preferences > Team
-
-Parses git configure files as key value pairs and shows them on Eclipse. Doesn't even suggest possible key values.
