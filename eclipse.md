@@ -27,9 +27,69 @@ Install Eclipse as a regular user, not as root or via package managers like `apt
 
 Preferences, settings are under Window > Preferences
 
+### Line wrapping
+
+<http://stackoverflow.com/questions/2846002/does-eclipse-have-line-wrap>
+
+Hard is possible, soft is notoriously not.
+
+### Project preferences
+
+On the package explorer, click on the project and hit `Alt + Enter` or go File > Properties.
+
+From there you can do things like:
+
+- set how the project is run (`F12`), e.g. passing command line arguments to the program or to the VM.
+
 ## Keyboard shortcuts
 
 General > Keys
+
+Navigate in editor and its tabs:
+
+- 	`F3`: open definition in a new tab
+
+- 	`Alt left`: go to the last location. May jump between lines and change tabs.
+
+- 	`Ctrl + Shift + T`: find class definition (Type). Does a sort of Fuzzy search for capital letters.
+
+- 	`Ctrl + Shift + R`: find files.
+
+- 	`Ctrl + H`: search for Java things. Allows you to select classes, methods, fields, etc.
+
+- 	`Alt + Shift + Q + XXX`: focus on many different things depending on `XXX`
+
+    - `P`: Package Explorer
+
+- 	`Alt + Shift + X + XXX`: run things
+
+    - `J`: Java. Runs the `main` of the file.
+
+- 	`Ctrl + T`: show a popup with type hierarchy of current class file. You can then click on the classes to jump to them.
+
+- 	`Ctrl + Shift + Down/Up`: move to the next / previous class member
+
+Navigate across editor and other widgets:
+
+- 	`Ctrl + M`: Toggle maximize current window.
+
+- 	`F12`: focus editor
+
+Edit:
+
+- 	`Ctrl + /`: toggle single line comment
+
+- 	`Ctrl + Alt + J`: toggle single line comment
+
+Misc:
+
+- 	`F12`: run program. How it gets run is defined under the project properties.
+
+## Non-keyboard stuff
+
+- 	Jump to overridden method: a little triangle appears to the left of the method.
+
+	<http://stackoverflow.com/questions/3771934/eclipse-navigate-to-inheritor-base-declaration>
 
 ## Plugins
 
@@ -37,7 +97,7 @@ General > Keys
 
 Install and search plugins through the Eclipse Marketplace.
 
-From the IDE: Help > Eclipse Marketplace
+From the IDE: Help > Eclipse Marketplace ... note the very intuitive placement under Help.
 
 The website: <http://marketplace.eclipse.org/>
 
@@ -45,11 +105,11 @@ The website: <http://marketplace.eclipse.org/>
 
 Add Vim like editing to eclipse: <http://vrapper.sourceforge.net/update-site/stable>.
 
-C and C++: #http://download.eclipse.org/tools/cdt/releases/indigo/
+C and C++: <http://download.eclipse.org/tools/cdt/releases/indigo/>
 
 Python: <http://pydev.org/updates>
 
-HTML, Javascript, PHP: <http://download.eclipse.org/webtools/repository/indigo/>
+HTML, JavaScript, PHP: <http://download.eclipse.org/webtools/repository/indigo/>
 
 #### LaTeX
 
@@ -72,14 +132,34 @@ Parses git configure files as key value pairs and shows them on Eclipse. Doesn't
 
 <http://vrapper.sourceforge.net/home>
 
+### StartExplorer
+
+<https://github.com/basti1302/startexplorer>
+
+Open file explorer or shell on given folder from Package Explorer.
+
+Custom commands: go to Preferences > StartExplorer > Custom Commands.
+
+You can use variables as described at: <http://basti1302.github.io/startexplorer/help/05_custom_commands.html>
+
+E.g., start Guake here:
+
+	guake -n "${resource_loc}"
+
+No bindings for custom commands yet: <https://github.com/basti1302/startexplorer/issues/5>
+
 ### Color themes
+
+#### Editor color theme
 
 Best place to find color themes: <http://eclipse-color-theme.github.com/update>. It already comes with many color themes.
 
-The best way is to install the Color Theme plug-in and install new plugins with General > Appearance > Color Theme
+The best way is to install the Eclipse Color Theme plug-in and install new plugins with General > Appearance > Color Theme
 
-Otherwise to install epf themes: File > Import > Preferences > Select *.epf
+Otherwise to install `.epf` themes: File > Import > Preferences > Select *.epf
 
-Good dark theme: <http://www.eclipsecolorthemes.org/?view=theme&id=7915>
+Vibrant Ink is a good choice as usual.
 
-For the GUI, Appearance > Classic worked best for Ubuntu Unity.
+#### GUI color theme
+
+For the rest of the GUI besides the editor, Appearance > Classic worked best for Ubuntu Unity.

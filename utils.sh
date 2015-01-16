@@ -2130,39 +2130,6 @@
 
       who
 
-  ## id
-
-    # POSIX 7.
-
-    # Shows user and group ids and names.
-
-    # Show all info for a given user:
-
-      u=root
-      id "$u"
-
-    # For current user:
-
-      id
-
-    # Effective userid:
-
-      id -u
-
-    # Effective username:
-
-      id -un
-
-    # Real userid:
-
-      id -ur
-
-    # Same but for groups:
-
-      id -g
-      id -gn
-      id -gr
-
   ## whoami
 
     # Print effective user name:
@@ -2299,36 +2266,6 @@
 
       g=
       sudo groupadd $g
-
-  ## usermod
-
-    # Add/remove users to groups
-
-    # If you are the user, you have to logout/login again for changes to take effect.
-
-    # Change primary group of user u to g:
-
-      usermod -g $g $u
-
-      g=1000,1001
-
-    # Sets exactly the supplementary groups of user u.
-    # Remove from non listed ones:
-
-       usermod -G $g $u
-
-    # Append (-a) groups g to supplementary groups of user u:
-
-       usermod -aG $g $u
-
-    # Change home dir of user u to d.
-    # The old contents are not moved:
-
-       usermod -d $d $u
-
-    # Also move his current dir contents to new dir:
-
-      usermod -md $d $u
 
   ## passwd
 

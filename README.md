@@ -103,6 +103,11 @@ Media video, games, etc.) file types, viewers, editors, capture, synthesizers:
 - [Markup](markup/): Markdown, RST. Focus on command line interface and extensions.
 - [Video](video.md): videos, films, subtitles.
 
+User operations:
+
+- [id](id.md)
+- [usermod](usermod.md)
+
 Generic data formats:
 
 - [JSON](json.md)
