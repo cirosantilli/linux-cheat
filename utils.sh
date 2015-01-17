@@ -179,26 +179,6 @@
 
     #POSIX fortran compiler.
 
-## file management
-
-  ## krusader
-
-    #KDE extra gear <http://extragear.kde.org/>
-
-    #Features:
-
-    #- useractions
-
-      #Execute shell scripts wich access to things like current directory or selected files
-
-    #- give shortcuts to useractions
-
-      #You can give shortcuts to anything, including user actions!
-
-    #- ftp. Just enter an ftp url on the address bar and it all works.
-
-      #filezilla is still better at this I think.
-
 ## time date
 
   ## cal
