@@ -179,26 +179,6 @@
 
     #POSIX fortran compiler.
 
-## file management
-
-  ## krusader
-
-    #KDE extra gear <http://extragear.kde.org/>
-
-    #Features:
-
-    #- useractions
-
-      #Execute shell scripts wich access to things like current directory or selected files
-
-    #- give shortcuts to useractions
-
-      #You can give shortcuts to anything, including user actions!
-
-    #- ftp. Just enter an ftp url on the address bar and it all works.
-
-      #filezilla is still better at this I think.
-
 ## time date
 
   ## cal
@@ -245,37 +225,11 @@
       $TIMEZONE_NAME=
       cp $TIMEZONE_LOCATION/$TIMEZONE_NAME /etc/localtime
 
-## editor IDE
-
-  ## vim
-
-    # Move very fast with your keyboard without using a mouse.
-
-    # Works inside terminals therefore no need for X display manager
-
-    #gvim, runs in gtk outside command line
-    #and thus gets around many command line limitations such as reserved shortcuts
-
-      gvim
-
-  ## Libreoffice
-
-    # Project contains wysiwyg text editor, tables, image editor, database management.
-
-    # How to add new spellchecking language:<http://askubuntu.com/questions/72099/how-to-install-a-libreoffice-dictionary-spelling-check-thesaurus>
-
-    ## Calc
-
-      # Always show a row or column, specially the header if the table is long:
-
-      # - click on column that *follows* the one that should always show
-      # - Window > Freeze
-
 ## text
 
   ## echo
 
-    #POSIX 7>
+    #POSIX 7.
 
     ## versions
 
