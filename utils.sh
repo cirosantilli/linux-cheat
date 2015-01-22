@@ -225,37 +225,11 @@
       $TIMEZONE_NAME=
       cp $TIMEZONE_LOCATION/$TIMEZONE_NAME /etc/localtime
 
-## editor IDE
-
-  ## vim
-
-    # Move very fast with your keyboard without using a mouse.
-
-    # Works inside terminals therefore no need for X display manager
-
-    #gvim, runs in gtk outside command line
-    #and thus gets around many command line limitations such as reserved shortcuts
-
-      gvim
-
-  ## Libreoffice
-
-    # Project contains wysiwyg text editor, tables, image editor, database management.
-
-    # How to add new spellchecking language:<http://askubuntu.com/questions/72099/how-to-install-a-libreoffice-dictionary-spelling-check-thesaurus>
-
-    ## Calc
-
-      # Always show a row or column, specially the header if the table is long:
-
-      # - click on column that *follows* the one that should always show
-      # - Window > Freeze
-
 ## text
 
   ## echo
 
-    #POSIX 7>
+    #POSIX 7.
 
     ## versions
 
