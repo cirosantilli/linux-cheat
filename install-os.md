@@ -93,7 +93,18 @@ Therefore, if you have the choice, the best option in this case would be to firs
 
 This can be corrected in 2 ways: from a live boot, or from an existing partition with GRUB 2.
 
-### Graphics card problems
+### Proprietary driver problems
+
+Because of licensing issues, Ubuntu does not come with some proprietary drivers, which may lead to some functions being broken after installation.
+
+To solve that, make sure that you try to install the proprietary drivers after installation.
+
+Components which commonly fail include:
+
+- graphics card
+- WIFI card
+
+#### Graphics card
 
 If you graphics card is proprietary, Ubuntu boot may get locked on a black screen or a black screen with white patterns. In that case, follow the steps at: <http://askubuntu.com/a/162076/52975>, in particular:
 

@@ -27,6 +27,15 @@ Install Eclipse as a regular user, not as root or via package managers like `apt
 
 Preferences, settings are under Window > Preferences
 
+Make package manager follow current editor file:
+<http://stackoverflow.com/questions/6334241/how-do-i-show-an-open-file-in-eclipse-package-explorer>
+
+### Spell checking
+
+To add a word to the dictionary, you must first create the user dictionary. To get started, touch a `dict` file on your workspace, the search for spelling under preferences, and point to it.
+
+To add words to the dictionary, hit F2, then click on add word to dictionary.
+
 ### Line wrapping
 
 <http://stackoverflow.com/questions/2846002/does-eclipse-have-line-wrap>
@@ -148,6 +157,13 @@ E.g., start Guake here:
 
 No bindings for custom commands yet: <https://github.com/basti1302/startexplorer/issues/5>
 
+### MoreUnit
+
+Jump between a class and it's test file:
+<http://stackoverflow.com/questions/1399491/eclipse-function-plugin-that-finds-corresponding-junit-class>
+
+TODO how to use this? Clicking `Ctrl + J` tries to create a new test class instead of jumping to the existing one!
+
 ### Color themes
 
 #### Editor color theme
@@ -162,4 +178,4 @@ Vibrant Ink is a good choice as usual.
 
 #### GUI color theme
 
-For the rest of the GUI besides the editor, Appearance > Classic worked best for Ubuntu Unity.
+For the rest of the GUI besides the editor, see Preferences > Appearance. `Dark` is the only one my eyes will accept, but id does break some functionality.
