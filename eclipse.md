@@ -30,6 +30,9 @@ Preferences, settings are under Window > Preferences
 Make package manager follow current editor file:
 <http://stackoverflow.com/questions/6334241/how-do-i-show-an-open-file-in-eclipse-package-explorer>
 
+It is not possible to customize tab labels as with Vim's `guitablabel`:
+<http://stackoverflow.com/questions/3450648/smarter-editor-tab-labels-in-eclipse>
+
 ### Spell checking
 
 To add a word to the dictionary, you must first create the user dictionary. To get started, touch a `dict` file on your workspace, the search for spelling under preferences, and point to it.
@@ -56,49 +59,56 @@ General > Keys
 
 Navigate in editor and its tabs:
 
-- 	`F3`: open definition in a new tab
+-   `F3`: open definition in a new tab
 
-- 	`Alt left`: go to the last location. May jump between lines and change tabs.
+-   `Alt left`: go to the last location. May jump between lines and change tabs.
 
-- 	`Ctrl + Shift + T`: find class definition (Type). Does a sort of Fuzzy search for capital letters.
+-   `Ctrl + Shift + T`: find class definition (Type). Does a sort of Fuzzy search for capital letters.
 
-- 	`Ctrl + Shift + R`: find files.
+-   `Ctrl + Shift + R`: find files.
 
-- 	`Ctrl + H`: search for Java things. Allows you to select classes, methods, fields, etc.
+-   `Ctrl + O`: dropdown filter jump to method definition in current file
 
-- 	`Alt + Shift + Q + XXX`: focus on many different things depending on `XXX`
+    Search entire
+
+-   `Ctrl + H`: search for Java things. Allows you to select classes, methods, fields, etc.
+
+-   `Alt + Shift + Q + XXX`: focus on many different things depending on `XXX`
 
     - `P`: Package Explorer
 
-- 	`Alt + Shift + X + XXX`: run things
+-   `Alt + Shift + X + XXX`: run things
 
-    - `J`: Java. Runs the `main` of the file.
+    - `J`: Java. Runs the `main` of the file
+    - `T`: JUnit test.
 
-- 	`Ctrl + T`: show a popup with type hierarchy of current class file. You can then click on the classes to jump to them.
+-   `Ctrl + T`: show a popup with type hierarchy of current class file. You can then click on the classes to jump to them.
 
-- 	`Ctrl + Shift + Down/Up`: move to the next / previous class member
+-   `Ctrl + Shift + Down/Up`: move to the next / previous class member
+
+-   `Ctrl + E`: show a filter dropdown with the tabs
 
 Navigate across editor and other widgets:
 
-- 	`Ctrl + M`: Toggle maximize current window.
+-   `Ctrl + M`: Toggle maximize current window.
 
-- 	`F12`: focus editor
+-   `F12`: focus editor
 
 Edit:
 
-- 	`Ctrl + /`: toggle single line comment
+-   `Ctrl + /`: toggle single line comment
 
-- 	`Ctrl + Alt + J`: toggle single line comment
+-   `Ctrl + Alt + J`: toggle single line comment
 
 Misc:
 
-- 	`F12`: run program. How it gets run is defined under the project properties.
+-   `F12`: run program. How it gets run is defined under the project properties.
 
 ## Non-keyboard stuff
 
-- 	Jump to overridden method: a little triangle appears to the left of the method.
+-     Jump to overridden method: a little triangle appears to the left of the method.
 
-	<http://stackoverflow.com/questions/3771934/eclipse-navigate-to-inheritor-base-declaration>
+    <http://stackoverflow.com/questions/3771934/eclipse-navigate-to-inheritor-base-declaration>
 
 ## Plugins
 
@@ -153,7 +163,7 @@ You can use variables as described at: <http://basti1302.github.io/startexplorer
 
 E.g., start Guake here:
 
-	guake -n "${resource_loc}"
+    guake -n "${resource_loc}"
 
 No bindings for custom commands yet: <https://github.com/basti1302/startexplorer/issues/5>
 
