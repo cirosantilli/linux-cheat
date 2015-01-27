@@ -88,6 +88,24 @@ Navigate in editor and its tabs:
 
 -   `Ctrl + E`: show a filter dropdown with the tabs
 
+-   `F4`: show hierarchy of class under cursor
+
+-   `Ctrl + Alt + H`: show call graph of method under cursor.
+
+    Looks something like:
+
+    - `callsMethod1`
+    - `callsMethod2`
+
+    Then, as you click on each method of the tree, you open up it's own call graph:
+
+    -   `callsMethod1`
+        - `callsMethod_callsMethod1_1`
+        - `callsMethod_callsMethod1_2`
+    - `callsMethod2`
+
+    and so on. This allows you to see exactly what changes to a method will impact.
+
 Navigate across editor and other widgets:
 
 -   `Ctrl + M`: Toggle maximize current window.
@@ -100,13 +118,17 @@ Edit:
 
 -   `Ctrl + Alt + J`: toggle single line comment
 
+-   `Ctrl + .` and `Ctrl + ,`: next and previous error or warning. <http://stackoverflow.com/questions/1832183/eclipse-how-to-go-to-a-error-using-only-the-keyboard-keyboard-shortcut>
+
+-   `Ctrl + Shift + F`: auto format code using the current formatter.
+
 Misc:
 
 -   `F12`: run program. How it gets run is defined under the project properties.
 
 ## Non-keyboard stuff
 
--     Jump to overridden method: a little triangle appears to the left of the method.
+-   Jump to overridden method: a little triangle appears to the left of the method.
 
     <http://stackoverflow.com/questions/3771934/eclipse-navigate-to-inheritor-base-declaration>
 
@@ -151,6 +173,10 @@ Parses git configure files as key value pairs and shows them on Eclipse. Doesn't
 
 <http://vrapper.sourceforge.net/home>
 
+Some shortcuts that already exist in Eclipse were kept and the Vim version is not implemented. E.g. `Ctrl + R` is not implemented, so you have to use `Ctrl + Shift + Z` instead.
+
+Block visual is `Ctrl + Shift + V` instead of `Ctrl + V` as in Vim to avoid conflict with paste. Eclipse also has a built-in block visual mode: <http://stackoverflow.com/questions/1053725/how-do-i-enable-the-column-selection-mode-in-eclipse>
+
 ### StartExplorer
 
 <https://github.com/basti1302/startexplorer>
@@ -173,6 +199,10 @@ Jump between a class and it's test file:
 <http://stackoverflow.com/questions/1399491/eclipse-function-plugin-that-finds-corresponding-junit-class>
 
 TODO how to use this? Clicking `Ctrl + J` tries to create a new test class instead of jumping to the existing one!
+
+### JaCoCo
+
+Test coverage viewer plugin.
 
 ### Color themes
 

@@ -50,11 +50,15 @@ Therefore:
 
     Amazing description: "Reversed hand with middle finger extended."
 
--   <http://en.wikipedia.org/wiki/Non-breaking_space#Width_variations>
+### Whitespace
 
-    Unicode NBSP variants.
+Unicode NBSP variants:
+<http://en.wikipedia.org/wiki/Non-breaking_space#Width_variations>
 
-    Unicode also has other exotic spaces: <http://en.wikipedia.org/wiki/Whitespace_character>
+Other exotic spaces: <http://en.wikipedia.org/wiki/Whitespace_character>
+
+Ideographic space:
+<http://www.fileformat.info/info/unicode/char/3000/index.htm>
 
 ## Replacement character
 
