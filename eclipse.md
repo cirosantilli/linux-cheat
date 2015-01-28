@@ -67,6 +67,8 @@ Navigate in editor and its tabs:
 
 -   `Ctrl + Shift + R`: find files.
 
+-   `Ctrl + Shift + G`: find where the id (class, method, etc.) under the cursor is used.
+
 -   `Ctrl + O`: dropdown filter jump to method definition in current file
 
     Search entire

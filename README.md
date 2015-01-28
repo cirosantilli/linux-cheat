@@ -56,14 +56,19 @@ Pagers:
 - [more](more.md)
 - [pg](pg.md)
 
-File and directories:
+Files, directories, partitions:
 
+- [badblocks](badblocks.md)
+- [blkid](blkid.md)
 - [cp](cp.sh)
 - [du](du.md)
+- [e2fsck](e2fsck.md)
+- [e2fsprogs](e2progs.md)
 - [fdupes](fdupes.md)
 - [find](find.md)
 - [locate](locate.md)
 - [ls](ls.md)
+- [lsblk](lsblk.md)
 - [Swap partition](swap-partition.md)
 - [tree](tree.md)
 
