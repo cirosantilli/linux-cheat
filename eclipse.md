@@ -171,6 +171,22 @@ Configure: Preferences > Team
 
 Parses git configure files as key value pairs and shows them on Eclipse. Doesn't even suggest possible key values.
 
+Don't forget to turn-off the auto-modification of `.gitignore` which comes on by default. I hate it when Eclipse touches my source `:@`! <http://stackoverflow.com/questions/17748223/egit-and-eclipse-modifies-gitignore-file-but-it-should-not>:
+
+    Preferences > Team > Git > Projects and deselect "Automatically ignore derived resources by adding them to .gitignore".
+
+Features:
+
+-    `Ctrl + Shift + Q`: quick diff: shows on a small column to the left changed, inserted and deleted lines between the editor state and `HEAD~`, each with a different color. Deleted lines are marked between existing lines where they where.
+
+-   `Right click on sidebar > Show annotations`: author / change date color blame side by side with the editor. Hides the quick diff.
+
+    `Right click on sidebar > Revisions > Hide revision information`: undo the above. Highly unintuitive, since it is a toggle option, but you have to go to a different path to turn it off!
+
+    On hover, the commit information is shows.
+
+    `Right click on sidebar > Revisions > Show Author / Id`: show the Author / 7 character SHA of each blame commit.
+
 #### Vrapper
 
 <http://vrapper.sourceforge.net/home>
@@ -185,7 +201,7 @@ Block visual is `Ctrl + Shift + V` instead of `Ctrl + V` as in Vim to avoid conf
 
 Open file explorer or shell on given folder from Package Explorer.
 
-Custom commands: go to Preferences > StartExplorer > Custom Commands.
+Custom commands: go to `Preferences > StartExplorer > Custom Commands`.
 
 You can use variables as described at: <http://basti1302.github.io/startexplorer/help/05_custom_commands.html>
 
