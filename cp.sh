@@ -135,6 +135,13 @@
       cp --parents 0/1/a 2
       [ -e 2/0/1/a ] || exit 1
 
+    # Merges existing directories:
+
+      touch 0/1/b
+      cp --parents 0/1/b 2
+      [ -e 2/0/1/a ] || exit 1
+      [ -e 2/0/1/b ] || exit 1
+
   ## l
 
   ## hardlink

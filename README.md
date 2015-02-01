@@ -116,10 +116,17 @@ Media video, games, etc.) file types, viewers, editors, capture, synthesizers:
 - [Compression](compression.md): Zip, tar, gzip, 7z.
 - [Dictionary](dictionary.md): dictionary formats.
 - [Game](game.md): games, emulation.
-- [File sharing](files-sharing.md):  Soulseek, Dropbox.
 - [Image](image/): images, photos.
 - [Markup](markup/): Markdown, RST. Focus on command line interface and extensions.
 - [Video](video.md): videos, films, subtitles.
+
+File sharing:
+
+- [Dropbox](dropbox.md)
+- [Nicotine](nicotine.md)
+- [Ubuntu One](ubuntu-one.md)
+- [NFS](nfs.md) (WIP)
+- [LDAP](ldap.md) (WIP)
 
 User operations:
 
