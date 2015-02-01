@@ -316,68 +316,6 @@
 
       yes | timeout 1 cat
 
-  ## rev
-
-    # Reverse bytewise.
-
-      [ "`printf 'ab\n' | rev`" = $'ba' ] || exit 1
-
-  ## pagers
-
-    ## less
-
-      # File pager (viewer).
-
-      # Advantages over Vim:
-
-      # - loads faster
-
-      # Disadvantages over Vim:
-
-      # - much less powerful
-
-      # - `/`: search forward
-      # - `n`: repeat last search
-      # - `d`: down one page
-      # - `u`: up one page
-      # - `g`: top of document
-      # - `G`: bottom of document
-      # - `g`: top of document
-      # - `<ENTER>`: down one line
-      # - `-S` : toogle line wrapping
-
-        less "$f"
-        printf 'ab\ncd\n' | less
-
-      # - `-R` : interpret ANSI color codes
-
-        # Rubbish:
-
-          ls --color | less
-
-        # Colors!:
-
-          ls --color | less -R
-
-    ## more
-
-      # Worse than less:
-
-        echo a | more
-
-    ## pg
-
-      # Worse than more:
-
-        echo a | pg
-
-    ## pr
-
-      # Break file into pages with a certain number of lines
-      # and print to stdout:
-
-        ( for i in `seq 200`; do echo a; done ) | pr
-
   ## nl
 
     # POSIX 7

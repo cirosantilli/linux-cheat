@@ -44,9 +44,17 @@ Basic stream and file manipulation:
 
 - [cat](cat.md)
 - [head](head.md)
+- [rev](rev.sh)
+- [pr](pr.md)
 - [tac](tac.md)
 - [tail](tail.md)
 - [truncate](truncate.md)
+
+Pagers:
+
+- [less](less.md)
+- [more](more.md)
+- [pg](pg.md)
 
 File and directories:
 
@@ -56,6 +64,7 @@ File and directories:
 - [find](find.md)
 - [locate](locate.md)
 - [ls](ls.md)
+- [Swap partition](swap-partition.md)
 - [tree](tree.md)
 
 Diff:
@@ -95,6 +104,7 @@ Processes:
 Date and time:
 
 - [cal](cal.md)
+- [ddate](ddate.md)
 - [date](date.md)
 - [hwclock](hwclock.md)
 - [Time zone](time-zone.md)
