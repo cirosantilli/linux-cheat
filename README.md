@@ -48,8 +48,9 @@ Basic stream and file manipulation:
 - [tail](tail.md)
 - [truncate](truncate.md)
 
-File and directory:
+File and directories:
 
+- [cp](cp.sh)
 - [du](du.md)
 - [fdupes](fdupes.md)
 - [find](find.md)
