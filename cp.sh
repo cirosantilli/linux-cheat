@@ -8,20 +8,20 @@
 
     echo a > a
     cp a b
-    [ "`cat b`" = $'a' ] || exit 1
+    [ "$(cat b)" = 'a' ] || exit 1
 
   # If dest exists and is dir, copy into dir:
 
     mkdir d
     cp a d
-    [ "`cat d/a`" = $'d/a' ] || exit 1
+    [ "$(cat d/a)" = 'd/a' ] || exit 1
 
   # If dest exists and is file, overwrite without asking!
 
     echo a > a
     echo b > b
     cp a b
-    [ "`cat b`" = $'a' ] || exit 1
+    [ "$(cat b)" = 'a' ] || exit 1
 
 ## Directories
 
@@ -90,7 +90,7 @@
 
     cp c d
     [ -f d ] || exit 1
-    [ "`cat a`" = $'a' ] || exit 1
+    [ "$(at a)" = 'a' ] || exit 1
 
   # With the `-d` GNU extension, copies symlink to files into new symlinks (mnemonic: no-Dereference):
 
@@ -115,32 +115,6 @@
   # the only thing this could do is to copy dirs
   # and symlink files. But then why not do this with hardlinks?
 
-## hardlink
-
-    echo a > a
-    cp -l a b
-    ln -l a b
-    [ "$(stat -c '%i' a)" = "$(stat -c '%i' b)" ] || exit 1
-
-  # With `-r`, makes dirs, and hardlinks files:
-
-    mkdir d
-    touch d/a
-    touch d/b
-    cp -lr d e
-    [ "$(stat -c '%i' d/a)" = "$(stat -c '%i' e/a)" ] || exit 1
-    [ "$(stat -c '%i' d/b)" = "$(stat -c '%i' e/b)" ] || exit 1
-
-  # If `-l` is used, does not overwrite file:
-
-    echo a > a
-    echo b > b
-    if cp -l a b; then assert false; fi
-
-  # But can overwrite if `-f` is given:
-
-    cp -fl a b
-
 ## GNU extensions
 
   ## v
@@ -152,7 +126,42 @@
 
   ## parents
 
-    # Generate directories in the relative path of the copy.
+    # Generate directories in the relative path of src on top of the dst.
+
+      mkdir 0
+      mkdir 0/1
+      touch 0/1/a
+      mkdir 2
+      cp --parents 0/1/a 2
+      [ -e 2/0/1/a ] || exit 1
+
+  ## l
+
+  ## hardlink
+
+      echo a > a
+      cp -l a b
+      ln -l a b
+      [ "$(stat -c '%i' a)" = "$(stat -c '%i' b)" ] || exit 1
+
+    # With `-r`, makes dirs, and hardlinks files:
+
+      mkdir d
+      touch d/a
+      touch d/b
+      cp -lr d e
+      [ "$(stat -c '%i' d/a)" = "$(stat -c '%i' e/a)" ] || exit 1
+      [ "$(stat -c '%i' d/b)" = "$(stat -c '%i' e/b)" ] || exit 1
+
+    # If `-l` is used, does not overwrite file:
+
+      echo a > a
+      echo b > b
+      if cp -l a b; then assert false; fi
+
+    # But can overwrite if `-f` is given:
+
+      cp -fl a b
 
 ## Applications
 

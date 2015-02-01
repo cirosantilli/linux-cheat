@@ -179,52 +179,6 @@
 
     #POSIX fortran compiler.
 
-## time date
-
-  ## cal
-
-    # cout an ASCII art calendar:
-
-      cal
-
-  ## date
-
-    # POSIX 7.
-
-    # Get system date:
-
-      date
-
-    # Format current time and output it:
-
-      date "+%Y-%m-%d-%H-%M-%S"
-
-    ## gnu extensions
-
-      # Set system date:
-
-        sudo date -s "1 JUN 2012 09:30:00"
-
-  ## hwclock
-
-    #see hardware clock time:
-
-      sudo hwclock --show
-
-    #sync hardware clock to system clock
-
-      sudo hwclock --systohc
-
-  ## set you time zone
-
-    #on dual boot with windows there are conflicts because Windows uses local time, and Linux UTC (more logical...). you must either tell Linux to use local, or better, Windows to use UTC
-
-      $TIMEZONE_LOCATION=/usr/share/zoneinfo
-      cd $TIMEZONE_LOCATION
-      ls
-      $TIMEZONE_NAME=
-      cp $TIMEZONE_LOCATION/$TIMEZONE_NAME /etc/localtime
-
 ## text
 
   ## echo

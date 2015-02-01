@@ -371,9 +371,9 @@ Sample output:
 The standard naming scheme is:
 
 - `sd` and `hd` are the type of disk
-- `sda`         is the first hard disk, `sdb` is the second, `sdc` the third, etc.
-- `sda1`        is the primary partition of `sda`, `sda2` the second, etc.
-- `sda5`        is the first *logical* partition of `sda`. It starts at 5 because there can only be 4 primary partitions.
+- `sda` is the first hard disk, `sdb` is the second, `sdc` the third, etc.
+- `sda1` is the primary partition of `sda`, `sda2` the second, etc.
+- `sda5` is the first *logical* partition of `sda`. It starts at 5 because there can only be 4 primary partitions.
 
 If a MBR is not present and a filesystem starts directly at the start of the device, then `sda` will be the partition itself.
 
@@ -392,6 +392,12 @@ SATA stands for Serial Advanced Technology Attachment (or Serial ATA) and IDE is
 But by the beginning of 2007, SATA had largely replaced IDE in all new systems.
 
 <http://www.diffen.com/difference/IDE_vs_SATA>
+
+## Raw device
+
+<http://en.wikipedia.org/wiki/Raw_device>
+
+Bypasses the OSs filesystem management like caching, allowing user programs to do it
 
 ## sr0
 

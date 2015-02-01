@@ -92,6 +92,13 @@ Processes:
 - [ulimit](ulimit.md)
 - [wait](wait.sh)
 
+Date and time:
+
+- [cal](cal.md)
+- [date](date.md)
+- [hwclock](hwclock.md)
+- [Time zone](time-zone.md)
+
 Media video, games, etc.) file types, viewers, editors, capture, synthesizers:
 
 - [Audio](audio/): audio, music, sound.
