@@ -118,7 +118,6 @@ Media video, games, etc.) file types, viewers, editors, capture, synthesizers:
 
 - [Audio](audio/): audio, music, sound.
 - [Book](book.md): PDF, DJVU.
-- [Compression](compression.md): Zip, tar, gzip, 7z.
 - [Dictionary](dictionary.md): dictionary formats.
 - [Game](game.md): games, emulation.
 - [Image](image/): images, photos.
@@ -132,6 +131,15 @@ File sharing:
 - [Ubuntu One](ubuntu-one.md)
 - [NFS](nfs.md) (WIP)
 - [LDAP](ldap.md) (WIP)
+
+[Compression](compression.md):
+
+- [7zip](7zip.md)
+- [File Roller](file-roller.md)
+- [RAR](rar.md)
+- [gzip](gzip.md)
+- [tar](tar.md)
+- [zip](zip.md)
 
 User operations:
 
