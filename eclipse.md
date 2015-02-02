@@ -86,6 +86,8 @@ Navigate in editor and its tabs:
 
 -   `Ctrl + T`: show a popup with type hierarchy of current class file. You can then click on the classes to jump to them.
 
+    If you are on top of a method, you will be directed to the overridden method if any.
+
 -   `Ctrl + Shift + Down/Up`: move to the next / previous class member
 
 -   `Ctrl + E`: show a filter dropdown with the tabs
@@ -221,6 +223,16 @@ TODO how to use this? Clicking `Ctrl + J` tries to create a new test class inste
 ### JaCoCo
 
 Test coverage viewer plugin.
+
+### Built-in terminals
+
+<http://stackoverflow.com/questions/1562600/is-there-an-eclipse-plugin-to-run-system-shell-in-the-console>
+
+#### TCF Terminals
+
+Works, but useless since no auto `cd`. Maybe in version 3?
+
+Launch with `Ctrl + Alt + T`, which conflicts with Ubuntu's bad terminal launch shortcut, which should include the Super key as any decent global shortcut.
 
 ### Color themes
 
