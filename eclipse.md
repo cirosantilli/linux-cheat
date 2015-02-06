@@ -25,13 +25,19 @@ Install Eclipse as a regular user, not as root or via package managers like `apt
 
 ## Preferences
 
+## Configuration
+
 Preferences, settings are under Window > Preferences
 
-Make package manager follow current editor file:
+Make package explorer follow current editor file:
 <http://stackoverflow.com/questions/6334241/how-do-i-show-an-open-file-in-eclipse-package-explorer>
 
 It is not possible to customize tab labels as with Vim's `guitablabel`:
 <http://stackoverflow.com/questions/3450648/smarter-editor-tab-labels-in-eclipse>
+
+Show full path to files:
+<http://stackoverflow.com/questions/3170379/eclipseide-is-there-a-way-to-add-the-workspace-path-to-the-eclipse-ide-title-ba>
+Important if you are running multiple Eclipse instances at once.
 
 ### Spell checking
 
@@ -73,6 +79,8 @@ Navigate in editor and its tabs:
 
     Search entire
 
+    `Ctrl + O Ctrl + O`: also view the methods of base classes.
+
 -   `Ctrl + H`: search for Java things. Allows you to select classes, methods, fields, etc.
 
 -   `Alt + Shift + Q + XXX`: focus on many different things depending on `XXX`
@@ -86,13 +94,17 @@ Navigate in editor and its tabs:
 
 -   `Ctrl + T`: show a popup with type hierarchy of current class file. You can then click on the classes to jump to them.
 
-    If you are on top of a method, you will be directed to the overridden method if any.
+    If you are on top of a method, you will see a list of overriders / implementors.
+
+    `Ctrl + T Ctrl + T`: toggle between quick type and supertype hierarchy.
 
 -   `Ctrl + Shift + Down/Up`: move to the next / previous class member
 
 -   `Ctrl + E`: show a filter dropdown with the tabs
 
 -   `F4`: show hierarchy of class under cursor
+
+-   `Ctrl + Hover` on abstract method: show implementations.
 
 -   `Ctrl + Alt + H`: show call graph of method under cursor.
 
@@ -104,11 +116,17 @@ Navigate in editor and its tabs:
     Then, as you click on each method of the tree, you open up it's own call graph:
 
     -   `callsMethod1`
+
         - `callsMethod_callsMethod1_1`
         - `callsMethod_callsMethod1_2`
-    - `callsMethod2`
+
+    -   `callsMethod2`
 
     and so on. This allows you to see exactly what changes to a method will impact.
+
+-   `Ctrl + F8`, `Ctrl + Shift + F8`: open a popup and navigate perspectives forward and backwards.
+
+    Because of the popup, this also allows you to determine your current perspective.
 
 Navigate across editor and other widgets:
 
@@ -128,13 +146,190 @@ Edit:
 
 Misc:
 
+-   Mouse select expression + `Ctrl + Shift + I`: view result of selected expression. Good way to analyse temporary return values.
+
 -   `F12`: run program. How it gets run is defined under the project properties.
+
+-   `Alt + Shift + S`: Source code dialog.
+
+    Includes things like generation of annoying methods like `toString`, `equals` and `hashCode`.
+
+    The generated `hashGode` appears to be good, a similar approach is used by the JCL:
+    <http://stackoverflow.com/questions/11795104/is-the-hashcode-function-generated-by-eclipse-any-good>
+
+## Debug
+
+-   Double click on the gutter to add a breakpoint to a line.
+
+### Types of breakpoints
+
+-   Statements. The most common ones.
+
+-   Classes.
+
+-   Exception breakpoints can be created from the breakpoints view through the `J!` button.
+
+    You them chose the class of the exception and run the debug mode.
+
+    If a selected exception is thrown, the debug mode starts when that happens.
+
+    So you can now view the state of all variables through the exception trace.
+
+-   Filed access breakpoints. Active whenever a field changes value.
+
+-   Methods. TODO vs regular line breakpoints? You can choose either entry or exit from the method.
+
+Breakpoints can be conditional, and only turn on on certain conditions.
+
+Breakpoints conditional on stack trace have been marked WONTFIX: <http://stackoverflow.com/questions/14381446/conditional-breakpoint-by-caller-in-java-eclipse> The workaround is to make them conditional on:
+
+    StackTraceElement[] arr = Thread.currentThread().getStackTrace();
+    boolean contains = false;
+    for(StackTraceElement e : arr) {
+        if (e.getClassName().contains("A")) {
+            contains = true;
+            break;
+        }
+    }
+
+### Start debugging
+
+-   `F11`: debug program. If on a test file, run it. Else, runs the same debug that was last launched with `Ctrl + Alt + D + t`.
+
+-   `Alt + Shift + D T`: run current JUnit file in debug mode.
+
+    Jumps to the first break-point. Then you can use:
+
+    -   `F5` to go into method calls or move to the next statement.
+
+        If you hold this, you will see every single thing that your program is does.
+
+    -   `F6` to go to the next statement
+
+    -   `F7` end current method
+
+    -   `F8` to run until the next breakpoint or end of execution
+
+    `Ctrl + Shift + B` toggles the breakpoint on the current line.
+
+-   From the JUnit results window, right click on a test, and click debug. This will run only the given test method.
+
+---
+
+-   Select method and `Ctrl + F5`: step into selection.
+
+    When there are many method calls on a single line, this jumps into the selected method.
+
+-   When variables change value from the last step, they are highlighted on the variables view: <http://superuser.com/a/881424/128124>
+
+-   By default, when you start debugging Eclipse automatically opens the debug perspective.
+
+    When you finish debugging, there is currently no way of automatically going back to the main Java perspective:
+    <http://stackoverflow.com/questions/521442/in-eclipse-how-do-i-change-perspectives-after-terminating-a-process>
+
+-   `Ctrl + Shift + I`: view the result of the selected expression.
+
+    This is useful to inspect the result of temporary variables which exist just for one line, e.g.:
+
+        String s = new String(new String("a"));
+                              ^^^^^^^^^^^^^^^
+
+    if you want to get the value of `new String("a")`.
+
+    Note that for an expression, you must select it from the beginning. E.g.:
+
+        object.method()
+               ^^^^^^^^
+
+    will not work, you need instead:
+
+        object.method()
+        ^^^^^^^^^^^^^^^
+
+### Variable inspection
+
+The variables view shows the values of variables.
+
+You can recursively expand object fields to inspect their entire state.
+
+Bellow the field tree, the variable view shows the `toString` of the object, which you should always define.
+
+Furthermore, for complex objects like Maps, you will want a special view that only shows the keys, and not the complex implementation details. You can achieve this through the "logical view" button. For each interface you can configure a different logical view under "Preferences > Java > Debug > Logical Structure".
+
+It is also possible to edit the table tooltip for each field through the debug configuration "Add detail formatter" configuration: <http://stackoverflow.com/questions/7275520/eclipse-debugging-hashmap-logical-structure-using-key-and-values-tostring-me>
+
+### Go back in time
+
+### Find where a variable was last changed
+
+Not possible in Eclipse.
+
+This requires the so called *omniscient debuggers*, which keep a list of all changed variables. The problem is that those debuggers take up much more memory.
+
+## Jump to implementation
+
+<http://stackoverflow.com/questions/3255530/jump-into-interface-implementation-in-eclipse-ide>
+
+The easiest built-in way seems to be to hit F4 and navigate the type hierarchy.
+
+## Snippets
+
+SnipMate-like snippets are called templates in Eclipse.
+
+## Templates
+
+Preferences > Editor > Templates.
+
+Don't confuse with the "Code templates" under Java, which are templates that expand on file / class creation.
+
+Ctrl + Space to complete them. They may conflict with types, in which case both appear in the same list. Templates seem to always appear first.
+
+If you type an unique prefix of the name, it expands.
+
+Most useful meta variables:
+
+- `${any-unued-parameter}`: a placeholder. Hit enter to jump to the next one.
+- `${cursor}`: position of the cursor when expansion ends.
 
 ## Non-keyboard stuff
 
 -   Jump to overridden method: a little triangle appears to the left of the method.
 
     <http://stackoverflow.com/questions/3771934/eclipse-navigate-to-inheritor-base-declaration>
+
+## Configuration files
+
+Eclipse generates the following configuration files on projects:
+
+- `.project`
+- `.classpath`
+- `.settings/`
+
+You will want to gitignore them.
+
+### Eclipse.ini
+
+Global file on `$ECLIPSE_HOME` or in the eclipse installation folder by default.
+
+### Javadoc
+
+You can see the Javadoc of a project by hovering the mouse over the ID.
+
+Eclipse searches for Javadoc in several places:
+
+-   open files
+
+-   on `.jar`s that are placed at the same directory as the source of the class.
+
+    Those `.jar` contain should contain either the Javadoc tree or the source code that corresponds to that of the project.
+
+    Maven can be used to generate those files. The common naming convention is to distribute all of:
+
+    - `artifact-version.jar`
+    - `artifact-version-javadoc.jar`
+    - `artifact-version-sources.jar`
+
+    in a single directory.
 
 ## Plugins
 

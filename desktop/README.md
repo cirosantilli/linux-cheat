@@ -1106,7 +1106,6 @@ User space startup programs can only start after the display manager has logged 
 
 Therefore, they must either be launched by the DM at the end of its operation, or by something spawned by it.
 
-### autostart
 
 Used by Ubuntu, LXDE, KDE, GNOME
 
@@ -1460,15 +1459,13 @@ The fields it can contain are left for each spec: this only specifies syntax. An
 
 Specs: <http://standards.freedesktop.org/desktop-entry-spec/latest/>
 
-## Applications desktop files
+## Desktop files
 
 This discusses the desktop files under `$XDG_DATA_DIRS/applications` such as `$XDG_DATA_DIRS/applications/firefox.desktop`.
 
-Sources:
+Spec: <http://standards.freedesktop.org/menu-spec/latest/index.html>
 
--   <https://developer.gnome.org/integration-guide/stable/desktop-files.html.en>
-
-    GNOME tutorial. Claims to follow freedesktop.org specs: <http://standards.freedesktop.org/menu-spec/latest/index.html>
+Good source: GNOME tutorial: <https://developer.gnome.org/integration-guide/stable/desktop-files.html.en>
 
 Those files contain metadata about programs, which can be used by the DE to improve user experience.
 
@@ -1504,6 +1501,11 @@ Sample file (abridged):
     Name=Open a New Private Window
     Exec=firefox -private-window
     OnlyShowIn=Unity;
+
+Fields:
+
+-   `Terminal`. TODO
+-   `StartupNotify`. TODO
 
 How this file could be used by the DE:
 

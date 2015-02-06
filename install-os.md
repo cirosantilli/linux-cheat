@@ -106,6 +106,8 @@ Components which commonly fail include:
 
 #### Graphics card
 
+##### Screen shows weird black and white pattern
+
 If you graphics card is proprietary, Ubuntu boot may get locked on a black screen or a black screen with white patterns. In that case, follow the steps at: <http://askubuntu.com/a/162076/52975>, in particular:
 
 - go the GRUB menu by holding shift at startup
@@ -114,6 +116,10 @@ If you graphics card is proprietary, Ubuntu boot may get locked on a black scree
 - nomodeset
 
 Install, then add the proprietary drivers.
+
+##### Cannot detect external display when you have proprietary AMD driver
+
+<http://askubuntu.com/questions/71457/how-can-i-set-up-dual-monitor-display-with-ati-driver>
 
 ### Multiple hard disks
 

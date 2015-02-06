@@ -2,11 +2,11 @@
 
 Linux in informal terms can be either a computer system that:
 
-- complies to the [Linux Standard Base (LSB)][lsb] which is the main standard maintained by the [Linux foundation][]
+- complies to the Linux Standard Base (LSB)
 
 - uses the Linux kernel. TODO is this specified by the LSB? where? <http://unix.stackexchange.com/questions/75611/what-does-the-linux-standard-base-specify-about-the-kernel>. Information specific to the Linux kernel is not covered in this section.
 
-The [LSB][] specifies the minimum interfaces every Linux system must offer.
+The LSB specifies the minimum interfaces every Linux system must offer.
 
 The central component of the Linux operating system is the Linux kernel, released in 1991 by Linus Trovalds, however much of its core user space software comes from the GNU project. For this reason Linux systems may also be called GNU/Linux. 
 
@@ -46,118 +46,13 @@ The FSF insists on calling what most people call Linux as GNU/Linux, which sound
 
 The GNU software foundation is the creator and current maintainer of the GPL license, and mostly uses that license for its software and is the main enforcer of its infringements.
 
-## POSIX
+## POSIX compliance
 
-LSB is already highly POSIX compliant, and it states that it is on of its long term goals meant to become fully POSIX compatible
+LSB is highly POSIX compliant, and it states that it is on of its long term goals meant to become fully POSIX compatible
 
 Incompatibilities are being listed for future resolution.
 
 There a few POSIX requirements that the Linux kernel explicitly does not implement because it considers them impossible to implement efficiently.
-
-## LSB
-
-### core
-
--   CLI utilities. Very close to POSIX except that:
-
-    - adds `lsb_release`
-
-    The Desktop specification also adds `xdg-utils`.
-
--   elf file type
-
--   rpm is the default packaging format! The package format is not specified.
-
--   users and groups
-
--   system initialization
-
--   libc: C standard libraries shared object
-
--   libm: C math library shared object
-
--   libncurses: for command line interfaces
-
-### C++
-
-- C standard library shared objects are required
-
-### Interpreted languages
-
-- Python
-- Perl
-
-### Desktop
-
-- OpenGL shared objects
-- X11, GTK+, Qt runtimes
-- JPEG, PNG shared object libraries
-- ALSA (sound)
-- freedesktop.org XDG [Base Directory structure](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html), and [xdg-utils](http://portland.freedesktop.org/xdg-utils-1.0/).
-
-## FHS
-
-The filesystem hierarchy standard specifies base directories for the system and what should go in them.
-
-It is also maintained by the Linux foundation, and followed by the LSB.
-
-[freedesktop.org basedir spec](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html)  is another an important directory standard that specifies directory structures on top of the FHS. It has been adopted by the recent LSB 4.1 under the desktop section: <http://refspecs.linux-foundation.org/LSB_4.1.0/LSB-Desktop-generic/LSB-Desktop-generic.html#XDG-BASEDIR>
-
-### De facto but not mentioned in FHS
-
-#### /etc/alternatives
-
-Contains symlinks that determine default programs.
-
-For example: `editor -> /usr/bin/vim` and so on.
-
-Can be updated via `man update-alternatives`.
-
-Some important ones are:
-
-- editor: text editor
-- x-www-browser: text editor
-
-#### /etc/issue
-
-Contains the message that is printed before login shells (Ubuntu Ctrl + Alt + 1).
-
-See:
-
-    man issue
-
-<http://unix.stackexchange.com/questions/84280/is-etc-issue-common-file>
-
-Of course, since this is meant to be shown to end users,
-it serves as a broadcast message for CLI only environments,
-and should not be used to identify the distribution even though
-it usually contains the distribution ID by default.
-
-#### ^\.
-
-Hidden files.
-
-It is up to programs to decide how to treat them.
-
-#### \.~$
-
-Backup file.
-
-#### \.bak$
-
-Backup file.
-
-#### \.orig$
-
-Original installation file.
-
-#### \.d$
-
-Many theories, a plausible one: differentiate `a.conf file` from `a.conf.d` dir normally, all files in the `a.conf.d` dir will be sourced as if they are inside `a.conf`.
-
-#### /etc/environment
-
-TODO
 
 ## Distributions
 
@@ -213,6 +108,3 @@ LSB does however specifies many more tools than POSIX and supports almost all ba
 -   <http://www.cavecanen.org/linux/humour/horrorstories.txt>
 
     Real *NIX sysadmin horror stories of things gone terribly wrong.
-
-[linux foundation]: http://www.linuxfoundation.org/
-[lsb]:              http://www.linuxfoundation.org/collaborate/workgroups/lsb/download

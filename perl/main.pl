@@ -82,28 +82,41 @@ no warnings;
 
         # TODO vs ==
 
-        #==	!= <	<= >  >=
-        #eq	ne lt	le gt ge
+        #==    != <    <= >  >=
+        #eq    ne lt    le gt ge
 
-##strings
+##Strings
 
-    ##single quote vs double quote literals
+    ## Single quote vs double quote literals
 
-        my $s = "a";
-        "$s\n" == "a\n" or die;
+            my $s = 'a';
+            "$s\n" == "a\n" or die;
 
         # Single quote does not interpret backslash escapes:
 
             '$s\n' == "\$s\\n" or die;
 
-    # Operations
+        # Interpolation only works for individual variables, not for expressions:
+        # http://stackoverflow.com/questions/3939919/can-perl-string-interpolation-perform-any-expression-evaluation
 
+    # Operations:
+
+        ('ab' . 'cd') == 'abcd' or die;
         ('ab' . 'cd') == 'abcd' or die;
         ('ab' x 3) == 'ababab' or die;
         length('abc') == 3 or die;
         substr('abcd', 2, 2) == 'cd' or die;
         index('abb', 'b') == 1 or die;
         rindex('abb', 'b') == 2 or die;
+
+    # Difference must be done with `ne`: `!=` is only for numeric!
+
+    # So you might as well use `eq` instaead of `==`.
+    # TODO why does `==` appear to work?
+
+        #'ab' != 'cd' or die;
+        'ab' ne 'cd' or die;
+        'ab' eq 'ab' or die;
 
     # Weakly typed insanity:
 
@@ -119,35 +132,48 @@ no warnings;
 
     ##join
 
-        join(',', (1, 2)) == "1,2" or die;
+        join(',', (1, 2)) == '1,2' or die;
 
-##array
+##Array
 
         my @a = (0, 'a', 1);
         #array = ();
 
         $a[2] == 1 or die;
 
-    # Last element
+    # Last index of array: `$#`:
 
-        #$#a == 2 or die;
+        my @a = (0, 1);
+        $#a == 1 or die;
+
+    # Last element of array:
+
+        (0, 1)[-1] == 1 or die;
+
+    # Length of array:
+
+        my @a = (0, 1);
+        scalar @a == 2 or die;
+
+    # Same:
+
+        my $l = @a;
+        $l == 2 or die;
+
+    # Subarray:
+
+        my @a = (0, 1, 2, 3);
+        @a[1 .. 3] == (1, 2, 3) or die;
 
         my @a = (0, 1);
         #push(@a, 2) == (0, 1, 2) or die;
 
-        pop @a;
-        print @a;
+        #pop @a;
+        #shift @a;
+        #unshift @a, 0;
 
-        shift @a;
-        print @a;
+    # Scalar context magic:
 
-        unshift @a, 0;
-        print @a;
-
-    # scalar context magic:
-
-        #my $l = @a;
-        #$l == length(@a) or die;
 
 ##list
 
@@ -177,9 +203,9 @@ no warnings;
 
         ##single line
 
-            #same as ``&&``
+            #same as `&&`
 
-            #same as ``and``
+            #same as `and`
 
                 print 'a' if 1;
                 print 'b' if 0;
@@ -201,7 +227,7 @@ no warnings;
 
             ##can only use single command
 
-            #no ``;`` accepted
+            #no `;` accepted
 
                 print 'a'; print 'b' if 0;
                     #a
@@ -222,8 +248,8 @@ no warnings;
 
     ##unless
 
-        #``unless``, ``&&`` and ``and`` are exact same as
-        #``if``, ``||`` and ``or`` but negated.
+        #`unless`, `&&` and `and` are exact same as
+        #`if`, `||` and `or` but negated.
 
         print 'a' unless 0;
         unless(0) {
@@ -259,7 +285,7 @@ no warnings;
 
             print foreach (1 .. 3);
 
-        #like if, only single command (no ``;`` allowed)
+        #Like if, only single command (no `;` allowed)
 
         #uses references:
 
@@ -562,32 +588,51 @@ no warnings;
 
 ##process call
 
-    ##system
+    ##System
 
-        #on background
+        # Runs on background,
+        # so you cannot get stdout nor return status:
 
-        #cannot get stdout nor return status
+            system('echo', 'system');
 
-            system("echo", "-n", "a", "b");
+    ##``
+
+    ##Backticks
+
+        # Returns the STDOUT. STDERR goes to terminal.
+
+            `printf a` == 'a' or die;
+            `echo "stderr from backticks" 1>&2` == '' or die;
+
+        # Interpolation:
+
+            my $s = 'a';
+            `printf $s` == 'a' or die;
 
     ##qx
 
-        #program waits for end
+        # Same as backticks, but more flexible surrounding character.
 
-        #can get stdout and return status
+        # Program waits for end.
+
+        # Can get stdout and exit status.
 
             $a = qx(echo -n a b);
             $a = `echo -n a b`;
 
     ##$?
 
-        #status of last process close
+        # Status of last process closed.
 
             `false`;
-            print $?, "\n";
-                #
+            $? != 0 or die;
+
+        # TODO why fails:
+
+            `false`;
+            #$? == 1 or die;
 
             `true`;
-            print $?, "\n";
+            $? == 0 or die;
 
 print 'ALL ASSERTS PASSED'

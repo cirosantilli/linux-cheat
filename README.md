@@ -18,8 +18,10 @@ Documentation viewers:
 
 Base standards:
 
-- [Linux](linux.md): Linux, LSB.
 - [POSIX](posix.md)
+- [Linux](linux.md)
+- [LSB](lsb.md)
+- [FHS](fhs.md)
 
 Kernel related:
 
@@ -56,21 +58,41 @@ Pagers:
 - [more](more.md)
 - [pg](pg.md)
 
-Files, directories, partitions:
+Files, directories:
+
+-   [cp](cp.sh)
+
+-   [du](du.md)
+
+-   [fdupes](fdupes.md)
+
+-   [find](find.md)
+
+-   links:
+
+    - [ln](ln.md)
+    - [readlink](readlink.md)
+    - [realpath](realpath.md)
+
+-   [locate](locate.md)
+
+-   [ls](ls.md)
+
+-   [read](read.md)
+
+-   [stat](stat.md)
+
+-   [tree](tree.md)
+
+Partitions, filesystems:
 
 - [badblocks](badblocks.md)
 - [blkid](blkid.md)
-- [cp](cp.sh)
 - [du](du.md)
 - [e2fsck](e2fsck.md)
 - [e2fsprogs](e2progs.md)
-- [fdupes](fdupes.md)
-- [find](find.md)
-- [locate](locate.md)
-- [ls](ls.md)
 - [lsblk](lsblk.md)
-- [Swap partition](swap-partition.md)
-- [tree](tree.md)
+- [swap partition](swap-partition.md)
 
 Diff:
 
@@ -102,6 +124,7 @@ Processes:
 - [pstree](pstree.sh)
 - [pwd](pwd.sh)
 - [sleep](sleep.sh)
+- [timeout](timeout.md)
 - [top](top.md)
 - [ulimit](ulimit.md)
 - [wait](wait.sh)

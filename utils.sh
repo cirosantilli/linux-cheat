@@ -897,70 +897,7 @@
 
         sudo lshw
 
-## read
-
-  # Read from stdin and stores in shell variables.
-
-  #Therefore, this *must* be a shell BUILTIN, since it modifies shell variables directly
-
-  #POSIX 7.
-
-  #Get string from user into variable `a`:
-
-    #read a
-    #echo "$a"
-
-  #Cannot write with pipe into read because the pipe spawns a subshell,
-  #which cannot modify a variable in its parent shell:
-  #<http://stackoverflow.com/questions/13763942/bash-why-piping-input-to-read-only-works-when-fed-into-while-read-const>
-
-    a=a
-    echo b | read a     #`read a` is executed in a subshell!
-    [ $a = a ] || exit 1
-
-  #Creating a subshell does work however:
-
-    echo abc | ( read b; [ $b = abc ] || exit 1 ) || echo fail
-
-  #and so do while combos, which also create one subshell per loop body:
-
-    while read l; do
-      echo "$l"
-    done < <( echo -e "a\nb\na b" )
-
-  #Read from file descriptor linewise and assign to variable.
-
-    ## applications
-
-      #Read file linewise:
-
-        #while read l; do
-        #  echo "$l";
-        #done < "$f"
-
-      #Read stdout linewise:
-
-        while read l; do
-          echo "$l"
-        done < <( echo -e "a\nb\na b" )
-
-      #Split into fields:
-
-        #IFS_OLD="$IFS"
-        #while IFS=' : ' read f1 f2
-        #do
-        #  echo "$f1 $f2"
-        #done < <( echo -e "a : b\nc : d" )
-        #IFS="$IFS_OLD"
-
-  ## GNU extensions
-
-    #-p print a prompt message:
-
-      read -p "enter string: " s
-      echo "you entered $s"
-
-## process
+## Processes
 
   ## pwdx
 
@@ -1009,21 +946,14 @@
       #vlc 100 &
       #disown %3
 
-  ## timeout
-
-    # Run command for at most n seconds, and kill it if it does not finish in time
-
-    # coreutils
-
-      [ `timeout 3 bash -c 'for i in {1..2}; do echo $i; sleep 1; done'` = $'1\n2\n' ] || exit 1
-      [ `timeout 1 bash -c 'for i in {1..2}; do echo $i; sleep 1; done'` = $'1\n' ] || exit 1
-
   ## flock
 
     # Puts an advisory file lock on given file while a command executes:
 
       touch a
       flock a sleep 5 &
+
+    # TODO sample usage.
 
   ## prtstat
 
@@ -1552,135 +1482,6 @@
       umask 777
       touch c
         #---------
-
-  ## stat
-
-    # POSIX
-
-    # CLI for sys_stat.
-
-    # Get file/dir info such as:
-
-    # - size
-    # - owner
-    # - group
-    # - permissions
-    # - last access date
-    # - create date
-    # - modify date
-
-    # Example:
-
-      touch f
-      stat f
-
-    ## -c
-
-      # Format string:
-
-        chmod 1234 f
-        [ `stat -c "%a" f` = "234" ] || exit 1
-
-        chmod a=rt f
-        [ "`stat -c "%A" f`" = "-r--r--r-T" ] || exit 1
-
-      # Inode:
-
-        touch a
-        ln a b
-        [ "`stat -c "%i" a`" = "`stat -c '%i' b`" ] || exit 1
-
-    ## --print
-
-      # Like `-c` but interprets escapes like `\n`:
-
-        touch a
-        echo "`stat --print "%a\n%a\n" a`"
-        [ "`stat --print "\n" a`" = $'\n' ] || exit 1
-
-  ## links
-
-    ## ln
-
-      # Make hardlinks and symlinks
-
-      # This can also be done with `cp`
-
-      # Hardlink:
-
-        ln dest name
-
-      # Symlink files only:
-
-        ln -s dest name
-
-      # Symlink dir:
-
-        ln -ds dest name
-
-      # The link will be created even if the destination does not exist:
-
-        ln -s idontexist name
-
-      # If the name is in another dir, the destination is not changed by default:
-
-        mkdir d
-        ln -s a d/a
-        [ `readlink d/a` = a ] || exit 1
-
-      # To create relative to dest use `-r`:
-
-        mkdir d
-        ln -rs a d/a
-        [ `readlink d/a` = ../a ] || exit 1
-
-      # If the name is in another dir, the destination is not changed by default:
-
-      # Absolute link:
-
-        ln /full/path/to/dest name
-        [ `readlink name` = "/full/path/to/dest" ] || exit 1
-
-    ## readlink
-
-      # Get target of symlink
-
-        touch a
-        ln -s a b
-        ln -s b c
-
-        [ "`readlink c`" = $'b' ] || exit 1
-        [ "`readlink b`" = $'a' ] || exit 1
-
-      # Recursive:
-
-        [ "`readlink -f c`" = $'a' ] || exit 1
-
-    ## realpath
-
-      # Resolve all symbolic links and '.' and '..' entries of a path recursivelly
-
-      # Prefer readlink which is more widespread by default in distros
-
-        mkdir a
-        ln -s a b
-        cd a
-        touch a
-        ln -s a b
-        cd ..
-        realpath ./b/b
-
-      # Output:
-
-        = "`pwd`/a/a"
-
-      # readlink -f
-
-        # Same as:
-
-          readlink ./b/b
-
-        # and is part of coreutils, so more widespread default.
 
   ## fuser
 

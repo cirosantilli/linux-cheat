@@ -53,3 +53,14 @@ To a dir:
 
 ZIP every file in cur dir to file.zip
 
+## Implementations
+
+### Snappy
+
+### Zippy
+
+Zippy is the old name.
+
+Google, open sourced in 2011.
+
+Design goal: very high compression speed, at the cost of slightly lower compression ratios, usually around 20% to 100% lower.

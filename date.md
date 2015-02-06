@@ -20,6 +20,14 @@ Sample output:
 
 ## GNU extensions
 
+Saner RFC-3339 format:
+
+    date --rfc-3339=seconds
+
+Sample output:
+
+    2015-02-08 15:42:37+01:00
+
 Set the system date:
 
     sudo date -s "1 JUN 2012 09:30:00"

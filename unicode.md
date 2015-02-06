@@ -18,7 +18,9 @@ Code chart: browser by category or input as specific hex: <http://www.unicode.or
 
 <http://en.wikipedia.org/wiki/Plane_(Unicode)>
 
-There are 17 planes, 0 to 16, so not a multiple of 2! This is because of the limit of the UTF-16 encoding.
+A plane is a set of 2^16 characters.
+
+There are 17 planes, 0 to 16, so not a multiple of 2! This is because of the limit of the UTF-16 encoding which is a variable length encoding.
 
 0 is filled and has the most important characters.
 
@@ -28,13 +30,15 @@ There are 17 planes, 0 to 16, so not a multiple of 2! This is because of the lim
 
 14 and 15 are the private use area.
 
-## Point notation
+## Notation
 
-Points are noted as `U+` followed by an hexadecimal number, with leading zeros stripped.
+Points are noted as `U+` followed by an hexadecimal number.
+
+Leading plane zeros are stripped.
 
 Therefore:
 
-- plane 0 is noted as `U+XXXX`,
+- plane 0 is noted as `U+XXXX`. Note that leading zeros of the point are not stripped, e.g. `U+0100` since they are not in the plane.
 - planes 1 - 9 are noted as: `U+XXXXX`
 - planes nd 10 to 16 as `U+XXXXXX`
 
@@ -49,6 +53,10 @@ Therefore:
 -   Middle finger! Introduced in 2014.
 
     Amazing description: "Reversed hand with middle finger extended."
+
+-   <http://en.wikipedia.org/wiki/Pilcrow> `U+00B6` ¶
+
+    Indicates a paragraph.
 
 ### Whitespace
 
@@ -86,7 +94,7 @@ Planes 15 and 16.
 
     Claims backend runs on CUDA!
 
-# UTF-8
+## UTF-8
 
 <http://en.wikipedia.org/wiki/UTF-8>
 
@@ -108,7 +116,7 @@ Features:
 
 All of 5, 6 and many 4 byte characters don't map to any Unicode point to match the maximum number of characters encoded by Unicode.
 
-## Overlong encoding
+### Overlong encoding
 
 It is possible to encode many values in multiple ways, e.g., NUL can be coded as all of:
 
@@ -119,3 +127,11 @@ It is possible to encode many values in multiple ways, e.g., NUL can be coded as
 UTF-8 only allows the shortest possible representation.
 
 One possible use case for overlong representations is to overlong encode NUL as `C0F0`, so that the NUL character can be used as a string or file terminator. This works because there is no other valid 0 byte.
+
+## UTF-16
+
+Encodes everything with either two or four bytes, never one, making it super inefficient for ASCII.
+
+Therefore it is not ASCII compatible, so it requires special support even for ASCII viewing.
+
+Also, it contains NUL characters all over for ASCII, which requires greater care with C NUL-terminated strings.
