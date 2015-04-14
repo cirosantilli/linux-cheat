@@ -21,13 +21,18 @@ which cannot modify a variable in its parent shell:
 
 Creating a subshell does work however:
 
-    echo abc | ( read b; [ $b = abc ] || exit 1 ) || echo fail
+    echo 'abc' | ( read b; [ "$b" = 'abc' ] || exit 1 ) || echo fail
 
-and so do while combos, which also create one subshell per loop body:
+Redirection however does work:
+
+    read a < <(printf 'abc')
+    [ "$a" = 'abc' ] || exit 1
+
+This is why while combos also work:
 
     while read l; do
       echo "$l"
-    done < <( echo -e "a\nb\na b" )
+    done < <( printf "a\nb\na b\n" )
 
 Read from file descriptor line-wise and assign to variable.
 

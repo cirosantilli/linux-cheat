@@ -58,15 +58,19 @@ Therefore:
 
     Indicates a paragraph.
 
+-   Unicode has inverted versions of many characters: <http://www.cheesygames.com/upside-down-text/>
+
+    <http://stackoverflow.com/questions/2995340/how-does-u%CA%8Dop-%C7%9Dp%E1%B4%89sdn-text-work>
+
+    There is even a wiki with famous strategies: <http://en.wikipedia.org/wiki/Transformation_of_text>
+
 ### Whitespace
 
-Unicode NBSP variants:
-<http://en.wikipedia.org/wiki/Non-breaking_space#Width_variations>
+Unicode NBSP variants: <http://en.wikipedia.org/wiki/Non-breaking_space#Width_variations>
 
 Other exotic spaces: <http://en.wikipedia.org/wiki/Whitespace_character>
 
-Ideographic space:
-<http://www.fileformat.info/info/unicode/char/3000/index.htm>
+Ideographic space: <http://www.fileformat.info/info/unicode/char/3000/index.htm>
 
 ## Replacement character
 
@@ -126,7 +130,7 @@ It is possible to encode many values in multiple ways, e.g., NUL can be coded as
 
 UTF-8 only allows the shortest possible representation.
 
-One possible use case for overlong representations is to overlong encode NUL as `C0F0`, so that the NUL character can be used as a string or file terminator. This works because there is no other valid 0 byte.
+One possible use case for overlong representations is to overlong encode NUL as `C0F0`, so that the NUL character can be used as a string or file terminator. This works because there is no other valid 0 byte. This is used by the Java `.class` file format, in a format that Java calls modified UTF-8 string: <http://docs.oracle.com/javase/6/docs/api/java/io/DataInput.html#modified-utf-8>
 
 ## UTF-16
 

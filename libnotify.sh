@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 
-#do those annoying popup notifications yourself!
+# Do those annoying popup notifications yourself!
 
-#install:
+# Install:
 
     #sudo aptitude install -y libnotify-bin
 
-#basic usage:
+# Basic usage:
 
     notify-send a
 
-#-t: timeout:
+# -t: timeout:
 
     notify-send -t 1000 b
 
-#-u urgency. low, normal, or critical:
+# -u urgency. low, normal, or critical:
 
     notify-send -u critical c

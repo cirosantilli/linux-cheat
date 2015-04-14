@@ -12,8 +12,8 @@ View bytes in hexadecimal.
 
 Options:
 
-- `-C` : see bytes in hexadecimal
-- `-n32` : only 32 bytes
-- `-s32` : start at byte 32
+- `-C`: see bytes in hexadecimal
+- `-n32`: only 32 bytes
+- `-s32`: start at byte 32
 - `-v`: show duplicate lines
 - `-e '1/1 " %02X"'`: format string

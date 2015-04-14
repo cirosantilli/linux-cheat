@@ -1,344 +1,360 @@
 #!/usr/bin/env bash
 set -eu
 
-# TODO make all asserts pass
+## sed
 
-# POSIX 7 <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/sed.html>
+  # TODO make all asserts pass
 
-# Stream EDitor
+  # POSIX 7 http://pubs.opengroup.org/onlinepubs/9699919799/utilities/sed.html
 
-# Modifies files non-interactively.
+  # Stream EDitor
 
-# Beginner to pro tutorial: <http://www.grymoire.com/Unix/Sed.html>
+  # Modifies files non-interactively.
 
-## alternatives
+  # Beginner to pro tutorial: <http://www.grymoire.com/Unix/Sed.html>
 
-  # Consider using Python instead of this, or Perl if your are insane and really want to golf.
+  ## Alternatives
 
-  # sed has only slightly better golfing than Perl.
+    # Consider using Python instead of this, or Perl if your are insane and really want to golf.
 
-  # The only real advantage of sed over Perl is that Sed is POSIX, while perl is only LSB.
+    # sed has only slightly better golfing than Perl.
 
-## s command
+    # The only real advantage of sed over Perl is that Sed is POSIX, while perl is only LSB.
 
-  # Substitute:
+  ## s command
 
-    [ "$(printf 'aba\ncd\n' | sed 's/a/b/')" = $'bba\ncd' ] || exit 1
+    # Substitute:
 
-  ## patterns are BREs
+      [ "$(printf 'aba\ncd\n' | sed 's/a/b/')" = $'bba\ncd' ]
 
-    # `+` is ordinary, thus BRE, and no match TODO fails?
+    ## Patterns are BREs
 
-      #[ "$(echo 'aa' | sed 's/[[:alpha:]]/b/')" = 'ba' ] || exit 1
-      #[ "$(echo 'aa' | sed 's/.+/b/')" = 'ab' ] || exit 1
+      # `+` is ordinary, thus BRE, and no match TODO fails?
 
-    ## r
+        #[ "$(echo 'aa' | sed 's/[[:alpha:]]/b/')" = 'ba' ]
+        #[ "$(echo 'aa' | sed 's/.+/b/')" = 'ab' ]
 
-      # Use EREs instead of BREs. Always use it.
+      ## r
 
-        [ "$(echo 'aa' | sed -r 's/.+/b/')" = 'b' ] || exit 1
+        # Use EREs instead of BREs. Always use it.
 
-  ## g
-
-    # Replaces multiple non overalpping times on each line:
-
-      [ "$(echo 'aba' | sed 's/a/b/g')" = 'bbb' ] || exit 1
-
-  ## capturing groups
-
-      [ "$(echo a1 | sed -r 's/a(.)/b\1/')" = 'b1' ] || exit 1
-      [ "$(echo a1 | sed -r 's/a(.)/b\\1/')" = 'b\1' ] || exit 1
-      [ "$(echo a1 | sed -r 's/a(.)/\0&/')" = 'a1a1' ] || exit 1
-        #\0 and & both refer to the entire match
-      [ "$(echo a1 | sed -r 's/a(.)/\&/')" = '&' ] || exit 1
-
-      #no non-greedy *? operator. use [^]* combo instead
-
-  ## flags
+          [ "$(echo 'aa' | sed -r 's/.+/b/')" = 'b' ]
 
     ## g
 
-      # Replace as many times as possible in string
+      # Replaces multiple non overalpping times on each line:
 
-    ## p
+        [ "$(echo 'aba' | sed 's/a/b/g')" = 'bbb' ]
 
-      # Is can also be a flag, besides being the print command
+    ## Capturing groups
 
-    ## w
+        [ "$(echo a1 | sed -r 's/a(.)/b\1/')" = 'b1' ]
+        [ "$(echo a1 | sed -r 's/a(.)/b\\1/')" = 'b\1' ]
+        [ "$(echo a1 | sed -r 's/a(.)/\0&/')" = 'a1a1' ]
+          #\0 and & both refer to the entire match
+        [ "$(echo a1 | sed -r 's/a(.)/\&/')" = '&' ]
 
-      # Write lines to file:
+        #no non-greedy *? operator. use [^]* combo instead
 
-        f="/tmp/f"
-        printf 'a\nb\na\n' | sed -n "s/a/A/w $f"
-        [ "$(cat "$f")" = $'A\nA' ] || exit 1
+    ## Flags
 
-## /
+      ## g
 
-  # Only exec next command if match:
+        # Replace as many times as possible in string
 
-    [ "$(printf 'a\nb\n' | sed -n '/a/p')" = 'a' ] || exit 1
+      ## p
 
-## restrict lines
+        # Is can also be a flag, besides being the print command
 
-  # Line number:
+      ## w
 
-    [ "$(printf 'a\nb\n' | sed -n '1 p')" = 'a' ] || exit 1
+        # Write lines to file:
 
-  # Last line:
+          f="/tmp/f"
+          printf 'a\nb\na\n' | sed -n "s/a/A/w $f"
+          [ "$(cat "$f")" = $'A\nA' ]
 
-    [ "$(printf 'a\nb\n' | sed -n '$ p')" = 'b' ] || exit 1
+  ## /
 
-  # Before last line: TODO http://stackoverflow.com/questions/14115820/vim-vi-sed-act-on-a-certain-number-of-lines-from-the-end-of-the-file
+    # Only exec next command if match:
 
-  # Line matches pattern:
+      [ "$(printf 'a\nb\n' | sed -n '/a/p')" = 'a' ]
 
-    [ "$(printf 'a\nb\n' | sed '/a/ s/./c/')" = $'c\nb' ] || exit 1
+  ## restrict lines
 
-  # Line range:
+    # Line number:
 
-    [ "$(printf 'a\nb\nc\nd\n' | sed '1,3 s/./e/')" = $'e\ne\ne\nd' ] || exit 1
+      [ "$(printf 'a\nb\n' | sed -n '1 p')" = 'a' ]
 
-  ## pattern range
+    # Last line:
 
-      [ "$(printf 'a\nb\nc\nd\n' | sed '/a/,/c/ s/./0/')" = $'0\n0\n0\nd' ] || exit 1
+      [ "$(printf 'a\nb\n' | sed -n '$ p')" = 'b' ]
 
-    # Non-greedy:
+    # Before last line: TODO http://stackoverflow.com/questions/14115820/vim-vi-sed-act-on-a-certain-number-of-lines-from-the-end-of-the-file
 
-      [ "$(printf 'a\nb\n0\n0\na\nb\n' | sed '/a/,/b/ s/./A/')" = $'A\nA\n0\n0\nA\nA' ] || exit 1
+    # Line matches pattern:
 
-  ## multiple commands per restriction
+      [ "$(printf 'a\nb\n' | sed '/a/ s/./c/')" = $'c\nb' ]
 
-    [ "$(printf 'a\nb\n' | sed '1 {s/./c/; s/c/d/}')" = $'d\nb' ] || exit 1
+    # Line range:
 
-  ## !
+      [ "$(printf 'a\nb\nc\nd\n' | sed '1,3 s/./e/')" = $'e\ne\ne\nd' ]
 
-    # Negation.
+    ## pattern range
 
-    # Act on non-matching:
+        [ "$(printf 'a\nb\nc\nd\n' | sed '/a/,/c/ s/./0/')" = $'0\n0\n0\nd' ]
 
-      [ "$(printf 'a\nb\n' | sed -n '1! p')" = 'b' ] || exit 1
-      [ "$(printf 'a\nb\n' | sed -n '/a/! p')" = 'b' ] || exit 1
+      # Non-greedy:
 
-## multiple commands
+        [ "$(printf 'a\nb\n0\n0\na\nb\n' | sed '/a/,/b/ s/./A/')" = $'A\nA\n0\n0\nA\nA' ]
 
-  # Concatenate with ; or newlines:
+    ## multiple commands per restriction
 
-    [ "$(printf 'a\nb\n' | sed '/a/ s/./B/; /B/ {s/B/C/; s/C/D/}')" = $'D\nb' ] || exit 1
+      [ "$(printf 'a\nb\n' | sed '1 {s/./c/; s/c/d/}')" = $'d\nb' ]
 
-## q
+    ## !
 
-  # Quit, stop execution:
+      # Negation.
 
-    [ "$(printf 'a\nb\n' | sed 's/./c/; q')" = 'c' ] || exit 1
+      # Act on non-matching:
 
-## d
+        [ "$(printf 'a\nb\n' | sed -n '1! p')" = 'b' ]
+        [ "$(printf 'a\nb\n' | sed -n '/a/! p')" = 'b' ]
 
-  # Delete:
+  ## multiple commands
 
-    [ "$(printf 'a\nb\n' | sed '/a/ d')" = 'b' ] || exit 1
+    # Concatenate with ; or newlines:
 
-## a, i, c
+      [ "$(printf 'a\nb\n' | sed '/a/ s/./B/; /B/ {s/B/C/; s/C/D/}')" = $'D\nb' ]
 
-  # Append (after), insert (before), change
+  ## q
 
-    [ "$(printf 'a\nb\n' | sed '1 a 0')" = $'a\n0\nb' ] || exit 1
-    [ "$(printf 'a\nb\n' | sed '1 i 0')" = $'0\na\nb' ] || exit 1
-    [ "$(printf 'a\nb\n' | sed '1 c 0')" = $'0\nb' ] || exit 1
+    # Quit, stop execution:
 
-  ## newlines and spaces
+      [ "$(printf 'a\nb\n' | sed 's/./c/; q')" = 'c' ]
 
-    [ "$(printf 'a\nb\n' | sed '1 c 0 1\n2 3')" = $'0 1\n2 3\nb' ] || exit 1
+  ## d
 
-## =
+    # Delete:
 
-  # Line number:
+      [ "$(printf 'a\nb\n' | sed '/a/ d')" = 'b' ]
 
-    [ "$(printf 'a\nb\na\n' | sed -n '/a/ =')" = $'1\n3' ] || exit 1
+  ## a, i, c
 
-## y
+    # Append (after), insert (before), change
 
-  # Replace individual chars tr-like:
+      [ "$(printf 'a\nb\n' | sed '1 a 0')" = $'a\n0\nb' ]
+      [ "$(printf 'a\nb\n' | sed '1 i 0')" = $'0\na\nb' ]
+      [ "$(printf 'a\nb\n' | sed '1 c 0')" = $'0\nb' ]
 
-    [ "$(printf 'a\nb\n' | sed 'y/ab/01/')" = $'0\n1' ] || exit 1
-    [ "$(printf 'a\nb\n' | sed 'y/ab/AB/')" = $'A\nB' ] || exit 1
+    ## newlines and spaces
 
-## multiline
+      [ "$(printf 'a\nb\n' | sed '1 c 0 1\n2 3')" = $'0 1\n2 3\nb' ]
 
-  # - pattern space: buffer that holds each line.
+  ## =
 
-    #`s//` modifies pattern space
+    # Line number:
 
-  # - `n`: empty pattern space, put next line into it. default action at end.
+      [ "$(printf 'a\nb\na\n' | sed -n '/a/ =')" = $'1\n3' ]
 
-    # Print first line after matching `/a/`:
+  ## y
 
-      [ "$(printf 'a\nb\n' | sed -n '/a/ {n;p}')" = $'b' ] || exit 1
+    # Replace individual chars tr-like:
 
-    # Print second line after matching `/a/`:
+      [ "$(printf 'a\nb\n' | sed 'y/ab/01/')" = $'0\n1' ]
+      [ "$(printf 'a\nb\n' | sed 'y/ab/AB/')" = $'A\nB' ]
 
-      [ "$(printf 'a\nb\nc\n' | sed -n '/a/ {n;n;p}')" = $'c' ] || exit 1
+  ## multiline
 
-  # - `N`: append next line to pattern space. Next line is not read again.
+    # - pattern space: buffer that holds each line.
 
-      [ "$(printf 'a\nb\n' | sed -n '/a/ {N;p};')" = $'a\nb' ] || exit 1
-      [ "$(printf 'a\nb\n' | sed -n '/b/ p; /a/ {N;p};')" = $'a\nb' ] || exit 1
+      #`s//` modifies pattern space
 
-  # - `p`: print entire pattern space. default action at end if no `-n`.
+    # - `n`: empty pattern space, put next line into it. default action at end.
 
-  # - `P`: print up to first newline. TODO error:
+      # Print first line after matching `/a/`:
 
-      #[ "$(printf 'a\nb\n' | sed -n '/a/ P')" = $'b' ] || exit 1
+        [ "$(printf 'a\nb\n' | sed -n '/a/ {n;p}')" = $'b' ]
 
-  # - `d`: delete pattern space. go to next line. *Is a loop continue*
+      # Print second line after matching `/a/`:
 
-  # - `D`: delete first line of pattern space. go to next line.
+        [ "$(printf 'a\nb\nc\n' | sed -n '/a/ {n;n;p}')" = $'c' ]
 
-## hold buffer
+    # - `N`: append next line to pattern space. Next line is not read again.
 
-  # There is an storage area called **hold buffer** in addition to the pattern buffer.
+        [ "$(printf 'a\nb\n' | sed -n '/a/ {N;p};')" = $'a\nb' ]
+        [ "$(printf 'a\nb\n' | sed -n '/b/ p; /a/ {N;p};')" = $'a\nb' ]
 
-  # It can contain the strings.
+    # - `p`: print entire pattern space. default action at end if no `-n`.
 
-  ## h
+    # - `P`: print up to first newline. TODO error:
 
-    # Put pattern buffer into storage
+        #[ "$(printf 'a\nb\n' | sed -n '/a/ P')" = $'b' ]
 
-  ## x
+    # - `d`: delete pattern space. go to next line. *Is a loop continue*
 
-    # Exchange storage and pattern.
+    # - `D`: delete first line of pattern space. go to next line.
 
-    # Print old/new newline pairs after substitution:
+  ## hold buffer
 
-      [ "$(printf 'a\nb\n' | sed -n 'h; /a/ {s/a/c/; s/$/\n/; x;p;x;p}')" = $'a\nc\n' ] || exit 1
+    # There is an storage area called **hold buffer** in addition to the pattern buffer.
 
-    # Print first line before matching `/b/`:
+    # It can contain the strings.
 
-      [ "$(printf 'a\nb\n' | sed -n '/b/ {x;p;d}; h')" = $'a' ] || exit 1
+    ## h
 
-  ## g
+      # Put pattern buffer into storage
 
-    # Pattern space = hold space
+    ## x
 
-      [ "$(printf 'a\nb\n' | sed -n 'h; /a/ {s/a/c/;x;p;g;p}')" = $'a\nc' ] || exit 1
+      # Exchange storage and pattern.
 
-  ## G
+      # Print old/new newline pairs after substitution:
 
-    # Pattern space += hold space
+        [ "$(printf 'a\nb\n' | sed -n 'h; /a/ {s/a/c/; s/$/\n/; x;p;x;p}')" = $'a\nc\n' ]
 
-      [ "$(printf 'a\nb\n' | sed -n 'h; /a/ {s/a/c/;x;G;p}')" = $'a\nc' ] || exit 1
+      # Print first line before matching `/b/`:
 
-## goto
+        [ "$(printf 'a\nb\n' | sed -n '/b/ {x;p;d}; h')" = $'a' ]
 
-  ## label
+    ## g
 
-    # May be on same line as command, ex: `:l s/a/b/` is the same as `:l; s/a/b`.
+      # Pattern space = hold space
 
-  ## b
+        [ "$(printf 'a\nb\n' | sed -n 'h; /a/ {s/a/c/;x;p;g;p}')" = $'a\nc' ]
 
-    # Unconditional jump.
+    ## G
 
-      [ "$(printf 'a\nb\n' | sed '/a/ b c; s/./c/; :c')" = $'a\nc' ] || exit 1
-      [ "$(printf 'a\nb\n' | sed '/a/ b c; s/./c/; :c s/c/d')" = $'a\nd' ] || exit 1
+      # Pattern space += hold space
 
-  ## t
+        [ "$(printf 'a\nb\n' | sed -n 'h; /a/ {s/a/c/;x;G;p}')" = $'a\nc' ]
 
-    # Jump if last s changed pattern space.
+  ## goto
 
-    # Remove spaces after a:
+    ## label
 
-      [ "$(printf 'a b c\n' | sed ':a s/a /a/; t a')" = $'ab c' ] || exit 1
+      # May be on same line as command, ex: `:l s/a/b/` is the same as `:l; s/a/b`.
 
-    # Remove everything between a and c:
+    ## b
 
-      [ "$(printf 'a b c\n' | sed ':a s/a[^c]/a/; t a')" = $'ac' ] || exit 1
+      # Unconditional jump.
 
-## Command line arguments
+        [ "$(printf 'a\nb\n' | sed '/a/ b c; s/./c/; :c')" = $'a\nc' ]
+        [ "$(printf 'a\nb\n' | sed '/a/ b c; s/./c/; :c s/c/d')" = $'a\nd' ]
 
-  ## n
+    ## t
 
-    # Don't print all lines (default).
+      # Jump if last s changed pattern space.
 
-    # Print new line if match:
+      # Remove spaces after a:
 
-      sed -n 's/find/repl/gp'
+        [ "$(printf 'a b c\n' | sed ':a s/a /a/; t a')" = $'ab c' ]
 
-    # grep:
+      # Remove everything between a and c:
 
-      sed -n '/find/p'
+        [ "$(printf 'a b c\n' | sed ':a s/a[^c]/a/; t a')" = $'ac' ]
 
-  ## i
+  ## Command line arguments
 
-    # Edit files in-place, modifying them.
+    ## n
 
-    # WARNING: transforms symlinks into regular files!
-    # Use the GNU extension `--follow-symlinks`, to prevent this.
+      # Don't print all lines (default).
 
-      f=/tmp/f
-      printf 'a\nb\n' > "$f"
-      sed -i 's/a/A/' "$f"
-      [ "$(cat "$f")" = $'A\nb' ] || exit 1
+      # Print new line if match:
 
-      sed -i.bak 's/A/a/' "$f"
-        #baks up old file with .bak suffix
-      [ "$(cat "$f")" = $'a\nb' ] || exit 1
-      [ "$(`cat "$f".bak)" = $'A\nb' ] || exit 1
-      [ `ls | wc -l` = 2 ] || exit 1
+        sed -n 's/find/repl/gp'
 
-    # Whatever it would print to stdout, writes to the input file instead.
+      # grep:
 
-    # Cannot be used with stdin input!
+        sed -n '/find/p'
 
-  ## e
+    ## i
 
-    # Execute.
+      # Edit files in-place, modifying them.
 
-    # Give multiple commands.
+      # WARNING: transforms symlinks into regular files!
+      # Use the GNU extension `--follow-symlinks`, to prevent this.
 
-    # Execute in each line in given order.
+        f=/tmp/f
+        printf 'a\nb\n' > "$f"
+        sed -i 's/a/A/' "$f"
+        [ "$(cat "$f")" = $'A\nb' ]
 
-    # Same as ; concatenating commands.
+        sed -i.bak 's/A/a/' "$f"
+          #baks up old file with .bak suffix
+        [ "$(cat "$f")" = $'a\nb' ]
+        [ "$(`cat "$f".bak)" = $'A\nb' ]
+        [ `ls | wc -l` = 2 ]
 
-      [ "$(printf 'a\nb\n' | sed -e 's/a/b/' -e 's/b/c/')" = $'c\nc' ] || exit 1
+      # Whatever it would print to stdout, writes to the input file instead.
 
-  ## f
+      # Cannot be used with stdin input!
 
-    # Read commands from given file.
+    ## e
 
-    # One command per line.
+      # Execute.
 
-    ## shebang
+      # Give multiple commands.
 
-      # Can exec sed script with following shebang:
+      # Execute in each line in given order.
 
-        #!/bin/sed -f
+      # Same as ; concatenating commands.
+
+        [ "$(printf 'a\nb\n' | sed -e 's/a/b/' -e 's/b/c/')" = $'c\nc' ]
+
+    ## f
+
+      # Read commands from given file.
+
+      # One command per line.
+
+      ## shebang
+
+        # Can exec sed script with following shebang:
+
+          #!/bin/sed -f
 
   ## GNU extensions
 
-## applications
+    # https://www.gnu.org/software/sed/manual/sed.html
 
-  # If modified, print line number, old line, new line
+    ## Escape sequences.
 
-  # E.g.:
+      # https://www.gnu.org/software/sed/manual/sed.html#Escapes
 
-  # Input:
+      # Numeric character specifications:
 
-    #a
-    #b
-    #a
-    #b
+        #\dxxx
+        #\oxxx
+        #\xxx
 
-  # Regex: `s/a/c/`
+      # Great for when you fell like doing some binary file editing.
 
-  # Output:
+  ## Applications
 
-    #1
-    #a
-    #c
-    #
-    #3
-    #a
-    #c
+    # If modified, print line number, old line, new line
 
-  [ "$(printf 'a\nb\na\nb\n' | sed -n 'h; s/a/c/; t p; d; :p {=;x;G;s/$/\n/;p}')" = $'1\na\nc\n\n3\na\nc\n' ] || exit 1
+    # E.g.:
 
-echo 'All tests passed.'
+    # Input:
+
+      #a
+      #b
+      #a
+      #b
+
+    # Regex: `s/a/c/`
+
+    # Output:
+
+      #1
+      #a
+      #c
+      #
+      #3
+      #a
+      #c
+
+    [ "$(printf 'a\nb\na\nb\n' | sed -n 'h; s/a/c/; t p; d; :p {=;x;G;s/$/\n/;p}')" = $'1\na\nc\n\n3\na\nc\n' ]
+
+  echo 'All tests passed.'

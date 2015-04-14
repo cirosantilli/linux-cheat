@@ -4,7 +4,9 @@ View binary data.
 
 POSIX 7: <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/od.html>
 
-Saner non-POSIX 7 alternatives: `hd`, `hexdump`.
+Mnemonic: Octal Dump.
+
+Other non-POSIX 7 alternatives: `hd`, `hexdump`. Those usually produce more readable output by default.
 
 Very useful for viewing binary data which contains values which cannot be interpreted as some character set (ASCII, UTF-8) that can be printed to terminal screen.
 
@@ -16,9 +18,9 @@ You have some fun exploring things such as:
 
         sudo hd -n 512 /dev/sda
 
-Octal dump.
-
 View byte values byte by byte in octal and other bases.
+
+## Most useful commands
 
 The most useful command for inputs which are mostly ASCII is:
 
@@ -42,8 +44,9 @@ Which outputs:
 
 For interactive uses, consider either:
 
-- using another utility such as `hd` (non-POSIX) which has saner defaults
-- having an alias which sets sane flags:
+-   using another utility such as `hd` (non-POSIX) which has saner defaults
+
+-   having an alias which sets sane flags:
 
         alias ods='od -Ax -tx1'
 
@@ -58,21 +61,21 @@ Output:
 
 Meaning of output:
 
-1. Number of the first byte in the line in.
+1.  Number of the first byte in the line in.
 
-Here the first byte in line 1 is byte 0 of the file. The first byte of line 2, if it existed, would be byte 2.
+    Here the first byte in line 1 is byte 0 of the file. The first byte of line 2, if it existed, would be byte 2.
 
-2. First byte of each line.
+2.  First byte of each line.
 
-`61` in hex is 97 in decimal, which is the ASCII for `a`.
+    `61` in hex is 97 in decimal, which is the ASCII for `a`.
 
-3. Second byte of each line.
+3.  Second byte of each line.
 
-`62` in hex is 98 in decimal, which is the ASCII for `b`.
+    `62` in hex is 98 in decimal, which is the ASCII for `b`.
 
 Best command for computational use:
 
-    printf "ab" | od -Ax -tx1
+    printf 'ab' | od -Ax -tx1
 
 ## t
 
@@ -262,6 +265,10 @@ Output:
     0000048 79 20 7a 0a
     0000052
 
-## -N
+## N
 
 Maximum number of bytes to read.
+
+## w
+
+Number of bytes per line. Default: 32.

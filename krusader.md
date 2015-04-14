@@ -39,3 +39,11 @@ Some defaults could be better.
 -   F2 opens Guake in the current directory when you need a larger shell
 
     Useraction: TODO
+
+## Warning windows
+
+## Warning windows
+
+When I delete files with `Del` or do other actions, I get an annoying warning popup.
+
+Maybe <https://bugs.kde.org/show_bug.cgi?id=304233>

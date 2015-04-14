@@ -6,8 +6,13 @@ Programming IDE.
 
 Advantages over Vim:
 
-- everything coded in Java
-- huge Java integration
+-   coded in Java and plugins also coded
+
+-   huge out-of-the-box Java development integration:
+
+    - great debugging interface
+    - code navigation: click to jump to interface or definition
+    - parses stdout stack traces
 
 Downside:
 
@@ -29,15 +34,11 @@ Install Eclipse as a regular user, not as root or via package managers like `apt
 
 Preferences, settings are under Window > Preferences
 
-Make package explorer follow current editor file:
-<http://stackoverflow.com/questions/6334241/how-do-i-show-an-open-file-in-eclipse-package-explorer>
+Make package explorer follow current editor file: <http://stackoverflow.com/questions/6334241/how-do-i-show-an-open-file-in-eclipse-package-explorer>
 
-It is not possible to customize tab labels as with Vim's `guitablabel`:
-<http://stackoverflow.com/questions/3450648/smarter-editor-tab-labels-in-eclipse>
+It is not possible to customize tab labels as with Vim's `guitablabel`: <http://stackoverflow.com/questions/3450648/smarter-editor-tab-labels-in-eclipse>
 
-Show full path to files:
-<http://stackoverflow.com/questions/3170379/eclipseide-is-there-a-way-to-add-the-workspace-path-to-the-eclipse-ide-title-ba>
-Important if you are running multiple Eclipse instances at once.
+Show full path to files: <http://stackoverflow.com/questions/3170379/eclipseide-is-there-a-way-to-add-the-workspace-path-to-the-eclipse-ide-title-ba> Important if you are running multiple Eclipse instances at once.
 
 ### Spell checking
 
@@ -98,6 +99,12 @@ Navigate in editor and its tabs:
 
     `Ctrl + T Ctrl + T`: toggle between quick type and supertype hierarchy.
 
+-   `Ctrl + Shift + H`: open call hierarchy for method under cursor. Allows you to see who calls what.
+
+    How to ignore tests: <http://stackoverflow.com/questions/9321408/hide-unit-tests-from-call-heirachy>
+
+    How to ignore parent classes, e.g. `toString` on all Objects: <http://stackoverflow.com/questions/13792592/finding-references-of-myclass-tostring-in-eclipse>
+
 -   `Ctrl + Shift + Down/Up`: move to the next / previous class member
 
 -   `Ctrl + E`: show a filter dropdown with the tabs
@@ -154,8 +161,10 @@ Misc:
 
     Includes things like generation of annoying methods like `toString`, `equals` and `hashCode`.
 
-    The generated `hashGode` appears to be good, a similar approach is used by the JCL:
-    <http://stackoverflow.com/questions/11795104/is-the-hashcode-function-generated-by-eclipse-any-good>
+    The generated `hashGode` appears to be good, a similar approach is used by the JCL: <http://stackoverflow.com/questions/11795104/is-the-hashcode-function-generated-by-eclipse-any-good>
+
+
+-   `Alt + Shift + J`: generate Javadoc comments for method under cursor
 
 ## Debug
 
@@ -307,6 +316,8 @@ Eclipse generates the following configuration files on projects:
 
 You will want to gitignore them.
 
+It does not seem possible to ask Eclipse to prevent Eclipse from creating those files: <http://stackoverflow.com/questions/12563878/how-to-prevent-creation-of-project-files-in-eclipse-navigator>
+
 ### Eclipse.ini
 
 Global file on `$ECLIPSE_HOME` or in the eclipse installation folder by default.
@@ -417,7 +428,21 @@ TODO how to use this? Clicking `Ctrl + J` tries to create a new test class inste
 
 ### JaCoCo
 
+### EclEmma
+
 Test coverage viewer plugin.
+
+`JaCoCo` is the backend.
+
+Go to a JUnit test, then `Alt + Shift + E T`. This runs the test, and colors places the code that were covered or not.
+
+To remove the highlight, click on the `X` of the Coverage window. You can also assign a keyboard shortcut to it. And if you change a file, the coverage highlight disappears.
+
+`Ctrl + Alt + Q O` opens the coverage window.
+
+For each branch, it puts a diamond on the left gutter that says how many of the branches (true / false) were covered at least once: red for 0, yellow for 1 and green for both.
+
+On the test itself, the highlight indicates which zones have been run or not.
 
 ### Built-in terminals
 

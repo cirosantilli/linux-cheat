@@ -1,0 +1,3 @@
+# Templates
+
+Simple Vagrantfile templates.

@@ -1,5 +1,13 @@
 # Make
 
+POSIX 7 build system.
+
+Special targets:
+
+- [.PRECIOUS](precious/)
+
+## Introduction
+
 Make allows you to:
 
 -   make command line interfaces of the type:
@@ -12,8 +20,7 @@ Make allows you to:
 
     This may save lots of time when building large projects.
 
-Make is specified by POSIX <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/make.html>
-and implemented by GNU with extensions. It is the de facto standard make tool for POSIX systems.
+Make is specified by POSIX 7 <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/make.html> and implemented by GNU with extensions. It is the de facto standard make tool for POSIX systems.
 
 ## Downsides of Make
 
@@ -31,7 +38,7 @@ None has yet dominated on most applications, but important ones include:
 
 -   Rake.
 
-    Similar to `make`, Ruby implemented with makefiles written in pure Ruby.
+    Similar to `make`, Ruby implemented with Makefiles written in pure Ruby.
 
 -   Apache Ant.
 
@@ -39,11 +46,11 @@ None has yet dominated on most applications, but important ones include:
 
     Makefiles are written in XML, so a bit verbose to write by hand.
 
-## makefile vs Makefile
+## Makefile filename case
 
 - <http://stackoverflow.com/questions/12669367/should-i-name-makefile-or-makefile>
 
-make tries the following names, in order: `GNUmakefile`, `makefile` and `Makefile`.
+Make tries the following names, in order: `GNUmakefile`, `makefile` and `Makefile`.
 
 `Makefile` has the advantages:
 

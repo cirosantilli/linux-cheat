@@ -46,6 +46,12 @@ Useful options:
 
 -   `-c`: check if is sorted
 
+## Custom line separator
+
+<http://stackoverflow.com/questions/2625976/sorting-space-delimited-numbers-with-linux-bash>
+
+No direct way apparently, just `tr` it.
+
 ## GNU extensions
 
 -   `-V`: sort dot separated versions numbers:

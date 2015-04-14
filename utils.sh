@@ -87,54 +87,6 @@
       CFLAGS=$(shell pkg-config --cflags pkgname)
       LIBS=$(shell pkg-config --libs pkgname)
 
-  ## diff
-
-    ## diff
-
-      # GNU diffutils package.
-
-      # Compare files *and* directory contents
-
-      # Files:
-
-        echo -e "0\na\n1\n2\n3\n4\n5" > a
-        echo -e "0\n1\n2\nb\n3\n5" > b
-        nl a
-        nl b
-
-        diff a b
-
-        diff -u a b
-        #gitlike diff (unified format)
-
-      # Directories:
-
-        mkdir a
-        touch a/a
-        touch a/c
-        mkdir b
-        touch b/b
-        touch b/c
-        diff a b
-
-    ## patch
-
-    ## wdiff
-
-      # Word oriented diff.
-
-        wdiff a b
-
-    ## kiff3
-
-      # KDE 3 way merge tool.
-
-      # Works with `git mergetool`.
-
-        sudo aptitude install -y kdiff3
-
-        kdiff3 f1 f2 -o fout
-
   ## source-highlight
 
     # Takes in source files and produces highlighted output in one of the formats:
@@ -180,118 +132,6 @@
     #POSIX fortran compiler.
 
 ## text
-
-  ## echo
-
-    #POSIX 7.
-
-    ## versions
-
-      #POSIX says that: A string to be written to standard output.
-
-        #If the first operand is -n, or if any of the operands contain a <backslash> character,
-        #the results are implementation-defined.
-
-      #Which means that is your `echo` input statrs with `-n` or contains a backslash `\`,
-      #behaviour is undetermined.
-
-      #To make things worse, in practice different implementations *do* have different standards.
-
-      #- On Ubuntu 13.04, `sh` has an `echo` built-in.
-
-        #This version only accepts `-n` as a command line option,
-        #and backslash escapes are always interpreted.
-
-      #- `/bin/echo` by GNU. On Ubuntu 13.04, `bash` has no built-in called `echo`,
-        #and therefore uses this one.
-
-        #In this version, you need to use the `-e` option to activate the backslash escapes.
-
-        #It seems that this is is slighltly *not* POSIX compliant since other options are introduced
-        #such as `-e`, and POSIX seems to mandate that such strings be printed (`echo -e 'a' would print `-e a`)
-
-      #The message then is clear: if you want to use escape chars, or ommit the ending newline,
-      #do *not* use `echo`. Or even better, never use echo, only `printf`.
-
-    #print to stdout:
-
-      [ "`echo a`" = a ] || exit 1
-
-    #multiple arguments are space separated:
-
-      [ "`echo a b c`" = "a b c" ] || exit 1
-
-    ## gnu implementation
-
-      #As explained in the versions section, POSIX does not specificy behaviour
-      #if `-n` input starts or if input contains `\n`, and in practice inplementations
-      #recognze other command line options besides `-n`.
-
-      #Appends newline at end by default.
-
-      #-n: no final newline:
-
-        echo -n a
-
-      #Does not interpret `\` escaped chars by default:
-
-        [ "`echo 'a\nb'`" = $'a\\nb' ] || exit 1
-
-      #-e: interprets \ escaped chars:
-
-        [ "`echo -e 'a\nb'`" = $'a\nb' ] || exit 1
-        [ "`echo -e '\x61'`" = $'a' ] || exit 1
-
-      #Print the `-n` string:
-      #IMPOSSIBLE! not even gnu echo supports `--` since POSIX says that this should be supported.
-      #=) use `printf`.
-
-  ## printf
-
-    # POSIX 7.
-
-    # Goes around echo's quicks.
-
-    # Anlogous to C printf.
-
-    # Does not automatically append newline:
-
-      [ "`printf "a"`" == "a" ] || exit 1
-
-    # Automatically interprets backslash escapes like C printf:
-
-      printf "a\nb"
-
-    # Automatically interprets backslash escapes like C printf:
-
-    # Print the `-n` string:
-
-      [ "`printf "%s" "-n"`" == "-n" ] || exit 1
-
-    # Supports C format strings:
-
-      [ "`printf "%1.2d" 1`"    == "01" ] || exit 1
-      [ "`printf "%1.2f" 1.23`"  == "1.23" ] || exit 1
-
-    # Print the `-n` string:
-
-      [ "`printf "%s" "-n"`" == "-n" ] || exit 1
-
-    # Print a string ignoring all escape sequences (always appends terminates in a single newline):
-
-      printf "%s\n" "\n\r"
-
-    # Never terminate in a newline:
-
-      printf "%s" "\n\r"
-
-    # Include trailling newlines:
-
-      TODO
-
-    # Do interpret the escapes:
-
-      printf "%ba" "\n"
 
   ## yes
 
@@ -347,41 +187,9 @@
 
       [ `echo "a bcd" | fold -w 2` = $'a\nbcd' ] || exit 1
 
-  ## column
-
-    # bsdmainutils
-
-    # If the input would be larger than the current terminal column count,
-    # format it into newspaper like columns.
-
-      seq 100 | column
-
-    # Sample output:
-
-      1	6	11	16	21	26	31	36	41	46	51	56	61	66	71	76	81	86	91	96
-      2	7	12	17	22	27	32	37	42	47	52	57	62	67	72	77	82	87	92	97
-      3	8	13	18	23	28	33	38	43	48	53	58	63	68	73	78	83	88	93	98
-      4	9	14	19	24	29	34	39	44	49	54	59	64	69	74	79	84	89	94	99
-      5	10	15	20	25	30	35	40	45	50	55	60	65	70	75	80	85	90	95	100
-
-    # Sample output:
-
-
-    # `-t`: format data into table format. Inteligently uses a separator char
-    # `-s`: set the separator char
-
-
-      printf '123|1|12345\n12345|123|1\n' | column -ts'|'
-
-    # Sample output:
-
-      123    1    12345
-      12345  123  1
-
   ## tsort
 
-    # Topological sorting:
-    # <http://en.wikipedia.org/wiki/Tsort_%28Unix%29>
+    # Topological sorting: <http://en.wikipedia.org/wiki/Tsort_%28Unix%29>
 
       printf '1 2\n2 3\n' | tsort
         #1
@@ -395,7 +203,7 @@
 
   ## split
 
-    # corutils.
+    # coreutils package.
 
     # Split files into new smaller files of same size
 
@@ -429,35 +237,6 @@
       [ `cat xx00` = 0 ] || exit 1
       [ `cat xx01` = $'aa\n1' ] || exit 1
       [ `cat xx02` = $'aa\n2' ] || exit 1
-
-  ## paste
-
-    # POSIX 7.
-
-    # Useless
-
-    # Shows files side by side line by line.
-
-    # Default separator: tab.
-
-    # Long lines will make this unreadable.
-
-      echo -e "a a a a a a a a a a a a a a\na" > a
-      echo -e "b b\nb b"            > b
-      echo -e "c c\nc c\nc"          > c
-      paste a b c
-
-  ## expand
-
-    # POSIX 7
-
-    # Expand tabs to spaces:
-
-      echo -e "a\tb" | expand
-
-    ## unexpand
-
-      #contrary
 
   ## seq
 
@@ -495,9 +274,11 @@
       # Use this only if you really need to control
       # the output with the options.
 
-  ## path operations
+  ## Path operations
 
-    ## basename ##dirname
+    ## basename
+
+    ## dirname
 
       # POSIX 7
 
@@ -523,7 +304,7 @@
 
 ## moreutils
 
-  #extra base linux utils
+  # Extra base Linux utils.
 
     sudo aptitude install moreutils
 
@@ -564,9 +345,9 @@
       a="`echo -e "\n#lines starting with '#' will be ignored" | vipe | grep -Ev '^#' `"
       echo "$a"
 
-## character encoding
+## Character encoding
 
-  ## chinese
+  ## Chinese
 
     # - Guobiao is mainly used in Mainland China and Singapore. Named as `GB\d+`
     # - Big5, used in Taiwan, Hong Kong and Macau
@@ -799,26 +580,6 @@
       # coreutils
 
         nproc
-
-    ## cpuinfo
-
-      # CPU info dev file:
-
-        cat /proc/cpuinfo
-
-      # Check if CPU is 64 bit:
-
-        cat /proc/cpuinfo | grep flags | grep lm
-
-      # `lm` is a standard CPU flag that stands for Long Mode and indicates exactly support for 64 bit.
-
-      # Meaning of all flags: <http://unix.stackexchange.com/questions/43539/what-do-the-flags-in-proc-cpuinfo-mean>
-
-    # RAM info dev file:
-
-      cat /proc/meminfo
-
-    # RAM info dev file:
 
 	## lspci
 

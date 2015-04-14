@@ -1,6 +1,6 @@
 # date
 
-POSIX 7 http://pubs.opengroup.org/onlinepubs/9699919799/utilities/date.html
+POSIX 7 <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/date.html>
 
 Get system date:
 

@@ -95,6 +95,10 @@ Generated files and data after `sudo update-grub`:
 
 -   `GRUB_CMDLINE_LINUX_DEFAULT`: space separated list of Kernel boot parameters.
 
+    Documented at:
+
+        man bootparam
+
     Those parameters can also be edited from the boot menu for single session by selecting the partition and clicking `e`.
 
 	Most important to know:

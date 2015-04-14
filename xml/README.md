@@ -2,7 +2,33 @@
 
 Very popular plain text data exchange format.
 
-Specified by W3C at: <http://www.w3.org/TR/xml/>. Currently equals the latest stable: XML 1.0 (2008).
+-   [xmllint](xmllint.md)
+-   [libxml](libxml.md)
+-   Examples
+    - Minimalistic
+        - [empty.xml](empty.xml) (invalid)
+        - [min.xml](min.xml)
+        - [min-sane.xml](min-sane.xml)
+        - [prolog-no-version](prolog-no-version.xml)
+    -   [comment.xml](comment.xml)
+    -   [css.xml](css.xml)
+    -   [inline-dtd.xml](inline-dtd.xml)
+    -   Evil:
+        - [billion-laughs.xml](billion-laughs.xml)
+
+## Standards
+
+Specified by W3C at: <http://www.w3.org/TR/xml/>. Currently equals to the latest stable: XML 1.0 (2008).
+
+Funnily, the last version of XML 1.1, the other major version of XML, dates from 2006, i.e. before XML 1.0. This is so because XML 1.0 was created in 1998, but XML 1.1 was created in 2004.
+
+XML 1.0 is much more popular than XML 1.1: <http://stackoverflow.com/questions/6260975/should-i-learn-xml-1-0-or-xml-1-1>
+
+XML Namespaces <http://www.w3.org/TR/REC-xml-names/> from 2009 extends XML with things like `xmlns`.
+
+<http://www.w3.org/TR/xmlschema11-1/> specifies XML
+
+## Introduction
 
 Represents data on a tree structure.
 
@@ -14,13 +40,9 @@ Can be easily extended to define new formats, and several key formats are based 
 
 HTML looks a lot like XML, but is *not* valid XML for several new syntaxes which are more convenient to web developers. XHTML, an HTML variant version which really is XML.
 
-Minimal XML document:
+XML has been losing popularity to JSON, which is more lightweight as you don't have to repeat open and closing tags so much, and since JSON is almost of subset of JavaScript notation, which many people know.
 
-- XML documents must have a root element.
-
-## Well formed
-
-## Valid
+## Well formed vs valid
 
 A well formed document has the correct XML syntax.
 
@@ -33,6 +55,8 @@ There are two file formats which specify documents:
 - the older Document Type Definition (DTD).
 - the newer and XML based, XML Schema (XSD). Yup, specify XMLs with XMLs!
 
+<http://stackoverflow.com/questions/1544200/what-is-difference-between-xml-schema-and-dtd>
+
 ## Minimal document
 
 The minimal well formed-document contains the `prolog` and one, possibly empty root element:
@@ -41,27 +65,95 @@ The minimal well formed-document contains the `prolog` and one, possibly empty r
 
 See: [min.xml](min.xml).
 
+## Element
+
+Valid characters:
+
+### Name of elements and attributes
+
+Rules <http://www.w3.org/TR/xml/#NT-NameStartChar>.
+
+In particular:
+
+- `@` is not allowed
+- `-` and `.` and digits are allowed but not as the first character
+- `:` and `_` are allowed anywhere
+
+### Attributes
+
+Characters that must be encoded on the value: `<&"`
+
+### Elements vs attributes for key value dictionaries
+
+In many cases, both can be used.
+
+Elements can:
+
+-   contain other elements
+
+-   skip DTD check if you let users add arbitrary new keys.
+
+        <elem customKey="customVal />
+
+    vs:
+
+        <elem>
+          <entry key="customKey" val="customVal" />
+        </elem>
+
+Attributes can:
+
+-   enforce DTD check
+
 ## Declaration
 
 ## prolog
 
-Must be the first thing in the document.
+<http://www.w3.org/TR/xml/#sec-prolog-dtd>
 
-Is optional, but the spec says that it RFC2119-SHOULD be present, so just use it always.
+### XML declaration
+
+<http://www.w3.org/TR/xml/#NT-XMLDecl>
+
+Must be the first thing in the document: not even whitespace can come before it.
+
+Is optional, but the spec says that it RFC2119-SHOULD be present, so just use it always. <http://stackoverflow.com/questions/7007427/does-a-valid-xml-file-require-an-xml-declaration>
+
+For XML 1.1 it is mandatory, and XML 1.1 says that if it is not present, then the document is XML 1.0.
 
 TODO: what is the default version if prolog missing?
 
-E.g.:
+Must contain the version attribute if present.
 
     <?xml version="1.0"?>
-
-Must contain the version attribute if present.
 
 May contain the encoding:
 
     <?xml version="1.0" encoding="UTF-8"?>
 
 UTF-8 is the default if not specified.
+
+#### standalone
+
+The prolog may contain a `standalone`:
+
+    <?xml version="1.0" encoding="UTF-8" standalone="true"?>
+
+Means that validation should ignore DTD if one is present.
+
+---
+
+`version`, `encoding` and `standalone` are not real attributes, only magic things that look like attributes. Their order is fixed.
+
+### DTD
+
+Define what a valid document is.
+
+<http://www.w3.org/TR/xml/#NT-doctypedecl>
+
+### XSD
+
+TODO
 
 ## Processing instructions
 
@@ -130,34 +222,8 @@ Only `href` is mandatory, `type` is only advisory.
 
 TODO: are all HTML style attributes allowed?
 
-# XSLT
+## XSLT
 
 XML-based Turing complete language used to transform XML documents into other formats, e.g.: other XML documents, PDFs, HTML, etc.
 
 <http://en.wikipedia.org/wiki/XSLT>
-
-# Tools
-
-## libxml
-
-GNOME's implementation.
-
-Homepage: <http://xmlsoft.org/>
-
-## xmllint
-
-libxml CLI frontend.
-
-Usage:
-
-    xmllint min.xml
-
-Checks if:
-
-- well formed
-- valid
-- entity loops like the billion laughs attack
-
-Pretty print:
-
-    xmllint --format min.xml

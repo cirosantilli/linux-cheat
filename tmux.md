@@ -70,7 +70,7 @@ Attach again to a session:
 
 Window shortcuts:
 
--   `,`: create a new window (Vim tab)
+-   `,`: rename a new window (Vim tab)
 
 -   `c`: create a new window (Vim tab)
 

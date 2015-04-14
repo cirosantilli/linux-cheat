@@ -196,32 +196,6 @@ Each partition can have a different filesystem.
 
 When creating partitions for external storage devices such as USB stick nowadays, the best option is NTFS since Linux can read write to it out of the box, and it can be used on the 95% of computers because they use Windows (which does not read / write to ext out of the box.)
 
-### tmpfs
-
-### ramfs
-
-Types of filesystems that exists only in RAM. It is therefore fast and can only be small.
-
-Can be useful if you want to speed up some filesystem operations and have enough RAM for it.
-
-tmpfs vs ramfs:
-
--   tmpfs has a fixed size: it does not grow dynamically and raises an error if you blow the limit.
-
-    ramfs can grow dynamically and does not use swap.
-
--   tmpfs uses swap, ramfs does not.
-
-Create a tmpfs:
-
-    sudo mkdir -p /mnt/tmp
-    sudo mount -t tmpfs -o size=20m tmpfs /mnt/tmp
-
-Create a ramfs:
-
-    sudo mkdir -p /mnt/ram
-    sudo mount -t ramfs -o size=20m ramfs /mnt/ram
-
 ## Create filesystems
 
 Find all commands to make filesystems:
@@ -497,11 +471,41 @@ Mounts `from/` on `to/`.
 
 `-u a -g a`: everything seen on `to` is owned by `a:a`
 
-Everything created / saved on b, is created on `a` with owner `b:b`.
+Everything created / saved on `b`, is created on `a` with owner `b:b`.
 
 Unmount:
 
     fusermount -u /home/johnc/ISO-images
+
+### ramfs
+
+### tmpfs
+
+Types of filesystems that exists only in RAM. It is therefore fast and can only be small.
+
+Can be useful if you want to speed up some filesystem operations and have enough RAM for it.
+
+tmpfs vs ramfs:
+
+-   tmpfs has a fixed size: it does not grow dynamically and raises an error if you blow the limit.
+
+    ramfs can grow dynamically and does not use swap.
+
+-   tmpfs uses swap, ramfs does not.
+
+Create a tmpfs:
+
+    sudo mkdir -p /mnt/tmpfs
+    sudo mount -t tmpfs -o size=100m tmpfs /mnt/tmpfs
+
+Create a ramfs:
+
+    sudo mkdir -p /mnt/ramfs
+    sudo mount -t ramfs -o size=100m ramfs /mnt/ramfs
+
+Undo with:
+
+    sudo umount /mnt/ramfs
 
 ### Unmount
 

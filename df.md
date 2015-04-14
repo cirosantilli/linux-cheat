@@ -43,6 +43,15 @@ Also show partition filesystems type:
 
     df -T
 
+Get the current partition for a given path:
+
+    df /mnt/tmpfs
+
+Sample output:
+
+    Filesystem     1K-blocks  Used Available Use% Mounted on
+    tmpfs             102400     0    102400   0% /mnt/tmpfs
+
 ## i
 
 Get percentage of free / used inodes:

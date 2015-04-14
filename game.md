@@ -74,11 +74,15 @@ Type what to do and where to go.
 
 Convert number in numerals to number in English:
 
-    assert [ `echo 1 | number` = "one." ]
+    [ `echo 1 | number` = "one." ] || exit 1
 
 #### pom
 
 Displays the phase of the moon.
+
+#### rot13
+
+    [ "$(echo 'abc' | rot13)" = 'nop' ] || exit 1
 
 #### primes
 

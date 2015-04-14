@@ -134,6 +134,15 @@ no warnings;
 
         join(',', (1, 2)) == '1,2' or die;
 
+    ##repeat
+
+    ##x operator
+
+        # Yes, the letter `x` is an operator in Perl...
+        # http://stackoverflow.com/questions/277485/how-can-i-repeat-a-string-in-perl
+
+        ('ab' x 3) eq 'ababab' or die;
+
 ##Array
 
         my @a = (0, 'a', 1);

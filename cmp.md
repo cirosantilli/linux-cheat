@@ -1,6 +1,6 @@
 # cmp
 
-GNU Diffutils package.
+<http://pubs.opengroup.org/onlinepubs/9699919799/utilities/cmp.html>, Ubuntu GNU Diffutils package.
 
 Compares F and G byte by byte, until first difference is found.
 
