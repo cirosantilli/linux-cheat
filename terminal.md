@@ -40,6 +40,10 @@ This is very useful when you want the current application to stop running, becau
 
 Note however that applications can handle `SIGTERM`, and some pesky applications won't terminated on `<C-C>` (some may at least ask you if you want to terminate, or tell you how to do so).
 
+### c-\
+
+Send a `SIGQUIT` to foreground process.
+
 ### c-z
 
 Send a `SIGSTOP` to foreground process, and put it on background.
@@ -101,10 +105,6 @@ The process can be resumed with `<C-Q>`.
 Send a `SIGCONT` to foreground process.
 
 Useful after a `<C-S>`.
-
-### c-\
-
-Send a `SIGQUIT` to foreground process.
 
 ### c-d
 

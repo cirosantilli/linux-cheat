@@ -11,9 +11,7 @@ Get string from user into variable `a`:
     read a
     echo "$a"
 
-Cannot write with pipe into read because the pipe spawns a sub-shell,
-which cannot modify a variable in its parent shell:
-<http://stackoverflow.com/questions/13763942/bash-why-piping-input-to-read-only-works-when-fed-into-while-read-const>
+Cannot write with pipe into read because the pipe spawns a sub-shell, which cannot modify a variable in its parent shell: <http://stackoverflow.com/questions/13763942/bash-why-piping-input-to-read-only-works-when-fed-into-while-read-const>
 
     a=a
     echo b | read a   `read a` is executed in a subshell!

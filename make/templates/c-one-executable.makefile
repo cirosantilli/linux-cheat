@@ -14,6 +14,8 @@ OUTS := $(addsuffix $(OUT_EXT), $(OUTS_NOEXT))
 
 .PHONY: all clean run
 
+all: $(OUTS)
+
 $(RUN): $(OUTS)
 	gcc '$<' -o '$@'
 
