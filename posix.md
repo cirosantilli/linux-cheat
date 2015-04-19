@@ -1,7 +1,8 @@
 # POSIX
 
-For a cheat on the POSIX C API and all the concepts necessary to understand it see:
-<https://github.com/cirosantilli/cpp/tree/99ad8ab9aee7bf2d8c47c9e25f4631eddb556ccf/posix>
+An operating system standardization by both IEEE and `the open group` (merger of the `Open software foundation` with `X/Open`)
+
+For a cheat on the POSIX C API and all the concepts necessary to understand it see: <https://github.com/cirosantilli/cpp/tree/99ad8ab9aee7bf2d8c47c9e25f4631eddb556ccf/posix>
 
 POSIX command line utilities shall not be discussed here because it is better to group utilities together with other non-POSIX utilities which have similar functions, for example discussing both `kill` (POSIX) and `killall` (non-POSIX) side by side.
 
@@ -9,19 +10,9 @@ POSIX means: `Portable Operating System Interface for uniX`.
 
 POSIX is also known as: Single Unix specification (SUS)
 
-## Sources
+<http://www.opengroup.org/openbrand/register/>
 
--   <http://www.amazon.com/Beginning-Linux-Programming-Neil-Matthew/dp/0470147628>
-
-    Matthew; Stones - Beginning Linux Programming.
-
-    Very good intro do many of POSIX utilities with interesting examples and topics.
-
-## Introduction
-
-An operating system standardization by both IEEE and `the open group` (merger of the `Open software foundation` with `X/Open`)
-
-Currently, GNU/Linux and mac systems are largely POSIX compliant but not certified, windows is not largely compliant.
+Most GNU/Linux systems are largely POSIX compliant but not certified, Windows is largely not compliant, Mac OS X Yosemite is certified. The list of all certified products is found at: <http://www.opengroup.org/openbrand/register/>
 
 The specification if free to view.
 

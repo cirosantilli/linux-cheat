@@ -1,0 +1,109 @@
+# Sources
+
+Consider reading books on general operating system concepts, as those tend to explain better concepts which are used on Linux as well as other OS.
+
+Linux kernel documentation kind of sucks.
+
+Most function definitions or declarations don't contain any comments, so you really need to have a book in your hands to understand the high level of things.
+
+## Free
+
+-   `git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git`
+
+    The source code, *the* only definitive source.
+
+    The built-in docs are not very good though.
+
+-   Official bug tracker: <https://bugzilla.kernel.org/>
+
+-   [free-electrons][]
+
+    One of the best ways of searching where things are defined / declared on the source code.
+
+    Possible alternatives: `ctags` and `grep`.
+
+-   `grep -R`
+
+    Possible way to find where something is defined.
+
+    May take a long time on the source root, and it may be hard to get the actual definitions,
+    but it does works sometimes.
+
+-   `ctags -R`
+
+    Better than grep to find where things are defined / declared.
+
+    Doing:
+
+        ctags -R --c-kinds=-m
+
+    on the kernel root generated a file of 134M, but this might be worth it as it may save lots of grepping time.
+
+    You will might then want to add the following to your `.bashrc`:
+
+        function ctag { grep "^$1" tags; } #CTAgs Grep for id
+        function rctag { cd `git rev-parse --show-toplevel` && grep "^$1" tags; }
+
+    Another similar option is to use [free-electrons][].
+
+-   [kernel-org][]
+
+    kernel.org resources list
+
+-   `make htmldoc` on the source.
+
+    Generates documentation for the kernel from comments, and puts it under `Documentation/DocBook/index.html`
+
+    The most useful is under `kernel api`. Still, this is grossly incomplete.
+
+    The documentation seems to be stored in the `.c` files mostly rather than on the `.h`.
+
+    Weirdly the snapshots of htmldoc on kernel.org have some extra functions, check it out:
+    <https://www.kernel.org/doc/htmldocs/kernel-api.html>
+
+-   [kernel-org][]
+
+    kernel.org resources list
+
+-   [kernelnewbies][]
+
+-   [kernel-mail][]
+
+    Kernel mailing lists.
+
+    Mostly bleeding edge design decisions.
+
+## Non-free
+
+### Books on operating systems in general
+
+-   [stallings11][]
+
+### Books on the Linux kernel
+
+-   [corbet05][]
+
+    Shows lots of kernel to kernel interfaces, but not the internals.
+
+    Tons of examples.
+
+    Good first Linux book read.
+
+-   [bovet05][]
+
+    Inner workings.
+
+    Reasonable info on x86 hardware.
+
+-   [love06][]
+
+    Love - 2006 - Linux kernel development.
+
+[bovet05]:        http://www.amazon.com/books/dp/0596005652
+[corbet05]:       http://www.amazon.com/books/dp/0596005903
+[free-electrons]: http://lxr.free-electrons.com/ident
+[kernel-mail]:    http://vger.kernel.org/vger-lists.html
+[kernel-org]:     https://www.kernel.org/doc/
+[kernelnewbies]:  http://kernelnewbies.org/
+[love06]:         http://www.amazon.com/books/dp/0596005652
+[stallings11]:    http://www.amazon.com/Operating-Systems-Internals-Principles-Edition/dp/013230998X

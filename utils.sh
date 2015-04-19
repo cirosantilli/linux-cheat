@@ -8,53 +8,6 @@
 
   # For a summary of up to level 2 header: `grep -E '^[[:space:]]{0,4}## ' %`.
 
-## Sources
-
-  # - http://linux.die.net/
-
-    # Linux man pages.
-
-    # Also contains dive into python and advanced bash scripting,
-    # so is a major site.
-
-  # Almost official pages:
-
-    # - http://www.kernel.org/
-
-    # - http://git.kernel.org/
-
-  # - http://www.tldp.org/
-
-    # Many tutorials.
-
-  # - the geek stuff
-
-    # http://www.thegeekstuff.com
-
-    # Short tutorials with lots of examples.
-
-  # - tuxfiles
-
-    # <http://www.tuxfiles.org/linuxhelp/fstab.html>
-
-    # Some good tuts
-
-  # - man pages
-
-    # Not many examples, but full function list, and you often can guess what they mean!
-
-  #- info pages
-
-    # GNU project substitude for man.
-
-    # Usually much longer explanations and examples.
-
-    # Better nodewise navigation.
-
-  # - Linux from scratch
-
-    # Teaches how to build a minimal Linux distro
-
 ## configuration
 
   ## Ubuntu
@@ -580,10 +533,6 @@
       # coreutils
 
         nproc
-
-	## lspci
-
-		sudo lspci
 
 	## hwinfo
 

@@ -68,6 +68,10 @@ Some interesting files include:
 
 ## /proc/cpuinfo
 
+TODO vs `/sys/bus/cpu`.
+
+`lscpu` gets information from this file.
+
 On x86, most (TODO all?) of this information comes from the `CPUID` instruction.
 
 Information on CPUs:
@@ -101,6 +105,10 @@ Sample output (only one of my 4 cores):
     cache_alignment : 64
     address sizes   : 36 bits physical, 48 bits virtual
     power management:
+
+- `processor`: processor ID, one for each core
+- `vendor_id`: is part of CPU ID and identifies the vendor
+- `family`, `model` and `stepping` come directly from `CPUID`. Stepping is just another smaller version level: <https://en.wikipedia.org/wiki/Stepping_level>.
 
 ### cpuinfo flags
 

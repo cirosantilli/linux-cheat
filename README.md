@@ -8,7 +8,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [Ubuntu Cheat](https://github.com/cirosantilli/ubuntu-cheat)
     1. [C++ Cheat](https://github.com/cirosantilli/cpp-cheat): compilation / language heavy subjects: POSIX C API, dynamic libraries
     1. [Networking Cheat](https://github.com/cirosantilli/networking-cheat): networking tools and protocols HTTP, SSH, curl, Apache
-1.  [utils](utils.sh) dump of many utilities. Being split up into separate files..
+1.  [utils](utils.sh) dump of many utilities. Being split up into separate files.
 1.  Documentation viewers
     1. [man](man.sh)
     1. [info](info.md)
@@ -157,6 +157,9 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [xsel](xsel.md)
     1.  [xdg-open](xdg-open.md)
     1.  [xset](xset.md)
+    1.  Screenshots
+        1. [recordMyDesktop](recordMyDesktop.md)
+        1. [xwd](xwd.md)
 1.  Generic data formats
     1. [JSON](json.md)
     1. [XML](xml/)
@@ -173,13 +176,21 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
 1.  [Configuration automation](config-automation.md)
     1. [chef](chef/)
     1. [puppet](puppet.md)
+1.  Hardware
+    [lspci](lspci.md)
 1.  Misc
     1. [logrotate](logrotate.md)
     1. [factor](factor.md)
     1. [xargs](xargs.md)
+1.  [Bibliography](bibliography.md)
 
 ## WIP
 
+1.  [Hardware](hardware.md)
+    1.  [lshw](lshw.md)
+    1.  Printer
+        1. [system-config-printer](system-config-printer.md)
+        1. CUPS
 1.  [gcov](gcov.md)
 1.  Misc
     1. [sys-filesystem](sys-filesystem.md)
