@@ -12,22 +12,33 @@ Most function definitions or declarations don't contain any comments, so you rea
 
     The source code, *the* only definitive source.
 
-    The built-in docs are not very good though.
+    Also see the built-in documentation at `Documentation/`.
+
+    Ways to browse:
+
+    -   the most official way is the cgit: <https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/>
+
+    -   GitHub mirror <https://github.com/torvalds/linux>
+
+    -   [free-electrons][]
+
+        Has ctag-like hyperlinks in the kernel code.
+
+        Possible alternatives: `ctags` and `grep`.
+
+-   [kernel-mail][]
+
+    Kernel mailing lists.
+
+    Mostly bleeding edge design decisions.
 
 -   Official bug tracker: <https://bugzilla.kernel.org/>
-
--   [free-electrons][]
-
-    One of the best ways of searching where things are defined / declared on the source code.
-
-    Possible alternatives: `ctags` and `grep`.
 
 -   `grep -R`
 
     Possible way to find where something is defined.
 
-    May take a long time on the source root, and it may be hard to get the actual definitions,
-    but it does works sometimes.
+    May take a long time on the source root, and it may be hard to get the actual definitions, but it does works sometimes.
 
 -   `ctags -R`
 
@@ -58,8 +69,7 @@ Most function definitions or declarations don't contain any comments, so you rea
 
     The documentation seems to be stored in the `.c` files mostly rather than on the `.h`.
 
-    Weirdly the snapshots of htmldoc on kernel.org have some extra functions, check it out:
-    <https://www.kernel.org/doc/htmldocs/kernel-api.html>
+    Weirdly the snapshots of htmldoc on kernel.org have some extra functions, check it out: <https://www.kernel.org/doc/htmldocs/kernel-api.html>
 
 -   [kernel-org][]
 
@@ -67,11 +77,9 @@ Most function definitions or declarations don't contain any comments, so you rea
 
 -   [kernelnewbies][]
 
--   [kernel-mail][]
+-   [Corbet - 2005 - Linux Device Drivers][corbet05]
 
-    Kernel mailing lists.
-
-    Mostly bleeding edge design decisions.
+    Ultimate device driver source.
 
 ## Non-free
 
@@ -80,14 +88,6 @@ Most function definitions or declarations don't contain any comments, so you rea
 -   [stallings11][]
 
 ### Books on the Linux kernel
-
--   [corbet05][]
-
-    Shows lots of kernel to kernel interfaces, but not the internals.
-
-    Tons of examples.
-
-    Good first Linux book read.
 
 -   [bovet05][]
 
@@ -100,7 +100,7 @@ Most function definitions or declarations don't contain any comments, so you rea
     Love - 2006 - Linux kernel development.
 
 [bovet05]:        http://www.amazon.com/books/dp/0596005652
-[corbet05]:       http://www.amazon.com/books/dp/0596005903
+[corbet05]:       https://lwn.net/Kernel/LDD3/
 [free-electrons]: http://lxr.free-electrons.com/ident
 [kernel-mail]:    http://vger.kernel.org/vger-lists.html
 [kernel-org]:     https://www.kernel.org/doc/

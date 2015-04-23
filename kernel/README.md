@@ -8,6 +8,7 @@
 1.  [Testing](testing.md)
 1.  [Source tree](source-tree.md)
 1.  [Module](module.md)
+    1. [Device driver](device-driver.md)
 1.  [Virtual address space](virtual-address-space.md)
 1.  [Scheduling](scheduling.md)
 1.  [Style guide](style-guide.md)
@@ -29,17 +30,23 @@ A simple example is the C `printf` function, which must at some point ask the ke
 
 Another simple example is file IO.
 
-## Version number
-
-- rc = Release Candidate
-
-## Get kernel version
+## Get current kernel version
 
     uname -r
 
-Or:
+Sample output:
+
+    3.13.0-48-generic
+
+TODO what does generic mean?
+
+Or parse:
 
     cat /proc/version
+
+Sample output:
+
+    Linux version 3.13.0-48-generic (buildd@orlo) (gcc version 4.8.2 (Ubuntu 4.8.2-19ubuntu1) ) #80-Ubuntu SMP Thu Mar 12 11:16:15 UTC 2015
 
 ## Interruptions
 

@@ -12,9 +12,9 @@
 
   ## Ubuntu
 
-    #jockey
+    ## jockey
 
-      # Additional drivers : non free vendors
+      # Additional drivers : non-free vendors
 
       # List:
 
@@ -24,7 +24,7 @@
 
         jockey-text --enable=$DRIVER
 
-## programming
+## Programming
 
   ## pkg-config
 
@@ -263,18 +263,18 @@
 
   ## sponge
 
-    #solves the input to output problem problem
+    # solves the input to output problem problem.
 
-    #setup:
+    # setup:
 
       printf '0\n1\n' > a
 
-    #fails:
+    # Fails:
 
       grep 0 a | cat > a
       [ "`cat a`" = '' ] || exit 1
 
-    #works:
+    # Works:
 
       grep 0 a | sponge a
       [ "`cat a`" = '0' ] || exit 1
@@ -344,181 +344,11 @@
 
     # mv converting encodings
 
-## cron
-
-  # Tell the computer to do things at specified times automatially.
-
-  ## crontab
-
-    # POSIX 7.
-
-    # Utility to manage crobjobs.
-
-    # It is basically a frontend for the `/etc/crontab` file which an be edited directly.
-
-    # It is not possible launch graphical applications via cron!
-
-    # Edit user cron jobs in vim
-
-      crontab -e
-
-    # Sample line:
-
-      1 2 3 4 5 /path/to/cmd.sh arg1 arg2 >/dev/null 2>&1
-
-    # Fields:
-
-    # - 1: Minute (0-59)
-    # - 2: Hours (0-23)
-    # - 3: Day (0-31)
-    # - 4: Month (0-12 [12 == December])
-    # - 5: Day of the week(0-7 [7 or 0 == sunday])
-    # - /path/to/command - Script or command name to schedule#
-
-    # Special notations:
-
-    # - * : every
-    # - */5 : every five
-    # - 1,3,6 : several
-    # - 1-5 : ranges
-
-    # Convenient altenatives to the fields:
-
-    # - @reboot	Run once, at startup.
-    # - @yearly	Run once a year, "0 0 1 1 *".
-    # - @annually	(same as @yearly)
-    # - @monthly	Run once a month, "0 0 1 * *".
-    # - @weekly	Run once a week, "0 0 * * 0".
-    # - @daily	Run once a day, "0 0 * * *".
-    # - @midnight	(same as @daily)
-    # - @hourly	Run once an hour, "0 * * * *".
-
-    # Example:
-
-      @daily /path/to/cmd.sh arg1 arg2 >/dev/null 2>&1
-
-    # `>/dev/null 2>&1` prevents cron from sending notification emails.
-
-    # Otherwise if you want them add:
-
-      #MAILTO="vivek@nixcraft.in"
-
-    # to the config file.
-
-    # List all cronjobs:
-
-      crontab -l
-
-    # List all cronjobs for a given user:
-
-      crontab -u user -l
-
-    # Erase all cronjobs:
-
-      crontab -r
-
-    # Erase all cronjobs for a given user only
-
-      crontab -r -u username
-
-  ## batch
-
-    # POSIX 7
-
-    # Superset of `at`.
-
-    # Execute only when system load average goes below 1.5,
-    # starting from now!
-
-      cd "`mktemp -d`"
-      echo "touch a" | batch
-
-    # Same, but with at you can change to any time:
-
-      echo "touch a" | at -q b now
-
-  ## at
-
-    # Schedule job at a single specified time.
-
-    # Not for a periodic jobs.
-
-      cd "`mktemp -d`"
-      echo "touch a" | at now + 1 minutes
-        #in one minute `test -f a`
-      echo "echo a" | at now + 1 minutes
-        #nothing happens!
-        #of course, job does not run in current shell
-      echo "xeyes" | at now + 1 minutes
-        #nothing happens
-
-    # List jobs:
-
-      atq
-
-    # Remove job with id 1:
-
-      atrm 1
-
-    # Id can be found on atq output.
-
-    #inner workings
-
-      echo "touch a" | at now + 10 minutes
-      d=/var/spool/cron/atjobs
-      sudo cat "$d/$(sudo ls "$d" | head -n 1)"
-        #note how the entire environment
-        #and current dir are saved and restored
-
-      sudo cat /usr/lib/cron/at.allow
-        #if exists, only listed users can `at`
-      sudo cat /usr/lib/cron/at.deny
-        #if allow exists, this is ignored!
-        #if not, denies only to listed users
-
 ## system info
-
-  ## uname
-
-    #POSIX 7.
-
-    # Gets information on host computer.
-
-    # Print all info uname has to give:
-
-      uname -a
-
-    # This includes kernel version, user, ...
-
-    # You can each isolated with other opts.
-
-  ## lsb_release
-
-    # Command required by the LSB.
-
-    # Get distro maintainer, name, version and version codename:
-
-        lsb_release -a
-
-    # Extract id programmatically to autodetect distro:
-
-        distro_id="$(lsb_release -i | sed -r 's/.*:\t(.*)/\1/')"
-        distro_version="$(lsb_release -r | sed -r 's/.*:\t(.*)/\1/')"
 
   ## CPU
 
   ## Processor
-
-    ## arch
-
-      # Architecture of the OS, not CPU hardware: Subset of uname.
-
-        arch
-
-      # Sample outputs:
-
-        #i686
-        #x86_64
 
     ## mpstat
 
@@ -1023,153 +853,6 @@
     # - `echo` terminates
     # - `cat` reads the data from the pipe and terminates
 
-  ## mknod
-
-    # Create character, block or FIFO (named pipe) files.
-
-    # Make a char file with major number 12 and minor number 2:
-
-      sudo mknod /dev/coffee c 12 2
-
-  ## chown
-
-    # POSIX 7
-
-    # Change owner and group of files.
-
-    # You must use sudo to do this, because otherwise users would be able to:
-
-    # - steal ownership of files
-    # - git ownership to users who do not want to own the files
-
-      su a
-      mkdir d
-      touch d/f
-      sudo chown newuser:newgroup d
-        #must use sudo to chown
-      [ `stat -c '%U' d` = newuser ] || exit 1
-      [ `stat -c '%G' d` = newgroup ] || exit 1
-      [ `stat -c '%U' d/f` = a ] || exit 1
-
-    # `-R` for recursive operation:
-
-      su a
-      mkdir d
-      touch d/f
-      sudo chown b d
-      [ `stat -c '%U' d` = newuser ] || exit 1
-      [ `stat -c '%G' d` = newgroup ] || exit 1
-      [ `stat -c '%U' d/f` = newuser ] || exit 1
-      [ `stat -c '%G' d/f` = newgroup ] || exit 1
-
-    # To change only user:
-
-      sudo chown newuser
-
-    # To change only group:
-
-      sudo chown :newgroup
-
-  ## chmod
-
-    # POSIX
-
-    # Change file permissions
-
-    # Syntax:
-
-      # chomod [ugoa][+-=][rwxXst]+
-
-    # Make f executable for all (owner, group and other);
-
-      chmod a+x "$f"
-
-    # Makes f readable for all:
-
-      chmod a+r "$f"
-
-    # The difference between using `a` and nothing is that when using
-    # nothing `umask` comes into play.
-
-      umask 002
-      chmod +w "$f"
-      stat -c "%a" "$f"
-        #220
-      chmod a=w "$f"
-      stat -c "%a" "$f"
-        #222
-      chmod o=w "$f"
-      stat -c "%a" "$f"
-        #002
-
-    # Make f not executable for all:
-
-      chmod -x "$f"
-
-    # Make file not executable and not writeble by all:
-
-      chmod =r "$f"
-
-    # Make f executable for owner:
-
-      chmod u+x "$f"
-
-    # Makes f executable for group and other:
-
-      chmod go+x "$f"
-
-    # Makes f readable and writible for all:
-
-      chmod +rw "$f"
-
-    # Same as `chmod =rwx`:
-
-      chmod 777 "$f"
-
-    ## sticky bit, suid sgid bits
-
-      # Sticky bit:
-
-        chmod 1000 "$f"
-        chmod o=t "$f"
-        chmod a=t "$f"
-        stat -c "%A" "$f"
-          #---------T
-        chmod a-t "$f"
-        chmod u=t "$f"
-        chmod g=t "$f"
-        stat -c "%A" "$f"
-          #---------T
-        chmod =s "$f"
-        chmod 6000
-          #set suid and sgid
-        chmod u=s "$f"
-        chmod 4000
-          #set suid and sgid
-        chmod g=s "$f"
-        chmod 2000
-
-      # Can't clear them on numeric mode, only symbolic:
-
-        chmod 7777 f
-        stat -c "%A" "$f"
-          #-rwsrwsrws
-        chmod 0 f
-        stat -c "%A" "$f"
-          #---S--S--T
-        chmod a-st f
-        stat -c "%A" "$f"
-          #----------
-
-    # Can only change permissions for files you own
-    # even if you do not have all the permissions on the file:
-
-      su a
-      touch a
-      chmod 777 a
-      su b
-      if ! chmod 770 a; then assert true; fi
-
   ## umask
 
     # Shows/sets permissions that will be *removed*.
@@ -1192,69 +875,6 @@
       umask 777
       touch c
         #---------
-
-  ## fuser
-
-    #psmisc package
-
-    # Determines which process are using a file or directory.
-
-    # Can send signals to those processes.
-
-      fuser .
-
-    # Shows pids followed by a suffix:
-
-    # -`c`: current directory
-    # -`e`: executable being run
-    # -`f`: open file. f is omitted in default display mode
-    # -`F`: open file for writing. F is omitted in default display mode
-    # -`r`: root directory
-    # -`m`: mmap’ed file or shared library
-
-    # You will have at least one process here: your bash
-
-    # Also Show program and user:
-
-      fuser -v .
-
-    # Check process using tcp/udp ports:
-
-      fuser -v -n tcp 5000
-
-  ## mktemp
-
-    # Create temporary files in the temporary directory.
-
-    # Creates a temporary file in `/tmp/`:
-
-      f="$(mktemp)"
-      echo "$f"
-      assert test -f "$f"
-      rm "$f"
-
-    # Directory:
-
-      d="$(mktemp -d)"
-      echo "$f"
-      assert test -d "$d"
-      rm -r "$d"
-
-    # Custom name template:
-
-      f="$(mktemp --tmpdir abcXXXdef)"
-      assert echo "$f" | grep -E 'abc...def'
-      assert test -f "$f"
-      rm "$f"
-
-    # Must use `--tmpdir` with template or else file is created in current dir
-
-  ## pathchk
-
-    # Check if path is portable across POSIX systems:
-
-      pathchk -p 'a'
-      pathchk -p '\\'
 
 ## setterm
 

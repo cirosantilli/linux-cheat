@@ -1,6 +1,6 @@
 # Module
 
-There are things which are hard to do from regular user programs such as directly talking to hardware
+There are things which are hard to do from regular user programs such as directly talking to hardware.
 
 Some operations can be done via system calls, but if you want flexibility and speed, using the kernel ring is fundamental
 
@@ -19,7 +19,13 @@ Device drivers (programs that enables the computer to talk to hardware) are one 
 
 Two devices can map to the same hardware!
 
-## Config files
+## Stable kernel interface
+
+Kernel modules can use any internal interface of the kernel, although some are more visible than others.
+
+But there is no stable kernel API for modules: if you don't add your driver to the kernel tree, it can break any time: <https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/Documentation/stable_api_nonsense.txt?id=v4.0>
+
+## Configuration files
 
 If file it gets read, if dir, all files in dir get read:
 
@@ -137,134 +143,6 @@ Those come directly from the kernel source tree.
 
 See [this](#includes).
 
-## Device drivers
-
-Devices map to filesystem under `/dev/`. You can get info on them with:
-
-    ls -l /dev
-
-Those files are not on disk files, but offer an interface similar to disk files via the same system calls.
-
-On this case however, it is entirely up to the device writer to specify what each call should do. Obviously, developers should use intuitive calls for the operations, so for example `open` should make any required initializations, `write` send data to the device, `read` get data from the device, and `close` make cleanup operations.
-
-There are three main types of devices:
-
--   block and char
-
-        crw-rw----  1 root tty       7,   1 Feb 25 09:29 vcs1
-        brw-rw----  1 root disk      8,   0 Feb 25 09:30 sda
-        ^
-        type
-
--   `b`: block
-
--   `c`: char
-
-The `b` here is my HD.
-
-Each partition also gets a `b` file.
-
-### Major and minor numbers
-
-Using `ls -l`:
-
-    crw-rw----  1 root tty       7,   1 Feb 25 09:29 vcs1
-                                 ^    ^
-                                 1    2
-
-1.  Major number.
-
-	Traditionally tells kernel which driver controls the device represented by this file.
-
-	Currentlly many drivers can share a single major number.
-
-2.  Minor number.
-
-	ID of each hardware controlled by a given driver.
-
-Get a list of all major numbers attributed and the name of the related device:
-
-	cat /proc/devices
-
-Both are stored inside a `dev_t` type (a single int, with some bytes for each number). You can manipulate `dev_t` with the macros:
-
-- `MAJOR(dev_t dev)`: get major number of a `dev_t`
-- `MINOR(dev_t dev)`: get major number of a `dev_t`
-- `MKDEV(int major, int minor)`: make `dev_t` from major and minor
-
-### alloc_chrdev_region
-
-Allocate character device major and minor number for a new driver.
-
-Defined in `fs/char_dev.c`.
-
-Declared in `include/linux/fs.h`.
-
-Defined in `fs/char_dev.c`.
-
-    int alloc_chrdev_region(&dev, 0, 1, "char_cheat");
-
-Where:
-
-- `dev` is an output containing the device number dynamically allocated to your driver
-- `firstminor` is the first minor number associated with the char driver
-- `count` is the number of minor number which should be allocated.
-- `name` is what will appear under `/proc/devices` and on the `sysfs` under TODO confirm
-
-Returns `0` on success, negative integer on error.
-
-You could fix the major device number yourself, but this is more and more deprecated. This was done with the `register_chrdev_region` function.
-
-The only disadvantage of using dynamic allocation of major numbers is that we must create the character device files under `/dev` after registering the module, and to do so we must process information available at `/proc/devices` which contains char dev name / device number pairs.
-
-Before being able to use those numbers, you still need to allocate a `cdev` with `cdev_init`, and then tell the kernel about it and which device numbers it represents via `cdev_add`.
-
-Once a module is done with the device numbers, it should free those numbers via `unregister_chrdev_region`.
-
-This does not create actual device files.
-
-### cdev
-
-Represents a character device in the kernel.
-
-### cdev_init
-
-Initializes a `cdev`, allocating data for it, and setting its file operations:
-
-    void cdev_init(struct cdev *cdev, struct file_operations *fops);
-
-### cdev_add
-
-Register a `cdev` structure once it has been set up.
-
-    int cdev_add(struct cdev *dev, dev_t num, unsigned int count);
-
-### iminor and imajor
-
-Inodes contain references to `cdev`.
-
-To get the major and minor numbers from a character dev inode, use:
-
-    unsigned int iminor(struct inode *inode);
-    unsigned int imajor(struct inode *inode);
-
-### create a character file from sh
-
-Character files can be created with the `mknod` command.
-
-Since `mknod` also serves other purposes such as creating FIFOs, it shall not be documented here.
-
-As a short reminder, to make a char file with major number 12 and minor number 2 use:
-
-    sudo mknod /dev/coffee c 12 2
-
-Whatever device file you create with a given major and minor number pair will be handled by the same `cdev`, which in particular specifies the `file_operations` `struct`.
-
-Therefore all of the following device files will do the same thing for example when you `cat` them:
-
-    sudo mknod /dev/test c 1 2
-    sudo mknod /tmp/asdf c 1 2
-
 ## Hardware communication
 
 Talking to hardware always comes down to writing bytes in specific registers at a given memory addresses.
@@ -275,11 +153,11 @@ However, since x86 is the most popular and it separates address spaces, every ar
 
 On x86, the following specialized instructions exist for port IO:
 
-- `IN`:         Read from a port
-- `OUT`:        Write to a port
-- `INS/INSB`:   Input string from port/Input byte string from port
-- `INS/INSW`:   Input string from port/Input word string from port
-- `INS/INSD`:   Input string from port/Input `doubleword` string from port
+- `IN`: Read from a port
+- `OUT`: Write to a port
+- `INS/INSB`: Input string from port/Input byte string from port
+- `INS/INSW`: Input string from port/Input word string from port
+- `INS/INSD`: Input string from port/Input `doubleword` string from port
 - `OUTS/OUTSB`: Output string to port/Output byte string to port
 - `OUTS/OUTSW`: Output string to port/Output word string to port
 - `OUTS/OUTSD`: Output string to port/Output `doubleword` string to port

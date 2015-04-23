@@ -23,18 +23,41 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [System Call](system-call/)
     1. [sysctl](sysctl.md)
     1. [Special files](special-files.md)
-        1. [proc filesystem](proc-filesystem.md)
-        1. [dev filesystem](dev-filesystem.md)
+        1.  [proc filesystem](proc-filesystem.md)
+        1.  [dev filesystem](dev-filesystem.md)
+            1. [mknod](mknod.md)
 1.  Initialization
     1. [Install OS](install-os.md): how to install a new OS
     1. [Boot](boot.md)
     1. [Init](init.md): System V, Upstart
-1.  Base topics
-    1. [Filesystem](filesystem.md) POSIX file permissions.
-        1. [Hardlink](hardlink.md)
-    1. [File permissions](file-permissions.md): filesystem, hard disks, mounting, partitions
-    1. [Terminal](terminal.md): terminal emulators, ANSI escapes, control characters
-        1. [Guake](guake.sh)
+1.  System information
+    1.  [lsb_release](lsb_release.md)
+    1.  [uname](uname.md)
+    1.  Hardware
+        [lspci](lspci.md)
+1.  [Filesystem](filesystem.md)
+    1.  [File permissions](file-permissions.md)
+    1.  [Hardlink](hardlink.md)
+    1.  [badblocks](badblocks.md)
+    1.  [blkid](blkid.md)
+    1.  [chown](chown.sh)
+    1.  [chmod](chmod.sh)
+    1.  [du](du.md)
+    1.  ext filesystems
+        1. [e2label](e2label.md)
+        1. [e2fsck](e2fsck.md)
+        1. [e2fsprogs](e2progs.md)
+        1. [mke2fs](mke2fs.md)
+    1.  [fdisk](fdisk.md)
+    1.  [fuser](fuser.md)
+    1.  [lsblk](lsblk.md)
+    1.  [mktemp](mktemp.md)
+    1.  [pathchk](pathchk.md)
+    1.  [ramfs](ramfs.md)
+    1.  [swap partition](swap-partition.md)
+    1.  [UUID](uuid.md)
+1. [Terminal](terminal.md): terminal emulators, ANSI escapes, control characters
+    1. [Guake](guake.sh)
 1.  Stream and file manipulation
     1. [cat](cat.md)
     1. [head](head.md)
@@ -86,14 +109,6 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
 1.  File managers
     1. [Krusader](krusader.md)
     1. [vifm](vifm.md)
-1.  Partitions, filesystems
-    1. [badblocks](badblocks.md)
-    1. [blkid](blkid.md)
-    1. [du](du.md)
-    1. [e2fsck](e2fsck.md)
-    1. [e2fsprogs](e2progs.md)
-    1. [lsblk](lsblk.md)
-    1. [swap partition](swap-partition.md)
 1.  [Compilation and libraries](compile.md)
     1. [GDB](gdb.md)
     1. [Library](library.md)
@@ -172,13 +187,19 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [RST](rst/)
 1.  [Virtual machine](virtual-machine/)
     1. [Docker](docker/)
+    1. [User mode Linux](user-mode-linux.md)
     1. [Vagrant](vagrang/)
 1.  [Configuration automation](config-automation.md)
     1. [chef](chef/)
     1. [puppet](puppet.md)
-1.  Hardware
-    [lspci](lspci.md)
+1.  Printing
+    1. [CUPS](cups.md)
+        1. [lp](lp.md)
+        1. [lpstat](lpstat.md)
+        1. [lpoptions](lpoptions.md)
+        1. [system-config-printer](system-config-printer.md)
 1.  Misc
+    1. [cron](cron.sh)
     1. [logrotate](logrotate.md)
     1. [factor](factor.md)
     1. [xargs](xargs.md)
@@ -186,11 +207,10 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
 
 ## WIP
 
+1.  Filesystem
+    [eCryptfs](ecryptfs.md)
 1.  [Hardware](hardware.md)
     1.  [lshw](lshw.md)
-    1.  Printer
-        1. [system-config-printer](system-config-printer.md)
-        1. CUPS
 1.  [gcov](gcov.md)
 1.  Misc
     1. [sys-filesystem](sys-filesystem.md)

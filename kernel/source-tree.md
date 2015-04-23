@@ -14,9 +14,20 @@ Top folders by size of a compiled `v3.10-rc5` kernel:
 
 ## arch
 
-Architecture specific code. Ex: `x86`, `sparc`, `arm`.
+Architecture specific code. E.g.:
 
-`/arch/XXX/include/`
+- `x86`: mixture of IA-32 and x86-64
+- `arm`
+- `sparc`
+- `powerpc`
+
+### x86
+
+-   `arch/x86/syscalls/syscal_32.tbl`, `arch/x86/syscalls/syscal_64.tbl`: maps system call numbers to the methods.
+
+    TODO what is `common` vs `x32` vs `64` in the `64.tbl` file?
+
+-   `arch/x86/kernel/entry_32.S`, `arch/x86/kernel/entry_64.S`: the low level system call handling
 
 ## asm
 
@@ -59,16 +70,27 @@ One major application of this is to ignore those files from source control. The 
 
 ## include/linux
 
-Default places for almost all important headers for interfaces that can be used across the kernel.
+Contains headers which are visible from user programs as well as from inside the kernel.
 
-Some subsystems however are large enough to merit separate directories in include such as `net` which holds the networking includes.
+Only things which are usable from user programs are exported, which is a small subset of the kernel interface.
 
-Important files include:
+Modules for instance can import many other headers, and use their implementation loaded in the Kernel code in memory.
 
-- `sched.h`:    scheduling and task key structures
-- `fs.h`:       key filesystem structures
-- `compiler.h`: compiler related stuff such as `__user`, which expands to a GCC `__attribute__`.
-- `types.h`:    typedefs
+Example application: ABI for making system calls. System calls are of course visible from user space, and some of them take structures. A `.h` file can then give the C `struct` that must be passed to the system call, e.g. via the glibc `<sys/syscall.h>`.
+
+Examples of that can be fount at: <http://www.fsl.cs.sunysb.edu/~vass/linux-aio.txt>
+
+Those headers may also contain:
+
+- some small `static inline` methods, mostly ones that operate directly on the 
+- defined constants, mostly flags to operate on the structs
+
+Interesting files:
+
+- `compiler.h`: compiler related stuff such as `__user`, which expands to a GCC `__attribute__`
+- `fs.h`: key filesystem structures
+- `sched.h`: scheduling and task key structures
+- `types.h`: typedefs
 
 ## include/asm-generic
 
@@ -89,6 +111,10 @@ Very incomplete.
 Important files and directories:
 
 - `DocBook`: documentation automatically generated from well formatted source code comments.
+
+### Documentation/ABI
+
+Documents stable APIs that the kernel exposes. Basically system calls and `sysfs`.
 
 ## init
 
@@ -167,3 +193,9 @@ For example, to try to find the definition of `struct s`:
 ## System.map
 
 Generated at the top level and then placed at `/boot/System.map-<version>`.
+
+## Firmware
+
+Contains mostly `ihex` files, which represent binary firmware.
+
+TODO how those are used exactly? Apparently by device drivers: <https://wiki.ubuntu.com/Kernel/Firmware>

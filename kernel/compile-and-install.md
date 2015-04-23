@@ -6,15 +6,26 @@ Get the source:
 
 	git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
 
-Clean everything:
+Get some help on the main targets:
+
+    make help
+
+Do a basic clean:
+
+    make clean
+
+Clean everything, including generated configuration:
 
 	make mrproper
+
+This is likely a reference to <https://en.wikipedia.org/wiki/Mr._Clean> in German (and Finnish?)...
 
 Generate the `.config` file:
 
 	make menuconfig
+	make xconfig
 
-This opens up a ncurses interface which allows you to choose amongst tons of options which determine which features your kernel will include or not.
+This opens up a ncurses interface which allows you to choose amongst tons of options (~6k) which determine which features your kernel will include or not.
 
 Then go on to `save` to save to the `.config` file and then exit.
 

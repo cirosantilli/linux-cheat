@@ -2,6 +2,32 @@
 
 Filesystems and related concepts: hard disks, mounting, partitions, block devices.
 
+## Filesystem format
+
+Determines how data will be efficiently stored in the hard disk in a linear manner.
+
+Very complex design, which must consider:
+
+- how to store tree structures like directories?
+- how to find things efficiently?
+- if power goes down, will the user lose all data?
+
+ext2, ext3 and ext4 are the ones mainly used in Linux today.
+
+On ext4, only one dir is created at the root: lost+found
+
+Other important filesystems:
+
+- NTFS: windows today
+- FAT:  DOS
+- MFS:  Macintosh File System. Mac OS X today.
+
+To find out types see blkid or lsblk
+
+Each partition can have a different filesystem.
+
+When creating partitions for external storage devices such as USB stick nowadays, the best option is NTFS since Linux can read write to it out of the box, and it can be used on the 95% of computers because they use Windows (which does not read / write to ext out of the box.)
+
 ## Partitions
 
 There are 2 main types of partitions: MBR or GPT.
@@ -94,62 +120,6 @@ Disk formating consists mainly of two steps:
 
 GUI tools such as gparted exist to make both those steps conveniently.
 
-## fdisk
-
-View and edit partition tables and disk parameters.
-
-REPL interface.
-
-Does not create filesystems. For that see: `mke2fs` for ext systems.
-
-Mnemonic: Format disk.
-
-Better use gparted for simple operations if you have X11
-
-To view/edit partitions with interactive CLI prompt interface.
-
-### l
-
-Show lots of partition and disk data on all disks:
-
-    sudo fdisk -l
-
-Sample output for each disk:
-
-    Disk /dev/sda: 500.1 GB, 500107862016 bytes
-    255 heads, 63 sectors/track, 60801 cylinders, total 976773168 sectors
-    Units = sectors of 1 * 512 = 512 bytes
-    Sector size (logical/physical): 512 bytes / 4096 bytes
-    I/O size (minimum/optimal): 4096 bytes / 4096 bytes
-    Disk identifier: 0x7ddcbf7d
-
-    Device Boot   Start     End   Blocks  Id System
-    /dev/sda1  *    2048   3074047   1536000  7 HPFS/NTFS/exFAT
-    /dev/sda2     3074048  198504152  97715052+  7 HPFS/NTFS/exFAT
-    /dev/sda3    948099072  976771071  14336000  7 HPFS/NTFS/exFAT
-    /dev/sda4    198504446  948099071  374797313  5 Extended
-    Partition 4 does not start on physical sector boundary.
-    /dev/sda5    198504448  907638783  354567168  83 Linux
-    /dev/sda6    940277760  948099071   3910656  82 Linux swap / Solaris
-    /dev/sda7    907640832  940267519  16313344  83 Linux
-
-### REPL
-
-Edit partitions for `sdb` on REPL interface:
-
-    sudo fdisk /dev/sdb
-
-Operation: make a list of changes to be made, then write them all to disk and exit with `w` (write).
-
-Most useful commands:
-
-- `-m`: list options
-- `-p`: print info on partition, same as using `-l` option.
-- `-o`: create new DOS partition table.
-- `-n`: create new partition.
-- `-d`: delete a partition.
-- `-w`: write enqueued changes and exit.
-
 ## Hard disks
 
 Hard disks are represented by the system as block devices.
@@ -169,32 +139,6 @@ To understand those concepts, you must visualize the hard disk's physical arrang
 - <http://en.wikipedia.org/wiki/Track_%28disk_drive%29>
 
 Those parameters can be gotten with commands such as `sudo fdisk -l`.
-
-## Filesystem
-
-Determines how data will be efficiently stored in the hard disk in a linear manner.
-
-Very complex design, which must consider:
-
-- how to store tree structures like directories?
-- how to find things efficiently?
-- if power goes down, will the user lose all data?
-
-ext2, ext3 and ext4 are the ones mainly used in Linux today.
-
-On ext4, only one dir is created at the root: lost+found
-
-Other important filesystems:
-
-- NTFS: windows today
-- FAT:  DOS
-- MFS:  Macintosh File System. Mac OS X today.
-
-To find out types see blkid or lsblk
-
-Each partition can have a different filesystem.
-
-When creating partitions for external storage devices such as USB stick nowadays, the best option is NTFS since Linux can read write to it out of the box, and it can be used on the 95% of computers because they use Windows (which does not read / write to ext out of the box.)
 
 ## Create filesystems
 
@@ -229,17 +173,6 @@ Where:
 You should only use on partition devices (ex: `sda1`), not on the entire devices (ex: `sda`).
 
 If you want to edit the partition table, first use a tool like `fdisk`.
-
-## mke2fs
-
-Make ext[234] partitions.
-
-Consider using gparted if you have X11.
-
-- `-t`: type: ext2, ext3, ext4
-- `-L`: label
-- `-i`: inodes per group (power of 2)
-- `-j`: use ext3 journaling. TODO for `-t` ext3/4, is it created by default?
 
 ## tune2fs
 
@@ -345,43 +278,6 @@ CD DVD.
 
 A SanDisk SD card had a device named `mmcblk0`.
 
-## UUID
-
-Unique identifier for a partition. Field exists in ext and NTFS.
-
-Given when you create of format a partition.
-
-Can be found with tools such as `lsblk -o`, `blkid`, or `gparted`.
-
-Get UUID of a device:
-
-    sudo lsblk -no UUID /dev/sda1
-
-Get all devices:
-
-    sudo lsblk -no UUID /dev/sda1
-
-An ext partitions concept.
-
-Determines the mount name for the partition.
-
-Should be unique, but not sure this is enforced. TODO
-
-### e2label
-
-Get / set ext[234] label info
-
-Set new label for partition:
-
-    sudo e2label /dev/sda7
-    sudo e2label /dev/sda new_label
-
-Each partition may have a label up to 16 chars length. If it does, the partition will get that name when mounted.
-
-List all labels:
-
-    sudo blkid
-
 ## /dev/disk
 
 Symlinks to partition identifiers.
@@ -476,36 +372,6 @@ Everything created / saved on `b`, is created on `a` with owner `b:b`.
 Unmount:
 
     fusermount -u /home/johnc/ISO-images
-
-### ramfs
-
-### tmpfs
-
-Types of filesystems that exists only in RAM. It is therefore fast and can only be small.
-
-Can be useful if you want to speed up some filesystem operations and have enough RAM for it.
-
-tmpfs vs ramfs:
-
--   tmpfs has a fixed size: it does not grow dynamically and raises an error if you blow the limit.
-
-    ramfs can grow dynamically and does not use swap.
-
--   tmpfs uses swap, ramfs does not.
-
-Create a tmpfs:
-
-    sudo mkdir -p /mnt/tmpfs
-    sudo mount -t tmpfs -o size=100m tmpfs /mnt/tmpfs
-
-Create a ramfs:
-
-    sudo mkdir -p /mnt/ramfs
-    sudo mount -t ramfs -o size=100m ramfs /mnt/ramfs
-
-Undo with:
-
-    sudo umount /mnt/ramfs
 
 ### Unmount
 
@@ -606,7 +472,7 @@ To mount Windows filesystems such as NTFS or DOS use:
 
     umask=111,dmask=000
 
-This way, dirs will be 000 and files 666 (not executable).
+This way, directories will be 000 and files 666 (not executable).
 
 ### DVD
 
@@ -633,56 +499,3 @@ List mounted filesystems:
 File System Check.
 
 Check and repair Linux filesystems.
-
-## inotify
-
-Take action whenever file changes: <http://superuser.com/questions/181517/how-to-execute-a-command-whenever-a-file-changes>
-
-Portability: Linux only. Relies directly on the `inotify` system calls. More info at:
-
-    man inotify
-
-Ubuntu install:
-
-    sudo aptitude install -y inotify-tools
-
-Usage single file:
-
-    cd /tmp
-    f=file
-    echo a > "$f"
-    while inotifywait -e close_write "$f"; do cat "$f"; done
-
-`make` on any directory changes with nice separator between commands:
-
-	while inotifywait -qq -e 'close_write,moved_to,create' '.'; do printf '\n%70s\n' | tr ' ' '='; make --no-print-directory; done
-
-`-q` quiet to stop it from printing one message every time it starts watching, `-qq` to print nothing at all.
-
-Go to another shell and:
-
-    cd /tmp
-    echo b > file
-
-Sample output on the first shell:
-
-    Setting up watches.
-    Watches established.
-    file CLOSE_WRITE,CLOSE
-    b
-
-If the file is replaced by a different file rather than written to which is what most editors do, it process dies.
-
-Workaround: monitor directory:
-
-    cd /tmp
-    f=file
-    while true; do
-      change=$(inotifywait -e close_write,moved_to,create .)
-      change=${change#./ * }
-      if [ "$change" = "$f" ]; then make; fi
-    done
-
-And then it works
-
-    vim /tmp/file

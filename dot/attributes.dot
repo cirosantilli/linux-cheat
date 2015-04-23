@@ -1,0 +1,16 @@
+// # Attributes
+graph graphname {
+    // Graph attributes
+    size="5,5";
+
+    // # Node attributes
+
+        // Multiple attrs can be either given side by side
+        // on multiple declarations of a:
+        a [label="label"];
+        a [shape=box][color=green];
+
+    // Line attributes.
+    a -- b -- c [color=blue][style=dotted];
+    b -- d;
+}

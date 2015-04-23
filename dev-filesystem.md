@@ -1,14 +1,14 @@
 # dev filesystem
 
-Represent devices, either physical or virtual.
+Contains device driver files.
 
-Many virtual devices are created automatically by the Kernel to offer certain file like operations, such as random number generation.
+To really understand what is going on, learn how to make a minimal device driver yourself. This is not documented here.
 
-Device drivers are kernel modules created by hardware vendors that implement a dev file that allows access to a device.
+Standard device number and paths are documented at: <http://www.lanana.org/docs/device-list/devices-2.6+.txt>, which is part of the LSB.
 
-Several virtual dev files are documented directly under their basename, e.g.: `/dev/null` is documented at:
+Some devices are created automatically by the Kernel even if there is no corresponding hardware to offer services under read write, e.g. random number generation.
 
-    man null
+## sda
 
 ## /dev/sda
 
@@ -34,9 +34,13 @@ Example: write pseudorandom sequences into `/dev/sda/` to hide data:
 
     #sudo dd bs=4M if=/dev/urandom of=/dev/sda
 
+## null
+
 ## /dev/null
 
     man null
+
+Major minor:
 
 Discards whatever input is given to it by a `write` syscall.
 
@@ -45,6 +49,8 @@ Very useful to discard undesired stdout / stderr:
     echo a > /dev/null
 
 Generates no output.
+
+## zero
 
 ## /dev/zero
 
@@ -67,6 +73,8 @@ Output:
     000200
 
 Meaning if you don't speak `od` language (now is a good time to learn): 512 bytes with value 0.
+
+## full
 
 ## /dev/full
 
@@ -94,14 +102,15 @@ Just like for `/dev/zero`, it is useless to cat those files, since they don't ha
 
 x86 considered using the `RDRAND` instruction introduced in 2011 as part of the entropy pool, but this has generated some controversy as it would rely on a process which is not observable and could lead to cryptographic back-doors.
 
+### urandom
+
 ### /dev/urandom
 
 Documented at:
 
     man urandom
 
-`/dev/urandom` returns random numbers continuously. It is faster than `random`,
-but has less entropy. It should however be good enough for most applications.
+`/dev/urandom` returns random numbers continuously. It is faster than `random`, but has less entropy. It should however be good enough for most applications.
 
 Example: get 16 random bytes:
 

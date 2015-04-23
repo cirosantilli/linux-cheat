@@ -1,4 +1,6 @@
-##ifeq
+## Conditional
+
+## ifeq
 
 ifeq (a,a)
 	ifeqaa := 1
@@ -12,21 +14,22 @@ else
 	ifeqab := 0
 endif
 
-	#Can be used both for variable definitions and in rules.
+	# Can be used both for variable definitions and in rules.
 
-	#Syntax gotchas:
+	# Syntax gotchas:
 
-	#- you **must** put a space after `ifeq`! The following fails gives a separator missing error:
+	# - you **must** put a space after `ifeq`!
+	#   The following fails gives a separator missing error:
 
 #ifeq(a,a)
 #endif
 
-	#- **must** be the first thing on a line. The following fails:
+	# - **must** be the first thing on a line. The following fails:
 
 	#ifeq (a,a)
 	#endif
 
-#Can nest:
+# Can be nested:
 
 ifeq (a,a)
 ifeq (a,a)
@@ -34,7 +37,7 @@ ifeq (a,a)
 endif
 endif
 
-#only evals done before the rules are taken into account:
+# Only evals done before the rules are taken into account:
 
 	EVAL_BEFORE:=0
 

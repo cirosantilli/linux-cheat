@@ -1,0 +1,56 @@
+# inotify-tools
+
+<https://github.com/rvoicilas/inotify-tools>
+
+Wrapper C library around Linux's inotify system call, which take action whenever file changes: <http://superuser.com/questions/181517/how-to-execute-a-command-whenever-a-file-changes>
+
+Also offers command line utilities.
+
+Portability: Linux only. Relies directly on the `inotify` system calls. More info at:
+
+    man inotify
+
+Ubuntu install:
+
+    sudo aptitude install -y inotify-tools
+
+Usage single file:
+
+    cd /tmp
+    f=file
+    echo a > "$f"
+    while inotifywait -e close_write "$f"; do cat "$f"; done
+
+`make` on any directory changes with nice separator between commands:
+
+	while inotifywait -qq -e 'close_write,moved_to,create' '.'; do printf '\n%70s\n' | tr ' ' '='; make --no-print-directory; done
+
+`-q` quiet to stop it from printing one message every time it starts watching, `-qq` to print nothing at all.
+
+Go to another shell and:
+
+    cd /tmp
+    echo b > file
+
+Sample output on the first shell:
+
+    Setting up watches.
+    Watches established.
+    file CLOSE_WRITE,CLOSE
+    b
+
+If the file is replaced by a different file rather than written to which is what most editors do, it process dies.
+
+Workaround: monitor directory:
+
+    cd /tmp
+    f=file
+    while true; do
+      change=$(inotifywait -e close_write,moved_to,create .)
+      change=${change#./ * }
+      if [ "$change" = "$f" ]; then make; fi
+    done
+
+And then it works
+
+    vim /tmp/file

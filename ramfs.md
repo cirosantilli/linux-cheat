@@ -2,7 +2,7 @@
 
 # tmpfs
 
-Types of filesystems that exists only in RAM. It is therefore fast and can only be small.
+Types of filesystems that exists only in RAM. It is therefore fast and can only be small. In the Linux kernel under `fs/ramfs`.
 
 Can be useful if you want to speed up some filesystem operations and have enough RAM for it.
 
@@ -23,3 +23,7 @@ Create a ramfs:
 
     sudo mkdir -p /mnt/ramfs
     sudo mount -t ramfs -o size=100m ramfs /mnt/ramfs
+
+Undo with:
+
+    sudo umount /mnt/ramfs

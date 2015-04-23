@@ -1,21 +1,19 @@
-#funcs can be used to define variables also:
+## shell
 
-##shell
+	# Evaluate shell command
 
-	#evaluate shell command
-
-	#expands like a variable
+	# Expands like a variable
 
 		SHELL_IN := a
 		SHELL_OUT := $(shell echo $(SHELL_IN))
 
-	#newlines and carriage returns are converted to single spaces:
+	# Newlines and carriage returns are converted to single spaces:
 
-		shell_newline := $(shell printf "a\nb")
+		shell_newline := $(shell printf 'a\nb')
 
-##error
+## error
 
-	#Print error message and stop make execution.
+	# Print error message and stop make execution.
 
 ifeq (0,1)
 	$(error Error message)

@@ -1,5 +1,7 @@
 # Style guide
 
+Documented under `Documentation/CodingStyle`.
+
 Style used for the Linux Kernel.
 
 -   Tabs instead of spaces. Configure editors to view tabs as 8 spaces. In `vim` you could source:
