@@ -10,7 +10,9 @@ Port: 631 TCP and UDP.
 
 You can also visit: <http://localhost:631/> to see a web front-end for CUPS. TODO check: is it standard? Works on Ubuntu 14.04.
 
-Configuration files:
+## Ink levels
+
+Not possible with CUPS apparently. Consider `ink`.
 
 ## Bibliography
 

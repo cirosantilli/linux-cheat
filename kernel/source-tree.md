@@ -45,6 +45,10 @@ Even though the code in those headers is architecture dependant, it is possible 
 
 Cryptography.
 
+The kernel can use CPU-specific cryptographic instructions, e.g. <https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/arch/x86/crypto?id=refs/tags/v4.0>
+
+This is a bit polemic, since some states restrict cryptographic software in a similar way to weapons.
+
 ## uapi
 
 `uapi` contains arch dependant stuff that will be exposed to userspace applications: <http://lwn.net/Articles/507794/>

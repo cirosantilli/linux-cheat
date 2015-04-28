@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+targets="
+separate-invocations
+dollar
+multiline-command
+dollar
+no-at
+at
+no-hyphen
+hyphen
+at-hyphen
+"
+
+for target in $targets; do
+  printf "\033[1;31m## $target\033[0m\n"
+  make "$target"
+  echo
+done

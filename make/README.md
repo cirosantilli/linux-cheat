@@ -5,6 +5,8 @@ POSIX 7 build system.
 Special targets:
 
 - [.PRECIOUS](precious/)
+- [Plus sign (+)](plus-sign/)
+- [include](include/)
 
 ## Introduction
 
@@ -31,8 +33,7 @@ The main problems of make are:
 
 ## Alternatives
 
-Because of the downsides of make, many other make systems have been devised.
-None has yet dominated on most applications, but important ones include:
+Because of the downsides of make, many other make systems have been devised. None has yet dominated on most applications, but important ones include:
 
 -   CMake
 
@@ -63,16 +64,19 @@ Make tries the following names, in order: `GNUmakefile`, `makefile` and `Makefil
 
 ## Command line options
 
--   `-j5`: let make run in 5 threads.
+### j
 
-    *Be warned*: this will make standard output of all threads mix up so the stdout will be meaningless.
+Let make run in 5 threads:
 
-    Also, this *may break your makefiles*, since in a rule like:
+    make -j5
 
-        all: a b c
+*Be warned*: this will make standard output of all threads mix up so the stdout will be meaningless.
 
-    `a`, `b`, and `c` are run in parallel, it it might be the case that
-    `c` *must* run only after `a` and `b`.
+Also, this *may break your makefiles*, since in a rule like:
+
+    all: a b c
+
+`a`, `b`, and `c` are run in parallel, it it might be the case that `c` *must* run only after `a` and `b`.
 
 ## Sources
 

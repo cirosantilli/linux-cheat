@@ -1,58 +1,58 @@
-#?deprecated
+# ?deprecated
 
-#THIS FILE IS DEPRECATED
-#it is being split up into smaller
-#more understantable and testable makefiles
-#and will be completelly removed afterwards
+# THIS FILE IS DEPRECATED
+# it is being split up into smaller
+# more understantable and testable makefiles
+# and will be completelly removed afterwards
 
-##conventional targets
+## conventional targets
 
-##phony targets
+## phony targets
 
-	#if you don't give phony, make thinks you want to build a file
-	#if a file install exists, make does nothing!
-	#http://stackoverflow.com/questions/2145590/what-is-the-purpose-of-phony-in-a-makefile
+	# if you don't give phony, make thinks you want to build a file
+	# if a file install exists, make does nothing!
+	# http://stackoverflow.com/questions/2145590/what-is-the-purpose-of-phony-in-a-makefile
 
 	.PHONY: all install clean help
 
-	#first target in file is default! all is often it by convention
+	# first target in file is default! all is often it by convention
 
-	#help. can be first if options required
+	# help. can be first if options required
 
 	help:
 		@echo "must use an option:"
 		@echo "  c"
 		@echo "  cpp"
 
-	#$make #makes first target found on file
+	# $make #makes first target found on file
 
-	##conventional names
+	## conventional names
 
-		##help
+		## help
 
-				#print help on cur makefile options
+				# print help on cur makefile options
 
-		##all
+		## all
 
-			#builds everything
+			# builds everything
 
-			#usually is the default target (comes first)
+			# usually is the default target (comes first)
 
-		##check
+		## check
 
-			#do test to check that application is woking properly
+			# do test to check that application is woking properly
 
-		##install
+		## install
 
-				#install after a build
+				# install after a build
 
-				#this basically putting built/config files in the right place with right permissions
+				# this basically putting built/config files in the right place with right permissions
 
-				#and calling auxiliary programs such as ``ldconfig``
+				# and calling auxiliary programs such as ``ldconfig``
 
-		##clean
+		## clean
 
-			#remove generated output/auxiliary files
+			# remove generated output/auxiliary files
 
 			clean:
 				@rm *.o *.tmp
@@ -60,32 +60,32 @@
 			install:
 				@mv out $(DIRINPATH)
 
-##.SECONDARY
+## .SECONDARY
 
-	#an **intermediate** file is a file that is neither target nor prerequisite.
+	# an **intermediate** file is a file that is neither target nor prerequisite.
 
-	#example:
+	# example:
 
-		#a.m4 -> a.c -> a.o
+		# a.m4 -> a.c -> a.o
 
-	#with a single rule:
+	# with a single rule:
 
 		a.o: a.m4
 			m4 a.m4 > a.c
 			gcc -o a.o a.c
 
-	#here a.c is intermediate.
+	# here a.c is intermediate.
 
-	#make deletes intermediate files by default because:
+	# make deletes intermediate files by default because:
 
-	#- they are not desired outputs (those must be targets)
-	#- if one of the base prerequisites is modified, this will be remade anyways
+	# - they are not desired outputs (those must be targets)
+	# - if one of the base prerequisites is modified, this will be remade anyways
 
-	#if you want to keep them you can use the secondary target:
+	# if you want to keep them you can use the secondary target:
 
 	.SECONDARY: a.c b.c
 
-##variables
+## variables
 
 	CC=gcc
 	CXX=$(CC)
@@ -96,102 +96,103 @@
 	$(OUTDIR)/target$(OUTEXT): dep.c
 		$(CC) $(FLAGS) -o $(OUTDIR)/target$(OUTEXT) dep.c
 
-	#multiple vars
+	# multiple vars
 	articles = coat shoes mobile sweater socks\
 					trousers shirt pants undershirt
 
 	$(articles) :; @echo put on $@; touch $@
 
-	#assignment
-		#VARIABLE = value
-			#Normal setting of a variable - values within it are recursively expanded when the variable is used, not when it's declared
+	# assignment
+		# VARIABLE = value
+			# Normal setting of a variable - values within it are recursively expanded when the variable is used, not when it's declared
 
 			a = $(b)
 			b = $(c)
 			c = c
 
 			echo $(a)
-			#c
+			# c
 
-		#VARIABLE := value
-			#Setting of a variable with simple expansion of the values inside - values within it are expanded at declaration time.
+		# VARIABLE := value
+			# Setting of a variable with simple expansion of the values inside - values within it are expanded at declaration time.
 
-			#always use this
+			# always use this
 
 			c := c
 			b := $(c)
 			a := $(b)
 
 			echo $(a)
-			#c
+			# c
 
-		#VARIABLE ?= value
-			#Setting of a variable only if it doesn't have a value
-		#VARIABLE += value
-			#Appending the supplied value to the existing value
+		# VARIABLE ?= value
+			# Setting of a variable only if it doesn't have a value
+		# VARIABLE += value
+			# Appending the supplied value to the existing value
 
-	##define var inside rule
+	## define var inside rule
 		all:
 			$(eval X := $* )
-			#set a variable inside a rule
+			# set a variable inside a rule
 			echo $(X)
 
-	##special vars
+	## special vars
 
-		#$@: cur target
-		#$*: part that matches % of cur target
-		#$<: first cur dep
+		# $@: cur target
+		# $*: part that matches % of cur target
+		# $<: first cur dep
 			$(OUTDIR)/target$(OUTEXT): dep.c
 				$(CC) $(FLAGS) -o $@ $<
-			#$? 	The names of all the prerequisites that are newer than the target, with spaces between them.
-			#$^ and $+ 	The names of all the prerequisites, with spaces between them. The value of $^ omits duplicate prerequisites, while $+ retains them and preserves their order.
+		# $? 	The names of all the prerequisites that are newer than the target, with spaces between them.
+		# $^ and $+ 	The names of all the prerequisites, with spaces between them.
+		# The value of $^ omits duplicate prerequisites, while $+ retains them and preserves their order.
 
-##spaces
+## spaces
 
-	#**PAY ATTENTION TO THIS BECAUSE MAKE IS FUSSY ABOUT SPACES**!
+	# **PAY ATTENTION TO THIS BECAUSE MAKE IS FUSSY ABOUT SPACES**!
 
-	#- you simply cannot have filenames with spaces in them. use hyphens '-' or '_' instead
+	# - you simply cannot have filenames with spaces in them. use hyphens '-' or '_' instead
 
-	#- in variable definition, traillinw whitespaces that follow are included!!
+	# - in variable definition, traillinw whitespaces that follow are included!!
 
-		#ex:
+		# ex:
 
 			a = b
 
-		#a = "b  "
+		# a = "b  "
 
-		#never use trailling spaces!!!
+		# never use trailling spaces!!!
 
-	#- you cannot have a blank line for a rule:
+	# - you cannot have a blank line for a rule:
 
 		all:
 			echo a
 
 			echo b
 
-		#only `echo a` will be executed!!!
+		# only `echo a` will be executed!!!
 
 		all:
 			echo a
 			echo b
 
-		#`echo a` and `echo b` are executed
+		# `echo a` and `echo b` are executed
 
-##include
+## include
 
-	#sources a file
+	# sources a file
 	include make.inc
 
-	#continue even if missing
+	# continue even if missing
 	-include make.inc
 
-##implicit rules
+## implicit rules
 
-	# An explicit rule assigns the commands for several targets
+	#  An explicit rule assigns the commands for several targets
 	coat shoes mobile sweater socks trousers\
 	shirt pants undershirt: ;  @echo put on $@; touch $@
 
-	# Implicit rules state the prerequisites
+	#  Implicit rules state the prerequisites
 	coat:      shoes mobile sweater
 	shoes:     socks trousers
 	mobile:    trousers
@@ -199,48 +200,48 @@
 	trousers:  pants shirt
 	shirt:     undershirt
 
-##duplicate rules
+## duplicate rules
 
-	#must use double colons
+	# must use double colons
 
-	#socks will build both
+	# socks will build both
 	socks:: ; @echo get into left sock
 	socks:: ; @echo get into right sock
 
-##call other makefiles
+## call other makefiles
 
 	$(MAKE)
 
-##command line variables
+## command line variables
 
 	###
 	$make run A='"1"'
 	echo $(A)
-	#1
+	# 1
 
 	###
 	$make run A='"1"'
 	A=2
 	echo $(A)
-	#1
+	# 1
 
 	###
 	$make run A='"1"'
  A=2
 	echo $(A)
-	#2
+	# 2
 
 	###
 	$make run A='"1"'
  A?=2
 	echo $(A)
-	#1
+	# 1
 
 	$make run A='"as df"'
 	echo $(A)
-	#as df
+	# as df
 
-##conditional
+## conditional
 
 	A=defined
 	all: a.out
@@ -250,21 +251,21 @@
 		echo undefined
 	endif
 
-##builtin functions
+## builtin functions
 
-	##wildcard
+	## wildcard
 
-		#makes an array with wildcard.
+		# makes an array with wildcard.
 
 			SRCS = $(wildcard *$(INEXT))
 
-	##patsubst
+	## patsubst
 
-		#makes an array with wildcard.
+		# makes an array with wildcard.
 
 			OUTS = $(patsubst %$(INEXT),%$(OUTEXT),$(SRCS))
 
-		#compile all files of a type
+		# compile all files of a type
 
 			INEXT=.c
 			OUTEXT=
@@ -274,17 +275,17 @@
 			%: %$(INEXT)
 				$(CC) $(CFLAGS) -o $@$(OUTEXT) $<
 
-	##foreach
+	## foreach
 
-		#do a loop and concatenate results
+		# do a loop and concatenate results
 
-		#select all files with one of the given extensions in current directory
+		# select all files with one of the given extensions in current directory
 
 			IN_DIR   := ./
 			IN_EXTS  := .lex .y .c .cpp
 			INS		 := $(foreach IN_EXT, $(IN_EXTS), $(wildcard $(IN_DIR)*$(IN_EXT)) )
 
-	##eval
+	## eval
 
 		define a variable inside a rule
 
@@ -318,9 +319,9 @@
 	$(origin variable) 	Return a string describing how the make variable variable was defined.
 	$(call var,param,...) 	Evaluate the variable var replacing any references to $(1),$(2) with the first, second, etc. param values.
 
-##submake
+## submake
 
-	#call other makefiles
+	# call other makefiles
 
 	mkdir a
 
@@ -334,57 +335,36 @@ all:
 
 	make
 
-##dolar sign
+## implicit builtins
 
-	#if you want a dollar sign in the rules, use $$:
+# make has some built-in rules and variables
 
-	all:
-		a=b;echo $$a
+# PAY ATTENTION OR THIS WILL F*** YOU UP LATER,
+# SINCE THEY MAY OVERRIDE YOUR OWN RULES AND VARIABLES WITHOUT WARNING!!!!!!!!!!!!!
 
-##multiline commands
+# in this way, for example, c.c -> c.o happens automatically
 
-	#when `\` ends the line
+# suffixes for which there are implicit rules (may override your own rules!):
 
-	#simply make continues reading next line
+	# .out, .a, .ln, .o, .c, .cc, .C, .cpp, .p, .f, .F, .m, .r, .y, .l, .ym, .lm, .s, .S, .mod, .sym, .def, .h, .info, .dvi, .tex, .texinfo, .texi, .txinfo, .w, .ch .web, .sh, .elc, .el
 
-	#`\` is passed to bash
+# predefined vars ( ?= won't work for them! ):
 
-		all:
-			( 			\
-				cd d	;\
-				pwd		;\
-			)
+	# AR AS CC CPP FC M2C PC CO GET LEX YACC LINT MAKEINFO TEX TEXI2DVI WEAVE CWEAVE TANGLE CTANGLE RM ARFLAGS ASFLAGS CFLAGS CXXFLAGS COFLAGS CPPFLAGS FFLAGS GFLAGS LDFLAGS LFLAGS YFLAGS PFLAGS RFLAGS LINTFLAGS
 
-##implicit builtins
+# those vars are mainly used to control the automatic rules.
 
-#make has some built-in rules and variables
-
-#PAY ATTENTION OR THIS WILL F*** YOU UP LATER,
-#SINCE THEY MAY OVERRIDE YOUR OWN RULES AND VARIABLES WITHOUT WARNING!!!!!!!!!!!!!
-
-#in this way, for example, c.c -> c.o happens automatically
-
-#suffixes for which there are implicit rules (may override your own rules!):
-
-	#.out, .a, .ln, .o, .c, .cc, .C, .cpp, .p, .f, .F, .m, .r, .y, .l, .ym, .lm, .s, .S, .mod, .sym, .def, .h, .info, .dvi, .tex, .texinfo, .texi, .txinfo, .w, .ch .web, .sh, .elc, .el
-
-#predefined vars ( ?= won't work for them! ):
-
-	#AR AS CC CPP FC M2C PC CO GET LEX YACC LINT MAKEINFO TEX TEXI2DVI WEAVE CWEAVE TANGLE CTANGLE RM ARFLAGS ASFLAGS CFLAGS CXXFLAGS COFLAGS CPPFLAGS FFLAGS GFLAGS LDFLAGS LFLAGS YFLAGS PFLAGS RFLAGS LINTFLAGS
-
-#those vars are mainly used to control the automatic rules.
-
-#to turn off the implicit rules: add a phony empty rule:
+# to turn off the implicit rules: add a phony empty rule:
 
 .SUFFIXES:
 
-#as you may guess, this specifies for which suffixes automatic rules will work or not.
+# as you may guess, this specifies for which suffixes automatic rules will work or not.
 
-#**I SUGGEST YOU ALWAYS USE THIS**!
+# **I SUGGEST YOU ALWAYS USE THIS**!
 
-##recipes
+## recipes
 
-	##make all files of an extension inside given path
+	## make all files of an extension inside given path
 
 		CC=pdflatex
 		IN_EXT=.tex
@@ -409,5 +389,5 @@ all:
 
 		clean:
 			rm -rf $(OUT_DIR) $(AUX_DIR)
-			#rm *.$(OUT_EXT)
-		#compile command
+			# rm *.$(OUT_EXT)
+		# compile command

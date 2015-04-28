@@ -117,21 +117,6 @@
 
       nl "$f"
 
-  ## fold
-
-    # Wrap lines.
-
-    # POSIX 7
-
-      echo -e "aaaa\nbb" | fold -w 3
-        #aaa
-        #a
-        #bb
-
-    #-s: only break at spaces:
-
-      [ "`echo -e "12345 6" | fold -s -w 3`" = $'123\n45\n6' ] || exit 1
-
   ## fmt
 
     # coreutils.
@@ -139,20 +124,6 @@
     # Wrap lines, but don't cut words
 
       [ `echo "a bcd" | fold -w 2` = $'a\nbcd' ] || exit 1
-
-  ## tsort
-
-    # Topological sorting: <http://en.wikipedia.org/wiki/Tsort_%28Unix%29>
-
-      printf '1 2\n2 3\n' | tsort
-        #1
-        #2
-        #3
-
-      printf '1 2\n2 1\n' | tsort
-        #contains loop
-      echo $?
-        #1
 
   ## split
 
@@ -165,9 +136,9 @@
       split -db1 f p
       split -dn3 f p
 
-      [ `cat p00` = a ] || exit 1
-      [ `cat p01` = b ] || exit 1
-      [ `cat p02` = c ] || exit 1
+      [ "$(cat p00)" = 'a' ] || exit 1
+      [ "$(cat p01)" = 'b' ] || exit 1
+      [ "$(cat p02)" = 'c' ] || exit 1
 
     # Existing files are overwritten:
 
@@ -179,7 +150,7 @@
 
   ## csplit
 
-    #corutils.
+    # corutils.
 
     # Split files into new smaller files at lines that match given EREs.
 
@@ -190,42 +161,6 @@
       [ `cat xx00` = 0 ] || exit 1
       [ `cat xx01` = $'aa\n1' ] || exit 1
       [ `cat xx02` = $'aa\n2' ] || exit 1
-
-  ## seq
-
-    # Counts to stdout.
-
-      seq 1
-      seq 1 3
-        #1
-        #2
-        #3
-
-      seq 1 2 5
-        #1
-        #3
-        #5
-
-    # Options:
-
-    # - `s`: separator
-    # - `w`: equal width
-
-    ## non-application
-
-      # You could use this for loops:
-
-        for i in `seq 10`; do echo $i; done
-
-      # But don't
-
-      # Use brace expansion instead which is a bash built-in,
-      # and thus potentially faster (possibly no new process spawned):
-
-        for i in {1..10}; do echo $i; done
-
-      # Use this only if you really need to control
-      # the output with the options.
 
   ## Path operations
 
@@ -242,18 +177,6 @@
         [ "$(basename "/")" = "/" ] || exit 1
 
       # Extensions can be extracted naively with variable expansion, but it is not trivial to make it work for dot files.
-
-  ## strings
-
-    # Search for printable strings in file.
-
-    # Prints sequences of at least 4 printable chars by default.
-
-    # Useful to extract information from non textual formats,
-    # which contain some textual data
-
-      gcc c.c
-      strings a.out
 
 ## moreutils
 

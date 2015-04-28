@@ -1,9 +1,10 @@
 # sort
 
+POSIX: <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/sort.html>
+
 Sort line wise.
 
-Uses External R-Way merge.
-This algorithm allows to sort files that are larger than RAM memory.
+Uses External R-Way merge. This algorithm allows to sort files that are larger than RAM memory.
 
 Sort `f1`, `f2` together line wise:
 

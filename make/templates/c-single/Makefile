@@ -1,7 +1,8 @@
+.POSIX:
 .PHONY: clean run
 
 main.out: main.c
-	gcc -std=c89 -o '$@' '$<'
+	gcc -pedantic-errors -std=c89 -Wall -o '$@' '$<'
 
 clean:
 	rm -f main.out

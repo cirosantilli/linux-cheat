@@ -59,7 +59,7 @@
 
 	shell_var = $$a
 
-##where variables can be used
+##Where variables can be used
 
 	#you can use variables:
 

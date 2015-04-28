@@ -1,6 +1,6 @@
 # uniq
 
-POSIX 7
+POSIX: <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/uniq.html>
 
 *Ajacent* dupe line operations.
 

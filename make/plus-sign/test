@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+echo '## default'
+make
+echo
+echo '## -n'
+make -n
+echo
+echo '## -q'
+make -q
+echo
+echo '## -t'
+make -t

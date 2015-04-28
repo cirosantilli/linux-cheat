@@ -1,6 +1,6 @@
-##Special targets.
+## Special rules.
 
-###POSIX
+### POSIX
 
 # If not present as the first non-comment line the behaviour of Make is unspecified...
 
@@ -8,13 +8,13 @@
 
 .POSIX:
 
-###PHONY
+### PHONY
 
-# If the target is given, use posix compliance
+# If the target is given, use POSIX compliance
 
 .PHONY: first depends depended depended2
 
-###SUFFIXES
+### SUFFIXES
 
 # List of file extension for which automatic rules shall be generated:
 
@@ -22,7 +22,7 @@
 
 # You can retrive those extensions with the `SUFFIXES` automatic variable
 
-###SILENT
+### SILENT
 
 # Supress command echoing from the given dependencies,
 # much like `@` for individual lines.
@@ -34,7 +34,7 @@
 
 .SILENT: silent
 
-##Default rule
+## Default rule
 
 # Whatever its name, the first rule is the default if no args.
 
@@ -43,7 +43,7 @@
 first:
 	@echo first
 
-#depends first call `depended` and `depened2`
+# Depends first call `depended` and `depened2`.
 depends: depended depended2
 	@echo depends
 	#target name:
@@ -57,8 +57,9 @@ depended:
 depended2:
 	@echo depended2
 
-##%
-##Percent
+## %
+
+## Percent
 
 # `%` equals the regex: `[^/]+`
 
@@ -82,9 +83,3 @@ percent/b.c:
 
 clean:
 	percent/b.c
-
-silent:
-	echo 'silent'
-
-not-silent:
-	echo 'not-silent'

@@ -84,18 +84,6 @@ Displays the phase of the moon.
 
     [ "$(echo 'abc' | rot13)" = 'nop' ] || exit 1
 
-#### primes
-
-Print primes between 1 to 100:
-
-    primes 1 100
-
-Count primes:
-
-    primes 1 100 | wc -l
-
-`factor` is not included here as it is part of coreutils.
-
 #### robots
 
 Very simple, fun, but too much luck.

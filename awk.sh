@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# POSIX 7. <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/awk.html>
+# POSIX 7. http://pubs.opengroup.org/onlinepubs/9699919799/utilities/awk.html
 
 # Turing Machine, but use only for *ultra simple* POSIX text table field manipulation:
 # it only has better golfing on that very limited problem set.
@@ -46,7 +46,7 @@
     #CONDITION_N  { STATEMENT_N   }
     #END      { STATEMENT_END  }
 
-  echo $'1 2\n3 4' | awk 'BEGIN{print "b"}1<2{print "l"}1<2{print "l2"; print "l3"}1>2{print "l4"}END{print "e"}'
+  printf '1 2\n3 4' | awk 'BEGIN{print "b"}1<2{print "l"}1<2{print "l2"; print "l3"}1>2{print "l4"}END{print "e"}'
   #$'b\nl\nl2\nl3\nl\nl2\nl3\ne
 
   echo '0.5 0.5' | awk '{print $1+$2}'
@@ -63,11 +63,11 @@
   awk 'BEGIN{print "a", 1}'
     #'a 1'
       #by default, print does space separation
-  awk 'BEGIN{print "a"."b"}'
+  awk 'BEGIN{print "a" "b"}'
     #'ab'
       #string concat
-  awk '{print}'
-    #cat
+
+    [ "$(echo 'a' | awk '{print}')" = 'a' ] || exit 1
 
 ## applications
 
@@ -81,8 +81,25 @@
 
   # Same as above, but print only first match:
 
-    [ "$(echo $'1 a\n2 b\n1 c' | awk '$1 == 1 { print $2; exit }')" = a ] || exit 1
+    [ "$(printf '1 a\n2 b\n1 c\n' | awk '$1 == 1 { print $2; exit }')" = 'a' ] || exit 1
 
   # Same as above, but match EREs:
 
-    [ "$(echo $'1 a\n2 b\n1 c' | awk '$1 ~/^1$/ { print $2; exit }')" = a ] || exit 1
+    [ "$(printf '1 a\n2 b\n1 c\n' | awk '$1 ~/^1$/ { print $2; exit }')" = 'a' ] || exit 1
+
+## RS
+
+  # Record separator.
+
+  # `''` is a special value that selects blank lines, i.e. paragraphs:
+  # http://unix.stackexchange.com/questions/82944/how-to-grep-for-text-in-a-file-and-display-the-paragraph-that-has-the-text/82958#82958
+
+    [ "$(printf '1 a0\na1\na2\n\nb0\nb1\nb2\n\nc0\nc1\nc2\n' | awk -v RS='' '/b1/')" = "$(printf 'b0\nb1\nb2')" ] || exit 1
+
+## Subtract adjacent lines
+
+  # TODO fails if the first is zero.
+
+    #[ "$(printf '0\n1\n3\n6' | awk awk 'p{print $0-p}{p=$0}')" = "$(printf '1\n2\n3')" ] || exit 1
+
+echo 'ALL ASSERTS PASSED'
