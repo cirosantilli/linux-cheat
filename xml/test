@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# Test the well-formedness of all XML,
+# and DTD-validity if a DTD is linked.
+
+set -e
+xmllint 2elems.xml
+! xmllint billion-laughs.xml
+xmllint comment.xml
+! xmllint control-entity.xml
+xmllint css.xml
+! xmllint empty.xml
+xmllint --valid inline-dtd.xml
+xmllint min-sane.xml
+xmllint min.xml
+! xmllint prolog-no-version.xml
+echo 'ALL ASSERTS PASSED'

@@ -67,8 +67,6 @@ See: [min.xml](min.xml).
 
 ## Element
 
-Valid characters:
-
 ### Name of elements and attributes
 
 Rules <http://www.w3.org/TR/xml/#NT-NameStartChar>.
@@ -104,6 +102,15 @@ Elements can:
 Attributes can:
 
 -   enforce DTD check
+
+## Binary data
+
+Apparently you must text-encode it, e.g. with base64: <http://stackoverflow.com/questions/19893/how-do-you-embed-binary-data-in-xml>
+
+This is because:
+
+- control characters are invalid in XML
+- character entities of control characters are also invalid
 
 ## Declaration
 

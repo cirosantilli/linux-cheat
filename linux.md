@@ -46,7 +46,7 @@ LSB is meant to contain all the core tools that allow compliant applications to 
 
 LSB does however specifies many more tools than POSIX and supports almost all base tools used by user friendly applications found in distributions.
 
-## Sources
+## Bibliography
 
 -   `git clone http://git.kernel.org/pub/scm/docs/man-pages/man-pages`
 
@@ -70,12 +70,6 @@ LSB does however specifies many more tools than POSIX and supports almost all ba
     The geek stuff.
 
     Short tutorials with lots of examples.
-
--   <http://www.linuxfromscratch.org/>
-
-    Linux from scratch.
-
-    Teaches how to build a minimal Linux distro from base standard packages.
 
 -   <https://wiki.archlinux.org/index.php/Installation_Guide>
 

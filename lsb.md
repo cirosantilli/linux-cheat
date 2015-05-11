@@ -18,23 +18,35 @@ Maintained by the Linux Foundation, of which it is the main standard
 
     The Desktop specification also adds `xdg-utils`.
 
--   elf file type
-
 -   rpm is the default packaging format! The package format is not specified.
 
 -   users and groups
 
 -   system initialization
 
--   libc: C standard libraries shared object
+### elf file type
 
--   libm: C math library shared object
+One spec for each architecture, each a very thin extensions of other well known specs like System V AMD64 ABI <http://www.x86-64.org/documentation/abi.pdf>
 
--   libncurses: for command line interfaces
+<http://refspecs.linuxbase.org/LSB_4.1.0/LSB-Core-generic/LSB-Core-generic/elf-generic.html>
 
-## C++
+### Libraries
 
-- C standard library shared objects are required
+The following libraries are required:
+
+- `libc` ANSI C
+- `libm` ANSI C
+- `libgcc_s`
+- `libdl`
+- `librt` POSIX: `fork` and other process utilities
+- `libcrypt`
+- `libpam`
+- `libncurses`
+- `libz`
+
+POSIX libraries are extended, and minimal requirements are set for non-POSIX ones: <http://refspecs.linuxbase.org/LSB_4.1.0/LSB-Core-generic/LSB-Core-generic/tocbaselib.html>
+
+## Runtime languages
 
 ## Interpreted languages
 

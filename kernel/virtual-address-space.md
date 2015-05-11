@@ -10,24 +10,6 @@ The kernel uses complicated features of the CPU to manage paging, so if you don'
 
 Good source on the subject: <http://stackoverflow.com/questions/18431261/how-does-x86-paging-work>.
 
-## Sources
-
-Free:
-
--   good beginner's tutorial: <http://duartes.org/gustavo/blog/post/anatomy-of-a-program-in-memory>
-
--   good tutorial: <http://www.bottomupcs.com/virtual_address_and_page_tables.html>
-
--   [Rutgers lecture notes on Memory Management](http://www.cs.rutgers.edu/~pxk/416/notes/09-memory.html)
-
-    Good info on the historical development of virtual adress space techniques.
-
-Non-free:
-
--   Bovet - 2005 - Understanding the Linux Kernel. Chapter "Memory Addressing".
-
-    Good info on the x86 memory hardware.
-
 ## Goals of a virtual memory space
 
 -   allow multiple programs to share a single RAM, while having the convenient illusion that their memory is contiguous.
@@ -68,64 +50,89 @@ As usual, Linux adopts a single unified model that covers several architectures.
 
 ## Virtual memory space for a single process
 
-The process memory space is divided as follows:
+The process sees it's memory as follows (out of scale):
 
-    kernel
+    +------------------ <--- 4Gb
+    |                 |
+    |                 | random stack offset
+    |                 |
+    +------------------ <--- TASK_SIZE
+    |
+    | stack
+    |
+    | ||| (grows down)
+    | vvv
+    |
+    +-----------------
+    |
+    |
+    |
+    +-----------------+ <--- RLIMIT_STACK
+    |                 |
+    |                 | random mmap offset
+    |                 |
+    +-----------------+
+    |
+    | memory mapping
+    |
+    |||| (grows down)
+    |vvv
+    |
+    +-----------------
+    |
+    |
+    |
+    +-----------------  <--- brk
+    |
+    | ^^^
+    | ||| (grows up)
+    |
+    | heap
+    |
+    +-----------------+ <--- start_brk
+    |                 |
+    |                 | random brk offset
+    |                 |
+    +-----------------+
+    |
+    | BSS
+    |
+    +----------------- <--- end_data
+    |
+    | data
+    |
+    +----------------- <--- end_code
+    |
+    | text
+    |
+    +----------------- <--- 0x0804_8000
+    |
+    |
+    |
+    +----------------- <--- 0
 
-    ------------------
-                      |
-                      | random stack offset
-                      |
-    ------------------ <== TASK_SIZE
+To better understand this, verify it with both:
 
-    stack
+- an assembly program that prints addresses
+- a C program that prints addresses
 
-    ||| (grows down)
-    vvv
+This is **not** how physical memory looks like!
 
-    ------------------
+Physical memory is completely mangled up by paging, and could be in any order.
 
+The kernel just makes it so that after paging the program sees this.
 
-    ------------------ <== RLIMIT_STACK
-                      |
-                      | random mmap offset
-                      |
-    ------------------
+The only thing we know about physical memory for sure is that the top 1Gb is for the kernel (code + memory):
 
-    memory mapping
-
-    ||| (grows down)
-    vvv
-
-    ------------------
-
-    ------------------ <== brk
-
-    ^^^
-    ||| (grows up)
-
-    heap
-
-    ------------------ <== start_brk
-                      |
-                      | random brk offset
-                      |
-    ------------------
-
-    BSS
-
-    ------------------ <== end_data
-
-    data
-
-                       <== start_data
-    ------------------ <== end_code
-
-    text
-
-    ------------------ <== 0x08048000
-
-    ------------------ <== 0
+    +----------------- 4gb
+    |
+    | Kernel segment
+    |
+    +----------------- 3Gb
+    |
+    | Application segment
+    |
+    +----------------- 0
 
 ## Valid addresses
 
@@ -142,9 +149,15 @@ Any other access attempt will generate a TODO page or seg fault?
 
 Never changes between processes.
 
+### TASK_SIZE
+
 `TASK_SIZE` is typically 3/4 of the total memory.
 
 Note that this is *virtual* memory, so it is independent of the actual size of the memory as the hardware and the kernel can give processes the illusion that they actually have amounts of memory larger than the hardware for instance.
+
+Wen a program starts, the kernel puts that value on `ESP`.
+
+TODO: is it possible to get it later directly (without rewinding the call stack) if it was not stored somewhere else?
 
 ## ASLR
 
@@ -172,9 +185,31 @@ Stores dynamically loaded library code.
 
 ## Heap
 
+## brk
+
+## start_brk
+
 Usually managed by language libraries such as C `malloc`.
 
-Manipulated on the system level by the `brk` syscall.
+Manipulated on the system level by the `brk` and `sbrk` syscalls.
+
+### random brk offset
+
+### CONFIG_COMPAT_BRK
+
+Can be turned off by the `CONFIG_COMPAT_BRK` kernel build option, which is off by default (randomization is on by default):
+
+    struct task_struct {
+        #ifdef CONFIG_COMPAT_BRK
+            unsigned brk_randomized:1;
+        #endif
+    }
+
+`brk_randomized` then controls if the process has the randomized break or not.
+
+TODO: can this be controlled on a per process basis? what is the API?
+
+If enabled, makes heap attacks harder, but breaks compatibility of older binaries that relied on it being fixed before the feature was added.
 
 ## BSS
 
@@ -216,3 +251,21 @@ Defined in `page-flags.h`.
 A page frame refers to the smallest physical memory that the processor can ask from the RAM.
 
 Paging usually has hardware support today.
+
+## Bibliography
+
+Free:
+
+-   good beginner's tutorial: <http://duartes.org/gustavo/blog/post/anatomy-of-a-program-in-memory>
+
+-   good tutorial: <http://www.bottomupcs.com/virtual_address_and_page_tables.html>
+
+-   [Rutgers lecture notes on Memory Management](http://www.cs.rutgers.edu/~pxk/416/notes/09-memory.html)
+
+    Good info on the historical development of virtual adress space techniques.
+
+Non-free:
+
+-   Bovet - 2005 - Understanding the Linux Kernel. Chapter "Memory Addressing".
+
+    Good info on the x86 memory hardware.

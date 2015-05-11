@@ -733,13 +733,6 @@
 
       rename 's/^([0-9]) /0$1 /g' *.mp3
 
-  ## cpio
-
-    #TODO
-
-    find . ! -iname '* - *' -type f -print | cpio -pvdumB './no author'
-    #find selected files to destination, building and keeping their relative directory structure
-
   ## install
 
     # Move and set: mode, ownership and groups.
@@ -775,29 +768,6 @@
     # - `echo` puts its data on the pipe
     # - `echo` terminates
     # - `cat` reads the data from the pipe and terminates
-
-  ## umask
-
-    # Shows/sets permissions that will be *removed*.
-
-    # This is system call implemented, not shell implemented,
-    # and interacts with certain system calls such as `open`.
-
-    # Has direct effect on commands such as `chmod` and `touch`.
-
-      touch a
-      ls -l a
-        #rw-rw-r--
-      umask
-        #002
-        #ok the other w was removed
-        #the x are not set by touch by default
-      umask 0
-      touch b
-        #rw-rw-rw-
-      umask 777
-      touch c
-        #---------
 
 ## setterm
 

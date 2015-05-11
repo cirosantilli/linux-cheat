@@ -51,6 +51,8 @@ This is a bit polemic, since some states restrict cryptographic software in a si
 
 ## uapi
 
+User API.
+
 `uapi` contains arch dependant stuff that will be exposed to userspace applications: <http://lwn.net/Articles/507794/>
 
 An example is system calls macro numbers such as `__NR_WRITE`.
@@ -93,7 +95,7 @@ Interesting files:
 
 - `compiler.h`: compiler related stuff such as `__user`, which expands to a GCC `__attribute__`
 - `fs.h`: key filesystem structures
-- `sched.h`: scheduling and task key structures
+- `sched.h`: scheduling and task key structures, e.g. `task_struct`
 - `types.h`: typedefs
 
 ## include/asm-generic
@@ -105,6 +107,21 @@ Possible rationale: make it clear what new ports will need to implement; things 
 It is a very fun to explore part of the code as it is a gateway for low level code.
 
 <http://stackoverflow.com/questions/3247770/what-is-the-linux-2-6-3x-x-include-asm-generic-for>
+
+## defconfig
+
+E.g.:
+
+    arch/x86/configs/i386_defconfig
+    arch/x86/configs/x86_64_defconfig
+
+TODO. One per architecture.
+
+Seems to be used as the default for the `.config` on a given platform.
+
+You can select an explicit arch to initialize `.config` with:
+
+    make defconfig ARCH=um
 
 ## Documentation
 

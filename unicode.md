@@ -20,7 +20,7 @@ Code chart: browser by category or input as specific hex: <http://www.unicode.or
 
 A plane is a set of 2^16 characters.
 
-There are 17 planes, 0 to 16, so not a multiple of 2! This is because of the limit of the UTF-16 encoding which is a variable length encoding.
+There are 17 planes, 0 to 16, so **not** a multiple of 2! This is because historically UTF-16 was the dominant encoding before UTF-8 beat it, and UTF-16 does not encode a power of 2 points because it is variable length (2 or 4 bytes).
 
 0 is filled and has the most important characters.
 

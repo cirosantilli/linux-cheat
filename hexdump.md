@@ -1,5 +1,7 @@
 # hexdump
 
+Ubuntu `bsdmainutils` package.
+
 `od` alternative with better defaults, but not POSIX 7.
 
 Uses saner hexadecimal defaults.

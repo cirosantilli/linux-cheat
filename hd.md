@@ -2,6 +2,8 @@
 
 `od` alternative with better defaults, but not POSIX 7.
 
+Ubuntu `bsdmainutils` package.
+
 Uses saner hexadecimal defaults and shows ASCII side by side.
 
 Saner than hexdump.

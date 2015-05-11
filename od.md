@@ -35,7 +35,7 @@ Note however how octal notation is used for the numbers TODO can this be convert
 
 The best option for files which are not mostly ASCII is:
 
-    printf "ab\n\x10" | od -Ax -tx1
+    printf 'ab\n\x10' | od -Ax -tx1
 
 Which outputs:
 
@@ -124,7 +124,7 @@ Output:
 
 Note how this is less convenient that hexadecimal since each byte needs 3 characters instead of 2 to be represented.
 
-Another downside of using octal: 3 octal character makes 9 bits (3 per charcter) and not 8 as in a byte, so it is not possible to have for example `444`.
+Another downside of using octal: 3 octal character makes 9 bits (3 per character) and not 8 as in a byte, so it is not possible to have for example `444`.
 
 ### tc
 

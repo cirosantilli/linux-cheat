@@ -39,6 +39,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [File permissions](file-permissions.md)
     1.  [Hardlink](hardlink.md)
     1.  [badblocks](badblocks.md)
+    1.  [bindfs](bindfs.md)
     1.  [blkid](blkid.md)
     1.  [chown](chown.sh)
     1.  [chmod](chmod.sh)
@@ -49,9 +50,11 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1. [e2fsprogs](e2progs.md)
         1. [mke2fs](mke2fs.md)
     1.  [fdisk](fdisk.md)
+    1.  [FUSE](FUSE.md)
     1.  [fuser](fuser.md)
     1.  [lsblk](lsblk.md)
     1.  [mktemp](mktemp.md)
+    1.  [mountall](mountall.md)
     1.  [pathchk](pathchk.md)
     1.  [ramfs](ramfs.md)
     1.  [swap partition](swap-partition.md)
@@ -115,6 +118,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
 1.  Programming
     1. [ack](ack.sh)
     1. [ctags](ctags/)
+    1. [cscope](cscope.md)
 1.  Processes
     1. [chroot](chroot.sh)
     1. [env](env.sh)
@@ -130,8 +134,10 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [pstree](pstree.sh)
     1. [pwd](pwd.sh)
     1. [sleep](sleep.sh)
+    1. [strace](strace.md)
     1. [timeout](timeout.md)
     1. [top](top.md)
+    1. [umask](umask.md)
     1. [ulimit](ulimit.md)
     1. [wait](wait.sh)
 1.  Date and time
@@ -161,6 +167,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [gzip](gzip.md)
     1. [tar](tar.md)
     1. [zip](zip.md)
+    1. [ar](ar.md)
 1.  User operations
     1. [id](id.md)
     1. [usermod](usermod.md)
@@ -187,6 +194,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [RST](rst/)
 1.  [Virtual machine](virtual-machine/)
     1. [Docker](docker/)
+    1. [QEMU](qemu.md)
     1. [User mode Linux](user-mode-linux.md)
     1. [Vagrant](vagrang/)
 1.  [Configuration automation](config-automation.md)
@@ -207,9 +215,12 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  Sorting
         1. [sort](sort.md)
         1. [tsort](tsort.md)
+1.  Packages
+    1. [util-linux](util-linux.md)
 1.  Misc
     1. [cron](cron.sh)
     1. [logrotate](logrotate.md)
+    1. [BusyBox](busybox.md)
     1. [xargs](xargs.md)
 1.  [Bibliography](bibliography.md)
 

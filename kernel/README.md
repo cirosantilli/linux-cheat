@@ -1,8 +1,8 @@
 # Kernel
 
 1.  Code
-    [main.c](main.c)
-    [hello_world](hello_world.c)
+    1. [main.c](main.c)
+    1. [hello_world](hello_world.c)
 1.  [Introduction](introduction.md)
 1.  [Compile and install](compile-and-install.md)
 1.  [Testing](testing.md)
@@ -17,6 +17,7 @@ WIP
 
 1. [dmesg](dmesg.md)
 1. [LXC](lxc.md)
+1. [Kconfig](kconfig.md)
 
 ## User programs
 

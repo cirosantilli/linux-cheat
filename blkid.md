@@ -2,7 +2,9 @@
 
 `util-linux` package.
 
-Get UUID, label and filesystem type for all partitions
+There is also a `liblkid` package in Ubuntu which offers functions like disk detection.
+
+Get UUID, label and filesystem type for all partitions:
 
     sudo blkid
 

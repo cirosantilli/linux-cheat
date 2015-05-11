@@ -10,5 +10,6 @@
 .PHONY: all
 
 all:
+	echo $cmd
 	echo 'no plus'
 	+echo 'plus'

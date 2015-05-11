@@ -4,7 +4,7 @@ that can be exemplified in modules, which is much easier than recompiling and re
 
 #__rcu
 
-	TODO0 a type of locking directive
+	TODO a type of locking directive
 */
 
 #include <linux/version.h> 	/* include/generated/uapi/linux. LINUX_VERSION_CODE, KERNEL_VERSION */
@@ -29,7 +29,7 @@ that can be exemplified in modules, which is much easier than recompiling and re
 #include <linux/path.h>		/* path */
 #include <linux/sched.h>	/* current */
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 9, 0)
-	#include <linux/sched/rt.h>	/* MAX_PRIO, MAX_USER_RT_PRIO, DEFAULT_PRIO */
+#include <linux/sched/rt.h>	/* MAX_PRIO, MAX_USER_RT_PRIO, DEFAULT_PRIO */
 #endif
 #include <linux/slab.h> 	/* kmalloc, kmem_cach_create, kmem_cach_alloc */
 #include <linux/spinlock.h>
@@ -54,9 +54,9 @@ that can be exemplified in modules, which is much easier than recompiling and re
 */
 
 /*
-#module description
+# Module description
 
-##license
+## License
 
 the kernel offers methods to indicate the license of modules or parts of modules
 such as symbols
@@ -84,40 +84,40 @@ MODULE_VERSION("0.1");
 /*MODULE_ALIAS("cheat2");*/
 
 /*
-#parameters
+# Parameters
 
-parameters an be passed to modules at insertion time:
+Parameters an be passed to modules at insertion time:
 
 - via command line arguments for `insmod` and `modprobe`
 - via conf files in `/etc/modprobe.d/` for `modprobe` only
 
-they are used from inside the program via the module_param macro.
+They are used from inside the program via the module_param macro.
 
-if no vaule is given for them, they remain unchanged
+If no vaule is given for them, they remain unchanged
 
-the following types are supported:
+The following types are supported:
 
 - bool
 - invbool (returns the negation of bool)
 - charp: character pointer
 - int, long, short, uint, ulong, ushort
 
-the third is the file permissions for the module representation under `/sys/module/<name>/parameters`:
+The third is the file permissions for the module representation under `/sys/module/<name>/parameters`:
 
 - `S_IRUGO`: readonly
 - `S_IRUGO|S_IWUSR`: writeable by sudo
 
-try:
+Try:
 
 	cat /sys/module/<thismodule>/parameters/param_i
 */
 
-//declartion and default values of parameters:
+/* Declartion and default values of parameters: */
 static int param_i = 0;
 static char *param_s = "aaa";
-//static int param_is[] = {0,0,0};
+/*static int param_is[] = {0,0,0};*/
 
-//set values if given:
+/* Set values if given: */
 module_param(param_i, int, S_IRUGO);
 module_param(param_s, charp, S_IRUGO);
 /* TODO BUG this generates a NULL dereference and kernel oops:*/
@@ -168,7 +168,7 @@ int exported_symbol_gpl;
 EXPORT_SYMBOL(exported_symbol);
 EXPORT_SYMBOL_GPL(exported_symbol_gpl);
 
-//must be global:
+/* Must be global: */
 DEFINE_PER_CPU(int, cpu_int);
 static atomic_t i_global_atomic;
 
@@ -196,7 +196,7 @@ static struct cdev cdevs[N_DEVS];
 
 	- open and release: if NULL, always sucessful.
 
-	#read file operation
+	# read file operation
 
 		Prototype:
 
@@ -275,38 +275,38 @@ static struct cdev cdevs[N_DEVS];
 		};
 
 /*
- * this function is defined as the entry point by the `module_init` call below.
- *
- * using `init_module` as name also worked. TODO why
- *
- * static is not mandatory, but good practice since this function should not be seen
- * from other files.
- *
- * typical things a real module would do here include:
- *
- * - initialize variables
- * - register an interrupt handler
- * - register a the bottom half of the interrupt handler
- *
- * return value:i
- *
- * - 0 on success
- * - non zero on failure.
- *
- * You should always return the negation of constants defined in `linux/errno.h`,
- * for example as `return -ENOMEM`
- *
- * #cleanup
- *
- * 	module insertion forget to nicely cleanup in case
- * */
+This function is defined as the entry point by the `module_init` call below.
+
+Using `init_module` as name also worked. TODO why
+
+Static is not mandatory, but good practice since this function should not be seen
+from other files.
+
+Typical things a real module would do here include:
+
+- initialize variables
+- register an interrupt handler
+- register a the bottom half of the interrupt handler
+
+Return value:
+
+- 0 on success
+- non zero on failure.
+
+You should always return the negation of constants defined in `linux/errno.h`,
+for example as `return -ENOMEM`
+
+# cleanup
+
+	module insertion forget to nicely cleanup in case
+*/
 static int __init init(void)
 {
 	/* separate from older entries in log*/
 	printk(KERN_DEBUG __FILE__ ": \n============================================================\n");
 
 	/*
-	#printk
+	# printk
 
 		The kernel has no simple way to communicate with a terminal
 		so you the simplest thing to do is dump program output to a file.
@@ -343,17 +343,17 @@ static int __init init(void)
 	printk(KERN_DEBUG "i_global = %d\n", i_global);
 
 	/*
-	#version
+	# version
 
 		Device drivers depend on kernel version.
 
 		You can get some version flexibility with the preprocessor.
 
-		#LINUX_VERSION_CODE
+		# LINUX_VERSION_CODE
 
 			Example: on kernel `2.6.10` == 0x02060a
 
-		#KERNEL_VERSION
+		# KERNEL_VERSION
 
 			Transform human version numbers into HEXA notation:
 
@@ -372,7 +372,7 @@ static int __init init(void)
 	}
 
 	/*
-	#__KERNEL__
+	# __KERNEL__
 
 		Defined on the Makefile when compiling the kernel or kernel modules.
 
@@ -388,7 +388,7 @@ static int __init init(void)
 	}
 
 	/*
-	#assembly instructions that only kernel code can do
+	# assembly instructions that only kernel code can do
 
 		some instructions require kernel priviledge to be used
 
@@ -399,7 +399,7 @@ static int __init init(void)
 		but understanding those instructions may give you insights
 		on how the system achieves certain effects.
 
-		#x86
+		# x86
 
 			- interrupt flag IF instruction
 
@@ -425,19 +425,20 @@ static int __init init(void)
 		in the kernel, those are be separated from non architecture specific files
 		*/
 
-		//TODO how to get cr0?
-
-			//int out = 0;
-			//asm (
-			//	"mov %%cr0, %0"
-			//	: "=m" (out)
-			//);
-			//printk( "%d", out );
+        /* TODO how to get cr0? */
+        /*
+        int out = 0;
+        asm (
+            "mov %%cr0, %0"
+            : "=m" (out)
+        );
+        printk( "%d", out );
+        */
 	}
 #endif
 
 	/*
-	#fixed size integers
+	# fixed size integers
 
 		Like c99 `int32_t` family
 
@@ -445,7 +446,7 @@ static int __init init(void)
 
 		Defined in `include/linux/types.h`.
 
-	#fixed size endieness
+	# fixed size endieness
 
 		For cases were big or little endieness must be explicit
 
@@ -454,8 +455,8 @@ static int __init init(void)
 	TODO what is the difference between using le and be?
 	*/
 	{
-		//__u8 u8 = 127;
-		//__s8 s8 = 255;
+        /*__u8 u8 = 127;*/
+        /*__s8 s8 = 255;*/
 
 		__le16 le16 = 1;
 		__be16 be16 = 1;
@@ -463,37 +464,37 @@ static int __init init(void)
 	}
 
 	/*
-	#smp
+	# smp
 
 		stands for Symettrical MultiProcessing.
 
 		means using multiple cpus at once (multicore systems)
 
-	#per cpu variables
+	# per cpu variables
 
-		<http://www.makelinux.net/ldd3/chp-8-sect-5>
+		http://www.makelinux.net/ldd3/chp-8-sect-5
 
-		#DEFINE_PER_CPU
+		# DEFINE_PER_CPU
 
 			define a copy of given variable for each cpu
 
-		#get_cpu_var(name);
+		# get_cpu_var(name);
 
 			get variable for current cpu
 
 			this is a macro, so you can modify the variable with that too
 
-		#put_cpu_var(name);
+		# put_cpu_var(name);
 
 			must be called after the variable has been modified
 
-		#smp_processor_id()
+		# smp_processor_id()
 
 			get id of current processor
 
 			run this many times and it may change
 
-		#get_cpu(name, cpu)
+		# get_cpu(name, cpu)
 
 			like `get_cpu_var`, but from any processor
 	*/
@@ -506,7 +507,9 @@ static int __init init(void)
 	}
 
 	/*
-	#likely #unlikely
+	#  likely
+
+    # unlikely
 
 	 	the unlikely function marks a condition as rare, and makes it easier
 	 	for compilers and processors to optimize the code
@@ -536,44 +539,44 @@ static int __init init(void)
 	}
 
 	/*
-	#__init macros
+	# __init macros
 
 		Put data on speial sections:
 
-			#define __init          __attribute__ ((__section__ (".init.text")))
-			#define __initdata      __attribute__ ((__section__ (".init.data")))
-			#define __exitdata      __attribute__ ((__section__(".exit.data")))
-			#define __exit_call     __attribute_used__ __attribute__ ((__section__ (".exitcall.exit")))
+			# define __init          __attribute__ ((__section__ (".init.text")))
+			# define __initdata      __attribute__ ((__section__ (".init.data")))
+			# define __exitdata      __attribute__ ((__section__(".exit.data")))
+			# define __exit_call     __attribute_used__ __attribute__ ((__section__ (".exitcall.exit")))
 
-			#ifdef MODULE
-			#define __exit          __attribute__ ((__section__(".exit.text")))
-			#else
-			#define __exit          __attribute_used__ __attribute__ ((__section__(".exit.text")))
-			#endif
+			# ifdef MODULE
+			# define __exit          __attribute__ ((__section__(".exit.text")))
+			# else
+			# define __exit          __attribute_used__ __attribute__ ((__section__(".exit.text")))
+			# endif
 
 		Functions and data in those sections are meant to be used only at initialization processes (kernel or modules),
 		and are then removed from RAM by `free_initmem()`.
 
 		Sources:
 
-		- <http://stackoverflow.com/questions/8832114/what-does-init-mean-in-this-linux-kernel-code>
-		- <http://kernelnewbies.org/FAQ/InitExitMacros>
+		- http://stackoverflow.com/questions/8832114/what-does-init-mean-in-this-linux-kernel-code
+		- http://kernelnewbies.org/FAQ/InitExitMacros
 
-	#__init
+	# __init
 
 		Tells the compiler that this function is only used once at initialization,
 		so the kernel may free up the code memory after the initialization.
 
-	#__initdata
+	# __initdata
 
 		Marks data instead of functions.
 
-	#__initconst
-	#__devinit
+	# __initconst
+	# __devinit
 
 		TODO0
 
-	#__exit
+	# __exit
 
 		Only used for modules.
 
@@ -586,14 +589,14 @@ static int __init init(void)
 	}
 
 	/*
-	#data structures
+	# data structures
 
 		the kernel has some basic and effective data structure implementations
 		that should be reused whenever possible
 	*/
 	{
 		/*
-		#linked lists
+		# linked lists
 
 			list_head with associated methods and macros is a doubly linked circular linked list
 
@@ -608,7 +611,7 @@ static int __init init(void)
 
 			but you should use methods and macros instead of next and prev directly
 
-		#list_head
+		# list_head
 
 			Represents a node of a linked list.
 		*/
@@ -619,7 +622,7 @@ static int __init init(void)
 			};
 
 			/*
-			#LIST_HEAD
+			# LIST_HEAD
 
 				creates a differentiated `list_head` which shall represent the enteire list
 
@@ -629,7 +632,7 @@ static int __init init(void)
 				LIST_HEAD( alist );
 
 			/*
-			#LIST_HEAD_INIT
+			# LIST_HEAD_INIT
 
 				links list.next and list.prev to itself:
 				the first element of the list
@@ -650,11 +653,11 @@ static int __init init(void)
 				};
 
 			/*
-			#list_add
+			# list_add
 
 				adds the element next to the given one
 
-			#list_add_tail
+			# list_add_tail
 
 				adds the element previous to the given one
 
@@ -676,7 +679,7 @@ static int __init init(void)
 				list_add_tail(&cc.list, &alist);
 
 			/*
-			#list_for_each_entry
+			# list_for_each_entry
 
 				Simplifies a loop over a list:
 
@@ -704,7 +707,7 @@ static int __init init(void)
 			*/
 
 			/*
-			#container_of
+			# container_of
 
 				this macros allows us to get the address of the struct given one of the
 				addresses of the fields of the struct
@@ -723,7 +726,7 @@ static int __init init(void)
 	}
 
 	/*
-	#algorithms
+	# algorithms
 
 		Generally useful algorithms that you would take from libc.
 	*/
@@ -735,7 +738,7 @@ static int __init init(void)
 	}
 
 	/*
-	#time
+	# time
 
 		There are 2 types of time:
 
@@ -749,7 +752,7 @@ static int __init init(void)
 		Time is important on the kernel,
 		for example when giving hardware time to complete certain tasks.
 
-	#system timer
+	# system timer
 
 		Programmable hardware that emmits interrputs at a given frequency,
 		on the 10 - 1k Hz range as of 2013.
@@ -757,11 +760,11 @@ static int __init init(void)
 	*/
 	{
 		/*
-		#HZ
+		# HZ
 
 			Frequency of the system clock.
 
-		#jiffies
+		# jiffies
 
 			How many system clock periods have passed since boot.
 
@@ -770,13 +773,12 @@ static int __init init(void)
 			Mnemonic: in a jiffy is an informal / old expression for in a while.
 			A jiffle then is a small amount of time.
 
-		#wraparound
+		# wraparound
 
 			jiffies is an unsigned long, so if we reach its limit it wraps around to 0.
 
-			Example:
+            Example: half a second in the future:
 
-				//half a second in the future
 				unsigned long timeout = jiffies + HZ/2;
 
 				//work
@@ -792,10 +794,10 @@ static int __init init(void)
 
 			This is why you should use:
 
-				#define time_after(unknown, known) ((long)(known) - (long)(unknown) < 0)
-				#define time_before(unknown, known) ((long)(unknown) - (long)(known) < 0)
-				#define time_after_eq(unknown, known) ((long)(unknown) - (long)(known) >= 0)
-				#define time_before_eq(unknown, known) ((long)(known) - (long)(unknown) >= 0)
+				# define time_after(unknown, known) ((long)(known) - (long)(unknown) < 0)
+				# define time_before(unknown, known) ((long)(unknown) - (long)(known) < 0)
+				# define time_after_eq(unknown, known) ((long)(unknown) - (long)(known) >= 0)
+				# define time_before_eq(unknown, known) ((long)(known) - (long)(unknown) >= 0)
 
 			to compare times as:
 
@@ -810,7 +812,7 @@ static int __init init(void)
 	}
 
 	/*
-	#PAGE_SIZE
+	# PAGE_SIZE
 
 		Size of a page.
 	*/
@@ -819,7 +821,7 @@ static int __init init(void)
 	}
 
 	/*
-	#memory zones
+	# memory zones
 
 		Each page belongs to a zone.
 
@@ -827,11 +829,11 @@ static int __init init(void)
 
 		There are 3 zone types: ZONE_NORMAL, ZONE_DMA and ZONE_HIGHMEM.
 
-		#ZONE_NORMAL
+		# ZONE_NORMAL
 
 			Not any of the other pathological cases.
 
-		#ZONE_DMA
+		# ZONE_DMA
 
 			Used for hardware access communication.
 
@@ -839,7 +841,7 @@ static int __init init(void)
 
 			Mainly historical usage.
 
-		#ZONE_HIGHMEM
+		# ZONE_HIGHMEM
 
 			Memory that needs more than 32 bits to be addressed, that is,
 			if you have more than 4 Gb memory.
@@ -856,7 +858,7 @@ static int __init init(void)
 	*/
 
 	/*
-	#memory allocation
+	# memory allocation
 
 		The following methods are common for memory allocation by the kernel for is own use:
 
@@ -865,7 +867,7 @@ static int __init init(void)
 		- slab alocator methods such as: kmem_cach_create + kmem_cache_alloc
 		- vmalloc
 
-		#gfp flags
+		# gfp flags
 
 			Certain flags are used on all of those functions.
 
@@ -875,7 +877,7 @@ static int __init init(void)
 	*/
 
 	/*
-	#alloc_pages
+	# alloc_pages
 
 		Gets a given number of contiguous (linear address) pages.
 
@@ -885,18 +887,18 @@ static int __init init(void)
 
 		Based on the Buddy System.
 
-	#page_address
+	# page_address
 
 		Returns start of linear address of given page, NULL if that page is on high memory
 		or is not mapped.
 
 		TODO page_address vs page->virtual?
 
-	#free_pages
+	# free_pages
 
 		Like aloc_pages, but takes the starting linear address.
 
-	#page struct
+	# page struct
 
 		Fields:
 
@@ -927,7 +929,7 @@ static int __init init(void)
 	}
 
 	/*
-	#slab allocator
+	# slab allocator
 
 		Best way to allocate several objects of the same type (size and required initial data).
 
@@ -950,7 +952,7 @@ static int __init init(void)
 
 			Objects can be either free or occupied.
 
-		#kmem_cache_create
+		# kmem_cache_create
 
 			Create a cache.
 
@@ -969,17 +971,17 @@ static int __init init(void)
 			The constructor is called on the data at creation of every object.
 			NULL means no contructor.
 
-		#kmem_cache_alloc
+		# kmem_cache_alloc
 
 			Allocate data on a created chache.
 
 			You do not need to know in which slab it will be created.
 
-		#kmem_cache_free
+		# kmem_cache_free
 
 			Free data on a cache.
 
-		#kmem_cache_destroy
+		# kmem_cache_destroy
 
 			Delete a cache.
 
@@ -995,7 +997,7 @@ static int __init init(void)
 			obj[1] = 2;
 		}
 
-		//create the cache
+        /* create the cache */
 		cache = kmem_cache_create(
 			"test_cache_0",
 			2 * sizeof( int ),
@@ -1005,8 +1007,8 @@ static int __init init(void)
 		);
 		if (!cache) return -1;
 
-		//allocate memory for the cache
-		//we make two pairs of integers
+        /* allocate memory for the cache */
+        /* we make two pairs of integers */
 		is[0] = kmem_cache_alloc(cache, GFP_KERNEL);
 		is[1] = kmem_cache_alloc(cache, GFP_KERNEL);
 
@@ -1024,7 +1026,7 @@ static int __init init(void)
 	}
 
 	/*
-	#kmalloc
+	# kmalloc
 
 		Like libc malloc, but for the kernel.
 
@@ -1046,18 +1048,18 @@ static int __init init(void)
 	}
 
 	/*
-	#process
+	# process
 
 		The kernel manages user processes and kernel processes, scheduling them with some algorithm
 		so that users see all process make some progress more or less at the same time.
 
 		The process model is found under `sched.h` and is named `struct task_struct`.
 
-	#threads
+	# threads
 
 		Threads are processes that share the same address space so they act on common variables.
 
-	#current
+	# current
 
 		Macro that gives the `task_struct` representing the current process.
 
@@ -1073,19 +1075,19 @@ static int __init init(void)
 		so that only the top bits of `current_stack_pointer` (ESP) are considered.
 
 
-	#current_thread_info
+	# current_thread_info
 
-	#task_struct
+	# task_struct
 
-		Represents processes (called taks on the kern), found in `sched.h`
+		Represents processes (called taks on the kern), found in `include/linux/sched.h`
 
-		#tgid
+		# tgid
 
 			thread group id
 
 			same for all threads that TODO have the same data?
 
-		#parent vs real_parent
+		# parent vs real_parent
 
 			TODO
 
@@ -1094,19 +1096,19 @@ static int __init init(void)
 		real time attempts to be real time, but linux maker no guarantees that
 		a process will actually run before a given time, only this is very likely
 
-		#children
+		# children
 
 			processes keep a linked list of its children
 
-		#sibling
+		# sibling
 
 			processes keep a linked list of its siblings
 
-		#task_struct scheduling fields
+		# task_struct scheduling fields
 
 			The following fields relate to process scheduling.
 
-			#state
+			# state
 
 				Possible values are:
 
@@ -1118,23 +1120,23 @@ static int __init init(void)
 				- TASK_ZOMBIE
 				- EXIT_DEAD
 
-			#static_priority
+			# static_priority
 
 				Priority when the process was started
 
 				can be changed with `nice` and `sched_setscheduler` system calls.
 
-			#normal_priority
+			# normal_priority
 
 				Priority based on the static priority and on the scheduling policy only.
 
-			#prio
+			# prio
 
 				Actual priority.
 
 				The kernel may change this at runtime for certain reasons.
 
-			#rt_priority
+			# rt_priority
 
 				real time priority. Range: 0 to 99, like nice, smallest is most urgent.
 
@@ -1150,13 +1152,13 @@ static int __init init(void)
 
 				representing the scheduling policy
 
-			#run_list
+			# run_list
 
 				used by the real time scheduler only
 
 				TODO
 
-			#time_slice
+			# time_slice
 
 				used by the real time only
 
@@ -1166,10 +1168,9 @@ static int __init init(void)
 		printk(KERN_DEBUG "TASK_RUNNING = %d\n", TASK_RUNNING);
 		printk(KERN_DEBUG "TASK_INTERRUPTIBLE = %d\n", TASK_INTERRUPTIBLE);
 
-		//self is obviously running when state gets printed, parent may be not:
-
-			printk(KERN_DEBUG "current->state  = %ld\n", current->state);
-			printk(KERN_DEBUG "current->parent->state  = %ld\n", current->parent->state);
+        /* self is obviously running when state gets printed, parent may be not: */
+        printk(KERN_DEBUG "current->state  = %ld\n", current->state);
+        printk(KERN_DEBUG "current->parent->state  = %ld\n", current->parent->state);
 
 		printk(KERN_DEBUG "current->comm = %s\n", current->comm);
 		printk(KERN_DEBUG "current->pid  = %lld\n", (long long)current->pid);
@@ -1189,14 +1190,13 @@ static int __init init(void)
 		printk(KERN_DEBUG "current->exit_signal = %d\n", current->exit_signal);
 
 		/*  the signal sent when the parent dies  */
-
-			printk(KERN_DEBUG "current->pdeath_signal = %d\n", current->pdeath_signal);
+        printk(KERN_DEBUG "current->pdeath_signal = %d\n", current->pdeath_signal);
 
 		printk(KERN_DEBUG "current->parent->pid  = %lld\n", (long long)current->parent->pid);
 		printk(KERN_DEBUG "current->parent->parent->pid  = %lld\n", (long long)current->parent->parent->pid);
 		printk(KERN_DEBUG "current->real_parent->pid  = %lld\n", (long long)current->real_parent->pid);
 
-		//children transversal:
+        /* children transversal: */
 		{
 			struct task_struct *task_struct_ptr;
 			printk(KERN_DEBUG "current->children pids:\n");
@@ -1205,7 +1205,7 @@ static int __init init(void)
 			}
 		}
 
-		//siblings transversal:
+        /* siblings transversal: */
 		{
 			struct task_struct *task_struct_ptr;
 
@@ -1220,10 +1220,11 @@ static int __init init(void)
 			}
 		}
 
-		//struct list_head sibling;	/* linkage in my parent's children list */
+        /* linkage in my parent's children list */
+        /*struct list_head sibling;*/
 
 		/*
-		#groupr_leader
+		# groupr_leader
 
 			TODO what is this
 		*/
@@ -1232,12 +1233,12 @@ static int __init init(void)
 		}
 
 		/*
-		#fs
+		# fs
 
 			Process keeps a `include/linux/fs_struct.h` `fs_struct` structure,
 			which contains information relating the process to the filesystem such as:
 
-			- root path:
+			-   root path:
 
 				Each process has a root.
 
@@ -1249,7 +1250,7 @@ static int __init init(void)
 
 				Root can be changed on `sh` via `chroot`.
 
-			- pwd path:
+			-   pwd path:
 
 				Good and old current directory.
 		*/
@@ -1261,7 +1262,7 @@ static int __init init(void)
 		}
 
 		/*
-		#sched_entity
+		# sched_entity
 
 			Represents either a single task or a group of tasks to the scheduler.
 		*/
@@ -1273,7 +1274,7 @@ static int __init init(void)
 		}
 
 		/*
-		#sched_class
+		# sched_class
 
 			Defined at `kernel/sched/sched.h`.
 
@@ -1301,21 +1302,21 @@ static int __init init(void)
 
 			declared on `kernel/sched/sche.h`.
 
-			#sched_class_highes
+			# sched_class_highes
 
 				Some self documentation also tells us that:
 
-					#define sched_class_highest (&stop_sched_class)
+					# define sched_class_highest (&stop_sched_class)
 
 				means that stop_sched_class has the highes priority.
 
 				<http://stackoverflow.com/questions/15399782/what-is-the-use-of-stop-sched-class-in-linux-kernel>
 
-			#for_each_class
+			# for_each_class
 
 				Loop all members classes:
 
-					#define for_each_class(class) \
+					# define for_each_class(class) \
 						for (class = sched_class_highest; class; class = class->next)
 		*/
 		{
@@ -1325,49 +1326,46 @@ static int __init init(void)
 	}
 
 	/*
-	#schedule()
+	# schedule()
 
 		Tell the scheduler that he can schedule another process for now.
 
 		Like POSIX yield.
 
-	#wake_up_process(struct task_struct)
+	# wake_up_process(struct task_struct)
 
 		Sets process to `TASK_RUNNING`.
 
-	#set_current_state
+	# set_current_state
 
 		Set state for current process. Ex:
 
 			set_current_state(TASK_INTERRUPTIBLE)
 
-	#__sched
+	# __sched
 
 		Attribute added to functions that may call `schedule()` (`sched.h`):
 
-			#define __sched		__attribute__((__section__(".sched.text")))
+			# define __sched		__attribute__((__section__(".sched.text")))
 
 	*/
 	{
-		//max priority of an rt process:
+        /* max priority of an rt process: */
+        printk(KERN_DEBUG "MAX_USER_RT_PRIO  = %d\n", MAX_USER_RT_PRIO);
 
-			printk(KERN_DEBUG "MAX_USER_RT_PRIO  = %d\n", MAX_USER_RT_PRIO);
+        /* max priority of any process: */
+        printk(KERN_DEBUG "MAX_PRIO  = %d\n", MAX_PRIO);
 
-		//max priority of any process:
-
-			printk(KERN_DEBUG "MAX_PRIO  = %d\n", MAX_PRIO);
-
-		//default priority for new processes:
-
-			printk(KERN_DEBUG "DEFAULT_PRIO  = %d\n", DEFAULT_PRIO);
+        /* default priority for new processes: */
+        printk(KERN_DEBUG "DEFAULT_PRIO  = %d\n", DEFAULT_PRIO);
 
 		schedule();
 	}
 
 	/*
-	#kernel threads
+	# kernel threads
 
-	#kthread
+	# kthread
 
 		The kernel can spawn its own threads.
 
@@ -1390,7 +1388,7 @@ static int __init init(void)
 
 		Each kernel thread has its own pid a tgid.
 
-		#kthread_create
+		# kthread_create
 
 			Create kernel threads.
 
@@ -1416,11 +1414,11 @@ static int __init init(void)
 
 			After creating a thread you must wake it up with a `wake_up_process(struc task_struct *)` call`
 
-		#kthread_run
+		# kthread_run
 
 			Same as kthread_create, but also starts the thread.
 
-		#kthread_stop
+		# kthread_stop
 
 			<https://www.kernel.org/doc/htmldocs/device-drivers/API-kthread-stop.html>
 
@@ -1430,7 +1428,7 @@ static int __init init(void)
 
 				kthread_stop(struc task_struct *)
 
-		#kthread_should_stop
+		# kthread_should_stop
 
 			TODO how to use it
 	*/
@@ -1444,7 +1442,7 @@ static int __init init(void)
 		{
 			struct data *data = (struct data *)vdata;
 
-			//each kernel thread has its own pid and tgid
+            /* Each kernel thread has its own pid and tgid. */
 			printk(
 				KERN_DEBUG "kthread: i = %d, pid = %lld, ppid = %lld, tgid = %lld\n",
 				data->i,
@@ -1491,28 +1489,29 @@ static int __init init(void)
 				"test_kthread_0"
 			);
 
-			//if we had used kthread_create:
-
-				//if ( thread != NULL ) {
-				//	wake_up_process(thread);
-				//}
+            /* If we had used kthread_create: */
+            /*
+            if ( thread != NULL ) {
+                wake_up_process(thread);
+            }
+            */
 		}
 
-		//sleep until we have the good result
-		//this can only happen when all threads are over
+        /* sleep until we have the good result */
+        /* this can only happen when all threads are over */
 		while( atomic_read(&i_global_atomic) < n_threads ) {
-			//when each thread ends, it tries to wake us up
-			//because it might be that the end condition has been reached.
+            /* when each thread ends, it tries to wake us up */
+            /* because it might be that the end condition has been reached. */
 			set_current_state(TASK_INTERRUPTIBLE);
 			schedule();
 		}
 
-		//assert that all threads finished
+        /* assert that all threads finished */
 		if ( atomic_read(&i_global_atomic) != n_threads ) return -1;
 	}
 
 	/*
-	#synchronization
+	# synchronization
 
 		There are severl methods adapted for different cases:
 
@@ -1531,7 +1530,7 @@ static int __init init(void)
 	*/
 
 	/*
-	#atomic operations
+	# atomic operations
 
 		ANSI C does not guarantee that any operation is atomic, not even things like: `a++`.
 
@@ -1549,17 +1548,17 @@ static int __init init(void)
 		- subtract and test greater than
 		- binary operations
 
-	#atomic_t
+	# atomic_t
 
 		Type used on all atomic operations.
 
-	#ATOMIC_INIT(int)
+	# ATOMIC_INIT(int)
 
 		Initialize an atomic to given integer.
 
 		Only works at compile time and for initialization.
 
-	#atomic_set(int *, int)
+	# atomic_set(int *, int)
 
 		Set value of atomic.
 
@@ -1567,14 +1566,14 @@ static int __init init(void)
 	*/
 	{
 		atomic_t i = ATOMIC_INIT(0);
-		//ERROR: not initialization
-		//i = ATOMIC_INIT(0);
+        /* ERROR: not initialization */
+        /*i = ATOMIC_INIT(0);*/
 		atomic_inc(&i);
 		if ( atomic_read(&i) != 1 ) return -1;
 	}
 
 	/*
-	#wait queues
+	# wait queues
 
 		High level method where a thread waits for a certain condition to become true.
 
@@ -1666,7 +1665,7 @@ static int __init init(void)
 
 		atomic_set(&i_global_atomic, 0);
 
-		for ( int i = 0; i < n_threads; i++ ) {
+		for (int i = 0; i < n_threads; i++) {
 
 			threads[i] = kthread_run(
 				function,
@@ -1677,11 +1676,11 @@ static int __init init(void)
 
 		wait_event_interruptible(wq, atomic_read(&i_global_atomic) == n_threads);
 
-		//assert that all threads finished
-		if ( atomic_read(&i_global_atomic) != n_threads ) return -1;
+        /* assert that all threads finished */
+		if (atomic_read(&i_global_atomic) != n_threads) return -1;
 	}
 
-	//#process address space
+    /* # Process address space */
 	{
 		printk(KERN_DEBUG "TASK_SIZE (GiB) = %lu\n", TASK_SIZE / (1 << 30));
 
@@ -1691,14 +1690,16 @@ static int __init init(void)
 		compare to the addresses of user space program variables to check this (3Gb = `0xc0000000`)
 		*/
 		{
-			//i is in the kernel since this is a kernel module
+            /* i is in the kernel since this is a kernel module */
 			int i;
-			if ( (int)&i < TASK_SIZE ) return -1;
+			if ((int)&i < TASK_SIZE) return -1;
 			printk( KERN_DEBUG "(void*)&i = %p\n", (void*)&i );
 		}
 
 		/*
-		#mm_struct
+		# mm_struct
+
+		    `include/linux/mm_types.h`
 
 			Describes the process adress space.
 
@@ -1739,14 +1740,13 @@ static int __init init(void)
 			printk(KERN_DEBUG "  arg_end    = %lx\n", current->mm->arg_end);
 			printk(KERN_DEBUG "  env_start  = %lx\n", current->mm->env_start);
 			printk(KERN_DEBUG "  env_end    = %lx\n", current->mm->env_end);
-
 			printk(KERN_DEBUG "  total_vm   = %lu\n", current->mm->total_vm);
 			printk(KERN_DEBUG "  locked_vm  = %lu\n", current->mm->locked_vm);
 		}
 	}
 
 	/*
-	#filesystem
+	# filesystem
 
 		mnemonic: fs
 
@@ -1758,7 +1758,7 @@ static int __init init(void)
 
 		That abstraction is called the virtual filesystem (VFS).
 
-	#virtual filesystem
+	# virtual filesystem
 
 		aka VFS
 
@@ -1790,7 +1790,7 @@ static int __init init(void)
 		- dentry
 		- file
 
-		#inode struct
+		# inode struct
 
 			Represents a file in the usual sense: a chunk of data on disk with medatada such as
 
@@ -1817,7 +1817,7 @@ static int __init init(void)
 				dev_t i_rdev; //device numbers if this represents
 
 
-		#file struct
+		# file struct
 
 			represents a file open for reading.
 
@@ -1839,7 +1839,7 @@ static int __init init(void)
 				void *private_data; 		//used to store any state information implementation may wish to use
 				struct dentry *f_dentry; 	//associated dentry
 
-		#umode_t
+		# umode_t
 
 			Encodes file permissions and type (regular file, character device, etc.)
 			for example for sytem calls.
@@ -1850,7 +1850,7 @@ static int __init init(void)
 			and coincide with the POSIX names when possible, for example `S_IRWXU`
 			is for owner has rwx.
 
-		#file io from the kernel
+		# file io from the kernel
 
 			It seems that it is a bad practice to do file creation / reading / writing from the kernel:
 			<http://www.linuxjournal.com/article/8110>
@@ -1859,7 +1859,7 @@ static int __init init(void)
 	*/
 	{
 		/*
-		#superblock struct
+		# superblock struct
 
 			located under `fs.h`
 
@@ -1879,18 +1879,18 @@ static int __init init(void)
 			struct dentry *root;
 			struct super_block *root_sb;
 
-			//get the `/` dentry
+            /* get the `/` dentry */
 			root = current->fs->root.dentry;
 			root_sb = root->d_sb;
 
 			printk(KERN_DEBUG "super_block:\n");
 
-			//virtual blocksize:
+            /* virtual blocksize. */
 			printk(KERN_DEBUG "  s_blocksize = %ld\n", root_sb->s_blocksize);
 
 			printk(KERN_DEBUG "  s_maxbytes (GiB) = %llu\n", (long long unsigned)root_sb->s_maxbytes / (1 << 30));
 
-			//name of corresponding block device
+            /* name of corresponding block device */
 			printk(KERN_DEBUG "  s_id = %s\n", root_sb->s_id);
 
 			u8 s_uuid_string[17];
@@ -1900,7 +1900,7 @@ static int __init init(void)
 		}
 
 		/*
-		#dentry struct
+		# dentry struct
 
 			Defined under `dcache.h`.
 
@@ -1954,12 +1954,12 @@ static int __init init(void)
 		{
 			struct dentry *root;
 
-			//get `/` dentry
+            /* get `/` dentry */
 			root = current->fs->root.dentry;
 			printk(KERN_DEBUG "root->dname.name = %s\n", root->d_name.name );
 
 			/*
-			#ls
+			# ls
 
 				dentry children transversal
 
@@ -1989,15 +1989,15 @@ static int __init init(void)
 	}
 
 	/*
-	#ext filesystem family
+	# ext filesystem family
 
 		Free sources:
 
-		- <http://www.virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1.html>
+		- http://www.virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1.html
 
 		Main versions used: ext2, ext3 and ext4.
 
-	#block ext
+	# block ext
 
 		A *block* or *sector* is the minimal unit of data transfer.
 
@@ -2029,7 +2029,7 @@ static int __init init(void)
 		In any case, fragmenting blocks would necessarily mean that access to inner files
 		would be slower.
 
-	#disk layout
+	# disk layout
 
 		Disk layout for ext2:
 
@@ -2039,7 +2039,7 @@ static int __init init(void)
 
 		- nb is total number of block groups
 
-		#boot block
+		# boot block
 
 			aka boot sector
 
@@ -2063,7 +2063,7 @@ static int __init init(void)
 
 			- volume boot record (VBR):
 
-		#block group
+		# block group
 
 			Each block groups is of type:
 
@@ -2086,7 +2086,7 @@ static int __init init(void)
 
 			- reduce probability of disk corruption (TODO confirm this)
 
-			##super block
+			# #super block
 
 				Store global information about the entire filesystem.
 
@@ -2122,7 +2122,7 @@ static int __init init(void)
 
 				- char[64] s_last_mounted: path where it was last mounted.
 
-			##group descriptor
+			# #group descriptor
 
 				ext2_group_desc
 	*/
@@ -2130,7 +2130,7 @@ static int __init init(void)
 	}
 
 	/*
-	#interrupt handler
+	# interrupt handler
 
 		is a function that does what must be done in case of an interrupt,
 		typically a message sent by hardware such as a mouse saying "hey I moved"
@@ -2142,9 +2142,10 @@ static int __init init(void)
 
 		Typically the jobs it will do are:
 
-		      - save the data from some buffer into RAM. this prevents small buffers from getting filled up.
-		      - send an aknowledgment to the hardware that the interrupt was handled so the hardware can
-		          //continue to send data for example
+		      -   save the data from some buffer into RAM. this prevents small buffers from getting filled up.
+
+		      -   send an aknowledgment to the hardware that the interrupt was handled so the hardware can
+                  continue to send data for example
 
 		What it typically should *not* do it to actually procees the data that was aquired
 		this should be left for the bottom half.
@@ -2163,7 +2164,7 @@ static int __init init(void)
 		void  local_irq_restore(unsigned long flags);
 		void  local_irq_enable(void);
 
-	#request_irq
+	# request_irq
 
 		this function tells the kernel to use a given interrupt function to deal with certain interrupts
 
@@ -2198,7 +2199,7 @@ static int __init init(void)
 
 	*/
 	{
-		//TODO get working
+        /* TODO get working */
 		/*if (request_irq(rtc_irq, rtc_interrupt, IRQF_SHARED, "rtc", (void *)&rtc_port)) {*/
 			/*printk(KERN_ERR "rtc: cannot register IRQ %d\n", rtc_irq);*/
 			/*return -EIO;*/
@@ -2206,11 +2207,11 @@ static int __init init(void)
 	}
 
 	/*
-	#syscall
+	# syscall
 
 		See system calls.
 
-	#system calls
+	# system calls
 
 		This covers system calls from a kernel internal point of view, not from userland point of view.
 
@@ -2224,7 +2225,7 @@ static int __init init(void)
 
 		Arguments are passed on CPU registers. This simplifies things since program memory can be swapped of.
 
-		#create a system call
+		# create a system call
 
 			This describes how to add a new system call.
 
@@ -2237,7 +2238,7 @@ static int __init init(void)
 
 			- inform the kerne that a function is a system call by registering it.
 
-		#declaration and definition
+		# declaration and definition
 
 			Syscalls inside the kernel are functions.
 
@@ -2252,7 +2253,7 @@ static int __init init(void)
 			To actually turn one of those functions into a system call it must be registered
 			as a system call.
 
-			#SYSCALL_DEFINE<nargs>
+			# SYSCALL_DEFINE<nargs>
 
 				Defined at `syscalls.h`.
 
@@ -2260,16 +2261,15 @@ static int __init init(void)
 
 				Sample usage:
 
-					SYSCALL_DEFINE0(getpid)
-					{
+					SYSCALL_DEFINE0(getpid) {
 						return task_tgid_vnr(current); // returns current->tgid
 					}
 
-			#COMPAT_SYSCALL_DEFINExxx
+			# COMPAT_SYSCALL_DEFINExxx
 
 				TODO0
 
-			#location on the source tree
+			# location on the source tree
 
 				Portable system calls can be implemented anywhere on the source tree,
 				in the place that fits their purporse more closely.
@@ -2284,7 +2284,7 @@ static int __init init(void)
 
 					grep -ER 'SYSCALL_DEFINE..read'
 
-		#registration
+		# registration
 
 			This describes how to inform the kernel that a function is a system call.
 
@@ -2298,7 +2298,7 @@ static int __init init(void)
 			For example on x86 unistd includes either `unistd_32` or `unistd_64` depending on the configuration options,
 			and it is those files that do the actual registration.
 
-			#x86
+			# x86
 
 				This arch includes both 32 and 64 bits to factor out common points.
 
@@ -2311,9 +2311,9 @@ static int __init init(void)
 
 				arch/x86/include/generated/uapi/unistd_XXX.h
 
-				x32 concept definition: <http://en.wikipedia.org/wiki/X32_ABI>
+				x32 concept definition: http://en.wikipedia.org/wiki/X32_ABI
 
-		#__NR_XXX
+		# __NR_XXX
 
 			For most architectures those macros are defined under `uapi/asm/unistd.h`.
 
@@ -2322,7 +2322,7 @@ static int __init init(void)
 	*/
 
 	/*
-	#__user
+	# __user
 
 		Indicates that the following pointer comes from userspace.
 
@@ -2345,7 +2345,7 @@ static int __init init(void)
 	*/
 
 	/*
-	#capable
+	# capable
 
 		Returns true iff the current process has a capability. For example:
 
@@ -2368,11 +2368,11 @@ static int __init init(void)
 	}
 
 	/*
-	#modules
+	# modules
 	*/
 	{
 		/*
-		#THIS_MODULE
+		# THIS_MODULE
 
 			pointer to the module struct of current module
 
@@ -2381,26 +2381,25 @@ static int __init init(void)
 			this struct determines all the information about a module
 		*/
 		{
-			//version is was set with the MODULE_VERSION macro:
-
+            /* version is was set with the MODULE_VERSION macro: */
 			printk(KERN_DEBUG "THIS_MODULE->version = %s\n", THIS_MODULE->version );
 		}
 
 		/*
-		#MODULE
+		# MODULE
 
 			Defined on the Makefile only if current code is a module.
 		*/
 		{
 #ifdef MODULE
 #else
-			//we are sure this is a module.
+            /* We are sure this is a module. */
 			return -1;
 #endif
 		}
 
 		/*
-		#parameters
+		# parameters
 		*/
 		{
 			printk(KERN_DEBUG "param_i = %d\n", param_i);
@@ -2410,7 +2409,7 @@ static int __init init(void)
 	}
 
 	/*
-	#device driver
+	# device driver
 
 		there are 3 main types of device drivers:
 
@@ -2424,7 +2423,7 @@ static int __init init(void)
 	*/
 
 	/*
-	#character device
+	# character device
 	*/
 	{
 		int major;
@@ -2441,7 +2440,7 @@ static int __init init(void)
 		printk(KERN_DEBUG "major = %d\n", major);
 		printk(KERN_DEBUG "minor = %d\n", minor);
 
-		//TODO why ils ony 
+        /* TODO why ils only. */
 		fopss[0] = &fops_infinite;
 		fopss[1] = &fops_once;
 
@@ -2509,7 +2508,7 @@ static void __exit cleanup(void)
 	printk(KERN_DEBUG "%s\n", __func__ );
 
 	/*
-	#unregister_chrdev_region
+	# unregister_chrdev_region
 
 		void unregister_chrdev_region(dev_t from, unsigned count)
 	*/

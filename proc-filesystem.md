@@ -18,13 +18,9 @@ Some interesting files include:
 
 -   `cat /proc/modules`: information on modules
 
--   `cat /proc/mounts`: list all mounted filesystems and some info on them
-
 -   `cat /proc/partitions`: `softirq` info
 
 -   `cat /proc/sched_debug`: scheduler info for debugging
-
--   `cat /proc/self/`: information about the current process
 
 -   `cat /proc/slabinfo`: slab allocator info
 
@@ -63,6 +59,53 @@ Some interesting files include:
     1. address
     2. type. Same as used by the `nm` utility.
     3. id
+
+## /proc/stat
+
+Sample output:
+
+    cpu  1041524 890 258966 6401473 38194 10 5852 0 0 0
+    cpu0 282332 316 66564 3531273 24715 6 3698 0 0 0
+    cpu1 241328 55 76244 951641 1026 2 972 0 0 0
+    cpu2 280238 178 66044 955538 3563 1 920 0 0 0
+    cpu3 237624 340 50113 963019 8889 0 261 0 0 0
+    intr 42234546 16 86830 0 0 0 0 0 0 1 [...]
+    ctxt 130745461
+    btime 1431232525
+    processes 63385
+    procs_running 1
+    procs_blocked 1
+    softirq 16098970 937 4031292 2138117 668544 531851 [...]
+
+Points which are not obvious from `man proc`:
+
+- `intr`: TODO
+
+## /proc/[pid]
+
+## Processes
+
+`/proc` is likely called proc because for each PID it contains a directory `/proc/[pid]` which expose process information.
+
+`man proc` explain in detail most entries.
+
+We can test them out with:
+
+    sleep 10 &
+    cat /proc/$!/cmdline | hd
+
+which gives:
+
+    00000000  73 6c 65 65 70 00 31 30  00                       |sleep.10.|
+    00000009
+
+## /proc/self
+
+## self
+
+Information about the current process:
+
+Behaves like a symlink to `/proc/<PID>`, but is pure `/proc` magic, since it is like a symlink that looks different from every process: <http://unix.stackexchange.com/questions/34192/how-is-proc-self-implemented-in-linux>
 
 ## cpuinfo
 
@@ -172,3 +215,30 @@ Meaning:
 -   5: PID of the last process created on the system.
 
 Used by tools such as `top`, `uptime`.
+
+## /proc/mounts
+
+List mounted filesystems:
+
+    cat /proc/mounts
+
+Sample output:
+
+    rootfs / rootfs rw 0 0
+    sysfs /sys sysfs rw,nosuid,nodev,noexec,relatime 0 0
+    proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0
+    udev /dev devtmpfs rw,relatime,size=1872900k,nr_inodes=468225,mode=755 0 0
+    devpts /dev/pts devpts rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=000 0 0
+    tmpfs /run tmpfs rw,nosuid,noexec,relatime,size=376740k,mode=755 0 0
+    /dev/disk/by-uuid/e45497f8-6295-41da-ad8c-90dbbac264e8 / ext4 rw,relatime,errors=remount-ro,data=ordered 0 0
+    none /sys/fs/cgroup tmpfs rw,relatime,size=4k,mode=755 0 0
+    none /sys/fs/fuse/connections fusectl rw,relatime 0 0
+    none /sys/kernel/debug debugfs rw,relatime 0 0
+    none /sys/kernel/security securityfs rw,relatime 0 0
+    none /run/lock tmpfs rw,nosuid,nodev,noexec,relatime,size=5120k 0 0
+    none /run/shm tmpfs rw,nosuid,nodev,relatime 0 0
+    none /run/user tmpfs rw,nosuid,nodev,noexec,relatime,size=102400k,mode=755 0 0
+    none /sys/fs/pstore pstore rw,relatime 0 0
+    /dev/sda5 /home/ciro ext4 rw,relatime,data=ordered 0 0
+    systemd /sys/fs/cgroup/systemd cgroup rw,nosuid,nodev,noexec,relatime,name=systemd 0 0
+    gvfsd-fuse /run/user/1000/gvfs fuse.gvfsd-fuse rw,nosuid,nodev,relatime,user_id=1000,group_id=1000 0 0

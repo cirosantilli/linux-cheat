@@ -8,39 +8,13 @@ Standard device number and paths are documented at: <http://www.lanana.org/docs/
 
 Some devices are created automatically by the Kernel even if there is no corresponding hardware to offer services under read write, e.g. random number generation.
 
-## sda
-
-## /dev/sda
-
-Device files of this type represent block devices such as hard disks or flash memory.
-
-The first device is `sda`, the second `sdb`, and so on.
-
-Also, partitions inside those devices have device files for them too.
-
-The first primary partition inside `sda` will be called `sda1`, the second main partition `sda2`, and so on.
-
-Logical partitions are numbered from `sda5` onwards.
-
-*Warning*: usage of block devices can be very dangerous and lead to data loss!
-
-Example: copy a block device on `/dev/sda/` to the one one `/dev/dsb`:
-
-    #sudo dd bs=4M if=/dev/zero of=/dev/sdb
-
-This could be used to make a full system backup.
-
-Example: write pseudorandom sequences into `/dev/sda/` to hide data:
-
-    #sudo dd bs=4M if=/dev/urandom of=/dev/sda
-
 ## null
 
 ## /dev/null
 
     man null
 
-Major minor:
+Type, major, minor: character, 1, 3
 
 Discards whatever input is given to it by a `write` syscall.
 
@@ -55,6 +29,8 @@ Generates no output.
 ## /dev/zero
 
     man zero
+
+Major, minor: 1, 5
 
 Returns as many zeros as asked for by a read syscall.
 
@@ -94,9 +70,13 @@ The kernel implements a random number generator which draws entropy from non-pre
 
 Just like for `/dev/zero`, it is useless to cat those files, since they don't have and end, and `cat` tries to read to the end of the file before printing.
 
+### random
+
 ### /dev/random
 
     man random
+
+Major, minor: 1, 8
 
 `/dev/random` returns random numbers one by one whenever enough entropy is generated. It is slower than `urandom`, but has greater entropy.
 
@@ -106,9 +86,9 @@ x86 considered using the `RDRAND` instruction introduced in 2011 as part of the 
 
 ### /dev/urandom
 
-Documented at:
-
     man urandom
+
+Major, minor: 1, 9
 
 `/dev/urandom` returns random numbers continuously. It is faster than `random`, but has less entropy. It should however be good enough for most applications.
 
@@ -144,6 +124,32 @@ Similar to `tty`, but may only work on actual ttys such as Ubuntu Ctrl + Alt + F
 
 Discussion: <http://unix.stackexchange.com/questions/60641/linux-difference-between-dev-console-dev-tty-and-dev-tty0>
 
+## sda
+
+## /dev/sda
+
+Device files of this type represent block devices such as hard disks or flash memory.
+
+The first device is `sda`, the second `sdb`, and so on.
+
+Also, partitions inside those devices have device files for them too.
+
+The first primary partition inside `sda` will be called `sda1`, the second main partition `sda2`, and so on.
+
+Logical partitions are numbered from `sda5` onwards.
+
+*Warning*: usage of block devices can be very dangerous and lead to data loss!
+
+Example: copy a block device on `/dev/sda/` to the one one `/dev/dsb`:
+
+    #sudo dd bs=4M if=/dev/zero of=/dev/sdb
+
+This could be used to make a full system backup.
+
+Example: write pseudorandom sequences into `/dev/sda/` to hide data:
+
+    #sudo dd bs=4M if=/dev/urandom of=/dev/sda
+
 ## /dev/input/mice
 
 You can have some fun with mouses. Search for the mice or mouse device files and cat them:
@@ -157,3 +163,15 @@ And then:
 Now note that when you move the mouse, cat spits something out to the screen!
 
 `mice` is the combination of all mice, and each other `mouseX` is a single mouse device.
+
+## loop
+
+## loop0
+
+## loop1
+
+TODO
+
+Type, major, minor: block, 7, `X` for `loopX`
+
+Used to mount regular files that contain filesystems instead of device files as is usual.
