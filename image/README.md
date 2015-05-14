@@ -117,18 +117,6 @@ Good SVG GUI editor.
 
 GNOME diagram editor
 
-### DOT
-
-Graph format and name of an editor utility.
-
-Graphviz is the most important front and back-end implementation.
-
-Convert DOT file to image formats:
-
-    dot -Tpng -o outfile.png input.dot
-    dot -Tpdf -o outfile.pdf input.dot
-    dot -Tsvg -o outfile.svg input.dot
-
 ## Viewers
 
 ### eog

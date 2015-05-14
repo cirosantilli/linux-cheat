@@ -6,7 +6,34 @@ Files documented at:
 
     man proc
 
-Some interesting files include:
+## proc really is a filesystem
+
+Proc really is a "regular" filesystem and can me mounted wherever you want with `mount`. E.g.:
+
+    mkdir /tmp/proc2
+    sudo mount -t proc none /tmp/proc2
+    readlink /tmp/proc2/self/cwd
+    readlink /proc/self/cwd
+    sudo umount /tmp/newproc
+
+generates a second `proc`.
+
+It is also listed under `/proc/filesystems` like all others.
+
+It is just that system calls are implemented magically in it, e.g.:
+
+- `readlink /proc/self` returns the current PID
+- `sudo touch a` always fails: you cannot create files in `/proc`. There is no associated storage.
+
+## Does proc need to be in /etc/fstab ?
+
+Only if you want custom mount options:
+
+<http://askubuntu.com/questions/181429/is-a-proc-mount-necessary-in-etc-fstab>
+
+Not present in Ubuntu 14.04.
+
+## Interesting files
 
 -   numeric directories: `/proc/1/`, `/proc/2/`, ...:
 

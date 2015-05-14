@@ -856,16 +856,6 @@
 
       last
 
-  ## tty
-
-    # Show current tty:
-
-      tty
-
-    # Sample output:
-
-      #/dev/pts/1
-
   ## getty
 
     # The tty that runs on those ctrl-alt-F\d things:

@@ -30,3 +30,7 @@ Seems to be the best tool for it:
     [ "$(printf 'a\nb\nc\n' | paste -sd, -)" = 'a,b,c' ] || exit 1
 
 `tr` also works somewhat, but you have to deal with the last separator.
+
+``` {mycode .haskell .numberLines startFrom="100"}
+console.log("hello world")
+```

@@ -1,4 +1,12 @@
-# sys filesystem
+# sysfs
+
+Similar to `proc`, but contains other system information besides processes.
+
+Mounted by default under `/sys`.
+
+Like `proc`, is a regular filesystem, that is listed under `/proc/filesystems` and can be mounted multiple times.
+
+Like `proc`, it is not possible to create files under it: `sudo touch /sys/a` fails.
 
 ## /sys/bus/pci/devices
 

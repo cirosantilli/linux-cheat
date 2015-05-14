@@ -1,0 +1,6 @@
+graph g1 {
+    a -- b;
+}
+graph g2 {
+    a -- b;
+}

@@ -10,7 +10,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [Networking Cheat](https://github.com/cirosantilli/networking-cheat): networking tools and protocols HTTP, SSH, curl, Apache
 1.  [utils](utils.sh) dump of many utilities. Being split up into separate files.
 1.  Documentation viewers
-    1. [man](man.sh)
+    1. [man](man.md)
     1. [info](info.md)
 1.  Base standards
     1. [POSIX](posix.md)
@@ -22,10 +22,6 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [Kernel](kernel/)
     1. [System Call](system-call/)
     1. [sysctl](sysctl.md)
-    1. [Special files](special-files.md)
-        1.  [proc filesystem](proc-filesystem.md)
-        1.  [dev filesystem](dev-filesystem.md)
-            1. [mknod](mknod.md)
 1.  Initialization
     1. [Install OS](install-os.md): how to install a new OS
     1. [Boot](boot.md)
@@ -56,9 +52,13 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [mktemp](mktemp.md)
     1.  [mountall](mountall.md)
     1.  [pathchk](pathchk.md)
-    1.  [ramfs](ramfs.md)
     1.  [swap partition](swap-partition.md)
     1.  [UUID](uuid.md)
+    1.  Virtual filesystems
+        1.  [proc filesystem](proc-filesystem.md)
+        1.  [dev filesystem](dev-filesystem.md)
+            1. [mknod](mknod.md)
+        1. [ramfs](ramfs.md)
 1. [Terminal](terminal.md): terminal emulators, ANSI escapes, control characters
     1. [Guake](guake.sh)
 1.  Stream and file manipulation
@@ -206,7 +206,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1. [lpstat](lpstat.md)
         1. [lpoptions](lpoptions.md)
         1. [system-config-printer](system-config-printer.md)
-1.  Math
+1.  Mathematics
     1.  [bc](bc.md)
     1.  [factor](factor.md)
     1.  [primes](primes.md)
@@ -215,6 +215,10 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  Sorting
         1. [sort](sort.md)
         1. [tsort](tsort.md)
+    1.  [Graphviz](graphiz.md)
+        1. [acyclic](acyclic.md)
+        1. [dijkstra](dijkstra.md)
+        1. [gc](gc.md)
 1.  Packages
     1. [util-linux](util-linux.md)
 1.  Misc
@@ -227,12 +231,13 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
 ## WIP
 
 1.  Filesystem
-    [eCryptfs](ecryptfs.md)
+    1. [devpts](devpts.md)
+    1. [eCryptfs](ecryptfs.md)
+    1. [rootfs](rootfs.md)
+    1. [sysfs](sysfs.md)
 1.  [Hardware](hardware.md)
     1.  [lshw](lshw.md)
 1.  [gcov](gcov.md)
-1.  Misc
-    1. [sys-filesystem](sys-filesystem.md)
 1.  File sharing
     1. [NFS](nfs.md)
     1. [LDAP](ldap.md)

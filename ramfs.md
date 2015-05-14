@@ -6,6 +6,8 @@ Types of filesystems that exists only in RAM. It is therefore fast and can only 
 
 Can be useful if you want to speed up some filesystem operations and have enough RAM for it.
 
+On Ubuntu 14.04, a `tmpfs` is mounted by default at `/run`, to which the FHS `/var/run` symlinks to.
+
 tmpfs vs ramfs:
 
 -   tmpfs has a fixed size: it does not grow dynamically and raises an error if you blow the limit.

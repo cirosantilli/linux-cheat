@@ -43,8 +43,6 @@ Filesystem type to mount.
 
 List of filesystems that the kernel knows how to mount.
 
-One of those must be passed as a parameter to the `mount` system call.
-
 ## o
 
 ## Options

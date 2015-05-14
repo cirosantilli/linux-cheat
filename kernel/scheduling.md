@@ -83,6 +83,16 @@ The name real time policy is not very true: Linux does not absolutely ensure tha
 
 However, real time processes are very privileged, and in absence of other real time processes without even higher priorities, the processes will run as fast as the hardware can possibly run it.
 
+#### RTAI
+
+#### LinuxCNC
+
+<https://en.wikipedia.org/wiki/RTAI>
+
+<https://en.wikipedia.org/wiki/LinuxCNC>
+
+Real Time Application Interface is a modified Linux kernel for strict real-time, and LinuxCNC is a distribution that uses it.
+
 ## Priority
 
 Priority is a measure of how important processes are, which defines how much CPU time they shall get relative to other processes.
