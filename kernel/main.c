@@ -1963,7 +1963,7 @@ static int __init init(void)
 
 				dentry children transversal
 
-				TODO0 why do I see files which are not there on the root
+				TODO why do I see files which are not there on the root
 				such as `libglibXXX` and vmlinuz?
 			*/
 			{

@@ -4,7 +4,7 @@
 
 View and modify kernel parameters at runtime for a single session.
 
-Also the name of a deprecated system call TODO in favor of what? writing to `/proc/sys` files?
+Also the name of a deprecated system call TODO in favor of what? Writing to `/proc/sys` files?
 
 Documentation of all kernel parameters: <https://github.com/torvalds/linux/blob/master/Documentation/kernel-parameters.txt>
 

@@ -13,18 +13,25 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [man](man.md)
     1. [info](info.md)
 1.  Base standards
-    1. [POSIX](posix.md)
-    1. [Linux](linux.md)
-    1. [LSB](lsb.md)
-    1. [FHS](fhs.md)
-    1. [GNU](gnu.md)
-1.  Kernel related
-    1. [Kernel](kernel/)
+    1.  [POSIX](posix.md)
+    1.  [LSB](lsb.md)
+    1.  [FHS](fhs.md)
+    1.  [GNU](gnu.md)
+1.  [Linux](linux.md)
+    1.  Alternatives
+        1. [Hurd](hurd.md)
+        1. [BSD](bsd.md)
+    1.  [Distros](distros.md)
+        1. [Minimal distros](minimal-distros.md)
+1.  [Kernel](kernel/)
     1. [System Call](system-call/)
     1. [sysctl](sysctl.md)
+    1. [dmesg](demesg.md)
+    1. [installkernel](installkernel.md)
 1.  Initialization
     1. [Install OS](install-os.md): how to install a new OS
     1. [Boot](boot.md)
+    1. [GRUB](grub.md)
     1. [Init](init.md): System V, Upstart
 1.  System information
     1.  [lsb_release](lsb_release.md)
@@ -45,6 +52,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1. [e2fsck](e2fsck.md)
         1. [e2fsprogs](e2progs.md)
         1. [mke2fs](mke2fs.md)
+    1.  [fallocate](fallocate.md)
     1.  [fdisk](fdisk.md)
     1.  [FUSE](FUSE.md)
     1.  [fuser](fuser.md)
@@ -58,7 +66,29 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1.  [proc filesystem](proc-filesystem.md)
         1.  [dev filesystem](dev-filesystem.md)
             1. [mknod](mknod.md)
-        1. [ramfs](ramfs.md)
+        1.  [sysfs](sysfs.md)
+        1.  [ramfs](ramfs.md)
+    1.  Files, directories
+        1.  [cp](cp.sh)
+        1.  [dd](dd.md)
+        1.  [du](du.md)
+        1.  [fdupes](fdupes.md)
+        1.  [find](find.md)
+        1.  links
+            1. [ln](ln.md)
+            1. [readlink](readlink.md)
+            1. [realpath](realpath.md)
+        1.  [locate](locate.md)
+        1.  [ls](ls.md)
+        1.  [read](read.md)
+        1.  [stat](stat.md)
+        1.  [tree](tree.md)
+    1.  File managers
+        1. [Krusader](krusader.md)
+        1. [vifm](vifm.md)
+    1.  [CD DVD](cd-dvd.md)
+        [isoinfo](isoinfo.md)
+        [eject](eject.md)
 1. [Terminal](terminal.md): terminal emulators, ANSI escapes, control characters
     1. [Guake](guake.sh)
 1.  Stream and file manipulation
@@ -97,24 +127,6 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [cmp](cmp.md)
     1. [diff](diff.md)
     1. [wdiff](diff.md)
-1.  Files, directories
-    1.  [cp](cp.sh)
-    1.  [dd](dd.md)
-    1.  [du](du.md)
-    1.  [fdupes](fdupes.md)
-    1.  [find](find.md)
-    1.  links
-        1. [ln](ln.md)
-        1. [readlink](readlink.md)
-        1. [realpath](realpath.md)
-    1.  [locate](locate.md)
-    1.  [ls](ls.md)
-    1.  [read](read.md)
-    1.  [stat](stat.md)
-    1.  [tree](tree.md)
-1.  File managers
-    1. [Krusader](krusader.md)
-    1. [vifm](vifm.md)
 1.  Programming
     1. [ack](ack.sh)
     1. [ctags](ctags/)
@@ -168,7 +180,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [tar](tar.md)
     1. [zip](zip.md)
     1. [ar](ar.md)
-1.  User operations
+1.  User accounts
     1. [id](id.md)
     1. [usermod](usermod.md)
 1.  [Desktop](desktop/): X, XDG, GNOME, KDE and related utilities
@@ -192,10 +204,9 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [Kramdown](kramdown/)
     1. [Pandoc](pandoc/)
     1. [RST](rst/)
-1.  [Virtual machine](virtual-machine/)
+1.  [Virtualization](virtualization.md)
     1. [Docker](docker/)
     1. [QEMU](qemu.md)
-    1. [User mode Linux](user-mode-linux.md)
     1. [Vagrant](vagrang/)
 1.  [Configuration automation](config-automation.md)
     1. [chef](chef/)
@@ -222,9 +233,9 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
 1.  Packages
     1. [util-linux](util-linux.md)
 1.  Misc
+    1. [BusyBox](busybox.md)
     1. [cron](cron.sh)
     1. [logrotate](logrotate.md)
-    1. [BusyBox](busybox.md)
     1. [xargs](xargs.md)
 1.  [Bibliography](bibliography.md)
 
@@ -234,7 +245,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [devpts](devpts.md)
     1. [eCryptfs](ecryptfs.md)
     1. [rootfs](rootfs.md)
-    1. [sysfs](sysfs.md)
+    1. [MAKEDEV](makedev.md)
 1.  [Hardware](hardware.md)
     1.  [lshw](lshw.md)
 1.  [gcov](gcov.md)

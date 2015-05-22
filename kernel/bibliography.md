@@ -57,10 +57,6 @@ Most function definitions or declarations don't contain any comments, so you rea
 
     Another similar option is to use [free-electrons][].
 
--   [kernel-org][]
-
-    kernel.org resources list
-
 -   `make htmldoc` on the source.
 
     Generates documentation for the kernel from comments, and puts it under `Documentation/DocBook/index.html`
@@ -71,9 +67,17 @@ Most function definitions or declarations don't contain any comments, so you rea
 
     Weirdly the snapshots of htmldoc on kernel.org have some extra functions, check it out: <https://www.kernel.org/doc/htmldocs/kernel-api.html>
 
--   [kernel-org][]
+-   [kernel.org][]
 
     kernel.org resources list
+
+    Wiki for some subprojects: <https://wiki.kernel.org/>
+
+-   [elinux.com](http://elinux.org)
+
+    Embedded Linux wiki.
+
+    Supported by the Linux kernel.
 
 -   [kernelnewbies][]
 
@@ -103,7 +107,7 @@ Most function definitions or declarations don't contain any comments, so you rea
 [corbet05]:       https://lwn.net/Kernel/LDD3/
 [free-electrons]: http://lxr.free-electrons.com/ident
 [kernel-mail]:    http://vger.kernel.org/vger-lists.html
-[kernel-org]:     https://www.kernel.org/doc/
+[kernel.org]:     https://www.kernel.org
 [kernelnewbies]:  http://kernelnewbies.org/
 [love06]:         http://www.amazon.com/books/dp/0596005652
 [stallings11]:    http://www.amazon.com/Operating-Systems-Internals-Principles-Edition/dp/013230998X

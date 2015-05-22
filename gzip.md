@@ -12,7 +12,7 @@ Library name: zlib, GNU.
 
 Popular wrapper: `gzip`, and `gunzip` to unzip.
 
-Vs zip:
+## gzip vs zip
 
 -   Completely different file types.
 
@@ -38,6 +38,14 @@ Extract `a.gz` and erase it if successful:
 
     gzip -r .
 
-### gz file format
+`gunzip` requires files to have a given extension by default. Workaround:
+
+    gunzip <file >out
+
+or:
+
+    gcat file >out
+
+## gz file format
 
 IETF standardized format: <https://www.ietf.org/rfc/rfc1952.txt>

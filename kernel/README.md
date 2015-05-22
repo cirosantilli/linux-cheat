@@ -4,20 +4,23 @@
     1. [main.c](main.c)
     1. [hello_world](hello_world.c)
 1.  [Introduction](introduction.md)
-1.  [Compile and install](compile-and-install.md)
+1.  [Build and install](build-and-install.md)
 1.  [Testing](testing.md)
 1.  [Source tree](source-tree.md)
 1.  [Module](module.md)
     1. [Device driver](device-driver.md)
 1.  [Virtual address space](virtual-address-space.md)
 1.  [Scheduling](scheduling.md)
+1.  Virtualization
+    1. [User mode Linux](user-mode-linux.md)
+    1. [Lguest](lguest.md)
 1.  [Style guide](style-guide.md)
 
 WIP
 
-1. [dmesg](dmesg.md)
 1. [LXC](lxc.md)
 1. [Kconfig](kconfig.md)
+1. [Boot command line parameters](boot-command-line-parameters.md)
 
 ## User programs
 

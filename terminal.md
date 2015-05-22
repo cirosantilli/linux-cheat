@@ -382,20 +382,6 @@ Terminal emulators are GUIs that interface with users in more complex ways.
 
 It is easy to get the two mixed up because most of the time terminal emulators simply accumulate input chars, wait for an `<enter>` keypress, and then send strings to the sh interpreter.
 
-## /dev/tty
-
-Special file, reading and writing to it is the same as reading and writing to current terminal.
-
-Ex:
-
-    echo a > /dev/tty
-
-Output:
-
-    a
-
-So `a` was written to the current terminal.
-
 ## Good terminal emulators
 
 Drop-down capability is a huge advantage: hit a key, and the terminal appears. Options:

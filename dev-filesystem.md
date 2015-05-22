@@ -8,6 +8,17 @@ Standard device number and paths are documented at: <http://www.lanana.org/docs/
 
 Some devices are created automatically by the Kernel even if there is no corresponding hardware to offer services under read write, e.g. random number generation.
 
+## devtmpfs
+
+Like `proc` and `sysfs`, the `dev` filesystem is a virtual filesystem that can be mounted any number of times:
+
+    mkdir newdev
+    sudo mount -t devtmpfs none newdev
+
+The actual filesystem name is `devtmpfs`, and `/dev` is just the usual mount point.
+
+Most distributions also mount `devpts` inside `/dev` in addition to `devtmpfs`:
+
 ## null
 
 ## /dev/null
@@ -113,10 +124,17 @@ The current terminal. Also works on xterm windows.
 
 Try:
 
-    echo 'echo a >/dev/tty' > s
-    bash s >/dev/null
+    echo a >/dev/tty
 
-`a` appears on the terminal screen even if stdout was redirected to `/dev/null`, because `a` was sent directly to the tty.
+`a` appears on the terminal screen even if stdout was redirected somewhere else, because `a` was sent directly to the tty.
+
+Application: show some output that is also going to be redirected. E.g.:
+
+    echo a | tee /dev/tty | grep a
+
+This both forwards the pipe, and prints it to the terminal.
+
+See also: `/proc/self/fd/[0-2]`
 
 ## /dev/console
 

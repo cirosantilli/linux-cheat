@@ -127,11 +127,13 @@ You can select an explicit arch to initialize `.config` with:
 
 Kernel documentation.
 
-Very incomplete.
+Very incomplete: the source is the final doc :-)
 
 Important files and directories:
 
 - `DocBook`: documentation automatically generated from well formatted source code comments.
+
+Also consider `make mandocs`, which builds manpages from well formated function comments.
 
 ### Documentation/ABI
 
@@ -143,7 +145,12 @@ Initialization code. Specially important is `main.c` which ties the whole kernel
 
 ## kernel
 
-TODO
+Seems to contain any topic that did not fall in other directories, e.g. `fs`, `net`, `crypto`.
+
+Some important directories it contains:
+
+- `sched`
+- `time`
 
 ## lib
 
@@ -198,18 +205,6 @@ Also consider `ack` or good and old GNU `grep -r`.
 For example, to try to find the definition of `struct s`:
 
     ack '^struct s \{'
-
-## usr/include/linux vs usr/src/linux-headers
-
-<http://stackoverflow.com/questions/9094237/whats-the-difference-between-usr-include-linux-and-the-include-folder-in-linux>
-
--   `/usr/include/linux` is owned by libc on Linux, and used to call kernel services from userspace. TODO understand with a sample usage
-
--   `/usr/src/linux-headers-$(uname -r)/include/linux/` is exactly part of the kernel tree under `include` for a given kernel version.
-
-    Can be used to offer access to the kernel's inner workings.
-
-    It is useful for example for people writing kernel modules, and is automatically included by the standard module `Makefile`.
 
 ## System.map
 

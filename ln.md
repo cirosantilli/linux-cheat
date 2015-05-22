@@ -8,7 +8,11 @@ This can also be done with `cp`
 
 Hardlink:
 
-    ln dest name
+    ln <dest> [<name>]
+
+If name is not given, use same basename as `dest` and create on current directory:
+
+    ln ../Makefile
 
 Symlink files only:
 

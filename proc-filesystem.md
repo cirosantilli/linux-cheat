@@ -126,6 +126,16 @@ which gives:
     00000000  73 6c 65 65 70 00 31 30  00                       |sleep.10.|
     00000009
 
+### fd
+
+Process file descriptors.
+
+In particular, `0`, `1` and `2` are `stdin`, `stdout`, and `stderr`, and could be used similarly to `/dev/tty`:
+
+    echo a >/proc/self/fd/1
+
+Outputs `a` to the stdout of the current shell.
+
 ## /proc/self
 
 ## self

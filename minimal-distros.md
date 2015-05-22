@@ -2,11 +2,15 @@
 
 Minimal distros are a great way to understand what a distribution is made of, and how it interfaces with the kernel.
 
+"Serious" minimal distros usually target embedded systems like phones, cars, routers, etc. in which storage and computing capacity is limited.
+
 ## Minimal Linux Live
 
 <https://github.com/ivandavidov/minimal>
 
 <http://stackoverflow.com/a/30056630/895245>
+
+By default, this distribution only boots the RAM `initrd`: anything you do is lost after shutdown.
 
 ## Buildroot
 
@@ -24,6 +28,14 @@ One step beyond Minimal Linux Live: includes a libc and a package manager with m
 
 <http://www.linuxfromscratch.org/>
 
-Linux from scratch.
+Linux from scratch, mostly educational.
 
 Teaches how to build a minimal Linux distro from base standard packages.
+
+Not very automated, although there is an automated version at: <http://www.linuxfromscratch.org/alfs/>
+
+## Damn small Linux
+
+<https://en.wikipedia.org/wiki/Damn_Small_Linux>
+
+Seemed popular, but died in 2008?

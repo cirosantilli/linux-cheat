@@ -19,3 +19,13 @@ Sample output:
 	/dev/sdb7: UUID="3fabbe75-0c62-4705-a3ad-4e87c5dcc143" TYPE="ext4"
 	/dev/sdb8: UUID="56886cc6-e247-488a-9acf-a07a99cfa3ca" TYPE="ext4"
 	/dev/sdb9: UUID="bbc2c9bf-4846-44d1-81c0-eade6d2dcefb" TYPE="swap"
+
+Can also be used to identify files that contain filesystems, e.g.:
+
+    blkid ubuntu-14.04.2-desktop-amd64.iso
+
+outputs:
+
+    ubuntu-14.04.2-desktop-amd64.iso: LABEL="Ubuntu 14.04.2 LTS amd64" TYPE="iso9660" 
+
+If it cannot be identified, it prints nothing and returns `4`.

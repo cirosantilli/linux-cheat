@@ -135,7 +135,7 @@ Kernel modules are built using a makefile located at:
 
 Header files come from the same directory as the makefile: `/lib/modules/$(uname -r)/build`.
 
-TODO what is: `/usr/src/linux-headers-$(uname -r)/` ?
+TODO how is that different from: `/usr/src/linux-headers-$(uname -r)/` ?
 
 Those come directly from the kernel source tree.
 

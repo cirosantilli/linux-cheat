@@ -124,6 +124,10 @@ Examples:
     man 8 grub-install
     man 8 mount
 
+### 9
+
+Kernel routines. Linux extension. Generated with `make mandocs` on the kernel.
+
 ## GNU extensions
 
 Exact search on title. Shows only first page found match:

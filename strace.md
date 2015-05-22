@@ -107,4 +107,29 @@ If we remove the `puts()`, we see that the only commands it added were:
     write(1, "Hello world C\n", 14Hello world C
     )         = 14
 
-TODO understand. Would be cool if we 
+TODO understand
+
+## f
+
+Monitor forked processes.
+
+Great if you program calls other processes, which is usually done with a fork exec sequence.
+
+Without `-f`, we stop seeing at the `fork` call, and cannot see what `exec` is being called with which is what we want.
+
+Sample application: who is `gcc` calling `cc1` exactly?
+
+We can run:
+
+    strace -f gcc -S main.c |& less
+
+Grepping for `cc1`, we see the lines:
+
+    access("/usr/local/lib/gcc/x86_64-unknown-linux-gnu/5.1.0/", X_OK) = 0
+    stat("/usr/local/libexec/gcc/x86_64-unknown-linux-gnu/5.1.0/cc1", {st_mode=S_IFREG|0755, st_size=135942122, ...}) = 0
+    access("/usr/local/libexec/gcc/x86_64-unknown-linux-gnu/5.1.0/cc1", X_OK) = 0
+    vfork(Process 6312 attached
+    <unfinished ...>
+    [pid  6312] execve("/usr/local/libexec/gcc/x86_64-unknown-linux-gnu/5.1.0/cc1", ["/usr/local/libexec/gcc/x86_64-un"..., "-quiet", "-imultiarch", "x86_64-linux-gnu", "hello_world.c", "-quiet", "-dumpbase", "hello_world.c", "-mtune=generic", "-march=x86-64", "-auxbase", "hello_world", "-o", "hello_world.s"], [/* 140 vars */] <unfinished ...>
+
+`[/* 140 vars */]` stands for environment variables, which was omitted because it would be too large.

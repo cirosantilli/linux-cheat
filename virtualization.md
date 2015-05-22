@@ -1,4 +1,4 @@
-# Virtual machine
+# Virtualization
 
 Virtualization tools such as VirtualBox, Vagrant or Docker.
 
@@ -61,37 +61,35 @@ Filesystem may be set to be a file on the host representing the filesystem.
 
 Downsides:
 
-- performance loss on the guest system since there are two OSs running on a single machine.
-- additional level of complexity, possibly causing hard to solve errors. In practice however, we find VMs like VirtualBox to reproduce host systems very well.
+-   performance loss on the guest system since there are two OSs running on a single machine.
+
+-   additional level of complexity, possibly causing hard to solve errors. In practice however, we find VMs like VirtualBox to reproduce host systems very well.
 
 Important niche of application for VMs include:
 
-- gaming, to run games from other platforms such as a Windows game on Linux.
-- web app deployment, where it is necessary to control every aspect of the system.
+-   gaming, to run games from other platforms such as a Windows game on Linux.
+
+-   web app deployment, where it is necessary to control every aspect of the system.
 
     This is used for example by AWS.
 
-## Alternatives to virtual machines
-
--   wine.
-
-    Implements the Windows API, so you can run programs just like:
-
-        wine notepad.exe
-
-    Harder to get things working than inside a VM, since it is a complete API reimplementation.
-
-    Windows only.
-
--   Docker: <https://github.com/dotcloud/docker>
+## Types of virtualization
 
 ## Hardware support
 
-The x86 family has hardware features that improve performance and may be even required for certain virtualizations.
+## Emulation vs virtualization
 
-Those features can be turned on or off by the BIOS, and in many modern systems they come turned off by default.
+-   emulation vs virtualization: <http://stackoverflow.com/questions/6044978/full-emulation-vs-full-virtualization>
 
-If you plan on using virtualization, the first thing you should do is to enable such features by going into the BIOS config (first screen shown at computer startup), and looking for a virtualization section.
+    Emulation is usually said to be software only, while virtualization uses hardware support, making it way faster.
+
+    The x86 family has hardware features that improve performance and may be even required for certain virtualizations.
+
+    Those features can be turned on or off by the BIOS, and in many modern systems they come turned off by default.
+
+    If you plan on using virtualization, the first thing you should do is to enable such features by going into the BIOS config (first screen shown at computer startup), and looking for a virtualization section.
+
+-   Docker: <https://github.com/dotcloud/docker>
 
 ## Formats
 
