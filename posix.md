@@ -12,7 +12,7 @@ POSIX is also known as: Single Unix specification (SUS)
 
 <http://www.opengroup.org/openbrand/register/>
 
-Most GNU/Linux systems are largely POSIX compliant but not certified, Windows is largely not compliant, Mac OS X Yosemite is certified. The list of all certified products is found at: <http://www.opengroup.org/openbrand/register/>
+Most GNU/Linux systems are largely POSIX compliant but not certified, Windows is largely not compliant ([feature request](https://windows.uservoice.com/forums/265757-windows-feature-suggestions/suggestions/6573649-full-posix-support) :-)), Mac OS X Yosemite is certified. The list of all certified products is found at: <http://www.opengroup.org/openbrand/register/>
 
 The specification if free to view.
 
@@ -108,90 +108,25 @@ The following variables have fixed purposes in POSIX 7:
 - `PWD`
 - `TMPDIR`
 - `COLUMNS` and `LINES`: current width of terminal
-- `SHELL`:               this is *not* the current shell! It contains the path of the default shell.
-- `TERM`:                analogous to shell
+- `SHELL`: this is *not* the current shell! It contains the path of the default shell.
+- `TERM`: analogous to shell
 
 The following variables determine the locale applications should use:
 
-- `LC_CTYPE`:    Character classification and case conversion.
-- `LC_COLLATE`:  Collation order.
-- `LC_MONETARY`: Monetary formatting.
-- `LC_NUMERIC`:  Numeric, non-monetary formatting.
-- `LC_TIME`:     Date and time formats.
-- `LC_MESSAGES`: Formats of informative and diagnostic messages and interactive responses.
+- `LC_CTYPE`: character classification and case conversion
+- `LC_COLLATE`: collation order
+- `LC_MONETARY`: monetary formatting
+- `LC_NUMERIC`: numeric, non-monetary formatting
+- `LC_TIME`: date and time formats
+- `LC_MESSAGES`: formats of informative and diagnostic messages and interactive responses
 
-They are defined at: <http://pubs.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap07.html>
-POSIX also offers interfaces to modify those variables. The exact location where they are implemented
-is not specified. E.g., on Ubuntu 14.04, they are stored under `/etc/default/locale`.
+They are defined at: <http://pubs.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap07.html> POSIX also offers interfaces to modify those variables. The exact location where they are implemented is not specified. E.g., on Ubuntu 14.04, they are stored under `/etc/default/locale`.
 
 The following variables don't have fixed purposes, but POSIX says that they must be used with caution:
 
 - `EDITOR`: default text editor
 - `PAGER`: default pager program ( `more`, `less`, etc. )
 - `PPID`: PID of parent process
-
-### Regular expressions
-
-    man 7 regex
-
-POSIX specifies are two types of regular expressions:
-
-- basic (RE)
-- extended (ERE)
-
-Basic is deprecated, so don't use it.
-
-Some POSIX utilities such as `grep` or `sed` use BREs by default (backwards compatibility) but can use EREs with an option.
-
-#### BRE vs ERE
-
-The main difference is that EREs add more Perl-like special characters.
-
-BREs have special:
-
-- `^` and `$` anchors
-- `[ab]` character classes, including negated `[^ab]`
-- `.` matches all
-- `*` repeats last expression: `.*`, `[ab]*`.
-
-EREs add:
-
-- `(a|b)` alternation
-- `a{1,3}` repetition count
-- `a+` at least one
-- `a?` one or zero.
-
-Perl like character classes such as `\s` are still very inconvenient in EREs: `[[:upper:][:lower:]]`.
-
-Examples:
-
-    echo $'a\nb'    | grep -E '(a|b)'
-    echo $'a\nb'    | grep -E 'a*'
-    echo $'a\nb'    | grep -E 'a?'
-    echo $'a\nb'    | grep -E 'a+'
-    echo $'a\nb'    | grep -E '^a$'
-    echo $'a\nb'    | grep -E 'a{1,2}'
-    echo $'aa\nab'  | grep -E '(a)\1'
-    echo $'a\nb'    | grep -E '.'
-    echo $'a\nb'    | grep -E '[[:alpha:]]'
-    echo $'a\nA'    | grep -E '[[:upper:][:lower:]]'`" = $'a\nA' ]
-
-#### Predefined character classes
-
-Is the main difference between those and Perl (except for very magic perl regex options).
-
-They enclosed in `[::]` inside a `[]`. example:
-
-    echo $'a\nb'    | grep -E '[[:alpha:]]'
-
-Full list:
-
-    alnum       digit       punct
-    alpha       graph       space
-    blank       lower       upper
-    cntrl       print       xdigit
-
-In Perl these are backlash escaped chars, much shorter to write...
 
 ### Command line interface
 

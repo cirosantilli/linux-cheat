@@ -4,13 +4,25 @@ It is fundamental that you understand the global architecture of kernel code so 
 
 ## Sizes
 
-Top folders by size of a compiled `v3.10-rc5` kernel:
+Top folders by size of a clean `v3.10-rc5` kernel:
 
-    3.7G    drivers
-    727M    net
-    598M    fs
-    334M    sound
-    255M    arch
+    330M    drivers
+    172M    tags
+    131M    arch
+    37M fs
+    32M include
+    30M Documentation
+    29M sound
+    26M net
+    8.4M    tools
+    6.7M    kernel
+    6.1M    firmware
+    3.6M    scripts
+    3.4M    lib
+    3.0M    mm
+    2.9M    crypto
+    2.3M    security
+    1.2M    block
 
 ## arch
 
@@ -22,6 +34,17 @@ Architecture specific code. E.g.:
 - `powerpc`
 
 ### x86
+
+### IA-32
+
+### x86-64
+
+Contains both IA-32 and x86_64. A large part is factored out between the two, specifics are distinguished by:
+
+- `32` or `64` on the filename
+- `#ifdef __i386__` in the code
+
+System calls:
 
 -   `arch/x86/syscalls/syscal_32.tbl`, `arch/x86/syscalls/syscal_64.tbl`: maps system call numbers to the methods.
 
@@ -49,19 +72,52 @@ The kernel can use CPU-specific cryptographic instructions, e.g. <https://git.ke
 
 This is a bit polemic, since some states restrict cryptographic software in a similar way to weapons.
 
-## uapi
+## include
+
+Headers used across the kernel.
+
+Very important, as it contains all major structures, and understanding structures is the first step to understanding programs. The next one is how they are manipulated.
+
+### uapi
 
 User API.
 
-`uapi` contains arch dependant stuff that will be exposed to userspace applications: <http://lwn.net/Articles/507794/>
+Contains arch headers that will be exposed to userspace applications: <http://lwn.net/Articles/507794/>
 
-An example is system calls macro numbers such as `__NR_WRITE`.
+Example application: ABI for making system calls. System calls are of course visible from user space, and some of them take structures. A `.h` file can then give the C `struct` that must be passed to the system call, e.g. via the glibc `<sys/syscall.h>`.
 
-TODO how do user programs use import those headers?
+Those headers may also contain:
+
+- some small `static inline` methods, mostly ones that operate directly on the 
+- defined constants, mostly flags to operate on the structs
+
+Those headers can be exported for userspace usage with `make headers_install`.
+
+Modules for instance can import many other headers, and use their implementation loaded in the Kernel code in memory.
+
+### include/linux
+
+Generic headers. Contains some of the most fundamental headers of the kernel:
+
+- `sched.h`: scheduling and task key structures, e.g. `task_struct`
+- `arch/x86/include/asm/ptrace.h`: `pt_regs` which models the x86 registers
+- `fs.h`: key filesystem structures
+- `types.h`: typedefs
+- `compiler.h`: compiler related stuff such as `__user`, which expands to a GCC `__attribute__`
+
+### include/asm-generic
+
+Holds declarations of things that are defined in assembly.
+
+Possible rationale: make it clear what new ports will need to implement; things that are not there are defined in C, so no need to port those.
+
+It is a very fun to explore part of the code as it is a gateway for low level code.
+
+<http://stackoverflow.com/questions/3247770/what-is-the-linux-2-6-3x-x-include-asm-generic-for>
 
 ## generated
 
-Files under such directories have been generated programmatically from other files.
+Files under such directories have been generated programmatically from other files and are gitignored.
 
 An example in `3.10-rc5` is `arch/x86/include/generated/uapi/asm/unistd_32.h` which contains the `__NR_XXX` system call macro numbers.
 
@@ -73,40 +129,6 @@ One major application of this is to ignore those files from source control. The 
     include/config
     include/generated
     arch/*/include/generated
-
-## include/linux
-
-Contains headers which are visible from user programs as well as from inside the kernel.
-
-Only things which are usable from user programs are exported, which is a small subset of the kernel interface.
-
-Modules for instance can import many other headers, and use their implementation loaded in the Kernel code in memory.
-
-Example application: ABI for making system calls. System calls are of course visible from user space, and some of them take structures. A `.h` file can then give the C `struct` that must be passed to the system call, e.g. via the glibc `<sys/syscall.h>`.
-
-Examples of that can be fount at: <http://www.fsl.cs.sunysb.edu/~vass/linux-aio.txt>
-
-Those headers may also contain:
-
-- some small `static inline` methods, mostly ones that operate directly on the 
-- defined constants, mostly flags to operate on the structs
-
-Interesting files:
-
-- `compiler.h`: compiler related stuff such as `__user`, which expands to a GCC `__attribute__`
-- `fs.h`: key filesystem structures
-- `sched.h`: scheduling and task key structures, e.g. `task_struct`
-- `types.h`: typedefs
-
-## include/asm-generic
-
-Holds declarations of things that are defined in assembly.
-
-Possible rationale: make it clear what new ports will need to implement; things that are not there are defined in C, so no need to port those.
-
-It is a very fun to explore part of the code as it is a gateway for low level code.
-
-<http://stackoverflow.com/questions/3247770/what-is-the-linux-2-6-3x-x-include-asm-generic-for>
 
 ## defconfig
 
@@ -206,12 +228,22 @@ For example, to try to find the definition of `struct s`:
 
     ack '^struct s \{'
 
-## System.map
-
-Generated at the top level and then placed at `/boot/System.map-<version>`.
-
 ## Firmware
 
-Contains mostly `ihex` files, which represent binary firmware.
+TODO confirm this.
 
-TODO how those are used exactly? Apparently by device drivers: <https://wiki.ubuntu.com/Kernel/Firmware>
+Contains mostly `ihex` files, which represent binary data.
+
+Firmware are sequences of bytes that get saved to persistent memory inside of devices.
+
+Firmware exists so that manufacturers can update how their hardware works after selling the hardware.
+
+The actual meaning of the bytes of the of firmware is undocumented: end users only gets blobs, and the manuals say: using blob version X, the device works as such. There are many tutorials on the net however.
+
+Likely manufacturers feel it would give too much insight into their internal design.
+
+Therefore, the only way for end users to modify firmware themselves is to reverse engineer the device's inner workings, which is hard and uncertain.
+
+This also means that firmware could be a source of security vulnerability, as it is an undocumented feature of the hardware.
+
+The Linux kernel must fix firmware feed to devices so that they are in a known documented state, against which drivers can be coded.

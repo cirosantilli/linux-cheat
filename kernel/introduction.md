@@ -85,3 +85,11 @@ Of of the goals of Linux is to highly (but to 100%) POSIX compliant.
 Therefore, many of its system calls and concepts map directly to POSIX concepts.
 
 We strongly encourage you to look at exactly what POSIX specifies and what it does not, so as to be able to decide if your code cannot be made more portable by using the POSIX C API instead of Linux specific code.
+
+## Monolithic kernel
+
+Linux adopted the monolithic kernel approach instead of the micro-kernel approach of MINIX on which it was based, and GNU HURD.
+
+This proved to be a great decision, as micro-kernels are much harder to write, was one of the reasons why Linux won.
+
+Andrew S. Tanenbaum who made MINIX said it was a bad choice in 92 in the famous Tanenbaum Torvalds debate: <https://en.wikipedia.org/wiki/Tanenbaum%E2%80%93Torvalds_debate> <https://groups.google.com/forum/#!topic/comp.os.minix/wlhw16QWltI[1-25]>

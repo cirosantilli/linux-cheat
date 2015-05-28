@@ -1455,42 +1455,6 @@ The icon is identified by the `Icon` field, which corresponds to a file under `$
 
 That directory may contain multiple versions of each icon, at various resolutions, color depths and styles, since icon themes can also change with DE settings. `hicolor/48x48` should contains lots of standard icons.
 
-## Default applications
-
-[xdg-open](xdg-open) is a popular XDG choice.
-
-This talks about how to allow users to choose their default application when opening certain types of file.
-
-There are many systems, and they have some degree of compatibility.
-
-`update-alternatives` and `/etc/alternatives` is an important Linux method of executable selection.
-
-#### update-mime-database
-
-shared-mime-info package.
-
-### gnome-open
-
-Gnome specific. Use `xdg-open` instead..
-
-### kde-open
-
-KDE specific. Use `xdg-open` instead..
-
-## logkeys
-
-Writes all key presses to a file.
-
-Great way to steal people's passwords if they use your computer.
-
-Start logging:
-
-    sudo logkeys -s
-
-End logging:
-
-    sudo logkeys -k
-
 ## IBus input methods
 
 Daemon for Chinese, Japanese, etc. input.
@@ -1498,19 +1462,3 @@ Daemon for Chinese, Japanese, etc. input.
 On Ubuntu, you must install the Qt version separately for it to work on Qt apps via:
 
     sudo aptitude install -y ibus-qt4
-
-## Solaar
-
-Monitor status and configure Logitech wireless devices.
-
-List devices:
-
-    solaar-cli show
-
-List configuration of device:
-
-    solaar-cli config 1
-
-TODO how to change the Fn swap (in some keyboards, if you press F1 it does the Fn version istead). The following fails:
-
-    sudo solaar-cli config 1 fn-swap false

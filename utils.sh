@@ -1086,11 +1086,3 @@
     # Login server.
 
     # freeradius is the major implementation.
-
-## setleds
-
-  # Set/get capslock, numlock and scrolllock led state;
-
-  # Only works from tty (ctrl+alt+F[1-6] on ubuntu);
-
-    setleds

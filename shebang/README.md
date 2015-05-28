@@ -9,11 +9,15 @@ Tells Linux which interpreter to use to run the program.
 
 *must* be first char of first line.
 
-The shebang is not specified by POSIX, so don't try to do fancy things with it
-like passing command line arguments to the interpreter:
-<http://stackoverflow.com/questions/4303128/how-to-use-multiple-arguments-with-a-shebang-i-e>
+The shebang is not specified by POSIX, so don't try to do fancy things with it like passing command line arguments to the interpreter: <http://stackoverflow.com/questions/4303128/how-to-use-multiple-arguments-with-a-shebang-i-e>
 
 ## What it does exactly
+
+The shebang is implemented directly on the kernel level, it is not bash magic.
+
+If a file starts with `#!` and you run the `execve` system call on it, Linux will treat it as a script. It is analogous for ELF files which must start with `07fxELF`, and any other executable type Linux supports: the first bytes determine the type.
+
+The script format is specified at `fs/binfmt_script.c`. The same goes analogously to all formats Linux can execute, e.g. `fs/binfmt_elf.c`.
 
 Try `./print_args_shebang c d` to really understand what happens
 

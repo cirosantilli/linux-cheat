@@ -3,23 +3,61 @@ set -eu
 
 ## sed
 
-  # TODO make all asserts pass
+# POSIX 7 http://pubs.opengroup.org/onlinepubs/9699919799/utilities/sed.html
 
-  # POSIX 7 http://pubs.opengroup.org/onlinepubs/9699919799/utilities/sed.html
+# Stream EDitor.
 
-  # Stream EDitor
+# Modifies files non-interactively.
 
-  # Modifies files non-interactively.
+# Beginner to pro tutorial: http://www.grymoire.com/Unix/Sed.html
 
-  # Beginner to pro tutorial: <http://www.grymoire.com/Unix/Sed.html>
+## Alternatives
 
-  ## Alternatives
+  # Consider using Python instead of this, or Perl if your are insane and really want to golf.
 
-    # Consider using Python instead of this, or Perl if your are insane and really want to golf.
+  # sed has only slightly better golfing than Perl.
 
-    # sed has only slightly better golfing than Perl.
+  # The only real advantage of sed over Perl is that Sed is POSIX, while perl is only LSB.
 
-    # The only real advantage of sed over Perl is that Sed is POSIX, while perl is only LSB.
+## Command line arguments
+
+  ## n
+
+    # Don't print all lines (default).
+
+    # Print new line if match:
+
+      sed -n 's/find/repl/gp'
+
+    # grep:
+
+      sed -n '/find/p'
+
+## Syntax
+
+  ## e
+
+    # Execute.
+
+    # Give multiple commands.
+
+    # Execute in each line in given order.
+
+    # Same as ; concatenating commands.
+
+      [ "$(printf 'a\nb\n' | sed -e 's/a/b/' -e 's/b/c/')" = $'c\nc' ]
+
+  ## f
+
+    # Read commands from given file.
+
+    # One command per line.
+
+    ## shebang
+
+      # Can exec sed script with following shebang:
+
+        #!/bin/sed -f
 
   ## s command
 
@@ -29,16 +67,13 @@ set -eu
 
     ## Patterns are BREs
 
-      # `+` is ordinary, thus BRE, and no match TODO fails?
+      # `+` is ordinary, thus BRE, and no match TODO why fails?
 
         #[ "$(echo 'aa' | sed 's/[[:alpha:]]/b/')" = 'ba' ]
         #[ "$(echo 'aa' | sed 's/.+/b/')" = 'ab' ]
 
-      ## r
-
-        # Use EREs instead of BREs. Always use it.
-
-          [ "$(echo 'aa' | sed -r 's/.+/b/')" = 'b' ]
+      # POSIX does not seem to support EREs.
+      # For that you need the GNU extension `-r` flag.
 
     ## g
 
@@ -80,7 +115,7 @@ set -eu
 
       [ "$(printf 'a\nb\n' | sed -n '/a/p')" = 'a' ]
 
-  ## restrict lines
+  ## Restrict lines
 
     # Line number:
 
@@ -254,19 +289,15 @@ set -eu
 
         [ "$(printf 'a b c\n' | sed ':a s/a[^c]/a/; t a')" = $'ac' ]
 
-  ## Command line arguments
+## GNU extensions
 
-    ## n
+  ## Command line arguments GNU
 
-      # Don't print all lines (default).
+    ## r
 
-      # Print new line if match:
+      # Use EREs instead of BREs:
 
-        sed -n 's/find/repl/gp'
-
-      # grep:
-
-        sed -n '/find/p'
+        [ "$(echo 'aa' | sed -r 's/.+/b/')" = 'b' ]
 
     ## i
 
@@ -290,35 +321,11 @@ set -eu
 
       # Cannot be used with stdin input!
 
-    ## e
-
-      # Execute.
-
-      # Give multiple commands.
-
-      # Execute in each line in given order.
-
-      # Same as ; concatenating commands.
-
-        [ "$(printf 'a\nb\n' | sed -e 's/a/b/' -e 's/b/c/')" = $'c\nc' ]
-
-    ## f
-
-      # Read commands from given file.
-
-      # One command per line.
-
-      ## shebang
-
-        # Can exec sed script with following shebang:
-
-          #!/bin/sed -f
-
-  ## GNU extensions
-
     # https://www.gnu.org/software/sed/manual/sed.html
 
-    ## Escape sequences.
+  ## Syntax
+
+    ## Numeric byte values
 
       # https://www.gnu.org/software/sed/manual/sed.html#Escapes
 
@@ -330,31 +337,35 @@ set -eu
 
       # Great for when you fell like doing some binary file editing.
 
-  ## Applications
+    ## Character classes
 
-    # If modified, print line number, old line, new line
+      # GNU sed offers some Perl like character class notation like `\s`.
 
-    # E.g.:
+## Applications
 
-    # Input:
+  # If modified, print line number, old line, new line
 
-      #a
-      #b
-      #a
-      #b
+  # E.g.:
 
-    # Regex: `s/a/c/`
+  # Input:
 
-    # Output:
+    #a
+    #b
+    #a
+    #b
 
-      #1
-      #a
-      #c
-      #
-      #3
-      #a
-      #c
+  # Regex: `s/a/c/`.
 
-    [ "$(printf 'a\nb\na\nb\n' | sed -n 'h; s/a/c/; t p; d; :p {=;x;G;s/$/\n/;p}')" = $'1\na\nc\n\n3\na\nc\n' ]
+  # Output:
 
-  echo 'All tests passed.'
+    #1
+    #a
+    #c
+    #
+    #3
+    #a
+    #c
+
+  [ "$(printf 'a\nb\na\nb\n' | sed -n 'h; s/a/c/; t p; d; :p {=;x;G;s/$/\n/;p}')" = $'1\na\nc\n\n3\na\nc\n' ]
+
+echo 'ALL ASSERTS PASSED'

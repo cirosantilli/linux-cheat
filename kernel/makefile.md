@@ -1,4 +1,4 @@
-# Build and install
+# Makefile
 
 How to compile and install the kernel.
 
@@ -12,6 +12,14 @@ Quickstart:
 	make defconfig
 	make -j5
     # TODO run it somehow on a VM easily.
+	sudo make install
+	sudo make modules_install
+
+Then:
+
+- reboot
+- pray that your distro is compatible with the version and configuration you chose (networking failed on Ubuntu 14.04)
+- run `uname -a` on a terminal and behold your new kernel version
 
 ## Help
 
@@ -37,29 +45,32 @@ Many targets under `make help`.
 
 Those targets generate the `.config` file, which is then used by the `Makefile` to build.
 
+The options are determined by the `Kconfig` files present throughout the kernel.
+
 ### defconfig
 
-Simple default configuration.
+Simple default configuration:
+
+	make defconfing
 
 ### menuconfig
 
+Open up a ncurses interface:
+
 	make menuconfig
 
-This opens up a ncurses interface which allows you to choose amongst tons of options (~6k) which determine which features your kernel will include or not.
+that allows you to turn options on or off.
+
+Advantages over direct `.config` editing:
+
+- see the configurations as a logical tree
+- you cannot make enter invalid values
 
 Then go on to `save` to save to the `.config` file and then exit.
 
-Many of the options of the configuration file can be accessed via preprocessor macros which control system behavior (TODO all of them are accessible?)
+Not well explained navigation:
 
-For example:
-
-    CONFIG_SMP=y
-
-Means that symmetrical multiprocessing is on (yes), and then in the code we can use:
-
-    #ifdef CONFIG_SMP
-        //smp specific
-    #endif
+- `<Esc><Esc>` (double Esc) goes up on the configuration tree
 
 ### tinyconfig
 
@@ -203,6 +214,11 @@ Most programs will not depend on those headers, and will use glibc as an OS port
 Documented at: <https://www.kernel.org/doc/Documentation/kbuild/headers_install.txt> which says that:
 
     Kernel headers are backwards compatible, but not forwards compatible.
+
+Those files are basically a copy paste from `uapi` directories:
+
+- `include/uapi` for the generic ones
+- `arch/x86/include/uapi` for the arch specific ones, which end up under `include/asm`
 
 #### /usr/include/linux
 

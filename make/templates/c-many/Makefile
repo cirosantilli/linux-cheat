@@ -16,7 +16,10 @@ all: $(OUTS)
 	gcc -o '$@' -pedantic-errors -std=c89 -Wall '$<'
 
 clean:
-	rm -f *$(OUT_EXT)
+	rm -f *'$(OUT_EXT)'
 
 run: all
 	./'$(RUN)$(OUT_EXT)'
+
+test: all
+	./test '$(OUT_EXT)'

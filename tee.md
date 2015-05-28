@@ -25,3 +25,7 @@ To multiple processes:
     echo a | tee >(seqn 2) tee >(seqn 2) | tr a b
 
 Process are run in parallel so the output order is variable.
+
+Tee to pipe and stdout at the same time:
+
+    echo a | tee /dev/tty | grep b
