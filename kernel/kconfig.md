@@ -46,11 +46,21 @@ Then throughout the kernel source `ifdef`s are used:
 
     #endif
 
+## help
+
+The `---help---` is not necessary: most places use just `help`.
+
+A patch to remove this inconsistency was WONTFIXed... <https://lkml.org/lkml/2005/5/2/181>
+
 ## Important options
 
 Quick selection of options that appear everywhere throughout the code and which every hacker should know.
 
 -   `arch/x86/Kconfig`
 
-    - `SMP`
+    - `SMP`: symmetric multiprocessing
     - `IA32_EMULATION`
+
+## Cross compile the kernel
+
+<http://raspberrypi.stackexchange.com/questions/192/how-do-i-cross-compile-the-kernel-on-a-ubuntu-host>

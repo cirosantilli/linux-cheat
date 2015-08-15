@@ -1,10 +1,12 @@
 # ulimit
 
+Bash built-in.
+
 Get and set resource limits for a process and its children.
 
-POSIX 7: <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/ulimit.html>
+POSIX 2013: <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/ulimit.html>
 
-Linux and POSIX offer several per process limits. POSIX ones are documented with the `getrlimit` interface at <http://pubs.opengroup.org/onlinepubs/9699919799/functions/getrlimit.html>
+Linux and POSIX offer several per process limits. POSIX ones are documented with the `getrlimit` interface at <http://pubs.opengroup.org/onlinepubs/9699919799/functions/getrlimit.html> which Linux implements with identically named system calls.
 
 On Ubuntu, implemented as a `sh` and `bash` built-in:
 
@@ -12,20 +14,25 @@ On Ubuntu, implemented as a `sh` and `bash` built-in:
 
 `sudo ulimit` fails because `ulimit` is a built-in and `sudo` takes executables as argument. Alternatives: <http://stackoverflow.com/questions/17483723/command-not-found-when-using-sudo-ulimit>
 
-`ulimit` is a front-end for
-<http://pubs.opengroup.org/onlinepubs/9699919799/functions/ulimit.html>,
-which in Linux is a front-end for
-<http://pubs.opengroup.org/onlinepubs/9699919799/functions/setrlimit.html>
+`ulimit` is a front-end for <http://pubs.opengroup.org/onlinepubs/9699919799/functions/ulimit.html>, which in Linux is a front-end for <http://pubs.opengroup.org/onlinepubs/9699919799/functions/setrlimit.html>
 
 Limits are enforced per process, so if a process is able to fork it can blow the limits by using the children. Limiting the children is non-trivial, so `ulimit` should only be used to prevent system crashes on trusted programs (e.g. one that may take too much RAM with certain parameters).
 
 If programs try to break those limits, the system call fails, and often the program crashes.
 
+## Make limits permanent
+
+## /etc/security/limits.conf
+
+<http://serverfault.com/questions/610130/how-to-set-ulimit-value-permanently>
+
+`libpam-modules:amd64` package on Ubuntu 14.04.
+
 ## f
 
 POSIX only specifies this option: the maximum file size that can be written in 512 byte blocks.
 
-Get value of the limit:
+Get value of the (soft) limit:
 
     ulimit -f
 
@@ -56,15 +63,33 @@ List all limits (including the unit and the option name):
 
     ulimit -a
 
+### Soft limit
+
+### Hard limit
+
 ### S
 
 ### H
 
 Linux has the concept of hard and soft limits.
 
-Soft limits can be increased by any user, up to the hard limit, and the hard limit can only be increased by `sudo`.
+Soft limits can be increased by any user, up to the hard limit.
+
+The hard limit can only be increased by `sudo`, but decreased without.
 
 `-S` specifies soft limits, `-H` hard, and the absence of both sets both at once.
+
+Print soft limit:
+
+    ulimit -Sc
+
+Same:
+
+    ulimit -c
+
+Print hard limit:
+
+    ulimit -Hc
 
 Bash also provides the `soft` and `hard` special limit values which refer to the current soft and hard values.
 

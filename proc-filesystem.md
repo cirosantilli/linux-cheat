@@ -55,6 +55,8 @@ Not present in Ubuntu 14.04.
 
 -   `cat /proc/version`: Linux kernel version and other system info. Similar to `uname -a` output.
 
+    <http://askubuntu.com/questions/2884/how-can-i-determine-the-version-of-the-running-kernel>
+
 -   `cat /proc/devices`: information on registered character and block devices.
 
     Does not consider files under `/dev/`, but registrations done for example via `alloc_chrdev_region`.

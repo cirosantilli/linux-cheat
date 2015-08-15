@@ -1,0 +1,7 @@
+@node Top
+@top smallexample
+@smallexample
+int i = 0;
+if (i == 0)
+    puts("zero");
+@end smallexample

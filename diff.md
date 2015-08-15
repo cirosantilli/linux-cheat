@@ -23,6 +23,15 @@ Output:
     2d1
     < 1
 
+Deletion of one line further down:
+
+    diff <(printf '0\n1\n2\n3\n') <(printf '0\n1\n3\n')
+
+Output:
+
+    3d2
+    < 2
+
 Deletion of two lines:
 
     diff <(printf '0\n1\n2\n3\n') <(printf '0\n3\n')
@@ -32,6 +41,30 @@ Output:
     2,3d1
     < 1
     < 2
+
+Two deletions:
+
+    diff <(printf '0\n1\n2\n3\n4\n5\n6\n') <(printf '0\n2\n3\n4\n6\n')
+
+Output:
+
+    2d1
+    < 1
+    6d4
+    < 5
+
+Two double deletions:
+
+    diff <(printf '0\n1\n2\n3\n4\n5\n6\n') <(printf '0\n3\n6\n')
+
+Output:
+
+    2,3d1
+    < 1
+    < 2
+    5,6d2
+    < 4
+    < 5
 
 Addition of one line:
 

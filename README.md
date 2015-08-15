@@ -25,7 +25,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [Distros](distros.md)
         1. [Minimal distros](minimal-distros.md)
 1.  [Kernel](kernel/)
-    1. [System Call](system-call/)
+    1. [System Call](system-call.md)
     1. [sysctl](sysctl.md)
     1. [dmesg](demesg.md)
     1. [installkernel](installkernel.md)
@@ -38,6 +38,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [lsb_release](lsb_release.md)
     1.  [uname](uname.md)
     1.  Hardware
+        [cpuid](cpuid.md)
         [lspci](lspci.md)
 1.  [Filesystem](filesystem.md)
     1.  [File permissions](file-permissions.md)
@@ -91,7 +92,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [CD DVD](cd-dvd.md)
         [isoinfo](isoinfo.md)
         [eject](eject.md)
-1. [Terminal](terminal.md): terminal emulators, ANSI escapes, control characters
+1.  [Terminal](terminal.md): terminal emulators, ANSI escapes, control characters
     1. [Guake](guake.sh)
 1.  Stream and file manipulation
     1. [cat](cat.md)
@@ -131,33 +132,40 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [wdiff](diff.md)
 1.  Programming
     1.  [ack](ack.sh)
+    1.  Analytics
+        1.  [cloc](cloc.md)
+        1.  [sloccount](sloccount.md)
     1.  [ctags](ctags/)
     1.  [cscope](cscope.md)
     1.  Build systems
         1. [make](make/)
         1. [autotools](autotools/)
 1.  Processes
-    1. [Shebang](shebang/)
-    1. [chroot](chroot.sh)
-    1. [env](env.sh)
-    1. [free](env.md)
-    1. [htop](htop.md)
-    1. [jobs](jobs.sh)
-    1. [kill](kill.sh)
-    1. [killall](killall.sh)
-    1. [lsof](lsof.md)
-    1. [nice](nice.sh)
-    1. [nohup](nohup.sh)
-    1. [ps](ps.md)
-    1. [pstree](pstree.sh)
-    1. [pwd](pwd.sh)
-    1. [sleep](sleep.sh)
-    1. [strace](strace.md)
-    1. [timeout](timeout.md)
-    1. [top](top.md)
-    1. [umask](umask.md)
-    1. [ulimit](ulimit.md)
-    1. [wait](wait.sh)
+    1.  [Shebang](shebang/)
+    1.  [chroot](chroot.sh)
+    1.  [env](env.sh)
+    1.  [free](env.md)
+    1.  [htop](htop.md)
+    1.  [jobs](jobs.sh)
+    1.  [kill](kill.sh)
+    1.  [killall](killall.sh)
+    1.  [lsof](lsof.md)
+    1.  [ltrace](ltrace.md)
+    1.  [nice](nice.sh)
+    1.  [nohup](nohup.sh)
+    1.  procps
+        1. [pmap](ps.md)
+        1. [ps](ps.md)
+    1.  [parallel](parallel.md)
+    1.  [pstree](pstree.sh)
+    1.  [pwd](pwd.sh)
+    1.  [sleep](sleep.sh)
+    1.  [strace](strace.md)
+    1.  [timeout](timeout.md)
+    1.  [top](top.md)
+    1.  [umask](umask.md)
+    1.  [ulimit](ulimit.md)
+    1.  [wait](wait.sh)
 1.  Date and time
     1. [cal](cal.md)
     1. [ddate](ddate.md)
@@ -173,7 +181,6 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1. [GIMP](gimp.md)
         1. [gnuplot](gnuplot)
         1. [imagemagick](imagemagick.md)
-    1.  [Markup](markup/): Markdown, RST. Focus on command line interface and extensions
     1.  [Video](video.md): videos, films, subtitles
 1.  File sharing
     1. [Dropbox](dropbox.md)
@@ -210,14 +217,16 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
 1.  Character encoding
     1. [Unicode](unicode.md)
         1. [iconv](iconv.sh)
-1.  Markup compilers
+1.  Markup
     1. [Kramdown](kramdown/)
     1. [Pandoc](pandoc/)
     1. [RST](rst/)
 1.  [Virtualization](virtualization.md)
     1. [Docker](docker/)
     1. [QEMU](qemu.md)
+    1. [Xen](xen.md)
     1. [Vagrant](vagrang/)
+    1. [Intel SDE](intel-sde.md)
 1.  [Configuration automation](config-automation.md)
     1. [chef](chef/)
     1. [puppet](puppet.md)
@@ -227,6 +236,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1. [lpstat](lpstat.md)
         1. [lpoptions](lpoptions.md)
         1. [system-config-printer](system-config-printer.md)
+    1.  [ink](ink.md)
 1.  Mathematics
     1.  [bc](bc.md)
     1.  [factor](factor.md)
@@ -262,3 +272,5 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
 1.  File sharing
     1. [NFS](nfs.md)
     1. [LDAP](ldap.md)
+1.  Markup
+    1. [Texinfo](texinfo.md)

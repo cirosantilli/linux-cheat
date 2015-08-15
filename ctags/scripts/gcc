@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+git ls-files |
+  grep -Pv "^(ada|fortran|go|java|jit|objc|objcp|testsuite)/" |
+  ctags -R --c-kinds=-m -L -

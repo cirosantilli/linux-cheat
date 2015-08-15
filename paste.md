@@ -2,8 +2,6 @@
 
 POSIX 7: <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/paste.html>
 
-A bit useless.
-
 Shows files side by side line by line.
 
 Tabulation is based on the tab character, so having lines longer than the tab make this unreadable by default:
@@ -31,6 +29,10 @@ Seems to be the best tool for it:
 
 `tr` also works somewhat, but you have to deal with the last separator.
 
-``` {mycode .haskell .numberLines startFrom="100"}
-console.log("hello world")
-```
+## Join every two lines
+
+<http://stackoverflow.com/questions/8987257/concatenating-every-other-line-with-the-next>
+
+    [ "$(printf 'a\nb\nc\nd\n' | paste -d, - -)" = "$(printf 'a,b\nc,d')" ] || exit 1
+
+`- -` works only for stdin: <http://stackoverflow.com/questions/8987257/concatenating-every-other-line-with-the-next#comment50617700_8987307>

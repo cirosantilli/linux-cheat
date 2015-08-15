@@ -4,30 +4,52 @@ Cscope <http://cscope.sourceforge.net/>.
 
 C-only, but more powerful, e.g. can list references.
 
-## Basic usage
+## Quick start
 
     cd project/root
     cscope -R
 
-This generates a `cscope.out` file.
+This generates or updates a `cscope.out` file and leaves you in the ncurses interface.
 
-For the Linux kernel 4.0, it took 2 minutes on a 2013 machine, and generated a 350M file, and leaves you in the ncurses interface.
+For the Linux kernel 4.0, it took 2 minutes on a 2013 machine, and generated a 350M file.
 
 The `cscope.out` file is binary and not directly readable on text editors.
 
-Next time you want to open the ncurses interface, you can use either:
+On the ncurses interface, navigate with the down arrow to:
+
+    Find functions calling this function:
+
+Enter your desired function name, and enter.
+
+Now navigate with arrows to the occurrence you want.
+
+Space moves to the next page.
+
+When you hit enter on a line, it opens your command line editor (VIM?) on that line.
+
+When you quit the editor, you fall back on the search.
+
+To start a new search, hit `<Tab>`, and navigate with the arrows again.
+
+Hit Ctrl + D to exit.
+
+## -R
+
+Search source files recursively in the current directory:
 
     cscope -R
 
-which will update the database where needed and reuse existing `cscope.out`, or:
+## -d
+
+Skip the database update entirely, enter ncurses viewer directly:
 
     cscope -d
 
-which will skip the database update.
-
 ## -b
 
-Only build the database, don't enter the ncurses.
+Only build the database, don't enter the ncurses interface:
+
+    cscope -Rb
 
 ## Ignore struct declarations and see only definitions
 
@@ -53,6 +75,11 @@ You are now left on a ncurses interface with the following options:
     Find assignments to this symbol:
 
 Use arrows to navigate up and down.
+
+Notes:
+
+- `Find this C symbol`: lists all occurrences of variables / functions: definition, declaration, usage, increment, calls
+- `Find assignments to this symbol`: does not include compound assignment, or suffix increment `++`
 
 ### Panes
 
@@ -90,5 +117,3 @@ On the output pane, go one page down.
 Filter output through shell command. E.g.:
 
     ^grep sched
-
-Also 

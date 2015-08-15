@@ -193,3 +193,7 @@ TODO
 Type, major, minor: block, 7, `X` for `loopX`
 
 Used to mount regular files that contain filesystems instead of device files as is usual.
+
+## /dev/shm
+
+Files created by `shm_open` calls. This function is part of POSIX, but creation of the files under `/dev` is not.

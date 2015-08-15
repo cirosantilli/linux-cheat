@@ -200,7 +200,7 @@ The amount of available attributes is very restricted if compared with modern to
 The following example prints:
 
 - a red and underlined `a` character
-- a red and bold       `b` character
+- a red and bold `b` character
 - a `c` character with default attributes:
 
         printf '\033[4;31ma\033[1;24mb\033[0mc\n'
@@ -208,16 +208,18 @@ The following example prints:
 Which can be broken up as:
 
      \033 [ 4 ; 31 m | a | \033 [ 1 ; 24 m  | b | \033 [ 0 m | c
-     ^^^^^^ ^ ^ ^^ ^ |   |                  |   |            |
-     1      2 3 4  5 |   |                  |   |            |
+     ^^^^^^ ^ ^ ^^ ^ |   |        ^   ^^    |   |            |
+     1      2 3 4  5 |   |        6   7     |   |            |
 
 where:
 
 1. CSI
 2. underline on
 3. separator
-4. bold
+4. red
 5. SGR
+5. bold
+6. underline off
 
 How it works:
 

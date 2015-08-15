@@ -32,30 +32,15 @@ Most function definitions or declarations don't contain any comments, so you rea
 
     Mostly bleeding edge design decisions.
 
+    `linux-kernel`: is the highest volume one. TODO: better replies than Stack Overflow?
+
+    `linux-newbie`: looks like a good one for me
+
+    Web UIs suck: <http://unix.stackexchange.com/questions/90080/how-do-i-search-the-linux-kernel-mailing-list-archives>
+
 -   Official bug tracker: <https://bugzilla.kernel.org/>
 
--   `grep -R`
-
-    Possible way to find where something is defined.
-
-    May take a long time on the source root, and it may be hard to get the actual definitions, but it does works sometimes.
-
--   `ctags -R`
-
-    Better than grep to find where things are defined / declared.
-
-    Doing:
-
-        ctags -R --c-kinds=-m
-
-    on the kernel root generated a file of 134M, but this might be worth it as it may save lots of grepping time.
-
-    You will might then want to add the following to your `.bashrc`:
-
-        function ctag { grep "^$1" tags; } #CTAgs Grep for id
-        function rctag { cd `git rev-parse --show-toplevel` && grep "^$1" tags; }
-
-    Another similar option is to use [free-electrons][].
+    Not used by many developers, most stick to the mailing list...
 
 -   `make htmldoc` on the source.
 
@@ -66,6 +51,12 @@ Most function definitions or declarations don't contain any comments, so you rea
     The documentation seems to be stored in the `.c` files mostly rather than on the `.h`.
 
     Weirdly the snapshots of htmldoc on kernel.org have some extra functions, check it out: <https://www.kernel.org/doc/htmldocs/kernel-api.html>
+
+-   <http://0xax.gitbooks.io/linux-insides/content/Initialization/linux-initialization-4.html>
+
+    Good book.
+
+    Above all: hosted on GitHub.
 
 -   [kernel.org][]
 
@@ -84,6 +75,12 @@ Most function definitions or declarations don't contain any comments, so you rea
 -   [Corbet - 2005 - Linux Device Drivers][corbet05]
 
     Ultimate device driver source.
+
+-   Interviews with many kernel devs:
+
+    <https://www.linux.com/news/special-feature/linux-developers>
+
+    Good getting started info.
 
 ## Non-free
 

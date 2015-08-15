@@ -2,30 +2,94 @@
 
 # POSIX 7. http://pubs.opengroup.org/onlinepubs/9699919799/utilities/awk.html
 
-# Turing Machine, but use only for *ultra simple* POSIX text table field manipulation:
+# Turing complet, but use only for *ultra simple* POSIX text table field manipulation,
+# e.g.: if a column equals X, print Y.
+
 # it only has better golfing on that very limited problem set.
 
-# For more sanity, use Perl or Python.
+# For more sanity, use Python.
 
-## variables
+## Basic examples
 
-  #same as c
+  # Example of where you should use it: print second column is the first is `'a'`:
 
-  #initialized to 0.
+    printf 'a 1\nb 2\na 3' | awk '$1 == "a" { print $2 }'
 
-  #$0: entire record
-  #$\n: fields
-  #last field: $(NF-1)
+  # Numeric comparison: print col 2 if col 1 equals 1:
+
+    printf '01 a\n2 b\n001 c' | awk '$1 == 1 { print $2 }'
+
+  # Simple arithmetic operations:
+
+    printf 'a 01\nb 2\na 3' | awk '$2 == 1 { print $1 }'
+
+  # Line number operations: print every nth line:
+
+    seq 10 | awk 'NR % 3 == 0'
+
+  # Line number operations: delete every nth line:
+
+    seq 10 | awk 'NR % 3 != 0'
+
+  # GNU sed can do those with the `~` extension:
+  # http://superuser.com/questions/396536/how-to-keep-only-every-nth-line-of-a-file
+
+## General syntax
+
+  # Similar to sed.
+
+  # A general awk program is of the type:
+
+    # BEGIN       { STATEMENT_BEGIN }
+    # CONDITION0  { STATEMENT0   }
+    # CONDITION1  { STATEMENT1   }
+    # ...
+    # CONDITION_N { STATEMENT_N   }
+    # END         { STATEMENT_END  }
+
+  # To put multiple statements on a single lime, use `;`.
+
+  printf '1 2\n3 4' | awk 'BEGIN{print "b"}1<2{print "l"}1<2{print "l2"; print "l3"}1>2{print "l4"}END{print "e"}'
+  #$'b\nl\nl2\nl3\nl\nl2\nl3\ne
+
+  echo '0.5 0.5' | awk '{print $1 + $2}'
+  #1
+
+  # If a statment is missing, print is implied:
+
+    [ "$(echo 'a' | awk '1')" = 'a' ] || exit 1
+
+  # If a condition is missing, 1 (true) is implied:
+
+    [ "$(echo 'a' | awk '{print}')" = 'a' ] || exit 1
+
+## Variables
+
+  # Same as c
+
+  # Initialized to 0.
+
+  # $0: entire record
+  # $\n: fields
+  # last field: $(NF-1)
 
   ## FS
-    #field (column) separator
-    #FS=':' FS=/[[:space:]]/ -F'/[[:space:]]/'
-  #OFS: output field separator
-  #RS: record (line) separator
-  #ORS: output ""
-  #NF: number of fields
-  #NR: number of current record
-  #FNR: total number of records in cur file
+
+    # Field (column) separator.
+
+    # FS=':' FS=/[[:space:]]/ -F'/[[:space:]]/'
+
+  ## OFS: output field separator
+
+  ## RS: record (line) separator
+
+  ## ORS: output ""
+
+  ## NF: number of fields
+
+  ## NR: number of current record
+
+  ## FNR: total number of records in current file file
 
 #- arithmetic: same as C: +, *, -, /
 
@@ -35,41 +99,32 @@
 
 #- if else for while: like C
 
-## general syntax
+## String to int
 
-  #A general awk program is of the type:
-
-    #BEGIN     { STATEMENT_BEGIN }
-    #CONDITION0   { STATEMENT0   }
-    #CONDITION1   { STATEMENT1   }
-    #...
-    #CONDITION_N  { STATEMENT_N   }
-    #END      { STATEMENT_END  }
-
-  printf '1 2\n3 4' | awk 'BEGIN{print "b"}1<2{print "l"}1<2{print "l2"; print "l3"}1>2{print "l4"}END{print "e"}'
-  #$'b\nl\nl2\nl3\nl\nl2\nl3\ne
-
-  echo '0.5 0.5' | awk '{print $1+$2}'
-  #1
-
-## string num conversion
-
-    awk 'BEGIN{print "1"+1}'
-    awk 'BEGIN{print " 1"+1}'
+    awk 'BEGIN {print "1"+1}'
+    awk 'BEGIN {print " 1"+1}'
     #2
 
 ## print
 
-  awk 'BEGIN{print "a", 1}'
+  awk 'BEGIN {print "a", 1}'
     #'a 1'
-      #by default, print does space separation
-  awk 'BEGIN{print "a" "b"}'
+      # by default, print does space separation
+
+  awk 'BEGIN {print "a" "b"}'
     #'ab'
       #string concat
 
+  # Without arguments, it defaults to `print $0`:
+
     [ "$(echo 'a' | awk '{print}')" = 'a' ] || exit 1
 
-## applications
+  # Note that the default action is to print:
+
+    [ "$(echo 'a' | awk '1')" = 'a' ] || exit 1
+    [ "$(echo 'a' | awk '1;1')" = "$(printf "a\na")" ] || exit 1
+
+## Applications
 
   # Print second field of all entries if first field equals a given integer value:
 
@@ -92,7 +147,9 @@
   # Record separator.
 
   # `''` is a special value that selects blank lines, i.e. paragraphs:
-  # http://unix.stackexchange.com/questions/82944/how-to-grep-for-text-in-a-file-and-display-the-paragraph-that-has-the-text/82958#82958
+
+  # - http://unix.stackexchange.com/questions/136218/grep-sed-or-awk-print-entire-paragraph-in-a-file-on-pattern-match
+  # - http://unix.stackexchange.com/questions/82944/how-to-grep-for-text-in-a-file-and-display-the-paragraph-that-has-the-text/82958#82958
 
     [ "$(printf '1 a0\na1\na2\n\nb0\nb1\nb2\n\nc0\nc1\nc2\n' | awk -v RS='' '/b1/')" = "$(printf 'b0\nb1\nb2')" ] || exit 1
 

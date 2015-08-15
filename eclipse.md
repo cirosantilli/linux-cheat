@@ -40,6 +40,24 @@ It is not possible to customize tab labels as with Vim's `guitablabel`: <http://
 
 Show full path to files: <http://stackoverflow.com/questions/3170379/eclipseide-is-there-a-way-to-add-the-workspace-path-to-the-eclipse-ide-title-ba> Important if you are running multiple Eclipse instances at once.
 
+### Configuration files
+
+Eclipse generates the following configuration files on projects:
+
+- `.project`
+- `.classpath`
+- `.settings/`
+
+You will want to gitignore them.
+
+It does not seem possible to ask Eclipse to prevent Eclipse from creating those files: <http://stackoverflow.com/questions/12563878/how-to-prevent-creation-of-project-files-in-eclipse-navigator>
+
+#### Eclipse.ini
+
+Global file on `$ECLIPSE_HOME` or in the eclipse installation folder by default.
+
+You should add more memory to the JVM that runs Eclipse for larger projects to load: <http://stackoverflow.com/questions/9565125/whats-the-recommended-eclipse-cdt-configuration-for-big-c-project-indexer-ta>
+
 ### Spell checking
 
 To add a word to the dictionary, you must first create the user dictionary. To get started, touch a `dict` file on your workspace, the search for spelling under preferences, and point to it.
@@ -306,22 +324,6 @@ Most useful meta variables:
 
     <http://stackoverflow.com/questions/3771934/eclipse-navigate-to-inheritor-base-declaration>
 
-## Configuration files
-
-Eclipse generates the following configuration files on projects:
-
-- `.project`
-- `.classpath`
-- `.settings/`
-
-You will want to gitignore them.
-
-It does not seem possible to ask Eclipse to prevent Eclipse from creating those files: <http://stackoverflow.com/questions/12563878/how-to-prevent-creation-of-project-files-in-eclipse-navigator>
-
-### Eclipse.ini
-
-Global file on `$ECLIPSE_HOME` or in the eclipse installation folder by default.
-
 ### Javadoc
 
 You can see the Javadoc of a project by hovering the mouse over the ID.
@@ -356,11 +358,22 @@ The website: <http://marketplace.eclipse.org/>
 
 Add Vim like editing to eclipse: <http://vrapper.sourceforge.net/update-site/stable>.
 
-C and C++: <http://download.eclipse.org/tools/cdt/releases/indigo/>
-
 Python: <http://pydev.org/updates>
 
 HTML, JavaScript, PHP: <http://download.eclipse.org/webtools/repository/indigo/>
+
+#### CDT
+
+C and C++: <http://download.eclipse.org/tools/cdt/releases/indigo/>
+
+For large projects, make sure that you add more memory to the VM at `Eclipse.ini` or the indexing hangs: <http://stackoverflow.com/questions/9565125/whats-the-recommended-eclipse-cdt-configuration-for-big-c-project-indexer-ta>
+
+Change file extension for C++:
+
+- <http://stackoverflow.com/questions/4728531/how-to-change-the-default-c-class-suffix-in-eclipse-cdt>
+- <http://stackoverflow.com/questions/226402/make-eclipse-treat-h-file-as-c>
+
+Useful to develop GCC, which uses `.c` and `.h` as C++...
 
 #### LaTeX
 

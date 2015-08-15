@@ -9,6 +9,7 @@ The user space programs of most Linux distributions are mostly inherited from th
 For example, the following central components originate from GNU:
 
 - GCC
+- Binutils
 - glibc
 - bash
 
@@ -25,8 +26,11 @@ The GNU software foundation is the creator and current maintainer of the GPL lic
 Interesting GNU links include:
 
 - high priority projects: <http://www.fsf.org/campaigns/priority-projects/>
-- list of all their software: <https://www.gnu.org/manual/blurbs.html>
+- <https://www.gnu.org/manual/blurbs.html>: list of all their software
+- <ftp://ftp.gnu.org/gnu/>: software download section
 - humour: <https://www.gnu.org/fun/fun.html>
+- <https://www.gnu.org/prep/standards/standards.html> coding standards
+- <https://www.gnu.org/prep/maintain/maintain.html> maintainer guidelines
 
 ## Savannah
 
@@ -39,3 +43,47 @@ Savannah allows anyone to hosted projects there, but there is a human review of 
 They have both `gitweb`, and `cgit` web interfaces.
 
 List of all projects: <http://git.savannah.gnu.org>
+
+## Vocabulary
+
+- PR: Problem Report, bug
+- CR: Change Request, feature request
+- RFC: Request For Comment, TODO?
+
+## Interesting projects
+
+- GCC
+- Binutils
+- glibc
+- bash
+- gnulib: http://www.gnu.org/software/gnulib/ C utilities library. Similar to 
+
+## Submitting patches
+
+Most GNU projects use hateful last century mailing lists... subscribe to them and use your email filters to deal with the noise...
+
+To generate patches, make a commit, then `git format-patch HEAD~ | xsel -b`, and send the output by email. You may add extra comments before the patch.
+
+The email subject should be the commit summary line.
+
+The commit message must end with the ChangeLog entry, which the committer will copy paste into the correct ChangeLog.
+
+*Don't* modify the ChangeLog yourself.
+
+You must indicate in which ChangeLog the entry will go by specifying it's directory.
+
+Example of commit message:
+
+    First summary line
+
+    More lines.
+
+    More lines.
+
+    subdir:
+
+    2000-01-01 Your Name  <your.name@email.com>
+
+            * file.c (function) Improve something.
+            (function1) Improve another thing.
+            * file2.c (function) Improve something.

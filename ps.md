@@ -8,27 +8,21 @@ On Ubuntu 12.04, implemented by the procps package.
 
 `ps` is a tool with a complicated past and multiple implementations.
 
-The procps version <http://procps.sourceforge.net/> supports
-multiple syntaxes for backwards compatibility:
+The procps version <http://procps.sourceforge.net/> supports multiple syntaxes for backwards compatibility:
 
 - UNIX options, which may be grouped and must be preceded by a dash.
 - BSD options, which may be grouped and must not be used with a dash.
 - GNU long options, which are preceded by two dashes.
 
-For your sanity, we recommend that you use POSIX and GNU syntax
-only wherever possible, never BSD syntax.
+For your sanity, we recommend that you use POSIX and GNU syntax only wherever possible, never BSD syntax.
 
-Implementations commonly use the proc filesystem (thus implemented procps)
-There does not seem to be a POSIX way to implement this,
-except maybe following a process tree.
+Implementations commonly use the proc filesystem (thus implemented procps) There does not seem to be a POSIX way to implement this, except maybe following a process tree.
 
 Good short summary:
 
     ps --help
 
-ps interface is ugly: some options have dash GNU style,
-others simply don't, and have no dash equivalent.
-Deal with it.
+ps interface is ugly: some options have dash GNU style, others simply don't, and have no dash equivalent. Deal with it.
 
 Best command to see all processes on the system:
 
@@ -44,13 +38,9 @@ Output fields include:
 
 -   `CMD`: command that launched th process without command line arguments
 
--   `RSS`: (not POSIX) Resident Set Size. Memory used directly by the program in the RAM (so no swap)
-    and that is not shared with other programs (shared memory like shared libraries).
-    <http://stackoverflow.com/questions/7880784/what-is-rss-and-vsz-in-linux-memory-management>
+-   `RSS`: (not POSIX) Resident Set Size. Memory used directly by the program in the RAM (so no swap) and that is not shared with other programs (shared memory like shared libraries). <http://stackoverflow.com/questions/7880784/what-is-rss-and-vsz-in-linux-memory-management>
 
--   `VSZ`: (not POSIX) Virtual Memory Size: the entire address space that is visible by the program,
-    although not necessarily loaded in memory. Includes swap and parts of shared libraries
-    not loaded in RAM.
+-   `VSZ`: (not POSIX) Virtual Memory Size: the entire address space that is visible by the program, although not necessarily loaded in memory. Includes swap and parts of shared libraries not loaded in RAM.
 
 -   `%MEM`: (not POSIX) percentage of `RSS` out of the total memory
 

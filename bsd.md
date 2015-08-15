@@ -18,3 +18,10 @@ Main variants:
 - FreeBSD
 - OpenBSD
 - NetBSD
+
+Major users: <https://www.freebsdfoundation.org/testimonials> include:
+
+- WhatsApp
+- Netflix
+- Xinuous
+- Experts Exchange

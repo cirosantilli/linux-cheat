@@ -93,7 +93,7 @@ Extended notably by the FHS.
 
 ### Environment variables
 
-In POSIX 7, those are defined in: Base Definitions > Environment Variables.
+<http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap08.html#tag_08>
 
 POSIX specifies:
 
@@ -128,7 +128,26 @@ The following variables don't have fixed purposes, but POSIX says that they must
 - `PAGER`: default pager program ( `more`, `less`, etc. )
 - `PPID`: PID of parent process
 
+### Exit status
+
+<http://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_08>
+
+Extends ANSI C (which specifies `0` for success):
+
+-   `126`: command found but not executable.
+
+-   `127`: command not found. Try:
+
+        asdfqwer
+        echo $?
+
+-   Values greater than 128 indicate that a process was terminated by a signal.
+
+    Linux goes further and [specifies that](http://www.gnu.org/software/bash/manual/bashref.html#Exit-Status) when terminated by a signal, the exit status shall be 128 + the normal error status.
+
 ### Command line interface
+
+<http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap12.html>
 
 Suggests the following format for documenting CLIs:
 
@@ -154,26 +173,9 @@ A few of the most interesting suggests for argument and utility name syntax:
 
 -   `-W` is reserved for vendor options
 
-### Exit status
-
-[POSIX specifies that](http://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_08):
-
--   `0`: success, all others for errors.
-
-    It may seem counter intuitive to call 0 success since it is associated with false in C, but it is like that because there is only one type of success, and the other values indicate the exact cause of failure.
-
--   `127`: command not found. Try:
-
-        asdfqwer
-        echo $?
-
--   `126`: command found but not executable.
-
--   Values greater than 128 indicate that a process was terminated by a signal.
-
-    GNU goes further and [specifies that](http://www.gnu.org/software/bash/manual/bashref.html#Exit-Status) when terminated by a signal, the exit status shall be 128 + the normal error status.
-
 ### Filenames
+
+<http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html#tag_04_12>
 
 POSIX filenames are extremely restrictive: more than any modern operating system:
 

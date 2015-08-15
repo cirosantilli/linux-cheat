@@ -37,10 +37,12 @@ Download an ISO like <http://releases.ubuntu.com/14.04/ubuntu-14.04.2-desktop-am
 
 `qemu-img` creates a disk image with 5G that will hold your hard disk data
 
-If you don't pass `-enable-kvm`, it will be really slow:
+If you don't pass `-enable-kvm`, it will be *really* slow:
 
 - <http://unix.stackexchange.com/questions/108122/installing-ubuntu-13-0-desktop-in-qemu>
 - <http://askubuntu.com/questions/419958/why-am-i-getting-a-black-screen-when-booting-vm-using-qemu>
+
+Even so, it is still slower than VirtualBox.
 
 There were some graphics artifacts, so it is was not really usable. But did seem to work.
 
@@ -110,3 +112,62 @@ If on a GUI window, closing it kills the VM.
 The same effect can be achieved with:
 
     shutdown
+
+## GDB
+
+TODO I can't get it to work: <https://sourceware.org/bugzilla/show_bug.cgi?id=13984#add_comment>
+
+First build the kernel with debug information by setting the `CONFIG_DEBUG_INFO` and `CONFIG_GDB_SCRIPTS` configurations.
+
+Use the `-s` and `-S` flags:
+
+    qemu-system-x86_64 -kernel ../build/arch/x86/boot/bzImage -initrd rootfs.cpio.gz -S -s
+
+Then:
+
+    gdb -ex "add-auto-load-safe-path ${vmlinux_path}-gdb.py" \
+        -ex "file ${vmlinux_path}" \
+        -ex 'target remote localhost:1234'
+
+`1234` is not officially reserved by anyone.
+
+Finally you can do:
+
+    hbreak start_kernel
+
+It must be a hardware breakpoint, `break` software breakpoints are ignored. TODO why? See also:
+
+- <https://bugs.launchpad.net/ubuntu/+source/qemu-kvm/+bug/901944>
+
+## Monitor
+
+Special mode that allows you to enter commands to QEMU.
+
+Enter with: `Ctrl + Alt + 2`.
+
+Leave with: `Ctrl + Alt + 1`.
+
+Those allow you to observe the program state without using an external debugger like GDB. GDB is more powerful however.
+
+## User mode
+
+QEMU can also emulate just processor to run compiled executables.
+
+The QEMU executables for this are named as:
+
+    qemu-ARCH
+
+unlike the full system emulators which are named;
+
+    qemu-system-ARCH
+
+E.g.:
+
+    qemu-x86_64 `which cpuinfo`
+    qemu-i386 program
+
+In Ubuntu 14.04, you need a separate package `qemu-user` for those.
+
+Of course, you can only run those programs if your OS can handle their system calls and required dynamic libraries are present compiled for that arch.
+
+`qemu-x86_64` refuses to run IA32 executables even though they run natively on Linux.

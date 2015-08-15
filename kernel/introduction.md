@@ -36,9 +36,17 @@ Urgent security fixes may get a new minor as `3.x.y`.
 
 Before a release, Linus announces feature freeze, and release candidates start being tagged as `3.x.rc1`, etc.
 
-Only a single branch exists. Patches are sent by email. TODO there are no back-ports?
+Patches are sent by email.
+
+<https://en.wikipedia.org/wiki/Linux_kernel#Maintenance>
 
 Top developers have their source under separate forks at: <https://git.kernel.org/cgit/linux/kernel/git/> with possibly multiple feature branches.
+
+### Backports
+
+Most releases get 3 month backport support.
+
+Every 1 year TODO check a long term support release comes out with 2 year support.
 
 ## What the kernel does
 

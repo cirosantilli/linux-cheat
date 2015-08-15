@@ -14,6 +14,7 @@
 1.  Virtualization
     1. [User mode Linux](user-mode-linux.md)
     1. [Lguest](lguest.md)
+1.  [Debug](debug.md)
 1.  [Style guide](style-guide.md)
 1.  [Trivia](trivia.md)
 

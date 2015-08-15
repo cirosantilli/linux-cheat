@@ -30,11 +30,11 @@ Determine your GRUB version with:
 
 Here we discuss GRUB 2.
 
-## configuration
+## Configuration files
 
 Input files:
 
--  `/etc/grub.d`
+-  `/etc/grub.d/*`
 - `/etc/default/grub`
 
 Generated files and data after `sudo update-grub`:
@@ -44,11 +44,31 @@ Generated files and data after `sudo update-grub`:
 
 ### /etc/default/grub
 
+Shell script sourced by `grub-mkconfig`.
+
+Can defined some variables which configure grub, but is otherwise an arbitrary shell script:
+
     sudo vim /etc/default/grub
 
--   `GRUB_DEFAULT`: default OS choice if cursor is not moved.
+-   `GRUB_DEFAULT`: default OS choice if cursor is not moved:
 
-    Starts from 0, the order is the same as shown at grub os choice menu.
+    Starts from 0, the order is the same as shown at grub OS choice menu:
+
+        GRUB_DEFAULT=0
+
+    The order can be found on the generated `/boot/grub/grub.cfg`: you have to count the number of `menuentry` calls.
+
+    To select sub-menus, which are created with the `submenu` call on `/boot/grub/grub.cfg`, use:
+
+        GRUB_DEFAULT='0>1'
+
+    You can also use OS name instead of a number, e.g.:
+
+        GRUB_DEFAULT='Ubuntu'
+
+    For a line from `/boot/grub/grub.cfg` of type:
+
+        menuentry 'Ubuntu'
 
 -   `GRUB_TIMEOUT` : time before auto OS choice in seconds
 
@@ -103,19 +123,25 @@ Windows example:
 
 It is common to add one OS menu entry per file so that it is easy to change their order (just change alphabetical order).
 
-### os_prober
-
-Looks for several OS and adds them automatically to GRUB menu.
-
-Recognizes Linux and Windows.
-
-TODO how to use it
+## Configuration scripts
 
 ### update-grub
 
-Interpret input configuration files and update `/etc/default/grub` which will be used at boot time.
+Just calls:
 
-You must to this every time you change the input configuration files for the changes to take effect.
+    grub-mkconfig -o /boot/grub/grub.cfg
+
+### grub-mkconfig
+
+Called by `update-grub` as:
+
+    grub-mkconfig -o /boot/grub/grub.cfg
+
+Important actions:
+
+- sources `/etc/default/grub`
+- sources `/etc/default/grub.d/*.cfg`, which may override options in `/etc/default/grub`
+- runs scripts under `/etc/grub.d`, which use the variables defined in the above sourced files
 
 ### grub-install
 
@@ -125,9 +151,16 @@ Interpret input configuration files and update the MBR on the given disk:
 
 If for example you install a new Linux distro, and you want to restore your old distro's GRUB configuration, you must log into the old distro and do `grub-install`, therefore telling your system via the MBR to use the installation parameters given on the old distro.
 
+### os_prober
+
+Looks for several OS and adds them automatically to GRUB menu.
+
+Recognizes Linux and Windows.
+
+TODO how to use it
+
 ## Bibliography
 
 -   <http://www.dedoimedo.com/computers/grub-2.html>
 
     Great configuration tutorial.
-

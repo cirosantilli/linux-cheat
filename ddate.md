@@ -2,7 +2,7 @@
 
 Discordian calendar date: <http://en.wikipedia.org/wiki/Discordian_calendar>!
 
-`utils-linux` package.
+`util-linux` package.
 
 Likely an atheist programmer tongue-in-the-cheek.
 

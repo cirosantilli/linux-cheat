@@ -1,16 +1,47 @@
 # VirtualBox
 
+If you only want command line emulation, use the Vagrant front-end for VirtualBox. It rules.
+
+## Ubuntu Quick start
+
+Restart your computer, and from the BIOS setup screen, enable hardware virtualization. This will make VirtualBox *much* faster.
+
+Let's emulate one Ubuntu inside another:
+
+    wget -q -O - http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc | sudo apt-key add -
+    sudo sh -c 'echo "deb http://download.virtualbox.org/virtualbox/debian precise non-free contrib" >> /etc/apt/sources.list.d/virtualbox.org.list'
+    sudo aptitude update
+    sudo aptitude install -y virtualbox-4.3
+
+Download an Ubuntu `.iso` image from the official website.
+
+Launch VirtualBox, and create a new image. Use the default settings.
+
+Insert the ISO into the virtual drive:
+
+- Settings
+- Storage
+- Click on the disk icon as shown on this video: <http://www.youtube.com/watch?feature=player_detailpage&v=hK-oggHEetc&t=538>
+
+and select a Live ISO we've downloaded.
+
+From there on, install Ubuntu as you would on regular hardware, and restart.
+
+## Introduction
+
 Open source cross platform option by Oracle.
 
 Create a VM with default configuration.
 
 If all you want to do is develop on a command line, forget the VirtualBox GUI, and go directly for Vagrant, which is much more automated for that purpose.
 
-All you have is an empty disk (disk file), but it cannot know where to boot from since it does not see you HD. Go: `settings > storage > click on the disk button` as shown on [this video](http://www.youtube.com/watch?feature=player_detailpage&v=hK-oggHEetc&t=538) and select a Live ISO for you desired distro. This ISO is mounted on the virtual DVD reader.
+## Mouse and keyboard
 
-Start running the system, and since the virtual HD is empty, it will boot from the ISO. Install that system. It will be just like installing on an empty HD. Reboot and you have a working system.
+Certain key combinations are always captured by the host, such as Ctrl-Alt-Del or Ctrl-Alt-BACKSPACE.
 
-Certain key combinations are always captured by the host, such as Ctrl-Alt-Del or Ctrl-Alt-BACKSPACE. You can send any Ctrl-Alt-KEY combination by using host_key + KEY, where host_key is right control version 4.2.
+You can send any Ctrl-Alt-KEY combination by using host_key + KEY, where host_key is right control version 4.2.
+
+There are also hosts that support VM integration: this allows you to capture the mouse automatically when you hover the VM window.
 
 ## Guest utils
 

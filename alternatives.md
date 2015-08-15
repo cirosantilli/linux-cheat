@@ -9,4 +9,9 @@ Major alternatives:
 
 - <https://en.wikipedia.org/wiki/IBM_AIX>, IBM system V based
 - <https://en.wikipedia.org/wiki/HP-UX>, HP system V based
-- <https://en.wikipedia.org/wiki/QNX>, strict real time and micro-kernel, bought by BlackBerry.
+
+Strict real time:
+
+- <https://en.wikipedia.org/wiki/QNX>, proprietary, micro-kernel, bought by BlackBerry.
+- <https://en.wikipedia.org/wiki/VxWorks>, proprietary
+- <https://en.wikipedia.org/wiki/ECos> GPL, started by Cygnus, discontinued by Red Hat, copyright later transfered to the FSF.

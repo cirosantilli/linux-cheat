@@ -2,6 +2,12 @@
 
 Get a list of system calls made by a given program.
 
+Most useful command:
+
+    sudo strace -f -s999 -v program.out
+
+Also consider `ltrace` to trace library calls.
+
 ## Assembly hello world
 
 For a minimal IA-32 NASM hello world:
@@ -98,7 +104,7 @@ we get:
     exit_group(0)                           = ?
     +++ exited with 0 +++
 
-Wow, boilerplate! Just a few more calls than with the raw assembly :-)
+Wow, boilerplate! Just a "few" more calls than with the raw assembly :-)
 
 If we remove the `puts()`, we see that the only commands it added were:
 
@@ -106,8 +112,6 @@ If we remove the `puts()`, we see that the only commands it added were:
     mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f4ed9996000
     write(1, "Hello world C\n", 14Hello world C
     )         = 14
-
-TODO understand
 
 ## f
 
@@ -132,4 +136,16 @@ Grepping for `cc1`, we see the lines:
     <unfinished ...>
     [pid  6312] execve("/usr/local/libexec/gcc/x86_64-unknown-linux-gnu/5.1.0/cc1", ["/usr/local/libexec/gcc/x86_64-un"..., "-quiet", "-imultiarch", "x86_64-linux-gnu", "hello_world.c", "-quiet", "-dumpbase", "hello_world.c", "-mtune=generic", "-march=x86-64", "-auxbase", "hello_world", "-o", "hello_world.s"], [/* 140 vars */] <unfinished ...>
 
-`[/* 140 vars */]` stands for environment variables, which was omitted because it would be too large.
+`[/* 140 vars */]` stands for environment variables, which was omitted because it would be too large. This abbreviation can be prevented with `-s999 -v`.
+
+## v
+
+## s
+
+Don't hide details of some system calls which would normally show `[/* 140 vars */]`.
+
+You may also need `-s999` to see everything, otherwise the maximum line limit might get hit.
+
+## Print addresses of string arguments
+
+<http://stackoverflow.com/questions/21819011/how-can-i-make-strace-to-print-addresses-instead-of-strings>

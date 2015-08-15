@@ -1,0 +1,4 @@
+@node Top
+@top var
+@c HTML: <var> tag!
+@var{foo}

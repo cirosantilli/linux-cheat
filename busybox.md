@@ -37,3 +37,11 @@ BusyBox also implements a version `init`, which is capable of reading `/etc/init
 Even though Ubuntu 14.04 does not have it installed by default, its boot system adds it to the `/boot/initrd*` files. Poetically speaking, the initial boot environment has characteristics of an embedded system.
 
 It is then the job of `init` to mount
+
+## Internals
+
+BusyBox uses the kernel's Kconfig mechanism.
+
+In particular, it is affected by variables like `KBUILD_OUTPUT` just like the kernel, and has identical targets like `defconfig` and `mrproper`.
+
+Unlike the kernel, the `KBUILD_OUTPUT` directory must exist before running `make`... Why?

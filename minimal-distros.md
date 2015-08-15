@@ -14,7 +14,17 @@ By default, this distribution only boots the RAM `initrd`: anything you do is lo
 
 ## Buildroot
 
+System to build distro images locally
+
 <http://buildroot.uclibc.org/>
+
+## Yocto Project
+
+<http://www.yoctoproject.org>
+
+Similar to Buildroot.
+
+Supported by the Linux Foundation.
 
 ## Alpine Linux
 

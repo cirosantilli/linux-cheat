@@ -48,7 +48,8 @@ System calls:
 
 -   `arch/x86/syscalls/syscal_32.tbl`, `arch/x86/syscalls/syscal_64.tbl`: maps system call numbers to the methods.
 
-    TODO what is `common` vs `x32` vs `64` in the `64.tbl` file?
+    - TODO what is `common` vs `x32` vs `64` in the `64.tbl` file?
+    - TODO `stub` functions like `stub_fork`: <http://stackoverflow.com/questions/23734170/why-do-certain-linux-x86-64-system-calls-require-a-stub>
 
 -   `arch/x86/kernel/entry_32.S`, `arch/x86/kernel/entry_64.S`: the low level system call handling
 
@@ -247,3 +248,11 @@ Therefore, the only way for end users to modify firmware themselves is to revers
 This also means that firmware could be a source of security vulnerability, as it is an undocumented feature of the hardware.
 
 The Linux kernel must fix firmware feed to devices so that they are in a known documented state, against which drivers can be coded.
+
+## Vocabulary
+
+### Sub-leaves
+
+In the context of CPUID and `/proc/cpuinfo`, most CPUID take a single input: eax.
+
+But recent CPUID instructions are also taking ecx as a second level after eax, thus the leaf of a two level tree.

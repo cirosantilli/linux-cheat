@@ -20,6 +20,14 @@ It is also maintained by the Linux foundation, and required by the LSB.
 
 System crashes, but Ubuntu uses it for user space as well using the <https://packages.debian.org/unstable/main/corekeeper> package.
 
+## libexec
+
+Executables meant to be called only from other executables, and not directly be in the `PATH`.
+
+http://www.linuxbase.org/betaspecs/fhs/fhs/ch04s07.html
+
+Optional and not present in Ubuntu 14.04, but the concept is used by GCC (e.g. for `cc1`) and Git (external commands).
+
 ## De facto extensions
 
 Common naming patterns not present in any major standard.
@@ -47,10 +55,7 @@ See:
 
 <http://unix.stackexchange.com/questions/84280/is-etc-issue-common-file>
 
-Of course, since this is meant to be shown to end users,
-it serves as a broadcast message for CLI only environments,
-and should not be used to identify the distribution even though
-it usually contains the distribution ID by default.
+Of course, since this is meant to be shown to end users, it serves as a broadcast message for CLI only environments, and should not be used to identify the distribution even though it usually contains the distribution ID by default.
 
 ### ^\.
 

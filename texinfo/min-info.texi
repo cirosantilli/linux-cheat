@@ -1,0 +1,2 @@
+@node Top
+@top Minimal file that shows in info without warning

@@ -33,8 +33,6 @@ set -eu
 
       sed -n '/find/p'
 
-## Syntax
-
   ## e
 
     # Execute.
@@ -58,6 +56,8 @@ set -eu
       # Can exec sed script with following shebang:
 
         #!/bin/sed -f
+
+## Syntax
 
   ## s command
 
@@ -125,15 +125,21 @@ set -eu
 
       [ "$(printf 'a\nb\n' | sed -n '$ p')" = 'b' ]
 
-    # Before last line: TODO http://stackoverflow.com/questions/14115820/vim-vi-sed-act-on-a-certain-number-of-lines-from-the-end-of-the-file
+    # TODO Before last line:
+    # http://stackoverflow.com/questions/14115820/vim-vi-sed-act-on-a-certain-number-of-lines-from-the-end-of-the-file
 
     # Line matches pattern:
 
       [ "$(printf 'a\nb\n' | sed '/a/ s/./c/')" = $'c\nb' ]
 
+    # An empty pattern like `//` means: reuse the last regexp.
+
     # Line range:
 
       [ "$(printf 'a\nb\nc\nd\n' | sed '1,3 s/./e/')" = $'e\ne\ne\nd' ]
+
+    # Multiple individual lines:
+    # http://unix.stackexchange.com/questions/117511/is-it-possible-to-match-multiple-specific-line-numbers-not-range-with-sed
 
     ## pattern range
 
@@ -156,7 +162,7 @@ set -eu
         [ "$(printf 'a\nb\n' | sed -n '1! p')" = 'b' ]
         [ "$(printf 'a\nb\n' | sed -n '/a/! p')" = 'b' ]
 
-  ## multiple commands
+  ## Multiple commands
 
     # Concatenate with ; or newlines:
 
@@ -174,7 +180,11 @@ set -eu
 
       [ "$(printf 'a\nb\n' | sed '/a/ d')" = 'b' ]
 
-  ## a, i, c
+  ## a
+
+  ## i
+
+  ## c
 
     # Append (after), insert (before), change
 
@@ -343,29 +353,36 @@ set -eu
 
 ## Applications
 
-  # If modified, print line number, old line, new line
+  ## Show substitutions made
 
-  # E.g.:
+    # If modified, print line number, old line, new line
 
-  # Input:
+    # E.g.:
 
-    #a
-    #b
-    #a
-    #b
+    # Input:
 
-  # Regex: `s/a/c/`.
+      #a
+      #b
+      #a
+      #b
 
-  # Output:
+    # Regex: `s/a/c/`.
 
-    #1
-    #a
-    #c
-    #
-    #3
-    #a
-    #c
+    # Output:
 
-  [ "$(printf 'a\nb\na\nb\n' | sed -n 'h; s/a/c/; t p; d; :p {=;x;G;s/$/\n/;p}')" = $'1\na\nc\n\n3\na\nc\n' ]
+      #1
+      #a
+      #c
+      #
+      #3
+      #a
+      #c
+
+        [ "$(printf 'a\nb\na\nb\n' | sed -n 'h; s/a/c/; t p; d; :p {=;x;G;s/$/\n/;p}')" = $'1\na\nc\n\n3\na\nc\n' ]
+
+  ## Print all lines between a start and end matching lines
+
+    # http://unix.stackexchange.com/questions/17404/show-only-text-between-2-matching-pattern
+    # http://stackoverflow.com/questions/17988756/how-to-select-lines-between-two-marker-patterns-which-may-occur-multiple-times-w
 
 echo 'ALL ASSERTS PASSED'

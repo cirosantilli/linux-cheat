@@ -91,7 +91,16 @@ Important niche of application for VMs include:
 
 -   Docker: <https://github.com/dotcloud/docker>
 
-## Formats
+### Hypervisor
+
+TODO vs virtualization?
+
+- type 1: runs directly on the hardware. You boot into it to start with. E.g.: Xen
+- type 2: runs on top of an OS. E.g.: VirtualBox.
+
+KVM: hard to say.
+
+## File formats
 
 ### ovf
 
