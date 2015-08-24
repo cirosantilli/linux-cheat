@@ -119,10 +119,6 @@ The MBR can only be at the start of a physical partition, not of a logical parti
 
 This is why on bootloader configurations you give `/dev/sda`, instead of `/dev/sda1-4`.
 
-## fuseblk
-
-TODO. NTFS partitions as such.
-
 ## Format disks
 
 To format a disk is to prepare it for initial utilization, often destroying all data it contains.
@@ -188,46 +184,11 @@ You should only use on partition devices (ex: `sda1`), not on the entire devices
 
 If you want to edit the partition table, first use a tool like `fdisk`.
 
-## tune2fs
-
-Get and set parameters of ext filesystems that can be tuned after creation.
-
-List all parameters:
-
-    sudo tune2fs -l /dev/sda5
-
-## gparted
-
-GUI to `fdisk` + `mke2fs.`
-
-Very powerful and simple to use.
-
-## parted
-
-Get information on all partitions
-
-Very useful output form:
-
-    sudo parted -l
-
-Sample output:
-
-    Number Start  End   Size  Type   File system   Flags
-    1   1049kB 1574MB 1573MB primary  ntfs      boot
-    2   1574MB 102GB  100GB  primary  ntfs
-    4   102GB  485GB  384GB  extended
-    5   102GB  465GB  363GB  logical  ext4
-    7   465GB  481GB  16.7GB logical  ext4
-    6   481GB  485GB  4005MB logical  linux-swap(v1)
-    3   485GB  500GB  14.7GB primary  ntfs
-
 ## sda
 
 ## sdb
 
 ## hda
-
-## Device files
 
 Each hard disk and partition corresponds to device file.
 
@@ -264,6 +225,10 @@ If a MBR is not present and a filesystem starts directly at the start of the dev
 
 ### IDE
 
+### PATA
+
+### Parallel ATA
+
 ### hd vs sd
 
 `hd` is for IDE disks, `sd` for SATA disks.
@@ -274,45 +239,18 @@ SATA stands for Serial Advanced Technology Attachment (or Serial ATA) and IDE is
 
 But by the beginning of 2007, SATA had largely replaced IDE in all new systems.
 
+Both have the same device number 8.
+
 <http://www.diffen.com/difference/IDE_vs_SATA>
+
+### SCSI
+
+Both SATA and IDE are SCSI. This is why both `hd` and `sd` have the same major device number.
+
+<https://en.wikipedia.org/wiki/SCSI>
 
 ## Raw device
 
 <http://en.wikipedia.org/wiki/Raw_device>
 
 Bypasses the OSs filesystem management like caching, allowing user programs to do it
-
-## sr0
-
-CD DVD.
-
-`/dev/cdrom` is a symlink to it.
-
-## mmcblk0
-
-A SanDisk SD card had a device named `mmcblk0`.
-
-## /dev/disk
-
-Symlinks to partition identifiers.
-
-Allows you to get identifier info.
-
-If id no present, link not there.
-
-Example:
-
-    cd /dev/disk/
-    ls -l
-    by-id
-    by-label
-    by-path
-    by-uuid
-
-    ls -l by-id
-
-## fsck
-
-File System Check.
-
-Check and repair Linux filesystems.

@@ -4,6 +4,10 @@ Count files, line of code, empty lines and comment lines under directory.
 
     cloc .
 
+Does not seem possible to add new languages. For more flexibility see: <http://stackoverflow.com/questions/1358540/how-to-count-all-the-lines-of-code-in-a-directory-recursively> A good one is:
+
+    ( find ./ -name '*.tex' -print0 | xargs -0 cat ) | wc -l
+
 Sample output for GDB:
 
         4770 text files.

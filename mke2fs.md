@@ -13,11 +13,17 @@ Consider using gparted if you have X11.
 
 Great way to study how file systems work byte by byte.
 
-ext2 needs at least 64k (TODO exact minimum).
+ext2 needs at least 64k (TODO exact minimum?)
 
-    dd if=/dev/zero of=a.ex2 bs=1024 count=64
-    echo y | mke2fs -t ext2 a.ex2
+    F=a.ex2
+    dd if=/dev/zero of="$F" bs=1024 count=64
+    echo y | mke2fs -t ext2 "$F"
     mkdir -p d
-    sudo mount a.ex2 d -o loop
+    sudo mount "$F" d -o loop
     # Do stuff
+    echo a > d/f
     sudo umount d
+
+Now `file a.ex2` says:
+
+    a.ex2: Linux rev 1.0 ext2 filesystem data, UUID=f2c40840-cf93-49d9-a3b7-353c8994ee46

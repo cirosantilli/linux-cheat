@@ -25,16 +25,57 @@ In scripts, always use the more versatile (and slightly more verbose) read while
 
 Or do yourself a favor and use Python.
 
-## -I
+## Default operation
 
-What you will want to use 95% of the time are commands of the form:
+## L
 
-    printf 'a\nb\n' | xargs -I'{}' echo '{}'
+The default of operation of `xargs` is undetermined and thus insane. When you do:
 
-which will expand to:
+    printf 'a\nb\nc\n' | xargs echo
+
+any one of following things can happen:
 
     echo a
     echo b
+    echo c
+
+or:
+
+    echo a b
+    echo c
+
+or more likely since the input is small, but not certainly:
+
+    echo a b c
+
+To see an actual example where line breaks are added on Ubuntu 14.04, try:
+
+    echo {a..z}{a..z}{a..z}{a..z} | xargs echo | wc
+
+which give me 18 lines.
+
+This happens because there is a maximum number of stdin bytes that get pasted on each command line.
+
+To fix this number, use `-L`, or better, `-I{}` which implies `-L1`.
+
+With `-L` we can be sure that:
+
+    [ "$(printf 'a\nb\nc\n' | xargs -L1 echo)" = "$(printf 'a\nb\nc')" ] || exit 1
+    [ "$(printf 'a\nb\nc\n' | xargs -L2 echo)" = "$(printf 'a b\nc')"  ] || exit 1
+    [ "$(printf 'a\nb\nc\n' | xargs -L3 echo)" = "$(printf 'a b c')"   ] || exit 1
+
+## I
+
+What you will want to use 95% of the time are commands of the form:
+
+    printf 'a\nb\n' | xargs -I'{}' echo '{}' ASDF
+
+which is equivalent to:
+
+    echo a
+    echo b
+
+`echo` is called multiple times.
 
 This is so common that you should:
 
@@ -51,7 +92,7 @@ You should always to use `-I` because:
 
     By default, **XARGS TAKES MULTIPLE LINES AND FEEDS THEM ALL TO THE COMMAND AT ONCE**, so:
 
-        printf 'a\nb\n' | xargs echo
+        [ printf 'a\nb\n' | xargs echo ]
 
     Likely expands to a single `echo a b`, because by default it took 2 lines at once.
 
@@ -63,19 +104,19 @@ You should always to use `-I` because:
 
     By default, xargs does not quote arguments for you:
 
-        printf '1\n2\n' | xargs -L2 printf '%d %d'
+        printf '1\n2\n' | xargs -L2 printf '%d | %d'
 
-    correctly prints `1 2`, so it did not quote as `'1 2'`.
+    correctly prints `1 | 2`, so it did not quote as `'1 2'`.
 
     Therefore, always quote yourself when you want one command per line:
 
         printf 'a\nb\n' | xargs -I'{}' echo '{}'
 
-**This will still fail for filenames with quotes**! Must use `-0` in that case.
+**This will still fail for filenames with quotes**! Must use `-0` in that case. E.g.:
 
     echo "'" | xargs
 
-Gives an error
+Gives an error:
 
     xargs: unmatched single quote; by default quotes are special to xargs unless you use the -0 option
 

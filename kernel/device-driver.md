@@ -8,19 +8,35 @@ Device files are not regular on disk files, but offer an interface similar to di
 
 On this case however, it is entirely up to the device to implement what each system call should do. Obviously, developers should use intuitive calls for the operations, so for example `open` should make any required initializations, `write` send data to the device, `read` get data from the device, and `close` make cleanup operations.
 
+Devices drives do not need to map to actual physical devices like keyboards, cameras etc., even though most are linked in some way to physical devices. E.g., `/dev/null` has absolutely no relation to physical objects.
+
 The standard location for device files is `/dev/`. This section will not cover the standard device drivers present there.
 
-## Parameters
+## Type
+
+## Major number
+
+## Minor number
 
 Three parameters identify a device driver:
 
-- type: either block or char
-- major number
-- minor number
+1.  type: either block or char
 
-You can retrieve those numbers for a given device file with the `stat` system call, and that information also appears on both the stat utility and `ls -l`.
+    The type is required: a given major / minor pair can have two completely different meanings
 
-E.g.:
+1.  Major number.
+
+    Traditionally tells kernel which driver controls the device represented by this file.
+
+    Currently many drivers can share a single major number.
+
+1.  Minor number.
+
+    ID of each hardware controlled by a given driver.
+
+### Get type, major and minor numbers
+
+The `stat` system call gets it:
 
     stat /dev/null
 
@@ -28,8 +44,8 @@ Sample output:
 
       File: ‘/dev/null’
 
-      Size: 0         	Blocks: 0          IO Block: 4096   character special file
-    Device: 5h/5d	Inode: 1029        Links: 1     Device type: 1,3
+      Size: 0           Blocks: 0          IO Block: 4096   character special file
+    Device: 5h/5d   Inode: 1029        Links: 1     Device type: 1,3
     Access: (0666/crw-rw-rw-)  Uid: (    0/    root)   Gid: (    0/    root)
     Access: 2015-04-20 08:15:17.667233382 +0200
     Modify: 2015-04-20 08:15:17.667233382 +0200
@@ -41,15 +57,38 @@ Which says:
     character special file
     Device type: 1,3
 
-And:
+That information also appears the output of `ls -l` which uses `stat` under the hood:
 
     ls -l /dev/null
 
-Gives:
+Sample output:
 
     crw-rw-rw- 1 root root 1, 3 Apr 20 08:15 /dev/null
 
 The `c` says it is a character device. `1,  3` appear where the file size would be, and show the major and minor numbers instead. For a block device it would be `b` instead.
+
+Get a list of all major numbers attributed and the name of the related device:
+
+    cat /proc/devices
+
+### Representation of major and minor numbers
+
+Major and minor numbers are stored inside a `dev_t` type (a single int, with some bytes for each number). You can manipulate `dev_t` with the macros:
+
+- `MAJOR(dev_t dev)`: get major number of a `dev_t`
+- `MINOR(dev_t dev)`: get major number of a `dev_t`
+- `MKDEV(int major, int minor)`: make `dev_t` from major and minor
+
+### Standard device numbers
+
+Standard device number and paths are documented at: <http://www.lanana.org/docs/device-list/devices-2.6+.txt>, which is part of the LSB.
+
+They are documented on the kernel 4.1 at: `Documentation/devices.txt`.
+
+The device numbers are actually set on the kernel 4.1 at: `include/uapi/linux/major.h`. Note that it is under `uapi` since those numbers need to be seen outside of the kernel. Character / block device numbers are simply repeated, e.g.:
+
+    #define VCS_MAJOR       7
+    #define LOOP_MAJOR      7
 
 ## Create new device files
 
@@ -79,34 +118,6 @@ Represent things like hard disks, CDs, etc., which have a size, and let you do r
 ### Network interfaces
 
 TODO
-
-## Major and minor numbers
-
-Using `ls -l`:
-
-    crw-rw----  1 root tty       7,   1 Feb 25 09:29 vcs1
-                                 ^    ^
-                                 1    2
-
-1.  Major number.
-
-	Traditionally tells kernel which driver controls the device represented by this file.
-
-	Currentlly many drivers can share a single major number.
-
-2.  Minor number.
-
-	ID of each hardware controlled by a given driver.
-
-Get a list of all major numbers attributed and the name of the related device:
-
-	cat /proc/devices
-
-Both are stored inside a `dev_t` type (a single int, with some bytes for each number). You can manipulate `dev_t` with the macros:
-
-- `MAJOR(dev_t dev)`: get major number of a `dev_t`
-- `MINOR(dev_t dev)`: get major number of a `dev_t`
-- `MKDEV(int major, int minor)`: make `dev_t` from major and minor
 
 ## Coding device drivers
 

@@ -13,16 +13,17 @@ Show lots of information:
 Sample output:
 
     -rw-rw-r-- 1 ciro ciro  4 Feb 25 11:53 a
-    1     2 3  4    5 6      7
+    1          2 3    4     5 6            7
 
 1. file permissions. See permissions
-2. for files, number of hardlinks. For directories, it is the number of subdirs + parent + self,
-    the minimum being 2 therefore.
+2. for files, number of hardlinks. For directories, it is the number of subdirs + parent + self, the minimum being 2 therefore.
 3. owner
 4. group
 5. size in bytes
 6. last modified
 7. filename
+
+`ls` permissions can also have a trailing `+` in case of ACL: <http://serverfault.com/questions/227852/what-does-a-mean-at-the-end-of-the-permissions-from-ls-l>
 
 `ls` is aware if its output goes to a pipe or not. if yes, automatically newline separates it:
 

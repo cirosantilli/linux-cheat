@@ -191,7 +191,9 @@ Seems to contain utilities which are useful throughout the kernel, such as:
 
 ## scripts
 
-Scripts used to build the kernel.
+Various scripts, and most importantly the ones used to build the kernel.
+
+`Makefile.build` and `Kbuild.include` are central build files.
 
 ## driver
 

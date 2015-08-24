@@ -4,6 +4,8 @@ First learn that emulation and virtualization are different: <http://stackoverfl
 
 QEMU is originally an emulator. However a kernel module for it was created that allows it to use KVM virtualization with the `-enable-kvm` flag, which is much faster.
 
+QEMU is used a lot in the context of Linux kernel development. Understanding all it's options is a great way to learn Linux kernel packaging.
+
 The top 3 contributors are Red Hat employees.
 
 <http://qemu.org>
@@ -12,9 +14,19 @@ The top 3 contributors are Red Hat employees.
 
 <https://github.com/qemu/qemu>
 
+## User vs system modes
+
+There are two main modes for QEMU operation: user or system.
+
+System mode emulates the entire hardware, and requires you to use an OS with it. It is what we are usually most interested in.
+
+System mode executables are named as `qemu-system-ARCH`.
+
+User mode emulation just makes the CPU look like a new one, but reuses the currently running OS. Executable names are of form `qemu-ARCH`.
+
 ## Kernel without image
 
-The simplest way to run a Linux kernel in QEMU is to give it:
+The simplest way to run a Linux kernel from source in QEMU is to give it:
 
 - the kernel you compiled
 - the root filesystem in which you will login
@@ -28,14 +40,32 @@ where:
 - `bzImage` is an output of the kernel build at `arch/x86/boot/bzImage` in v4.0
 - `initrd.cpio.gz` is an `initrd` like can be generated with Minimal Linux Live: basically a cpio inside a `.gz` which contains the root filesystem without the kernel
 
-## Ubuntu ISO
+## ISO
+
+### Minimal Linux Live
+
+<https://github.com/ivandavidov/minimal>
+
+It is so minimal, that you don't even need KVM for it to work well.
+
+Already contains `qemu` run scripts on the source, which does:
+
+    qemu-system-x86_64 -cdrom minimal_linux_live.iso
+
+`file` says it is an x86 boot sector.
+
+### cdrom
+
+TODO is there a difference between:
+
+    qemu-system-x86_64        minimal_linux_live.iso
+    qemu-system-x86_64 -cdrom minimal_linux_live.iso
+
+### Ubuntu ISO
 
 Download an ISO like <http://releases.ubuntu.com/14.04/ubuntu-14.04.2-desktop-amd64.iso> and:
 
-    qemu-img create img.img 5G
     qemu-system-x86_64 -boot d -cdrom ./ubuntu-14.04.2-desktop-amd64.iso -m 512 -enable-kvm
-
-`qemu-img` creates a disk image with 5G that will hold your hard disk data
 
 If you don't pass `-enable-kvm`, it will be *really* slow:
 
@@ -46,15 +76,7 @@ Even so, it is still slower than VirtualBox.
 
 There were some graphics artifacts, so it is was not really usable. But did seem to work.
 
-## Generate an image
-
-### Minimal Linux Live
-
-Consider: <https://github.com/ivandavidov/minimal>
-
-It is so minimal, that you don't even need KVM for it to work well.
-
-Already contains `qemu` run scripts on top of that.
+`file ./ubuntu-14.04.2-desktop-amd64` says that it is an x86 boot sector.
 
 ### qemu-make-debian-root
 
@@ -71,7 +93,7 @@ Requires sudo because this must mount a device on the file.
 
 `trusty` and `http://archive.ubuntu.com/ubuntu` are forwarded to `debootstrap`.
 
-## Run qemu in the terminal
+## Run QEMU in the terminal
 
 Normally, QEMU opens up an X window.
 
@@ -89,17 +111,61 @@ TODO
 
 ## Persistent storage
 
-TODO Likely something with `hda`?
+The `-hdX` options emulate attaching hard disks to the computer.
+
+Those hard disks are file backed.
+
+Example:
+
+    F=a.ex2
+    dd if=/dev/zero of="$F" bs=1024 count=64
+    echo y | mke2fs -t ext2 "$F"
+    qemu-system-x86_64 -boot d -cdrom minimal_linux_live.iso -hda a.ex2
+
+Now from inside the emulator we can do:
+
+    mkdir d
+    mount /dev/sda d
+    echo a > d/f
+    poweroff
+
+If you pass `-hdb` instead of `-hda`, the device will still be `/dev/sda` because it is the first one to be found (if you haven't passed `-hda` as well).
+
+Now if we restart the emulator and do:
+
+    mkdir d
+    mount /dev/sda d
+    cat d/f
+
+We get:
+
+    a
+
+We could also verify that the backing file has been modified by mounting it to a loop device.
+
+### Boot from the current system
+
+**Don't do this**:
+
+    #sudo qemu-system-x86_64 -m 512 -enable-kvm -hda /dev/sda
+
+The emulation works at first, but then breaks your system because of file usage conflicts.
+
+TODO: how to fix it afterwards?
 
 ### qemu-img
 
-TODO get this working.
+### qcow2
 
-Creates the place where the hard disk of the guest will be stored.
+While `dd` + `mke2fs` is a simple and standard way to generate an image, it is not very versatile.
 
-There are multiple formats.
+QEMU has a specific disk format called *qcow2* which allows for further capabilities. 
 
-`raw`, the simplest one, is equivalent to doing an `fallocate` or `dd`.
+`qemu-img` is a tool capable of creating such images.
+
+`man qemu-img` says that qcow2 can also do:
+
+> smaller images (useful if your filesystem does not supports holes, for example on Windows), optional AES encryption, zlib based compression and support of multiple VM snapshots
 
 ## ARM in x86
 

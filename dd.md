@@ -46,19 +46,19 @@ Default values: 512 B.
 
 ## count
 
-Copy up to count blocks (defined by bs):
+Copy up to count blocks (defined by `bs`):
 
-    [ `echo -n 1234 | dd status=none bs=2 count=1` = 12 ] || exit 1
-    [ `echo -n 1234 | dd status=none bs=1 count=3` = 123 ] || exit 1
+    [ "$(printf '1234' | dd status=none bs=2 count=1)" = '12' ] || exit 1
+    [ "$(printf '1234' | dd status=none bs=1 count=3)" = '123' ] || exit 1
 
 ## size suffixes
 
--`c`: 1 (char)
--`w`: 2 (word)
--`kB`: 1000
--`K`: 1024
--`MB`: 1000*1000
--`M`: 1024*1024
+- `c`: 1 (char)
+- `w`: 2 (word)
+- `kB`: 1000
+- `K`: 1024
+- `MB`: 1000*1000
+- `M`: 1024*1024
 
 and so on for G, T, P, E, Z and Y!
 
@@ -101,6 +101,12 @@ Most useful ones:
 
 TODO
 
+## verbose
+
+## Monitor progress
+
+Not easy: <http://askubuntu.com/questions/215505/how-do-you-monitor-the-progress-of-dd>
+
 ## Applications
 
 Copy one hard disk to another:
@@ -132,7 +138,7 @@ We recommend sticking to the GNU version, as it is maintained by an organization
 
 Basic usage:
 
-    dd -fv /dev/from /dev/to ddrescue.log
+    ddrescue -fv /dev/from /dev/to ddrescue.log
 
 - `-f`: write even if destination exists already. Required to copy device files to other device files.
 - `-v`: print the transfer status while it is going on.

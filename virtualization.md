@@ -20,6 +20,10 @@ To interface with the guest from the host, you can either either use:
 
 Filesystem may be set to be a file on the host representing the filesystem.
 
+Use a minimal distribution like Minimal Linux Live to better understand how virtualization tools work.
+
+Once you are done emulating a hardware you own, run things on the actual hardware to see if it *really* works as expected.
+
 ## Applications
 
 -   switch quickly between the two OS without reboot or the need to partition your disk.

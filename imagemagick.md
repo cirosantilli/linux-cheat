@@ -32,6 +32,12 @@ Does not do:
 
 - DJVU
 
+### Convert formats
+
+Multiple JPG to a single PDF:
+
+    convert in0.jpg in1.jpg out.pdf
+
 ### resize
 
 Resize to 50% or original size:
@@ -56,7 +62,7 @@ Resize to fixed width of 100 px, height maintains original proportion:
 
 `10x10`: rectangle to keep:
 
-        convert -crop 10x10 a.jpg b.jpg
+    convert -crop 10x10 a.jpg b.jpg
 
 `+10+10`: top left corner of rectangle
 

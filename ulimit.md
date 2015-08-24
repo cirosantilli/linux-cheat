@@ -2,11 +2,15 @@
 
 Bash built-in.
 
+POSIX 2013 CLI utility: <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/ulimit.html> and deprecated C API function.
+
 Get and set resource limits for a process and its children.
 
-POSIX 2013: <http://pubs.opengroup.org/onlinepubs/9699919799/utilities/ulimit.html>
+Linux and POSIX offer several per process limits.
 
-Linux and POSIX offer several per process limits. POSIX ones are documented with the `getrlimit` interface at <http://pubs.opengroup.org/onlinepubs/9699919799/functions/getrlimit.html> which Linux implements with identically named system calls.
+POSIX ones are documented with the `getrlimit` interface at <http://pubs.opengroup.org/onlinepubs/9699919799/functions/getrlimit.html>
+
+Linux implements both `getrlimit()` and `ulimit()` with `sys_getrlimit`. `ulimit()` was deprecated in POSIX 7, but not the CLI utility.
 
 On Ubuntu, implemented as a `sh` and `bash` built-in:
 

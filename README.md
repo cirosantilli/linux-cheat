@@ -30,7 +30,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [dmesg](demesg.md)
     1. [installkernel](installkernel.md)
 1.  Initialization
-    1. [Install OS](install-os.md): how to install a new OS
+    1. [Install Operating System](install-operating-system.md): how to install a new OS
     1. [Boot](boot.md)
     1. [GRUB](grub.md)
     1. [Init](init.md): System V, Upstart
@@ -53,6 +53,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [mountall](mountall.md)
     1.  [pathchk](pathchk.md)
     1.  [swap partition](swap-partition.md)
+    1.  [tune2fs](tune2fs.md)
     1.  [UUID](uuid.md)
     1.  ext filesystems
         1. [e2label](e2label.md)
@@ -63,6 +64,8 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1.  [proc filesystem](proc-filesystem.md)
         1.  [dev filesystem](dev-filesystem.md)
             1. [mknod](mknod.md)
+            1. [/dev/loop](/dev/loop.md)
+            1. [/dev/sr0](/dev/sr0.md)
         1.  [sysfs](sysfs.md)
         1.  [ramfs](ramfs.md)
         1.  [binfmt_misc filesystem](binfmt-misc-filesystem.md)
@@ -89,6 +92,9 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  File managers
         1. [Krusader](krusader.md)
         1. [vifm](vifm.md)
+    1.  Partitions
+        1.  [parted](parted.md)
+        1.  [gparted](gparted.md)
     1.  [CD DVD](cd-dvd.md)
         [isoinfo](isoinfo.md)
         [eject](eject.md)

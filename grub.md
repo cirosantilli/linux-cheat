@@ -159,6 +159,14 @@ Recognizes Linux and Windows.
 
 TODO how to use it
 
+## Multiboot specification
+
+<https://en.wikipedia.org/wiki/Multiboot_Specification>
+
+Standard created by GRUB for booting OSes.
+
+Followed by Linux and many NIXes, but not Windows or Mac.
+
 ## Bibliography
 
 -   <http://www.dedoimedo.com/computers/grub-2.html>

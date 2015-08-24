@@ -2,11 +2,13 @@
 
 View and edit partition tables and disk parameters.
 
+Mnemonic: Format disk.
+
+util-linux package.
+
 REPL interface.
 
 Does not create filesystems. For that see: `mke2fs` for ext systems.
-
-Mnemonic: Format disk.
 
 Better use gparted for simple operations if you have X11
 
@@ -37,6 +39,8 @@ Sample output for each disk:
     /dev/sda6    940277760  948099071   3910656  82 Linux swap / Solaris
     /dev/sda7    907640832  940267519  16313344  83 Linux
 
+TODO: what is the `boot` column?
+
 ## REPL
 
 Edit partitions for `sdb` on REPL interface:
@@ -48,9 +52,9 @@ Operation: make a list of changes to be made, then write them all to disk and ex
 Most useful commands:
 
 - `-m`: list options
-- `-p`: print info on partition, same as using `-l` option.
-- `-o`: create new DOS partition table.
-- `-n`: create new partition.
-- `-d`: delete a partition.
-- `-w`: write enqueued changes and exit.
+- `-p`: print info on partition, same as using `-l` option
+- `-o`: create new DOS partition table
+- `-n`: create new partition
+- `-d`: delete a partition
+- `-w`: write enqueued changes and exit
 

@@ -49,3 +49,9 @@ Not very automated, although there is an automated version at: <http://www.linux
 <https://en.wikipedia.org/wiki/Damn_Small_Linux>
 
 Seemed popular, but died in 2008?
+
+## TODO test
+
+Tiny core Linux: <http://tinycorelinux.net/>, source: <http://git.tinycorelinux.net/index.cgi> Minimalistic with X.
+
+Minimalistic, text based, security: <http://rlsd2.dimakrasner.com/>

@@ -69,3 +69,13 @@ For example, from the `lspci` output, in `GF108M [NVS 5400M]`:
 ### NVIDIA settings
 
 To check that the installation is working, use `nvidia-settings`, which monitors the GPU, and will show if the GPU is not properly installed.
+
+## dGPU
+
+Discrete GPU, a traditional GPU separate from the CPU, with it's own internal memory.
+
+## IGP
+
+Intermediate between CPU and GPU, uses RAM memory.
+
+<http://en.wikipedia.org/wiki/Graphics_processing_unit#Integrated_graphics_solutions>

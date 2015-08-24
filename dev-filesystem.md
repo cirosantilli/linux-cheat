@@ -1,12 +1,11 @@
 # dev filesystem
 
-Contains device driver files.
+Contains device driver files, and things related to device drivers like symlinks that give nice names to device drives.
 
-To really understand what is going on, learn how to make a minimal device driver yourself. This is not documented here.
+To understand what is going on, make a minimal device driver yourself. This is not documented here. Prerequisites you will learn when you do that:
 
-Standard device number and paths are documented at: <http://www.lanana.org/docs/device-list/devices-2.6+.txt>, which is part of the LSB.
-
-Some devices are created automatically by the Kernel even if there is no corresponding hardware to offer services under read write, e.g. random number generation.
+- what do the type, major and minor numbers mean
+- you can device arbitrary effects to standard file system calls like `open` and `close` on device files. They are usually not represented on disk in any way.
 
 ## devtmpfs
 
@@ -148,6 +147,18 @@ Discussion: <http://unix.stackexchange.com/questions/60641/linux-difference-betw
 
 Device files of this type represent block devices such as hard disks or flash memory.
 
+Type, major, minor: block, 8, X, one per partition:
+
+    brw-rw---- 1 root disk 8, 0 Aug 23 03:45 /dev/sda
+    brw-rw---- 1 root disk 8, 1 Aug 23 04:43 /dev/sda1
+    brw-rw---- 1 root disk 8, 2 Aug 23 03:45 /dev/sda2
+    brw-rw---- 1 root disk 8, 3 Aug 23 03:45 /dev/sda3
+    brw-rw---- 1 root disk 8, 4 Aug 23 03:45 /dev/sda4
+    brw-rw---- 1 root disk 8, 5 Aug 23 03:45 /dev/sda5
+    brw-rw---- 1 root disk 8, 6 Aug 23 03:45 /dev/sda6
+    brw-rw---- 1 root disk 8, 7 Aug 23 03:45 /dev/sda7
+    brw-rw---- 1 root disk 8, 8 Aug 23 03:45 /dev/sda8
+
 The first device is `sda`, the second `sdb`, and so on.
 
 Also, partitions inside those devices have device files for them too.
@@ -182,18 +193,42 @@ Now note that when you move the mouse, cat spits something out to the screen!
 
 `mice` is the combination of all mice, and each other `mouseX` is a single mouse device.
 
-## loop
-
-## loop0
-
-## loop1
-
-TODO
-
-Type, major, minor: block, 7, `X` for `loopX`
-
-Used to mount regular files that contain filesystems instead of device files as is usual.
-
 ## /dev/shm
 
 Files created by `shm_open` calls. This function is part of POSIX, but creation of the files under `/dev` is not.
+
+## /dev/disk
+
+Symlinks to partition identifiers.
+
+Allows you to get identifier info.
+
+If id no present, link not there.
+
+TODO what is the name of the subsystem that implements this? Where is it documented?
+
+Example:
+
+    ls -l /dev/disk/
+
+Sample output:
+
+    total 0
+    drwxr-xr-x 2 root root 420 Aug 23  2015 by-id
+    drwxr-xr-x 2 root root 100 Aug 23  2015 by-label
+    drwxr-xr-x 2 root root 180 Aug 23  2015 by-uuid
+
+Then:
+
+    ls -l /dev/disk/by-id/
+
+Sample output:
+
+    total 0
+    lrwxrwxrwx 1 root root 10 Aug 23 03:45 322246df-fed3-42f7-ba4d-4d72d6cce95f -> ../../sda5
+    lrwxrwxrwx 1 root root 10 Aug 23 03:45 5CE89967E8994066 -> ../../sda3
+    lrwxrwxrwx 1 root root 10 Aug 23 03:45 84f8087d-fc74-45b8-a6a2-180856b48982 -> ../../sda6
+    lrwxrwxrwx 1 root root 10 Aug 23 04:43 A6DA9BF3DA9BBE4D -> ../../sda1
+    lrwxrwxrwx 1 root root 10 Aug 23 03:45 D0EC9F59EC9F38A4 -> ../../sda2
+    lrwxrwxrwx 1 root root 10 Aug 23 03:45 e45497f8-6295-41da-ad8c-90dbbac264e8 -> ../../sda8
+    lrwxrwxrwx 1 root root 10 Aug 23 03:45 ff1b6e50-82ff-4696-823f-774b0f803298 -> ../../sda7

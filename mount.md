@@ -51,6 +51,19 @@ Control how the mount will be made.
 
 Some of those are passed as `mountflags` flags, others as `void* data` to the system call.
 
+### loop
+
+Example: create a file that contains a filesystem:
+
+    dd if=/dev/zero of=a.ex2 bs=1024 count=64
+    echo y | mke2fs -t ext2 a.ex2
+    mkdir -p d
+    # Since no specific loop device file is given (loop0, loop1, etc.),
+    # find the first free one.
+    sudo mount a.ex2 d -o loop
+    # Do stuff
+    sudo umount d
+
 ## bind
 
 Set the `MS_BIND` `mountflags` flag of the system call.
@@ -125,7 +138,7 @@ Syntax:
 
     This dir must exist before mount and preferably be used only for mounting a single filesystem.
 
-    It seems that fstab can auto create/remove the missing dirs.
+    It seems that fstab can auto create/remove the missing directories.
 
 3.  Type. ext[234], NTFS, etc.
 
@@ -145,23 +158,15 @@ Explained in:
 
     man mount
 
-`/etc/mtab` contains information about currently mounted filesystems.
+`/etc/mtab` contains a list of filesystems maintained by the `mount` and `umount` programs.
+
+This file is only intended to be read, as it is modified by `mount` automatically.
 
 Mount without arguments cats it:
 
     mount
 
-This file is only intended to be read, as it is modified by `mount` automatically.
-
-Its format is compatible with `fstab`, although copying lines directly is not very useful as it refers to block devices by device file, which can change arbitrarily.
-
-Sample lines of the file:
-
-    /dev/sda7 / ext4 rw,errors=remount-ro 0 0
-    proc /proc proc rw,noexec,nosuid,nodev 0 0
-    sysfs /sys sysfs rw,noexec,nosuid,nodev 0 0
-    none /sys/fs/fuse/connections fusectl rw 0 0
-    /dev/sdb1 /media/SYSTEM_DRV fuseblk rw,nosuid,nodev,allow_other,default_permissions,blksize=4096 0 0
+`/proc/mounts` is generally better as it uses actual up-to-date kernel mount information. The formats are the same, and contents are likely to be very similar.
 
 ## Auto mount Windows filesystems
 

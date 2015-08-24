@@ -45,8 +45,6 @@ Not present in Ubuntu 14.04.
 
 -   `cat /proc/modules`: information on modules
 
--   `cat /proc/partitions`: `softirq` info
-
 -   `cat /proc/sched_debug`: scheduler info for debugging
 
 -   `cat /proc/slabinfo`: slab allocator info
@@ -56,23 +54,6 @@ Not present in Ubuntu 14.04.
 -   `cat /proc/version`: Linux kernel version and other system info. Similar to `uname -a` output.
 
     <http://askubuntu.com/questions/2884/how-can-i-determine-the-version-of-the-running-kernel>
-
--   `cat /proc/devices`: information on registered character and block devices.
-
-    Does not consider files under `/dev/`, but registrations done for example via `alloc_chrdev_region`.
-
-    Sample lines:
-
-        Character devices:
-        1 mem
-        4 tty
-
-    Which say that:
-
-    - major number 1 is taken device named `mem`
-    - major number 4 is taken device named `tty`
-
-    where the device name is what was passed to the `alloc_chrdev_region` call.
 
 -   `sudo cat /proc/kallsyms | less`: list of kernel symbols
 
@@ -88,6 +69,25 @@ Not present in Ubuntu 14.04.
     1. address
     2. type. Same as used by the `nm` utility.
     3. id
+
+## /proc/devices
+
+Information on registered character and block devices.
+
+Does not consider files under `/dev/`, but registrations done for example via `alloc_chrdev_region`.
+
+Sample lines:
+
+    Character devices:
+    1 mem
+    4 tty
+
+Which says that:
+
+- major number 1 is taken device named `mem`
+- major number 4 is taken device named `tty`
+
+The device name is what was passed to the `alloc_chrdev_region` of the kernel internal API.
 
 ## /proc/stat
 
@@ -281,3 +281,20 @@ Sample output:
     /dev/sda5 /home/ciro ext4 rw,relatime,data=ordered 0 0
     systemd /sys/fs/cgroup/systemd cgroup rw,nosuid,nodev,noexec,relatime,name=systemd 0 0
     gvfsd-fuse /run/user/1000/gvfs fuse.gvfsd-fuse rw,nosuid,nodev,relatime,user_id=1000,group_id=1000 0 0
+
+## /proc/partitions
+
+Sample output:
+
+    major minor  #blocks  name
+
+       8        0  488386584 sda
+       8        1    1536000 sda1
+       8        2   97715052 sda2
+       8        3   14336000 sda3
+       8        4          1 sda4
+       8        5  309445632 sda5
+       8        6    3910656 sda6
+       8        7   30718976 sda7
+       8        8   30718750 sda8
+      11        0    1048575 sr0

@@ -1,4 +1,4 @@
-# Install OS
+# Install Operating System
 
 How to install a new OS on your computer.
 
@@ -40,7 +40,7 @@ Some installers even allow you to reserve space on the USB for persistent storag
 
 #### dd method
 
-Works for any distribution.
+If the `.iso` is a boot sector, which is the case for Ubuntu 14.04, you can use this method to install it from USB.
 
 Destroys all data in USB.
 
