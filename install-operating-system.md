@@ -68,7 +68,16 @@ This will erase all data on the USB!
 
 *Don't* write to the first partition `/dev/sdX1`, since what we want is to write to the start of the device, not to the start of its first partition!
 
-#### usb-creator-gtk
+#### Persistent USB install
+
+- <http://askubuntu.com/questions/16988/how-do-i-install-ubuntu-to-a-usb-key-without-using-startup-disk-creator>
+- <https://wiki.archlinux.org/index.php/Installing_Arch_Linux_on_a_USB_key>
+
+##### Virtual machine ISO INSTALL
+
+<http://askubuntu.com/a/672839/52975>
+
+##### usb-creator-gtk
 
 Ubuntu specific.
 
@@ -78,14 +87,29 @@ Allows easy creation of persistent storage USB of up to 4GiB, and more with hack
 
     gksudo usb-creator-gtk
 
+### ISO on Linux filesystem
+
+GRUB can boot from ISO images stored inside a regular filesystem.
+
+It appears as another regular entry on the GRUB menu.
+
+So always keep an image around and GRUB setup in case you destroy your system.
+
+This dispenses the use of an USB stick.
+
+TODO get working:
+
+- http://askubuntu.com/questions/340156/install-ubuntu-from-iso-image-directly-from-hard-disk-of-a-system-running-linux
+- http://askubuntu.com/questions/24903/how-to-boot-from-an-iso-file-in-grub2
+- http://askubuntu.com/questions/121212/using-a-bootable-live-cd-disk-image-mounted-on-the-hard-drive
+
 ### Bootloader problems
 
 Most distributions install their own bootloader, meaning that they rewrite the existing bootloader.
 
 This means that if the new bootloader cannot recognize certain types of boot data on each partition, you will not see those partitions as bootable.
 
-This is for example the case if you install a distro with GRUB 2 (Ubuntu 13.04),
-and then install another distro which uses GRUB (Fedora 17)
+This is for example the case if you install a distro with GRUB 2 (Ubuntu 13.04), and then install another distro which uses GRUB (Fedora 17)
 
 GRUB cannot recognize GRUB 2 booting data since it came before GRUB 2 existed, so you will not see your old bootable partitions as bootable.
 

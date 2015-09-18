@@ -96,6 +96,21 @@ which is provided by the hwdata package <https://git.fedorahosted.org/hosted/hwd
 
 Updates
 
+## /sys/block
+
+Block devices.
+
+<https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-block>
+
+### removable
+
+<http://unix.stackexchange.com/questions/125961/how-to-tell-if-a-scsi-device-is-removable>
+
+TODO what does it mean exacly? My main hard disk was not removable, but my USB was:
+
+    cat /sys/block/sda/removable
+    cat /sys/block/sdb/removable
+
 ### Bibliography
 
 <http://prefetch.net/articles/linuxpci.html>

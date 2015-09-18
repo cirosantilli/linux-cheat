@@ -30,16 +30,16 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [dmesg](demesg.md)
     1. [installkernel](installkernel.md)
 1.  Initialization
-    1. [Install Operating System](install-operating-system.md): how to install a new OS
-    1. [Boot](boot.md)
-    1. [GRUB](grub.md)
-    1. [Init](init.md): System V, Upstart
+    1.  [Install Operating System](install-operating-system.md): how to install a new OS
+    1.  [Boot](boot.md)
+    1.  [Init](init.md): System V, Upstart
 1.  System information
     1.  [lsb_release](lsb_release.md)
     1.  [uname](uname.md)
     1.  Hardware
-        [cpuid](cpuid.md)
-        [lspci](lspci.md)
+        1. [cpuid](cpuid.md)
+        1. [lspci](lspci.md)
+        1. [lsusb](lsusb.md)
 1.  [Filesystem](filesystem.md)
     1.  [File permissions](file-permissions.md)
     1.  [Hardlink](hardlink.md)
@@ -50,8 +50,10 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [FUSE](FUSE.md)
     1.  [fuser](fuser.md)
     1.  [lsblk](lsblk.md)
+    1.  [fstab](fstab.md)
     1.  [mountall](mountall.md)
     1.  [pathchk](pathchk.md)
+    1.  [sync](sync.md)
     1.  [swap partition](swap-partition.md)
     1.  [tune2fs](tune2fs.md)
     1.  [UUID](uuid.md)
@@ -87,17 +89,20 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1.  [stat](stat.md)
         1.  [tree](tree.md)
     1.  Permissions
-        1. [chown](chown.sh)
-        1. [chmod](chmod.sh)
+        1.  [chown](chown.sh)
+        1.  [chmod](chmod.sh)
     1.  File managers
-        1. [Krusader](krusader.md)
-        1. [vifm](vifm.md)
+        1.  [Krusader](krusader.md)
+        1.  [vifm](vifm.md)
     1.  Partitions
         1.  [parted](parted.md)
         1.  [gparted](gparted.md)
+        1.  [Home partition](home-partition.md)
+        1.  [MBR](mbr.md)
+        1.  [GPT](gpt.md)
     1.  [CD DVD](cd-dvd.md)
-        [isoinfo](isoinfo.md)
-        [eject](eject.md)
+        1. [isoinfo](isoinfo.md)
+        1. [eject](eject.md)
 1.  [Terminal](terminal.md): terminal emulators, ANSI escapes, control characters
     1. [Guake](guake.sh)
 1.  Stream and file manipulation
@@ -202,15 +207,23 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
 1.  User accounts
     1. [id](id.md)
     1. [usermod](usermod.md)
-1.  [Desktop](desktop/): X, XDG, GNOME, KDE and related utilities
+1.  [Desktop](desktop.md)
+    1.  [X11](x11.md)
+    1.  [freedesktop.org](freedesktop-org.md)
+    1.  [Display manager](display-manager.md)
+        1. [LightDM](lightdm.md)
+    1.  [Window manager](window-manager.md)
     1.  [Default applications](default-applications.md)
         1. [update-alternatives](update-alternatives.md)
+    1.  [Startup programs](startup-programs.md)
     1.  Notifications
         1. [libnotify](libnotify.md)
         1. [zenity](zenity.md)
     1.  Screenshots
         1. [recordMyDesktop](recordMyDesktop.md)
         1. [xwd](xwd.md)
+    1.  [Screensaver](screensaver.md)
+    1.  [IBus](ibus.md)
     1.  [logkeys](logkeys.md)
     1.  [setleds](setleds.md)
     1.  [solaar](solaar.md)

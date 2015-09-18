@@ -13,3 +13,8 @@ If you don't have very strict constraints, default to:
 
 - `zip` if you want OS portability
 - `tar.gz` if you want to maintain Linux filesystem metadata intact: permissions, symlinks, etc.
+
+TODO: underestand these formats:
+
+- lzip. Extensions: `.lz`
+- Extension `.xz`. TODO.

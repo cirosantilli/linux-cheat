@@ -232,3 +232,19 @@ Sample output:
     lrwxrwxrwx 1 root root 10 Aug 23 03:45 D0EC9F59EC9F38A4 -> ../../sda2
     lrwxrwxrwx 1 root root 10 Aug 23 03:45 e45497f8-6295-41da-ad8c-90dbbac264e8 -> ../../sda8
     lrwxrwxrwx 1 root root 10 Aug 23 03:45 ff1b6e50-82ff-4696-823f-774b0f803298 -> ../../sda7
+
+## /dev/stdin
+
+## /dev/stdout
+
+## /dev/stderr
+
+Symlinks to `/proc/self/fd/{0,2}`.
+
+No portability: <http://unix.stackexchange.com/questions/36403/portability-of-dev-stdouit>
+
+Bash also implements it as a built-in magic path.
+
+Useful when annoying programs don't follow the usual convention of `-` for stdout / stdin in the place of files, e.g.: <http://www.serverfault.com/questions/329150/is-there-a-way-to-make-objdump-read-from-stdin-instead-of-file>
+
+But it does not work all the time, since those programs may not implement `-` because they rely on `seek` calls which are not supported on pipes.

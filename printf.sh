@@ -2,19 +2,33 @@
 
 ## printf
 
-  # POSIX 7.
+  # POSIX 7: http://pubs.opengroup.org/onlinepubs/9699919799/utilities/printf.html
 
   # Goes around echo's quicks.
 
-  # Similar to C printf.
+  # Similar to C printf, but not identical.
 
   # Does not automatically append newline like `echo`:
 
     [ "$(printf 'a')" = 'a' ] || exit 1
 
-  # Interprets backslash escapes like C printf:
+  ## \
 
-    printf 'Interpret\nbackslash\n'
+  ## Backslash escapes
+
+    # Interprets backslash escapes much like C printf:
+
+      printf 'Interpret\nbackslash\n'
+
+    # \x is a notable exception: only \123 octals are specified.
+    #
+    # Fails in `sh`, but exists as a Bash extension.
+    #
+    # POSIX explicitly says:
+    #
+    # > Hexadecimal character constants as defined in the ISO C standard
+    # are not recognized in the format operand because there is no consistent way
+    # to detect the end of the constant.
 
   # Print strings that could be command line arguments:
 

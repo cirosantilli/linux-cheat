@@ -97,60 +97,11 @@ Unmount block device from all directories it is mounted:
 
 `umount` can only be used if the device is not in use. To determine which processes are using a device, use `lsof` or `fuser`.
 
-## fstab
+## Mount entire disk image with multiple partitions in it
 
-This is about the config file located at `/etc/fstab`.
-
-Mount partitions at startup.
-
-Good sources:
-
-    man fstab
-    man mount
-
-- <http://www.tuxfiles.org/linuxhelp/fstab.html>
-- <https://wiki.archlinux.org/index.php/Fstab>
-
-List partitions that should mount up at startup and where to mount them:
-
-    sudo cp /etc/fstab /etc/fstab.bak
-    sudo vim /etc/fstab
-    sudo mount -a
-
-Apply changes only mounts `auto` option set.
-
-Syntax:
-
-    <file system> <mount point>  <type> <options>    <dump> <pass>
-    1             2              3      4            5      6
-
-1.  identifier to the file system.
-
-    E.g.:
-
-    - `/dev/sda1`
-    - `UUID=ABCD1234ABCD1234`
-    - `LABEL=mylabel`
-
-2.  where it will get mounted.
-
-    The most standard option is to make a subdir of `/media` like `/media/windows`.
-
-    This dir must exist before mount and preferably be used only for mounting a single filesystem.
-
-    It seems that fstab can auto create/remove the missing directories.
-
-3.  Type. ext[234], NTFS, etc.
-
-4.  Options.
-
-    - `defaults`. Use default options for the current filesystem type.
-
-5.  Dump. Used by the dump utility to make backups. If `0`, don't make backups. If `1`, make them.
-
-6.  Pass. Used by `fsck`. If `0` the FS is ignored by `fsck`, `1` it is checked with highest priority, `2` checked with smaller priority.
-
-Use 1 for the primary partition, `2` for the others.
+- <http://unix.stackexchange.com/questions/9099/reading-a-filesystem-from-a-whole-disk-image>
+- <http://superuser.com/questions/117136/how-can-i-mount-a-partition-from-dd-created-image-of-a-block-device-e-g-hdd-u>
+- <http://askubuntu.com/questions/69363/mount-single-partition-from-image-of-entire-disk-device>
 
 ## mtab
 

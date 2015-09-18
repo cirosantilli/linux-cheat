@@ -8,12 +8,12 @@ Tested on `v4.0`.
 
 Quickstart:
 
-	git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-	cd linux
+    git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+    cd linux
     export KBUILD_OUTPUT="$(pwd)/../build"
-	make mrproper
-	make defconfig
-	make -j5
+    make mrproper
+    make defconfig
+    make -j5
     # Creates the .config file on the build directory.
     # TODO run it somehow on a VM easily.
     # TODO change install path.
@@ -21,9 +21,9 @@ Quickstart:
     # http://unix.stackexchange.com/questions/5423/how-to-change-the-install-path-of-my-linux-source-tree
     #mkdir "$(pwd)/../install"
     #make install INSTALL_PATH="$(pwd)/../install"
-	make modules_install INSTALL_MOD_PATH=../modules
+    make modules_install INSTALL_MOD_PATH=../modules
     make headers_install INSTALL_HDR_PATH=../headers
-	make firmware_install INSTALL_MOD_PATH=../firmware
+    make firmware_install INSTALL_MOD_PATH=../firmware
     # TODO install path
     #make installmandocs
 
@@ -54,14 +54,6 @@ shows all commands that are run.
 
 is even more verbose.
 
-## Run
-
-After `make install`:
-
-- reboot
-- pray that your distro is compatible with the version and configuration you chose (networking failed on Ubuntu 14.04 with a simple `defconfig`)
-- run `uname -a` on a terminal and behold your new kernel version
-
 ## Help
 
 Get some help on the main targets:
@@ -76,7 +68,7 @@ Do a basic clean:
 
 Clean everything, including generated configuration:
 
-	make mrproper
+    make mrproper
 
 This is likely a reference to <https://en.wikipedia.org/wiki/Mr._Clean> in German (and Finnish?)...
 
@@ -96,7 +88,7 @@ The source for the REPL configuration generators called by make is at `scripts/k
 
 Simple default configuration:
 
-	make defconfing
+    make defconfing
 
 ### oldconfig
 
@@ -118,7 +110,7 @@ TODO: vs olddefconfig? Less automatic.
 
 Open up a ncurses interface:
 
-	make menuconfig
+    make menuconfig
 
 that allows you to turn options on or off.
 
@@ -161,7 +153,7 @@ If the kernel was compiled with `CONFIG_IKCONFIG`, then you can `cat /proc/confi
 
 Build:
 
-	make -j5
+    make -j5
 
 this may take more than one hour.
 
@@ -196,14 +188,20 @@ Once you have compiled the kernel, there is one important component missing: the
 
 The kernel is not able to generate that filesystem for you.
 
-### Standard deployment
+### Install on the current machine
+
+This may break your system.
 
 Install kernel on current machine:
 
-	sudo make install
-	sudo make modules_install
+    #sudo make install
+    sudo make modules_install
 
 Now reboot, from the GRUB menu choose "Advanced Ubuntu options", and then choose the newly installed kernel.
+
+Pray that your distro is compatible with the version and configuration you chose (networking failed on Ubuntu 14.04 with a simple `defconfig`)
+
+Run `uname -a` on a terminal and behold your new kernel version
 
 TODO how to go back to the old kernel image by default at startup? Going again into advance options and clicking on it works, but the default is still the newer version which was installed.
 
@@ -213,7 +211,22 @@ This method is too slow for development, and you will want to use some kind of v
 
 `make install`, forwards to the `installkernel` script, which is not a part of the kernel tree but rather distro supplied. In Ubuntu 14.04 is at `/sbin/installkernel` and furnished by the `debianutils` package. It is a small shell script.
 
-### Installed files
+### QEMU
+
+With QEMU, you can directly run either:
+
+- the output of `make isoimage`
+- bzImage with `-kernel`
+
+### syslinux
+
+TODO
+
+### grub-mkrescue
+
+TODO possible?
+
+### Installed files on make install
 
 <http://unix.stackexchange.com/questions/5518/what-is-the-difference-between-the-following-kernel-makefile-terms-vmlinux-vml>
 
@@ -241,6 +254,8 @@ Can be configured with:
 
 Make sure to point to the `../build` so that `.config` is seen
 
+### isoimage
+
 ### ISO build
 
 For x86 (why only x86), you can generate a bootable ISO with:
@@ -249,15 +264,22 @@ For x86 (why only x86), you can generate a bootable ISO with:
 
 where `FINITRD` points to a previously constructed `initrd` that will be used to initialize the system.
 
-This method is used by [Minimal Linux Live](https://github.com/ivandavidov/minimal).
+This method is used by [Minimal Linux Live](https://github.com/ivandavidov/minimal), which producesa nice little `rootfs.cpio.gz`.
 
 The output file generated is:
 
     build/arch/x86/boot/image.iso
 
-You can then feed the generated ISO directly to QEMU:
+You can then feed the generated ISO directly to QEMU with either:
 
     qemu-system-x86_64 -cdrom image.iso
+    qemu-system-x86_64 -hda image.iso
+
+or burn it to either an USB or CD with:
+
+    sudo dd if=image.iso of=/dev/sdX
+
+Internally in 4.2, it is coded at `arch/x86/boot/Makefile`, and `syslinux`, `mkisofs` to make a ISO, and then `isohybrid` to make it bootable either from ISO or USB.
 
 ### Headers install
 

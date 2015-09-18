@@ -1,6 +1,6 @@
 # Testing
 
-Tips on how to test with the kernel.
+Tips on how to unit test with the kernel. Interactive tests are not covered.
 
 ## Official testing methods
 
@@ -55,4 +55,3 @@ Where:
 -   `/media/sf_kernel`:
 
     Directory shared between client and host, that corresponds to the host's location of the module code and `Makefile`.
-

@@ -6,7 +6,7 @@ Mnemonic: Format disk.
 
 util-linux package.
 
-REPL interface.
+REPL interface. Non-interactive usage only with pipes... <http://superuser.com/questions/332252/creating-and-formating-a-partition-using-a-bash-script>
 
 Does not create filesystems. For that see: `mke2fs` for ext systems.
 
@@ -51,10 +51,29 @@ Operation: make a list of changes to be made, then write them all to disk and ex
 
 Most useful commands:
 
-- `-m`: list options
-- `-p`: print info on partition, same as using `-l` option
-- `-o`: create new DOS partition table
-- `-n`: create new partition
-- `-d`: delete a partition
-- `-w`: write enqueued changes and exit
+- `m`: list options
+- `p`: print info on partition, same as using `-l` option
+- `o`: create new DOS partition table
+- `n`: create new partition
+- `d`: delete a partition
+- `w`: write enqueued changes and exit
 
+## Erase everything and create a single partition
+
+    printf 'o\nn\np\n1\n\n\nw\n' | sudo fdisk /dev/sdX
+
+This does not create a filesystem, only the partition.
+
+The one partition takes up almost the entire disk, except the first 2048 bytes which are reserved for the partition table.
+
+TODO: why does it leave 2048 and not just 512 which is what the MBR needs?
+
+You will now likely want to use `mke2fs` to create a partition like:
+
+    sudo mkfs.ext4 /dev/sdX1
+
+## Minimal size for a partition
+
+### Why fails for small images?
+
+TODO <http://superuser.com/questions/972433/why-does-fdisk-fail-to-create-a-new-partition-with-you-must-set-cylinders-if>

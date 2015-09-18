@@ -42,50 +42,6 @@ Each partition can have a different filesystem.
 
 When creating partitions for external storage devices such as USB stick nowadays, the best option is NTFS since Linux can read write to it out of the box, and it can be used on the 95% of computers because they use Windows (which does not read / write to ext out of the box.)
 
-## Partitions
-
-There are 2 main types of partitions: MBR or GPT.
-
-### MBR
-
-You can only have 4 primary partitions.
-
-Each one can be either divided into logical any number of logical partitions partitions.
-
-A primary partition that is split into logical partitions is called an extended partition.
-
-Primary partitions get numbers from 1 to 4.
-
-Logical partitions get numbers starting from 5.
-
-You can visualize which partition is inside which disk with `sudo lsblk -l`.
-
-TODO more common?
-
-### GPT
-
-Arbitrary amount of primary partitions.
-
-No logical partitions.
-
-You should unmount partitions before making change to them.
-
-To get info on partitions, start/end, filesystem type and flags, consider: `parted`, `df -f`
-
-### Home partition
-
-If you are a developer, create a separate partition and put your home on the root `/` of that partition.
-
-Benefits:
-
-- you can easily share your home between multiple operating systems: just mount it up, and all your user configs will be automatically reused across multiple development environments.
-- if your home HD gets filled with large downloads, your system won't get into trouble,
-since it uses a separate partition.
-
-Use the same username on new systems, and mount the partition automatically with `fstab`. For every new system, just copy the fstab line.
-
-30GiB is a good size for each root partition. Leave everything else for the home partition.
-
 ### Partition table
 
 Contained in the MBR.
@@ -95,29 +51,6 @@ The partition table is optional: <http://askubuntu.com/questions/276582/is-it-sa
 If not present, most systems will search for a partition starting at the very beginning of the disk.
 
 In such case, the partition will be mounted directly at `/dev/sdb`, not `/dev/sdb1`
-
-## MBR
-
-The MBR is the first 512 sector of the device found. It contains:
-
--   a small piece of code (446 bytes) called the primary boot loader.
-
-    This code will then be executed.
-
-    Most often, all it does it to load a second stage bootloader like GRUB.
-
--   the partition table (64 bytes) describing the primary and extended partitions.
-
--   2 bytes for MBR validation check.
-
-    It is a fixed magic number <http://stackoverflow.com/questions/1125025/what-is-the-role-of-magic-number-in-boot-loading-in-linux>, that can be used to:
-
-    - check if the device has a MBR
-    - check endianess
-
-The MBR can only be at the start of a physical partition, not of a logical partition.
-
-This is why on bootloader configurations you give `/dev/sda`, instead of `/dev/sda1-4`.
 
 ## Format disks
 
@@ -184,6 +117,10 @@ You should only use on partition devices (ex: `sda1`), not on the entire devices
 
 If you want to edit the partition table, first use a tool like `fdisk`.
 
+## /dev/sdX
+
+## /dev/hdX
+
 ## sda
 
 ## sdb
@@ -233,6 +170,8 @@ If a MBR is not present and a filesystem starts directly at the start of the dev
 
 `hd` is for IDE disks, `sd` for SATA disks.
 
+Type, major number: block, `8`.
+
 These are two standards of interface between hard disk and motherboard, with different connectors.
 
 SATA stands for Serial Advanced Technology Attachment (or Serial ATA) and IDE is also called Parallel ATA or PATA.
@@ -245,7 +184,7 @@ Both have the same device number 8.
 
 ### SCSI
 
-Both SATA and IDE are SCSI. This is why both `hd` and `sd` have the same major device number.
+Both SATA and IDE are SCSI. This is why both `hd` and `sd` have the same major device number 8.
 
 <https://en.wikipedia.org/wiki/SCSI>
 

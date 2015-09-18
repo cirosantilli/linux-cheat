@@ -73,7 +73,7 @@ WAV to MP3:
 
 ### id3tool
 
-Get id3 tags info (for mp3 for example):
+Get id3 tags info (for MP3 for example):
 
     TITLE="`id3tool "$1" | grep '^Song Title:' | awk '{ for (i=3;i<=NF;i++) { printf $i; printf " " } }'`"
     ARTIST="`id3tool "$1" | grep '^Artist:' | awk '{ for (i=2;i<=NF;i++) { printf $i; printf " " } }'`"
@@ -91,9 +91,20 @@ GUI.
 
 #### shntool
 
-Single APE and CUE in dir, FLAC output, formatted as number, author, track
+Single APE and CUE in dir, FLAC output, formatted as `number - author - track`
 
-    shntool split -f *.cue -o flac *.ape -t '%n - %p - %t'
+    shntool split -f *.cue -o flac -t '%n - %p - %t' *.ape
+
+You need the `mac` CLI tool to do this, and the easiest way to get it is with:
+
+    sudo add-apt-repository -y ppa:flacon
+    sudo apt-get update
+    sudo apt-get install -y flacon
+
+See also:
+
+- <http://unix.stackexchange.com/questions/165485/why-can-i-not-split-a-ape-file>
+- <http://superuser.com/questions/251362/split-monkeyaudio-ape-cue-log-of-whole-audio-cd-into-mp3-of-individual>
 
 ### SoX
 
@@ -101,7 +112,7 @@ Set of utilities record, play and modify files via CLI.
 
 Interactive front end for libSoX.
 
-Must install available formats separatelly.
+Must install available formats separately.
 
 Record from microphone into `a.wav` file:
 

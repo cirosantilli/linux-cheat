@@ -237,3 +237,17 @@ In Ubuntu 14.04, you need a separate package `qemu-user` for those.
 Of course, you can only run those programs if your OS can handle their system calls and required dynamic libraries are present compiled for that arch.
 
 `qemu-x86_64` refuses to run IA32 executables even though they run natively on Linux.
+
+## bios
+
+## UEFI
+
+## OVMF
+
+You can use UEFI instead of BIOS by downloading `OVMF.fd` and using:
+
+    qemu-system-x86 -bios OVMF.fd [other opts]
+
+See: <http://unix.stackexchange.com/a/228053/32558>
+
+The Linux 4.2 kernel works out-of-the-box with it.
