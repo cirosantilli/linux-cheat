@@ -88,7 +88,7 @@ which is provided by the hwdata package <https://git.fedorahosted.org/hosted/hwd
     8086 Intel Corporation
         0154  3rd Gen Core processor DRAM Controller
 
-### TODO
+TODO:
 
 - why do many devices are shown under PCI, but I think PCI was replaced by PCIe a long time ago.
 
@@ -100,16 +100,33 @@ Updates
 
 Block devices.
 
+Convenience only: all device directories point to `/sys/devices`
+
 <https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-block>
 
 ### removable
 
 <http://unix.stackexchange.com/questions/125961/how-to-tell-if-a-scsi-device-is-removable>
 
-TODO what does it mean exacly? My main hard disk was not removable, but my USB was:
+TODO what does it mean exactly? My main hard disk was not removable, but my USB was:
 
     cat /sys/block/sda/removable
     cat /sys/block/sdb/removable
+
+## /sys/class
+
+Devices grouped by category.
+
+This is only for convenience: all device directories are symlinks to `/sys/devices`.
+
+E.g.:
+
+    ls -l /sys/class/rtc/
+
+Gives the `rtc0` device directory:
+
+    total 0
+    lrwxrwxrwx 1 root root 0 Sep 25 09:46 rtc0 -> ../../devices/pnp0/00:02/rtc/rtc0
 
 ### Bibliography
 

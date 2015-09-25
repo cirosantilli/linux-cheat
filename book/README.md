@@ -30,7 +30,7 @@ Formats that contain image, text, fonts such as PDF or DJVU but not not formats 
 
 -   MOBI: Mobipocket company, free format, bought by Amazon. TODO vs EPUB.
 
--   RTF: Rich Text Format, proprietary Microsoft
+-   RTF: Rich Text Format, proprietary Microsoft. Can be opened with `fbreader`.
 
 ## Viewers
 

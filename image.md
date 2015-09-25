@@ -64,38 +64,6 @@ Bit by bit, no compression.
 
 Specified by Microsoft.
 
-### Netpbm
-
-- PBM: black and white (1 or 0!)
-- PGM: gray scale
-- PPM: color
-
-Those three formats are also collectively knows as PNM, Portable aNymap Format.
-
-Mainly used in Linux.
-
-Bad browser support.
-
-Very simple to edit on a text editor because ASCII based.
-
-Not compressed, so not very memory efficient.
-
-Magic numbers: first thing in file, specifies the exact format. Cannot be determined by extension alone because of binary/ASCII forms.
-
-- `P1`: PBM ASCII
-- `P2`: PGM ASCII
-- `P3`: PPM ASCII
-- `P4`: PBM binary
-- `P5`: PGM binary
-- `P6`: PPM binary
-
-An example to differentiate ASCII from binary. For PBM:
-
-- ASCII: 1 byte per pix.
-- in binary 1 *bit* per pixel.
-
-To view the minimalistic examples in this repo, open them with an image editor and do a huge zoom.
-
 ### TIF
 
 Lossless or lossy, in practice lossless applications only.

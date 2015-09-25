@@ -1,0 +1,8 @@
+P3
+# The image is 3 x 2.
+3 2
+# 255 is the maximum value for RGB.
+255
+# Alignment is optional: a single space would do
+255   0   0     0 255   0     0   0 255
+255 255   0   255 255 255     0   0   0

@@ -188,10 +188,11 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [Book](book.md): PDF, DJVU.
     1.  [Dictionary](dictionary.md): dictionary formats
     1.  [Game](game.md): games, emulation
-    1.  [Image](image/): images, photos
+    1.  [Image](image.md)
         1. [GIMP](gimp.md)
-        1. [gnuplot](gnuplot)
-        1. [imagemagick](imagemagick.md)
+        1. [NetPBM](netpbm/)
+        1. [gnuplot](gnuplot/)
+        1. [ImageMagick](imagemagick.md)
     1.  [Video](video.md): videos, films, subtitles
 1.  File sharing
     1. [Dropbox](dropbox.md)

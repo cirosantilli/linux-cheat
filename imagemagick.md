@@ -58,6 +58,14 @@ Resize to fixed width of 100 px, height maintains original proportion:
 
 	convert large.png -resize 100x small.png
 
+Fixed height:
+
+	convert large.png -resize x100 small.png
+
+Force modififed aspect ratio:
+
+	convert large.png -resize '50x100!' small.png
+
 ### crop
 
 `10x10`: rectangle to keep:
@@ -76,7 +84,7 @@ Cannot give top left corner in percentage
 
 Bottom 50 percent:
 
-        convert -gravity south -crop 100x50% a.jpg b.jpg
+    convert -gravity south -crop 100x50% a.jpg b.jpg
 
 ### color
 
@@ -103,6 +111,28 @@ Bottom 50 percent:
 -   `-level`: linear transform on color space:
 
         convert -level -100,100 a.jpg b.jpg
+
+### extent
+
+Keep only the 50x50 central square of an image:
+
+    convert in.png -gravity center -extent 50x50 out.png
+
+Percentage version:
+
+    convert in.png -gravity center -extent '50%x50%' out.png
+
+### append
+
+Paste multimple images into one vertically: <http://superuser.com/questions/290656/combine-multiple-images-using-imagemagick>
+
+    convert -append in-*.jpg out.jpg
+
+Size is not corrected automatically.
+
+Horizontally:
+
+    convert +append in-*.jpg out.jpg
 
 ### Transparency to white
 

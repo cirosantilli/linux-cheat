@@ -2,6 +2,8 @@
 
 Contains device driver files, and things related to device drivers like symlinks that give nice names to device drives.
 
+Files are documented under `man 4`.
+
 To understand what is going on, make a minimal device driver yourself. This is not documented here. Prerequisites you will learn when you do that:
 
 - what do the type, major and minor numbers mean
@@ -248,3 +250,11 @@ Bash also implements it as a built-in magic path.
 Useful when annoying programs don't follow the usual convention of `-` for stdout / stdin in the place of files, e.g.: <http://www.serverfault.com/questions/329150/is-there-a-way-to-make-objdump-read-from-stdin-instead-of-file>
 
 But it does not work all the time, since those programs may not implement `-` because they rely on `seek` calls which are not supported on pipes.
+
+## /dev/rtc
+
+    man rtc
+
+Real time clock.
+
+TODO example.
