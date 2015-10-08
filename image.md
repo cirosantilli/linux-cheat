@@ -145,3 +145,11 @@ Contains `img2txt`.
 Convert DVI to PNG.
 
 Important application: LaTeX -> DVI -> PNG -> website.
+
+## Misc
+
+### Color spaces
+
+- <https://en.wikipedia.org/wiki/SRGB>
+
+- <https://en.wikipedia.org/wiki/HSL_and_HSV>

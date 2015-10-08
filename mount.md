@@ -8,6 +8,8 @@ Linux has the `mount` and `umount` system calls.
 
 There are also `mount` and `umount` `util-linux` command line front-ends.
 
+Not POSIX.
+
 ## Mount multiple times
 
 If the directory was not empty, old contents will be hidden.
@@ -63,6 +65,10 @@ Example: create a file that contains a filesystem:
     sudo mount a.ex2 d -o loop
     # Do stuff
     sudo umount d
+
+Type autodetect usually works in this case, so you can type just:
+
+    sudo mount a.ex2 d
 
 ## bind
 

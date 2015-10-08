@@ -167,6 +167,16 @@ QEMU has a specific disk format called *qcow2* which allows for further capabili
 
 > smaller images (useful if your filesystem does not supports holes, for example on Windows), optional AES encryption, zlib based compression and support of multiple VM snapshots
 
+## fda
+
+Boot from given floppy image.
+
+https://github.com/dcloues/os_tutorial can only be run with it.
+
+Must be used when `grub.cfg` uses:
+
+	root (fd0)
+
 ## ARM in x86
 
 <https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Virtual_ARM_Linux_environment>
@@ -180,6 +190,21 @@ The same effect can be achieved with:
     shutdown
 
 ## GDB
+
+### GDB on boot sector
+
+<http://stackoverflow.com/questions/28811811/using-gdb-in-16-bit-mode/32925370#32925370>
+
+    qemu-system-x86_64 -hda boot.img -S -s &
+    gdb -ex 'target remote localhost:1234' -ex 'break *0x7c00' -ex 'continue'
+
+The first instruction to be run is *not* your bot sector, but rather (TODO confirm) the BIOS code at address `0x0000fff0`. See also: <http://stackoverflow.com/questions/31296422/why-do-the-bytes-0xea-0000-ffff-in-a-bootloader-cause-the-computer-to-reboot>
+
+So the first thing you do should be:
+
+Note that symbol names won't help, because there is no debugging information in boot sectors!
+
+### GDB on kernel
 
 TODO I can't get it to work: <https://sourceware.org/bugzilla/show_bug.cgi?id=13984#add_comment>
 

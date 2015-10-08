@@ -131,24 +131,48 @@
 
 ## combos
 
+    ## Print only matching parts of the line
+
+      # http://stackoverflow.com/questions/2777579/how-to-output-only-captured-groups-with-sed
+
+      # Only matching part, no matching groups:
+
+        printf 'a1 b2\na34 b56\n' | perl -lane 'print m/\d+/g'
+        #12
+        #3456
+
+      # Single match per line, only print matching group:
+
+        printf 'a1 b2\na34 b56\n' | perl -lane 'print if s/.*?a(\d+).*/$1/g'
+        #1
+        #34
+
+      # Multiple matches per line (unstructured data), only print matching group:
+
+        printf 'a1 b2\na34 b56 a78 b90\n' | perl -lane 'print if s/.*?a(\d+)|.*/$1/g' 
+        #1
+        #3478
+
     # **Very dangerous!!!!**, so make a backup of the current directory before proceeding.
 
     # Find files with matching names and print only new modified lines to stdout:
 
-      find . -iname "*.tex" | xargs perl -lane 'print if s/a/A/g'
+      find . -iname '*.tex' | xargs perl -lane 'print if s/a/A/g'
 
-    # Useful before you do mass refactoring
+    # Useful before you do mass refactoring.
 
     # Make the modifications on files with matching names, print nothing to stdout
 
-      find . -iname "*.tex" | xargs perl -lapi -e 's/a/A/g'
+      find . -iname '*.tex' | xargs perl -lapi -e 's/a/A/g'
 
-    ## multiline ##slurp
+    ## Multiline
+
+    ## Slurp
 
       # For multiline operations:
 
-        find . -iname "*.tex" | xargs perl -0777 -ne 'print if s/a/A/g'
-        find . -iname "*.tex" | xargs perl -0777 -pi -e 's/a/A/g'
+        find . -iname '*.tex' | xargs perl -0777 -ne 'print if s/a/A/g'
+        find . -iname '*.tex' | xargs perl -0777 -pi -e 's/a/A/g'
 
       # For the love of God, do not use `-l` with this unless you know what you are doing.
 

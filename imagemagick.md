@@ -18,9 +18,37 @@ List supported formats:
 
     identify -list format
 
-Get size of an image:
+Supported colorspaces:
 
-    identify -format "%[fx:w]x%[fx:h]" a.jpg
+    identify -list colorspace
+
+### format
+
+<http://www.imagemagick.org/script/escape.php>
+
+Get size of an image: <http://stackoverflow.com/questions/1555509/can-imagemagick-return-the-image-size>
+
+    identify -format '%w %h' a.jpg
+
+Number of bits:
+
+    identify -format '%[fx:w*h]' a.jpg
+
+`fx` expressions: <http://www.imagemagick.org/script/fx.php> TODO: how to prevent that from using scientific notation or at least infinite precision?
+
+### ping
+
+Makes identify operation potentially faster by not reading the entire file to memory:
+
+- <http://stackoverflow.com/a/22393926/895245>
+- <http://stackoverflow.com/questions/4670013/fast-way-to-get-image-dimensions-not-filesize>
+
+### Check if image is black and white binary
+
+TODO:
+
+- <http://programmers.stackexchange.com/questions/131067/image-color-grayscale-classification>
+- <http://superuser.com/questions/508472/how-to-recognize-black-and-white-images>
 
 ## convert
 
@@ -32,11 +60,61 @@ Does not do:
 
 - DJVU
 
+### Order of arguments
+
+The order of arguments matters! Transformations that come first, are applied first.
+
 ### Convert formats
+
+The formats are deduced from the extension of the input and output.
 
 Multiple JPG to a single PDF:
 
     convert in0.jpg in1.jpg out.pdf
+
+#### Formats
+
+Full format list with some notes: <http://www.imagemagick.org/script/formats.php>
+
+Some useful formats:
+
+-  `rgb`: export raw pixels
+
+-  `gray`: export grayscale. E.g.:
+
+        printf '\x00\xFF\x00\xFF' > f.gray
+        convert -depth 8 -size 2x2 f.gray f.png
+
+    If the `-size` is too small, e.g. `1x2`, make multiple images, e.g. `f-N.png`.
+
+### Specify a format explicitly
+
+To force the format of an input or output, prefix it with `format:`, e.g.:
+
+    convert -depth 8 -size 320x200+0 gray:f pic.png
+
+treats an unknown binary format in file `f` as `gray`.
+
+### Output to stdout
+
+Since output is determined by the file extension, we have to specify it with the magic syntax:
+
+    convert in.jpg pbm:-
+
+Or:
+
+    convert in.jpg pbm:
+
+- <http://superuser.com/questions/577992/convert-image-at-command-line-to-console-stream>
+- <http://stackoverflow.com/questions/4066173/using-imagemagick-without-making-files>
+
+There are also some magic formats, like:
+
+    convert in.jpg info:
+
+which produces the same as:
+
+    identify in.jpg
 
 ### resize
 
@@ -62,9 +140,65 @@ Fixed height:
 
 	convert large.png -resize x100 small.png
 
-Force modififed aspect ratio:
+Force modified aspect ratio:
 
 	convert large.png -resize '50x100!' small.png
+
+### trim
+
+Automagically remove white background.
+
+Perfect to get smaller data like documents out of scanned A4 pages.
+
+### depth
+
+Specify number of bits for each channel.
+
+If the input format does not specify it through metadata, you must specify if yourself.
+
+E.g.:
+
+    printf '\x00\xFF\x00\xFF\x00\xFF' > f.gray
+    convert -depth 8 -size 2x3 f.gray -depth 16 g.gray
+    hd g.gray
+
+Gives:
+
+    00000000  00 00 ff ff 00 00 ff ff  00 00 ff ff              |............|
+    0000000c
+
+The first `-depth 8`, specifies it for the input, and the second for the output.
+
+#### Depths that are not multiple of 8
+
+TODO: what happens when depth < 8? http://stackoverflow.com/questions/10155092/how-do-i-convert-image-to-2-bit-per-pixel ImageMagick packs multiple bits per byte since it is not possible to address bits, but I don't understand exactly how. Specially, because it depends on the dimensions! E.g.;
+
+    printf "%10s" | sed 's/ /\xFF\x00/g' > f.gray
+    convert -depth 8 -size 1x20 f.gray -depth 2 g.gray
+    hd g.gray
+    convert -depth 8 -size 2x10 f.gray -depth 2 g.gray
+    hd g.gray
+    convert -depth 8 -size 10x2 f.gray -depth 2 g.gray
+    hd g.gray
+    convert -depth 8 -size 20x1 f.gray -depth 2 g.gray
+    hd g.gray
+
+Gives:
+
+    00000000  80 00 80 00 80 00 80 00  80 00 80 00 80 00 80 00  |................|
+    *
+    00000014
+
+    00000000  80 80 80 80 80 80 80 80  80 80                    |..........|
+    0000000a
+
+    00000000  aa 80 aa 80                                       |....|
+    00000004
+
+    00000000  aa aa a0                                          |...|
+    00000003
+
+So it seems that if depth < 8, then ImageMagick operates line wise, and 0 pads missing bits.
 
 ### crop
 
@@ -86,13 +220,7 @@ Bottom 50 percent:
 
     convert -gravity south -crop 100x50% a.jpg b.jpg
 
-### color
-
--   `-colorspace Gray`: convert to grayscale:
-
-        convert in.png -colorspace Gray out.png
-
--   `-monochrome`: monochrome image. TODO == -depth 1? But not in my tests.
+### Color options
 
 -   `-depth`: number of bits per pixel.
 
@@ -104,13 +232,33 @@ Bottom 50 percent:
 
         convert -density 300 a.pdf a.jpg
 
--   `-threshold`: Simple way to convert to black and white: if color average is above threshold, pixel is white else pixel is black:
-
-        convert -threshold 50 a.jpg b.jpg
+    This produces horrible effects because there is no dithering.
 
 -   `-level`: linear transform on color space:
 
         convert -level -100,100 a.jpg b.jpg
+
+#### colorspace
+
+`-colorspace gray`: convert to grayscale:
+
+        convert in.png -colorspace Gray out.png
+
+TODO what does `-colorspace hsl` mean? Do output formats support HSL?
+
+#### Grayscale
+
+-   `-threshold`: Simple way to convert to a binary black and white image: if color average is above threshold, pixel is white else pixel is black:
+
+        convert -threshold 50 a.jpg b.jpg
+
+-   `-monochrome`: seems to generate a black and white binary image with a good dithering.
+
+        convert -monochrome a.jpg b.jpg
+
+    Can likely be achieved with other options? But this is a convenient option
+
+    <http://www.imagemagick.org/Usage/quantize/#monochrome>
 
 ### extent
 
@@ -124,7 +272,7 @@ Percentage version:
 
 ### append
 
-Paste multimple images into one vertically: <http://superuser.com/questions/290656/combine-multiple-images-using-imagemagick>
+Paste multiple images into one vertically: <http://superuser.com/questions/290656/combine-multiple-images-using-imagemagick>
 
     convert -append in-*.jpg out.jpg
 
@@ -167,3 +315,27 @@ Animate multiple images interactively:
     animate -delay 100 img*.png
 
 Not meant to generate a GIF from the command line, but good choice to preview a GIF before creating one.
+
+## Applications
+
+Random gray image:
+
+    head -c 1000000 /dev/urandom > f.gray
+    convert -depth 8 -size 1000x1000 f.gray f.png
+
+Random RGB image:
+
+    head -c 3000000 /dev/urandom > f.rgb
+    convert -depth 8 -size 1000x1000 f.rgb f.png
+
+Stripes:
+
+    printf "%1000000s" | sed 's/ /\xFF\x00/g' > f.gray
+    convert -depth 8 -size 2000x1000 f.gray f.png
+
+Checkerboard:
+
+    printf "%1002001s" | sed 's/ /\xFF\x00/g' > f.gray
+    convert -depth 8 -size 1001x2002 f.gray f.png
+
+

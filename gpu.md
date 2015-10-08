@@ -16,6 +16,22 @@ There are more and more GPUs integrated inside the CPU, such as is the case for 
 
 The GPU market is heavily moved by the gaming industry since good GPUs are needed to play modern games. Therefore it should seem as no surprise if things just don't work in Linux and only in Windows which controls about 100% of the gaming market as of 2013.
 
+## Open-sourceness of drivers
+
+<http://www.pcworld.com/article/2911459/why-nvidia-graphics-cards-are-the-worst-for-open-source-but-the-best-for-linux-gaming.html>
+
+As of 2015, the situation is as follows:
+
+-   NVIDIA has the fastest Linux driver, but offers them as blobs only.
+
+    Nouveau http://nouveau.freedesktop.org/wiki/ is an open source driver reverse engineered from the blobs. Worse performance than blobs obviously.
+
+-   AMD: has both blobs and an open source version. Blob is less powerful than NVIDIA blobs, and open source less powerful still.
+
+    Employs people to write the open source code.
+
+-   Intel: apparently the most open source friendly one.
+
 ## Find your graphics card
 
     sudo lspci | grep VGA

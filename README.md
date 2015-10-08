@@ -6,8 +6,9 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
 
 1.  Related repositories
     1. [Ubuntu Cheat](https://github.com/cirosantilli/ubuntu-cheat)
-    1. [C++ Cheat](https://github.com/cirosantilli/cpp-cheat): compilation / language heavy subjects: POSIX C API, dynamic libraries
-    1. [Networking Cheat](https://github.com/cirosantilli/networking-cheat): networking tools and protocols HTTP, SSH, curl, Apache
+    1. [C++ Cheat](https://github.com/cirosantilli/cpp-cheat)
+    1. [Networking Cheat](https://github.com/cirosantilli/networking-cheat)
+    1. [Gnuplot Cheat](https://github.com/cirosantilli/gnuplot-cheat)
 1.  [utils](utils.sh) dump of many utilities. Being split up into separate files.
 1.  Documentation viewers
     1. [man](man.md)
@@ -30,7 +31,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [dmesg](demesg.md)
     1. [installkernel](installkernel.md)
 1.  Initialization
-    1.  [Install Operating System](install-operating-system.md): how to install a new OS
+    1.  [Install Operating System](install-operating-system.md)
     1.  [Boot](boot.md)
     1.  [Init](init.md): System V, Upstart
 1.  System information

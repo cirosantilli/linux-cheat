@@ -85,8 +85,7 @@ Shortcuts:
 
 -   `Ctrl + PageDown`: go to previous tab
 
--   `T`: text tool. To move text around, use the Move tool.
-    You must click precisely on a character, not on the background.
+-   `T`: text tool. To move text around, use the Move tool. You must click precisely on a character, not on the background.
 
 -   `Shift + T`: resize, scale selection
 
