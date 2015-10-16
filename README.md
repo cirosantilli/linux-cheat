@@ -293,5 +293,3 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
 1.  File sharing
     1. [NFS](nfs.md)
     1. [LDAP](ldap.md)
-1.  Markup
-    1. [Texinfo](texinfo.md)

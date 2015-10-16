@@ -1,3 +1,0 @@
-@node Top
-@top Comment
-@c This is a comment!

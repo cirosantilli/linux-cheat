@@ -1,4 +1,0 @@
-@node Top
-@top value
-@set ABC a b c
-@value{ABC}

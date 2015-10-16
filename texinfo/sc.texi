@@ -1,4 +1,0 @@
-@c Small caps: https://en.wikipedia.org/wiki/Small_caps
-@node Top
-@top sc
-@sc{abc}

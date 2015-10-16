@@ -1,7 +1,0 @@
-@node Top
-@top example
-@example
-int i = 0;
-if (i == 0)
-    puts("zero");
-@end example
