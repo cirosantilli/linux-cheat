@@ -298,3 +298,7 @@ Sample output:
        8        7   30718976 sda7
        8        8   30718750 sda8
       11        0    1048575 sr0
+
+## /proc/interrupts
+
+Explained at <https://github.com/cirosantilli/x86-bare-metal-examples/> because you have to understand the low level PIC stuff for that to make any sense.

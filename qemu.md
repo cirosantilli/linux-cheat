@@ -14,6 +14,8 @@ The top 3 contributors are Red Hat employees.
 
 <https://github.com/qemu/qemu>
 
+By default this talks about QEMU 2.0.0.
+
 ## User vs system modes
 
 There are two main modes for QEMU operation: user or system.
@@ -102,6 +104,8 @@ But that is wasteful if you don't have a GUI in the system you are booting.
     qemu-system-x86_64 -kernel bzImage -initrd rootfs.cpio.gz -nographic -append 'console=ttyS0'
 
 Doing `shutdown` there will only affect the host as usual.
+
+How to access the QEMU monitor there (Ctrl + Alt + 1/2 on GUI): <http://stackoverflow.com/questions/14165158/how-to-switch-to-qemu-monitor-console-when-running-with-curses>
 
 ## Increase screen size
 
@@ -206,29 +210,7 @@ Note that symbol names won't help, because there is no debugging information in 
 
 ### GDB on kernel
 
-TODO I can't get it to work: <https://sourceware.org/bugzilla/show_bug.cgi?id=13984#add_comment>
-
-First build the kernel with debug information by setting the `CONFIG_DEBUG_INFO` and `CONFIG_GDB_SCRIPTS` configurations.
-
-Use the `-s` and `-S` flags:
-
-    qemu-system-x86_64 -kernel ../build/arch/x86/boot/bzImage -initrd rootfs.cpio.gz -S -s
-
-Then:
-
-    gdb -ex "add-auto-load-safe-path ${vmlinux_path}-gdb.py" \
-        -ex "file ${vmlinux_path}" \
-        -ex 'target remote localhost:1234'
-
-`1234` is not officially reserved by anyone.
-
-Finally you can do:
-
-    hbreak start_kernel
-
-It must be a hardware breakpoint, `break` software breakpoints are ignored. TODO why? See also:
-
-- <https://bugs.launchpad.net/ubuntu/+source/qemu-kvm/+bug/901944>
+<http://stackoverflow.com/a/33203642/895245>
 
 ## Monitor
 
@@ -239,6 +221,10 @@ Enter with: `Ctrl + Alt + 2`.
 Leave with: `Ctrl + Alt + 1`.
 
 Those allow you to observe the program state without using an external debugger like GDB. GDB is more powerful however.
+
+## Switch TTY
+
+On Ubuntu 14.04, `Ctrl + Alt + Fx` changes the TTY on the host, for guest use Alt + Left / Right: <http://askubuntu.com/questions/54814/how-can-i-ctrl-alt-f-to-get-to-a-tty-in-a-qemu-session>
 
 ## User mode
 
@@ -276,3 +262,29 @@ You can use UEFI instead of BIOS by downloading `OVMF.fd` and using:
 See: <http://unix.stackexchange.com/a/228053/32558>
 
 The Linux 4.2 kernel works out-of-the-box with it.
+
+## append
+
+Pass kernel boot parameters (command line arguments):
+
+    -append "init=/dev/sbin panic=1"
+
+## driver
+
+QEMU 2.3.0 complains with a warning if we don't set `format`, so in this version we have to use:
+
+    qemu-systemi386 -drive 'file=my.img,format=raw'
+
+## Internals
+
+### Create your own hardware emulator that works with QEMU
+
+<http://ilevex.eu/post/88944209761/how-to-create-a-custom-pci-device-in-qemu>
+
+## Performance simulation
+
+Nope, QEMU is just designed to be fast, and performance is not well documented because it would reveal too much internals:
+
+- <http://stackoverflow.com/questions/17454955/can-you-check-performance-of-a-program-running-with-qemu-simulator>
+- <http://stackoverflow.com/questions/14259542/cycle-accurate-simulation-of-x86-hardware>
+- <https://en.wikipedia.org/wiki/Computer_architecture_simulator>

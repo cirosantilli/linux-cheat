@@ -258,3 +258,27 @@ But it does not work all the time, since those programs may not implement `-` be
 Real time clock.
 
 TODO example.
+
+## /dev/fb0
+
+## Framebuffer
+
+I think this can be used to dump and write to the screen.
+
+TODO: minimal example.
+
+- <https://www.kernel.org/doc/Documentation/fb/api.txt>
+- <https://www.kernel.org/doc/Documentation/fb/framebuffer.txt>
+- <http://stackoverflow.com/questions/4996777/paint-pixels-to-screen-via-linux-framebuffer>
+- <http://superuser.com/questions/495948/can-i-display-a-jpg-or-png-to-the-framebuffer-dev-fb>
+- <http://unix.stackexchange.com/questions/25063/capturing-area-of-the-screen-without-a-desktop-environment>
+- <http://serverfault.com/questions/125524/linux-cli-screenshot-without-x>
+- `man fbdev`
+
+Looks like the X-server is implemented through it!
+
+## /dev/mem
+
+    man mem
+
+Allows you to read physical memory.

@@ -63,6 +63,11 @@
 
     [ "$(echo 'a' | awk '{print}')" = 'a' ] || exit 1
 
+  # - arithmetic: same as C: +, *, -, /
+  # - string comp: `==` and `!=`
+  # - posix string ERE regex comp: ~// !~// (sub match accepted unless you use `^$`)
+  # - if else for while: like C
+
 ## Variables
 
   # Same as c
@@ -91,13 +96,18 @@
 
   ## FNR: total number of records in current file file
 
-#- arithmetic: same as C: +, *, -, /
+  ## length: number of bytes of the line, excluding the newline
 
-#- string comp: `==` and `!=`
+  ## RS
 
-#- posix string ERE regex comp: ~// !~// (sub match accepted unless you use `^$`)
+    # Record separator.
 
-#- if else for while: like C
+    # `''` is a special value that selects blank lines, i.e. paragraphs:
+
+    # - http://unix.stackexchange.com/questions/136218/grep-sed-or-awk-print-entire-paragraph-in-a-file-on-pattern-match
+    # - http://unix.stackexchange.com/questions/82944/how-to-grep-for-text-in-a-file-and-display-the-paragraph-that-has-the-text/82958#82958
+
+      [ "$(printf '1 a0\na1\na2\n\nb0\nb1\nb2\n\nc0\nc1\nc2\n' | awk -v RS='' '/b1/')" = "$(printf 'b0\nb1\nb2')" ] || exit 1
 
 ## String to int
 
@@ -107,13 +117,15 @@
 
 ## print
 
-  awk 'BEGIN {print "a", 1}'
-    #'a 1'
-      # by default, print does space separation
+  # By default, print does space separation:
 
-  awk 'BEGIN {print "a" "b"}'
+    awk 'BEGIN {print "a", 1}'
+    #'a 1'
+
+  # String concat:
+
+    awk 'BEGIN {print "a" "b"}'
     #'ab'
-      #string concat
 
   # Without arguments, it defaults to `print $0`:
 
@@ -123,6 +135,16 @@
 
     [ "$(echo 'a' | awk '1')" = 'a' ] || exit 1
     [ "$(echo 'a' | awk '1;1')" = "$(printf "a\na")" ] || exit 1
+
+## next
+
+  # Stop current action, move to next line.
+
+## Subtract adjacent lines
+
+  # TODO fails if the first is zero.
+
+    #[ "$(printf '0\n1\n3\n6' | awk awk 'p{print $0-p}{p=$0}')" = "$(printf '1\n2\n3')" ] || exit 1
 
 ## Applications
 
@@ -142,21 +164,14 @@
 
     [ "$(printf '1 a\n2 b\n1 c\n' | awk '$1 ~/^1$/ { print $2; exit }')" = 'a' ] || exit 1
 
-## RS
+  # Sum column:
 
-  # Record separator.
+    #awk '{sum += $1} END {print sum}'
 
-  # `''` is a special value that selects blank lines, i.e. paragraphs:
+  # Variables start as 0, so no need to initalize them.
+  # http://unix.stackexchange.com/questions/115998/how-do-i-multiply-and-sum-column-data-using-awk-and-or-sed
 
-  # - http://unix.stackexchange.com/questions/136218/grep-sed-or-awk-print-entire-paragraph-in-a-file-on-pattern-match
-  # - http://unix.stackexchange.com/questions/82944/how-to-grep-for-text-in-a-file-and-display-the-paragraph-that-has-the-text/82958#82958
-
-    [ "$(printf '1 a0\na1\na2\n\nb0\nb1\nb2\n\nc0\nc1\nc2\n' | awk -v RS='' '/b1/')" = "$(printf 'b0\nb1\nb2')" ] || exit 1
-
-## Subtract adjacent lines
-
-  # TODO fails if the first is zero.
-
-    #[ "$(printf '0\n1\n3\n6' | awk awk 'p{print $0-p}{p=$0}')" = "$(printf '1\n2\n3')" ] || exit 1
+  # Skip blank lines:
+  # http://stackoverflow.com/questions/11687216/awk-to-skip-the-blank-lines
 
 echo 'ALL ASSERTS PASSED'

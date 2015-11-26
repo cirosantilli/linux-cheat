@@ -2,7 +2,7 @@
 
 How to compile and install the kernel.
 
-To get up and running really fast, use <https://github.com/cirosantilli/runlinux>
+To get up and running really fast, use <https://github.com/cirosantilli/runlinux>. The kernel userland minimal hello world is: <http://superuser.com/a/991733/128124>
 
 Tested on `v4.0`.
 
@@ -337,8 +337,8 @@ TODO vs `/usr/include/linux`: <http://stackoverflow.com/questions/9094237/whats-
 
 ### tags
 
-    make cscope
-    make tags
+    (unset KBUILD_OUTPUT make cscope)
+    (unset KBUILD_OUTPUT make tags)
 
 Seems to use `scripts/tags.sh`.
 

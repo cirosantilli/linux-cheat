@@ -105,6 +105,8 @@ System V configuration file.
 
 Not used in Upstart.
 
+To learn it, use this: <https://github.com/ivandavidov/minimal/blob/9797b843d117b520919471c45f6c1fe5f1e916d6/src/5_generate_rootfs.sh#L81>
+
 ### Ubuntu specific
 
 `/etc/defaults/name` are shell scripts that contain environment variables which can be used by the corresponding init script. Rationale: scripts can be updated without destroying parameters. File in `defaults` are never changed by the package manager.

@@ -18,7 +18,8 @@ The GPU market is heavily moved by the gaming industry since good GPUs are neede
 
 ## Open-sourceness of drivers
 
-<http://www.pcworld.com/article/2911459/why-nvidia-graphics-cards-are-the-worst-for-open-source-but-the-best-for-linux-gaming.html>
+- <http://www.pcworld.com/article/2911459/why-nvidia-graphics-cards-are-the-worst-for-open-source-but-the-best-for-linux-gaming.html>
+- <http://www.phoronix.com/scan.php?page=article&item=steamos-open-ubuntu&num=1>
 
 As of 2015, the situation is as follows:
 
@@ -32,7 +33,9 @@ As of 2015, the situation is as follows:
 
 -   Intel: apparently the most open source friendly one.
 
-## Find your graphics card
+## Find your graphics card model
+
+<http://askubuntu.com/questions/72766/how-do-i-find-out-the-model-of-my-graphics-card>
 
     sudo lspci | grep VGA
 
@@ -70,6 +73,27 @@ Bumblebee seems to be the best bet to support NVIDIA Optimus as of 2013.
 
 ## NVIDIA
 
+Check the required driver:
+
+- <http://www.nvidia.com/Download/index.aspx>
+
+### Make it work
+
+It is either made to work, or it wont work, don't try too much.
+
+Managed to make a NVS 5400M work on Ubuntu 15.10 with just:
+
+    sudo apt-get install nvidia-352
+
+where `-352` is the latest driver available.
+
+Good luck:
+
+- <http://askubuntu.com/questions/162639/how-do-i-get-ubuntu-to-recognize-my-nvidia-graphics-card>
+- <http://askubuntu.com/questions/472928/correct-nvidiaintel-graphics-setup-in-14-04>
+- <http://askubuntu.com/questions/61396/how-do-i-install-the-nvidia-drivers>
+- <http://askubuntu.com/questions/172609/how-to-disable-discrete-gpu-using-nvidia-drivers>
+
 ### NVIDIA version names
 
 Each hardware has two names:
@@ -82,9 +106,13 @@ For example, from the `lspci` output, in `GF108M [NVS 5400M]`:
 - `NVS 5400M` is the model name
 - `GF108M` is the codename
 
-### NVIDIA settings
+## Check that GPU is being used
 
-To check that the installation is working, use `nvidia-settings`, which monitors the GPU, and will show if the GPU is not properly installed.
+- <http://askubuntu.com/questions/68028/how-do-i-check-if-ubuntu-is-using-my-nvidia-graphics-card>
+- <http://unix.stackexchange.com/questions/16407/how-to-check-which-gpu-is-active>
+- <http://askubuntu.com/questions/363775/what-is-the-use-of-nvidia-prime>
+
+`nvidia-settings`: TODO what indicates that it is working?
 
 ## dGPU
 
@@ -95,3 +123,30 @@ Discrete GPU, a traditional GPU separate from the CPU, with it's own internal me
 Intermediate between CPU and GPU, uses RAM memory.
 
 <http://en.wikipedia.org/wiki/Graphics_processing_unit#Integrated_graphics_solutions>
+
+## Benchmarks
+
+<http://askubuntu.com/questions/31913/how-to-perform-a-detailed-and-quick-3d-performance-test>
+
+- `glxgears`
+- `glmark2`. But it segfaults after installing NVIDIA: <https://bugs.launchpad.net/ubuntu/+source/glmark2/+bug/1475902>
+
+## nvidia-prime
+
+Tools to control GPUs:
+
+Chose which GPU to use:
+
+    prime-select
+
+## AMD
+
+### APU
+
+### Fusion
+
+AMD's on-board GPU.
+
+<https://en.wikipedia.org/wiki/AMD_Accelerated_Processing_Unit>
+
+They are fabless.

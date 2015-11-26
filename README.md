@@ -23,6 +23,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [Alternatives](alternatives.md)
         1. [Hurd](hurd.md)
         1. [BSD](bsd.md)
+        1. [Android](android.md)
     1.  [Distros](distros.md)
         1. [Minimal distros](minimal-distros.md)
 1.  [Kernel](kernel/)
@@ -273,11 +274,14 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1. [gc](gc.md)
 1.  Packages
     1. [util-linux](util-linux.md)
+1.  Simulation
+    1. [gazebo](gazebo.md)
 1.  Misc
     1. [BusyBox](busybox.md)
     1. [cron](cron.sh)
     1. [logrotate](logrotate.md)
     1. [xargs](xargs.md)
+1.  [Statistics](statistics.md)
 1.  [Bibliography](bibliography.md)
 
 ## WIP

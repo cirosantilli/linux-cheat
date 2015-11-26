@@ -21,3 +21,7 @@ Options:
 - `l`: newlines only
 - `L`: max line length only
 - `w`: words only
+
+To omit the filename: use stdin! <http://stackoverflow.com/questions/3746947/get-just-the-integer-from-wc-in-bash>
+
+    wc <file

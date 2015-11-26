@@ -23,6 +23,8 @@ WIP
 1. [LXC](lxc.md)
 1. [Kconfig](kconfig.md)
 1. [Boot command line parameters](boot-command-line-parameters.md)
+1. [init](init.md)
+1. [Panic](panic.md)
 
 ## User programs
 

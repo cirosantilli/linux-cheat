@@ -29,3 +29,7 @@
   # Column range from second to last:
 
     [ "$(printf 'a:b:c\nd:e:f\n' | cut -d: -f2-)" = "$(printf 'b:c\ne:f')" ] || exit 1
+
+  # Empty field (two adjacent delimiters):
+
+    [ "$(printf 'a::c\nd:e:f\n' | cut -d: -f2)" = "$(printf '\ne')" ] || exit 1

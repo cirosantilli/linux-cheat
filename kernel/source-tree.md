@@ -53,6 +53,8 @@ System calls:
 
 -   `arch/x86/kernel/entry_32.S`, `arch/x86/kernel/entry_64.S`: the low level system call handling
 
+-   `do_int3`: handles `int $3` to generate SIGTRAP
+
 ## asm
 
 `asm` directories contains header files which differ from one architecture to another.
@@ -164,7 +166,15 @@ Documents stable APIs that the kernel exposes. Basically system calls and `sysfs
 
 ## init
 
-Initialization code. Specially important is `main.c` which ties the whole kernel together.
+## Entry point
+
+- <http://stackoverflow.com/questions/18266063/does-kernel-have-main-function/33422401#33422401>
+
+Other sources:
+
+- <http://stackoverflow.com/questions/18266063/does-kernel-have-main-function>
+- <https://github.com/0xAX/linux-insides/blob/fee77bccbb2b0b07e8bd4283abf83f2de488b06c/Initialization/linux-initialization-4.md>
+- <http://unix.stackexchange.com/questions/86955/does-the-kernel-have-a-main-function>
 
 ## kernel
 

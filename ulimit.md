@@ -99,7 +99,9 @@ Bash also provides the `soft` and `hard` special limit values which refer to the
 
 ### v
 
-Virtual memory.
+Virtual memory in bytes:
+
+    ulimit -Sv 500000
 
 This is one of the most useful limits, when you are running a potentially memory heavy algorithm and don't want it to crash your computer.
 

@@ -24,3 +24,7 @@ Prints nothing.
     else
       echo eq
     fi
+
+## More than two files
+
+<http://unix.stackexchange.com/questions/33638/diff-several-files-true-if-all-not-equal>

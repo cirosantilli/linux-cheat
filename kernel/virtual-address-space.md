@@ -175,7 +175,12 @@ Must be small not to take too much space.
 
 Grows down.
 
-May be allowed to increase by the OS access is done before the maximum stack value `RLIMIT_STACK`.
+May be allowed to increase by the OS if access is done before the maximum stack value `RLIMIT_STACK`? TODO or is the actual max? 
+
+TODO: quote source and answer:
+
+- http://stackoverflow.com/questions/17671423/stack-allocation-for-process
+- http://unix.stackexchange.com/questions/145557/how-does-stack-allocation-work-in-linux
 
 ## Memory mapping
 
