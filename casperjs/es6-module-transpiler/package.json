@@ -1,0 +1,10 @@
+{
+  "name": "cirosantilli-es6-module-transpiler-test",
+  "version": "0.0.1",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-es6-module-transpiler": "^0.6.0",
+    "grunt-contrib-watch": "^0.6.1"
+  }
+}

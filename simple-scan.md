@@ -8,8 +8,6 @@ Usage:
 
     simple-scan
 
-Then click scan button. The image updates as the scan is made,
-and you can stop it when you are done before the scanner reached the bottom.
+Then click scan button. The image updates as the scan is made, and you can stop it when you are done before the scanner reached the bottom.
 
-Make sure your scanner supports the definition preferences you set
-or you will get a connexion error.
+Make sure your scanner supports the definition preferences you set or you will get a connexion error.

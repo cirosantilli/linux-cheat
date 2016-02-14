@@ -1,4 +1,6 @@
-## sudo ##sudoers
+## sudo
+
+##sudoers
 
   # Do next single command as another user or super user.
 
@@ -150,10 +152,18 @@ EOF
 
   ## Environemnt variables
 
+  ## PATH
+
     # By default, `sudo` ignores the current environment variables to start a new "fresh" session.
 
-    # This can be avoided with the `-E` option:
-    # <http://stackoverflow.com/questions/8633461/how-to-keep-environment-variables-when-using-sudo>
+    # - http://superuser.com/questions/232231/how-do-i-make-sudo-preserve-my-environment-variables
+    # - http://stackoverflow.com/questions/8633461/how-to-keep-environment-variables-when-using-sudo
+
+    # PATH is treated even more specially:
+
+    # - http://stackoverflow.com/questions/8633461/how-to-keep-environment-variables-when-using-sudo
+    # - http://stackoverflow.com/questions/257616/sudo-changes-path-why
+    # - http://unix.stackexchange.com/questions/83191/how-to-make-sudo-preserve-path
 
   ## Ubuntu default sudo config
 

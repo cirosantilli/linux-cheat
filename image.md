@@ -68,6 +68,10 @@ Specified by Microsoft.
 
 Lossless or lossy, in practice lossless applications only.
 
+### Raw formats
+
+<https://en.wikipedia.org/wiki/Raw_image_format>
+
 ## Get info on image
 
 - `file $f`: type, and for certain formats size other major parameters such as depth.
@@ -153,3 +157,5 @@ Important application: LaTeX -> DVI -> PNG -> website.
 - <https://en.wikipedia.org/wiki/SRGB>
 
 - <https://en.wikipedia.org/wiki/HSL_and_HSV>
+
+- <https://en.wikipedia.org/wiki/YUV>

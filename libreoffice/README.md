@@ -34,3 +34,15 @@ Create: Select the table > Data > Pivot table. Drag and drop header fields into 
 Dragging multiple headers on rows or columns creates a hierarchy. It is not possible to open or close hierarchies quickly on the table directly: you must right click and edit the pivot layout.
 
 To drilldown the facts, double click on the data cell. This opens a new tab with the drilldown table.
+
+## How to do GUI stuff
+
+Copy and paste row: <https://ask.libreoffice.org/en/question/13577/how-to-insert-copied-columns/> Possible solution:
+
+- insert multiple rows
+- select what you want to copy and copy it
+- select all the places you want to paste them and do it
+
+Insert multiple rows: <https://ask.libreoffice.org/en/question/559/inserting-rows-in-a-spreadsheet/>
+
+Sort by column: Select cells then Menu > Data > Sort

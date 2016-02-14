@@ -22,6 +22,36 @@ A program capable of `COmpressing and DECompressing` certain formats.
 
 The term is often used in phrases as: "Do you have the codec for XXX to watch" in which it means, do you have the program that does the decoding?
 
+#### H.264
+
+Not free, dominates in 2015.
+
+<https://en.wikipedia.org/wiki/H.264/MPEG-4_AVC#Patent_licensing>
+
+#### H.265
+
+#### HEVC
+
+Non-free proposed successor to H.264.
+
+<https://en.wikipedia.org/wiki/High_Efficiency_Video_Coding>
+
+#### VP9
+
+Free, by Google for the web.
+
+#### Daala
+
+Free by Xiph and Mozilla.
+
+<https://xiph.org/daala/>
+
+#### Thor
+
+<https://en.wikipedia.org/wiki/Thor_%28video_codec%29>
+
+Free, by Cisco.
+
 ### Subtitles
 
 Subtitles are often stored in DVDs as images the format pair: idx + sub.
@@ -152,23 +182,7 @@ Many utilities are front-ends to libraries provided by a single project.
 
 Large open source project to offer tools that deal with many, many video formats and containers.
 
-Also the name of an utility to convert between formats,
-which has been renamed to `avconv` and deprecated the old name,
-presumably because it does much more than mpeg now, and is linked to `libav`.
-
-#### avconv utility
-
-In Ubuntu, the `ffmpeg` and `avconv` utilities are contained in the `libav-tools` package.
-
-Includes a version of the library `libav`.
-
-Convert `ogg` into `mpg`:
-
-    avconv -i input.ogv -f 24 output.mpg
-
-You must specify frame rate, as the following fails because MPEG does not support the default 15fps:
-
-    avconv -i input.ogv output.mpg
+Also the name of an utility to convert between formats, which has been renamed to `avconv` and deprecated the old name, presumably because it does much more than MPEG now, and is linked to `libav`.
 
 ### mkvtools
 

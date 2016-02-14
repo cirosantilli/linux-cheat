@@ -188,7 +188,7 @@ Show man short description of ls.
 
 ## manpath
 
-Man search path
+Get the man search path:
 
     manpath
 

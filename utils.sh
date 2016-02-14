@@ -42,664 +42,616 @@
 
   ## source-highlight
 
-    # Takes in source files and produces highlighted output in one of the formats:
+  # Takes in source files and produces highlighted output in one of the formats:
 
-    # - html
-    # - ansi terminal escape sequences
-    # - pdf
+  # - html
+  # - ansi terminal escape sequences
+  # - pdf
 
-    # List all languages supported:
+  # List all languages supported:
 
-      source-highlight --lang-list
+    source-highlight --lang-list
 
-    # Generate an `a.html` highlighted version of `a.py`:
+  # Generate an `a.html` highlighted version of `a.py`:
 
-      source-highlight a.py
+    source-highlight a.py
 
-  ## pygments
+## pygments
 
-    #python package for multi language syntax coloring.
+  #python package for multi language syntax coloring.
 
-    #take python source, output colored html:
+  #take python source, output colored html:
 
-      pygmentize -O full -o test.html test.py
-      firefox test.html &
+    pygmentize -O full -o test.html test.py
+    firefox test.html &
 
-    #-O: options.
-      #full is required here, otherwise there would be no header,
-      #and the style info would not be put in the html
+  #-O: options.
+    #full is required here, otherwise there would be no header,
+    #and the style info would not be put in the html
 
-    #input and output formats here were inferred from extension,
-    #but can be explicitly set too.
+  #input and output formats here were inferred from extension,
+  #but can be explicitly set too.
 
-  ## c99
+## c99
 
-    #POSIX C99 compiler!
+  #POSIX C99 compiler!
 
-    #On Linux as of 2013, acts as a simple GCC frontend.
+  #On Linux as of 2013, acts as a simple GCC frontend.
 
-    #At first glance `gcc -std=c99` is largely compatible with the POSIX c99.
+  #At first glance `gcc -std=c99` is largely compatible with the POSIX c99.
 
-  ## fort77
+## fort77
 
-    #POSIX fortran compiler.
+  #POSIX fortran compiler.
 
 ## text
 
-  ## yes
+## yes
 
-    # coreutils
+  # coreutils
 
-    # Repeat an output forever!
+  # Repeat an output forever!
 
-      yes
-        #y
-        #y
-        #y
-        #...
+    yes
+      #y
+      #y
+      #y
+      #...
 
-      yes a b c
-        #a b c
-        #a b c
-        #a b c
-        #...
+    yes a b c
+      #a b c
+      #a b c
+      #a b c
+      #...
 
-    # Good for programs that keep asking for keyboard confirmations
-    # and which have no command line way of given them at invocation time:
+  # Good for programs that keep asking for keyboard confirmations
+  # and which have no command line way of given them at invocation time:
 
-      yes | timeout 1 cat
+    yes | timeout 1 cat
 
-  ## nl
+## nl
+
+  # POSIX 7
+
+  # CAT LInes, number non-empty ones:
+
+    nl "$f"
+
+## fmt
+
+  # coreutils.
+
+  # Wrap lines, but don't cut words
+
+    [ `echo "a bcd" | fold -w 2` = $'a\nbcd' ] || exit 1
+
+## split
+
+  # coreutils package.
+
+  # Split files into new smaller files of same size
+
+    echo -n abc > f
+
+    split -db1 f p
+    split -dn3 f p
+
+    [ "$(cat p00)" = 'a' ] || exit 1
+    [ "$(cat p01)" = 'b' ] || exit 1
+    [ "$(cat p02)" = 'c' ] || exit 1
+
+  # Existing files are overwritten:
+
+  # Options:
+
+  # - `d`: uses number suffixes, otherwise, uses letters aa, ab, ac, ...
+  # - `b`: bytes per file
+  # - `n`: number of files
+
+## csplit
+
+  # corutils.
+
+  # Split files into new smaller files at lines that match given EREs.
+
+  # Matching lines are kept.
+
+    printf '0\naa\n1\naa\n2\n' > f
+    csplit f '/^a/' '{*}'
+    [ `cat xx00` = 0 ] || exit 1
+    [ `cat xx01` = $'aa\n1' ] || exit 1
+    [ `cat xx02` = $'aa\n2' ] || exit 1
+
+## Path operations
+
+  ## basename
+
+  ## dirname
 
     # POSIX 7
 
-    # CAT LInes, number non-empty ones:
+      [ "$(dirname  "/path/to/dir/or/file")" = "/path/to/dir/or" ] || exit 1
+      [ "$(basename "/path/to/dir/or/file")" = "file"            ] || exit 1
 
-      nl "$f"
+      [ "$(dirname  "/")" = "/" ] || exit 1
+      [ "$(basename "/")" = "/" ] || exit 1
 
-  ## fmt
-
-    # coreutils.
-
-    # Wrap lines, but don't cut words
-
-      [ `echo "a bcd" | fold -w 2` = $'a\nbcd' ] || exit 1
-
-  ## split
-
-    # coreutils package.
-
-    # Split files into new smaller files of same size
-
-      echo -n abc > f
-
-      split -db1 f p
-      split -dn3 f p
-
-      [ "$(cat p00)" = 'a' ] || exit 1
-      [ "$(cat p01)" = 'b' ] || exit 1
-      [ "$(cat p02)" = 'c' ] || exit 1
-
-    # Existing files are overwritten:
-
-    # Options:
-
-    # - `d`: uses number suffixes, otherwise, uses letters aa, ab, ac, ...
-    # - `b`: bytes per file
-    # - `n`: number of files
-
-  ## csplit
-
-    # corutils.
-
-    # Split files into new smaller files at lines that match given EREs.
-
-    # Matching lines are kept.
-
-      printf '0\naa\n1\naa\n2\n' > f
-      csplit f '/^a/' '{*}'
-      [ `cat xx00` = 0 ] || exit 1
-      [ `cat xx01` = $'aa\n1' ] || exit 1
-      [ `cat xx02` = $'aa\n2' ] || exit 1
-
-  ## Path operations
-
-    ## basename
-
-    ## dirname
-
-      # POSIX 7
-
-        [ "$(dirname  "/path/to/dir/or/file")" = "/path/to/dir/or" ] || exit 1
-        [ "$(basename "/path/to/dir/or/file")" = "file"            ] || exit 1
-
-        [ "$(dirname  "/")" = "/" ] || exit 1
-        [ "$(basename "/")" = "/" ] || exit 1
-
-      # Extensions can be extracted naively with variable expansion, but it is not trivial to make it work for dot files.
+    # Extensions can be extracted naively with variable expansion, but it is not trivial to make it work for dot files.
 
 ## moreutils
 
-  # Extra base Linux utils.
+# Extra base Linux utils.
 
-    sudo aptitude install moreutils
+  sudo aptitude install moreutils
 
-  ## sponge
+## sponge
 
-    # solves the input to output problem problem.
+  # solves the input to output problem problem.
 
-    # setup:
+  # setup:
 
-      printf '0\n1\n' > a
+    printf '0\n1\n' > a
 
-    # Fails:
+  # Fails:
 
-      grep 0 a | cat > a
-      [ "`cat a`" = '' ] || exit 1
+    grep 0 a | cat > a
+    [ "`cat a`" = '' ] || exit 1
 
-    # Works:
+  # Works:
 
-      grep 0 a | sponge a
-      [ "`cat a`" = '0' ] || exit 1
+    grep 0 a | sponge a
+    [ "`cat a`" = '0' ] || exit 1
 
-  ## vipe
+## vipe
 
-    # Use editor (aka vim =)) in the middle of a pipe:
+  # Use editor (aka vim =)) in the middle of a pipe:
 
-      EDITOR=vim
-      seq 10 | vipe | less
+    EDITOR=vim
+    seq 10 | vipe | less
 
-      a="`seq 10 | vipe`"
-      echo "$a"
+    a="`seq 10 | vipe`"
+    echo "$a"
 
-    # Uses editor environment variable to determine editor.
+  # Uses editor environment variable to determine editor.
 
-    # In Ubuntu, this is set by default to vim in bashrc.
+  # In Ubuntu, this is set by default to vim in bashrc.
 
-    # This is a good way to get user input that might be large, e.g. git commit messages.
+  # This is a good way to get user input that might be large, e.g. git commit messages.
 
-      a="`echo -e "\n#lines starting with '#' will be ignored" | vipe | grep -Ev '^#' `"
-      echo "$a"
+    a="`echo -e "\n#lines starting with '#' will be ignored" | vipe | grep -Ev '^#' `"
+    echo "$a"
 
 ## Character encoding
 
-  ## Chinese
+## Chinese
 
-    # - Guobiao is mainly used in Mainland China and Singapore. Named as `GB\d+`
-    # - Big5, used in Taiwan, Hong Kong and Macau
+  # - Guobiao is mainly used in Mainland China and Singapore. Named as `GB\d+`
+  # - Big5, used in Taiwan, Hong Kong and Macau
 
-    # `file` does not work properly for chinese
+  # `file` does not work properly for chinese
 
-  ## dos2unix
+## dos2unix
 
-    # CR LF to CR.
+  # CR LF to CR.
 
-    # In place:
+  # In place:
 
-      echo -e 'a\r\nb\r\n' > a.txt
-      dos2unix a.txt
-      [ "`cat a.txt`" = $'a\nb\n' ] || exit 1
+    echo -e 'a\r\nb\r\n' > a.txt
+    dos2unix a.txt
+    [ "`cat a.txt`" = $'a\nb\n' ] || exit 1
 
-    # Does some smart heuristic things like skipping binary files and FIFOs, so better than `sed`.
+  # Does some smart heuristic things like skipping binary files and FIFOs, so better than `sed`.
 
-  ## enca
+## enca
 
-    # Detect and convert international encodings.
+  # Detect and convert international encodings.
 
-    # Guess encoding:
+  # Guess encoding:
 
-      enca a.txt
+    enca a.txt
 
-    # This may not work if you don't give the expected language as input.
+  # This may not work if you don't give the expected language as input.
 
-    # View available languages:
+  # View available languages:
 
-      enca --list languages
+    enca --list languages
 
-    # Tell enca that the file is in chinese:
+  # Tell enca that the file is in chinese:
 
-      enca -L zh a.txt
+    enca -L zh a.txt
 
-    # You give languages as locales
-    # (i think as 2 letter iso 639-1 codes <http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes> since only `zh` worked for chinese)
+  # You give languages as locales
+  # (i think as 2 letter iso 639-1 codes <http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes> since only `zh` worked for chinese)
 
-  ## convmv
+## convmv
 
-    # mv converting encodings
+  # mv converting encodings
 
 ## system info
 
-  ## CPU
+## CPU
 
-  ## Processor
+## Processor
 
-    ## mpstat
+  ## mpstat
 
-      # Processor related stats:
+    # Processor related stats:
 
-        mpstat
+      mpstat
 
-    ## nproc
+  ## nproc
 
-      # Number of processing unites (= cores?).
+    # Number of processing unites (= cores?).
 
-      # coreutils
+    # coreutils
 
-        nproc
+      nproc
 
-	## hwinfo
+## hwinfo
 
-		sudo aptitude install -y hwinfo
+  sudo aptitude install -y hwinfo
 
-		hwinfo | less
+  hwinfo | less
 
-  ## sar
+## sar
 
-    # Long term performance statistics.
+  # Long term performance statistics.
 
-    # You must run this as a cronjob:
+  # You must run this as a cronjob:
 
-      crontab -e
+    crontab -e
 
-    # Paste:
+  # Paste:
 
-      */5 * * * * root /usr/lib/sa/sa1 1 1
+    */5 * * * * root /usr/lib/sa/sa1 1 1
 
-    # CPU usage
+  # CPU usage
 
-      sar -u
+    sar -u
 
-    # Disk IO stats:
+  # Disk IO stats:
 
-      sar –d
+    sar –d
 
-    # Network stats:
+  # Network stats:
 
-      sar -n DEV | more
-      sar -n SOCK |more
+    sar -n DEV | more
+    sar -n SOCK |more
 
-  ## hardware specs
+## hardware specs
 
-    ## bus
+  ## bus
 
-      ## usb
+    ## usb
 
-        # New: usb 3.0
-        # Old still existing: usb 2.0
+      # New: usb 3.0
+      # Old still existing: usb 2.0
 
-        # Current uses: mouse, keyboard, external hard disks, external cd, flash storage devices.
+      # Current uses: mouse, keyboard, external hard disks, external cd, flash storage devices.
 
-        # Several device classes.
+      # Several device classes.
 
-        # Several connector types: Standard-A, Standard-B, Micro-B, Mini-B
-        # <http://en.wikipedia.org/wiki/File:Usb_connectors.JPG>
+      # Several connector types: Standard-A, Standard-B, Micro-B, Mini-B
+      # <http://en.wikipedia.org/wiki/File:Usb_connectors.JPG>
 
-        #3.0:
+      #3.0:
 
-          # - full duplex
-          # - 8 pins
-          # - voltage: 5 V
-          # - power: max 0.9 A (5V)
-          # - signaling rate: 5 Gbit/s (Super Speed mode)
-          # - maximal cable length: 5 meters
+        # - full duplex
+        # - 8 pins
+        # - voltage: 5 V
+        # - power: max 0.9 A (5V)
+        # - signaling rate: 5 Gbit/s (Super Speed mode)
+        # - maximal cable length: 5 meters
 
-          ## differentiate from usb 2.0
+        ## differentiate from usb 2.0
 
-            # - 3.0 tipically blue while 2.0 black
-            # - 3.0 has 8 pins instead of 4
-            # - ss for super spped may be written
-            # - <http://www.usb3.com/usb3-info.html>
+          # - 3.0 tipically blue while 2.0 black
+          # - 3.0 has 8 pins instead of 4
+          # - ss for super spped may be written
+          # - <http://www.usb3.com/usb3-info.html>
 
-      ## firewire
+    ## firewire
 
-      ## ethernet
+    ## ethernet
 
-    ## lshw
+  ## lshw
 
-      # Show lots of hardware specs, including networing, USB, CPU.
+    # Show lots of hardware specs, including networing, USB, CPU.
 
-        sudo lshw
+      sudo lshw
 
 ## Processes
 
-  ## pwdx
+## pwdx
 
-    # Print current working directory of given process:
+  # Print current working directory of given process:
 
-      pwdx $pid
+    pwdx $pid
 
-  ## trap
+## trap
 
-    # Capture signals.
+  # Capture signals.
 
-      trap "echo a" SIGINT SIGTERM
+    trap "echo a" SIGINT SIGTERM
 
-    # Now Ctrl-C away and notice `a` get printed.
+  # Now Ctrl-C away and notice `a` get printed.
 
-  ## bg
+## bg
 
-    #POSIX 7
+  #POSIX 7
 
-      #bg %3
-        #starts running job 3 which was stopped on background
-      #bg
-      #bg %+
-      #bg %%
-        #last bg job [+]
-      #bg %-
-        #before last bg job [-]
+    #bg %3
+      #starts running job 3 which was stopped on background
+    #bg
+    #bg %+
+    #bg %%
+      #last bg job [+]
+    #bg %-
+      #before last bg job [-]
 
-  ## fg
+## fg
 
-    #POSIX 7
+  #POSIX 7
 
-      #fg %3
-        #starts running job 3 which was on background on foreground
-      #fg
-        #last job
+    #fg %3
+      #starts running job 3 which was on background on foreground
+    #fg
+      #last job
 
-  ## disown
+## disown
 
-    # Remove job 3 from list of sub jobs.
+  # Remove job 3 from list of sub jobs.
 
-    # Closing bash will not kill it anymore.
+  # Closing bash will not kill it anymore.
 
-      #vlc 100 &
-      #vlc 100 &
-      #vlc 100 &
-      #disown %3
+    #vlc 100 &
+    #vlc 100 &
+    #vlc 100 &
+    #disown %3
 
-  ## flock
+## flock
 
-    # Puts an advisory file lock on given file while a command executes:
+  # Puts an advisory file lock on given file while a command executes:
 
-      touch a
-      flock a sleep 5 &
+    touch a
+    flock a sleep 5 &
 
-    # TODO sample usage.
+  # TODO sample usage.
 
-  ## prtstat
+## prtstat
 
-    #TODO
+  #TODO
 
-  ## peekfd
+## peekfd
 
-    #TODO
+  #TODO
 
-  ## ipcs
+## ipcs
 
-    # List info on inter process communication facilities:
+  # List info on inter process communication facilities:
 
-      ipcs
+    ipcs
 
-    # Shows:
+  # Shows:
 
-    # - shared mem
-    # - semaphores
-    # - message queues
+  # - shared mem
+  # - semaphores
+  # - message queues
 
-    ## ipcrm
+  ## ipcrm
 
-      # Remove IPC facility.
+    # Remove IPC facility.
 
-  ## vmstat
+## vmstat
 
-    # Memory, sway, io, cpu
+  # Memory, sway, io, cpu
 
-    # Run every 1s, 100 times.
+  # Run every 1s, 100 times.
 
-      vmstat 1 100
+    vmstat 1 100
 
-    # Vmstat procs Section
+  # Vmstat procs Section
 
-        #r field: Total number of runnable process
-        #b field: Total number of blocked process
+      #r field: Total number of runnable process
+      #b field: Total number of blocked process
 
-    #Memory section
+  #Memory section
 
-        #Swpd field: Used swap space
-        #Free field: Available free RAM
-        #Buff field: RAM used for buffers
-        #Cache field: RAM used for filesystem cache
+      #Swpd field: Used swap space
+      #Free field: Available free RAM
+      #Buff field: RAM used for buffers
+      #Cache field: RAM used for filesystem cache
 
-    #Swap Section
+  #Swap Section
 
-        #Si field: Amount of memory swapped from disk per second
-        #So field: Amount of memory swapped to disk per second
+      #Si field: Amount of memory swapped from disk per second
+      #So field: Amount of memory swapped to disk per second
 
-    #IO Section
+  #IO Section
 
-        #Bi field: Blocks received from disk
-        #Bo field: Blocks sent to disk.
+      #Bi field: Blocks received from disk
+      #Bo field: Blocks sent to disk.
 
-    #System Section
+  #System Section
 
-        #In field: Number of interrupts per second.
-          #move you mouse and see this go up!
+      #In field: Number of interrupts per second.
+        #move you mouse and see this go up!
 
-        #Cs field: Number of context switches per second.
+      #Cs field: Number of context switches per second.
 
-    #CPU Section
+  #CPU Section
 
-        #Us field: Time spend running user code. (non-kernel code)
-        #Sy field: Time spent running kernel code.
-        #Id field: Idle time.
-        #Wa field: Time spent waiting for the IO
+      #Us field: Time spend running user code. (non-kernel code)
+      #Sy field: Time spent running kernel code.
+      #Id field: Idle time.
+      #Wa field: Time spent waiting for the IO
 
 ## files
 
-  ## cd
+## cd
 
-    #POSIX
+  #POSIX
 
-    #go to dir
+  #go to dir
+
+    mkdir d
+    cd d
+    pwd
+
+  #goto home dir:
+
+    cd
+    cd ~
+
+  #go back to last dir:
+
+    cd -
+
+  #cannot go 2 dirs back: goes back an forth between current and last dir.
+  #The following simply goes to current dir:
+
+    cd -
+    cd -
+
+  #-a : (all) show hidden files
+  #-h : human readable filesizes
+  #-l : long. one per line, lots of data.
+
+    cd -alh
+
+  #PATH variable for cd!
+
+    CDPATH=/usr/:~
+    cd
+    mkdir a
+    mkdir b
+    cd b
+    cd a
+    pwd
+      #~/a
+
+## touch
+
+  # POSIX
+
+  # Create file if does not exist.
+
+  # Update modify date to present if it exists.
+
+    touch f
+
+## mkdir
+
+  #POSIX
+
+  #make dirs
+
+  #make a dir:
+
+    mkdir "$d"
+
+  #no error if existant:
+
+    mkdir d
+    mkdir -p d
+
+  #make parent dirs if not existent:
+
+    mkdir -p a/b/c/d
+
+  #-m: set mode of new dir (permissions)
+
+    mkdir -m 1777 d
+    [ `stat -c "%A" d` = 'drwxrwxrwt' ] || exit 1
+
+## mv
+
+  # POSIX
+
+  # Move or rename files and dirs.
+
+  ## files
+
+    # If dest does not exist, move the file to it:
 
       mkdir d
-      cd d
-      pwd
+      touch d/a
+      mkdir d2
+      mv d/a d2/b
+      [ "`ls d`" = '' ] || exit 1
+      [ "`ls d2`" = 'b' ] || exit 1
 
-    #goto home dir:
+    # If dest exists and is a file, overwrite by default:
 
-      cd
-      cd ~
+      echo a > a
+      echo b > b
+      mv a b
+      [ "`ls`" = "b" ] || exit 1
+      [ "`cat b`" = "a" ] || exit 1
 
-    #go back to last dir:
+    # If dest exists and is a dir, move into dir:
 
-      cd -
+      touch a
+      mkdir d
+      mv a d
 
-    #cannot go 2 dirs back: goes back an forth between current and last dir.
-    #The following simply goes to current dir:
+  ## dirs
 
-      cd -
-      cd -
-
-    #-a : (all) show hidden files
-    #-h : human readable filesizes
-    #-l : long. one per line, lots of data.
-
-      cd -alh
-
-    #PATH variable for cd!
-
-      CDPATH=/usr/:~
-      cd
-      mkdir a
-      mkdir b
-      cd b
-      cd a
-      pwd
-        #~/a
-
-  ## touch
-
-    # POSIX
-
-    # Create file if does not exist.
-
-    # Update modify date to present if it exists.
-
-      touch f
-
-  ## mkdir
-
-    #POSIX
-
-    #make dirs
-
-    #make a dir:
-
-      mkdir "$d"
-
-    #no error if existant:
+    # Same as files except does not overwrite non empty dirs:
 
       mkdir d
-      mkdir -p d
+      mkdir d2
+      mkdir d2/d
+      mv d d2
+        #d2/d was overwritten:
+      [ "`ls`"   = "d2" ] || exit 1
+      [ "`ls d2`" = "d" ] || exit 1
+      mkdir d
+      touch d2/d/a
+      mv d d2
+        #cannot mv: dir not empty
 
-    #make parent dirs if not existent:
+  ## GNU extensions
 
-      mkdir -p a/b/c/d
+    ## b ##s
 
-    #-m: set mode of new dir (permissions)
+      # Make backup if dest exits
 
-      mkdir -m 1777 d
-      [ `stat -c "%A" d` = 'drwxrwxrwt' ] || exit 1
-
-  ## mv
-
-    # POSIX
-
-    # Move or rename files and dirs.
-
-    ## files
-
-      # If dest does not exist, move the file to it:
-
-        mkdir d
-        touch d/a
-        mkdir d2
-        mv d/a d2/b
-        [ "`ls d`" = '' ] || exit 1
-        [ "`ls d2`" = 'b' ] || exit 1
-
-      # If dest exists and is a file, overwrite by default:
-
-        echo a > a
-        echo b > b
-        mv a b
-        [ "`ls`" = "b" ] || exit 1
-        [ "`cat b`" = "a" ] || exit 1
-
-      # If dest exists and is a dir, move into dir:
+      #if backupt exists, it is lost:
 
         touch a
-        mkdir d
-        mv a d
+        touch b
 
-    ## dirs
+      # Backup `a~` is made:
 
-      # Same as files except does not overwrite non empty dirs:
+        mv -b b a
+        [ -f a ] || exit 1
+        [ -f a~ ] || exit 1
+        [ `ls | wc -l` = 2 ] || exit 1
 
-        mkdir d
-        mkdir d2
-        mkdir d2/d
-        mv d d2
-          #d2/d was overwritten:
-        [ "`ls`"   = "d2" ] || exit 1
-        [ "`ls d2`" = "d" ] || exit 1
-        mkdir d
-        touch d2/d/a
-        mv d d2
-          #cannot mv: dir not empty
+      # Backup is only made if destination exists:
 
-    ## GNU extensions
+        mv -b a b
+        [ -f a~ ] || exit 1
+        [ -f b ] || exit 1
+        [ `ls | wc -l` = 2 ] || exit 1
 
-      ## b ##s
+      # If backup exists, it gets overwritten:
 
-        # Make backup if dest exits
+        touch a
+        mv -b a b
+        [ -f a ] || exit 1
+        [ -f a~ ] || exit 1
+        [ `ls | wc -l` = 2 ] || exit 1
 
-        #if backupt exists, it is lost:
+      # Custom backup suffix:
 
-          touch a
-          touch b
+        touch a b
+        mv -bS ".bak" b a
+        [ -f a ] || exit 1
+        [ -f a.bak ] || exit 1
 
-        # Backup `a~` is made:
-
-          mv -b b a
-          [ -f a ] || exit 1
-          [ -f a~ ] || exit 1
-          [ `ls | wc -l` = 2 ] || exit 1
-
-        # Backup is only made if destination exists:
-
-          mv -b a b
-          [ -f a~ ] || exit 1
-          [ -f b ] || exit 1
-          [ `ls | wc -l` = 2 ] || exit 1
-
-        # If backup exists, it gets overwritten:
-
-          touch a
-          mv -b a b
-          [ -f a ] || exit 1
-          [ -f a~ ] || exit 1
-          [ `ls | wc -l` = 2 ] || exit 1
-
-        # Custom backup suffix:
-
-          touch a b
-          mv -bS ".bak" b a
-          [ -f a ] || exit 1
-          [ -f a.bak ] || exit 1
-
-  ## rsync
-
-    # Very powerful and flexible file copy tool.
-
-    # Can:
-    #
-    # -   work over networks. Both machines must have it installed.
-    #
-    #     Capable of compressing before sending over the network, and decrompressing on the other side.
-    #
-    # -   synchronize differentially
-    #
-    # -   encrypt files sent
-
-    # Useful options:
-
-    # - `-a`: "archive mode".
-
-        # rsync -a origin dest
-
-      # Sets : `-Dgloprt`
-
-      # Does what you want it to do, before you notice you need it:
-
-      # - `-D`: preserve special and device files. Requires sudo.
-      # - `-g`: preserve group. Requires `sudo`.
-      # - `-l`: copy symlinks as symlinks.
-      # - `-o`: preserve owner. Requires `sudo`.
-      # - `-p`: preserve permissions.
-      # - `-r`: recurse into directories.
-      # - `-t`: preserve modification times.
-
-    # - `--exclude=`: Exclude directories.
-    # - `-v`: verbose
-    # - `-z`: compress files before transfer, decompress after.
-
-      # Useful if transfer will be done over a network,
-      # so that smaller files can be transferred.
-
-    # Combos:
-
-      # Back up everything except `/media` (where the backup will go to), and `/home`.
-
-        #sudo rsync -av --exclude=home --exclude=media / /media/SOMETHING/bak
-
-      # WARNING: your disk must be ext4, not NTFS, or permissions are impossible.
-      # In that case: http://unix.stackexchange.com/questions/11757/is-ntfs-under-linux-able-to-save-a-linux-file-with-its-chown-and-chmod-settings
-
-  ## rm
+## rm
 
     # Remove files and dirs.
 

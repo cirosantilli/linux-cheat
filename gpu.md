@@ -31,6 +31,8 @@ As of 2015, the situation is as follows:
 
     Employs people to write the open source code.
 
+    2016: open up movement: <http://gpuopen.com/welcometogpuopen/>
+
 -   Intel: apparently the most open source friendly one.
 
 ## Find your graphics card model

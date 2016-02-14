@@ -1,6 +1,6 @@
 ## cron
 
-  # Tell the computer to do things at specified times automatially.
+  # Tell the computer to do things at specified times automatically.
 
   ## crontab
 
@@ -129,3 +129,8 @@
       sudo cat /usr/lib/cron/at.deny
         #if allow exists, this is ignored!
         #if not, denies only to listed users
+
+  ## Concurrency
+
+    # Jobs run concurrently:
+    # http://unix.stackexchange.com/questions/58481/can-a-crontab-job-run-concurrently-with-itself

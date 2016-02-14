@@ -1,8 +1,8 @@
 # Linux Cheat ![logo](logo.jpg)
 
-Linux information and cheatsheets.
+Linux tutorials and cheatsheets. Minimal examples. User and kernel land.
 
-Includes Linux concepts and utilities that work on Linux, not necessarily in the LSB.
+Includes Linux concepts and utilities that work on Linux, not necessarily in the LSB. So this is a big dump of useful things, and when something gets big / useful enough, I split to another repository.
 
 1.  Related repositories
     1. [Ubuntu Cheat](https://github.com/cirosantilli/ubuntu-cheat)
@@ -26,6 +26,8 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1. [Android](android.md)
     1.  [Distros](distros.md)
         1. [Minimal distros](minimal-distros.md)
+    1.  [Linux runs on](linux-runs-on.md)
+    1.  [Runs Linux](runs-linux.md)
 1.  [Kernel](kernel/)
     1. [System Call](system-call.md)
     1. [sysctl](sysctl.md)
@@ -55,6 +57,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [fstab](fstab.md)
     1.  [mountall](mountall.md)
     1.  [pathchk](pathchk.md)
+    1.  [rsync](rsync.md)
     1.  [sync](sync.md)
     1.  [swap partition](swap-partition.md)
     1.  [tune2fs](tune2fs.md)
@@ -95,7 +98,8 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1.  [chmod](chmod.sh)
     1.  File managers
         1.  [Krusader](krusader.md)
-        1.  [vifm](vifm.md)
+        1.  [CLI file managers](cli-file-managers.md)
+            1.  [vifm](vifm.md)
     1.  Partitions
         1.  [parted](parted.md)
         1.  [gparted](gparted.md)
@@ -154,28 +158,30 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1. [make](make/)
         1. [autotools](autotools/)
 1.  Processes
+    1.  procps
+        1.  [free](env.md)
+        1.  [kill](kill.sh)
+        1.  [pgrep](pgrep.md)
+        1.  [pmap](ps.md)
+        1.  [ps](ps.md)
+        1.  [top](top.md)
+    1.  psmisc
+        1.  [killall](killall.md)
     1.  [Shebang](shebang/)
     1.  [chroot](chroot.sh)
     1.  [env](env.sh)
-    1.  [free](env.md)
     1.  [htop](htop.md)
     1.  [jobs](jobs.sh)
-    1.  [kill](kill.sh)
-    1.  [killall](killall.sh)
     1.  [lsof](lsof.md)
     1.  [ltrace](ltrace.md)
     1.  [nice](nice.sh)
     1.  [nohup](nohup.sh)
-    1.  procps
-        1. [pmap](ps.md)
-        1. [ps](ps.md)
     1.  [parallel](parallel.md)
     1.  [pstree](pstree.sh)
     1.  [pwd](pwd.sh)
     1.  [sleep](sleep.sh)
     1.  [strace](strace.md)
     1.  [timeout](timeout.md)
-    1.  [top](top.md)
     1.  [umask](umask.md)
     1.  [ulimit](ulimit.md)
     1.  [wait](wait.sh)
@@ -187,6 +193,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [Time zone](time-zone.md)
 1.  Media video, games, etc.) file types, viewers, editors, capture, synthesizers
     1.  [Audio](audio/): music, sound
+        1. [avconv](avconv.md)
     1.  [Book](book.md): PDF, DJVU.
     1.  [Dictionary](dictionary.md): dictionary formats
     1.  [Game](game.md): games, emulation
@@ -213,6 +220,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
 1.  [Desktop](desktop.md)
     1.  [X11](x11.md)
     1.  [freedesktop.org](freedesktop-org.md)
+        1.  [D-Bus](dbus.md)
     1.  [Display manager](display-manager.md)
         1. [LightDM](lightdm.md)
     1.  [Window manager](window-manager.md)
@@ -252,13 +260,20 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
 1.  [Configuration automation](config-automation.md)
     1. [chef](chef/)
     1. [puppet](puppet.md)
-1.  Printing
+1.  Communication
+    1.  [Chat](chat.sh)
+        1.  [IRC](irc.sh)
+            1. [Xchat](xchat.md)
+1.  Printer
     1.  [CUPS](cups.md)
-        1. [lp](lp.md)
-        1. [lpstat](lpstat.md)
-        1. [lpoptions](lpoptions.md)
-        1. [system-config-printer](system-config-printer.md)
+        1.  [lp](lp.md)
+        1.  [lpstat](lpstat.md)
+        1.  [lpoptions](lpoptions.md)
+        1.  [system-config-printer](system-config-printer.md)
     1.  [ink](ink.md)
+    1.  Scan
+        1.  [Simple scan](simple-scan.md)
+        1.  [HP](hp.md)
 1.  Mathematics
     1.  [bc](bc.md)
     1.  [factor](factor.md)
@@ -277,10 +292,11 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
 1.  Simulation
     1. [gazebo](gazebo.md)
 1.  Misc
-    1. [BusyBox](busybox.md)
-    1. [cron](cron.sh)
-    1. [logrotate](logrotate.md)
-    1. [xargs](xargs.md)
+    1.  [BusyBox](busybox.md)
+    1.  [cron](cron.sh)
+        1.  [anacron](anacron)
+    1.  [logrotate](logrotate.md)
+    1.  [xargs](xargs.md)
 1.  [Statistics](statistics.md)
 1.  [Bibliography](bibliography.md)
 

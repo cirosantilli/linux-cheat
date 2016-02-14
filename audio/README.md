@@ -163,6 +163,10 @@ Command line tool that takes numeric input from stdin and generate sound.
 
 ## pulseaudio
 
+Vs alsa:
+
+<http://askubuntu.com/questions/426983/how-can-i-tell-if-im-using-alsa-or-pulse-audio-by-default-switching-to-i3-wm>
+
 ### pacmd
 
 Command line control to PulseAudio.

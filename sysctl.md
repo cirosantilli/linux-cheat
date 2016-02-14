@@ -66,3 +66,9 @@ Control ASLR.
 Configuration files to make settings permanent.
 
 All files in the `.d` get sourced.
+
+## hostname
+
+The effective hostname.
+
+Normally taken from `/etc/hostname` at startup.
