@@ -1,5 +1,7 @@
 # Audio
 
+1.  [Codecs](codecs.md)
+
 ## Directories
 
 On most systems, sound will be kept under:

@@ -12,15 +12,9 @@ Bad browser support, but can be viewed well with many Linux viewers, including `
 
 Magic numbers: first thing in file, specifies the exact format. Cannot be determined by extension alone because of binary/ASCII forms.
 
-- `P1`: `.pbm` ASCII
-- `P2`: `.pgm` ASCII
-- `P3`: `.ppm` ASCII
-- `P4`: `.pbm` binary
-- `P5`: `.pgm` binary
-- `P6`: `.ppm` binary
-
-Where:
-
-- `.pbm`: binary
-- `.pgm`: grayscale
-- `.ppm`: RGB
+- `P1`: `.pbm` ASCII binary
+- `P2`: `.pgm` ASCII grayscale
+- `P3`: `.ppm` ASCII RGB
+- `P4`: `.pbm` binary binary
+- `P5`: `.pgm` binary grayscale
+- `P6`: `.ppm` binary RGB

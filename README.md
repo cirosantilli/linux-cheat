@@ -198,11 +198,23 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [Dictionary](dictionary.md): dictionary formats
     1.  [Game](game.md): games, emulation
     1.  [Image](image.md)
-        1. [GIMP](gimp.md)
-        1. [NetPBM](netpbm/)
-        1. [gnuplot](gnuplot/)
-        1. [ImageMagick](imagemagick.md)
-    1.  [Video](video.md): videos, films, subtitles
+        1.  [Formats](image-formats.md)
+            1. [NetPBM](netpbm/)
+        1.  [GIMP](gimp.md)
+        1.  [ImageMagick](imagemagick.md)
+        1.  [gnuplot](gnuplot/)
+    1.  [Video](video.md)
+        1.  [Video codecs](video-codecs.md)
+        1.  [Video containers](video-containers.md)
+        1.  Utilities
+            1.  [ffmpeg](ffmpeg.md)
+                1.  [ffserver.conf](ffserver.conf)
+            1.  Ripping
+                1. [HandBrake](handbrake.md)
+        1.  Trivia
+            1. [MPEG LA](mpeg-la.md)
+    1.  [Camera](camera.md)
+        1.  [Video4Linux](video4linux.md)
 1.  File sharing
     1. [Dropbox](dropbox.md)
     1. [Nicotine](nicotine.md)

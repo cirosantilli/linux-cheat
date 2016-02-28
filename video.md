@@ -16,42 +16,6 @@ Transcoding may be a time consuming process, since it means to do complete data 
 
 A DVD can contain one or many titles. Usually each title contains one entire continuous film sequence such as the main film or an extra such as an interview with the director.
 
-### Codec
-
-A program capable of `COmpressing and DECompressing` certain formats.
-
-The term is often used in phrases as: "Do you have the codec for XXX to watch" in which it means, do you have the program that does the decoding?
-
-#### H.264
-
-Not free, dominates in 2015.
-
-<https://en.wikipedia.org/wiki/H.264/MPEG-4_AVC#Patent_licensing>
-
-#### H.265
-
-#### HEVC
-
-Non-free proposed successor to H.264.
-
-<https://en.wikipedia.org/wiki/High_Efficiency_Video_Coding>
-
-#### VP9
-
-Free, by Google for the web.
-
-#### Daala
-
-Free by Xiph and Mozilla.
-
-<https://xiph.org/daala/>
-
-#### Thor
-
-<https://en.wikipedia.org/wiki/Thor_%28video_codec%29>
-
-Free, by Cisco.
-
 ### Subtitles
 
 Subtitles are often stored in DVDs as images the format pair: idx + sub.
@@ -61,42 +25,6 @@ If you want srts, which is a text-only, smaller and human editable format on a t
 ### Multiplexing
 
 TODO
-
-## Containers
-
-Are file types that wrap video, audio and subtitles in a single files.
-
-Popular container formats include:
-
-### mkv
-
-Open standard.
-
-### ogv
-
-### ogg
-
-Open standard by <Xiph.Org>.
-
-Before 2007, used for audio only or audio video.
-
-Since 2007, <Xiph.Org> recommends using it only for audio only Vorbis, and using ogv for video.
-
-### mpg
-
-One of the extensions for MPEG-1 video.
-
-It is possible to concatenate `mpg` files directly via `cat` to get a larger one.
-
-### MPEG-4 Part 14
-
-### mp4
-
-More linked to Apple.
-
-### avi
-
-Created by Microsoft.
 
 ## DVD regions
 
@@ -222,64 +150,6 @@ Broken on Ubuntu 12.04, claims to have been corrected on 12.10: <https://bugs.la
 
 Codec library for the `H.264/MPEG-4 AVC` format.
 
-## Rip utilities
-
-### HandBrake
-
-Open source transcoder.
-
-Comes both in GUI and CLI versions.
-
-Supported containers: mkv, mpeg4.
-
-First check this for some good info: <http://msdn.microsoft.com/en-us/library/windows/desktop/dd388582%28v=vs.85%29.aspx>
-
-It stores audio in the AAC, MP3, or Vorbis formats. It can also pass through the Dolby Digital 5.1 (AC3) and Digital Theater Systems (DTS) surround sound formats used by DVDs.
-
-It supports chapters, as well as Variable Frame Rate video.
-
-It can include "soft" subtitles that can be turned on or off,
-instead of always being hard burned into the video frame.
-These can either be bitmap images of the subtitles included on a DVD (known as vobsub) or text.
-
-It seems that it can't produce srt.
-
-The following parameters usually vary between invocations:
-
-    i=/media/
-    s=1,2
-    a=1
-    t=1
-
-Scan only and output info on titles and tracks:
-
-    HandBrakeCLI -t 0 -i "$i"
-
-Useful to decide which title, audio and subtitle tracks are to be extracted.
-
-Recommended usage: 1000 kbps MPEG-4 Visual video and 160 kbps AAC-LC audio in an mkv container:
-
-    HandBrakeCLI -B 160 -a "$a" -e x264 -f mkv -i "$i" -m -o 1.mkv -q 22 -s "$s" -t "$t"
-
-- `B 160`:   sound bit rate in kbps
-- `a 1,2,3`: Audio tracks to keep. Default: first only.
-- `e x264`:  video Encode format x264/ffmpeg4/ffmpeg2/theora.
-- `f fmt`:   container Format. Currently can only be `mkv` or `mp4`.
-- `m`:       extract title markers.
-- `q 22`:    CRF constant quality in the [0 .. 50] interval. With x264 a recommended value is 22, which takes around 1h for 2h film producing an output file of 2GB with almost imperceptible quality loss.
-- `s 1,2,3`: subtitle tracks to keep in the container. Default: none.
-- `t <title>`: title to encode. Can only encode one title per container.
-
-In an `.mkv`, you can store MPEG-4 video created by ffmpeg, x264, or Theora video.
-
-- CRF ~2hrs film:
-- CRF off = 1214 MB
-- CRF 26 = 926 MB
-- CRF 24 = 1205 MB
-- CRF 22 = 1586 MB
-- CRF 20 = 2141 MB
-- CRF 16 = 4503 MB
-
 ## Subtitle utilities
 
 ### vobsub2srt
@@ -319,3 +189,9 @@ Subtitles that happen at the same time are put one on top of the other.
 Great for language learning.
 
     srtmerge a b ab
+
+## Get video information
+
+<http://askubuntu.com/questions/249828/command-to-see-media-file-info-in-terminal>
+
+http://stackoverflow.com/questions/3199489/meaning-of-ffmpeg-output-tbc-tbn-tbr

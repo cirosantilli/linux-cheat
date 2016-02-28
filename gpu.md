@@ -152,3 +152,11 @@ AMD's on-board GPU.
 <https://en.wikipedia.org/wiki/AMD_Accelerated_Processing_Unit>
 
 They are fabless.
+
+## vsync
+
+Synchronizes GPU output to the monitor refresh: <http://gaming.stackexchange.com/questions/198184/what-is-v-sync-and-when-should-i-enable-it?newreg=c80b4777d5484fb2b8b533ab8c506cd5>
+
+Monitors can only refresh at certain rates. If the GPU does not sync with it, artifacts may happen.
+
+Still, it is better for GPUs to be able to render more than say 30FPS, or else a drop in performance will be noticeable.
