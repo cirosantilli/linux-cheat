@@ -22,6 +22,12 @@ POSIX issue 7: IEEE formal name: `IEEE Std 1003.1-2008` highly recommended link:
 
 Single UNIX Specification, Version 4: <http://www.unix.org/version4/>
 
+## Unix
+
+https://en.wikipedia.org/wiki/Unix#History
+
+Based on https://en.wikipedia.org/wiki/Multics from Bell Labs.
+
 ## The Open Group
 
 Major open group supporters whose major supporters include:

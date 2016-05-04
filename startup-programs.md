@@ -11,7 +11,7 @@ Specification by freedesktop.org: <http://standards.freedesktop.org/autostart-sp
 Configuration files under:
 
 - `/etc/xdg/autostart`
-- `~/.config/autostart/`.
+- `~/.config/autostart/`
 
 Each file gets sourced.
 
@@ -22,3 +22,16 @@ Example, in a file called `firefox`, put:
         Exec=firefox
 
 TODO who executable implements it? Which DEs adopt it?
+
+Ubuntu 15.10 has `gnome-session-properties` from package `gnome-session-bins` is a GUI editor for those file.
+
+## X-GNOME-Autostart-enabled
+
+Enable or disable one of the startup files:
+
+    X-GNOME-Autostart-enabled=false
+    X-GNOME-Autostart-enabled=true
+
+You could of course remove it, but this is better as it keeps the rest of the data.
+
+Renaming the file to something like `file.desktop.off` is another option.

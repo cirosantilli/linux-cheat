@@ -126,6 +126,10 @@ Multiplayer shooter.
 
 Looks *very* promising, but multiplayer only, and no online mode.
 
+TODO architecture. Works over network? Someone is the server?
+
+https://www.youtube.com/watch?v=HdcFWUuV6-Y
+
 ### gnugo
 
 CLI go.
@@ -354,3 +358,7 @@ Inside the emulator:
 To avoid mounting every time, put under the `[autoexec]` section:
 
     echo -e "mount c /home/$USER/dos\nc:" >> ~/.dosbox/dosbox-*.conf
+
+## Lists
+
+<http://www.lgdb.org/>

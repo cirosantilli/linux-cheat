@@ -386,6 +386,8 @@ It is easy to get the two mixed up because most of the time terminal emulators s
 
 ## Good terminal emulators
 
+`tmux` and `screen` are the most portable options, use those as much as possible instead of terminal emulator features.
+
 Drop-down capability is a huge advantage: hit a key, and the terminal appears. Options:
 
 -   `guake`: GNOME
@@ -398,5 +400,27 @@ Drop-down capability is a huge advantage: hit a key, and the terminal appears. O
     - mouse click on ls items to `cd` into them
 
 -   Terminator <https://launchpad.net/terminator> is a window splitter master, but `tmux` does everything it does and better.
+
+Classics:
+
+- <https://en.wikipedia.org/wiki/Rxvt-unicode>
+- <https://en.wikipedia.org/wiki/Xterm>
+- <https://en.wikipedia.org/wiki/Rxvt>
+
+### Linux terminal
+
+TODO check: terminal emulator provided by the Linux kenrel that runs directly inside a TTY.
+
+TODO: source code location.
+
+Ubuntu 15.10 Ctrl + Alt + F2-6.
+
+`echo $TERM` gives `linux` TODO confirm: as can be seen from some boot methods that show a Penguin image.
+
+## Image inside terminal
+
+<http://askubuntu.com/questions/97542/how-do-i-make-my-terminal-display-graphical-pictures>
+
+The Linux console has that capability through `fbi`.
 
 [wiki-ansi-escape]: http://en.wikipedia.org/wiki/ANSI_escape_code

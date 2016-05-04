@@ -8,15 +8,35 @@ Can:
 
     Capable of compressing before sending over the network, and decompressing on the other side.
 
+    Sample usage:
+
+        rsync -av 192.168.0.20:/some/path new/path
+
 -   synchronize differentially: only copies files that are newer, skip already copied ones.
 
 -   encrypt files sent
 
-Useful options:
+## e
 
-- `-a`: "archive mode".
+`rsync` can use many "remote shells" (what is that?), and `ssh` is one of them (the default?)
 
-  # rsync -a origin dest
+So in order to use `rsync`, first make sure that you can login into the computer with plain ssh.
+
+### Too many authentication failures for *username*
+
+Sample usage at <http://superuser.com/questions/187779/too-many-authentication-failures-for-username>
+
+    rsync -av -e 'ssh -o PubkeyAuthentication=no' 'remote_user@host.com:~/remote/file' 'local/file'
+
+### Custom ssh port
+
+    rsync -av -e 'ssh -p 2222' 'remote_user@host.com:~/remote/file' 'local/file'
+
+## Useful options
+
+`-a`: "archive mode". Sets all the most useful options:
+
+    rsync -a origin dest
 
 Sets : `-Dgloprt`
 
@@ -33,13 +53,17 @@ Does what you want it to do, before you notice you need it:
 - `-v`: verbose
 - `-z`: compress files before transfer, decompress after.
 
-Useful if transfer will be done over a network,
-so that smaller files can be transferred.
+Useful if transfer will be done over a network, so that smaller files can be transferred.
 
-Combos:
+## Combos
 
 Back up everything except `/media` (where the backup will go to), and `/home`.
 
     sudo rsync -av --exclude=home --exclude=media / /media/SOMETHING/bak
 
 WARNING: your disk must be ext4, not NTFS, or permissions are impossible. In that case: http://unix.stackexchange.com/questions/11757/is-ntfs-under-linux-able-to-save-a-linux-file-with-its-chown-and-chmod-settings
+
+## Two remotes
+
+- <http://serverfault.com/questions/411552/rsync-remote-to-remote>
+- <http://unix.stackexchange.com/questions/183504/how-to-rsync-files-between-two-remotes>

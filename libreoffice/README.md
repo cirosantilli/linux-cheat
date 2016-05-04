@@ -46,3 +46,11 @@ Copy and paste row: <https://ask.libreoffice.org/en/question/13577/how-to-insert
 Insert multiple rows: <https://ask.libreoffice.org/en/question/559/inserting-rows-in-a-spreadsheet/>
 
 Sort by column: Select cells then Menu > Data > Sort
+
+## Export only selected Calc cells to a single PDF
+
+- http://stackoverflow.com/questions/19940236/how-to-generate-pdf-from-a-libreoffice-calc-sheet-fitting-the-page-width
+
+## Internals
+
+Uses it's own Widget toolkit! <https://docs.libreoffice.org/vcl.html>

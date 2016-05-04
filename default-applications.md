@@ -7,15 +7,16 @@ There are many systems, and they have some degree of compatibility.
 The best options likely are:
 
 - `xdg-open` is a popular XDG choice.
+- `gnome-open` Gnome specific. Use `xdg-open` instead. `xdg-open` forwards to it in GNOME systems.
 - `update-alternatives` and `/etc/alternatives` is an important Linux method of executable selection.
 
 ## update-mime-database
 
 shared-mime-info package.
 
-## gnome-open
+## Environment variables
 
-Gnome specific. Use `xdg-open` instead.
+Some common variables are used by non-graphical systems, e.g. `EDITOR` and `BROWSER`.
 
 ### kde-open
 

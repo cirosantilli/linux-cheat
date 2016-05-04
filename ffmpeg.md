@@ -37,6 +37,47 @@ First install `v4l2`, then:
 
     ffmpeg -f v4l2 -framerate 25 -video_size 640x480 -i /dev/video0 -f v8 output.mkv
 
+## ffprobe
+
+Get information about video and audio files:
+
+    ffprobe a.webm
+
+### Get frame count
+
+- <http://stackoverflow.com/questions/2017843/fetch-frame-count-with-ffmpeg>
+- <http://superuser.com/questions/84631/how-do-i-get-the-number-of-frames-in-a-video-on-the-linux-command-line>
+
+Not easy because it is not stored on the video, it requires decoding.
+
+### Get index of all key frames
+
+<http://superuser.com/questions/885452/extracting-the-index-of-key-frames-from-a-video-using-ffmpeg>
+
+    ffprobe -select_streams v \
+        -show_frames \
+        -show_entries frame=pict_type \
+        -of csv \
+        tmp.h264
+
+generates something like:
+
+    frame,I
+    frame,B
+    frame,P
+    frame,B
+    frame,P
+    frame,B
+    frame,P
+    frame,B
+    frame,P
+    frame,B
+    frame,I
+
+where `I`, `B`, and `P` are defined at: <https://en.wikipedia.org/wiki/Video_compression_picture_types>
+
+From there on, Bash it up.
+
 ## ffplay
 
 Minimalistic video preview tool.
@@ -45,9 +86,17 @@ Minimalistic video preview tool.
 
 No controls, no nothing, just a window with the video.
 
+Exit when file is over: <http://ffmpeg-users.933282.n4.nabble.com/ffplay-does-not-exit-automatically-after-the-file-has-completed-playing-td2969254.html>
+
+    ffplay -autoexit video.mp4
+
 Loop infinitely:
 
     ffplay -loop -1 video.mp4
+
+Raw audio file:
+
+    ffplay -autoexit -f u16be -ar 44100 -ac 1 in.raw
 
 ## Stream
 

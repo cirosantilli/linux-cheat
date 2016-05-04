@@ -137,3 +137,21 @@ Specified by Microsoft.
 <https://en.wikipedia.org/wiki/Macroblock>
 
 Encoding concept present in many formats, including JPEG and H.264.
+
+## FLIF
+
+http://flif.info/index.html
+
+## TGA
+
+<https://en.wikipedia.org/wiki/Truevision_TGA>
+
+Old, does not specify a new compression method, but container format allows it.
+
+## DDS
+
+<https://en.wikipedia.org/wiki/DirectDraw_Surface>
+
+Made specifically to store textures for 3D rendering, has hardware decoding support.
+
+Sample OpenGL usage: <https://github.com/opengl-tutorials/ogl/tree/71cad106cefef671907ba7791b28b19fa2cc034d/tutorial11_2d_fonts>

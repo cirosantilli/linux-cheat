@@ -14,13 +14,18 @@ And 80% of the kernel is written by enterprises: <http://www.linuxfoundation.org
 
 The Linux kernel is written on mainly on C99 standard with GCC extensions, which it uses extensively, both on points which cannot be done in any other way without the extensions (inline assembly), but also at points where those are not strictly necessary, for example to improve debugging and performance.
 
-In 2010 clang supported enough GNU extensions to compile the kernel, and it is supported on the 4.0 Makefile. It can be selected with CC.
-
 The C code defines higher level interfaces, which must be implemented in assembly for each ISA.
 
 You cannot use user space libs such as libc to program the kernel, since the kernel itself itself if need to be working for user space to work.
 
 You cannot use floating point operations on kernel code because that would incur too much overhead of saving floating point registers on some architectures, so don't do it.
+
+### clang to compile kernel
+
+In 2010 clang supported enough GNU extensions to compile the kernel, and it is supported on the 4.0 Makefile. It can be selected with CC.
+
+- <http://unix.stackexchange.com/questions/17972/is-there-a-linux-distro-compiled-with-clang-llvm>
+- <http://llvm.linuxfoundation.org/index.php/Main_Page>
 
 ## Release cycle
 

@@ -4,21 +4,23 @@ Terminal superpowers:
 
 -   create a remote ssh session, detach from it, close the ssh connection, ssh again, and reattach to the old bash!
 
--   open multiple terminal windows in a single terminal.
+-   open multiple terminal tabs splits (known as windows and panes)
 
 -   send keys to an open terminal. E.g.: from Vim, send `make<cr>` to an open terminal.
 
     There is already a plug-in that interfaces with Vim: <https://github.com/benmills/vimux>
 
-Ubuntu install:
+Some of tmux' functionality can be done with different terminal emulators. The advantage is that tmux runs inside any terminal, so it is more portable and easier to develop / configure.
 
-    sudo aptitutde install tmux
+As a result it is much more feature rich, and integrates better with the bash shell.
 
-Similar function to GNU screen but has more functionality.
+You then spend most of the time trying to get the terminal emulator to not do anything and just forward commands to tmux, and let tmux do the real work.
 
-What it can't do:
+Mostly written in C, ISC license, hosted on GitHub
 
-- save sessions to disk
+## Alternatives
+
+- GNU `screen`,less functionality
 
 ## Sessions
 
@@ -33,7 +35,7 @@ Open multiple terminals and create one session in each:
 
 List sessions from outside tmux:
 
-    tmux session
+    tmux list-sessions
 
 from inside tmux:
 
@@ -44,7 +46,7 @@ Output:
     session-name0: 1 windows (created Wed Apr  9 20:22:37 2014) [198x49] (attached)
     session-name1: 1 windows (created Wed Apr  9 20:19:23 2014) [198x49] (attached)
 
-Detach form a session:
+Detach form current session form inside tmux:
 
     tmux detach
 
@@ -59,20 +61,39 @@ List sessions again and you will see that we detached from the first terminal:
 
 Attach again to a session:
 
-    tmux a -t session-name0
+    tmux attach-session -t session-name0
 
 `$`: rename current session
+
+Kill / destroy a session:
+
+    tmux kill-session -t 'name'
+
+or exit all terminal windows of the session.
+
+### Save and restore sessions
+
+Not easily possible by default... but plugins exist:
+
+- <https://github.com/tmux-plugins/tmux-resurrect>
+- <https://github.com/tmux-plugins/tmux-continuum>
 
 ## Windows and panes
 
 - windows are like Vim tabs
-- panes are like Vim windows.
+- panes are like Vim windows
 
 Window shortcuts:
 
--   `,`: rename a new window (Vim tab)
+-   `c`: create a new window in the current session (Vim tab)
 
--   `c`: create a new window (Vim tab)
+    On target session on given directory:
+
+        tmux new-window -s 'session-name' -c 'dir'
+
+    TODO: breaks RVM: <https://github.com/wayneeseguin/rvm/issues/3212>
+
+-   `,`: rename a new window (Vim tab). The default name is `bash`.
 
 -   `w`: list windows in current session
 
@@ -83,7 +104,7 @@ Window shortcuts:
     where:
 
     - `0:`: is the window ID
-    - `bash`: is the default name of the window.
+    - `bash`: is the name of the program currently running on the window. Try: `sleep 10`. There is a short refresh time, and then the name changes! Note that this kind of breaks for interpreted programs...
     - `*`: indicates current window
     - `0`: indicates previously selected window
 
@@ -117,6 +138,16 @@ Some special strings include:
 - `Enter`
 - `C-x`: Control X
 - `M-x`: Alt X
+
+## Buffers
+
+Tmux has clipboards (Vim buffers).
+
+The default one is called `-`.
+
+They can be accessed from outside of tmux as well with:
+
+    tmux save-buffer -
 
 ## Copy mode
 

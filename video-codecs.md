@@ -50,9 +50,13 @@ Non-free proposed successor to H.264.
 
 MPEG LA patent pool.
 
+## VP8
+
 ## VP9
 
 Free, by Google, for the web.
+
+Implemented by `libvpx`.
 
 ## Daala
 

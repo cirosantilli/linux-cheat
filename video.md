@@ -195,3 +195,9 @@ Great for language learning.
 <http://askubuntu.com/questions/249828/command-to-see-media-file-info-in-terminal>
 
 http://stackoverflow.com/questions/3199489/meaning-of-ffmpeg-output-tbc-tbn-tbr
+
+## Step frames
+
+## Take screenshot of current frame
+
+<http://askubuntu.com/questions/468457/how-can-i-scrub-through-a-video-for-saving-screengrabs-frame-by-framie>

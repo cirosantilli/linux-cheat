@@ -109,6 +109,9 @@ set -eu
           printf 'a\nb\na\n' | sed -n "s/a/A/w $f"
           [ "$(cat "$f")" = $'A\nA' ]
 
+    # Replace only first occurence:
+    # http://stackoverflow.com/questions/148451/how-to-use-sed-to-replace-only-the-first-occurrence-in-a-file
+
   ## /
 
     # Only exec next command if match:

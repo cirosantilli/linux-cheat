@@ -12,7 +12,7 @@ Sample output:
 
 Format current time and output it:
 
-    date '+%Y-%m-%d %H:%M:%S'
+    date '+%Y-%m-%d_%H:%M:%S'
 
 Sample output:
 

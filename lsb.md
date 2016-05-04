@@ -14,6 +14,8 @@ The LSB is meant to contain all the core tools that allow compliant applications
 
 LSB does however specifies many more tools than POSIX and supports almost all base tools used by user friendly applications found in distributions.
 
+The Linux foundation was separate from the LSB in the past, and used to be called: <https://en.wikipedia.org/wiki/Open_Source_Development_Labs>
+
 ## POSIX compliance
 
 LSB is highly POSIX compliant, and it states that it is on of its long term goals meant to become fully POSIX compatible

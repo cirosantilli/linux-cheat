@@ -12,11 +12,13 @@ Popular container formats include:
 
 Open standard.
 
+Extension stands for: "Matroska video".
+
 ## WebM
 
 <https://en.wikipedia.org/wiki/WebM>
 
-Derived from Matroska.
+Derived from mkv.
 
 ## ogv
 

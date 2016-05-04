@@ -44,3 +44,7 @@ Inputs:
     Colors!:
 
         ls --color | less -R
+
+-   `-X`: keep last view of less visible on the terminal after quitting.
+
+    <http://askubuntu.com/questions/429781/less-output-does-not-show-output-in-terminal-after-quitting-it>

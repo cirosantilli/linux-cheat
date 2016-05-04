@@ -1,6 +1,6 @@
 # Linux Cheat ![logo](logo.jpg)
 
-Linux tutorials and cheatsheets. Minimal examples. User and kernel land.
+Linux tutorials and cheatsheets. Minimal examples. Mostly user-land.
 
 Includes Linux concepts and utilities that work on Linux, not necessarily in the LSB. So this is a big dump of useful things, and when something gets big / useful enough, I split to another repository.
 
@@ -33,6 +33,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [sysctl](sysctl.md)
     1. [dmesg](demesg.md)
     1. [installkernel](installkernel.md)
+    1. [TTY](tty.md)
 1.  Initialization
     1.  [Install Operating System](install-operating-system.md)
     1.  [Boot](boot.md)
@@ -40,7 +41,8 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
 1.  System information
     1.  [lsb_release](lsb_release.md)
     1.  [uname](uname.md)
-    1.  Hardware
+    1.  [Hardware](hardware.md)
+        1. [lshw](lshw.md)
         1. [cpuid](cpuid.md)
         1. [lspci](lspci.md)
         1. [lsusb](lsusb.md)
@@ -134,9 +136,11 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [paste](paste.md)
     1. [printf](printf.sh)
     1. [sed](sed.sh)
+    1. [split](split.md)
     1. [strings](strings.md)
     1. [tabs](tabs.md)
     1. [uniq](uniq.md)
+    1. [uuencode](uuencode.md), `uudecode`
     1. [wc](wc.md)
 1.  Binary data viewers
     1. [hd](hd.md)
@@ -181,6 +185,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [pwd](pwd.sh)
     1.  [sleep](sleep.sh)
     1.  [strace](strace.md)
+    1.  [time](time.md)
     1.  [timeout](timeout.md)
     1.  [umask](umask.md)
     1.  [ulimit](ulimit.md)
@@ -196,7 +201,9 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1. [avconv](avconv.md)
     1.  [Book](book.md): PDF, DJVU.
     1.  [Dictionary](dictionary.md): dictionary formats
+    1.  [Font](font.md)
     1.  [Game](game.md): games, emulation
+        1.  [Game engines](game-engines.md)
     1.  [Image](image.md)
         1.  [Formats](image-formats.md)
             1. [NetPBM](netpbm/)
@@ -230,14 +237,23 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [id](id.md)
     1. [usermod](usermod.md)
 1.  [Desktop](desktop.md)
+    1.  Configuration methods
+        1.  [dconf](dconf.md)
+        1.  [gconf](gconf.md)
+        1.  [Desktop files](desktop-files.md)
     1.  [X11](x11.md)
+        1.  [wmctrl](xmctrl.md)
+        1.  [xprop](xprop.md)
+        1.  [xsel](xsel.md)
+        1.  [xset](xset.md)
+        1.  [Display manager](display-manager.md)
     1.  [freedesktop.org](freedesktop-org.md)
         1.  [D-Bus](dbus.md)
-    1.  [Display manager](display-manager.md)
         1. [LightDM](lightdm.md)
     1.  [Window manager](window-manager.md)
     1.  [Default applications](default-applications.md)
-        1. [update-alternatives](update-alternatives.md)
+        1.  [xdg-open](xdg-open.md)
+        1.  [update-alternatives](update-alternatives.md)
     1.  [Startup programs](startup-programs.md)
     1.  Notifications
         1. [libnotify](libnotify.md)
@@ -250,9 +266,6 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [logkeys](logkeys.md)
     1.  [setleds](setleds.md)
     1.  [solaar](solaar.md)
-    1.  [xsel](xsel.md)
-    1.  [xdg-open](xdg-open.md)
-    1.  [xset](xset.md)
 1.  Generic data formats
     1. [JSON](json.md)
     1. [XML](xml/)
@@ -299,6 +312,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1. [acyclic](acyclic.md)
         1. [dijkstra](dijkstra.md)
         1. [gc](gc.md)
+    1.  [Statistics](statistics.md)
 1.  Packages
     1. [util-linux](util-linux.md)
 1.  Simulation
@@ -309,7 +323,6 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1.  [anacron](anacron)
     1.  [logrotate](logrotate.md)
     1.  [xargs](xargs.md)
-1.  [Statistics](statistics.md)
 1.  [Bibliography](bibliography.md)
 
 ## WIP
@@ -319,8 +332,6 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [eCryptfs](ecryptfs.md)
     1. [rootfs](rootfs.md)
     1. [MAKEDEV](makedev.md)
-1.  [Hardware](hardware.md)
-    1.  [lshw](lshw.md)
 1.  [gcov](gcov.md)
 1.  File sharing
     1. [NFS](nfs.md)

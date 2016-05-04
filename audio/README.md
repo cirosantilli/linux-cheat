@@ -38,7 +38,6 @@ Play file once and exit:
 
 Terminates when over. Good option to play an alarm signal after a very long command:
 
-
     sleep 5 && play ~/share/sounds/alert.*
 
 ### aplay
@@ -50,6 +49,10 @@ Comes with Ubuntu 12.04, but did not work very well.
 ### play
 
 SoX package. Similar to `paplay`.
+
+Play `.raw` file:
+
+    play -b 16 -c 1 --endian big -e unsigned -r 44100 in.raw
 
 ### cplay
 

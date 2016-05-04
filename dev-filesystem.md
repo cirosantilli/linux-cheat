@@ -259,11 +259,23 @@ Real time clock.
 
 TODO example.
 
+## /dev/mem
+
+    man mem
+
+Allows you to read physical memory.
+
 ## /dev/fb0
 
 ## Framebuffer
 
+TODO what is it exactly?
+
 I think this can be used to dump and write to the screen.
+
+Used by `fbi` to show images to screen, also used by X I guess?
+
+Looks like the X-server is implemented through it!
 
 TODO: minimal example.
 
@@ -274,11 +286,3 @@ TODO: minimal example.
 - <http://unix.stackexchange.com/questions/25063/capturing-area-of-the-screen-without-a-desktop-environment>
 - <http://serverfault.com/questions/125524/linux-cli-screenshot-without-x>
 - `man fbdev`
-
-Looks like the X-server is implemented through it!
-
-## /dev/mem
-
-    man mem
-
-Allows you to read physical memory.
