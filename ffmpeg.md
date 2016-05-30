@@ -10,6 +10,14 @@ List codecs: <http://stackoverflow.com/questions/3377300/what-are-all-codecs-sup
 
 ## Extract raw streams
 
+### VP9
+
+Freedom!
+
+    ffmpeg -framerate 4 -pattern_type glob -i '*.jpeg' -c:v vp9 out.webm
+
+TODO: quality is bad.
+
 ### H264
 
 - <http://stackoverflow.com/questions/10380045/is-there-any-easy-way-to-extract-h-264-raw-stream-in-annexb-format>
@@ -77,6 +85,23 @@ generates something like:
 where `I`, `B`, and `P` are defined at: <https://en.wikipedia.org/wiki/Video_compression_picture_types>
 
 From there on, Bash it up.
+
+## Images to video
+
+- <http://superuser.com/questions/624567/ffmpeg-create-a-video-from-images>
+- <http://askubuntu.com/questions/380199/converting-images-into-video>
+- <http://stackoverflow.com/questions/16315192/avconv-make-a-video-from-a-subset-on-images>
+- <https://trac.ffmpeg.org/wiki/Create%20a%20video%20slideshow%20from%20images>
+
+Just works:
+
+    ffmpeg -framerate 4 -pattern_type glob -i '*.jpg' -c:v libx264 out.mp4
+
+### Smooth transitions
+
+- <http://stackoverflow.com/questions/7565962/ffmpeg-fade-effects-between-frames>
+- <http://superuser.com/questions/778762/crossfade-between-2-videos-using-ffmpeg>
+- <http://superuser.com/questions/223678/how-to-convert-single-images-into-a-video-with-blending-transition>
 
 ## ffplay
 

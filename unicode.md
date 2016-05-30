@@ -64,6 +64,12 @@ Therefore:
 
     There is even a wiki with famous strategies: <http://en.wikipedia.org/wiki/Transformation_of_text>
 
+-   Full width characters <https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms>
+
+    Twice as wide as normal ASCII. Used in Asian languages like Chinese where most characters are also 2x wider than normal ASCII.
+
+        ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯ
+
 ### Whitespace
 
 Unicode NBSP variants: <http://en.wikipedia.org/wiki/Non-breaking_space#Width_variations>

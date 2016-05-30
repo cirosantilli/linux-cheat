@@ -14,8 +14,9 @@ Strict real time:
 
 - <https://en.wikipedia.org/wiki/QNX>, proprietary, micro-kernel, bought by BlackBerry.
 - <https://en.wikipedia.org/wiki/VxWorks>, proprietary
-- <https://en.wikipedia.org/wiki/ECos> GPL, started by Cygnus, discontinued by Red Hat, copyright later transfered to the FSF.
+- <https://en.wikipedia.org/wiki/ECos> GPL, started by Cygnus, discontinued by Red Hat, copyright later transferred to the FSF.
 - <https://en.wikipedia.org/wiki/FreeRTOS>
+- <https://en.wikipedia.org/wiki/Micro-Controller_Operating_Systems> proprietary with source available
 
 Dedicated OSes / firmware:
 

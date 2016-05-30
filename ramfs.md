@@ -26,7 +26,7 @@ Create a tmpfs:
 Create a ramfs:
 
     sudo mkdir -p /mnt/ramfs
-    sudo mount -t ramfs -o size=100m ramfs /mnt/ramfs
+    sudo mount -t ramfs -o size=300m ramfs /mnt/ramfs
 
 Undo with:
 

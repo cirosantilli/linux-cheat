@@ -91,3 +91,9 @@ Many apps do that with CLI arguments, and you should prefer that method if avail
     wmctrl -xa gvim -b add,fullscreen
 
 TODO: when I hit `Alt + Tab`, the list of applications does not show anymore on Ubuntu 15.10...
+
+## Focus window opened by command
+
+Non-trivial of course because there is no simple bijection between windows and executables:
+
+<http://unix.stackexchange.com/questions/167379/set-focus-to-newly-open-window>

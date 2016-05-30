@@ -72,3 +72,7 @@ All files in the `.d` get sourced.
 The effective hostname.
 
 Normally taken from `/etc/hostname` at startup.
+
+## swappiness
+
+<http://askubuntu.com/questions/103915/how-do-i-configure-swappiness>

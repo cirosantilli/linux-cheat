@@ -210,7 +210,7 @@ The names come from several sources: some are vendor specific like Intel and AMD
 
 Contains kernel parameters.
 
-Those can also be modified with `sysctl`.
+Those can also be modified with `sysctl`. Options will be documented there.
 
 ## /proc/uptime
 

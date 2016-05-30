@@ -4,6 +4,8 @@ Tested with: 13.12 Ubuntu 14.04
 
 <http://wiki.codeblocks.org/index.php?title=Keyboard_Shortcuts>
 
+Not recommended. Crashes a lot.
+
 ## Getting started
 
 ### Import projects
@@ -16,6 +18,8 @@ Tested with: 13.12 Ubuntu 14.04
 
 Not possible
 
+#### CMake
+
 ### Must have settings
 
 Open default workspace at startup:
@@ -25,6 +29,12 @@ Open default workspace at startup:
 ## Hangs when opening a file in a big project
 
 Big as in GCC big.
+
+## Jump to declaration
+
+Ctrl + Shift + .
+
+No mouse shortcut??
 
 ## Bibliography
 

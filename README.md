@@ -1,6 +1,6 @@
 # Linux Cheat ![logo](logo.jpg)
 
-Linux tutorials and cheatsheets. Minimal examples. Mostly user-land.
+Linux tutorials and cheatsheets. Minimal examples. Mostly user-land CLI utilities.
 
 Includes Linux concepts and utilities that work on Linux, not necessarily in the LSB. So this is a big dump of useful things, and when something gets big / useful enough, I split to another repository.
 
@@ -60,6 +60,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [mountall](mountall.md)
     1.  [pathchk](pathchk.md)
     1.  [rsync](rsync.md)
+    1.  [rm](rm.md)
     1.  [sync](sync.md)
     1.  [swap partition](swap-partition.md)
     1.  [tune2fs](tune2fs.md)
@@ -130,7 +131,6 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [echo](echo.sh)
     1. [column](column.md)
     1. [cut](cut.sh)
-    1. [Eclipse](eclipse.md)
     1. [expand](expand.md)
     1. [fold](fold.md)
     1. [paste](paste.md)
@@ -142,6 +142,10 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [uniq](uniq.md)
     1. [uuencode](uuencode.md), `uudecode`
     1. [wc](wc.md)
+1.  IDEs
+    1. [Eclipse](eclipse.md)
+    1. [Code::Blocks](codeblocks.md)
+    1. [KDevelop](kdevelop.md)
 1.  Binary data viewers
     1. [hd](hd.md)
     1. [hexdump](hexdump.md)
@@ -169,6 +173,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1.  [pmap](ps.md)
         1.  [ps](ps.md)
         1.  [top](top.md)
+        1.  [watch](watch.md)
     1.  psmisc
         1.  [killall](killall.md)
     1.  [Shebang](shebang/)
@@ -220,6 +225,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
                 1. [HandBrake](handbrake.md)
         1.  Trivia
             1. [MPEG LA](mpeg-la.md)
+        1.  [VLC](vlc.md)
     1.  [Camera](camera.md)
         1.  [Video4Linux](video4linux.md)
 1.  File sharing
@@ -315,7 +321,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [Statistics](statistics.md)
 1.  Packages
     1. [util-linux](util-linux.md)
-1.  Simulation
+1.  [Physics](physics.md)
     1. [gazebo](gazebo.md)
 1.  Misc
     1.  [BusyBox](busybox.md)

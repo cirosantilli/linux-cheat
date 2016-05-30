@@ -83,17 +83,17 @@ Important niche of application for VMs include:
 
 ## Emulation vs virtualization
 
--   emulation vs virtualization: <http://stackoverflow.com/questions/6044978/full-emulation-vs-full-virtualization>
+<http://stackoverflow.com/questions/6044978/full-emulation-vs-full-virtualization>
 
-    Emulation is usually said to be software only, while virtualization uses hardware support, making it way faster.
+Emulation is usually said to be software only, while virtualization uses hardware support, making it way faster.
 
-    The x86 family has hardware features that improve performance and may be even required for certain virtualizations.
+The x86 family has hardware features that improve performance and may be even required for certain virtualizations.
 
-    Those features can be turned on or off by the BIOS, and in many modern systems they come turned off by default.
+Those features can be turned on or off by the BIOS, and in many modern systems they come turned off by default.
 
-    If you plan on using virtualization, the first thing you should do is to enable such features by going into the BIOS config (first screen shown at computer startup), and looking for a virtualization section.
+If you plan on using virtualization, the first thing you should do is to enable such features by going into the BIOS config (first screen shown at computer startup), and looking for a virtualization section.
 
--   Docker: <https://github.com/dotcloud/docker>
+Docker: <https://github.com/dotcloud/docker>
 
 ### Hypervisor
 
@@ -103,6 +103,14 @@ TODO vs virtualization?
 - type 2: runs on top of an OS. E.g.: VirtualBox.
 
 KVM: hard to say.
+
+## Cycle accurate simulation
+
+Simulates speed well.
+
+Public simulators do not exist for closed source chips I know of.
+
+Likely because they would reveal too much internals and leak IP.
 
 ## File formats
 

@@ -6,7 +6,7 @@ GNU.
 
 Run `echo` 100 times in parallel:
 
-    seq 100 | parallel echo {}
+    seq 100 | parallel echo '{}'
 
 ## halt
 

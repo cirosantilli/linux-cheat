@@ -171,7 +171,7 @@ The first `-depth 8`, specifies it for the input, and the second for the output.
 
 #### Depths that are not multiple of 8
 
-TODO: what happens when depth < 8? http://stackoverflow.com/questions/10155092/how-do-i-convert-image-to-2-bit-per-pixel ImageMagick packs multiple bits per byte since it is not possible to address bits, but I don't understand exactly how. Specially, because it depends on the dimensions! E.g.;
+TODO: what happens when depth less than 8? http://stackoverflow.com/questions/10155092/how-do-i-convert-image-to-2-bit-per-pixel ImageMagick packs multiple bits per byte since it is not possible to address bits, but I don't understand exactly how. Specially, because it depends on the dimensions! E.g.;
 
     printf "%10s" | sed 's/ /\xFF\x00/g' > f.gray
     convert -depth 8 -size 1x20 f.gray -depth 2 g.gray
@@ -338,4 +338,6 @@ Checkerboard:
     printf "%1002001s" | sed 's/ /\xFF\x00/g' > f.gray
     convert -depth 8 -size 1001x2002 f.gray f.png
 
+## Trivia
 
+- http://arstechnica.com/security/2016/05/exploits-gone-wild-hackers-target-critical-image-processing-bug/

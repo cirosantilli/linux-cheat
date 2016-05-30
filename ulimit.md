@@ -111,6 +111,11 @@ Linux deals well with CPU limits since CPU usage rotates according to nice, but 
 
 The timeout tool aims to limit CPU and RAM for the children as well as parent: <https://github.com/pshved/timeout>
 
+### CPU usage
+
+- <http://stackoverflow.com/questions/386945/limiting-certain-processes-to-cpu-linux>
+- <http://unix.stackexchange.com/questions/151883/limiting-processes-to-not-exceed-more-than-10-of-cpu-usage>
+
 ## Per user limits
 
 ### PAM

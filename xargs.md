@@ -224,6 +224,12 @@ Remove them:
 
     find . | sort -f | uniq -di | xargs -I'{}' rm '{}'
 
-## Parallel
+## P
 
-TODO GNU xargs that does jobs in parallel? Looks promising.
+Run tasks in parallel, much like GNU `parallel`, with up to N threads:
+
+    seq 10 | xargs -p4 -I'{}' echo '{}'
+
+Whatever you do, don't use `-P0`! It is a fork bomb.
+
+<http://stackoverflow.com/a/19618159/895245>

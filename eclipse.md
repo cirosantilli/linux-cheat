@@ -364,6 +364,10 @@ HTML, JavaScript, PHP: <http://download.eclipse.org/webtools/repository/indigo/>
 
 #### CDT
 
+#### C++
+
+Hard to get working...
+
 C and C++: <http://download.eclipse.org/tools/cdt/releases/indigo/>
 
 For large projects, make sure that you add more memory to the VM at `Eclipse.ini` or the indexing hangs: <http://stackoverflow.com/questions/9565125/whats-the-recommended-eclipse-cdt-configuration-for-big-c-project-indexer-ta>

@@ -188,7 +188,7 @@ Rip from DVD:
 
 Automatically finds right configurations on most systems.
 
-Creates dir in cur dir and saves rip out as `.ogg` in it.
+Creates dir in cur dir and saves rip out as `.ogg` (Vorbis) in it.
 
 ## Synthesis
 
