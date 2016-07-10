@@ -10,7 +10,7 @@ C / C++ focused, but other languages also supported: <http://developer.kde.org/~
 
 - Vi input mode: Settings > Editing > Vi input mode > Use
 
-## Navigate souce
+## Navigate source
 
 - Import existing source: File > Import > CMake. Done. Just works!
 - Jump to definition: Ctrl + click.

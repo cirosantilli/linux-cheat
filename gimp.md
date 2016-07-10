@@ -115,6 +115,6 @@ Shortcuts:
 
     - `Ctrl + A + drag`: move the selection elsewhere
 
-    - `Ctrl + Shift + V`: open selection as new image
+    - `Ctrl + Shift + V`: open selection / clipboard as a new image
 
 -   `Ctrl + R`: add new rectangle to existing selection

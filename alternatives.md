@@ -21,3 +21,7 @@ Strict real time:
 Dedicated OSes / firmware:
 
 - <https://en.wikipedia.org/wiki/Rockbox> , music players
+
+Microcontrollers: seems like Linux requires a MMU:
+
+- <https://en.wikipedia.org/wiki/ΜClinux>

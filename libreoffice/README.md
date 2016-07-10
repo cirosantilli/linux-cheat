@@ -8,6 +8,10 @@ WYSIWYG text editor, tables, image editor, database management.
 
 How to add new spell checking language: <http://askubuntu.com/questions/72099/how-to-install-a-libreoffice-dictionary-spelling-check-thesaurus>
 
+## Write
+
+How to end a list??
+
 ## Calc
 
 Table /spreadsheet editor like Excel.

@@ -175,7 +175,7 @@ QEMU has a specific disk format called *qcow2* which allows for further capabili
 
 Boot from given floppy image.
 
-https://github.com/dcloues/os_tutorial can only be run with it.
+<https://github.com/dcloues/os_tutorial> can only be run with it.
 
 Must be used when `grub.cfg` uses:
 
@@ -269,7 +269,7 @@ Pass kernel boot parameters (command line arguments):
 
     -append "init=/dev/sbin panic=1"
 
-## driver
+## drive
 
 QEMU 2.3.0 complains with a warning if we don't set `format`, so in this version we have to use:
 
@@ -288,3 +288,24 @@ Nope, QEMU is just designed to be fast, and performance is not well documented b
 - <http://stackoverflow.com/questions/17454955/can-you-check-performance-of-a-program-running-with-qemu-simulator>
 - <http://stackoverflow.com/questions/14259542/cycle-accurate-simulation-of-x86-hardware>
 - <https://en.wikipedia.org/wiki/Computer_architecture_simulator>
+
+## GPU
+
+-   <http://stackoverflow.com/questions/5789418/how-do-i-add-a-virtual-gpu-into-qemu>
+    - <http://stackoverflow.com/questions/5762039/create-virtual-hardware-kernel-qemu-for-android-emulator-in-order-to-produce-o/5763466#5763466>
+
+## static
+
+Ubuntu 16.04:
+
+    sudo apt-get intall qemu-user-static
+
+Usermode emulation. E.g., get a Linux ARM statically linked executable on an x86 machine, then you can run it with:
+
+    qemu-arm-static ./executable
+
+QEMU emulates the ISA, and converts system calls to the host arch! Amazing.
+
+`-L` can be used to run with dynamic libraries: <http://stackoverflow.com/questions/16158994/qemu-arm-cant-run-arm-compiled-binary>
+
+    qemu-arm-static -L /usr/arm-linux-gnueabihf ./executable

@@ -95,6 +95,7 @@ TODO what is it.
 
 - <https://www.google.com/fonts> `woff2`.
 - <https://fontlibrary.org/> `otf`
+- <https://www.gnu.org/software/freefont/>
 
 ## Concepts
 

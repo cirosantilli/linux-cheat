@@ -54,6 +54,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [blkid](blkid.md)
     1.  [fdisk](fdisk.md)
     1.  [FUSE](FUSE.md)
+    1.  [Forensic rm](forensic-rm.md)
     1.  [fuser](fuser.md)
     1.  [lsblk](lsblk.md)
     1.  [fstab](fstab.md)

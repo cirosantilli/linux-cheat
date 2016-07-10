@@ -657,22 +657,6 @@
 
     # -r: recursive. Mandatory for directories. Potentially dangerous.
 
-  ## recover data removed with rm like tools
-
-    # `rm` only removes files from filesystem indexes, but the data remains in place
-    # until the event that another file is writen on it, which may take severl minutes or hours.
-
-    # Even after the file data overwritten few times, it is still possible to recover
-    # the data using expensive forensic methods (only viable for organizations).
-
-    # To permanently remove data from hard disk, you must use a tool like shred,
-    # which writes certain sequences to the hard disk, making it impossible to
-    # recover the data even with forensic methods.
-
-    # Such operations take a very long time, and are not viable on entire hard disks,
-    # so if you serious about clearing a hard disk, mechanical desctruction is a better option
-    # (open the hard disk case and destroy the disk).
-
   ## rename
 
     # Mass file regex renaming.

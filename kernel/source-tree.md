@@ -227,6 +227,8 @@ Sound code.
 
 Memory management.
 
+`mm/memory.c`: centerpiece of memory management
+
 ## IPC
 
 IPC stuff such as semaphores under `sem.c` or message queues under `mqueue.c`.
