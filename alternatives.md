@@ -18,6 +18,8 @@ Strict real time:
 - <https://en.wikipedia.org/wiki/FreeRTOS>
 - <https://en.wikipedia.org/wiki/Micro-Controller_Operating_Systems> proprietary with source available
 
+<https://en.wikipedia.org/wiki/Xenomai> provides real time capabilities on Linux userland.
+
 Dedicated OSes / firmware:
 
 - <https://en.wikipedia.org/wiki/Rockbox> , music players

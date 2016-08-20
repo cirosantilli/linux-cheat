@@ -26,6 +26,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1. [Android](android.md)
     1.  [Distros](distros.md)
         1. [Minimal distros](minimal-distros.md)
+        1. [Buildroot](buildroot.md)
     1.  [Linux runs on](linux-runs-on.md)
     1.  [Runs Linux](runs-linux.md)
 1.  [Kernel](kernel/)

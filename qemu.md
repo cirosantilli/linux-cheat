@@ -212,16 +212,6 @@ Note that symbol names won't help, because there is no debugging information in 
 
 <http://stackoverflow.com/a/33203642/895245>
 
-## Monitor
-
-Special mode that allows you to enter commands to QEMU.
-
-Enter with: `Ctrl + Alt + 2`.
-
-Leave with: `Ctrl + Alt + 1`.
-
-Those allow you to observe the program state without using an external debugger like GDB. GDB is more powerful however.
-
 ## Switch TTY
 
 On Ubuntu 14.04, `Ctrl + Alt + Fx` changes the TTY on the host, for guest use Alt + Left / Right: <http://askubuntu.com/questions/54814/how-can-i-ctrl-alt-f-to-get-to-a-tty-in-a-qemu-session>
@@ -309,3 +299,42 @@ QEMU emulates the ISA, and converts system calls to the host arch! Amazing.
 `-L` can be used to run with dynamic libraries: <http://stackoverflow.com/questions/16158994/qemu-arm-cant-run-arm-compiled-binary>
 
     qemu-arm-static -L /usr/arm-linux-gnueabihf ./executable
+
+## Monitor
+
+Special mode that allows you to enter commands to QEMU.
+
+Enter with: `Ctrl + Alt + 2`.
+
+Leave with: `Ctrl + Alt + 1`.
+
+Those allow you to observe the program state without using an external debugger like GDB. GDB is more powerful however.
+
+TODO: example.
+
+## Access host
+
+By default, the guest sees the host on a network at address 10.0.2.2.
+
+To try this out, run on the host:
+
+    python -m SimpleHTTPServer
+
+and inside a BusyBox image do:
+
+    wget 10.0.2.2:8000
+    cat index.html
+
+## Serial console
+
+## Parallel console
+
+Enter with: `Ctrl + Alt + 3` and `Ctrl + Alt + 4`. TODO example.
+
+## Shared filesystem with host
+
+For simpler applications, just use `nc` or `wget`
+
+NFS: TODO example. With this you can just mount a filesystem on the guest and it synchronizes automagically. Buildroot does have an NFS package.
+
+Without networking: <http://superuser.com/questions/628169/qemu-to-share-a-directory-with-the-host>

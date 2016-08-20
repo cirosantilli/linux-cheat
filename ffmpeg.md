@@ -8,6 +8,18 @@ List codecs: <http://stackoverflow.com/questions/3377300/what-are-all-codecs-sup
 
     ffmpeg -codecs
 
+## stdin and stdout operations
+
+ffmpeg can detect file types from both file names and contents. But if you want to be explicit, remember the `man ffmpeg` signature:
+
+    ffmpeg [global_options] {[input_file_options] -i input_file} ... {[output_file_options] output_file} ...
+
+So the `-f` before `-i` is for the input format, and the `-f` after `-i` is the output.
+
+Example: stream your desktop and play it:
+
+    ffmpeg -video_size 640x480 -framerate 25 -f x11grab -i :0.0+100,200 -f h264 - | ffplay -f h264 -
+
 ## Extract raw streams
 
 ### VP9

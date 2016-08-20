@@ -43,13 +43,13 @@ Sets : `-Dgloprt`
 Does what you want it to do, before you notice you need it:
 
 - `-D`: preserve special and device files. Requires sudo.
-- `-g`: preserve group. Requires `sudo`.
-- `-l`: copy symlinks as symlinks.
-- `-o`: preserve owner. Requires `sudo`.
-- `-p`: preserve permissions.
-- `-r`: recurse into directories.
-- `-t`: preserve modification times.
-- `--exclude=`: Exclude directories.
+- `-g`: preserve group. Requires `sudo`
+- `-l`: copy symlinks as symlinks
+- `-o`: preserve owner. Requires `sudo`
+- `-p`: preserve permissions
+- `-r`: recurse into directories
+- `-t`: preserve modification times
+- `--exclude=`: Exclude directories
 - `-v`: verbose
 - `-z`: compress files before transfer, decompress after.
 
@@ -67,3 +67,15 @@ WARNING: your disk must be ext4, not NTFS, or permissions are impossible. In tha
 
 - <http://serverfault.com/questions/411552/rsync-remote-to-remote>
 - <http://unix.stackexchange.com/questions/183504/how-to-rsync-files-between-two-remotes>
+
+## Move files
+
+TODO impossible? I wanted that to use nice things like `--exclude` as in:
+
+    rsync --remove-source-files --exclude .git * buildroot
+
+but `--remove-source-files` does not prevent the copy with a `mv`, it only simply unlinks the original after it is copied.
+
+- <http://serverfault.com/questions/147624/getting-rsync-to-move-file-from-source-to-destination>
+- <http://stackoverflow.com/questions/9849794/mv-equivalent-rsync-command>
+- <http://unix.stackexchange.com/questions/43957/using-rsync-to-move-not-copy-files-between-directories>
