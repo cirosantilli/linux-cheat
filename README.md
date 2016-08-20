@@ -81,6 +81,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1.  [sysfs](sysfs.md)
         1.  [ramfs](ramfs.md)
         1.  [binfmt_misc filesystem](binfmt-misc-filesystem.md)
+        1.  [NFS](nfs.md)
     1.  Files, directories
         1.  [cp](cp.sh)
         1.  [dd](dd.md)
@@ -342,5 +343,4 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [MAKEDEV](makedev.md)
 1.  [gcov](gcov.md)
 1.  File sharing
-    1. [NFS](nfs.md)
     1. [LDAP](ldap.md)

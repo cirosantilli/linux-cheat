@@ -265,9 +265,13 @@ TODO example.
 
 Allows you to read physical memory.
 
+## fbdev
+
 ## /dev/fb0
 
 ## Framebuffer
+
+TODO: minimal example.
 
 TODO what is it exactly?
 
@@ -277,8 +281,6 @@ Used by `fbi` to show images to screen, also used by X I guess?
 
 Looks like the X-server is implemented through it!
 
-TODO: minimal example.
-
 - <https://www.kernel.org/doc/Documentation/fb/api.txt>
 - <https://www.kernel.org/doc/Documentation/fb/framebuffer.txt>
 - <http://stackoverflow.com/questions/4996777/paint-pixels-to-screen-via-linux-framebuffer>
@@ -286,3 +288,15 @@ TODO: minimal example.
 - <http://unix.stackexchange.com/questions/25063/capturing-area-of-the-screen-without-a-desktop-environment>
 - <http://serverfault.com/questions/125524/linux-cli-screenshot-without-x>
 - `man fbdev`
+
+### /dev/dri
+
+### DRM
+
+### Direct Rendering Manager
+
+<https://en.wikipedia.org/wiki/Direct_Rendering_Manager>
+
+TODO: minimal example.
+
+Supersedes fbdev.

@@ -89,6 +89,10 @@ class Main : Base1, Base2
 
 Long description.
 
+@p arg2 is a parameter. http://stackoverflow.com/questions/15398711/whats-the-right-way-to-reference-a-parameter-in-doxygen
+
+Main#method is a method in a class.
+
 @tparam T   a class
 @tparam N   an int
 @tparam TT  a template
@@ -101,9 +105,11 @@ Not Multiline.
 @return 0
 @throw           nothing
 @see Main2
+@see Main2::method
+@see Main2#method
 */
 template<typename T, template <typename U> class TT, int N >
-int f(int arg1, float *arg2, int arg3, int arg4) {
+int globalFunction(int arg1, float *arg2, int arg3, int arg4) {
     return 0;
 }
 
