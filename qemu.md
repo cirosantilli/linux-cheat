@@ -312,7 +312,17 @@ Those allow you to observe the program state without using an external debugger 
 
 TODO: example.
 
-## Access host
+### Monitor telnet from host:
+
+Run QEMU with:
+
+    -monitor telnet:127.0.0.1:1234,server,nowait \
+
+Then:
+
+    telnet localhost 1234
+
+## Access host IP from QEMU
 
 By default, the guest sees the host on a network at address 10.0.2.2.
 
@@ -325,11 +335,13 @@ and inside a BusyBox image do:
     wget 10.0.2.2:8000
     cat index.html
 
-## Serial console
+### Access QEMU IP from host
 
-## Parallel console
+<http://unix.stackexchange.com/questions/124681/ssh-from-host-to-guest-using-qemu>
 
-Enter with: `Ctrl + Alt + 3` and `Ctrl + Alt + 4`. TODO example.
+Looks like:
+
+    -net user,hostfwd=tcp::2222-:22
 
 ## Shared filesystem with host
 
@@ -338,3 +350,11 @@ For simpler applications, just use `nc` or `wget`
 NFS: TODO example. With this you can just mount a filesystem on the guest and it synchronizes automagically. Buildroot does have an NFS package.
 
 Without networking: <http://superuser.com/questions/628169/qemu-to-share-a-directory-with-the-host>
+
+## Serial
+
+## TTL
+
+TODO: like the serial present on most dev boards, which gives a shell that can be accessed with:
+
+    telnet localhost 1234

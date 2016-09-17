@@ -107,3 +107,7 @@ Restart Compiz after modifying configurations to load them:
     compiz --replace
 
 You should do this from a tty other than `tty7`.
+
+## Matchbox
+
+Minimalistic, one window at a time only. Embedded focus. Buildroot 2016-05 has a package for it.

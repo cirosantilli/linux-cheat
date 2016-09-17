@@ -185,15 +185,17 @@ Example: write pseudorandom sequences into `/dev/sda/` to hide data:
 
 You can have some fun with mouses. Search for the mice or mouse device files and cat them:
 
-    sudo cat /dev/input/mice
+    sudo hd /dev/input/mice
 
 And then:
 
-    sudo cat /dev/input/mouse0
+    sudo hd /dev/input/mouse0
 
 Now note that when you move the mouse, cat spits something out to the screen!
 
 `mice` is the combination of all mice, and each other `mouseX` is a single mouse device.
+
+This subsystem is called `evdev`: <https://en.wikipedia.org/wiki/Evdev>
 
 ## /dev/shm
 

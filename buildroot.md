@@ -108,27 +108,88 @@ Grouped under `packages/Config.in`:
 
 Many / all are SDL based. It seems that SDL has an `fbdev` mode that dispenses X11.
 
+### prdoom
+
+### chocolate-doom
+
+Doom clones.
+
+This shows one running on uclinux blackfin SDL DirectFB: https://www.youtube.com/watch?v=fKyQOntPEFs
+
 ### ltris
 
 ### lbreakout2
 
-Fails with:
+From: http://lgames.sourceforge.net/about.php
+
+Simple SDL based games `L` stands for Linux.
+
+Should be able to run on framebuffer? But both on TTY and X11 they fail with:
 
     set_video_mode: cannot allocate screen: Couldn't set console screen info
 
+Looks like this is caused by the call: <https://www.libsdl.org/release/SDL-1.2.15/docs/html/sdlsetvideomode.html>
+
+`fbset` seems to do the same calls, and fails in the same way.
+
 ### opentyrian
 
-Hangs.
+Takes over screen and hangs.
 
 ### sl
 
 Classic steam locomotive `sl` typo corrector. Text only.
 
+### gnuchess
+
+CLI chess.
+
 ## X11
 
 http://unix.stackexchange.com/questions/70931/install-x11-on-my-own-linux-system
 
-## Firefly
+## GUI
+
+- <http://unix.stackexchange.com/questions/70931/install-x11-on-my-own-linux-system/306116#306116>
+
+## SDL without X11
+
+- <http://stackoverflow.com/questions/1263710/minimal-linux-distrobution-with-sdl-support-and-no-xwindows>
+
+## Web browser
+
+- <http://unix.stackexchange.com/questions/17779/how-can-i-build-a-custom-distribution-for-running-a-simple-web-browser/306192#306192>
+
+## Debugging tools
+
+The basics: always compile with:
+
+- debugging symbols
+- gdb and gdbserver on target
+- host cross gdb
+- strace
+
+## sshd
+
+<http://stackoverflow.com/a/39301480/895245>
+
+## nc
+
+## netcat
+
+Not enabled on BusyBox by default, see: `package/busybox/default.config`
+
+But we have ping (TODO from where?), so whatever.
+
+## Boards
+
+### Raspberry pi
+
+TODO: how to emulate with QEMU? `aarch` procedure did no work, no `dtb` file.
+
+Just worked on a PI2 via UART. No `sshd` daemon though.
+
+### Firefly
 
 - <https://bugs.busybox.net/show_bug.cgi?id=9226>
 - <http://bbs.t-firefly.com/forum.php?mod=viewthread&tid=1777>
