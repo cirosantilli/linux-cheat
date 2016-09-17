@@ -127,3 +127,8 @@ Classic steam locomotive `sl` typo corrector. Text only.
 ## X11
 
 http://unix.stackexchange.com/questions/70931/install-x11-on-my-own-linux-system
+
+## Firefly
+
+- <https://bugs.busybox.net/show_bug.cgi?id=9226>
+- <http://bbs.t-firefly.com/forum.php?mod=viewthread&tid=1777>
