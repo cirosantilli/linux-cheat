@@ -311,6 +311,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1.  [HP](hp.md)
 1.  Mathematics
     1.  [bc](bc.md)
+    1.  [coq](coq/)
     1.  [factor](factor.md)
     1.  [primes](primes.md)
     1.  [seq](seq.md)

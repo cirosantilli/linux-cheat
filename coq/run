@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -e
+for f in *.v; do
+    coqc "$f";
+done
