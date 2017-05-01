@@ -87,6 +87,7 @@ Best command for computational use:
 
 1 and 2 means how many bytes per block.
 
+
 Example:
 
     echo -n ab | od -tx1
@@ -136,8 +137,7 @@ More precisely, there are the following cases:
 
 - if the byte has a corresponding non whitespace ASCII character or space, print that character.
 
-- else if the character has a corresponding backslash `\\` C escape sequence,
-    print that sequence. Ex: 0 is `\0`.
+- else if the character has a corresponding backslash `\\` C escape sequence, print that sequence. Ex: 0 is `\0`.
 
 - else print the octal value of the byte as in `-to1`.
 
@@ -264,6 +264,12 @@ Output:
     0000032 71 20 72 20 73 20 74 20 75 20 76 20 77 20 78 20
     0000048 79 20 7a 0a
     0000052
+
+### Remove address lines
+
+<http://unix.stackexchange.com/questions/192937/removing-line-numbers-from-ods-output>
+
+    -An
 
 ## N
 

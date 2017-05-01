@@ -268,7 +268,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1. [libnotify](libnotify.md)
         1. [zenity](zenity.md)
     1.  Screenshots
-        1. [recordMyDesktop](recordMyDesktop.md)
+        1. [recordMyDesktop](record-my-desktop.md)
         1. [xwd](xwd.md)
     1.  [Screensaver](screensaver.md)
     1.  [IBus](ibus.md)

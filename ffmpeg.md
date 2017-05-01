@@ -104,10 +104,14 @@ From there on, Bash it up.
 - <http://askubuntu.com/questions/380199/converting-images-into-video>
 - <http://stackoverflow.com/questions/16315192/avconv-make-a-video-from-a-subset-on-images>
 - <https://trac.ffmpeg.org/wiki/Create%20a%20video%20slideshow%20from%20images>
+- <http://unix.stackexchange.com/questions/68770/converting-png-frames-to-video-at-1-fps>
+- <http://stackoverflow.com/questions/19267443/playback-issues-in-vlc-with-low-fps-video-from-images-using-ffmpeg>
 
 Just works:
 
-    ffmpeg -framerate 4 -pattern_type glob -i '*.jpg' -c:v libx264 out.mp4
+    ffmpeg -framerate 1 -pattern_type glob -i '*.png' -c:v libx264 -r 30 -pix_fmt yuv420p out.mp4
+
+`-r 30` to use a standard frame rate and be more compatible, see: <http://stackoverflow.com/questions/19267443/playback-issues-in-vlc-with-low-fps-video-from-images-using-ffmpeg/41797724#41797724>
 
 ### Smooth transitions
 
@@ -178,3 +182,31 @@ A few URLs that can be accessed from the browser:
 ## udp protocol
 
 An FFmpeg invention it seems: <http://stackoverflow.com/questions/27930879/what-is-ffmpegs-udp-protocol>
+
+## Trim by time
+
+## Cut by time
+
+- <http://stackoverflow.com/questions/18444194/cutting-the-videos-based-on-start-and-end-time-using-ffmpeg/40244234>
+- <http://superuser.com/questions/138331/using-ffmpeg-to-cut-up-video>
+
+Best command:
+
+    ffmpeg -i in.ogv -ss 00:00 -to 03:30 -c copy out.ogv
+
+## Concatenate
+
+- <http://ffmpeg.org/faq.html#How-can-I-concatenate-video-files>
+- <http://stackoverflow.com/questions/7333232/concatenate-two-mp4-files-using-ffmpeg>
+
+Best command:
+
+    ffmpeg -i concat:"in1.ogv|in2.ogv" -c copy out.ogv
+
+## Merge audio and video
+
+<http://superuser.com/questions/277642/how-to-merge-audio-and-video-file-in-ffmpeg>
+
+Yeah, this works on VLC and YouTube:
+
+    ffmpeg -i video.mp4 -i audio.mp3 -c copy output.mkv

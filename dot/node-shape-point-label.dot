@@ -1,0 +1,11 @@
+// TODO how to make a graph with shape=point and labels?
+// - http://www.graphviz.org/content/external-labels
+// - http://stackoverflow.com/questions/23018684/annotation-outside-a-node-in-dot
+// - http://www.graphviz.org/content/how-use-xlp-attribute-positioning-external-labels-xlabel
+// - http://stackoverflow.com/questions/30689533/graphviz-graph-positioning-xlabels
+graph {
+    node [shape=point];
+    1 [xlabel="a"]
+    2 [xlabel="b"]
+    1 -- 2;
+}

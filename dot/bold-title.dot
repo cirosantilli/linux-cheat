@@ -1,0 +1,12 @@
+// http://stackoverflow.com/questions/6171344/graphviz-record-node-with-a-bold-title
+digraph i { 
+  "node" [
+    label =<
+             <table border="0" cellborder="1" cellspacing="0">
+                 <tr><td><b>title</b></td></tr>
+                 <tr><td>field 1</td></tr>
+             </table>
+           >
+    shape = "none"
+  ];  
+}

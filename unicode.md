@@ -149,3 +149,7 @@ Also, it contains NUL characters all over for ASCII, which requires greater care
 ## Largest common Unicode gliph
 
 <https://www.quora.com/What-are-the-coolest-Unicode-characters/answer/Ciro-Santilli-%E5%85%AD%E5%9B%9B%E4%BA%8B%E4%BB%B6-%E6%B3%95%E8%BD%AE%E5%8A%9F-%E7%BA%B3%E7%B1%B3%E6%AF%94%E4%BA%9A-%E5%A8%81%E8%A7%86>
+
+## Math simulation
+
+<https://en.wikipedia.org/wiki/Unicode_subscripts_and_superscripts>

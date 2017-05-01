@@ -144,6 +144,10 @@ Force modified aspect ratio:
 
 	convert large.png -resize '50x100!' small.png
 
+## Resize to fixed aspect ratio, fill extra space black
+
+    convert in.png -resize 800x600 -background black -gravity center -extent 800x600 out.png
+
 ### trim
 
 Automagically remove white background.
@@ -252,6 +256,10 @@ TODO what does `-colorspace hsl` mean? Do output formats support HSL?
 
         convert -threshold 50 a.jpg b.jpg
 
+    Operate on alpha channel only:
+
+        convert apple.svg -scale 512x512 -channel alpha -threshold 50% +channel apple.png
+
 -   `-monochrome`: seems to generate a black and white binary image with a good dithering.
 
         convert -monochrome a.jpg b.jpg
@@ -259,6 +267,7 @@ TODO what does `-colorspace hsl` mean? Do output formats support HSL?
     Can likely be achieved with other options? But this is a convenient option
 
     <http://www.imagemagick.org/Usage/quantize/#monochrome>
+
 
 ### extent
 
@@ -287,6 +296,16 @@ Horizontally:
 <http://stackoverflow.com/questions/2322750/replace-transparency-in-png-images-with-white-background>
 
     convert image.png -background white -alpha remove white.png
+
+### Make white also transparent
+
+Raw:
+
+    convert in.png -transparent white out.png
+
+Hard threshold:
+
+    convert in.png -threshold 50% -transparent white out.png
 
 ### GIF operations
 
@@ -341,3 +360,7 @@ Checkerboard:
 ## Trivia
 
 - http://arstechnica.com/security/2016/05/exploits-gone-wild-hackers-target-critical-image-processing-bug/
+
+## SVG
+
+Not very good support as of 6.8.9.

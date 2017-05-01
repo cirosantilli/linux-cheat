@@ -1,5 +1,5 @@
-// Undirected
-graph graphname {
+// Undirected.
+graph {
     a -- b -- c;
     b -- d;
 }

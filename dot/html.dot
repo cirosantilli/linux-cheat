@@ -1,0 +1,5 @@
+graph {
+    1 [label=<<b>bold</b>>]
+    2 [label=<x<sub>sub</sub>>]
+    1 -- 2
+}

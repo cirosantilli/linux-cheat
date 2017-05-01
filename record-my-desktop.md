@@ -16,3 +16,7 @@ Most useful command:
 - save output to `out.ogv`, `out-1.ogv`, ...
 
 Use if from a drop-down terminal like Guake so in the 2 seconds you can make it disappear.
+
+Global shortcuts: <http://askubuntu.com/questions/200952/what-is-a-desktop-recorder-with-global-shortcuts>
+
+Screen area selection: <http://askubuntu.com/questions/156606/how-can-i-accurately-select-an-area-of-screen-to-record-when-using-recordmydeskt>
