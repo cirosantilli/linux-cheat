@@ -1,0 +1,5 @@
+env = Environment()
+p1 = env.Program(target='main.out', source=['main.c'])
+p2 = env.Program(target='main2.out', source=['main2.c'])
+env.Alias('asdf', p1)
+env.Alias('asdf', p2)

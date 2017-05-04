@@ -1,0 +1,2 @@
+env = Environment()
+env.Program(target='main.out', source=[Glob('*.c')])
