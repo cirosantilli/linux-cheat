@@ -13,3 +13,13 @@ Usage:
     ls /mnt/local
 
 The server may restrict access to only certain paths.
+
+## Server
+
+Good tutorial: <https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nfs-mount-on-ubuntu-14-04>
+
+    sudo mkdir /var/nfs
+    sudo chown nobody:nogroup /var/nfs
+    sudo service nfs-kernel-server start
+    echo '/shared/dir *(rw,sync,no_subtree_check)' | sudo tee /etc/exports
+    sudo exportfs -a

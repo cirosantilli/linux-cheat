@@ -1,0 +1,4 @@
+env = Environment()
+x = ARGUMENTS.get('x', '0')
+env.Append(CPPDEFINES=['X=' + x])
+env.Program(target = 'main.out', source = ['main.c'])

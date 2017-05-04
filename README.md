@@ -291,6 +291,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [Xen](xen.md)
     1. [Vagrant](vagrang/)
     1. [Intel SDE](intel-sde.md)
+    1. [gem5](gem5.md)
 1.  [Configuration automation](config-automation.md)
     1. [chef](chef/)
     1. [puppet](puppet.md)

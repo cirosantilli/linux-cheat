@@ -51,3 +51,26 @@ Sample output for GDB:
     -------------------------------------------------------------------------------
 
 In 2015 takes around 30 minutes on the Linux kernel: <http://www.quora.com/How-many-lines-of-code-are-in-the-Linux-kernel>
+
+## Per top-level directory breakdown
+
+E.g. for C and C++ only:
+
+    for d in $(git ls-tree HEAD . | awk -F '[[:space:]]' '$2=="tree" {print $4}'); do
+        echo "## $d"
+        cloc --list-file=<(git ls-files "$d" | grep -Fxvf <(git submodule status | cut -d' ' -f3))
+        echo
+    done |& tee /tmp/a
+    cat /tmp/a | awk -F' ' '/^##/{ printf("%-16s %d\n", name, sum); name = $2; sum = 0} /^(C |C\+\+ )/{ sum += $5 }' | tail -n+2 | sort -nrk 2,2
+
+## For each file
+
+    cloc --by-file .
+
+You can then do your own processing.
+
+## gitignore
+
+<https://github.com/AlDanial/cloc/issues/49>
+
+    --vcs=git

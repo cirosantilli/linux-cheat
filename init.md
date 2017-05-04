@@ -129,10 +129,6 @@ Set the `<start><stop>` levels of the script script:
 
 The above sets start to `2` and stop to `1`.
 
-## init directory
-
-`/etc/init` is Upstart specific. It contains scripts that correspond to Upstart services.
-
 ## upstart
 
 Intended as a backwards compatible replacement for System V.

@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+assert_fail() {
+  echo "Test failed: ${1}"
+  exit 1
+}
+
+top="$(pwd)"
+log_path="${top}/test.log"
+
+./clean
+
+cd "$top"
+cd 'hello'
+scons >>"$log_path" 2>&1
+[ "$(./main.out)" = 'hello' ] || assert_fail 'hello'
+
+cd "$top"
+cd 'define'
+scons >>"$log_path" 2>&1
+[ "$(./main.out)" = '1' ] || assert_fail 'define'
+
+cd "$top"
+cd 'cli_args'
+scons >>"$log_path" 2>&1
+[ "$(./main.out)" = '0' ] || assert_fail 'cli_args 0'
+scons x=1 >>"$log_path" 2>&1
+[ "$(./main.out)" = '1' ] || assert_fail 'cli_args 1'
+
+cd "$top"
+cd 'cflags'
+scons >>"$log_path" 2>&1
+[ scons std=c89 >>"$log_path" 2>&1 ] && assert_fail 'cflags c89'
+
+echo 'All tests passed'

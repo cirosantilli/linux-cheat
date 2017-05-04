@@ -1,0 +1,5 @@
+env = Environment()
+std = ARGUMENTS.get('std', 'c99')
+env.Append(CCFLAGS = '-std=' + std)
+env.Append(CCFLAGS = '-Werror')
+env.Program(target = 'main.out', source = ['main.c'])

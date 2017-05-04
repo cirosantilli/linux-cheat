@@ -55,6 +55,8 @@
     #go to tty3
     #your message is there!
 
+  # SSH sessions also see those messages.
+
 ## talk
 
   # Commandline chat program.

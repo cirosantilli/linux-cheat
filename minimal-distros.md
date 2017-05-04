@@ -55,3 +55,11 @@ Seemed popular, but died in 2008?
 Tiny core Linux: <http://tinycorelinux.net/>, source: <http://git.tinycorelinux.net/index.cgi> Minimalistic with X.
 
 Minimalistic, text based, security: <http://rlsd2.dimakrasner.com/>
+
+## AEL
+
+ARM Embedded Linux.
+
+Linaro ARM board bring-up helper.
+
+<http://www.linaro.org/blog/community-blog/is-linaro-a-distribution/>
