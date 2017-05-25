@@ -34,6 +34,8 @@ Tested on Ubuntu 16.04.
 
 ## ARM
 
+Full QEMU command documented under `board/qemu/*/readme.txt`.
+
 The obvious x86 analog just works, beauty.
 
 The only thing is that you have to move the x86 output away if you have one:
@@ -41,11 +43,18 @@ The only thing is that you have to move the x86 output away if you have one:
     mv output output.x86~
     make qemu_arm_versatile_defconfig
     make
-    qemu-system-arm -M versatilepb -kernel output/images/zImage -dtb output/images/versatile-pb.dtb -drive file=output/images/rootfs.ext2,if=scsi,format=raw -append "root=/dev/sda console=ttyAMA0,115200" -serial stdio -net nic,model=rtl8139 -net user
+    qemu-system-arm -M versatilepb -kernel output/images/zImage -dtb output/images/versatile-pb.dtb -drive file=output/images/rootfs.ext2,if=scsi,format=raw -append "root=/dev/sda console=ttyAMA0,115200" -serial stdio -net nic,model=rtl8139 -net user -nographic
 
 Then in QEMU:
 
     cat /proc/cpuinfo
+
+Vexpress requires a more recent QEMU, 2.0.0 does not work, but the 2.7.0 built with QEMU did.
+
+TODO: Ctrl + C kills the emulator itself. Why? Not like that in X86.
+
+- <https://github.com/cloudius-systems/osv/issues/49>
+- <https://unix.stackexchange.com/questions/167165/how-to-pass-ctrl-c-in-qemu>
 
 ## Don't ask for password at login
 
@@ -165,9 +174,10 @@ http://unix.stackexchange.com/questions/70931/install-x11-on-my-own-linux-system
 The basics: always compile with:
 
 - debugging symbols
-- gdb and gdbserver on target
+- gdb and gdbserver on target. Requires toolchain with thread support, e.g. glibc.
 - host cross gdb
 - strace
+- QEMU: buildroot can even compile QEMU!
 
 ## sshd
 

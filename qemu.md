@@ -105,7 +105,9 @@ But that is wasteful if you don't have a GUI in the system you are booting.
 
 Doing `shutdown` there will only affect the host as usual.
 
-How to access the QEMU monitor there (Ctrl + Alt + 1/2 on GUI): <http://stackoverflow.com/questions/14165158/how-to-switch-to-qemu-monitor-console-when-running-with-curses>
+How to access the QEMU monitor there (Ctrl + Alt + 1/2 on GUI): <http://stackoverflow.com/questions/14165158/how-to-switch-to-qemu-monitor-console-when-running-with-curses> This allows restoring the terminal after a panic with the monitor command:
+
+    quit
 
 ## Increase screen size
 
@@ -358,3 +360,34 @@ Without networking: <http://superuser.com/questions/628169/qemu-to-share-a-direc
 TODO: like the serial present on most dev boards, which gives a shell that can be accessed with:
 
     telnet localhost 1234
+
+<https://www.linkedin.com/in/peter-maydell-b493384>
+
+## Custom hardware modelling
+
+Main goals:
+
+- generate interrupts. E.g. a simple interrupt generator + Linux kernel handler.
+- read and write to main memory / IO. First experiment: represent an LED somehow (host file write?)
+
+Links:
+
+- <http://stackoverflow.com/questions/14869317/arm-interrupt-handling-in-qemu>
+- <http://stackoverflow.com/questions/37028940/qemu-arm-custom-machine>
+- <https://balau82.wordpress.com/2010/09/04/custom-hardware-modeling-with-qemu-elc-2010/>
+- <https://github.com/Xilinx/qemu-devicetrees>
+- <http://ieeexplore.ieee.org/document/5669197/>
+- <https://lists.nongnu.org/archive/html/qemu-devel/2011-06/msg01214.html>
+- <https://github.com/texane/vpcie>
+- <http://vlang.com/> <https://github.com/coverify/vlang>
+- <http://pavel-demin.github.io/red-pitaya-notes/led-blinker/> <https://github.com/pavel-demin/red-pitaya-notes>
+- <http://lists.nongnu.org/archive/html/qemu-devel/2015-06/msg04227.html>
+
+Search terms:
+
+- QEMU hardware modelling
+- QEMU Verilog
+
+## Replayable run traces
+
+Interesting! <https://github.com/panda-re/panda>
