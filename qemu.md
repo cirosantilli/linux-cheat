@@ -357,23 +357,71 @@ Without networking: <http://superuser.com/questions/628169/qemu-to-share-a-direc
 
 ## TTL
 
-TODO: like the serial present on most dev boards, which gives a shell that can be accessed with:
+### -serial file
 
-    telnet localhost 1234
+To file worked:
 
-<https://www.linkedin.com/in/peter-maydell-b493384>
+    -append 'console=ttyS0' -serial file:qemu.log
+
+but it is impossible to get input in this mode of course.
+
+### -serial /dev/tty
+
+TODO.
+
+dev serial:
+
+    -append 'console=ttyS0' -serial /dev/ttyS1
+
+then:
+
+    screen /dev/ttyS1 115200
+
+fails.
+
+### -serial stdio
+
+Next:
+
+    -serial stdio
+
+is implied by `-nographic`, and just works (but the QEMU window stays open).
+
+### -serial telnet
+
+    -append 'console=ttyS0' -serial telnet::4444,server,nowait \
+
+Then:
+
+    telnet localhost 4444
+
+### -serial tcp
+
+Same as telnet?
+
+    -append 'console=ttyS0' -serial tcp::4444,server,nowait \
+
+Then:
+
+    telnet localhost 4444
+
+### Multiple -serial options
+
+TODO. Only one got used in my tests.
 
 ## Custom hardware modelling
 
 Main goals:
 
 - generate interrupts. E.g. a simple interrupt generator + Linux kernel handler.
-- read and write to main memory / IO. First experiment: represent an LED somehow (host file write?)
+- read and write to main memory / IO. First experiment: represent an LED somehow (host file write?). Then GPIO.
 
 Links:
 
 - <http://stackoverflow.com/questions/14869317/arm-interrupt-handling-in-qemu>
 - <http://stackoverflow.com/questions/37028940/qemu-arm-custom-machine>
+- <https://stackoverflow.com/questions/28315265/how-to-add-a-new-device-in-qemu-source-code>
+- <https://stackoverflow.com/questions/8621376/emulating-a-nand-based-storage-device-in-qemu?rq=1>
 - <https://balau82.wordpress.com/2010/09/04/custom-hardware-modeling-with-qemu-elc-2010/>
 - <https://github.com/Xilinx/qemu-devicetrees>
 - <http://ieeexplore.ieee.org/document/5669197/>
@@ -382,6 +430,17 @@ Links:
 - <http://vlang.com/> <https://github.com/coverify/vlang>
 - <http://pavel-demin.github.io/red-pitaya-notes/led-blinker/> <https://github.com/pavel-demin/red-pitaya-notes>
 - <http://lists.nongnu.org/archive/html/qemu-devel/2015-06/msg04227.html>
+- <https://raspberrypi.stackexchange.com/questions/56373/is-it-possible-to-get-the-state-of-the-leds-and-gpios-in-a-qemu-emulation-like-t>
+- <https://github.com/xatier/qemu-LED-demo> TODO check.
+- <http://wiki.qemu.org/Features/GuestAgent>
+- <https://en.wikibooks.org/wiki/QEMU/Devices>
+- in tree: search for filenames containing `guest agent`, `ga`, `qmp`, `qapi`, `dev`
+    Most interesting hits:
+    - `docs`
+    - `scripts`
+    - `qga`
+    - `make -j14 txt` autogenerates a few interesting docs, then look in `.gitignore`
+- QMP, QAPI, QGA: only seem to do basic operations. Can only find how to inject NMIs, not other interrupts. Can't find how to watch memory.
 
 Search terms:
 
@@ -391,3 +450,44 @@ Search terms:
 ## Replayable run traces
 
 Interesting! <https://github.com/panda-re/panda>
+
+## chardev
+
+## device
+
+`-chardev` for host side, `-device` for guest side, both linked by `id` and `chardev` option pairs.
+
+`-device help` to list devices, `-device file,isa-serial` to list extra options of `isa-serial` device type.
+
+### chardev file
+
+Unidirectional guest to host.
+
+Run QEMU:
+
+    -chardev file,id=mydev0,path=hostpath \
+    -device isa-serial,chardev=mydev0 \
+
+In guest:
+
+    echo a > /dev/ttyS0
+
+In host:
+
+    cat hostpath
+
+### chardev pipe
+
+Pipes are unidirectional, but we can do bidirectional with two pipes.
+
+First:
+
+    sudo mknod -m 777 hostpipe.in p
+    sudo mknod -m 777 hostpipe.out p
+
+Then:
+
+    -chardev file,id=mydev0,path=hostpath \
+    -device isa-serial,chardev=mydev0 \
+
+Then `cat` and `printf` to `/dev/ttyS0`.

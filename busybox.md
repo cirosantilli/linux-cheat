@@ -45,3 +45,25 @@ BusyBox uses the kernel's Kconfig mechanism.
 In particular, it is affected by variables like `KBUILD_OUTPUT` just like the kernel, and has identical targets like `defconfig` and `mrproper`.
 
 Unlike the kernel, the `KBUILD_OUTPUT` directory must exist before running `make`... Why?
+
+## dev
+
+Most commonly populated by auto-mounted `devtmpfs` with kernel config:
+
+    CONFIG_DEVTMPFS=y
+    CONFIG_DEVTMPFS_MOUNT=y
+
+<https://unix.stackexchange.com/questions/52713/building-my-own-initrd-how-to-populate-dev-directory/52744#52744>
+
+Can also be repopulated with:
+
+    mdev -s
+
+In host, try it out:
+
+    rm /dev/zero
+    ls /dev/zero
+    mdev -s
+    ls /dev/zero
+
+TODO: when / how is this called at boot?
