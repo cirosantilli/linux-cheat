@@ -314,15 +314,28 @@ Those allow you to observe the program state without using an external debugger 
 
 TODO: example.
 
-### Monitor telnet from host:
+### Monitor telnet from host
 
 Run QEMU with:
 
-    -monitor telnet:127.0.0.1:1234,server,nowait \
+    -monitor telnet::4444,server,nowait \
 
 Then:
 
-    telnet localhost 1234
+    telnet localhost 4444
+
+This allows you to scroll up!
+
+### Cool monitor commands
+
+You can view and modify the full system state! :-)
+
+- `sendkey p`; `sendkey w`; `sendkey d`; `sendkey ret`
+- `stop`, `continue`
+- `info registers`: dump CPU registers, and many, many other interesting `info X`
+- `x`, `xp`: dump memory
+- `i`, `o`: IO port read and write
+- `logfile my.log`, then `log in_asm`, `log out_asm`, `log int`, and others, will log every such event into a huge log. Likely should be used with GDB breakpoints.
 
 ## Access host IP from QEMU
 
