@@ -137,6 +137,9 @@ This both forwards the pipe, and prints it to the terminal.
 
 See also: `/proc/self/fd/[0-2]`
 
+- <https://unix.stackexchange.com/questions/22545/how-to-connect-to-a-serial-port-as-simple-as-using-ssh>
+- <https://stackoverflow.com/questions/6947413/how-to-open-read-and-write-from-serial-port-in-c>
+
 ## /dev/console
 
 Similar to `tty`, but may only work on actual ttys such as Ubuntu Ctrl + Alt + F2, and not on xterm windows.

@@ -267,12 +267,6 @@ QEMU 2.3.0 complains with a warning if we don't set `format`, so in this version
 
     qemu-systemi386 -drive 'file=my.img,format=raw'
 
-## Internals
-
-### Create your own hardware emulator that works with QEMU
-
-<http://ilevex.eu/post/88944209761/how-to-create-a-custom-pci-device-in-qemu>
-
 ## Performance simulation
 
 Nope, QEMU is just designed to be fast, and performance is not well documented because it would reveal too much internals:
@@ -339,7 +333,7 @@ You can view and modify the full system state! :-)
 
 ## Access host IP from QEMU
 
-By default, the guest sees the host on a network at address 10.0.2.2.
+By default, the guest sees the host on a network at address `10.0.2.2`. This can be modified with `-net user,host=`.
 
 To try this out, run on the host:
 
@@ -352,11 +346,27 @@ and inside a BusyBox image do:
 
 ### Access QEMU IP from host
 
-<http://unix.stackexchange.com/questions/124681/ssh-from-host-to-guest-using-qemu>
+### Port forwarding
 
-Looks like:
+- <http://unix.stackexchange.com/questions/124681/ssh-from-host-to-guest-using-qemu>
+- <https://serverfault.com/questions/704294/qemu-multiple-port-forwarding>
 
-    -net user,hostfwd=tcp::2222-:22
+Launch QEMU:
+
+    -net nic,model=virtio \
+    -net user,hostfwd=tcp::4444-:4445 \
+
+Then on guest, with BusyBox' `nc` with listen config enabled:
+
+    nc -l -p 4445
+
+Host with Ubuntu's `openbsd` `nc`:
+
+    nc localhost 4444
+
+and type away on either side!
+
+TODO: can't do the opposite with this method? Listen from host. Likely not, since QEMU is already listening on host port.
 
 ## Shared filesystem with host
 
@@ -426,8 +436,13 @@ TODO. Only one got used in my tests.
 
 Main goals:
 
-- generate interrupts. E.g. a simple interrupt generator + Linux kernel handler.
-- read and write to main memory / IO. First experiment: represent an LED somehow (host file write?). Then GPIO.
+- generate interrupts. E.g. a simple interrupt generator + Linux kernel handler. Haven't found anything pre-done. Good keyword is "interrupt injection".
+- read and write to main memory / IO ports. First experiment: represent an LED somehow (host file write?). Then GPIO.
+    - IO ports are possible with `monitor` commands
+    - memory reads are possible with monitor commands `x` and `xp`. But what we really want is to map to guest and host memory for efficiency:
+        - <http://kvm.vger.kernel.narkive.com/rto1dDqn/sharing-variables-memory-between-host-and-guest>
+        - <https://www.linux-kvm.org/images/e/e8/0.11.Nahanni-CamMacdonell.pdf>
+        - <http://www.fp7-save.eu/papers/SCALCOM2016.pdf>
 
 Links:
 
@@ -435,11 +450,11 @@ Links:
 - <http://stackoverflow.com/questions/37028940/qemu-arm-custom-machine>
 - <https://stackoverflow.com/questions/28315265/how-to-add-a-new-device-in-qemu-source-code>
 - <https://stackoverflow.com/questions/8621376/emulating-a-nand-based-storage-device-in-qemu?rq=1>
+- <https://github.com/texane/vpcie> Closest working thing I've seen so far. Serializes PCI on both sides, and sends it through TCP. Inefficient, and requires extra instrumentation. But might be good enough.
 - <https://balau82.wordpress.com/2010/09/04/custom-hardware-modeling-with-qemu-elc-2010/>
 - <https://github.com/Xilinx/qemu-devicetrees>
-- <http://ieeexplore.ieee.org/document/5669197/>
+- <http://ieeexplore.ieee.org/document/5669197/> (2010, no source code?)
 - <https://lists.nongnu.org/archive/html/qemu-devel/2011-06/msg01214.html>
-- <https://github.com/texane/vpcie>
 - <http://vlang.com/> <https://github.com/coverify/vlang>
 - <http://pavel-demin.github.io/red-pitaya-notes/led-blinker/> <https://github.com/pavel-demin/red-pitaya-notes>
 - <http://lists.nongnu.org/archive/html/qemu-devel/2015-06/msg04227.html>
@@ -454,6 +469,7 @@ Links:
     - `qga`
     - `make -j14 txt` autogenerates a few interesting docs, then look in `.gitignore`
 - QMP, QAPI, QGA: only seem to do basic operations. Can only find how to inject NMIs, not other interrupts. Can't find how to watch memory.
+- <https://stackoverflow.com/questions/10826261/how-kvm-handle-physical-interrupt>
 
 Search terms:
 
@@ -504,3 +520,13 @@ Then:
     -device isa-serial,chardev=mydev0 \
 
 Then `cat` and `printf` to `/dev/ttyS0`.
+
+### chardev socket
+
+    -chardev socket,id=mydev0,host=0.0.0.0,port=4444,server -device isa-serial,chardev=mydev0
+
+On host:
+
+    netcat localhost 4444
+
+Guest can `cat` and `printf` to `/dev/ttyS0`, but nice 2 way communication like `netcat` is not too trivial: <https://unix.stackexchange.com/questions/22545/how-to-connect-to-a-serial-port-as-simple-as-using-ssh>
