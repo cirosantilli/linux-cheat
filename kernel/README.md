@@ -12,20 +12,20 @@
     1. [Device driver](device-driver.md)
 1.  [Virtual address space](virtual-address-space.md)
 1.  [Scheduling](scheduling.md)
-1.  Virtualization
-    1. [User mode Linux](user-mode-linux.md)
-    1. [Lguest](lguest.md)
+1.  [Virtualization](virtualization.md)
+    1.  [User mode Linux](user-mode-linux.md)
+    1.  [LXC](lxc.md)
+    1.  [Lguest](lguest.md)
 1.  [Debug](debug.md)
 1.  [Style guide](style-guide.md)
 1.  [Trivia](trivia.md)
 
 WIP
 
-1. [LXC](lxc.md)
-1. [Kconfig](kconfig.md)
-1. [Boot command line parameters](boot-command-line-parameters.md)
-1. [init](init.md)
-1. [Panic](panic.md)
+1.  [Kconfig](kconfig.md)
+1.  [Boot command line parameters](boot-command-line-parameters.md)
+1.  [init](init.md)
+1.  [Panic](panic.md)
 
 ## User programs
 

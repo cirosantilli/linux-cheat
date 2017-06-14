@@ -18,6 +18,14 @@ Before was a fork, later merged in 2.6 as a new architecture under `arch/um`.
 
 <http://askubuntu.com/questions/33958/how-to-correctly-start-a-ubuntu-user-mode-linux-from-the-command-line>
 
+Not very active apparently: <https://askubuntu.com/questions/796512/user-mode-linux-on-xenial>
+
+## Example
+
+<https://unix.stackexchange.com/questions/73203/how-to-create-rootfs-for-user-mode-linux-on-fedora-18> Almost works on a Buildroot image with UML on host, just needed to patch `inittab` with:
+
+    
+
 Quickstart tested on Kernel 4.0 source on a 3.13 host: TODO get working.
 
     make mrproper
