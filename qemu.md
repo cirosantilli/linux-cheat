@@ -173,6 +173,8 @@ QEMU has a specific disk format called *qcow2* which allows for further capabili
 
 > smaller images (useful if your filesystem does not supports holes, for example on Windows), optional AES encryption, zlib based compression and support of multiple VM snapshots
 
+TODO: example.
+
 ## fda
 
 Boot from given floppy image.
@@ -326,10 +328,15 @@ You can view and modify the full system state! :-)
 
 - `sendkey p`; `sendkey w`; `sendkey d`; `sendkey ret`
 - `stop`, `continue`
-- `info registers`: dump CPU registers, and many, many other interesting `info X`
+- `info`: lost of interesting machine info
+    - `info registers`: dump CPU registers
+    - `info tlb`: virtual to physical map. TODO vs `info mem`.
+    - `info qtree`: device tree
+    - `info ioapic`
 - `x`, `xp`: dump memory
 - `i`, `o`: IO port read and write
 - `logfile my.log`, then `log in_asm`, `log out_asm`, `log int`, and others, will log every such event into a huge log. Likely should be used with GDB breakpoints.
+- `gdbserver`: wait for GDB to connect during a session, like `-S` at startup
 
 ## Access host IP from QEMU
 
@@ -434,6 +441,8 @@ TODO. Only one got used in my tests.
 
 ## Custom hardware modelling
 
+## Create new devices
+
 Main goals:
 
 - generate interrupts. E.g. a simple interrupt generator + Linux kernel handler. Haven't found anything pre-done. Good keyword is "interrupt injection".
@@ -475,6 +484,61 @@ Search terms:
 
 - QEMU hardware modelling
 - QEMU Verilog
+
+Good devices to study:
+
+- `misc`:
+    - `edu`: `PCI`
+    - `arm_integrator_debug`: `PLATFORM`
+    - `pc-testdev`: `ISA`
+
+### Devices
+
+Each device has a bus it is attached to.
+
+Try on monitor `info qdev`.
+
+Then, a device can also contain some buses (bridge), e.g. the `pcihost` on the `main-system-bus`.
+
+### Create IRQs
+
+Have a look at what PCI is doing, and `irq.c` files.
+
+First you have to allocate the IRQ, which sets its handler:
+
+    qemu_irq *qemu_allocate_irqs(qemu_irq_handler handler, void *opaque, int n)
+
+The handler does the real work, and it is called when you do:
+
+    void qemu_set_irq(qemu_irq irq, int level)
+
+So the real question is what the handler does.
+
+For PCI, the handler just forwards to its bus via `pci_irq_handler` then `pci_change_irq_level` then:
+
+    bus->set_irq(bus->irq_opaque, irq_num, bus->irq_count[irq_num] != 0);
+
+Where `bus` is a `PCIBus`.
+
+For `edu`, this ends up calling:
+
+    piix3_set_irq+0 at hw/pci-host/piix.c
+
+where PIIX is the PCI IDE ISA Xcelerator Intel thing.
+
+TODO: what line of code makes the CPU jump to the handler? `cpu_loop` then `cpu_exec` then `cpu_handle_interrup` 
+
+### QOM
+
+QEMU has a crazy class system embedded.
+
+`TYPE_DEVICE` is the base class for all devices.
+
+`TYPE_OBJECT` is the base of all classes
+
+Then e.g. `TYPE_PCI` inherits `TYPE_DEVICE`, and specific PCI devices inherit `TYPE_PCI`.
+
+Minimal docs at: <https://github.com/qemu/qemu/blob/master/include/qom/object.h>
 
 ## Replayable run traces
 
@@ -530,3 +594,23 @@ On host:
     netcat localhost 4444
 
 Guest can `cat` and `printf` to `/dev/ttyS0`, but nice 2 way communication like `netcat` is not too trivial: <https://unix.stackexchange.com/questions/22545/how-to-connect-to-a-serial-port-as-simple-as-using-ssh>
+
+## Source tree
+
+`main`: `linux-user/main.c`
+
+Calls `cpu_loop`.
+
+Then the heart of execution is:
+
+    while (1) {
+        cpu_exec_start(cs);
+        trapnr = cpu_exec(cs);
+        cpu_exec_end(cs);
+
+`hw`: specifies two things:
+
+-   `-M`: machine descriptions: places buses and devices and exact CPU description:
+    - `hw/i386/`: x86 machines, notably the huge `pc.c`
+    - `hw/arm/`: ARM machines, e.g. `versatilepb.c`
+-   `-device` devices. Most directories.

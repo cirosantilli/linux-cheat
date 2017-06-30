@@ -1,6 +1,6 @@
 # Linux Cheat ![logo](logo.jpg)
 
-Linux tutorials and cheatsheets. Minimal examples. Mostly user-land CLI utilities.
+Linux tutorials and cheatsheets. Minimal examples. Mostly user-land CLI utilities. Linux kernel at: <https://github.com/cirosantilli/linux-kernel-module-cheat>
 
 Includes Linux concepts and utilities that work on Linux, not necessarily in the LSB. So this is a big dump of useful things, and when something gets big / useful enough, I split to another repository.
 
