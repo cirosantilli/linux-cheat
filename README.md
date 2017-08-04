@@ -334,6 +334,9 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1.  [anacron](anacron)
     1.  [logrotate](logrotate.md)
     1.  [xargs](xargs.md)
+1.  Security
+    1. [SELinux](selinux.md)
+    1. [Capabilities](capabilities.md)
 1.  [Bibliography](bibliography.md)
 
 ## WIP

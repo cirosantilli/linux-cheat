@@ -614,3 +614,5 @@ Then the heart of execution is:
     - `hw/i386/`: x86 machines, notably the huge `pc.c`
     - `hw/arm/`: ARM machines, e.g. `versatilepb.c`
 -   `-device` devices. Most directories.
+
+IRQ: final point seems to be: `arm_cpu_set_irq`
