@@ -2,7 +2,7 @@
 
 First learn that emulation and virtualization are different: <http://stackoverflow.com/questions/6044978/full-emulation-vs-full-virtualization>
 
-QEMU is originally an emulator. However a kernel module for it was created that allows it to use KVM virtualization with the `-enable-kvm` flag, which is much faster.
+QEMU is originally a software-only emulator. However a kernel module for it was created that allows it to use KVM virtualization with the `-enable-kvm` flag, which is much faster.
 
 QEMU is used a lot in the context of Linux kernel development. Understanding all it's options is a great way to learn Linux kernel packaging.
 
@@ -15,6 +15,14 @@ The top 3 contributors are Red Hat employees.
 <https://github.com/qemu/qemu>
 
 By default this talks about QEMU 2.0.0.
+
+## Functional emulation
+
+QEMU does a functional emulation of the CPU, i.e. it does everything as fast as possible, e.g. ignores caches and CPU pipelines.
+
+Therefore, it does not give accurate timing results. But it is much faster than an accurate timing simulation.
+
+The most popular realistic timing emulator for ARM is gem5, which is mainly developed by ARM Holdings itself.
 
 ## User vs system modes
 
