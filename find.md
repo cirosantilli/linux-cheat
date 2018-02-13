@@ -75,7 +75,7 @@ Looks at *entire* file path filtering by POSIX BRE.
 
 Find anything under current directory:
 
-    find . - path './*'
+    find . -path './*'
 
 Relative paths *must* start with a dot slash `./`.
 
