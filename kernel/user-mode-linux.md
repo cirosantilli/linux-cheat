@@ -24,8 +24,6 @@ Not very active apparently: <https://askubuntu.com/questions/796512/user-mode-li
 
 <https://unix.stackexchange.com/questions/73203/how-to-create-rootfs-for-user-mode-linux-on-fedora-18> Almost works on a Buildroot image with UML on host, just needed to patch `inittab` with:
 
-    
-
 Quickstart tested on Kernel 4.0 source on a 3.13 host: TODO get working.
 
     make mrproper

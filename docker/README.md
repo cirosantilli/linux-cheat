@@ -19,7 +19,7 @@ Good getting started: <http://docs.docker.io/introduction/working-with-docker/>
 
 Docker was developed by a company called dotCloud Inc, and open sourced. dotCloud was renamed to Docker Inc. in 2014.
 
-## help
+## Getting started
 
 List all commands:
 
@@ -33,6 +33,21 @@ Good info on the manpages:
 
     man docker
     man docker-run
+
+Status of the currently running VMs:
+
+    sudo docker info
+
+Run a hello world and exit:
+
+    docker run hello-world
+
+Run Ubuntu shell: TODO which is the default version:
+
+    sudo docker run -it ubuntu bash
+    sudo docker run -it ubuntu:16.04 bash
+
+Ctrl + D exits shell, `sudo docker info` says it is still running, how to exit?
 
 ## Images
 
@@ -81,7 +96,6 @@ No existing container, including stopped, must be using it. Can force with `-f` 
 Interesting images include:
 
 - [dockerfile/ubuntu](https://github.com/dockerfile/ubuntu/blob/master/Dockerfile): Ubuntu 14.04 with a few basic packages added like Git and cURL.
-
 
 ## run
 

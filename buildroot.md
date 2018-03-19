@@ -216,3 +216,7 @@ Direct `linux` in rootfs failed.
 - <http://oss.sgi.com/LDP/HOWTO/SSI-UML-HOWTO/buildroot.html>
 - <https://wiki.archlinux.org/index.php/User-mode_Linux#Build_rootfs_image>
 - <https://unix.stackexchange.com/questions/73203/how-to-create-rootfs-for-user-mode-linux-on-fedora-18>
+
+## Contributing
+
+CI: http://autobuild.buildroot.net/

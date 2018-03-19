@@ -14,7 +14,8 @@ AMD commits start 2008.
 
 Build:
 
-    sudo apt-get install mercurial
+    git clone https://gem5.googlesource.com/public/gem5.
+
     git clone
     hg clone http://repo.gem5.org/gem5
     cd gem5
@@ -28,9 +29,9 @@ Run Syscall Emulation (SE) mode:
 Run Full System (FS) mode:
 
     export M5_PATH='/dist/m5/system'
-    sudo mkdir -p "$PATH"
-    sudo chmod -R 777 "$PATH"
-    cd "$PATH"
+    sudo mkdir -p "$M5_PATH"
+    sudo chmod -R 777 "$M5_PATH"
+    cd "$M5_PATH"
     wget http://www.gem5.org/dist/current/arm/aarch-system-2014-10.tar.xz
     unxz aarch-system-2014-10.tar.xz
     tar xvf aarch-system-2014-10.tar

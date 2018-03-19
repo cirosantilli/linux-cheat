@@ -171,9 +171,13 @@ TODO: how to fix it afterwards?
 
 ### qcow2
 
-While `dd` + `mke2fs` is a simple and standard way to generate an image, it is not very versatile.
+The simplest image format is what you get when doing `dd` + `mke2fs`.
+
+Those images are called raw images.
 
 QEMU has a specific disk format called *qcow2* which allows for further capabilities. 
+
+<https://en.wikipedia.org/wiki/Qcow>
 
 `qemu-img` is a tool capable of creating such images.
 
@@ -181,7 +185,11 @@ QEMU has a specific disk format called *qcow2* which allows for further capabili
 
 > smaller images (useful if your filesystem does not supports holes, for example on Windows), optional AES encryption, zlib based compression and support of multiple VM snapshots
 
-TODO: example.
+So basically it seems that the format allows holes.
+
+Snapshot example that uses qcow2: <https://stackoverflow.com/questions/40227651/does-qemu-emulator-have-checkpoint-function/48724371#48724371>
+
+Raw images can be potentially faster than qcow2 since there is no need to process hole metadata. But qcow2 is likely better on average.
 
 ## fda
 
@@ -447,6 +455,8 @@ Then:
 
 TODO. Only one got used in my tests.
 
+https://stackoverflow.com/questions/39373236/redirect-multiple-uarts-in-qemu#comment85526416_39376502
+
 ## Custom hardware modelling
 
 ## Create new devices
@@ -603,7 +613,27 @@ On host:
 
 Guest can `cat` and `printf` to `/dev/ttyS0`, but nice 2 way communication like `netcat` is not too trivial: <https://unix.stackexchange.com/questions/22545/how-to-connect-to-a-serial-port-as-simple-as-using-ssh>
 
+## Build
+
+    ./configure \
+        --enable-debug \
+        --enable-sdl \
+        --enable-trace-backends=simple \
+        --extra-cflags="-O2 -DDEBUG_PL061=1" \
+        --host-cc="/usr/bin/gcc" \
+        --target-list="x86_64-softmmu" \
+        --with-sdlabi=2.0 \
+    ;
+
 ## Source tree
+
+### System mode
+
+Entry point: `vl.c`
+
+<https://lists.gnu.org/archive/html/qemu-devel/2007-05/msg00175.html>
+
+### User mode
 
 `main`: `linux-user/main.c`
 
