@@ -117,6 +117,16 @@ How to access the QEMU monitor there (Ctrl + Alt + 1/2 on GUI): <http://stackove
 
     quit
 
+## Display
+
+### vnc
+
+    ./qemu-system-x86_64 -vnd :0
+
+Then on host:
+
+    vinagre localhost:5900
+
 ## Increase screen size
 
 TODO

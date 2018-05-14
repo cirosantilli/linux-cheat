@@ -21,6 +21,34 @@ Docker was developed by a company called dotCloud Inc, and open sourced. dotClou
 
 ## Getting started
 
+Download Ubuntu image, and create a new container from it named `ub16`:
+
+    sudo docker run --name ub16 -it ubuntu:16.04 bash
+
+Write a file there:
+
+    date >f
+
+Ctrl + D kills the VM, as can be seen by the empty:
+
+    sudo docker ps
+
+which lists all containers. To get turn it back on:
+
+    sudo docker start -ai ub16
+
+To detach without turning it off enter `Ctrl-P Ctrl-Q`: <https://stackoverflow.com/questions/19688314/how-do-you-attach-and-detach-from-dockers-process>
+
+To open a new shell in a running container <https://stackoverflow.com/questions/39794509/how-to-open-multiple-terminals-in-docker> run:
+
+    sudo docker exec -it bash
+
+And check that `f` is present:
+
+    cat f
+
+## Help
+
 List all commands:
 
     sudo docker help
@@ -33,21 +61,6 @@ Good info on the manpages:
 
     man docker
     man docker-run
-
-Status of the currently running VMs:
-
-    sudo docker info
-
-Run a hello world and exit:
-
-    docker run hello-world
-
-Run Ubuntu shell: TODO which is the default version:
-
-    sudo docker run -it ubuntu bash
-    sudo docker run -it ubuntu:16.04 bash
-
-Ctrl + D exits shell, `sudo docker info` says it is still running, how to exit?
 
 ## Images
 
@@ -178,13 +191,33 @@ Same goes for a bare `CMD nginx`, since by default Nginx turns itself into a bac
 
 Share directory between guest and host:
 
-    sudo docker run -v /tmp ubuntu date > /tmp/docker
-    cat /tmp/docker
+    sudo docker run -v path/in/host:/full/path/in/guest ubuntu date > /full/path/in/guest/mydate
+    cat path/in/host/mydate
 
-    date > /tmp/docker
-    sudo docker run -v /tmp ubuntu cat /tmp/docker
+It gets updated immediately.
 
-Can only take absolute paths. Efficient for large files, unlike some VM schemes.
+Can only take absolute paths on guest. Efficient for large files, unlike some VM schemes. The paths get created if they don't exist.
+
+Only works for new containers: <https://stackoverflow.com/questions/28302178/how-can-i-add-a-volume-to-an-existing-docker-container>
+
+### GUI apps
+
+https://stackoverflow.com/questions/16296753/can-you-run-gui-apps-in-a-docker-container
+
+    sudo docker run --net=host
+
+Then in guest:
+
+    apt-get install x11vnc xvfb
+
+Then in host:
+
+    sudo apt-get install vinagre
+    vinagre localhost:5900
+
+## Port forwarding
+
+https://stackoverflow.com/questions/17770902/forward-host-port-to-docker-container
 
 ## ps
 

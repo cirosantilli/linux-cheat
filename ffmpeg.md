@@ -199,9 +199,13 @@ Best command:
 - <http://ffmpeg.org/faq.html#How-can-I-concatenate-video-files>
 - <http://stackoverflow.com/questions/7333232/concatenate-two-mp4-files-using-ffmpeg>
 
-Best command:
+Did not upload correctly to YouTube in 2018:
 
     ffmpeg -i concat:"in1.ogv|in2.ogv" -c copy out.ogv
+
+but the other method did:
+
+    ffmpeg -i in1.ogv -i in2.ogv -filter_complex "[0:v] [0:a] [1:v] [1:a] concat=n=2:v=1:a=1 [v] [a]" -map "[v]" -map "[a]" out.ogv
 
 ## Merge audio and video
 
