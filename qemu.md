@@ -121,7 +121,7 @@ How to access the QEMU monitor there (Ctrl + Alt + 1/2 on GUI): <http://stackove
 
 ### vnc
 
-    ./qemu-system-x86_64 -vnd :0
+    ./qemu-system-x86_64 -vnc :0
 
 Then on host:
 
