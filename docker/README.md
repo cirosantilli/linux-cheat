@@ -202,7 +202,9 @@ Only works for new containers: <https://stackoverflow.com/questions/28302178/how
 
 ### GUI apps
 
-https://stackoverflow.com/questions/16296753/can-you-run-gui-apps-in-a-docker-container
+Easiest method: https://stackoverflow.com/questions/31446661/build-a-full-ubuntu-desktop-docker-image/51122106#51122106
+
+More manual method: https://stackoverflow.com/questions/16296753/can-you-run-gui-apps-in-a-docker-container
 
     sudo docker run --net=host
 
