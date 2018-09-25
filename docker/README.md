@@ -41,7 +41,7 @@ To detach without turning it off enter `Ctrl-P Ctrl-Q`: <https://stackoverflow.c
 
 To open a new shell in a running container <https://stackoverflow.com/questions/39794509/how-to-open-multiple-terminals-in-docker> run:
 
-    sudo docker exec -it bash
+    sudo docker exec -it ub16 bash
 
 And check that `f` is present:
 
@@ -105,6 +105,12 @@ Remove image:
     sudo docker rmi image_name
 
 No existing container, including stopped, must be using it. Can force with `-f` (TODO does it prevent from using the container then?).
+
+Export an image to tar format:
+
+    sudo docker save image_name > image_name.tar
+
+Then note that every `ADD` and `RUN` command in a Dockerfile generates a separate snapshot of the image.
 
 Interesting images include:
 
@@ -199,6 +205,8 @@ It gets updated immediately.
 Can only take absolute paths on guest. Efficient for large files, unlike some VM schemes. The paths get created if they don't exist.
 
 Only works for new containers: <https://stackoverflow.com/questions/28302178/how-can-i-add-a-volume-to-an-existing-docker-container>
+
+Cannot mount guest to host: https://stackoverflow.com/questions/36246094/how-to-mount-a-directory-in-a-docker-container-to-the-host
 
 ### GUI apps
 

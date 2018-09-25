@@ -1,8 +1,11 @@
 # Kernel
 
+Anything that matters has / will be moved to: https://github.com/cirosantilli/linux-kernel-module-cheatt
+
+This does not need to compile anymore.
+
 1.  Code
     1. [main.c](main.c)
-    1. [hello_world](hello_world.c)
 1.  [Introduction](introduction.md)
 1.  [Build](build.md)
 1.  [Use built kernel](use-built-kernel.md)
