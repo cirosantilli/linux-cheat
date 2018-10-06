@@ -1,7 +1,8 @@
 # Output and temporary files.
+*.tmp
 _out/
 _tmp/
-*.tmp
+tmp
 
 # Compiled stuff.
 *.slo
@@ -14,4 +15,3 @@ _tmp/
 *.la
 *.a
 *.s
-
