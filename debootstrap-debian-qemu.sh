@@ -22,12 +22,10 @@ if [ ! -d "$debootstrap_dir" ]; then
     "$debootstrap_dir" \
     http://deb.debian.org/debian/ \
   ;
+  sudo rm -f "$root_filesystem"
 fi
 
-linux_image="$(printf "${debootstrap_dir}/boot/vmlinuz-"*)"
-
 if [ ! -f "$root_filesystem" ]; then
-
   # Set root password.
   echo 'root:root' | sudo chroot "$debootstrap_dir" chpasswd
 
@@ -65,24 +63,26 @@ EOF
   sudo chmod 666 "$root_filesystem"
 fi
 
-linux_img="${debootstrap_dir}/boot/vmlinuz-"*
+# linux_image="$(printf "${debootstrap_dir}/boot/vmlinuz-"*)"
 
-# Build the Linux kernel.
-git clone --depth 1 --branch v4.18 git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-cd linux
-wget https://gist.githubusercontent.com/cirosantilli/6e2f4975c1929162a86be09f839874ca/raw/6d151d231a233408a6e1b541bf4a92fd55bf5338/.config
-make olddefconfig
-make -j`nproc`
-cd -
-linux_img="linux/arch/x86_64/boot/bzImage"
+linux_img=linux/arch/x86_64/boot/bzImage
+if [ ! -f "$linux_img" ]; then
+  # Build the Linux kernel.
+  git clone --depth 1 --branch v4.18 git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+  cd linux
+  wget https://gist.githubusercontent.com/cirosantilli/6e2f4975c1929162a86be09f839874ca/raw/6d151d231a233408a6e1b541bf4a92fd55bf5338/.config
+  make olddefconfig
+  make -j`nproc`
+  cd -
+fi
 
 qemu-system-x86_64 \
   -append 'console=ttyS0 root=/dev/sda' \
-  -drive "file=img.ext2.qcow2,format=qcow2" \
+  -drive "file=${root_filesystem},format=qcow2" \
   -enable-kvm \
   -serial mon:stdio \
   -m 2G \
-  -kernel="$linux_img"
+  -kernel "$linux_img" \
   -device rtl8139,netdev=net0 \
   -netdev user,id=net0 \
 ;
