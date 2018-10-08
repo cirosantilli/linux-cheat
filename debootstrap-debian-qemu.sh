@@ -76,13 +76,14 @@ if [ ! -f "$linux_img" ]; then
   cd -
 fi
 
+linux_img=/home/ciro/bak/git/linux-kernel-module-cheat/submodules/linux/debian/build/./build-generic/arch/x86_64/boot/bzImage
 qemu-system-x86_64 \
   -append 'console=ttyS0 root=/dev/sda' \
+  -device rtl8139,netdev=net0 \
   -drive "file=${root_filesystem},format=qcow2" \
   -enable-kvm \
-  -serial mon:stdio \
-  -m 2G \
   -kernel "$linux_img" \
-  -device rtl8139,netdev=net0 \
+  -m 2G \
   -netdev user,id=net0 \
+  -serial mon:stdio \
 ;

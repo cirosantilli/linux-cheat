@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # https://askubuntu.com/questions/281763/is-there-any-prebuilt-qemu-ubuntu-image32bit-online/1081171#1081171
+# https://askubuntu.com/questions/802701/kernel-build-cross-compile
 
 set -eux
 
@@ -16,7 +17,6 @@ sudo apt-get install \
 if [ ! -d "$debootstrap_dir" ]; then
   # Create debootstrap directory.
   # - linux-image-generic: downloads the kernel image we will use under /boot
-  # - network-manager: automatically starts the network at boot for us
   sudo debootstrap \
     --include linux-image-generic \
     bionic \
@@ -75,6 +75,7 @@ EOF
   sudo chmod 666 "$root_filesystem"
 fi
 
+linux_image=/home/ciro/bak/git/linux-kernel-module-cheat/submodules/linux/debian/build/./build-generic/arch/x86_64/boot/bzImage
 qemu-system-x86_64 \
   -append 'console=ttyS0 root=/dev/sda' \
   -drive "file=${root_filesystem},format=qcow2" \

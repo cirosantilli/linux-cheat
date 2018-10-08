@@ -290,6 +290,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [Docker](docker/)
     1.  [QEMU](qemu.md)
         1. [debootstrap-ubuntu-qemu.sh](debootstrap-ubuntu-qemu.sh)
+        1. [debootstrap-ubuntu-qemu-arm.sh](debootstrap-ubuntu-qemu-arm.sh)
         1. [debootstrap-debian-qemu.sh](debootstrap-debian-qemu.sh)
     1.  [Xen](xen.md)
     1.  [Vagrant](vagrang/)
