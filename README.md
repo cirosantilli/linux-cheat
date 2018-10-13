@@ -68,6 +68,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [tune2fs](tune2fs.md)
     1.  [UUID](uuid.md)
     1.  [OverlayFS](overlayfs.md)
+        1.  [overlayfs.sh](overlayfs.sh)
     1.  ext filesystems
         1. [e2label](e2label.md)
         1. [e2fsck](e2fsck.md)
