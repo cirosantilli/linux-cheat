@@ -5,7 +5,7 @@ set -eux
 # https://askubuntu.com/questions/699565/example-overlayfs-usage
 
 # Global setup.
-top=overlay.tmp
+top=overlayfs.tmp
 rm -rf "$top"
 mkdir -p "$top"
 cd "$top"
