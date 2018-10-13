@@ -81,9 +81,9 @@ fi
 # Build the Linux kernel.
 linux_image="$(pwd)/linux/debian/build/build-generic/arch/arm64/boot/Image"
 if [ ! -f "$linux_image" ]; then
-  #git clone --branch Ubuntu-4.15.0-20.21 --depth 1 git://kernel.ubuntu.com/ubuntu/ubuntu-bionic.git linux
+  git clone --branch Ubuntu-4.15.0-20.21 --depth 1 git://kernel.ubuntu.com/ubuntu/ubuntu-bionic.git linux
   cd linux
-  cat << EOF | patch -p1
+  patch -p1 << EOF
 diff --git a/debian.master/config/config.common.ubuntu b/debian.master/config/config.common.ubuntu
 index 5ff32cb997e9..8a190d3a0299 100644
 --- a/debian.master/config/config.common.ubuntu
@@ -107,8 +107,6 @@ EOF
   cd -
 fi
 
-#linux_image=/home/ciro/bak/git/linux-kernel-module-cheat/out/linux/default/aarch64/arch/arm64/boot/Image
-#linux_image=/home/ciro/bak/git/linux-kernel-module-cheat/submodules/linux/debian/build/build-generic/arch/arm64/boot/Image
 qemu-system-aarch64 \
   -append 'console=ttyAMA0 root=/dev/vda rootfstype=ext2' \
   -device rtl8139,netdev=net0 \
