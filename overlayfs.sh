@@ -22,8 +22,8 @@ printf lower-content > lower/lower-file
 # Upper and work must be on the same filesystem.
 mkdir upper/upper upper/work
 printf upper-content > upper/upper/upper-file
-# Work must be empty. E.g. this would be bad.
-#echo 'work-content' > upper/work/work-file
+# Work must be empty. E.g. this would be bad:
+#printf work-content > upper/work/work-file
 # Make the lower readonly to show that that is possible:
 # writes actually end up on the upper filesystem.
 sudo mount -o remount,ro lower.ext4 lower
@@ -39,6 +39,11 @@ sudo mount \
 # Interact with the mount.
 printf 'overlay-content' > overlay/overlay-file
 ls lower upper/upper upper/work overlay
+
+# Write to underlying directories while mounted
+# gives undefined behaviour.
+#printf lower-content-2 > lower/lower-file-2
+#printf upper-content-2 > upper/upper-file-2
 
 # Unmount the overlay and observe state.
 sudo umount overlay

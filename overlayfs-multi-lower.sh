@@ -47,11 +47,6 @@ sudo mount \
   none \
   overlay \
 ;
-printf 'lower-content-1' > lower1/lower-file-1-after
-printf 'lower-content-2' > lower2/lower-file-2-after
-printf 'lower-content-3' > lower3/lower-file-3-after
-printf 'upper-content' > upper/upper/upper-file-after
-printf 'overlay-content' > overlay/overlay-file-after
 ls \
   lower1 \
   lower2 \
