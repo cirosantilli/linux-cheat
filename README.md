@@ -72,10 +72,10 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1.  [overlayfs-multi-upper.sh](overlayfs-multi-upper.sh)
         1.  [overlayfs-multi-lower.sh](overlayfs-multi-lower.sh)
     1.  ext filesystems
-        1. [e2label](e2label.md)
-        1. [e2fsck](e2fsck.md)
-        1. [e2fsprogs](e2progs.md)
-        1. [mke2fs](mke2fs.md)
+        1.  [e2label](e2label.md)
+        1.  [e2fsck](e2fsck.md)
+        1.  [mke2fs](mke2fs.sh)
+        1.  [mke2fs-multi](mke2fs-multi.sh)
     1.  Virtual filesystems
         1.  [proc filesystem](proc-filesystem.md)
         1.  [dev filesystem](dev-filesystem.md)
