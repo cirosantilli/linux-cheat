@@ -2,6 +2,9 @@
 
 # Create a multi ext2 partition filesystem from two directories with sfdisk
 # and mke2fs without sudo! Tested on Ubuntu 18.04.
+#
+# - https://stackoverflow.com/questions/10949169/how-to-create-a-multi-partition-sd-image-without-root-privileges/52850819#52850819
+# - https://superuser.com/questions/367196/linux-how-to-format-multiple-file-systems-within-one-file/1367534#1367534
 
 set -eux
 d=mke2fs-multi.tmp
@@ -79,13 +82,6 @@ rm "$partition_file_2"
 # losetup automation functions from:
 # https://stackoverflow.com/questions/1419489/how-to-mount-one-partition-from-an-image-file-that-contains-multiple-partitions/39675265#39675265
 loop-mount-partitions() (
-  # Works both on multi and single partition images.
-  # https://askubuntu.com/questions/69363/mount-single-partition-from-image-of-entire-disk-device/673257#673257
-  # https://superuser.com/questions/117136/how-can-i-mount-a-partition-from-dd-created-image-of-a-block-device-e-g-hdd-u/972020#972020
-  # https://stackoverflow.com/questions/1419489/loopback-mounting-individual-partitions-from-within-a-file-that-contains-a-parti/39675265#39675265
-  # https://superuser.com/questions/211338/mounting-a-multi-partition-disk-image-in-linux/1263401#1263401
-  # https://unix.stackexchange.com/questions/87183/creating-formatted-partition-from-nothing/229219#229219
-  # https://unix.stackexchange.com/questions/9099/reading-a-filesystem-from-a-whole-disk-image/229218#229218
   set -e
   img="$1"
   dev="$(sudo losetup --show -f -P "$img")"
