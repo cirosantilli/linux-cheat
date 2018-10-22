@@ -2,6 +2,7 @@
 
 # Build binutils from source and test it out. Tested on Ubuntu 18.04.
 # https://stackoverflow.com/questions/4252012/how-to-install-and-use-gas-gnu-compiler-on-linux/52928530#52928530
+# https://askubuntu.com/questions/881656/how-to-install-gnu-assembler/1086089#1086089
 
 d=binutils.tmp
 rm -rf "$d"
