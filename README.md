@@ -172,6 +172,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  Build systems
         1. [make](make/)
         1. [autotools](autotools/)
+    1.  [binutils.sh](binutils.sh)
 1.  Processes
     1.  procps
         1.  [free](env.md)
