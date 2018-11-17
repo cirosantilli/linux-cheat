@@ -44,9 +44,9 @@ Node:
 
 - `u`: parent node
 - `t`: top node
-- `[,`, `]:` next previous node. May   change node level
+- `[,`, `]:` next previous node. May change node level
 - `n`, `p`: same as `[` and `]`, but cannot change node level
-- `l`: go to last viewed node. can be used several times
+- `l`: go to last viewed node. Can be used several times.
 - `g`: like m, but search all nodes
 
 Search:
