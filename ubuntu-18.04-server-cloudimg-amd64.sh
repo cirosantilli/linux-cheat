@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
+set -eux
+
 sudo apt-get install cloud-image-utils qemu
 
+# Get the image.
 # This is already in qcow2 format.
 img=ubuntu-18.04-server-cloudimg-amd64.img
 if [ ! -f "$img" ]; then
@@ -12,11 +15,11 @@ if [ ! -f "$img" ]; then
   qemu-img resize "$img" +128G
 fi
 
+# Set the password.
+# https://serverfault.com/questions/920117/how-do-i-set-a-password-on-an-ubuntu-cloud-image
+# https://askubuntu.com/questions/507345/how-to-set-a-password-for-ubuntu-cloud-images-ie-not-use-ssh
 user_data=user-data.img
 if [ ! -f "$user_data" ]; then
-  # For the password.
-  # https://serverfault.com/questions/920117/how-do-i-set-a-password-on-an-ubuntu-cloud-image
-  # https://askubuntu.com/questions/507345/how-to-set-a-password-for-ubuntu-cloud-images-ie-not-use-ssh
   cat >user-data <<EOF
 #cloud-config
 password: asdfqwer
