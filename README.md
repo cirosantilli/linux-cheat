@@ -32,7 +32,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
 1.  [Kernel](kernel/)
     1. [System Call](system-call.md)
     1. [sysctl](sysctl.md)
-    1. [dmesg](demesg.md)
+    1. [dmesg](dmesg.md)
     1. [installkernel](installkernel.md)
     1. [TTY](tty.md)
 1.  Initialization
