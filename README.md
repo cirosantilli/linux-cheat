@@ -23,12 +23,10 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [Alternatives](alternatives.md)
         1. [Hurd](hurd.md)
         1. [BSD](bsd.md)
-        1. [Android](android.md)
     1.  [Distros](distros.md)
         1. [Minimal distros](minimal-distros.md)
         1. [Buildroot](buildroot.md)
     1.  [Linux runs on](linux-runs-on.md)
-    1.  [Runs Linux](runs-linux.md)
 1.  [Kernel](kernel/)
     1. [System Call](system-call.md)
     1. [sysctl](sysctl.md)
@@ -54,7 +52,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [bindfs](bindfs.md)
     1.  [blkid](blkid.md)
     1.  [fdisk](fdisk.md)
-    1.  [FUSE](FUSE.md)
+    1.  [FUSE](fuse.md)
     1.  [Forensic rm](forensic-rm.md)
     1.  [fuser](fuser.md)
     1.  [lsblk](lsblk.md)
@@ -80,8 +78,8 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1.  [proc filesystem](proc-filesystem.md)
         1.  [dev filesystem](dev-filesystem.md)
             1. [mknod](mknod.md)
-            1. [/dev/loop](/dev/loop.md)
-            1. [/dev/sr0](/dev/sr0.md)
+            1. [/dev/loop](loop.md)
+            1. [/dev/sr0](sr0.md)
         1.  [sysfs](sysfs.md)
         1.  [ramfs](ramfs.md)
         1.  [binfmt_misc filesystem](binfmt-misc-filesystem.md)
@@ -170,12 +168,11 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  [ctags](ctags/)
     1.  [cscope](cscope.md)
     1.  Build systems
-        1. [make](make/)
         1. [autotools](autotools/)
     1.  [binutils.sh](binutils.sh)
 1.  Processes
     1.  procps
-        1.  [free](env.md)
+        1.  [free](free.md)
         1.  [kill](kill.sh)
         1.  [pgrep](pgrep.md)
         1.  [pmap](ps.md)
@@ -256,7 +253,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1.  [gconf](gconf.md)
         1.  [Desktop files](desktop-files.md)
     1.  [X11](x11.md)
-        1.  [wmctrl](xmctrl.md)
+        1.  [wmctrl](wmctrl.md)
         1.  [xprop](xprop.md)
         1.  [xsel](xsel.md)
         1.  [xset](xset.md)
@@ -270,8 +267,8 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1.  [update-alternatives](update-alternatives.md)
     1.  [Startup programs](startup-programs.md)
     1.  Notifications
-        1. [libnotify](libnotify.md)
-        1. [zenity](zenity.md)
+        1. [libnotify](libnotify.sh)
+        1. [zenity](zenity.sh)
     1.  Screenshots
         1. [recordMyDesktop](record-my-desktop.md)
         1. [xwd](xwd.md)
@@ -285,7 +282,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1. [XML](xml/)
 1.  Character encoding
     1. [Unicode](unicode.md)
-        1. [iconv](iconv.sh)
+        1. [iconv](iconv.md)
 1.  Markup
     1. [Kramdown](kramdown/)
     1. [Pandoc](pandoc/)
@@ -299,7 +296,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1.  [ubuntu-18.04-server-cloudimg-amd64.sh](ubuntu-18.04-server-cloudimg-amd64.sh)
         1.  [ubuntu-18.04-server-cloudimg-arm64.sh](ubuntu-18.04-server-cloudimg-arm64.sh)
     1.  [Xen](xen.md)
-    1.  [Vagrant](vagrang/)
+    1.  [Vagrant](vagrant/)
     1.  [Intel SDE](intel-sde.md)
     1.  [gem5](gem5.md)
 1.  [Configuration automation](config-automation.md)
@@ -329,7 +326,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  Sorting
         1. [sort](sort.md)
         1. [tsort](tsort.md)
-    1.  [Graphviz](graphiz.md)
+    1.  [Graphviz](graphviz.md)
         1. [acyclic](acyclic.md)
         1. [dijkstra](dijkstra.md)
         1. [gc](gc.md)
@@ -341,7 +338,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
 1.  Misc
     1.  [BusyBox](busybox.md)
     1.  [cron](cron.sh)
-        1.  [anacron](anacron)
+        1.  [anacron](anacron.md)
     1.  [logrotate](logrotate.md)
     1.  [xargs](xargs.md)
 1.  Security

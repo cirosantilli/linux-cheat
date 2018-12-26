@@ -1,12 +1,28 @@
 # parallel
 
-GNU.
+GNU:
+
+    sudo apt-get install parallel
+
+There is also one in moreutils... https://superuser.com/questions/917577/how-can-i-install-gnu-parallel-alongside-moreutils-on-ubuntu-debian
 
 ## Basic usage
 
 Run `echo` 100 times in parallel:
 
     seq 100 | parallel echo '{}'
+
+## Remove extension
+
+    printf 'a.c\nb.c\nc.c\n' | parallel --will-cite echo '{.}'
+
+Outcome:
+
+    a
+    b
+    c
+
+Very convenient!
 
 ## halt
 
