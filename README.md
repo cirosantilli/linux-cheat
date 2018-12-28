@@ -182,7 +182,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
     1.  psmisc
         1.  [killall](killall.md)
     1.  [Shebang](shebang/)
-    1.  [chroot](chroot.sh)
+    1.  [chroot](chroot.md)
     1.  [env](env.sh)
     1.  [htop](htop.md)
     1.  [jobs](jobs.sh)
@@ -209,7 +209,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
 1.  Media video, games, etc.) file types, viewers, editors, capture, synthesizers
     1.  [Audio](audio/): music, sound
         1. [avconv](avconv.md)
-    1.  [Book](book.md): PDF, DJVU.
+    1.  [Book](book/): PDF, DJVU.
     1.  [Dictionary](dictionary.md): dictionary formats
     1.  [Font](font.md)
     1.  [Game](game.md): games, emulation
@@ -219,7 +219,6 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
             1. [NetPBM](netpbm/)
         1.  [GIMP](gimp.md)
         1.  [ImageMagick](imagemagick.md)
-        1.  [gnuplot](gnuplot/)
     1.  [Video](video.md)
         1.  [Video codecs](video-codecs.md)
         1.  [Video containers](video-containers.md)
