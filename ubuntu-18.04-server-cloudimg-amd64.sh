@@ -2,7 +2,11 @@
 
 set -eux
 
-sudo apt-get install cloud-image-utils qemu
+# Install dependencies.
+pkgs='cloud-image-utils qemu'
+if ! dpkg -s $pkgs >/dev/null 2>&1; then
+  sudo apt-get install $pkgs
+fi
 
 # Get the image.
 # This is already in qcow2 format.

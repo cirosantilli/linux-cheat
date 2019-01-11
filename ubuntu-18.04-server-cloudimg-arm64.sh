@@ -2,10 +2,16 @@
 
 set -eux
 
-sudo apt-get install cloud-image-utils qemu-system-arm qemu-efi
+# Parameters.
+img=ubuntu-18.04-server-cloudimg-arm64.img
+
+# Install dependencies.
+pkgs='cloud-image-utils qemu-system-arm qemu-efi'
+if ! dpkg -s $pkgs >/dev/null 2>&1; then
+  sudo apt-get install $pkgs
+fi
 
 # Get the image.
-img=ubuntu-18.04-server-cloudimg-arm64.img
 if [ ! -f "$img" ]; then
   wget "https://cloud-images.ubuntu.com/releases/18.04/release/${img}"
   qemu-img resize "$img" +128G
@@ -29,6 +35,7 @@ EOF
   dd if=/dev/zero of=flash1.img bs=1M count=64
 fi
 
+# Run.
 qemu-system-aarch64 \
   -M virt \
   -cpu cortex-a57 \
