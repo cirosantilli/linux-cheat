@@ -40,13 +40,13 @@ qemu-system-aarch64 \
   -M virt \
   -cpu cortex-a57 \
   -device rtl8139,netdev=net0 \
+  -device virtio-blk-device,drive=hd0 \
+  -drive "file=${user_data},format=raw" \
+  -drive "if=none,file=${img},id=hd0" \
   -m 4096 \
   -netdev user,id=net0 \
   -nographic \
-  -smp 4 \
-  -drive "if=none,file=${img},id=hd0" \
-  -device virtio-blk-device,drive=hd0 \
-  -drive "file=${user_data},format=raw" \
   -pflash flash0.img \
   -pflash flash1.img \
+  -smp 4 \
 ;

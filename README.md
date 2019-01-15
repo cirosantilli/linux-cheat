@@ -296,6 +296,7 @@ Includes Linux concepts and utilities that work on Linux, not necessarily in the
         1.  [ubuntu-18.04-server-cloudimg-arm64.sh](ubuntu-18.04-server-cloudimg-arm64.sh)
         1.  [ubuntu-18.04.1.0-live-server-amd64.sh](ubuntu-18.04.1.0-live-server-amd64.sh)
         1.  [ubuntu-18.04.1-server-arm64.sh](ubuntu-18.04.1-server-arm64.sh)
+        1.  [ubuntu-18.04.1-desktop-amd64.sh](ubuntu-18.04.1-desktop-amd64.sh)
     1.  [Xen](xen.md)
     1.  [Vagrant](vagrant/)
     1.  [Intel SDE](intel-sde.md)

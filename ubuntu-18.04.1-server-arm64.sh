@@ -18,6 +18,7 @@ set -eu
 
 # Parameters.
 id=ubuntu-18.04.1-server-arm64
+#id=debian-9.6.0-arm64-xfce-CD-1
 img="${id}.img.qcow2"
 iso="${id}.iso"
 flash0="${id}-flash0.img"
@@ -46,9 +47,7 @@ sudo \
   -M virt \
   -cdrom "$iso" \
   -cpu cortex-a57 \
-  -device virtio-net-device,netdev=net0,mac=11:11:11:11:11:11 \
   -m 2G \
-  -netdev type=tap,id=net0 \
   -nographic \
   -pflash "$flash0" \
   -pflash "$flash1" \
