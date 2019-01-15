@@ -10,6 +10,7 @@ set -eux
 id=ubuntu-18.04.1-server-arm64
 #id=debian-9.6.0-arm64-xfce-CD-1
 img="${id}.img.qcow2"
+img_snapshot="${id}.img.snapshot.qcow2"
 iso="${id}.iso"
 flash0="${id}-flash0.img"
 flash1="${id}-flash1.img"
@@ -58,9 +59,9 @@ fi
 qemu-system-aarch64 \
   -cpu cortex-a57 \
   -device rtl8139,netdev=net0 \
+  -device virtio-scsi-device \
   -device scsi-cd,drive=cdrom \
   -device virtio-blk-device,drive=hd0 \
-  -device virtio-scsi-device \
   -drive "file=${iso},id=cdrom,if=none,media=cdrom" \
   -drive "if=none,file=${img_snapshot},id=hd0" \
   -m 2G \

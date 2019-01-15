@@ -40,10 +40,11 @@ fi
 
 # Run the installed image.
 qemu-system-x86_64 \
-  -drive file=ubuntu-18.04-desktop-amd64.snapshot.qcow2,format=qcow2 \
+  -drive "file=${disk_img_snapshot},format=qcow2" \
   -enable-kvm \
   -m 2G \
   -smp 2 \
   -soundhw hda \
   -vga virtio \
+  "$@" \
 ;
