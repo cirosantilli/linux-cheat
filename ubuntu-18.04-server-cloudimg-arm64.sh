@@ -3,7 +3,11 @@
 set -eux
 
 # Parameters.
-img=ubuntu-18.04-server-cloudimg-arm64.img
+id=ubuntu-18.04-server-cloudimg-arm64
+img="${id}.img"
+flash0="${id}-flash0.img"
+flash1="${id}-flash1.img"
+user_data="${id}-user-data.img"
 
 # Install dependencies.
 pkgs='cloud-image-utils qemu-system-arm qemu-efi'
@@ -18,7 +22,6 @@ if [ ! -f "$img" ]; then
 fi
 
 # For the password.
-user_data=user-data.img
 if [ ! -f "$user_data" ]; then
   cat >user-data <<EOF
 #cloud-config
@@ -27,26 +30,26 @@ chpasswd: { expire: False }
 ssh_pwauth: True
 EOF
   cloud-localds "$user_data" user-data
-
-  # Use the EFI magic. Picked up from:
-  # https://wiki.ubuntu.com/ARM64/QEMU
-  dd if=/dev/zero of=flash0.img bs=1M count=64
-  dd if=/usr/share/qemu-efi/QEMU_EFI.fd of=flash0.img conv=notrunc
-  dd if=/dev/zero of=flash1.img bs=1M count=64
+fi
+if [ ! -f "$flash0" ]; then
+  dd if=/dev/zero of="$flash0" bs=1M count=64
+  dd if=/usr/share/qemu-efi/QEMU_EFI.fd of="$flash0" conv=notrunc
+fi
+if [ ! -f "$flash1" ]; then
+  dd if=/dev/zero of="$flash1" bs=1M count=64
 fi
 
 # Run.
 qemu-system-aarch64 \
-  -M virt \
   -cpu cortex-a57 \
   -device rtl8139,netdev=net0 \
   -device virtio-blk-device,drive=hd0 \
   -drive "file=${user_data},format=raw" \
   -drive "if=none,file=${img},id=hd0" \
-  -m 4096 \
+  -m 2G \
+  -machine virt \
   -netdev user,id=net0 \
   -nographic \
-  -pflash flash0.img \
-  -pflash flash1.img \
-  -smp 4 \
+  -pflash "$flash0" \
+  -pflash "$flash1" \
 ;

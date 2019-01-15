@@ -42,12 +42,13 @@ fi
 # Run.
 # TODO where to put this?
 #-drive "file=${img},format=qcow2" \
-sudo \
-  qemu-system-aarch64 \
-  -M virt \
+qemu-system-aarch64 \
   -cdrom "$iso" \
   -cpu cortex-a57 \
+  -device rtl8139,netdev=net0 \
   -m 2G \
+  -machine virt \
+  -netdev user,id=net0 \
   -nographic \
   -pflash "$flash0" \
   -pflash "$flash1" \
