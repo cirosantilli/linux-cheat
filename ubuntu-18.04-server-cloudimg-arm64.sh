@@ -59,8 +59,8 @@ qemu-system-aarch64 \
   -cpu cortex-a57 \
   -device rtl8139,netdev=net0 \
   -device virtio-blk-device,drive=hd0 \
-  -drive "file=${user_data_img},format=raw" \
   -drive "if=none,file=${img_snapshot},id=hd0" \
+  -drive "file=${user_data_img},format=raw" \
   -m 2G \
   -netdev user,id=net0 \
   -nographic \

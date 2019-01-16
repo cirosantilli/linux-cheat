@@ -5,8 +5,17 @@
 
 set -eux
 
-# Parameters.
 id=ubuntu-18.04.1-desktop-amd64
+OPTIND=1
+while getopts i: OPT; do
+  case "$OPT" in
+    i)
+      id="$OPTARG"
+      ;;
+  esac
+done
+shift "$(($OPTIND - 1))"
+
 disk_img="${id}.img.qcow2"
 disk_img_snapshot="${id}.snapshot.qcow2"
 iso="${id}.iso"
@@ -43,6 +52,7 @@ qemu-system-x86_64 \
   -drive "file=${disk_img_snapshot},format=qcow2" \
   -enable-kvm \
   -m 2G \
+  -serial mon:stdio \
   -smp 2 \
   -soundhw hda \
   -vga virtio \

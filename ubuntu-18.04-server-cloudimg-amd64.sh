@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Tested on: Ubuntu 18.10.
+
 set -eux
 
 # Parameters.
@@ -46,7 +48,8 @@ EOF
   cloud-localds "$user_data_img" "$user_data"
 fi
 
-# Run.
+# Run. The first boot will spend some time generating keys
+# on "cloud-init job", but further boots will be faster.
 qemu-system-x86_64 \
   -drive "file=${img_snapshot},format=qcow2" \
   -drive "file=${user_data_img},format=raw" \
@@ -56,5 +59,5 @@ qemu-system-x86_64 \
   -netdev user,id=net0 \
   -serial mon:stdio \
   -smp 2 \
-  -vga virtio \
+  "$@" \
 ;
