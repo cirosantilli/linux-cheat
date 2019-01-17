@@ -116,10 +116,11 @@ qemu-system-aarch64 \
   -device virtio-blk-device,drive=hd0 \
   -drive "if=none,file=${img_snapshot},id=hd0" \
   -drive "file=${user_data_img},format=raw" \
-  -m 4G \
+  -m 2G \
   -netdev user,id=net0 \
   -nographic \
   -pflash "$flash0" \
   -pflash "$flash1" \
-  -smp 4 \
+  -smp 2 \
+  "$@" \
 ;
