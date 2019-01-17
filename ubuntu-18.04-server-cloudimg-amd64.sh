@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Tested on: Ubuntu 18.10.
+# Tested on host: Ubuntu 18.10.
 
 set -eux
 
