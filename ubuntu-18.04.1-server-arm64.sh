@@ -2,9 +2,11 @@
 
 set -eux
 
-# TODO: installer step "Select and install software" fails.
+# Tested on host: Ubuntu 18.04 arm64 with -enable-kvm.
+#
+# TODO: on Ubuntu 18.10 amd64 host, installer step "Select and install software" fails.
 # Where can I find logs saying exactly what failed?
-# Tested on Ubuntu 18.10.
+#
 # - https://superuser.com/questions/942657/how-to-test-arm-ubuntu-under-qemu-the-easiest-way
 # - https://askubuntu.com/questions/797599/how-to-run-ubuntu-16-04-arm-in-qemu
 
@@ -73,4 +75,5 @@ qemu-system-aarch64 \
   -pflash "$flash0" \
   -pflash "$flash1" \
   -smp 2 \
+  "$@" \
 ;

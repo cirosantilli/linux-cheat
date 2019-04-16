@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
-# TODO: fails to set password most times. Tested on host: Ubuntu 18.10.
+# TODO: Tested on host: Ubuntu 18.10, fails to set password most times.
 # But I am alomst 100% that I've had at least one success with this exact same command.
 # But the rate is so small that I sometimes doubt my memory.
+#
+# Bug report at: https://bugs.launchpad.net/cloud-images/+bug/1818197
 #
 # [FAILED] Failed to start Initial cloud-init job (pre-networking). always shows, including on working runs.
 # It did not show on Ubuntu 18.04 host.
